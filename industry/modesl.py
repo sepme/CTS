@@ -47,6 +47,7 @@ class Comment(models.Model):
     industry_file = models.FileField(upload_to=None, max_length=100)
 
 class Industry(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     industry_form = models.OneToOneField(IndustryForm, on_delete=models.CASCADE) 
     research_field = models.CharField(max_length=None)
     history_and_record = models.CharField(max_length=None)
