@@ -69,7 +69,7 @@ class IndustryForm(models.Model):
     turn_over = models.FloatField()
     services_products = models.CharField(max_length=None)
     awards = models.CharField(max_length=None)
-
+    email_adress = models.EmailField(max_length=254)
 
 
 class ProjectHistory(models.Model):
