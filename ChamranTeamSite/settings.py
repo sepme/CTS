@@ -58,7 +58,7 @@ ROOT_URLCONF = 'ChamranTeamSite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates',],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,10 +69,6 @@ TEMPLATES = [
             ],
         },
     },
-]
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
 ]
 
 WSGI_APPLICATION = 'ChamranTeamSite.wsgi.application'
