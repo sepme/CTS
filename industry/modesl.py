@@ -44,10 +44,10 @@ class ProjectForm(models.Model):
     policy = models.CharField(max_length=None)
 
 class Comment(models.Model):
-    expert_comment = models.CharField(max_length=None)
-    expert_file = models.FileField(upload_to=None, max_length=100)
-    industry_comment = models.CharField(max_length=None)
-    industry_file = models.FileField(upload_to=None, max_length=100)
+    sender_comment = models.CharField(max_length=None)
+    sender_choices = (('expert' ,'متخصص'),('industry' ,'صنعت'),)
+    sender_type = models.CharField(max_length=15)
+    attach_file = models.FileField(upload_to=None, max_length=100)
 
 class Industry(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
