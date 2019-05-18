@@ -8,7 +8,7 @@ class Expert(models.Model):
     expert_project_history = models.ForeignKey(ExpertProjectHistory, on_delete=models.CASCADE)
     expert_point = models.IntegerField()
     def __str__(self):
-        return self.project_form.project_title_english
+        return self.expert_form.expert_firstname+self.expert_form.expert_lastname
 
 class ExpertForm(models.Model): 
     expert_firstname = models.CharField(max_length=None)
