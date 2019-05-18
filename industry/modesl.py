@@ -46,8 +46,9 @@ class ProjectForm(models.Model):
 class Comment(models.Model):
     sender_comment = models.CharField(max_length=None)
     sender_choices = (('expert' ,'متخصص'),('industry' ,'صنعت'),)
-    sender_type = models.CharField(max_length=15)
-    attach_file = models.FileField(upload_to=None, max_length=100)
+    sender_type = models.CharField(max_length=15,choices = sender_choices)
+    project_title_english = models.CharField(max_length=None)
+    attach_file = models.FileField(upload_to='./project_{0}'.format(project_title_english), max_length=100)
 
 class Industry(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
