@@ -33,7 +33,7 @@ class ExpertForm(models.Model):
     number_of_resercher = models.IntegerField()
     has_indusryial_researech = models.BooleanField()
     number_of_grants = models.IntegerField()
-    technique =  models.ForeignKey(Technique, on_delete=models.CASCADE)
+    technique =  models.ForeignKey(researcher.Technique, on_delete=models.CASCADE)
     languages = models.CharField(max_length=None)
 
 class ScientificRecord(models.Model):
