@@ -64,15 +64,15 @@ class Industry(models.Model):
 
 class IndustryForm(models.Model):
     industry_name = models.CharField(max_length=None)
-    registration number = models.CharField(max_length=None)
+    registration_number = models.CharField(max_length=None)
     date_of_foundation = models.DateField(auto_now=False, auto_now_add=False)
     industry_type = models.CharField(max_length=None)
-    adress = models.CharField(max_length=None)
+    industry_address = models.CharField(max_length=None)
     phone_number = models.IntegerField()
     budget_for_research = models.FloatField()
     turn_over = models.FloatField()
     services_products = models.CharField(max_length=None)
-    awards = models.CharField(max_length=None)
+    awards_honors = models.CharField(max_length=None)
     email_adress = models.EmailField(max_length=254)
 
 
