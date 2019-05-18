@@ -82,3 +82,16 @@ class ExpertProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None)
     key_words = models.CharField(max_length=None)
     project_priority_level = models.FloatField()
+    project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
+    project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
+    STATUS_CHOICE = (
+        ('completed' ,'completed'),
+        ('stoped' ,'stoped'),
+    )
+    project_status = models.CharField(max_length=9 ,choices = STATUS_CHOICE ,verbose_name="وضعیت")
+    project_point = models.FloatField(verbose_name='امتیاز')
+    project_income = models.IntegerField(verbose_name= 'درآمد')
+    project_involveTech = models.CharField(max_length=500 ,verbose_name='تکنیک ها')
+
+    def __str__(self):
+        return "history of " + self.profile.name 
