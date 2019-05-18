@@ -78,6 +78,8 @@ class IndustryForm(models.Model):
 
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None)
-    key_words = models.CharField(max_length=None)
+    key_words = ForeignKey(KeyWord, on_delete=models.CASCADE)
     project_priority_level = models.FloatField()
     
+class KeyWord(models.Model):
+    key_word_name = models.CharField(max_length=None)
