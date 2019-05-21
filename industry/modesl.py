@@ -12,15 +12,14 @@ class Project(models.Model):
     date_pahse_one_finished = models.DateField(auto_now=False, auto_now_add=False)
     date_pahse_two_finished = models.DateField(auto_now=False, auto_now_add=False)
     date_finished = models.DateField(auto_now=False, auto_now_add=False)
-    researcher_applied = models.ForeignKey(Researcher, on_delete=models.CASCADE)
+    researcher_applied = models.ManyToManyField(Researcher)
     researcher_accepted = models.OneToOneField(Researcher, on_delete=models.CASCADE)
-    expert_applied = models.ForeignKey(Expert, on_delete=models.CASCADE)
-    expert_accepted = models.ForeignKey(Expert, on_delete=models.CASCADE)
+    expert_applied = models.ManyToManyField(Expert)
+    expert_accepted = models.ManyToManyField(Expert)
     industry_creator = models.OneToOneField(Industry, on_delete=models.CASCADE)
     cost_of_project = models.FloatField()
     maximum_researcher = models.IntegerField()   
     project_detail = models.CharField(max_length=None)
-    project_comments = models.ForeignKey(Comments, on_delete=models.CASCADE)
     project_priority_level = models.FloatField()
     def __str__(self):
         return self.project_form.project_title_english
@@ -47,7 +46,7 @@ class Comment(models.Model):
     sender_comment = models.CharField(max_length=None)
     sender_choices = (('expert' ,'متخصص'),('industry' ,'صنعت'),)
     sender_type = models.CharField(max_length=15,choices = sender_choices)
-    project_title_english = models.CharField(max_length=None)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     attach_file = models.FileField(upload_to='./project_{0}'.format(project_title_english), max_length=100)
 
 class Industry(models.Model):
