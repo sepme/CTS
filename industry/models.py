@@ -82,10 +82,7 @@ class ProjectHistory(models.Model):
     project_priority_level = models.FloatField()
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
-    STATUS_CHOICE = (
-        ('completed' ,'completed'),
-        ('stoped' ,'stoped'),
-    )
+    STATUS_CHOICE = (('completed' ,'completed'),('stoped' ,'stoped'),)
     project_status = models.CharField(max_length=9 ,choices = STATUS_CHOICE ,verbose_name="وضعیت")
     project_point = models.FloatField(verbose_name='امتیاز')
     project_income = models.IntegerField(verbose_name= 'درآمد')
