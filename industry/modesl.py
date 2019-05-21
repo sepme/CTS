@@ -78,7 +78,7 @@ class IndustryForm(models.Model):
     
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None)
-    key_words = ForeignKey(KeyWord, on_delete=models.CASCADE)
+    key_words = ManyToManyField(KeyWord)
     project_priority_level = models.FloatField()
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
