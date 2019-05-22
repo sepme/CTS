@@ -10,15 +10,15 @@ body {
   background-color: #F8FDF7;
   font-family: Yekan;
 }
-  .card {
-    width: 400px;
-    height: 440px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0px 0px 20px #e3e3e3;
-  }
+.card {
+  width: 400px;
+  padding-bottom: 23px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 0px 20px #e3e3e3;
+}
 img {
   width: 105px;
   height: 100px;
@@ -47,7 +47,13 @@ img {
   left: 25px;
   top: 135px;
 }
-.username > input , .password > input {
+.username, .password , .confirm_password{
+  position: relative;
+}
+.confirm_password > input{
+  margin-bottom: 10px;
+}
+input {
   background-color: #fdfdfd;
   border: 1px solid #bdbdbd;
   border-radius: 5px;
@@ -58,59 +64,48 @@ img {
   direction: rtl;
   padding-right: 10px;
 }
-.username > label {
+.username > label , .password > label, .confirm_password > label, .email > label {
   color: #bdbdbd;
   position: absolute;
   right: 35px;
-  top: 177px;
+  top: 28px;
   transition: 300ms all ease;
 }
-.username > input:focus {
+input:focus {
   outline: none;
   border: 1px solid #3CCD1C;
 }
-.password > label {
-  color: #bdbdbd;
+.username > i , .password > i, .confirm_password > i , .email > i{
+  width: 35px;
+  height: 35px;
   position: absolute;
-  right: 35px;
-  top: 237px;
-  transition: 300ms all ease;
+  top: 33px;
+  left: 30px;
+  color: #bdbdbd;
 }
-.password > input:focus {
-  outline: none;
+span.error{
+  position: absolute;
+  left: 25px;
+  bottom: -7px;
+  color: #FF2525;
+  font-size: 13px;
+}
+.Enter-btn, .signUp-btn{
+  background-color: transparent;
   border: 1px solid #3CCD1C;
-}
-.username > i {
-  width: 35px;
-  height: 35px;
-  position: absolute;
-  top: 183px;
-  left: 30px;
-  color: #bdbdbd;
-}
-.password > i {
-  width: 35px;
-  height: 35px;
-  position: absolute;
-  top: 243px;
-  left: 30px;
-  color: #bdbdbd;
-}
-.Enter-btn{
-  background-color: #89E076;
-  border: none;
-  color: #F8FDF7;
+  color: #3CCD1C;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
   margin: 10px 25px;
   padding: 10px;
   transition: 200ms all ease;
+  box-shadow: 0 0 2px 2px #e3e3e3;
 }
-.Enter-btn:hover , .Enter-btn:focus {
+.Enter-btn:hover , .Enter-btn:focus ,.signUp-btn:hover ,.signUp-btn:focus {
   outline: none;
   color: #fff;
   background-color: #3CCD1C;
-  box-shadow: 0 0 2px 2px #e3e3e3;
+  box-shadow: 0 0 5px 2px #e3e3e3;
 }
 .hr::before {
   content: '';
@@ -128,11 +123,15 @@ p {
   margin-right: auto;
 }
 a {
-  color: #89E076;
+  color: #78e051;
   width: auto;
 }
 a:hover {
   text-decoration: none;
+  color: #3CCD1C;
+}
+a:focus {
+  text-decoration: underline;
   color: #3CCD1C;
 }
 .card > a {
@@ -174,7 +173,7 @@ a:hover {
     left: 10px;
     top: 135px;
   }
-  .username > input , .password > input {
+  .username > input , .password > input , .email > input {
     background-color: #fdfdfd;
     border: 1px solid #bdbdbd;
     border-radius: 5px;
@@ -216,6 +215,25 @@ a:hover {
     color: #bdbdbd;
   }
   .password > i {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 243px;
+    left: 20px;
+    color: #bdbdbd;
+  }
+  .email > label {
+    color: #bdbdbd;
+    position: absolute;
+    right: 10px;
+    top: 177px;
+    transition: 300ms all ease;
+  }
+  .email > input:focus {
+    outline: none;
+    border: 1px solid #3CCD1C;
+  }
+  .email > i{
     width: 35px;
     height: 35px;
     position: absolute;
@@ -400,4 +418,41 @@ a:hover {
     margin-top: 5px;
     margin-left: 10px;
   }
+}
+.signUp-div{
+  margin-top:10px;
+  display: none;
+}
+.user-type{
+  width: 100px;
+  height: 100px;
+  margin-left: 25px;
+  border: 1px solid #bdbdbd;
+  color: #bdbdbd;
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: #fdfdfd;
+}
+.user-type:hover {
+  cursor: pointer;
+  border:1px solid #3CCD1C;
+  color: #3CCD1C;
+  box-shadow: 0 0 5px 0 #3CCD1C;
+}
+.user-type > img{
+  width: 62px;
+  height: 62px;
+}
+.email{
+  position: relative;
+  display: none;
+}
+input[type="radio"]{
+  display: none;
+}
+input[type="radio"]:checked+label{
+  cursor: pointer;
+  border:1px solid #3CCD1C;
+  color: #3CCD1C;
+  box-shadow: 0 0 5px 0 #3CCD1C;
 }

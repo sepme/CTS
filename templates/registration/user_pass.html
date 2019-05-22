@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>ورود</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="card">
+    <img src="img/logo.png" alt="ChamranLogo">
+    <p class="ChamranTeam">چمران تیم</p>
+    <div class="username">
+        <label for="username">نام کاربری</label>
+        <input type="text" id="username" name="username" value="">
+        <i class="fas fa-user-alt fa-lg"></i>
+    </div>
+    <div class="password">
+        <label for="password">رمز عبور</label>
+        <input type="password" id="password" name="password" value="">
+        <i class="fas fa-lock fa-lg"></i>
+    </div>
+    <div class="confirm_password">
+        <label for="confirm_password">تایید رمز عبور</label>
+        <input type="password" id="confirm_password" name="confirm_password" value="">
+        <i class="fas fa-check fa-lg"></i>
+    </div>
+    <button type="button" name="enter" class="Enter-btn">ثبت اطلاعات</button>
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
