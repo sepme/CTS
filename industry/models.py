@@ -92,3 +92,44 @@ class ProjectHistory(models.Model):
     
 class KeyWord(models.Model):
     key_word_name = models.CharField(max_length=None)
+    
+    
+    
+class ٍEXPERTEvaluation(models.Model):
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
+    expert  = models.OneToOneField(expert.Expert, on_delete=models.CASCADE)
+    INT_CHOICE =(
+            ( 0 , '0'),
+            ( 1 , '1'),
+            ( 2 , '2'),
+            ( 3 , '3'),
+            ( 4 , '4'),
+            ( 5 , '5'),
+    )
+    
+    BOOL_CHOICE=(
+            (FALSE,"false"),
+            (TRUE,"true"),
+    )
+
+    provide_material =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    provide_ensurance = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    ontime_payment = models.IntegerField(choices= INT_CHOICE ,verbose_name = " ")
+    provide_place = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    formal_act = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    budget_amount = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    time_amount = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    continue_coperate = models.BooleanField(choices= BOOL_CHOICE)
+    using_chamt = models.BooleanField(choices= BOOL_CHOICE)
+    to_paper = models.BooleanField(choices= BOOL_CHOICE)
+    
+    def avarage(self):
+        sum = 0.0
+        sum = self.provide_material + self.provide_ensurance + self.ontime_payment + self.provide_place
+        sum = sum + self.formal_act + self.budget_amount + self.time_amount + self.chamt_satisfaction + self.total_satisfaction
+
+        ava = float(sum / 9)
+        return ava
+    
