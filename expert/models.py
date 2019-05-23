@@ -95,3 +95,42 @@ class ExpertProjectHistory(models.Model):
 
     def __str__(self):
         return "history of " + self.profile.name 
+    
+    
+class IndustryEvaluation(models.Model):
+    expert = models.ForeignKey(Expert, on_delete=models.CASCADE)
+    industry  = models.OneToOneField(industry.Industry, on_delete=models.CASCADE)
+    INT_CHOICE =(
+            ( 0 , '0'),
+            ( 1 , '1'),
+            ( 2 , '2'),
+            ( 3 , '3'),
+            ( 4 , '4'),
+            ( 5 , '5'),
+    )
+    
+    BOOL_CHOICE=(
+            (FALSE,"false"),
+            (TRUE,"true"),
+    )
+
+    ontime_progress_report =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    cotribution_to_industry = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    corect_estimation = models.IntegerField(choices= INT_CHOICE ,verbose_name = " ")
+    ontime_deadline = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    fullfill_requirment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    diciplined = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    comited_to_goals = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    quality = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    continue_coperate = models.BooleanField(choices= BOOL_CHOICE)
+    using_chamt = models.BooleanField(choices= BOOL_CHOICE)
+    has_inovation = models.BooleanField(choices= BOOL_CHOICE)
+    
+    def avarage(self):
+        sum = 0.0
+        sum = self.ontime_progress_report + self.cotribution_to_industry + self.corect_estimation + self.ontime_deadline
+        sum = sum + self.fullfill_requirment + self.comited_to_goals + self.total_satisfaction + self.quality + self.diciplined
+
+        ava = float(sum / 8)
+        return ava
