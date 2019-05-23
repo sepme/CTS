@@ -134,3 +134,46 @@ class IndustryEvaluation(models.Model):
 
         ava = float(sum / 8)
         return ava
+    
+class ResearcherEvaluation(models.Model):
+    expert = models.ForeignKey(Expert, on_delete=models.CASCADE)
+    researcher  = models.OneToOneField(researcher.Researcher, on_delete=models.CASCADE)
+    INT_CHOICE =(
+            ( 0 , '0'),
+            ( 1 , '1'),
+            ( 2 , '2'),
+            ( 3 , '3'),
+            ( 4 , '4'),
+            ( 5 , '5'),
+    )
+    
+    GAIN_CHOICE=(
+            ( 1 , 'تجریه عملی'),
+            ( 2 , 'استاد به عنوان معرف عمل کرده'),
+            ( 3 , 'مشارکت در مقاله'),
+            ( 4 , 'دریافت پیشنهاد کار'),
+            ( 5 , 'از قبل انجام کار پول دریافت کردم'),
+    )
+
+    tech_enough_info =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    tech_required_info = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    totoal_gain = models.IntegerField(choices= INT_CHOICE ,verbose_name = " ")
+    scientific_level = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    availability = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    planing = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    formal_act = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    distribute_task = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    next_cooperatetion = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    fullfill_requirment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    research_gain = models.IntegerField(choices= Gain_CHOICE)#//should be array
+    
+    def avarage(self):
+        sum = 0.0
+        sum = self.tech_enough_info + self.tech_required_info + self.totoal_gain + self.scientific_level
+        sum = sum + self.availability + self.planing + self.formal_act + self.distribute_task
+        + self.total_satisfaction + self.chamt_satisfaction + self.next_cooperatetion + self.fullfill_requirment
+
+        ava = float(sum / 12)
+        return ava
