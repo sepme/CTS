@@ -95,7 +95,7 @@ class KeyWord(models.Model):
     
     
     
-class ٍEepertEvaluation(models.Model):
+class ٍExepertEvaluation(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     expert  = models.OneToOneField(expert.Expert, on_delete=models.CASCADE)
     INT_CHOICE =(
