@@ -14,7 +14,7 @@ class Project(models.Model):
     date_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ اتمام پروژه")
     researcher_applied = models.ManyToManyField(Researcher,verbose_name = "پژوهشگران درخواست داده")
     researcher_accepted = models.ManyToManyField(Researcher,verbose_name = "پژوهشگران پذبرفته شده")
-    expert_applied = models.ManyToManyField(Expert,verbose_name = "استاد درخواست داده")
+    expert_applied = models.ManyToManyField(Expert,verbose_name = "اساتید درخواست داده")
     expert_accepted = models.OneToOneField(Expert, on_delete=models.CASCADE,verbose_name = "استاد پذیرفته شده")
     industry_creator = models.OneToOneField(Industry, on_delete=models.CASCADE,verbose_name = "صنعت صاحب پروژه")
     cost_of_project = models.FloatField(verbose_name = "هزینه پروژه")
@@ -122,7 +122,7 @@ class ٍExepertEvaluateIndustry(models.Model):
     time_amount = models.IntegerField(choices= INT_CHOICE ,verbose_name = "زمان بندی مطابق خواسته ها")
     total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت کلی")
     chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "عملکرد چمران تیم")
-    continue_coperate = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "تمایل همکاری با صنعت")
+    continue_coperate = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "ادامه همکاری با صنعت")
     using_chamt = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "ادامه همکاری با چمران تیم")
     to_paper = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "قابلیت تبدیل به مقاله")
     
