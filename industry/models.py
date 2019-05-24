@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Project(models.Model):
-    project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE) 
+    project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE,verbose_name ="فرم پروژه") 
     date_submited_by_industry = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ ثبت پرژه توسط صنعت")
     date_selected_by_expert = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ درخواست پروژه توسط استاد")
     date_start = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ اخذ پروژه توسط استاد")
@@ -48,10 +48,11 @@ class Comment(models.Model):
     sender_type = models.CharField(max_length=15,choices = sender_choices)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     attach_file = models.FileField(upload_to='./project_{0}'.format(project_title_english), max_length=100)
+    date_submited = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ ثبت")
 
 class Industry(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    industry_form = models.OneToOneField(IndustryForm, on_delete=models.CASCADE) 
+    user = models.OneToOneField(User, on_delete=models.CASCADE,verbose_name ="کاربر صنعت")
+    industry_form = models.OneToOneField(IndustryForm, on_delete=models.CASCADE,verbose_name ="فرم صنعت") 
     research_field = models.CharField(max_length=None,verbose_name ="حوزه فعالیت")
     history_and_record = models.CharField(max_length=None,verbose_name ="",verbose_name ="سابقه")
     is_international_industry = models.BooleanField(max_length=None,verbose_name ="سابقه فعالیت بین المللی")
@@ -78,8 +79,8 @@ class IndustryForm(models.Model):
     
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None)
-    key_words = ManyToManyField(KeyWord)
-    project_priority_level = models.FloatField(verbose_name ="")
+    key_words = ManyToManyField(KeyWord,verbose_name ="کلمات کلیدی")
+    project_priority_level = models.FloatField(verbose_name ="میزان اهمیت پروژه")
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
     STATUS_CHOICE = (('completed' ,'completed'),('stoped' ,'stoped'),)
