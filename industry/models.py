@@ -12,11 +12,11 @@ class Project(models.Model):
     date_pahse_one_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ پایان فاز اول")
     date_pahse_two_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ پایان فاز دوم")
     date_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ اتمام پروژه")
-    researcher_applied = models.ManyToManyField(Researcher)
-    researcher_accepted = models.ManyToManyField(Researcher, on_delete=models.CASCADE)
-    expert_applied = models.ManyToManyField(Expert)
-    expert_accepted = models.OneToOneField(Expert)
-    industry_creator = models.OneToOneField(Industry, on_delete=models.CASCADE)
+    researcher_applied = models.ManyToManyField(Researcher,verbose_name = "پژوهشگران درخواست داده")
+    researcher_accepted = models.ManyToManyField(Researcher,verbose_name = "پژوهشگران پذبرفته شده")
+    expert_applied = models.ManyToManyField(Expert,verbose_name = "استاد درخواست داده")
+    expert_accepted = models.OneToOneField(Expert, on_delete=models.CASCADE,verbose_name = "استاد پذیرفته شده")
+    industry_creator = models.OneToOneField(Industry, on_delete=models.CASCADE,verbose_name = "صنعت صاحب پروژه")
     cost_of_project = models.FloatField(verbose_name = "هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name = "حداکثر تعداد پژوهشگر")   
     project_detail = models.CharField(max_length=None ,verbose_name = "جزيات پروژه")
@@ -27,7 +27,7 @@ class Project(models.Model):
 class ProjectForm(models.Model): 
     project_title_persian = models.CharField(max_length=None,verbose_name ="عنوان پروژه فارسی")
     project_title_english = models.CharField(max_length=None,verbose_name ="عنوان پروژه انگلیسی")
-    key_words = models.CharField(max_length=None)
+    key_words = models.ManyToManyField(Keyword,verbose_name = "کلمات کلیدی")
     percentage_wet_lab = models.FloatField(verbose_name ="درصد wet_lab")
     percentage_dry_lab = models.FloatField(,verbose_name ="درصد dry_lab ")
     research_methodology = models.CharField(max_length=None,verbose_name ="روش تحقیق")#need choices
@@ -96,7 +96,7 @@ class Keyword(models.Model):
     
     
     
-class ٍExepertEvaluation(models.Model):
+class ٍExepertEvaluateIndustry(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     expert  = models.OneToOneField(expert.Expert, on_delete=models.CASCADE)
     INT_CHOICE =(
@@ -113,18 +113,18 @@ class ٍExepertEvaluation(models.Model):
             (TRUE,"true"),
     )
 
-    provide_material =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    provide_ensurance = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    ontime_payment = models.IntegerField(choices= INT_CHOICE ,verbose_name = " ")
-    provide_place = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    formal_act = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    budget_amount = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    time_amount = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    continue_coperate = models.BooleanField(choices= BOOL_CHOICE)
-    using_chamt = models.BooleanField(choices= BOOL_CHOICE)
-    to_paper = models.BooleanField(choices= BOOL_CHOICE)
+    provide_material =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت از تامین مواد اولیه")
+    provide_ensurance = models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت از بیمه کارکنان")
+    ontime_payment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "نحوه پرداخت به موقع")
+    provide_place = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تامین محل انجام")
+    formal_act = models.IntegerField(choices= INT_CHOICE ,verbose_name = "برخورد محترمانه")
+    budget_amount = models.IntegerField(choices= INT_CHOICE ,verbose_name = "بودجه سازگار با واقعیت")
+    time_amount = models.IntegerField(choices= INT_CHOICE ,verbose_name = "زمان بندی مطابق خواسته ها")
+    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت کلی")
+    chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "عملکرد چمران تیم")
+    continue_coperate = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "تمایل همکاری با صنعت")
+    using_chamt = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "ادامه همکاری با چمران تیم")
+    to_paper = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "قابلیت تبدیل به مقاله")
     
     def avarage(self):
         sum = 0.0
