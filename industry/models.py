@@ -25,22 +25,22 @@ class Project(models.Model):
         return self.project_form.project_title_english
 
 class ProjectForm(models.Model): 
-    project_title_persian = models.CharField(max_length=None)
-    project_title_english = models.CharField(max_length=None)
+    project_title_persian = models.CharField(max_length=None,verbose_name ="عنوان پروژه فارسی")
+    project_title_english = models.CharField(max_length=None,verbose_name ="عنوان پروژه انگلیسی")
     key_words = models.CharField(max_length=None)
-    percentage_wet_lab = models.FloatField()
-    percentage_dry_lab = models.FloatField()
-    research_methodology = models.CharField(max_length=None)
-    main_problem_and_importance = models.CharField(max_length=None)
-    progress_profitability= models.CharField(max_length=None)
-    approach = models.CharField(max_length=None)
-    innovation = models.CharField(max_length=None)
-    required_lab_equipment = models.CharField(max_length=None)
-    reqired_technique = models.CharField(max_length=None)
-    project_phase =  models.CharField(max_length=None)
-    required_budget = models.FloatField()
-    papers_and_documentaion = models.CharField(max_length=None)
-    policy = models.CharField(max_length=None)
+    percentage_wet_lab = models.FloatField(verbose_name ="درصد wet_lab")
+    percentage_dry_lab = models.FloatField(,verbose_name ="درصد dry_lab ")
+    research_methodology = models.CharField(max_length=None,verbose_name ="روش تحقیق")#need choices
+    main_problem_and_importance = models.CharField(max_length=None,verbose_name ="مشکلات اصلی و اهداف")
+    progress_profitability= models.CharField(max_length=None,verbose_name ="پیشرفا های حاصل")
+    approach = models.CharField(max_length=None,verbose_name ="راه کار ها")
+    innovation = models.CharField(max_length=None,verbose_name ="نو آوری ها")
+    required_lab_equipment = models.CharField(max_length=None,verbose_name ="منابع مورد نیاز")
+    reqired_technique = models.CharField(max_length=None,verbose_name ="تکنیک های مورد نیاز")
+    project_phase =  models.CharField(max_length=None,verbose_name ="مراحل انجام پروژه")
+    required_budget = models.FloatField(,verbose_name ="بودجه مورد نیاز")
+    papers_and_documentaion = models.CharField(max_length=None,verbose_name ="مقالات و مستندات")
+    policy = models.CharField(max_length=None,verbose_name ="نکات اخلاقی")
 
 class Comment(models.Model):
     sender_comment = models.CharField(max_length=None)
@@ -52,45 +52,46 @@ class Comment(models.Model):
 class Industry(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     industry_form = models.OneToOneField(IndustryForm, on_delete=models.CASCADE) 
-    research_field = models.CharField(max_length=None)
-    history_and_record = models.CharField(max_length=None)
-    is_international_industry = models.BooleanField(max_length=None)
-    industry_points = models.FloatField()
-    project_history = models.ForeignKey(ProjectHistory, on_delete=models.CASCADE)
+    research_field = models.CharField(max_length=None,verbose_name ="حوزه فعالیت")
+    history_and_record = models.CharField(max_length=None,verbose_name ="",verbose_name ="سابقه")
+    is_international_industry = models.BooleanField(max_length=None,verbose_name ="سابقه فعالیت بین المللی")
+    industry_points = models.FloatField(verbose_name ="امتیاز صنعت")
+    
     def __str__(self):
         return self.industry_name
 
 
 class IndustryForm(models.Model):
-    industry_name = models.CharField(max_length=None)
-    registration_number = models.CharField(max_length=None)
-    date_of_foundation = models.DateField(auto_now=False, auto_now_add=False)
-    industry_type = models.CharField(max_length=None)
-    industry_address = models.CharField(max_length=None)
-    phone_number = models.IntegerField()
-    budget_for_research = models.FloatField()
-    turn_over = models.FloatField()
-    services_products = models.CharField(max_length=None)
-    awards_honors = models.CharField(max_length=None)
-    email_adress = models.EmailField(max_length=254)
+    industry_name = models.CharField(max_length=None,verbose_name ="نام شرکت")
+    registration_number = models.CharField(max_length=None,verbose_name ="شماره ثبت")
+    date_of_foundation = models.DateField(auto_now=False, auto_now_add=False,verbose_name ="تاریخ تاسیس")
+    industry_type = models.CharField(max_length=None,verbose_name ="نوع شرکت")#need choices
+    industry_address = models.CharField(max_length=None,verbose_name ="ادرس شرکت")
+    phone_number = models.IntegerField(verbose_name ="شماره تلفن")
+    budget_for_research = models.FloatField(verbose_name ="بودجه برای تحقیقات")
+    turn_over = models.FloatField(verbose_name ="گردش مالی")
+    services_products = models.CharField(max_length=None,verbose_name ="خدمات/محصولات")
+    awards_honors = models.CharField(max_length=None,verbose_name ="افتخارات")
+    email_adress = models.EmailField(max_length=254و,verbose_name ="ادرس")
 
 
     
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None)
     key_words = ManyToManyField(KeyWord)
-    project_priority_level = models.FloatField()
+    project_priority_level = models.FloatField(verbose_name ="")
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
     STATUS_CHOICE = (('completed' ,'completed'),('stoped' ,'stoped'),)
     project_status = models.CharField(max_length=9 ,choices = STATUS_CHOICE ,verbose_name="وضعیت")
     project_point = models.FloatField(verbose_name='امتیاز')
     project_income = models.IntegerField(verbose_name= 'درآمد')
-  
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
+    
     def __str__(self):
         return "history of " + self.profile.name 
     
-class KeyWord(models.Model):
+class Keyword(models.Model):
     key_word_name = models.CharField(max_length=None)
     
     
