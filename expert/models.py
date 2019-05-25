@@ -172,3 +172,15 @@ class ResearcherEvaluateExpert(models.Model):
 
         ava = float(sum / 12)
         return ava
+
+class ResearchQuestion(models.Model):
+    question_title = models.CharField(max_length=None,verbose_name = "عنوان سوال")
+    submited_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ ثبت سوال")
+    question = models.CharField(max_length=None,verbose_name = "سوال")
+    is_answered = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "پاسخ داده شده")
+    expert = models.ForeignKey(Expert, on_delete=models.CASCADE ,verbose_name = "استاد")
+    
+    def __str__(self):
+        return "title" + question_title
+    
+    
