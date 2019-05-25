@@ -92,8 +92,8 @@ class ExpertProjectHistory(models.Model):
     
     
 class IndustryEvaluateExpert(models.Model):
-    expert = models.ForeignKey(Expert, on_delete=models.CASCADE,verbose_name = "")
-    industry  = models.OneToOneField(industry.Industry, on_delete=models.CASCADE,verbose_name = "")
+    expert = models.ForeignKey(Expert, on_delete=models.CASCADE,verbose_name = "استاد")
+    industry  = models.OneToOneField(industry.Industry, on_delete=models.CASCADE,verbose_name = "صنعت ارزیابی کننده")
     INT_CHOICE =(
             ( 0 , '0'),
             ( 1 , '1'),
@@ -108,18 +108,18 @@ class IndustryEvaluateExpert(models.Model):
             (TRUE,"true"),
     )
 
-    ontime_progress_report =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    cotribution_to_industry = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    corect_estimation = models.IntegerField(choices= INT_CHOICE ,verbose_name = " ")
-    ontime_deadline = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    fullfill_requirment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    diciplined = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    comited_to_goals = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    quality = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    continue_coperate = models.BooleanField(choices= BOOL_CHOICE)
-    using_chamt = models.BooleanField(choices= BOOL_CHOICE)
-    has_inovation = models.BooleanField(choices= BOOL_CHOICE)
+    ontime_progress_report =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "گزارش به موقع")
+    cotribution_to_industry = models.IntegerField(choices= INT_CHOICE ,verbose_name = "میزان همکاری با صنعت")
+    corect_estimation = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تخمین استاد از هزینه و مواد")
+    ontime_deadline = models.IntegerField(choices= INT_CHOICE ,verbose_name = "زمتن بندی اجرا")
+    fullfill_requirment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "اجرا مفاد قرارداد")
+    diciplined = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تعهد کاری")
+    comited_to_goals = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تحقق اداف پروژه")
+    quality = models.IntegerField(choices= INT_CHOICE ,verbose_name = "کیفیت عملکرد")
+    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت کلی")
+    continue_coperate = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "ادامه همکاری با استاد")
+    using_chamt = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "ادامه همکاری با چمران تیم")
+    has_inovation = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "دارای طرح جدید")
     
     def avarage(self):
         sum = 0.0
@@ -149,19 +149,20 @@ class ResearcherEvaluateExpert(models.Model):
             ( 5 , 'از قبل انجام کار پول دریافت کردم'),
     )
 
-    tech_enough_info =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    tech_required_info = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    totoal_gain = models.IntegerField(choices= INT_CHOICE ,verbose_name = " ")
-    scientific_level = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    availability = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    planing = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    formal_act = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    distribute_task = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
+    tech_enough_info =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "اطاعات لازم نحوه کارتکنیک ها")
+    tech_required_info = models.IntegerField(choices= INT_CHOICE ,verbose_name = "صحت تکنیک های مورد نیاز")
+    totoal_gain = models.IntegerField(choices= INT_CHOICE ,verbose_name = "افزایش یادگیری")
+    scientific_level = models.IntegerField(choices= INT_CHOICE ,verbose_name = "سطح علمی استاد")
+    availability = models.IntegerField(choices= INT_CHOICE ,verbose_name = "در دسترس بودن")
+    planing = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تناسب برنامه با زمان دانشجو")
+    flexible_schedule = models.IntegerField(choices= INT_CHOICE ,verbose_name = "انعطاف برنامه استاد")
+    formal_act = models.IntegerField(choices= INT_CHOICE ,verbose_name = "برخورد محترمانه")
+    distribute_task = models.IntegerField(choices= INT_CHOICE ,verbose_name = "به کارگیری متعادل دانشجویان")
+    total_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت کلی")
+    chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت از چمران تیم")
     next_cooperatetion = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    fullfill_requirment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
-    research_gain = models.IntegerField(choices= Gain_CHOICE)#//should be array
+    fullfill_requirment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تامین مالی و ازمایشگاه")
+    research_gain = models.IntegerField(choices= Gain_CHOICE,verbose_name = "دستاورد دانشجو")#//should be array
     
     def avarage(self):
         sum = 0.0
