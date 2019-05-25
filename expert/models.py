@@ -10,67 +10,67 @@ class Expert(models.Model):
         return self.expert_form.expert_firstname+self.expert_form.expert_lastname
 
 class ExpertForm(models.Model): 
-    expert_firstname = models.CharField(max_length=None,verbose_name = "")
-    expert_lastname = models.CharField(max_length=None,verbose_name = "")
-    special_field = models.CharField(max_length=None,verbose_name = "")
-    national_code = models.IntegerField(verbose_name = "")
-    scientific_rank = models.CharField(max_length=None,verbose_name = "")
-    university = models.CharField(max_length=None,verbose_name = "")
-    home_adress = models.CharField(max_length=None,verbose_name = "")
-    phone_number = models.IntegerField(verbose_name = "")
-    mobile_phone =  models.IntegerField(verbose_name = "")
-    email_adress = models.EmailField(max_length=254,verbose_name = "")
-    eq_tset = models.OneToOneField(EqTset, on_delete=models.CASCADE,verbose_name = "")
-    awards = models.CharField(max_length=None,verbose_name = "")
-    method_of_introduction = models.CharField(max_length=None,verbose_name = "")
-    posetive_feature_chamt =  models.CharField(max_length=None,verbose_name = "")
-    lab_equipment = models.CharField(max_length=None,verbose_name = "")
-    number_of_resercher = models.IntegerField(verbose_name = "")
-    has_indusryial_researech = models.BooleanField(verbose_name = "")
-    number_of_grants = models.IntegerField(verbose_name = "")
-    technique =  models.ManyToManyField(researcher.Technique,verbose_name = "")
-    languages = models.CharField(max_length=None,verbose_name = "")
+    expert_firstname = models.CharField(max_length=None,verbose_name = "نام")
+    expert_lastname = models.CharField(max_length=None,verbose_name = "نام خانوادگی")
+    special_field = models.CharField(max_length=None,verbose_name = "حوزه تخصصی")
+    national_code = models.IntegerField(verbose_name = "کد ملی")
+    scientific_rank = models.CharField(max_length=None,verbose_name = "مرتبه عامی")#need choice
+    university = models.CharField(max_length=None,verbose_name = "دانشگاه محل فعالیت")
+    home_adress = models.CharField(max_length=None,verbose_name = "ادرس منزل")
+    phone_number = models.IntegerField(verbose_name = "شماره منزل")
+    mobile_phone =  models.IntegerField(verbose_name = "شماره تلفن همراه")
+    email_adress = models.EmailField(max_length=254,verbose_name = "ایمیل")
+    eq_tset = models.OneToOneField(EqTset, on_delete=models.CASCADE,verbose_name = "تست EQ")
+    awards = models.CharField(max_length=None,verbose_name = "افتخارات")
+    method_of_introduction = models.CharField(max_length=None,verbose_name = "طریقه اشنایی با چمران تیم")
+    posetive_feature_chamt =  models.CharField(max_length=None,verbose_name = "ویژگی های مثبت چمران تیم")#check 
+    lab_equipment = models.CharField(max_length=None,verbose_name = "امکانات پژوهشی")
+    number_of_resercher = models.IntegerField(verbose_name = "دانشجو تحت نظارت")#need choices
+    has_indusryial_researech = models.BooleanField(verbose_name = "همکاری با شرکت خارج دانشگاه")
+    number_of_grants = models.IntegerField(verbose_name = "تعداد گرنت")
+    technique =  models.ManyToManyField(researcher.Technique,verbose_name = "تکنیک")#ask
+    languages = models.CharField(max_length=None,verbose_name = "تسلط بر زبان های خارجی")#need other class
 
 class ScientificRecord(models.Model):
-    degree = models.CharField(max_length=None,verbose_name = "")
-    major = models.CharField(max_length=None,verbose_name = "")
-    university = models.CharField(max_length=None,verbose_name = "")
-    city = models.CharField(max_length=None,verbose_name = "")
-    date_of_grauate = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "")
+    degree = models.CharField(max_length=None,verbose_name = "مقطع تحصیلی")
+    major = models.CharField(max_length=None,verbose_name = "رشته تحصیلی")
+    university = models.CharField(max_length=None,verbose_name = "دانشگاه")
+    city = models.CharField(max_length=None,verbose_name = "شهر")
+    date_of_grauate = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "سال اخذ مدرک")
     expert_form =  models.ForeignKey(ExpertForm, on_delete=models.CASCADE,verbose_name = "فرم استاد")
     
 class ExecutiveRecord(models.Model):
-    executive_post = models.CharField(max_length=None,verbose_name = "")
-    date_start_post = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "")
-    date_end_post = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "")
-    city =  models.CharField(max_length=None,verbose_name = "")
-    organization =  models.CharField(max_length=None,verbose_name = "")
+    executive_post = models.CharField(max_length=None,verbose_name = "سمت")
+    date_start_post = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تلریخ شروع")
+    date_end_post = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ پایان")
+    city =  models.CharField(max_length=None,verbose_name = "شهر")
+    organization =  models.CharField(max_length=None,verbose_name = "مجل خدمت")
     expert_form =  models.ForeignKey(ExpertForm, on_delete=models.CASCADE,verbose_name = "فرم استاد")
 
 class ResearchRecord(models.Model):
-    research_title = models.CharField(max_length=None,verbose_name = "")
-    researcher = models.CharField(max_length=None,verbose_name = "")
-    co_researcher = models.CharField(max_length=None,verbose_name = "")
-    status = models.CharField(max_length=None,verbose_name = "")
+    research_title = models.CharField(max_length=None,verbose_name = "عنوان طرح")
+    researcher = models.CharField(max_length=None,verbose_name = "نام مجری")
+    co_researcher = models.CharField(max_length=None,verbose_name = "همکار")
+    status = models.CharField(max_length=None,verbose_name = "وضعیت")#need choice
     expert_form =  models.ForeignKey(ExpertForm, on_delete=models.CASCADE,verbose_name = "فرم استاد")
 
 class PaperRecord(models.Model):
-    research_title = models.CharField(max_length=None,verbose_name = "")
-    date_published = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "")
-    publised_at = models.CharField(max_length=None,verbose_name = "")
-    impact_factor = models.FloatField(verbose_name = "")
-    citation = models.IntegerField(verbose_name = "")
+    research_title = models.CharField(max_length=None,verbose_name = "عنوان مقاله")
+    date_published = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ انتشار")
+    publised_at = models.CharField(max_length=None,verbose_name = "محل انتشار")
+    impact_factor = models.FloatField(verbose_name = "impact factor")
+    citation = models.IntegerField(verbose_name = "تعداد ارجاع")
     expert_form =  models.ForeignKey(ExpertForm, on_delete=models.CASCADE,verbose_name = "فرم استاد")
     
 class EqTset(models.Model):
-    team_work = models.IntegerField(verbose_name = "")
-    innovation = models.IntegerField(verbose_name = "")
-    devtion = models.IntegerField(verbose_name = "")
-    productive_research = models.IntegerField(verbose_name = "")
-    national_commitment = models.IntegerField(verbose_name = "")
-    collecting_information = models.IntegerField(verbose_name = "")
-    business_thinking = models.IntegerField(verbose_name = "")
-    risk_averse = models.IntegerField(verbose_name = "")
+    team_work = models.IntegerField(verbose_name = "روحیه کار تیمی")#need choice
+    innovation = models.IntegerField(verbose_name = "تفکر خلاقانه")#need choice
+    devtion = models.IntegerField(verbose_name = "تعهد و ازخوگذشتگی")#need choice
+    productive_research = models.IntegerField(verbose_name = "پژوهش محصولمحور")#need choice
+    national_commitment = models.IntegerField(verbose_name = "تعهد ملی")#need choice
+    collecting_information = models.IntegerField(verbose_name = "جمع اوری داده")#need choice
+    business_thinking = models.IntegerField(verbose_name = "روحیه بیزینسی")#need choice
+    risk_averse = models.IntegerField(verbose_name = "ریسک پذیری")#need choice
 
 class Technique(models.Model):
     technique_name = models.CharField(max_length=None,verbose_name = "")
