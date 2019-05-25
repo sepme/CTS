@@ -183,4 +183,12 @@ class ResearchQuestion(models.Model):
     def __str__(self):
         return "title" + question_title
     
+class ResearchQuestionInstance(models.Model):
+    researchquestion = models.ForeignKey(ResearchQuestion, on_delete=models.CASCADE ,verbose_name = "سوال پژوهشی")
+    hand_out_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ واگذاری")
+    question = models.CharField(max_length=None,verbose_name = "سوال")
+    is_answered = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "پاسخ داده شده")
+    resercher = models.ForeignKey(resercher.Researcher, on_delete=models.CASCADE ,verbose_name = "پژوهشگر")
     
+    def __str__(self):
+        return "title" + question_title
