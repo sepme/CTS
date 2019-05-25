@@ -72,15 +72,10 @@ class EqTset(models.Model):
     business_thinking = models.IntegerField(verbose_name = "روحیه بیزینسی")#need choice
     risk_averse = models.IntegerField(verbose_name = "ریسک پذیری")#need choice
 
-class Technique(models.Model):
-    technique_name = models.CharField(max_length=None,verbose_name = "")
-    ready_to_teach =  models.BooleanField(verbose_name = "")
-    skill_level = models.CharField(max_length=None,verbose_name = "")
-
 class ExpertProjectHistory(models.Model):
-    project_title_english = models.CharField(max_length=None,verbose_name = "")
-    key_words = models.CharField(max_length=None,verbose_name = "")
-    project_priority_level = models.FloatField(verbose_name = "")
+    project_title_english = models.CharField(max_length=None,verbose_name = "عنوان مقاله")
+    key_words = models.CharField(max_length=None,verbose_name = "کلمات کلیدی")#ask
+    project_priority_level = models.FloatField(verbose_name = "اولویت پروژه")
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
     STATUS_CHOICE = (
@@ -96,7 +91,7 @@ class ExpertProjectHistory(models.Model):
         return "history of " + self.profile.name 
     
     
-class IndustryEvaluation(models.Model):
+class IndustryEvaluateExpert(models.Model):
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE,verbose_name = "")
     industry  = models.OneToOneField(industry.Industry, on_delete=models.CASCADE,verbose_name = "")
     INT_CHOICE =(
@@ -134,7 +129,7 @@ class IndustryEvaluation(models.Model):
         ava = float(sum / 8)
         return ava
     
-class ResearcherEvaluation(models.Model):
+class ResearcherEvaluateExpert(models.Model):
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE,verbose_name = "")
     researcher  = models.OneToOneField(researcher.Researcher, on_delete=models.CASCADE,verbose_name = "")
     INT_CHOICE =(
