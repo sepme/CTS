@@ -21,8 +21,13 @@ class Project(models.Model):
     maximum_researcher = models.IntegerField(verbose_name = "حداکثر تعداد پژوهشگر")   
     project_detail = models.CharField(max_length=None ,verbose_name = "جزيات پروژه")
     project_priority_level = models.FloatField(verbose_name ="سطح اهمیت پروژه")
+    
     def __str__(self):
         return self.project_form.project_title_english
+    
+    def related_commets(self):
+        comments = Project.objects.all().select_related("Comment")
+        return comments
 
 class ProjectForm(models.Model): 
     project_title_persian = models.CharField(max_length=None,verbose_name ="عنوان پروژه فارسی")
