@@ -25,10 +25,16 @@ class ExpertForm(models.Model):
     method_of_introduction = models.CharField(max_length=None,verbose_name = "طریقه اشنایی با چمران تیم")
     posetive_feature_chamt =  models.CharField(max_length=None,verbose_name = "ویژگی های مثبت چمران تیم")#check 
     lab_equipment = models.CharField(max_length=None,verbose_name = "امکانات پژوهشی")
-    number_of_resercher = models.IntegerField(verbose_name = "دانشجو تحت نظارت")#need choices
+    number_of_reserche_choice =(
+            ( 0 , '1-10'),
+            ( 1 , '11-30'),
+            ( 2 , '31-60'),
+            ( 3 , '+60'),
+    )
+    number_of_resercher = models.IntegerField(choices=number_of_reserche_choice,verbose_name = "دانشجو تحت نظارت")
     has_indusryial_researech = models.BooleanField(verbose_name = "همکاری با شرکت خارج دانشگاه")
     number_of_grants = models.IntegerField(verbose_name = "تعداد گرنت")
-    technique =  models.ManyToManyField(researcher.Technique,verbose_name = "تکنیک")#ask
+    technique =  models.ManyToManyField(researcher.Technique,verbose_name = "تکنیک")
     languages = models.CharField(max_length=None,verbose_name = "تسلط بر زبان های خارجی")#need other class
 
 class ScientificRecord(models.Model):
@@ -63,14 +69,21 @@ class PaperRecord(models.Model):
     expert_form =  models.ForeignKey(ExpertForm, on_delete=models.CASCADE,verbose_name = "فرم استاد")
     
 class EqTset(models.Model):
-    team_work = models.IntegerField(verbose_name = "روحیه کار تیمی")#need choice
-    innovation = models.IntegerField(verbose_name = "تفکر خلاقانه")#need choice
-    devtion = models.IntegerField(verbose_name = "تعهد و ازخوگذشتگی")#need choice
-    productive_research = models.IntegerField(verbose_name = "پژوهش محصولمحور")#need choice
-    national_commitment = models.IntegerField(verbose_name = "تعهد ملی")#need choice
-    collecting_information = models.IntegerField(verbose_name = "جمع اوری داده")#need choice
-    business_thinking = models.IntegerField(verbose_name = "روحیه بیزینسی")#need choice
-    risk_averse = models.IntegerField(verbose_name = "ریسک پذیری")#need choice
+    INT_CHOICE =(
+            ( 1 , '1'),
+            ( 2 , '2'),
+            ( 3 , '3'),
+            ( 4 , '4'),
+            ( 5 , '5'),
+    )
+    team_work = models.IntegerField(choices= INT_CHOICE ,verbose_name = "روحیه کار تیمی")
+    innovation = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تفکر خلاقانه")
+    devtion = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تعهد و ازخوگذشتگی")
+    productive_research = models.IntegerField(choices= INT_CHOICE ,verbose_name = "پژوهش محصولمحور")
+    national_commitment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تعهد ملی")
+    collecting_information = models.IntegerField(choices= INT_CHOICE ,verbose_name = "جمع اوری داده")
+    business_thinking = models.IntegerField(choices= INT_CHOICE ,verbose_name = "روحیه بیزینسی")
+    risk_averse = models.IntegerField(choices= INT_CHOICE ,verbose_name = "ریسک پذیری")
 
 class ExpertProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None,verbose_name = "عنوان مقاله")
