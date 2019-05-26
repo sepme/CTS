@@ -14,7 +14,15 @@ class ExpertForm(models.Model):
     expert_lastname = models.CharField(max_length=None,verbose_name = "نام خانوادگی")
     special_field = models.CharField(max_length=None,verbose_name = "حوزه تخصصی")
     national_code = models.IntegerField(verbose_name = "کد ملی")
-    scientific_rank = models.CharField(max_length=None,verbose_name = "مرتبه عامی")#need choice
+    scientific_rank_choice =(
+            ( 0 , 'مربی'),
+            ( 1 , 'استادی یار'),
+            ( 2 , 'دانش یار'),
+            ( 3 , 'استاد '),
+            ( 4 , ' استاد تمام'),
+            ( 5 , 'پژوهشگر'),
+    )
+    scientific_rank = models.CharField(choices=scientific_rank_choice,max_length=None,verbose_name = "مرتبه علمی")
     university = models.CharField(max_length=None,verbose_name = "دانشگاه محل فعالیت")
     home_adress = models.CharField(max_length=None,verbose_name = "ادرس منزل")
     phone_number = models.IntegerField(verbose_name = "شماره منزل")
