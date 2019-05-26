@@ -35,7 +35,11 @@ class ProjectForm(models.Model):
     key_words = models.ManyToManyField(Keyword,verbose_name = "کلمات کلیدی")
     percentage_wet_lab = models.FloatField(verbose_name ="درصد wet_lab")
     percentage_dry_lab = models.FloatField(,verbose_name ="درصد dry_lab ")
-    research_methodology = models.CharField(max_length=None,verbose_name ="روش تحقیق")#need choices
+    research_methodology_choice =(
+            ( 0 , 'کیفی'),
+            ( 1 , 'کمی'),
+    )
+    research_methodology = models.IntegerField(choices= research_methodology_choice,verbose_name ="روش تحقیق")
     main_problem_and_importance = models.CharField(max_length=None,verbose_name ="مشکلات اصلی و اهداف")
     progress_profitability= models.CharField(max_length=None,verbose_name ="پیشرفا های حاصل")
     approach = models.CharField(max_length=None,verbose_name ="راه کار ها")
@@ -71,7 +75,11 @@ class IndustryForm(models.Model):
     industry_name = models.CharField(max_length=None,verbose_name ="نام شرکت")
     registration_number = models.CharField(max_length=None,verbose_name ="شماره ثبت")
     date_of_foundation = models.DateField(auto_now=False, auto_now_add=False,verbose_name ="تاریخ تاسیس")
-    industry_type = models.CharField(max_length=None,verbose_name ="نوع شرکت")#need choices
+    industry_type_choice =(
+            ( 0 , 'خصوصی'),
+            ( 1 , 'دولتی'),
+    )
+    industry_type = models.IntegerField(choices = industry_type_choice,max_length=None,verbose_name ="نوع شرکت")
     industry_address = models.CharField(max_length=None,verbose_name ="ادرس شرکت")
     phone_number = models.IntegerField(verbose_name ="شماره تلفن")
     budget_for_research = models.FloatField(verbose_name ="بودجه برای تحقیقات")
