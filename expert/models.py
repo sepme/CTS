@@ -43,7 +43,7 @@ class ExpertForm(models.Model):
     has_indusryial_researech = models.BooleanField(verbose_name = "همکاری با شرکت خارج دانشگاه")
     number_of_grants = models.IntegerField(verbose_name = "تعداد گرنت")
     technique =  models.ManyToManyField(researcher.Technique,verbose_name = "تکنیک")
-    languages = models.CharField(max_length=None,verbose_name = "تسلط بر زبان های خارجی")#need other class
+    languages = models.CharField(max_length=None,verbose_name = "تسلط بر زبان های خارجی")
 
 class ScientificRecord(models.Model):
     degree = models.CharField(max_length=None,verbose_name = "مقطع تحصیلی")
@@ -183,7 +183,7 @@ class ResearcherEvaluateExpert(models.Model):
     chamt_satisfaction = models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت از چمران تیم")
     next_cooperatetion = models.IntegerField(choices= INT_CHOICE ,verbose_name = "")
     fullfill_requirment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تامین مالی و ازمایشگاه")
-    research_gain = models.IntegerField(choices= Gain_CHOICE,verbose_name = "دستاورد دانشجو")#//should be array
+    
     
     def avarage(self):
         sum = 0.0
@@ -193,7 +193,12 @@ class ResearcherEvaluateExpert(models.Model):
 
         ava = float(sum / 12)
         return ava
-
+    
+class ResearchGain(models.Model):
+    researcherevaluateexpert = models.ForeignKey(ResearcherEvaluateExpert, on_delete=models.CASCADE ,verbose_name = "استاد")
+    research_gain = models.IntegerField(choices= Gain_CHOICE,verbose_name = "دستاورد دانشجو")
+    
+    
 class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=None,verbose_name = "عنوان سوال")
     submited_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ ثبت سوال")
