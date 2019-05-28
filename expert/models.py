@@ -1,13 +1,26 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Expert(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE ,verbose_name = "کاربر استاد")
-    expert_form = models.OneToOneField(ExpertForm, on_delete=models.CASCADE ,verbose_name = "فرم استاد") 
-    date_register = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ ثبت نام")
-    expert_point = models.IntegerField(verbose_name = "امتیاز استاد")
-    def __str__(self):
-        return self.expert_form.expert_firstname+self.expert_form.expert_lastname
+
+
+class EqTset(models.Model):
+    INT_CHOICE =(
+            ( 1 , '1'),
+            ( 2 , '2'),
+            ( 3 , '3'),
+            ( 4 , '4'),
+            ( 5 , '5'),
+    )
+    team_work = models.IntegerField(choices= INT_CHOICE ,verbose_name = "روحیه کار تیمی")
+    innovation = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تفکر خلاقانه")
+    devtion = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تعهد و ازخوگذشتگی")
+    productive_research = models.IntegerField(choices= INT_CHOICE ,verbose_name = "پژوهش محصولمحور")
+    national_commitment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تعهد ملی")
+    collecting_information = models.IntegerField(choices= INT_CHOICE ,verbose_name = "جمع اوری داده")
+    business_thinking = models.IntegerField(choices= INT_CHOICE ,verbose_name = "روحیه بیزینسی")
+    risk_averse = models.IntegerField(choices= INT_CHOICE ,verbose_name = "ریسک پذیری")
+
+
 
 class ExpertForm(models.Model): 
     expert_firstname = models.CharField(max_length=None,verbose_name = "نام")
@@ -31,7 +44,7 @@ class ExpertForm(models.Model):
     eq_tset = models.OneToOneField(EqTset, on_delete=models.CASCADE,verbose_name = "تست EQ")
     awards = models.CharField(max_length=None,verbose_name = "افتخارات")
     method_of_introduction = models.CharField(max_length=None,verbose_name = "طریقه اشنایی با چمران تیم")
-    posetive_feature_chamt =  models.CharField(max_length=None,verbose_name = "ویژگی های مثبت چمران تیم")#check 
+    posetive_feature_chamt =  models.CharField(max_length=None,verbose_name = "ویژگی های مثبت چمران تیم")
     lab_equipment = models.CharField(max_length=None,verbose_name = "امکانات پژوهشی")
     number_of_reserche_choice =(
             ( 0 , '1-10'),
@@ -44,6 +57,16 @@ class ExpertForm(models.Model):
     number_of_grants = models.IntegerField(verbose_name = "تعداد گرنت")
     technique =  models.ManyToManyField(researcher.Technique,verbose_name = "تکنیک")
     languages = models.CharField(max_length=None,verbose_name = "تسلط بر زبان های خارجی")
+
+
+
+class Expert(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE ,verbose_name = "کاربر استاد")
+    expert_form = models.OneToOneField(ExpertForm, on_delete=models.CASCADE ,verbose_name = "فرم استاد") 
+    date_register = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ ثبت نام")
+    expert_point = models.IntegerField(verbose_name = "امتیاز استاد")
+    def __str__(self):
+        return self.expert_form.expert_firstname+self.expert_form.expert_lastname
 
 class ScientificRecord(models.Model):
     degree = models.CharField(max_length=None,verbose_name = "مقطع تحصیلی")
@@ -65,7 +88,7 @@ class ResearchRecord(models.Model):
     research_title = models.CharField(max_length=None,verbose_name = "عنوان طرح")
     researcher = models.CharField(max_length=None,verbose_name = "نام مجری")
     co_researcher = models.CharField(max_length=None,verbose_name = "همکار")
-    status = models.CharField(max_length=None,verbose_name = "وضعیت")#need choice
+    status = models.CharField(max_length=None,verbose_name = "وضعیت")
     expert_form =  models.ForeignKey(ExpertForm, on_delete=models.CASCADE,verbose_name = "فرم استاد")
 
 class PaperRecord(models.Model):
@@ -76,26 +99,10 @@ class PaperRecord(models.Model):
     citation = models.IntegerField(verbose_name = "تعداد ارجاع")
     expert_form =  models.ForeignKey(ExpertForm, on_delete=models.CASCADE,verbose_name = "فرم استاد")
     
-class EqTset(models.Model):
-    INT_CHOICE =(
-            ( 1 , '1'),
-            ( 2 , '2'),
-            ( 3 , '3'),
-            ( 4 , '4'),
-            ( 5 , '5'),
-    )
-    team_work = models.IntegerField(choices= INT_CHOICE ,verbose_name = "روحیه کار تیمی")
-    innovation = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تفکر خلاقانه")
-    devtion = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تعهد و ازخوگذشتگی")
-    productive_research = models.IntegerField(choices= INT_CHOICE ,verbose_name = "پژوهش محصولمحور")
-    national_commitment = models.IntegerField(choices= INT_CHOICE ,verbose_name = "تعهد ملی")
-    collecting_information = models.IntegerField(choices= INT_CHOICE ,verbose_name = "جمع اوری داده")
-    business_thinking = models.IntegerField(choices= INT_CHOICE ,verbose_name = "روحیه بیزینسی")
-    risk_averse = models.IntegerField(choices= INT_CHOICE ,verbose_name = "ریسک پذیری")
 
 class ExpertProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None,verbose_name = "عنوان مقاله")
-    key_words = models.CharField(max_length=None,verbose_name = "کلمات کلیدی")#ask
+    key_words = models.ManyToManyField(industry.Keyword,verbose_name = "کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name = "اولویت پروژه")
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
@@ -213,5 +220,5 @@ class ResearchQuestionInstance(models.Model):
     hand_out_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ واگذاری")
     question = models.CharField(max_length=None,verbose_name = "سوال")
     is_answered = models.BooleanField(verbose_name = "پاسخ داده شده")
-    resercher = models.ForeignKey(resercher.Researcher, on_delete=models.CASCADE ,verbose_name = "پژوهشگر")
+    resercher = models.ForeignKey(researcher.Researcher, on_delete=models.CASCADE ,verbose_name = "پژوهشگر")
     
