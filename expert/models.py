@@ -109,7 +109,7 @@ class ExpertProjectHistory(models.Model):
     project_involveTech = models.CharField(max_length=500 ,verbose_name='تکنیک ها')
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE ,verbose_name = "استاد")
     def __str__(self):
-        return "history of " + self.profile.name 
+        return "history of " + self.project_title_english
     
     
 class IndustryEvaluateExpert(models.Model):
@@ -125,8 +125,8 @@ class IndustryEvaluateExpert(models.Model):
     )
     
     BOOL_CHOICE=(
-            (FALSE,"false"),
-            (TRUE,"true"),
+            (False,"false"),
+            (True,"true"),
     )
 
     ontime_progress_report =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "گزارش به موقع")
@@ -161,14 +161,6 @@ class ResearcherEvaluateExpert(models.Model):
             ( 4 , '4'),
             ( 5 , '5'),
     )
-    
-    GAIN_CHOICE=(
-            ( 1 , 'تجریه عملی'),
-            ( 2 , 'استاد به عنوان معرف عمل کرده'),
-            ( 3 , 'مشارکت در مقاله'),
-            ( 4 , 'دریافت پیشنهاد کار'),
-            ( 5 , 'از قبل انجام کار پول دریافت کردم'),
-    )
 
     tech_enough_info =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "اطاعات لازم نحوه کارتکنیک ها")
     tech_required_info = models.IntegerField(choices= INT_CHOICE ,verbose_name = "صحت تکنیک های مورد نیاز")
@@ -187,34 +179,39 @@ class ResearcherEvaluateExpert(models.Model):
     
     def avarage(self):
         sum = 0.0
-        sum = self.tech_enough_info + self.tech_required_info + self.totoal_gain + self.scientific_level
-        sum = sum + self.availability + self.planing + self.formal_act + self.distribute_task
-        + self.total_satisfaction + self.chamt_satisfaction + self.next_cooperatetion + self.fullfill_requirment
+        sum += self.tech_enough_info + self.tech_required_info + self.totoal_gain + self.scientific_level
+        sum += self.availability + self.planing + self.formal_act + self.distribute_task 
+        sum += self.total_satisfaction + self.chamt_satisfaction + self.next_cooperatetion + self.fullfill_requirment
 
         ava = float(sum / 12)
         return ava
     
 class ResearchGain(models.Model):
+    GAIN_CHOICE=(
+            ( 1 , 'تجریه عملی'),
+            ( 2 , 'استاد به عنوان معرف عمل کرده'),
+            ( 3 , 'مشارکت در مقاله'),
+            ( 4 , 'دریافت پیشنهاد کار'),
+            ( 5 , 'از قبل انجام کار پول دریافت کردم'),
+    )
     researcherevaluateexpert = models.ForeignKey(ResearcherEvaluateExpert, on_delete=models.CASCADE ,verbose_name = "استاد")
-    research_gain = models.IntegerField(choices= Gain_CHOICE,verbose_name = "دستاورد دانشجو")
+    research_gain = models.IntegerField(choices= GAIN_CHOICE,verbose_name = "دستاورد دانشجو")
     
     
 class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=None,verbose_name = "عنوان سوال")
     submited_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ ثبت سوال")
     question = models.CharField(max_length=None,verbose_name = "سوال")
-    is_answered = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "پاسخ داده شده")
+    is_answered = models.BooleanField(verbose_name = "پاسخ داده شده")
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE ,verbose_name = "استاد")
     
     def __str__(self):
-        return "title" + question_title
+        return "title" +self.question_title
     
 class ResearchQuestionInstance(models.Model):
     researchquestion = models.ForeignKey(ResearchQuestion, on_delete=models.CASCADE ,verbose_name = "سوال پژوهشی")
     hand_out_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ واگذاری")
     question = models.CharField(max_length=None,verbose_name = "سوال")
-    is_answered = models.BooleanField(choices= BOOL_CHOICE,verbose_name = "پاسخ داده شده")
+    is_answered = models.BooleanField(verbose_name = "پاسخ داده شده")
     resercher = models.ForeignKey(resercher.Researcher, on_delete=models.CASCADE ,verbose_name = "پژوهشگر")
     
-    def __str__(self):
-        return "title" + question_title
