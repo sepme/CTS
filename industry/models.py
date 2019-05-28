@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from researcher.models import Researcher
+from expert.models import Expert
 
 class ProjectForm(models.Model): 
     project_title_persian = models.CharField(max_length=None,verbose_name ="عنوان پروژه فارسی")
