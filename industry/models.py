@@ -34,7 +34,7 @@ class ProjectForm(models.Model):
     project_title_english = models.CharField(max_length=None,verbose_name ="عنوان پروژه انگلیسی")
     key_words = models.ManyToManyField(Keyword,verbose_name = "کلمات کلیدی")
     percentage_wet_lab = models.FloatField(verbose_name ="درصد wet_lab")
-    percentage_dry_lab = models.FloatField(,verbose_name ="درصد dry_lab ")
+    percentage_dry_lab = models.FloatField(verbose_name ="درصد dry_lab ")
     research_methodology_choice =(
             ( 0 , 'کیفی'),
             ( 1 , 'کمی'),
@@ -47,7 +47,7 @@ class ProjectForm(models.Model):
     required_lab_equipment = models.CharField(max_length=None,verbose_name ="منابع مورد نیاز")
     reqired_technique = models.CharField(max_length=None,verbose_name ="تکنیک های مورد نیاز")
     project_phase =  models.CharField(max_length=None,verbose_name ="مراحل انجام پروژه")
-    required_budget = models.FloatField(,verbose_name ="بودجه مورد نیاز")
+    required_budget = models.FloatField(verbose_name ="بودجه مورد نیاز")
     papers_and_documentaion = models.CharField(max_length=None,verbose_name ="مقالات و مستندات")
     policy = models.CharField(max_length=None,verbose_name ="نکات اخلاقی")
 
@@ -56,19 +56,19 @@ class Comment(models.Model):
     sender_choices = (('expert' ,'متخصص'),('industry' ,'صنعت'),)
     sender_type = models.CharField(max_length=15,choices = sender_choices)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    attach_file = models.FileField(upload_to='./project_{0}'.format(project_title_english), max_length=100)
+    attach_file = models.FileField(upload_to='./project_{0}'.format(project.project_form.project_title_english), max_length=100)
     date_submited = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ ثبت")
 
 class Industry(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,verbose_name ="کاربر صنعت")
     industry_form = models.OneToOneField(IndustryForm, on_delete=models.CASCADE,verbose_name ="فرم صنعت") 
     research_field = models.CharField(max_length=None,verbose_name ="حوزه فعالیت")
-    history_and_record = models.CharField(max_length=None,verbose_name ="",verbose_name ="سابقه")
+    history_and_record = models.CharField(max_length=None,verbose_name ="سابقه")
     is_international_industry = models.BooleanField(max_length=None,verbose_name ="سابقه فعالیت بین المللی")
     industry_points = models.FloatField(verbose_name ="امتیاز صنعت")
     
     def __str__(self):
-        return self.industry_name
+        return self.industry_form.industry_name
 
 
 class IndustryForm(models.Model):
@@ -86,13 +86,13 @@ class IndustryForm(models.Model):
     turn_over = models.FloatField(verbose_name ="گردش مالی")
     services_products = models.CharField(max_length=None,verbose_name ="خدمات/محصولات")
     awards_honors = models.CharField(max_length=None,verbose_name ="افتخارات")
-    email_adress = models.EmailField(max_length=254و,verbose_name ="ادرس")
+    email_adress = models.EmailField(max_length=254,verbose_name ="ادرس")
 
 
     
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None)
-    key_words = ManyToManyField(KeyWord,verbose_name ="کلمات کلیدی")
+    key_words = models.ManyToManyField(Keyword,verbose_name ="کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name ="میزان اهمیت پروژه")
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
@@ -103,14 +103,14 @@ class ProjectHistory(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     
     def __str__(self):
-        return "history of " + self.profile.name 
+        return "history of " + self.project_title_english
     
 class Keyword(models.Model):
     key_word_name = models.CharField(max_length=None)
     
     
-    
-class ٍExepertEvaluateIndustry(models.Model):
+
+class ExpertEvaluateIndustry(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE)
     expert  = models.OneToOneField(expert.Expert, on_delete=models.CASCADE)
     INT_CHOICE =(
@@ -123,8 +123,8 @@ class ٍExepertEvaluateIndustry(models.Model):
     )
     
     BOOL_CHOICE=(
-            (FALSE,"false"),
-            (TRUE,"true"),
+            (False,"false"),
+            (True,"true"),
     )
 
     provide_material =  models.IntegerField(choices= INT_CHOICE ,verbose_name = "رضایت از تامین مواد اولیه")
