@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-
+from researcher.models import Researcher
+from researcher.models import Technique
+from industry.models import Keyword
+from industry.models import Industry
 
 class EqTset(models.Model):
     INT_CHOICE =(
@@ -55,9 +57,10 @@ class ExpertForm(models.Model):
     number_of_resercher = models.IntegerField(choices=number_of_reserche_choice,verbose_name = "دانشجو تحت نظارت")
     has_indusryial_researech = models.BooleanField(verbose_name = "همکاری با شرکت خارج دانشگاه")
     number_of_grants = models.IntegerField(verbose_name = "تعداد گرنت")
-    technique =  models.ManyToManyField(researcher.Technique,verbose_name = "تکنیک")
+    technique =  models.ManyToManyField(Technique,verbose_name = "تکنیک")
     languages = models.CharField(max_length=None,verbose_name = "تسلط بر زبان های خارجی")
-
+    def __str__(self):
+        return self.expert_firstname +self.expert_lastname
 
 
 class Expert(models.Model):
@@ -66,7 +69,7 @@ class Expert(models.Model):
     date_register = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ ثبت نام")
     expert_point = models.IntegerField(verbose_name = "امتیاز استاد")
     def __str__(self):
-        return self.expert_form.expert_firstname+self.expert_form.expert_lastname
+        return self.expert_form
 
 class ScientificRecord(models.Model):
     degree = models.CharField(max_length=None,verbose_name = "مقطع تحصیلی")
@@ -102,7 +105,7 @@ class PaperRecord(models.Model):
 
 class ExpertProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=None,verbose_name = "عنوان مقاله")
-    key_words = models.ManyToManyField(industry.Keyword,verbose_name = "کلمات کلیدی")
+    key_words = models.ManyToManyField(Keyword,verbose_name = "کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name = "اولویت پروژه")
     project_start_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
     project_end_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ پایان")
@@ -121,7 +124,7 @@ class ExpertProjectHistory(models.Model):
     
 class IndustryEvaluateExpert(models.Model):
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE,verbose_name = "استاد")
-    industry  = models.OneToOneField(industry.Industry, on_delete=models.CASCADE,verbose_name = "صنعت ارزیابی کننده")
+    industry  = models.OneToOneField(Industry, on_delete=models.CASCADE,verbose_name = "صنعت ارزیابی کننده")
     INT_CHOICE =(
             ( 0 , '0'),
             ( 1 , '1'),
@@ -159,7 +162,7 @@ class IndustryEvaluateExpert(models.Model):
     
 class ResearcherEvaluateExpert(models.Model):
     expert = models.ForeignKey(Expert, on_delete=models.CASCADE,verbose_name = "")
-    researcher  = models.OneToOneField(researcher.Researcher, on_delete=models.CASCADE,verbose_name = "")
+    researcher  = models.OneToOneField(Researcher, on_delete=models.CASCADE,verbose_name = "")
     INT_CHOICE =(
             ( 0 , '0'),
             ( 1 , '1'),
@@ -220,5 +223,5 @@ class ResearchQuestionInstance(models.Model):
     hand_out_date = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ واگذاری")
     question = models.CharField(max_length=None,verbose_name = "سوال")
     is_answered = models.BooleanField(verbose_name = "پاسخ داده شده")
-    resercher = models.ForeignKey(researcher.Researcher, on_delete=models.CASCADE ,verbose_name = "پژوهشگر")
+    resercher = models.ForeignKey(Researcher, on_delete=models.CASCADE ,verbose_name = "پژوهشگر")
     
