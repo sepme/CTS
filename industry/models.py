@@ -1,34 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Project(models.Model):
-    project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE,verbose_name ="فرم پروژه") 
-    date_submited_by_industry = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ ثبت پرژه توسط صنعت")
-    date_selected_by_expert = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ درخواست پروژه توسط استاد")
-    date_start = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ اخذ پروژه توسط استاد")
-    date_project_started = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ شروع پروژه")
-    date_pahse_two_deadline = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "ناریخ مهلت فاز دوم")
-    date_pahse_three_deadline = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ مهلت فاز سوم")
-    date_pahse_one_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ پایان فاز اول")
-    date_pahse_two_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ پایان فاز دوم")
-    date_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ اتمام پروژه")
-    researcher_applied = models.ManyToManyField(Researcher,verbose_name = "پژوهشگران درخواست داده")
-    researcher_accepted = models.ManyToManyField(Researcher,verbose_name = "پژوهشگران پذبرفته شده")
-    expert_applied = models.ManyToManyField(Expert,verbose_name = "اساتید درخواست داده")
-    expert_accepted = models.OneToOneField(Expert, on_delete=models.CASCADE,verbose_name = "استاد پذیرفته شده")
-    industry_creator = models.OneToOneField(Industry, on_delete=models.CASCADE,verbose_name = "صنعت صاحب پروژه")
-    cost_of_project = models.FloatField(verbose_name = "هزینه پروژه")
-    maximum_researcher = models.IntegerField(verbose_name = "حداکثر تعداد پژوهشگر")   
-    project_detail = models.CharField(max_length=None ,verbose_name = "جزيات پروژه")
-    project_priority_level = models.FloatField(verbose_name ="سطح اهمیت پروژه")
-    
-    def __str__(self):
-        return self.project_form.project_title_english
-    
-    def related_commets(self):
-        comments = Project.objects.all().select_related("Comment")
-        return comments
-
 class ProjectForm(models.Model): 
     project_title_persian = models.CharField(max_length=None,verbose_name ="عنوان پروژه فارسی")
     project_title_english = models.CharField(max_length=None,verbose_name ="عنوان پروژه انگلیسی")
@@ -51,6 +23,37 @@ class ProjectForm(models.Model):
     papers_and_documentaion = models.CharField(max_length=None,verbose_name ="مقالات و مستندات")
     policy = models.CharField(max_length=None,verbose_name ="نکات اخلاقی")
 
+
+
+class Project(models.Model):
+    project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE,verbose_name ="فرم پروژه") 
+    date_submited_by_industry = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ ثبت پرژه توسط صنعت")
+    date_selected_by_expert = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ درخواست پروژه توسط استاد")
+    date_start = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ اخذ پروژه توسط استاد")
+    date_project_started = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ شروع پروژه")
+    date_pahse_two_deadline = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "ناریخ مهلت فاز دوم")
+    date_pahse_three_deadline = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ مهلت فاز سوم")
+    date_pahse_one_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ پایان فاز اول")
+    date_pahse_two_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ پایان فاز دوم")
+    date_finished = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ اتمام پروژه")
+    researcher_applied = models.ManyToManyField(researcher.Researcher,verbose_name = "پژوهشگران درخواست داده")
+    researcher_accepted = models.ManyToManyField(researcher.Researcher,verbose_name = "پژوهشگران پذبرفته شده")
+    expert_applied = models.ManyToManyField(expert.Expert,verbose_name = "اساتید درخواست داده")
+    expert_accepted = models.OneToOneField(expert.Expert, on_delete=models.CASCADE,verbose_name = "استاد پذیرفته شده")
+    industry_creator = models.OneToOneField(industry.Industry, on_delete=models.CASCADE,verbose_name = "صنعت صاحب پروژه")
+    cost_of_project = models.FloatField(verbose_name = "هزینه پروژه")
+    maximum_researcher = models.IntegerField(verbose_name = "حداکثر تعداد پژوهشگر")   
+    project_detail = models.CharField(max_length=None ,verbose_name = "جزيات پروژه")
+    project_priority_level = models.FloatField(verbose_name ="سطح اهمیت پروژه")
+    
+    def __str__(self):
+        return self.project_form.project_title_english
+    
+    def related_commets(self):
+        comments = Project.objects.all().select_related("Comment")
+        return comments
+
+
 class Comment(models.Model):
     sender_comment = models.CharField(max_length=None)
     sender_choices = (('expert' ,'متخصص'),('industry' ,'صنعت'),)
@@ -58,18 +61,6 @@ class Comment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     attach_file = models.FileField(upload_to='./project_{0}'.format(project.project_form.project_title_english), max_length=100)
     date_submited = models.DateField(auto_now=False, auto_now_add=False,verbose_name = "تاریخ ثبت")
-
-class Industry(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,verbose_name ="کاربر صنعت")
-    industry_form = models.OneToOneField(IndustryForm, on_delete=models.CASCADE,verbose_name ="فرم صنعت") 
-    research_field = models.CharField(max_length=None,verbose_name ="حوزه فعالیت")
-    history_and_record = models.CharField(max_length=None,verbose_name ="سابقه")
-    is_international_industry = models.BooleanField(max_length=None,verbose_name ="سابقه فعالیت بین المللی")
-    industry_points = models.FloatField(verbose_name ="امتیاز صنعت")
-    
-    def __str__(self):
-        return self.industry_form.industry_name
-
 
 class IndustryForm(models.Model):
     industry_name = models.CharField(max_length=None,verbose_name ="نام شرکت")
@@ -87,6 +78,22 @@ class IndustryForm(models.Model):
     services_products = models.CharField(max_length=None,verbose_name ="خدمات/محصولات")
     awards_honors = models.CharField(max_length=None,verbose_name ="افتخارات")
     email_adress = models.EmailField(max_length=254,verbose_name ="ادرس")
+
+
+
+
+
+class Industry(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,verbose_name ="کاربر صنعت")
+    industry_form = models.OneToOneField(IndustryForm, on_delete=models.CASCADE,verbose_name ="فرم صنعت") 
+    research_field = models.CharField(max_length=None,verbose_name ="حوزه فعالیت")
+    history_and_record = models.CharField(max_length=None,verbose_name ="سابقه")
+    is_international_industry = models.BooleanField(max_length=None,verbose_name ="سابقه فعالیت بین المللی")
+    industry_points = models.FloatField(verbose_name ="امتیاز صنعت")
+    
+    def __str__(self):
+        return self.industry_form.industry_name
+
 
 
     
