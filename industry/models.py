@@ -54,7 +54,7 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     innovation = models.TextField(verbose_name="نو آوری ها")
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_technique = models.TextField(verbose_name="تکنیک های مورد نیاز")
+    required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     papers_and_documentation = models.TextField(verbose_name="مقالات و مستندات")
@@ -75,9 +75,9 @@ class Project(models.Model):
     date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول")
     date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم")
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه")
-    researcher_applied = models.ManyToManyField('researcher.Researcher', verbose_name="پژوهشگران درخواست داده",
+    researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
                                                 related_name="researchers_applied")
-    researcher_accepted = models.ManyToManyField('researcher.Researcher', verbose_name="پژوهشگران پذبرفته شده",
+    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
                                                  related_name="researchers_accepted")
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied")
