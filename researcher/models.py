@@ -153,7 +153,7 @@ class ResearcherHistory(models.Model):
 
 
 class ResearcherEvaluation(models.Model):
-    researcher = models.ForeignKey("researcher.models.ResearcherUser", on_delete=models.CASCADE)
+    researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
     evaluator = models.OneToOneField("expert.ExpertUser", on_delete=models.CASCADE)
 
     zero = 0
