@@ -1,17 +1,56 @@
 $(document).ready(function(){
-  var sideBar = $(".side-bar");
-  $(".menu").click(function() {
-    if(sideBar.hasClass('min')) {
-      sideBar.removeClass('min');
-      sideBar.css("width","250px");
-      $(".menu").css("right","250px");
-      $(".chamranteam").attr("src","img/logoName.png");
-    }else {
-      sideBar.addClass('min');
-      sideBar.css("width","120px");
-      $(".menu").css("right","120px");
-      // $(".chamranteam").attr("src","img/logo.png");
+  // variable
 
+  // functions
+  function input_focus(){
+      $("input,textarea").on("focus", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        $(inputLabel).css({
+          "font-size":"13px",
+          "top":"0px",
+          "right":"15px",
+          "color":"#3CCD1C"
+        });
+      $(this).css("color","#3ccd1c");
+      }).on("focusout", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        $(inputLabel).css("color","#bdbdbd");
+        if($(this).val() === ''){
+          $(inputLabel).css({
+            "font-size":"14px",
+            "top":"28px",
+            "right":"25px",
+            "color":"#bdbdbd"
+          });
+        } else {
+          $(this).css("color","#8d8d8d");
+          $(inputLabel).css("color","#8d8d8d");
+        }
+      });
+  }
+  //codes
+  input_focus();
+  $(".form-submit").click(function () {
+    $(".main").removeClass("blur-div");
+    $(".mainInfo-body").css("display","none");
+  });
+  $("i.fa-plus").click(function () {
+    if ($("input#keys").val() !== '') {
+      div = document.createElement("div");
+      $(div).addClass("key-item");
+      $(div).html("<i class='fas fa-times'></i><span>" + $("input#keys").val() + "</span>");
+      $(".selected_keys").append(div);
+      $("input#keys").val('').focus();
     }
   });
+  $(".fa-times").click(function () {
+    $($(".fa-times").closest(div)).remove();
+  });
+  $('input#upload-input').change(function (event) {
+    $("img.profile").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
+  });
+  var contentWidth = $(document).innerWidth() - 250;
+  $(".content").css({"width":contentWidth,
+    "height":"90%"});
+  $(".side-bar").css("height","100%");
 });

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      {% block title %}{% endblock %}
+      {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    {% block header %}{% endblock %}
+      <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
+  </head>
+  <body>
+  {% block initial_information %}{% endblock %}
+  <div class="main {% block blur %}{% endblock %}">
+    <div class="top-bar">
+      <div class="top-msg">
+        <span class="fas fa-envelope fa-lg"></span>
+      </div>
+      <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
+      <div class="dropdown">
+        <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
+          <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
+        </button>
+        <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
+          <li><a href="#">اطلاعات کاربری</a></li>
+          <li><a href="#">تغییر رمز عبور</a></li>
+          <li class="divider"></li>
+          <li><a href="#">خروج</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+    <div class="side-bar">
+      <div class="topMargin"></div>
+      <div class="expert-icon"></div>
+      <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
+      <h5>{% block name %}{% endblock %}</h5>
+      <h6>استاد</h6>
+      <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0" aria-valuemax="100" style="width: 70px">
+          <span class="sr-only">{{ score|default:0 }}% completed</span>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <ul class="list-group">
+        {% url "index" as index %}
+        <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
+          <a href="#">
+            <div>
+              <span>پروژه ها</span>
+              <span class="fas fa-list-ul"></span>
+            </div>
+          </a>
+        </li>
+        <li class="list-group-item text-right">
+          <a href="#">
+            <div>
+              <span>پیام ها</span>
+              <span class="fas fa-envelope"></span>
+            </div>
+          </a>
+        </li>
+        <li class="list-group-item text-right">
+          <a href="#">
+            <div>
+              <span>طرح سوال</span>
+              <span class="fas fa-question"></span>
+            </div>
+          </a>
+        </li>
+        <li class="list-group-item text-right">
+          <a href="#">
+            <div>
+              <span>درخواست پژوهشگر</span>
+              <span class="fas fa-user-graduate"></span>
+            </div>
+          </a>
+        </li>
+        {% url 'userInfo' as userInfo%}
+        <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
+          <a href="#">
+            <div>
+              <span>تنظیمات کاربری</span>
+              <span class="fas fa-cog"></span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  {% block script %}{% endblock %}
+  <script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
+  </body>
+</html>
