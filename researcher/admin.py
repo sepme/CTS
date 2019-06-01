@@ -1,3 +1,10 @@
 from django.contrib import admin
+from . import models
 
-# Register your models here.
+@admin.register(models.Researcher)
+class ResearcherAdmin(admin.ModelAdmin):
+    pass
+    
+@admin.register(models.Researcher_profile)
+class Researcher_profileAdmin(admin.ModelAdmin):
+    pass

@@ -14,22 +14,9 @@
 <div class="card">
     <img src="{% static 'img/logo.png' %}" alt="ChamranLogo">
     <p class="ChamranTeam">چمران تیم</p>
-    <div class="username">
-        <label for="username">نام کاربری</label>
-        <input type="text" id="username" name="username" value="">
-        <i class="fas fa-user-alt fa-lg"></i>
-    </div>
-    <div class="password">
-        <label for="password">رمز عبور</label>
-        <input type="password" id="password" name="password" value="">
-        <i class="fas fa-lock fa-lg"></i>
-    </div>
-    <div class="confirm_password">
-        <label for="confirm_password">تایید رمز عبور</label>
-        <input type="password" id="confirm_password" name="confirm_password" value="">
-        <i class="fas fa-check fa-lg"></i>
-    </div>
-    <button type="button" name="enter" class="Enter-btn">ثبت اطلاعات</button>
+    {% block content %}
+      
+    {% endblock content %}
 </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -38,3 +25,4 @@
     <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
+

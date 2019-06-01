@@ -58,7 +58,7 @@ ROOT_URLCONF = 'ChamranTeamSite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +69,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    '/var/www/static/',
 ]
 
 WSGI_APPLICATION = 'ChamranTeamSite.wsgi.application'
@@ -122,3 +127,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#email
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chamranteaminfo@gmail.com'
+EMAIL_HOST_PASSWORD = 'chamran@98'
+EMAIL_PORT = 587

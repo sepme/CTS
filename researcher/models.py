@@ -5,13 +5,13 @@ import datetime
 
 class Researcher(models.Model):
     user               =  models.OneToOneField(User, on_delete=models.CASCADE)
-    researcherProfile  =  models.OneToOneField("ResearcherProfile", verbose_name=("مشخصات فردی"), on_delete=models.CASCADE)
-    membership_fee     =  models.OneToOneField("Membership_fee", verbose_name=("حق عضویت"), on_delete=models.CASCADE)
-    status             =  models.OneToOneField("Status", on_delete=models.CASCADE)
-    points             =  models.FloatField(default=0 ,verbose_name ='امتیاز')
+    researcher_profile =  models.OneToOneField("Researcher_profile", verbose_name=("مشخصات فردی"), on_delete=models.CASCADE ,blank=True)
+    membership_fee     =  models.OneToOneField("Membership_fee", verbose_name=("حق عضویت"), on_delete=models.CASCADE ,blank=True)
+    status             =  models.OneToOneField("Status", on_delete=models.CASCADE ,blank=True)
+    points             =  models.FloatField(default=0 ,verbose_name ='امتیاز' ,blank=True)
     
     def __str__(self):
-        return self.researcherProfile.name
+        return self.researcher_profile.name
 
 class Status(models.Model):
     STATUS =(
@@ -28,7 +28,7 @@ class Status(models.Model):
     def is_inactivate(self):
         return datetime.datetime.now() < self.inactivate_duration
 
-class MembershipFee(models.Model):
+class Membership_fee(models.Model):
     fee    =  models.IntegerField(verbose_name = 'هزینه')
     start  =  models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "اولین پرداخت")
     rePay  =  models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "آخرین پرداخت")
@@ -36,9 +36,9 @@ class MembershipFee(models.Model):
     def __str__(self):
         return str(self.fee)
 
-class ResearcherProfile(models.Model):
+class Researcher_profile(models.Model):
     name       =  models.CharField( max_length=300 ,verbose_name = "نام و نام خانوادگی")
-    birth_year =  models.models.DateField( auto_now=False, auto_now_add=False ,verbose_name = "سال تولد")
+    birth_year =  models.DateField( auto_now=False, auto_now_add=False ,verbose_name = "سال تولد")
     major      =  models.CharField( max_length=300 ,verbose_name = "رشته تحصیلی")
     
     GARADE_CHOICE = (
@@ -85,7 +85,7 @@ class ResearcherProfile(models.Model):
         return self.name + " profile"
 
 class ScientificHistory(models.Model):
-    researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
+    researcher_profile = models.ForeignKey("Researcher_profile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
 
     grade            =  models.CharField( max_length=300 ,verbose_name = "مقطع تحصیلی")
     major            =  models.CharField( max_length=300 ,verbose_name = "رشته تحصیلی")
@@ -97,7 +97,7 @@ class ScientificHistory(models.Model):
         return self.grade
 
 class Record(models.Model):
-    researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
+    researcher_profile = models.ForeignKey("Researcher_profile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
 
     post   =  models.CharField( max_length=300 ,verbose_name = "سمت")
     start  =  models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "از تاریخ")
@@ -109,7 +109,7 @@ class Record(models.Model):
         return self.post
 
 class ResearchActivities(models.Model):
-    researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name= "سوابق پژوهشی", on_delete=models.CASCADE)
+    researcher_profile = models.ForeignKey("Researcher_profile", verbose_name= "سوابق پژوهشی", on_delete=models.CASCADE)
 
     title         =  models.CharField( max_length=300 ,verbose_name ="عنوان طرح پژوهشی")
     presenter     =  models.CharField( max_length=50 ,verbose_name ="نام مجری")
@@ -125,7 +125,7 @@ class ResearchActivities(models.Model):
         return self.title
 
 class History(models.Model):
-    researcherProfile     = models.ForeignKey("ResearcherProfile", verbose_name="تاریخچه", on_delete=models.CASCADE)
+    researcher_profile     = models.ForeignKey("Researcher_profile", verbose_name="تاریخچه", on_delete=models.CASCADE)
 
     title       = models.CharField( max_length=300,  verbose_name=("عنوان پروژه"))
     start       = models.DateField(auto_now=False, auto_now_add=False ,verbose_name = "تاریخ شروع")
@@ -215,7 +215,7 @@ class TechniqueInstance(models.Model):
 
 class RequestedProject(models.Model):
     researcher          = models.ForeignKey("Researcher", on_delete=models.CASCADE)
-    project             = models.OneToOneField("Industry.Project", on_delete=models.CASCADE)
+    project             = models.OneToOneField("industry.Project", on_delete=models.CASCADE)
     date_requested      = models.DateField(auto_now=False, auto_now_add=False ,verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0 ,verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered  = models.IntegerField(default=0 ,verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
