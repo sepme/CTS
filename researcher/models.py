@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 
 import datetime
 
+
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    researcherProfile = models.OneToOneField("ResearcherProfile", verbose_name="مشخصات فردی",
-                                             on_delete=models.CASCADE)
+    researcher_profile = models.OneToOneField("ResearcherProfile", verbose_name="مشخصات فردی",
+                                              on_delete=models.CASCADE)
     membership_fee = models.OneToOneField('MembershipFee', verbose_name="حق عضویت", on_delete=models.CASCADE)
     status = models.OneToOneField("Status", on_delete=models.CASCADE)
     points = models.FloatField(default=0, verbose_name='امتیاز')
@@ -30,7 +31,7 @@ class Status(models.Model):
     def is_inactivate(self):
         return datetime.datetime.now() < self.inactivate_duration
 
-      
+
 class MembershipFee(models.Model):
     fee = models.IntegerField(verbose_name='هزینه')
     start = models.DateField(auto_now=False, auto_now_add=False, verbose_name="اولین پرداخت")
@@ -38,6 +39,7 @@ class MembershipFee(models.Model):
 
     def __str__(self):
         return str(self.fee)
+
 
 class ResearcherProfile(models.Model):
     name = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
@@ -53,7 +55,7 @@ class ResearcherProfile(models.Model):
     grade = models.CharField(max_length=6, choices=GRADE_CHOICE, verbose_name="آخرین مدرک تحصیلی")
     university = models.CharField(max_length=300, verbose_name="دانشگاه محل تحصیل")
     entry_year = models.IntegerField(verbose_name="سال ورود")
-    address = models.CharField(max_length=500, verbose_name="آدرس محل سکونت", blank=True)
+    address = models.TextField(verbose_name="آدرس محل سکونت", blank=True)
     home_number = models.CharField(max_length=50, verbose_name="تلفن منزل")
     phone_number = models.CharField(max_length=50, verbose_name="تلفن همراه", blank=True)
     email = models.EmailField(max_length=254, verbose_name="پست الکترونیکی")
@@ -87,6 +89,7 @@ class ResearcherProfile(models.Model):
     def __str__(self):
         return self.name + " profile"
 
+
 class ResearcherScientificHistory(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
 
@@ -99,9 +102,9 @@ class ResearcherScientificHistory(models.Model):
     def __str__(self):
         return self.grade
 
+
 class ResearcherRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
-
 
     post = models.CharField(max_length=300, verbose_name="سمت")
     start = models.DateField(auto_now=False, auto_now_add=False, verbose_name="از تاریخ")
@@ -114,7 +117,6 @@ class ResearcherRecord(models.Model):
 
 
 class ResearchActivities(models.Model):
-
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق پژوهشی", on_delete=models.CASCADE)
 
     title = models.CharField(max_length=300, verbose_name="عنوان طرح پژوهشی")
@@ -129,7 +131,8 @@ class ResearchActivities(models.Model):
 
     def __str__(self):
         return self.title
-      
+
+
 class ResearcherHistory(models.Model):
     researcher_profile = models.ForeignKey("ResearcherProfile", verbose_name="تاریخچه", on_delete=models.CASCADE)
 
