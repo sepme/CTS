@@ -4,6 +4,7 @@ from django.shortcuts import reverse
 
 import uuid
 
+
 class Message(models.Model):
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
     text = models.TextField(verbose_name="متن پیام")
@@ -41,23 +42,23 @@ class News(models.Model):
     def get_absolute_url(self):
         return 'news/' + self.link
 
-class Temp_user(models.Model):
-    pub_date     = models.DateTimeField( auto_now=True, auto_now_add=False) 
-    email        = models.EmailField(max_length=254 ,unique=True)
-    unique       = models.UUIDField( unique=True  ,default=uuid.uuid4())
+
+class TempUser(models.Model):
+    pub_date = models.DateTimeField(auto_now=True, auto_now_add=False)
+    email = models.EmailField(max_length=254, unique=True)
+    unique = models.UUIDField(unique=True, default=uuid.uuid4())
     CHOICE = (
-        ('expert' ,'Expert'),
-        ('industry' ,'Industry'),
-        ('researcher' ,'Researcher')
+        ('expert', 'Expert'),
+        ('industry', 'Industry'),
+        ('researcher', 'Researcher')
     )
-    account_type = models.CharField( max_length=50 ,choices=CHOICE)
-    
+    account_type = models.CharField(max_length=50, choices=CHOICE)
+
     class Meta:
-        ordering = ["-pub_date",]
+        ordering = ["-pub_date", ]
 
     def __str__(self):
         return self.account_type + ' - ' + str(self.pk)
-    
+
     def get_absolute_url(self):
         return reverse("chamran:home")
-    
