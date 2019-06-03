@@ -6,14 +6,14 @@ import datetime
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    researcherProfile = models.OneToOneField("ResearcherProfile", verbose_name="مشخصات فردی",
-                                             on_delete=models.CASCADE)
+    researcher_profile = models.OneToOneField("ResearcherProfile", verbose_name="مشخصات فردی",
+                                              on_delete=models.CASCADE)
     membership_fee = models.OneToOneField('MembershipFee', verbose_name="حق عضویت", on_delete=models.CASCADE)
     status = models.OneToOneField("Status", on_delete=models.CASCADE)
     points = models.FloatField(default=0, verbose_name='امتیاز')
 
     def __str__(self):
-        return self.researcherProfile.name
+        return self.researcher_profile.name
 
 
 class Status(models.Model):
@@ -55,7 +55,7 @@ class ResearcherProfile(models.Model):
     grade = models.CharField(max_length=6, choices=GRADE_CHOICE, verbose_name="آخرین مدرک تحصیلی")
     university = models.CharField(max_length=300, verbose_name="دانشگاه محل تحصیل")
     entry_year = models.IntegerField(verbose_name="سال ورود")
-    address = models.CharField(max_length=500, verbose_name="آدرس محل سکونت", blank=True)
+    address = models.TextField(verbose_name="آدرس محل سکونت", blank=True)
     home_number = models.CharField(max_length=50, verbose_name="تلفن منزل")
     phone_number = models.CharField(max_length=50, verbose_name="تلفن همراه", blank=True)
     email = models.EmailField(max_length=254, verbose_name="پست الکترونیکی")

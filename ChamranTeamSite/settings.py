@@ -58,6 +58,7 @@ ROOT_URLCONF = 'ChamranTeamSite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+
         'DIRS': ['templates', ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -125,3 +126,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+#email
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chamranteaminfo@gmail.com'
+EMAIL_HOST_PASSWORD = 'chamran@98'
+EMAIL_PORT = 587
