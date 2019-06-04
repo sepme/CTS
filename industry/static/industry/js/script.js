@@ -4,6 +4,12 @@ $(document).ready(function(){
   // functions
   function input_focus(){
       $("input,textarea").on("focus", function () {
+        if($(this).hasClass("attach-input")) {
+          return false;
+        }
+        if($(this).hasClass("inputTags-field")){
+          $(".inputTags-list").css("background-color","#fff");
+        }
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
         $(inputLabel).css({
           "font-size":"13px",
@@ -13,14 +19,19 @@ $(document).ready(function(){
         });
       $(this).css("color","#3ccd1c");
       }).on("focusout", function () {
+        if($(this).hasClass("attach-input"))
+          return false;
+        if($(this).hasClass("inputTags-field")){
+          $(".inputTags-list").css("background-color","#fdfdfd");
+        }
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        $(inputLabel).css("color","#bdbdbd");
+        $(inputLabel).css("color","#6f7285");
         if($(this).val() === ''){
           $(inputLabel).css({
             "font-size":"14px",
             "top":"28px",
             "right":"25px",
-            "color":"#bdbdbd"
+            "color":"#6f7285"
           });
         } else {
           $(this).css("color","#8d8d8d");
@@ -29,6 +40,7 @@ $(document).ready(function(){
       });
   }
   //codes
+  $(".inputTags-list").css("background-color","#fdfdfd");
   input_focus();
   $(".form-submit").click(function () {
     $(".main").removeClass("blur-div");

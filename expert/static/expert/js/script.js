@@ -5,8 +5,15 @@ $(document).ready(function(){
   stu_count = 0;
   art_count = 0;
   // functions
+  //   function fancytree_setup() {
+  //       $("span.fancytree-node span.fancytree-icon").html('<i class="fas fa-screwdriver"></i>');
+  //       $("span.fancytree-has-children span.fancytree-icon").html('<i class="fas fa-tools fa-lg"></i>');
+  //       $("span.fancytree-exp-c span.fancytree-expander").html('<i class="fas fa-chevron-left"></i>');
+  //   }
   function input_focus(){
       $("input,textarea").on("focus", function () {
+        if($(this).hasClass("solid-label"))
+          return false;
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
         $(inputLabel).css({
           "font-size":"13px",
@@ -16,14 +23,16 @@ $(document).ready(function(){
         });
       $(this).css("color","#3ccd1c");
       }).on("focusout", function () {
+        if($(this).hasClass("solid-label"))
+          return false;
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        $(inputLabel).css("color","#bdbdbd");
+        $(inputLabel).css("color","#6f7285");
         if($(this).val() === ''){
           $(inputLabel).css({
             "font-size":"14px",
             "top":"28px",
             "right":"25px",
-            "color":"#bdbdbd"
+            "color":"#6f7285"
           });
         } else {
           $(this).css("color","#8d8d8d");
@@ -34,6 +43,12 @@ $(document).ready(function(){
   function delet_item(className){
     $(".delete-item").click(function () {
       $(className+ " div#" + $(this).attr("id")).remove();
+    });
+  }
+  function close_dialog() {
+    $(".close").click(function () {
+      $(".dialog-main").css("display","none");
+      $(".main").removeClass("blur-div");
     });
   }
   //codes
@@ -240,6 +255,65 @@ $(document).ready(function(){
     input_focus();
     art_count ++;
   });
+  $(".chamran_btn.technique").click(function () {
+    $(".main").addClass("blur-div");
+    $(".dialog-main").css("display","block");
+    close_dialog();
+  });
+
+  $(".technique-list-item").click(function () {
+    $(this).toggleClass("active");
+    $(this).children("span").children(".fa-chevron-left").toggleClass("rotate--90");
+    $(this).children(".sub-technique-list").toggleClass("display-toggle");
+  });
+  $("#fancy-tree").fancytree({
+      checkbox: true,
+    source: [{"title": "Node 1", "key": "1"},
+             {"title": "تکنیک شماره یک", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]},
+              {"title": "Node 1", "key": "1"},
+             {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]},
+              {"title": "Node 1", "key": "1"},
+             {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]},
+              {"title": "Node 1", "key": "1"},
+             {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]},
+              {"title": "Node 1", "key": "1"},
+             {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]},
+              {"title": "Node 1", "key": "1"},
+             {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]},
+              {"title": "Node 1", "key": "1"},
+             {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]},
+              {"title": "Node 1", "key": "1"},
+             {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                {"title": "Node 2.1", "key": "3"},
+                {"title": "Node 2.2", "key": "4"}
+              ]}
+            ],
+    icon: function (event, data) {
+
+    },
+  });
+  // fancytree_setup();
   // var sideBar = $(".side-bar");
   // $(".menu").click(function() {
   //   if(sideBar.hasClass('min')) {

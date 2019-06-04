@@ -27,7 +27,7 @@ body {
   -moz-border-radius: 50%;
   border-radius: 50%;
   background-color: #fdfdfd;
-  color: #bdbdbd;
+  color: #6f7285;
   border: 1px solid #bdbdbd;
 }
 .upload > i{
@@ -78,7 +78,7 @@ img{
 input, textarea, select{
   background-color: #fdfdfd;
   border: 1px solid #bdbdbd;
-  color: #bdbdbd;
+  color: #6f7285;
   border-radius: 5px;
   margin-top: 20px;
   direction: rtl;
@@ -97,14 +97,14 @@ label{
   position: absolute;
   top: 28px;
   right: 25px;
-  color: #bdbdbd;
+  color: #6f7285;
   transition: 300ms all ease;
 }
 i.fa-plus{
   position: absolute;
   top: 33px;
   left: 25px;
-  color: #bdbdbd;
+  color: #6f7285;
   cursor: pointer;
 }
 .rankDiv{
@@ -113,7 +113,7 @@ i.fa-plus{
 .rankLabel{
   position: relative;
   border-radius: 0 5px 5px 0;
-  background-color: #cccccc;
+  background-color: #6f7285;
   color: #fdfdfd;
   top: 20px;
   right: 0;
@@ -138,7 +138,7 @@ i.fa-plus{
 }
 .key-item{
   display: block;
-  color: #bdbdbd;
+  color: #6f7285;
   background-color: #fdfdfd;
   padding: 5px;
   margin: 0 5px;
@@ -361,10 +361,10 @@ hr{
   direction: rtl!important;
 }
 .label{
-  color: #bdbdbd;
+  color: #6f7285;
 }
 .top-msg > .fa-envelope{
-  color: #bdbdbd;
+  color: #6f7285;
 }
 .top-msg > .fa-envelope:hover{
   color: #3CCD1C;
@@ -405,11 +405,11 @@ hr{
 }
 .header{
   font-family: Shabnam-Bold;
-  color: #bdbdbd;
+  color: #6f7285;
 }
 .sub-header{
   font-family: Shabnam-Light;
-  color: #bdbdbd;
+  color: #6f7285;
 }
 ::-webkit-scrollbar {
   width: 10px;
@@ -453,7 +453,7 @@ hr{
   color: #bdbdbd;
 }
 table{
-  color: #bdbdbd;
+  color: #6f7285;
   margin: auto;
 }
 td{
@@ -577,11 +577,41 @@ span.star-warning:after{
 input[name="foreign_work"]+label:hover , input[name="foreign_work"]:checked+label{
   border-radius: 50%;
 }
-input[type="range"]{
+.attach-input{
+  display: none;
+}
+.attach-label{
+  position: relative;
+  top: auto;
+  right: auto;
+  border-radius: 0.25rem;
+  border: 1px dashed #bdbdbd;
+  background-color: #fdfdfd;
+  color: #6f7285;
+  padding: 11px 50px;
+  margin: 10px 0;
+  height: 50px;
+}
+.attach-label:hover , .attach-label:focus{
+  border: 1px dashed #3CCD1C;
+  background-color: #fff;
+  color: #3CCD1C;
+  cursor: pointer;
+  padding: 11px 50px;
+  margin: 10px 0;
+  height: 50px;
+}
+div.inputTags-list span.inputTags-item{
+  background-color: #3CCD1C;
+}
+.inputTags-field{
   margin: 0;
 }
-input[type="range"]+label{
-  position: absolute;
-  left: -580px;
-  top: 10px;
+.inputTags-field:focus{
+  background-color: #fff!important;
+}
+.inputTags-list{
+  background-color: #fdfdfd;
+  border: 1px solid #bdbdbd!important;
+  padding: 0!important;
 }
