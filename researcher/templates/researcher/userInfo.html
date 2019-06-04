@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="{% static 'researcher/css/datepicker-style.css' %}">
 {% endblock %}
 {% block name %}رضا باسره{% endblock %}
+{% block dialog %}
+    {% include 'researcher/layouts/dialog.html' %}
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
@@ -211,6 +214,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="inner-card card">
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <span class="label header">تکنیک ها</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <button class="chamran_btn technique" type="button">افزودن</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card inner-card">
                         <div class="row">
                             <div class="col-lg-12">
@@ -219,6 +234,7 @@
                             </div>
                         </div>
                     </div>
+                    <button type="button" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
                 </form>
             </div>
         </div>

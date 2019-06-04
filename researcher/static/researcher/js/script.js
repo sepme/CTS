@@ -16,13 +16,13 @@ $(document).ready(function(){
       $(this).css("color","#3ccd1c");
       }).on("focusout", function () {
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        $(inputLabel).css("color","#bdbdbd");
+        $(inputLabel).css("color","#6f7285");
         if($(this).val() === ''){
           $(inputLabel).css({
             "font-size":"14px",
             "top":"28px",
             "right":"25px",
-            "color":"#bdbdbd"
+            "color":"#6f7285"
           });
         } else {
           $(this).css("color","#8d8d8d");
@@ -195,6 +195,17 @@ $(document).ready(function(){
     delet_item(".studious");
     input_focus();
     stu_count ++;
+  });
+  function close_dialog() {
+    $(".close").click(function () {
+      $(".dialog-main").css("display","none");
+      $(".main").removeClass("blur-div");
+    });
+  }
+  $(".chamran_btn.technique").click(function () {
+    $(".main").addClass("blur-div");
+    $(".dialog-main").css("display","block");
+    close_dialog();
   });
   var contentWidth = $(document).innerWidth() - 250;
   $(".content").css({"width":contentWidth,

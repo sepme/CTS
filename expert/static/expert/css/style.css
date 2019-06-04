@@ -28,7 +28,7 @@ body {
   -moz-border-radius: 50%;
   border-radius: 50%;
   background-color: #fdfdfd;
-  color: #bdbdbd;
+  color: #6f7285;
   border: 1px solid #bdbdbd;
 }
 .upload > i{
@@ -53,7 +53,7 @@ img{
 #upload-input{
   display: none;
 }
-.mainInfo-body{
+.mainInfo-body, .dialog-main{
   position: fixed;
   top: 0;
   left: 0;
@@ -66,7 +66,7 @@ img{
   filter: blur(10px);
   opacity: 0.9;
 }
-.mainInfo{
+.mainInfo, .dialog{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -79,7 +79,7 @@ img{
 input, textarea, select{
   background-color: #fdfdfd;
   border: 1px solid #bdbdbd;
-  color: #bdbdbd;
+  color: #6f7285;
   border-radius: 5px;
   margin-top: 20px;
   direction: rtl;
@@ -98,14 +98,14 @@ label{
   position: absolute;
   top: 28px;
   right: 25px;
-  color: #bdbdbd;
+  color: #6f7285;
   transition: 300ms all ease;
 }
 i.fa-plus{
   position: absolute;
   top: 33px;
   left: 25px;
-  color: #bdbdbd;
+  color: #6f7285;
   cursor: pointer;
 }
 .rankDiv{
@@ -114,7 +114,7 @@ i.fa-plus{
 .rankLabel{
   position: relative;
   border-radius: 0 5px 5px 0;
-  background-color: #cccccc;
+  background-color: #6f7285;
   color: #fdfdfd;
   top: 20px;
   right: 0;
@@ -139,7 +139,7 @@ i.fa-plus{
 }
 .uni-item{
   display: block;
-  color: #bdbdbd;
+  color: #6f7285;
   background-color: #fdfdfd;
   padding: 5px;
   margin: 0 5px;
@@ -361,10 +361,10 @@ hr{
   direction: rtl!important;
 }
 .label{
-  color: #bdbdbd;
+  color: #6f7285;
 }
 .top-msg > .fa-envelope{
-  color: #bdbdbd;
+  color: #6f7285;
 }
 .top-msg > .fa-envelope:hover{
   color: #3CCD1C;
@@ -376,9 +376,9 @@ hr{
   left: 4px;
   bottom: -11px;
   padding: 5px 10px;
-  -webkit-border-radius: 0 5px 0 5px;
-  -moz-border-radius: 0 5px 0 5px;
-  border-radius: 0 5px 0 5px;
+  -webkit-border-radius: 0 0.25rem 0 0.25rem;
+  -moz-border-radius: 0 0.25rem 0 0.25rem;
+  border-radius: 0 0.25rem 0 0.25rem;
   border: none;
   background-color: #89E076;
   color: #fff;
@@ -408,7 +408,7 @@ hr{
 }
 .sub-header{
   font-family: Shabnam-Light;
-  color: #bdbdbd;
+  color: #6f7285;
 }
 ::-webkit-scrollbar {
   width: 10px;
@@ -452,7 +452,7 @@ hr{
   color: #bdbdbd;
 }
 table{
-  color: #bdbdbd;
+  color: #6f7285;
   margin: auto;
 }
 td{
@@ -565,6 +565,8 @@ span.star-warning:after{
   position: absolute;
   top: 10px;
   padding: 5px;
+  min-width: 45px;
+  text-align: center;
   border: 1px solid #fff;
   border-radius: 20px;
 }
@@ -573,6 +575,90 @@ span.star-warning:after{
   border-radius: 20px;
   color: #3CCD1C;
 }
-input[name="foreign_work"]+label:hover , input[name="foreign_work"]:checked+label{
-  border-radius: 50%;
+.dialog-main{
+  display: none;
 }
+.dialog{
+  padding-bottom: 30px;
+}
+.close > i{
+  position: absolute;
+  top: -4px;
+  left: 10px;
+  color: #6d6d6d;
+}
+.close > i:hover{
+  cursor: pointer;
+  color: #ff4545;
+}
+input#search_technique{
+    position: absolute;
+    top: 0;
+    left: 10px;
+    padding-left: 30px;
+    margin: 0;
+}
+input#search_technique+label{
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: fit-content;
+    right: auto;
+}
+.fa-search:hover{
+  cursor: pointer;
+  color: #3CCD1C;
+
+}
+.technique-list, #fancy-tree {
+  margin-top: 56px;
+  margin-bottom: 16px;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  padding-right: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 400px;
+}
+ul.fancytree-container , .fancytree-treefocus{
+  background-color: #fff;
+  border: none!important;
+}
+.display-toggle{
+  display: none;
+}
+.technique-list-item{
+  list-style-type: none;
+  padding: 2px;
+  width: fit-content;
+  color: #bdbdbd;
+}
+.technique-list-item.active{
+  color: #6d6d6d;
+}
+.technique-list-item:hover{
+  color: #3CCD1C;
+  cursor: pointer;
+}
+.fa-chevron-left{
+  padding-left: 5px;
+  transition: all ease-in-out 200ms;
+}
+.rotate--90{
+  transform: rotate(-90deg);
+}
+/*!*fancytree*!*/
+/*span.fancytree-node:hover{*/
+/*  color: #3CCD1C;*/
+/*}*/
+/*span.fancytree-node > span.fancytree-title {*/
+/*  font-family: "Shabnam-Light";*/
+/*}*/
+/*span.fancytree-node > span.fancytree-icon{*/
+/*  background-image: none;*/
+/*}*/
+/*#fancytree-drop-marker, span.fancytree-checkbox,*/
+/*span.fancytree-drag-helper-img, span.fancytree-empty,*/
+/*span.fancytree-expander, span.fancytree-icon, span.fancytree-vline{*/
+/*  background-image: none;*/
+/*}*/
