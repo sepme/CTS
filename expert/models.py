@@ -1,14 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.shortcuts import reverse ,HttpResponseRedirect
 
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
-    expert_form = models.OneToOneField('expert.ExpertForm', on_delete=models.CASCADE, verbose_name="فرم استاد")
-    expert_point = models.IntegerField(verbose_name="امتیاز استاد")
+    expert_point = models.IntegerField(verbose_name="امتیاز استاد" ,default=0.0)
 
     def __str__(self):
-        return self.expert_form
+        return self.user.get_username()
+    
+    def get_absolute_url(self):
+        return HttpResponseRedirect(reverse("expert:index", kwargs={"pk": self.pk}))
 
 
 class EqTest(models.Model):
@@ -30,6 +33,7 @@ class EqTest(models.Model):
 
 
 class ExpertForm(models.Model):
+    expert_form = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد" ,blank=True)
     expert_firstname = models.CharField(max_length=32, verbose_name="نام")
     expert_lastname = models.CharField(max_length=32, verbose_name="نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")

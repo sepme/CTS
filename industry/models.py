@@ -1,17 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.shortcuts import reverse ,HttpResponseRedirect
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
-    industry_form = models.OneToOneField('industry.IndustryForm', on_delete=models.CASCADE, verbose_name="فرم صنعت")
-    industry_points = models.FloatField(verbose_name="امتیاز صنعت")
+    industry_points = models.FloatField(verbose_name="امتیاز صنعت" ,default=0.0)
 
     def __str__(self):
-        return self.industry_form
+        return self.user.get_username()
+    
+    def get_absolute_url(self):
+        return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
 
 
 class IndustryForm(models.Model):
+    industry_user = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE, verbose_name="فرم صنعت")
     name = models.CharField(max_length=64, verbose_name="نام شرکت")
     registration_number = models.IntegerField(verbose_name="شماره ثبت")
     date_of_foundation = models.IntegerField(verbose_name="تاریخ تاسیس")

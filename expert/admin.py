@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from . import models
+
+@admin.register(models.ExpertUser)
+class ExpertAdmin(admin.ModelAdmin):
+    pass
