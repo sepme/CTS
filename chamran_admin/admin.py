@@ -4,6 +4,6 @@ from . import models
 
 
 # Register your models here.
-@admin.register(models.Temp_user)
+@admin.register(models.TempUser)
 class TempUser(admin.ModelAdmin):
     pass
