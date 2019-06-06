@@ -1,0 +1,75 @@
+{% load static %}
+<div class="mainInfo-body">
+    <div class="card mainInfo text-right">
+      <span dir="rtl">سلام Brown ،به <span class="green">چمران</span><span class="red">تیم</span> خوش آمدید!</span>
+      <p dir="rtl">چمران تیم برای فعال سازی حساب کاربری شما به اطلاعات کاربری ذیل نیازمند است، لذا خواهشمند است اطلاعات زیر را به دقت تکمیل نمایید.</p>
+      <hr>
+      <form action="" method="post">
+          {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-6">
+            <div class="row">
+              <div class="col-lg-12 text-center">
+                <label for="upload-input" class="upload text-center">
+                  <i class="fas fa-pencil-alt"></i>
+                </label>
+                <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
+                <input type="file" id="upload-input" accept="image/png, image/jpeg">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="firmName">نام شرکت</label>
+                <input type="text" id="firmName" class="w-100">
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                <label for="registerNum">شماره ثبت</label>
+                <input type="text" id="registerNum" class="w-100">
+              </div>
+                <div class="col-lg-6">
+                <label for="establishmentDate">سال تاسیس</label>
+                <input type="text" id="establishmentDate" class="w-100">
+              </div>
+            </div>
+          </div>
+            <div class="col-lg-6">
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="Field">حوزه فعالیت</label>
+                <input type="text" id="Field" class="w-100">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 rankDiv">
+                  <label class="rankLabel" for="rank">نوع شرکت</label>
+                <select id="rank">
+                  <option selected dir="rtl">انتخاب کنید ...</option>
+                  <option value="1">دولتی</option>
+                  <option value="2">خصوصی</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <label for="Address">نشانی</label>
+                <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <label for="phoneNum">تلفن</label>
+                    <input type="text" id="phoneNum" class="w-100">
+                </div>
+                <div class="col-lg-6">
+                    <label for="Email">پست الکترونیکی</label>
+                    <input type="text" id="Email" class="w-100">
+                 </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="form-submit">ثبت اطلاعات</button>
+      </form>
+    </div>
+  </div>
