@@ -8,6 +8,9 @@ from . import models
 class Index(generic.TemplateView):
     template_name = 'researcher/index.html'
 
+class userInfo(generic.TemplateView):
+    template_name = 'researcher/userInfo.html'
+
 
 class Login(generic.TemplateView):
     template_name = 'registration/base.html'
