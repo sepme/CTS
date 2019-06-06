@@ -14,17 +14,25 @@
     <div class="card">
         <img src="{% static 'img/logo.png' %}" alt="ChamranLogo">
         <p class="ChamranTeam">چمران تیم</p>
+        <form method="post">
+          {% csrf_token %}
+          {{error}}<br>
         <div class="username">
           <label for="username">نام کاربری</label>
-          <input type="text" id="username" name="username" value="">
+          {{form.username}}
+          <!-- <input type="text" id="username" name="username" value=""> -->
           <i class="fas fa-user-alt fa-lg"></i>
         </div>
         <div class="password">
           <label for="password">رمز عبور</label>
-          <input type="password" id="password" name="password" value="">
+          <!-- <input type="password" id="password" name="password" value=""> -->
+          {{form.password}}
           <i class="fas fa-lock fa-lg"></i>
+          <button type="submit" name="enter" class="Enter-btn">ورود</button>
         </div>
+      </form>
         <a href="#" class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
+        <!-- <form method="POST" action=
         <div class="signUp-div">
             <input type="radio" name="user-type" id="researcher" value="researcher">
             <label for="researcher" class="user-type researcher text-center">
@@ -48,6 +56,7 @@
             <i class="fas fa-at fa-lg"></i>
         </div>
         <button type="button" name="enter" class="Enter-btn">ورود</button>
+      </form> -->
         <div class="hr"></div>
         <p class="new-user">کاربر جدید هستید؟    <a href="#" onclick='signUp()' >عضویت</a></p>
     </div>

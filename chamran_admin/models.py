@@ -44,8 +44,7 @@ class News(models.Model):
 
 
 class TempUser(models.Model):
-    pub_date = models.DateTimeField(auto_now=True, auto_now_add=False)
-    email = models.EmailField(max_length=254, unique=True)
+    email = models.EmailField(max_length=254 )
     unique = models.UUIDField(unique=True, default=uuid.uuid4())
     CHOICE = (
         ('expert', 'Expert'),
@@ -53,9 +52,6 @@ class TempUser(models.Model):
         ('researcher', 'Researcher')
     )
     account_type = models.CharField(max_length=50, choices=CHOICE)
-
-    class Meta:
-        ordering = ["-pub_date", ]
 
     def __str__(self):
         return self.account_type + ' - ' + str(self.pk)

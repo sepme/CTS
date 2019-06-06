@@ -1,22 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import reverse ,HttpResponseRedirect
 
 import datetime
 
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    researcher_profile = models.OneToOneField("ResearcherProfile", verbose_name="مشخصات فردی",
-                                              on_delete=models.CASCADE)
-    membership_fee = models.OneToOneField('MembershipFee', verbose_name="حق عضویت", on_delete=models.CASCADE)
-    status = models.OneToOneField("Status", on_delete=models.CASCADE)
-    points = models.FloatField(default=0, verbose_name='امتیاز')
+    points = models.FloatField(default=0.0, verbose_name='امتیاز' )
+    
 
     def __str__(self):
-        return self.researcher_profile.name
-
+        return self.user.get_username()
+    
+    def get_absolute_url(self):
+        return HttpResponseRedirect(reverse("researcher:index", kwargs={"pk": self.pk}))
 
 class Status(models.Model):
+    researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE ,blank=True)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
@@ -33,6 +34,7 @@ class Status(models.Model):
 
 
 class MembershipFee(models.Model):
+    researcher_user = models.OneToOneField('ResearcherUser', verbose_name="حق عضویت", on_delete=models.CASCADE ,blank=True)
     fee = models.IntegerField(verbose_name='هزینه')
     start = models.DateField(auto_now=False, auto_now_add=False, verbose_name="اولین پرداخت")
     rePay = models.DateField(auto_now=False, auto_now_add=False, verbose_name="آخرین پرداخت")
@@ -42,6 +44,8 @@ class MembershipFee(models.Model):
 
 
 class ResearcherProfile(models.Model):
+    researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
+                                              on_delete=models.CASCADE ,blank=True)
     name = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد")
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")

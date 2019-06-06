@@ -21,8 +21,6 @@ class UserPass(generic.TemplateView):
 
 
 def signup(request, username):
-    print("-------------------")
-    print("HEREEEEEEE IS RESEARCHER")
     user = get_object_or_404(User, username=username)
     researcher = models.ResearcherUser(user=user)
     researcher.save()
