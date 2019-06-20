@@ -3,24 +3,26 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-      {% block title %}{% endblock %}
+      <title>{% block title %}{% endblock %}</title>
       {% load static %}
     <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    {% block header %}{% endblock %}
-      <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
   </head>
   <body>
+  <div id="loading">
+{#      <canvas id="loading-canvas"></canvas>#}
+  </div>
   {% block dialog%}{% endblock %}
-  {% block initial_information %}{% endblock %}
-  <div class="main {% block blur %}{% endblock %}">
+  <div class="main">
     <div class="top-bar">
-      <div class="top-msg">
-        <span class="fas fa-envelope fa-lg"></span>
-      </div>
-      <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
-      <div class="dropdown">
+        <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
+        <div class="top-msg">
+            <span class="fas fa-envelope fa-lg"></span>
+        </div>
+        <div class="dropdown">
         <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
           <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
         </button>
@@ -33,7 +35,10 @@
       </div>
     </div>
     <div class="content">
-      {% block content %}{% endblock %}
+        <div class="container">
+            {% block initial_information %}{% endblock %}
+            {% block content %}{% endblock %}
+        </div>
     </div>
     <div class="side-bar">
       <div class="topMargin"></div>
@@ -84,7 +89,7 @@
         </li>
         {% url 'userInfo' as userInfo%}
         <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
-          <a href="#">
+          <a href="{% url 'expert:userInfo'%}">
             <div>
               <span>تنظیمات کاربری</span>
               <span class="fas fa-cog"></span>
@@ -93,6 +98,7 @@
         </li>
       </ul>
     </div>
+    <a href="#" id="toggle"><span></span></a>
   </div>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
