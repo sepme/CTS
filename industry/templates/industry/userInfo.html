@@ -1,12 +1,12 @@
 {% extends "industry/layouts/base_layout.html" %}
 {% load static %}
 {% block title %}<title>تنظیمات کاربری</title>{% endblock %}
-{% block name %}رضا باسره{% endblock %}
+{% block name %}{{user.username}}{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card">
-                <form action="" method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="inner-card card">
                         <div class="row">
@@ -15,55 +15,51 @@
                                 <i class="fas fa-pencil-alt"></i>
                             </label>
                             <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
-                            <input type="file" id="upload-input" accept="image/png, image/jpeg">
+                            {{form.photo}}
                         </div>
                         </div>
                             <div class="row">
                               <div class="col-lg-12">
                                 <label for="firmName">نام شرکت</label>
-                                <input type="text" id="firmName" class="w-100">
+                                {{form.name}}
                               </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="registerNum">شماره ثبت</label>
-                                <input type="text" id="registerNum" class="w-100">
+                                {{form.registration_number}}
                             </div>
                             <div class="col-lg-6">
                                 <label for="establishmentDate">سال تاسیس</label>
-                                <input type="text" id="establishmentDate" class="w-100">
+                                {{form.date_of_foundation}}                                
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Field">حوزه فعالیت</label>
-                                <input type="text" id="Field" class="w-100">
+                                {{form.research_field}}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 rankDiv">
                                 <label class="rankLabel" for="rank">نوع شرکت</label>
-                                <select id="rank">
-                                    <option selected dir="rtl">انتخاب کنید ...</option>
-                                    <option value="1">دولتی</option>
-                                    <option value="2">خصوصی</option>
-                                </select>
+                                {{form.industry_type}}
                           </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Address">آدرس</label>
-                                <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
+                                {{form.industry_address}}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="phoneNum">تلفن</label>
-                                <input type="text" id="phoneNum" class="w-100">
+                                {{form.phone_number}}
                             </div>
                             <div class="col-lg-6">
                                 <label for="Email">پست الکترونیکی</label>
-                                <input type="text" id="Email" class="w-100">
+                                {{form.email_address}}
                             </div>
                         </div>
                     </div>
@@ -71,13 +67,13 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا چند نمونه از خدمات / محصولاتی را که توسط شرکت شما ارائه می شود، ذکر بفرمایید.</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {{form.services_products}}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا چند نمونه از افتخارات شرکت مربوطه را نام ببرید.</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {{form.awards_honors}}
                             </div>
                         </div>
                         <div class="row">
@@ -87,7 +83,8 @@
                                 </span>
                                 <div class="text-center w-100">
                                     <label class="attach-label">
-                                        <input type="file" name="declaration" class="attach-input">
+                                        
+                                        {{form.tax_declaration}}
                                         <i class="fas fa-cloud-upload-alt"></i>
                                         <span class="file-name">بارگذاری اظهارنامه مالیاتی ...</span>
                                     </label>
