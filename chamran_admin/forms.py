@@ -6,17 +6,18 @@ from django.contrib.auth.models import User
 
 from . import models
 
-ACCOUNT_CHOICE =(
+ACCOUNT_CHOICE =[
     ('industry'   ,'Industry'),
     ('expert'     ,'Expert'),
     ('researcher' ,'Researcher'),
-)
+]
 
 class RegisterEmailForm(forms.Form):
     email = forms.EmailField(label="ایمیل")
-    account_type = forms.ChoiceField(choices=ACCOUNT_CHOICE ,label='نوع حساب کاربری')
+    account_type = forms.ChoiceField(choices=ACCOUNT_CHOICE, label='نوع حساب کاربری')
     class Meta:
         widgets = {
+            'email' : forms.TextInput(attrs={'id':"email",'name':"email" ,'value' :"" }),
             'account_type': forms.RadioSelect(),
         }
     
@@ -60,13 +61,9 @@ class RegisterUserForm(forms.Form):
         return confirm_password
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label='نام کاربری')
-    password = forms.CharField(widget=forms.PasswordInput() ,label='رمز عبور')
+    username = forms.CharField()
+    password = forms.CharField()
 
-    class Meta:
-        widgets ={
-            'password' : forms.PasswordInput(),
-        }
     
     def clean_username(self):
         data = self.cleaned_data["username"]
