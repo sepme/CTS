@@ -1,10 +1,6 @@
     function load_dialog(){
-
-        // var contentWidth = $(document).innerWidth();
-        // $(".dialog").css("width",dialogWidth);
-
         $(".title-back").each(function () {
-            var title_back_width = $(this).prev().outerWidth();
+            var title_back_width = $(this).prev().outerWidth() + 30;
             $(this).css("width", title_back_width);
         });
 
@@ -15,7 +11,6 @@
             $(this).next().css("width",divWidth/2 - 10);
             $(this).css("left", (divWidth)/2 );
         });
-
     }
     function init_windowSize() {
         var contentWidth = $(document).innerWidth()-250;
@@ -52,15 +47,30 @@
                 $(content).addClass("blur-div");
             }
     }
-    function init_showProject_btn(element){
-        $(element).click(function () {
+    function init_showProject_btn(element, dialogClass) {
+        $(element).click(function (){
             blur_div_toggle(".main");
-            $(".dialog-main").css("display","block");
-            close_dialog();
+            $(dialogClass).css("display","block");
+            close_dialog(dialogClass);
             load_dialog();
+            if( dialogClass === ".showProject"){
+                accept_project();
+            }
         });
     }
     function input_focus(){
+        if( $("input,textarea").prop("disabled") ) {
+            alert(1);
+            $(this).each(function () {
+                var inputLabel = "label[for='"+$(this).attr("id")+"']";
+                $(inputLabel).css({
+                    "font-size":"13px",
+                    "top":"0px",
+                    "right":"15px",
+                    "color":"#8d8d8d"
+                });
+            });
+        }
         $("input,textarea").on("focus", function () {
             if($(this).hasClass("solid-label"))
                 return false;
@@ -95,9 +105,17 @@
             $(className+ " div#" + $(this).attr("id")).remove();
         });
     }
-    function close_dialog() {
-        $(".close").click(function () {
-            $(".dialog-main").css("display","none");
+    function accept_project(){
+        $(".accept-btn").click(function () {
+            $(".showProject").slideUp('slow').delay('slow');
+            $(".project-details").delay('slow').slideDown('slow');
+            close_dialog(".project-details");
+            load_dialog();
+        });
+    }
+    function close_dialog(className){
+        $(".close").click(function (){
+            $(className).css("display","none");
             $(".main").removeClass("blur-div");
         });
     }
@@ -145,7 +163,7 @@ $(document).ready(function(){
     }else{
         // loading();
         init_windowSize();
-        init_showProject_btn(".chamran-btn-info");
+        init_showProject_btn(".chamran-btn-info" , ".showProject");
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");

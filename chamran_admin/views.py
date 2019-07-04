@@ -243,3 +243,35 @@ class ResetPasswordConfirm(generic.FormView):
             elif account_type == 'researcher':
                 return user.researcheruser.get_absolute_url()
         return super().post(request ,*args, **kwargs)
+class Signup(generic.TemplateView):
+    template_name = 'registration/signup.html'
+    http_method_names = ['get' ,'post']
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+        account_type = request.POST['account_type']
+        user = User(username=username ,email=email)
+        user.set_password(password)
+        if account_type == 'researcher':
+            user.save()
+            researcher = ResearcherUser(user=user)
+            researcher.save()
+            status = ResearcherStatus(researcher_user=researcher ,status='signed_up')
+            status.save()
+            return researcher.get_absolute_url()
+        elif account_type == 'expert':
+            user.save()
+            expert = ExpertUser(user=user)
+            expert.save()
+            return expert.get_absolute_url()
+
+        elif account_type == 'industry':
+            user.save()
+            industry = IndustryUser(user=user )
+            industry.save()
+            return industry.get_absolute_url()
+
+        return HttpResponseRedirect(reverse('chamran:home'))

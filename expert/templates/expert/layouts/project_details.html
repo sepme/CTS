@@ -1,30 +1,120 @@
 {% load static%}
-<div class="dialog-main showProject">
+<div class="dialog-main project-details">
     <div class="card text-right dialog">
         <div class="close"></div>
         <div class="container">
-            <div class="row">
+            <div class="row mbottom-lg-25">
                <div class="col-lg-12">
                    <h6 class="project-title"> محلول کشت سلولی ( FBS )</h6>
                </div>
             </div>
-            <div class="row mbottom-lg-30">
-                <div class="col-lg-6">
-                    <span class="border-span">محیط کشت سلولی </span>
-                    <span class="border-span">PCR</span>
-                    <span class="border-span">فلوسایتومتری</span>
-                    <span class="border-span">فلوسایتومتری</span>
-                    <span class="border-span">PCR</span>
-                    <span class="border-span">PCR</span>
-                </div>
-                <div class="col-lg-6">
-                    <div class="establish-time">
-                        <div class="time-head">زمان ثبت</div>
-                        <div class="time-body">22/12/1398</div>
-                    </div>
-                    <div class="time-left">
-                        <div class="time-head">مهلت انجام</div>
-                        <div class="time-body">2 ماه</div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    <div class="project-info custom-border-title">
+                        <span class="title">جزییات پروژه</span>
+                        <span class="title-back"></span>
+                        <div>
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label for="industry-name">کارفرما</label>
+                                            <input type="text" class="w-100" id="industry-name" value="شرکت طب باکس" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label for="enforced-name">مجری</label>
+                                            <input type="text" class="w-100" id="enforced-name" value="نمی دونم!" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label for="executive-info">توضیحات اجرایی</label>
+                                            <textarea class="w-100" rows="4" id="executive-info" disabled>توضیحات</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="industry-logo-preview">
+                                        <img src="{% static 'expert/img/industry.jpg' %}" alt="industry-logo">
+                                    </div>
+                                    <div class="budget-section">
+                                        <div class="budget">
+                                            <div class="budget-header">بودجه</div>
+                                            <div class="budget-content">
+                                                <div class="budget-amount">5,000,000</div>
+                                                <div>ریال</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-process">
+                                <div class="progress-row">
+                                    <div class="step-top">
+                                        <div class="time">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="step-content">
+                                            فاز اول
+                                        </div>
+                                    <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="step-content">
+                                            فاز سوم
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line-100">
+                                    <div class="arrow"></div>
+                                </div>
+                                <div class="progress-row">
+                                    <div class="step-down">
+                                        <div class="step-content">
+                                            شروع پروژه
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="step-content">
+                                            فاز دوم
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="step-content">
+                                            اتمام پروژه
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,14 +180,6 @@
                 </div>
             </div>
             <div class="row mbottom-lg-25">
-                <div class="col-lg-9">
-                    <button class="w-100 accept-btn btn">تایید و شروع پروژه</button>
-                </div>
-                <div class="col-lg-3">
-                    <button class="w-100 refuse-btn btn">رد پروژه</button>
-                </div>
-            </div>
-            <div class="row mbottom-lg-25">
                 <div class="col-lg-12 text-right">
                     <div class="project-comment custom-border-title">
                         <span class="title">نظرات</span>
@@ -115,27 +197,7 @@
                                 </form>
                                 <hr>
                                 <div class="comments">
-                                    <div class="my-comment">
-                                        <div class="comment-profile">
-                                            <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="expert_profile">
-                                        </div>
-                                        <div class="comment-body">
-                                            <span class="delete-comment"><i class="fas fa-times"></i></span>
-                                            <span>
-                                                این چه قیمتیه کثافت ؟! خر هم با این قیمت واست بر نمی بره
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="your-comment">
-                                        <div class="comment-profile">
-                                            <img src="{% static 'expert/img/pharmaceutical.jpg' %}" alt="expert_profile">
-                                        </div>
-                                        <div class="comment-body">
-                                            <span>
-                                                غلط کردی همینه که هست! می خوای بخواه نمی خوایم هرری!
-                                            </span>
-                                        </div>
-                                    </div>
+                                    تاکنون نظری ثبت نشده
                                 </div>
                             </div>
                         </div>

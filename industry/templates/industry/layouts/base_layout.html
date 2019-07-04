@@ -12,7 +12,6 @@
       <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
   </head>
   <body>
-  {% block initial_information %}{% endblock %}
   <div class="main {% block blur %}{% endblock %}">
     <div class="top-bar">
       <div class="top-msg">
@@ -32,19 +31,21 @@
       </div>
     </div>
     <div class="content">
-      {% block content %}{% endblock %}
+        <div class="container">
+            {% block initial_information %}{% endblock %}
+            {% block content %}{% endblock %}
+        </div>
     </div>
     <div class="side-bar">
       <div class="topMargin"></div>
       <div class="expert-icon"></div>
-      
-      <img src="{{industry.industryform.photo}}" alt="profile" class="profile" width="150px" height="150px">
+      <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
       <h5>{% block name %}{% endblock %}</h5>
       <h6>صنعت</h6>
-      <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ industry.industry_points|default:0 }}</span>/100</p>
+      <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="{{ industry.industry_points|default:0 }}" aria-valuemin="0" aria-valuemax="100" style="width: 70px">
-          <span class="sr-only">{{ industry.industry_points|default:0 }}% completed</span>
+        <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0" aria-valuemax="100" style="width: 70px">
+          <span class="sr-only">{{ score|default:0 }}% completed</span>
         </div>
       </div>
       <div class="hr"></div>
