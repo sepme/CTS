@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>{% block title %}{% endblock %}</title>
       {% load static %}
-    <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
+      <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
+      <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
   </head>
   <body>
   <div id="loading">
@@ -54,8 +54,7 @@
       </div>
       <div class="hr"></div>
       <ul class="list-group">
-        {% url "index" as index %}
-        <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
+        <li class="list-group-item text-right active">
           <a href="#">
             <div>
               <span>پروژه ها</span>
@@ -87,9 +86,8 @@
             </div>
           </a>
         </li>
-        {% url 'userInfo' as userInfo%}
-        <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
-          <a href="{% url 'expert:userInfo'%}">
+        <li class="list-group-item text-right">
+          <a href="#">
             <div>
               <span>تنظیمات کاربری</span>
               <span class="fas fa-cog"></span>

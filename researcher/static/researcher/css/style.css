@@ -1,15 +1,4 @@
-@font-face {
-  font-family: Shabnam;
-  src: url(../font/Shabnam.ttf);
-}
-@font-face {
-  font-family: Shabnam-Bold;
-  src: url(../font/Shabnam-Bold.ttf);
-}
-@font-face {
-  font-family: Shabnam-Light;
-  src: url(../font/Shabnam-Light.ttf);
-}
+@import "fontiran.css";
 @media screen {
     .mbottom-lg-25{
         margin-bottom: 25px;
@@ -20,7 +9,7 @@
 }
 body {
   background-color: #f8fdf7;
-  font-family: Shabnam;
+  font-family: iranyekan, serif;
   color: #fff;
   font-size: 14px;
   overflow-y: hidden;
@@ -429,10 +418,8 @@ hr{
   padding:0 15px 20px 15px;
 }
 .header{
-  font-family: Shabnam-Bold;
 }
 .sub-header{
-  font-family: Shabnam-Light;
   color: #6f7285;
 }
 ::-webkit-scrollbar {
@@ -619,14 +606,14 @@ input[name="foreign_work"]+label:hover , input[name="foreign_work"]:checked+labe
 }
 input#search_technique{
     position: absolute;
-    top: 0;
+    top: 10px;
     left: 10px;
     padding-left: 30px;
     margin: 0;
 }
 input#search_technique+label{
     position: absolute;
-    top: 10px;
+    top: 20px;
     left: 15px;
     width: fit-content;
     right: auto;
@@ -639,6 +626,35 @@ input#search_technique+label{
 /*
 * index.html
  */
+.search_technique{
+  margin-bottom: 50px;
+}
+#fancy-tree {
+  color: #000;
+}
+ul.ui-fancytree{
+  padding-right: 0;
+}
+ul.ui-fancytree > li{
+  list-style-type: none;
+  text-align: right;
+  padding: 2px;
+  width: 100%;
+  color: #6f7285;
+}
+ul.ui-fancytree > li > span > span{
+  margin-left: 2px;
+}
+ul.ui-fancytree > li.active{
+  color: #6d6d6d;
+}
+ul.ui-fancytree > li:hover{
+  color: #3CCD1C;
+  cursor: pointer;
+}
+.search_technique > input {
+  width: calc(100% - 15px);
+}
 .nav{
     padding-right: 0;
 }
@@ -680,7 +696,7 @@ a.nav-link:hover{
 }
 .project-item > span.header{
     color: #000;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 .project-item > span.header > span.sub-header{
     font-size: 12px;
@@ -701,7 +717,7 @@ a.nav-link:hover{
   box-shadow: 0 0 5px 1px #e3e3e3;
   position: absolute;
   left: 10px;
-  top: 7px;
+  bottom: 50px;
 }
 .chamran-btn-info:hover{
   background-color: #FFD700;
@@ -735,14 +751,17 @@ h6.project-title{
   margin-bottom: 15px;
 }
 span.border-span{
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: 0.25em;
-    border: 1px solid #bdbdbd;
-    padding: 5px;
-    background-color: #F8FDF7;
-    color: #707070;
-    margin: 12px 5px;
+  display: inline-block;
+  -webkit-border-radius: 0.25em;
+  -moz-border-radius: 0.25em;
+  border-radius: 0.25em;
+  border: 1px solid #bdbdbd;
+  padding: 2px 5px;
+  background-color: #F8FDF7;
+  color: #707070;
+  font-weight: 300;
+  font-size: 12px;
+  margin: 3px 5px;
 }
 .close{
   position: absolute;

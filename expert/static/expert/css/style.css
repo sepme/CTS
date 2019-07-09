@@ -88,6 +88,7 @@ img{
   box-shadow: 0 0 50px #e3e3e3;
 }
 .dialog-main{
+  display: none;
   overflow-y: scroll;
   justify-content: center;
 }
@@ -96,6 +97,7 @@ img{
   color: #262626;
   width: 70%;
   padding: 30px 10px;
+  border-top-left-radius: 15px;
   box-shadow: 0 0 50px #e3e3e3;
   margin: 70px auto;
   overflow-y: hidden;
@@ -607,13 +609,6 @@ span.star-warning:after{
     color: #3CCD1C;
     cursor: pointer;
 }
-.dialog-main{
-  display: none;
-}
-.dialog{
-  padding-bottom: 30px;
-  border-top-left-radius: 15px;
-}
 .close{
   position: absolute;
   top: 5px;
@@ -802,14 +797,17 @@ h6.project-title{
   margin-bottom: 15px;
 }
 span.border-span{
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: 0.25em;
-    border: 1px solid #bdbdbd;
-    padding: 5px;
-    background-color: #F8FDF7;
-    color: #707070;
-    margin: 12px 5px;
+    display: inline-block;
+  -webkit-border-radius: 0.25em;
+  -moz-border-radius: 0.25em;
+  border-radius: 0.25em;
+  border: 1px solid #bdbdbd;
+  padding: 2px 5px;
+  background-color: #F8FDF7;
+  color: #707070;
+  font-weight: 300;
+  font-size: 12px;
+  margin: 3px 5px;
 }
 .row-header{
   text-align: center;
@@ -920,7 +918,7 @@ span.border-span{
     border: 1px solid #bdbdbd;
     border-radius: 0.25em;
     background-color: #f8fdf7;
-    padding: 16px 10px 10px 10px;
+    padding: 25px 10px;
 }
 span.title{
     position: absolute;
@@ -1005,8 +1003,24 @@ span.title-back{
     background-color: #ff4545;
 }
 /* project details style*/
+.save-input{
+  margin-top: 20px;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #3ccd1c;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.save-input:hover, .save-input:focus{
+  outline: none;
+  color: #fff;
+  background-color: #3ccd1c;
+}
 .industry-logo-preview {
     text-align: left;
+}
+.project-detail > span.border-span{
+  background-color: #fff;
 }
 .industry-logo-preview > img {
     height: 150px;
