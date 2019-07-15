@@ -1,4 +1,5 @@
-    function load_dialog(){
+$('*').persiaNumber();
+function load_dialog(){
         $(".title-back").each(function () {
             var title_back_width = $(this).prev().outerWidth() + 30;
             $(this).css("width", title_back_width);
@@ -13,16 +14,21 @@
         });
     }
     function init_windowSize() {
-        var contentWidth = $(document).innerWidth()-250;
-        var contentMargin = 0.0862*contentWidth - 63.9655;
-        $(".info-card").css({
-            "margin-right":contentMargin,
-            "margin-left":contentMargin
-        });
-        $(".content").css({"width":contentWidth,
-            "height":"90%"});
-        $(".side-bar").css("height","100%");
+         if($(window).width() < 575.98){
 
+         }else {
+             var contentWidth = $(document).innerWidth() - 250;
+             var contentMargin = 0.0862 * contentWidth - 63.9655;
+             $(".info-card").css({
+                 "margin-right": contentMargin,
+                 "margin-left": contentMargin
+             });
+             $(".content").css({
+                 "width": contentWidth,
+                 "height": "90%"
+             });
+             $(".side-bar").css("height", "100%");
+         }
     }
     function loading() {
         $(".main").addClass("blur-div");
@@ -47,7 +53,7 @@
                 $(content).addClass("blur-div");
             }
     }
-    function init_showProject_btn(element, dialogClass) {
+    function init_dialog_btn(element, dialogClass) {
         $(element).click(function (){
             blur_div_toggle(".main");
             $(dialogClass).css("display","block");
@@ -60,7 +66,6 @@
     }
     function input_focus(){
         if( $("input,textarea").prop("disabled") ) {
-            alert(1);
             $(this).each(function () {
                 var inputLabel = "label[for='"+$(this).attr("id")+"']";
                 $(inputLabel).css({
@@ -119,26 +124,14 @@
             $(".main").removeClass("blur-div");
         });
     }
-    function express_btn(){
-        $(".express-row").click(function () {
-           $(this).removeClass("express-row").addClass("expand-row");
-           $(this).html("<i class='fas fa-chevron-up'></i>");
-           expand_btn();
-        });
-    }
-    function expand_btn(){
-        $(".expand-row").click(function () {
-           $(this).removeClass("expand-row").addClass("express-row");
-           $(this).html("<i class='fas fa-chevron-up'></i>");
-            express_btn();
-        });
-    }
 $(window).on("load",function () {
+    init_windowSize();
     load_dialog();
 }).on("resize",function () {
     init_windowSize();
     load_dialog();
 });
+
 $(document).ready(function(){
     // variable
     edu_count = 0;
@@ -163,7 +156,8 @@ $(document).ready(function(){
     }else{
         // loading();
         init_windowSize();
-        init_showProject_btn(".chamran-btn-info" , ".showProject");
+        init_dialog_btn(".chamran-btn-info" , ".showProject");
+        init_dialog_btn(".researcher-card-button-show" , ".researcher-info-dialog");
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");

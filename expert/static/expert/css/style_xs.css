@@ -1,11 +1,14 @@
 @import "fontiran.css";
-@media (max-width: 575.98px) {
+@media (max-width: 576px) {
     body {
         background-color: #f8fdf7;
-        font-family: iranyekan;
+        font-family: iranyekan, serif;
         color: #fff;
         font-size: 14px;
         overflow-y: hidden;
+    }
+    .container{
+        padding: 0;
     }
     .upload {
         position: absolute;
@@ -324,7 +327,7 @@
         display: block;
         width: 28px;
         height: 30px;
-        position: absolute;
+        position: fixed;
         bottom: 20px;
         left: 20px;
     }
@@ -436,9 +439,13 @@
     }
 
     .info-card {
-        margin: 20px 100px;
-        padding: 20px;
+        margin: 10px 0;
+        padding: 0;
         color: #000;
+        border:none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow:  none;
+        box-shadow:  none;
     }
 
     .row {
@@ -482,9 +489,10 @@
 
     .inner-card {
         padding: 10px;
-        margin: 20px auto;
-        background-color: #fff;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.08)
+        margin: 0 auto;
+        background-color: #f8fdf7;
+        box-shadow: none;
+        border: none;
     }
 
     .ch-card-item:last-child {
@@ -495,13 +503,7 @@
         margin-top: 5px;
         padding: 0 15px 20px 15px;
     }
-
-    .header {
-        font-family: iranyekan;
-    }
-
     .sub-header {
-        font-family: iranyekan;
         color: #6f7285;
     }
 
@@ -791,5 +793,38 @@
 
     .rotate--90 {
         transform: rotate(-90deg);
+    }
+    .nav{
+        position: relative;
+        height: 39px;
+        padding-right: 0;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+    .nav::-webkit-scrollbar{
+        display: none;
+    }
+    .nav > li{
+        margin-left: 10px;
+    }
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active,.nav-tabs .nav-link.active:hover,.nav-tabs .nav-link.active:focus{
+        border-color: #bdbdbd #bdbdbd #f8fdf7;;
+        color: #3CCD1C;
+        outline: none;
+        background-color: #f8fdf7;
+    }
+    .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover{
+        border-color: transparent;
+        background-color: transparent;
+        outline: none;
+    }
+    a.nav-link{
+        color: #6f7285;
+    }
+    a.nav-link:hover{
+        color: #3CCD1C;
+    }
+    .nav-tabs{
+        border-bottom: 1px solid #bdbdbd;
     }
 }
