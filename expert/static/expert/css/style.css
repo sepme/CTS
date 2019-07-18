@@ -1,12 +1,12 @@
 @import "fontiran.css";
-
-@media screen {
-    .mbottom-lg-25{
-        margin-bottom: 25px;
+.mbottom-10{
+        margin-bottom: 10px;
     }
-    .mbottom-lg-30{
-        margin-bottom: 30px;
-    }
+.mbottom-lg-25{
+  margin-bottom: 25px;
+}
+.mbottom-lg-30{
+  margin-bottom: 30px;
 }
 body {
   background-color: #f8fdf7;
@@ -624,6 +624,7 @@ span.star-warning:after{
   width: 30px;
   border-radius: 50%;
   border: 1px solid #bdbdbd;
+  z-index: 100;
 }
 .close:after,.close:before{
   background-color: #bdbdbd;
@@ -801,6 +802,7 @@ a.nav-link:hover{
   box-shadow: none;
 }
 h6.project-title{
+  margin-top: 10px;
   margin-bottom: 15px;
 }
 span.border-span{
@@ -844,8 +846,14 @@ span.border-span{
 .next-line{
   left: 0;
 }
-.comments {
-
+.new-comment-tools{
+  color: #707070;
+  position: absolute;
+  bottom: 10px;
+  right: 25px;
+}
+.new-comment-tools > i{
+  margin:0;
 }
 .comment-profile > img {
   border-radius: 50%;
@@ -853,44 +861,181 @@ span.border-span{
   height: 50px;
 }
 .comment-body{
-  width: calc(100% - 60px);
-  position: absolute;
+  width: 100%;
+  position: relative;
   padding: 5px;
-  bottom: 0;
   height: 100%;
+  min-height: 50px;
   border-radius: 0.25em;
   border: 1px solid #bdbdbd;
   background-color: #ffffff;
+}
+.comment-body:hover{
+  cursor: default;
 }
 .my-comment , .your-comment {
   position: relative;
   margin: 10px auto;
 }
+.my-comment{
+  padding-right: 70px;
+}
 .my-comment > .comment-profile {
-  position: relative;
+  position: absolute;
   right: 0;
   bottom: 0;
 }
 .my-comment > .comment-body {
-  left: 0;
+  border-bottom-right-radius: 0;
+}
+.my-comment > .comment-body:after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -10px;
+  height: 10px;
+  width: 10px;
+  border-bottom-left-radius: 1.25em;
+  background-color: #f8fdf7;
+  border-left: 1px solid #bdbdbd;
+  border-bottom: 1px solid #bdbdbd;
+}
+.my-comment > .comment-body:before{
+  content: '';
+  position:absolute;
+  bottom: -1px;
+  right: -10px;
+  height: 10px;
+  width: 10px;
+  background-color: #f8fdf7;
+  border-bottom: 1px solid #bdbdbd;
+}
+.fa-paperclip, .fa-pen, .fa-trash-alt, .fa-reply, .fa-smile{
+  border: 1px solid transparent;
+  padding: 6px;
+  background-color: transparent;
+  border-radius: 3px;
+}
+.fa-paperclip:hover, .fa-pen:hover, .fa-trash-alt:hover, .fa-reply:hover, .fa-smile:hover{
+  cursor: pointer;
+  color: #3ccd1c;
+  border: 1px solid #3ccd1c;
+  padding: 6px;
+  background-color: transparent;
+  border-radius: 3px;
+}
+label[for=comment-attach]{
+  top: 0;
+  right: 30px;
+}
+#comment{
+  padding-bottom: 30px;
+}
+.replay-div{
+  position: absolute;
+  top: 21px;
+  left: 16px;
+  height: 30px;
+  width: calc(100% - 31px);
+  border-radius: 5px 5px 0 0;
+  color: #707070;
+  overflow: hidden;
+  padding: 5px 5px 5px 20px;
+  background-color: #f8fdf7;
+  border-right: 2px solid #3ccd1c;
+}
+.replay-div:hover{
+  cursor: default;
+}
+.replay-div > .fa-reply{
+  padding: 0;
+  border: none;
+  margin-left: 10px;
+  border-radius: 0;
+}
+.replay-div > .fa-reply:hover{
+  cursor: default;
+  color: #707070;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+.replay-div > .fa-times{
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+}
+.replay-div > .fa-times:hover{
+  cursor: pointer;
+  color: #ff4545;
+}
+.attach{
+  position: absolute;
+  left: 15px;
+  height: 30px;
+  width: calc(100% - 30px);
+  border-radius: 5px 5px 0 0;
+  color: #707070;
+  overflow: hidden;
+  padding: 5px 5px 5px 20px;
+}
+.progress {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(0%, -50%);
+}
+.my-comment > .comment-body > .comment-tools{
+  color: #707070;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+}
+.comment-tools > i{
+  margin:0;
+}
+.your-comment {
+  padding-left: 70px;
+  padding-right: 20px;
 }
 .your-comment > .comment-profile {
-  position: relative;
+  position: absolute;
   left: 0;
   bottom: 0;
 }
 .your-comment > .comment-body {
-    right: 0;
+    border-bottom-left-radius: 0;
 }
-.delete-comment {
+.your-comment > .comment-body:after{
+  content: '';
   position: absolute;
-  top: 5px;
-  left: 5px;
-  color: #bdbdbd;
+  bottom: 0;
+  left: -10px;
+  height: 10px;
+  width: 10px;
+  border-bottom-right-radius: 1.25em;
+  background-color: #f8fdf7;
+  border-right: 1px solid #bdbdbd;
+  border-bottom: 1px solid #bdbdbd;
 }
-.delete-comment:hover {
-  cursor: pointer;
-  color: #ff4545;
+.your-comment > .comment-body:before{
+  content: '';
+  position:absolute;
+  bottom: -1px;
+  left: -10px;
+  height: 10px;
+  width: 10px;
+  background-color: #f8fdf7;
+  border-bottom: 1px solid #bdbdbd;
+}
+.your-comment > .comment-body > .comment-tools{
+  color: #707070;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -30px;
 }
 /* show Project style*/
 .establish-time , .time-left{
@@ -951,20 +1096,28 @@ span.title-back{
     border-radius: 0.25em;
     position: relative;
 }
+.project-info-innerDiv{
+  padding-right: 44px;
+}
 .project-info-tabs{
+    position: absolute;
+    top: 0;
+    right: 0;
     border-top-right-radius: 0.25em;
     border-bottom-right-radius: 0.25em;
     /*height: 100%;*/
     padding: 2px;
     width: 43px;
+
 }
 .project-info-content{
-    width: calc(100% - 43px);
+    width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+    min-height: 370px;
+    padding: 5px;
+    position: relative;
     border-right: 1px solid #bdbdbd;
+
 }
 .nav-pills > .nav-link{
     position: relative;
@@ -1338,16 +1491,24 @@ div.researcher-info-innerDiv{
   position: absolute;
 }
 .researcher-card-button-close{
-  left: 5px;
-  top: 5px;
+  left: 10px;
+  top: 10px;
 }
 .researcher-card-button-show{
+  padding: 5px;
   left: 5px;
   bottom: 5px;
+  background-color: #ffffff;
+  color: #FFD700;
+  border:1px solid #FFD700;
 }
 .researcher-card-button-check{
-  left: 50px;
+  padding: 5px;
+  left: 70px;
   bottom: 5px;
+  background-color: #ffffff;
+  color: #3ccd1c;
+  border:1px solid #3ccd1c;
 }
 .researcher-personal-info{
     padding-right: 175px;

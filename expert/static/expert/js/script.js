@@ -1,129 +1,3 @@
-$('*').persiaNumber();
-function load_dialog(){
-        $(".title-back").each(function () {
-            var title_back_width = $(this).prev().outerWidth() + 30;
-            $(this).css("width", title_back_width);
-        });
-
-        $(".row-header > .header").each(function () {
-            var divWidth = $(this).outerWidth();
-            divWidth = $(this).closest("div").innerWidth() - divWidth;
-            $(this).prev().css("width",divWidth/2 - 10);
-            $(this).next().css("width",divWidth/2 - 10);
-            $(this).css("left", (divWidth)/2 );
-        });
-    }
-    function init_windowSize() {
-         if($(window).width() < 575.98){
-
-         }else {
-             var contentWidth = $(document).innerWidth() - 250;
-             var contentMargin = 0.0862 * contentWidth - 63.9655;
-             $(".info-card").css({
-                 "margin-right": contentMargin,
-                 "margin-left": contentMargin
-             });
-             $(".content").css({
-                 "width": contentWidth,
-                 "height": "90%"
-             });
-             $(".side-bar").css("height", "100%");
-         }
-    }
-    function loading() {
-        $(".main").addClass("blur-div");
-        var canvas = $("#loading-canvas");
-        canvas.drawArc({
-            strokeStyle: '#000',
-            strokeWidth: 4,
-            rounded: true,
-            endArrow: true,
-            arrowRadius: 15,
-            arrowAngle: 90,
-            x: 160, y: 120,
-            start: 90,
-            end: 360,
-            radius: 50
-        });
-    }
-    function blur_div_toggle(content) {
-            if($(content).hasClass("blur-div")) {
-                $(content).removeClass("blur-div");
-            }else {
-                $(content).addClass("blur-div");
-            }
-    }
-    function init_dialog_btn(element, dialogClass) {
-        $(element).click(function (){
-            blur_div_toggle(".main");
-            $(dialogClass).css("display","block");
-            close_dialog(dialogClass);
-            load_dialog();
-            if( dialogClass === ".showProject"){
-                accept_project();
-            }
-        });
-    }
-    function input_focus(){
-        if( $("input,textarea").prop("disabled") ) {
-            $(this).each(function () {
-                var inputLabel = "label[for='"+$(this).attr("id")+"']";
-                $(inputLabel).css({
-                    "font-size":"13px",
-                    "top":"0px",
-                    "right":"15px",
-                    "color":"#8d8d8d"
-                });
-            });
-        }
-        $("input,textarea").on("focus", function () {
-            if($(this).hasClass("solid-label"))
-                return false;
-            var inputLabel = "label[for='"+$(this).attr("id")+"']";
-            $(inputLabel).css({
-                "font-size":"13px",
-                "top":"0px",
-                "right":"15px",
-                "color":"#3CCD1C"
-            });
-            $(this).css("color","#3ccd1c");
-        }).on("focusout", function () {
-            if($(this).hasClass("solid-label"))
-                return false;
-            var inputLabel = "label[for='"+$(this).attr("id")+"']";
-            $(inputLabel).css("color","#6f7285");
-            if($(this).val() === ''){
-                $(inputLabel).css({
-                    "font-size":"14px",
-                    "top":"28px",
-                    "right":"25px",
-                    "color":"#6f7285"
-                });
-            }else {
-                $(this).css("color","#8d8d8d");
-                $(inputLabel).css("color","#8d8d8d");
-            }
-        });
-    }
-    function delete_item(className){
-        $(".delete-item").click(function () {
-            $(className+ " div#" + $(this).attr("id")).remove();
-        });
-    }
-    function accept_project(){
-        $(".accept-btn").click(function () {
-            $(".showProject").slideUp('slow').delay('slow');
-            $(".project-details").delay('slow').slideDown('slow');
-            close_dialog(".project-details");
-            load_dialog();
-        });
-    }
-    function close_dialog(className){
-        $(".close").click(function (){
-            $(className).css("display","none");
-            $(".main").removeClass("blur-div");
-        });
-    }
 $(window).on("load",function () {
     init_windowSize();
     load_dialog();
@@ -131,16 +5,17 @@ $(window).on("load",function () {
     init_windowSize();
     load_dialog();
 });
-
 $(document).ready(function(){
     // variable
     edu_count = 0;
     exe_count = 0;
     stu_count = 0;
     art_count = 0;
-
+    $('*').persiaNumber();
     input_focus();
+    init_dialog_btn(".chamran-btn-info" , ".showProject");
     if($(window).width() < 575.98){
+    // toggle slide-bar => all views
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
            if($(this).hasClass("on")){
@@ -153,16 +28,22 @@ $(document).ready(function(){
                $(".content").addClass("blur-div");
            }
         });
+    // nav-tabs change => index view
+        $(".nav-link").click(function () {
+           $(".nav-link").removeClass("active");
+           $(this).addClass("active");
+           $(".nav").animate({
+               scrollLeft: $(this).offset().left
+           }, "slow");
+        });
     }else{
         // loading();
         init_windowSize();
-        init_dialog_btn(".chamran-btn-info" , ".showProject");
         init_dialog_btn(".researcher-card-button-show" , ".researcher-info-dialog");
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
         // }
-        express_btn();
       $(".form-submit").click(function () {
         blur_div_toggle(".top-bar");
         blur_div_toggle(".side-bar");

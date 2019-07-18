@@ -1,5 +1,8 @@
 @import "fontiran.css";
 @media (max-width: 576px) {
+    .mbottom-xs-10{
+        margin-bottom: 10px;
+    }
     body {
         background-color: #f8fdf7;
         font-family: iranyekan, serif;
@@ -67,15 +70,18 @@
 
     .mainInfo, .dialog {
         position: absolute;
-        top: 50%;
+        top: 50px;
         left: 50%;
-        width: 80%;
-        transform: translate(-50%, -50%);
+        width: 95%;
+        transform: translate(-50%);
         color: #262626;
         padding: 5px 10px 50px 10px;
         box-shadow: 0 0 50px #e3e3e3;
     }
-
+    .dialog{
+        margin: 0 0 50px 0;
+        overflow-x: hidden;
+    }
     input, textarea, select {
         background-color: #fdfdfd;
         border: 1px solid #bdbdbd;
@@ -711,11 +717,17 @@
     .dialog-main {
         display: none;
     }
-
-    .dialog {
-        padding-bottom: 30px;
+    .establish-time , .time-left{
+        width: fit-content;
+        position: relative;
+        top:0;
     }
-
+    .establish-time{
+        right: 0;
+    }
+    .time-left{
+        left: 0;
+    }
     .close > i {
         position: absolute;
         top: -4px;
@@ -794,21 +806,27 @@
     .rotate--90 {
         transform: rotate(-90deg);
     }
-    .nav{
+    .nav.nav-tabs{
         position: relative;
-        height: 39px;
+        height: 40px;
         padding-right: 0;
         overflow-x: scroll;
         overflow-y: hidden;
+        white-space: nowrap;
+        display: block;
     }
-    .nav::-webkit-scrollbar{
+    .nav.nav-tabs::-webkit-scrollbar{
         display: none;
     }
-    .nav > li{
+    .nav.nav-tabs > li{
         margin-left: 10px;
+        display: inline-block;
+        float: none;
+        position: relative;
+        white-space: normal;
     }
     .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active,.nav-tabs .nav-link.active:hover,.nav-tabs .nav-link.active:focus{
-        border-color: #bdbdbd #bdbdbd #f8fdf7;;
+        border-color:#f8fdf7 #f8fdf7 #3ccd1c;
         color: #3CCD1C;
         outline: none;
         background-color: #f8fdf7;
@@ -825,6 +843,12 @@
         color: #3CCD1C;
     }
     .nav-tabs{
-        border-bottom: 1px solid #bdbdbd;
+        border-bottom: none;
+    }
+    .tab-content{
+        border: none;
+        background-color: #f8fdf7;
+        border-radius: 0 0 0.25em 0.25em;
+        padding: 10px 0;
     }
 }

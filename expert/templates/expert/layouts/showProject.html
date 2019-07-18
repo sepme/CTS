@@ -18,13 +18,15 @@
                     <span class="border-span">PCR</span>
                 </div>
                 <div class="col-lg-6">
-                    <div class="establish-time">
+                    <div class="row">
+                        <div class="establish-time col-6">
                         <div class="time-head">زمان ثبت</div>
                         <div class="time-body">22/12/1398</div>
                     </div>
-                    <div class="time-left">
+                    <div class="time-left col-6">
                         <div class="time-head">مهلت انجام</div>
                         <div class="time-body">2 ماه</div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -74,6 +76,11 @@
                                     </div>
                                     <div class="answer">
                                         براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
                                     </div>
                                 </div>
                             </div>
@@ -83,10 +90,10 @@
             </div>
             <div class="row mbottom-lg-25">
                 <div class="col-lg-9">
-                    <button class="w-100 accept-btn btn">تایید و شروع پروژه</button>
+                    <button class="w-100 accept-btn btn mbottom-10">تایید و شروع پروژه</button>
                 </div>
                 <div class="col-lg-3">
-                    <button class="w-100 refuse-btn btn">رد پروژه</button>
+                    <button class="w-100 refuse-btn btn mbottom-10">رد پروژه</button>
                 </div>
             </div>
             <div class="row mbottom-lg-25">
@@ -100,8 +107,14 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <label for="comment">ثبت نظر جدید</label>
-                                            <textarea dir="rtl" id="comment" class="w-100" name="" rows="5"></textarea>
+                                            <textarea dir="rtl" id="comment" class="w-100 emojiable-option" name="" rows="5"></textarea>
                                             <button class="chamran_btn" type="button" style="left: 16px;bottom: 8px;">ثبت نظر</button>
+                                            <span class="new-comment-tools">
+                                                <input type="file" id="comment-attach" hidden>
+                                                <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
+                                                <i class="fas fa-smile"></i>
+                                            </span>
+                                            <div class="attachment"></div>
                                         </div>
                                     </div>
                                 </form>
@@ -111,10 +124,14 @@
                                         <div class="comment-profile">
                                             <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="expert_profile">
                                         </div>
-                                        <div class="comment-body">
-                                            <span class="delete-comment"><i class="fas fa-times"></i></span>
+                                        <div class="comment-body" dir="ltr">
+                                            <span class="comment-tools">
+                                                <i class="fas fa-trash-alt"></i>
+                                                <i class="fas fa-reply"></i>
+                                                <i class="fas fa-pen"></i>
+                                            </span>
                                             <span>
-                                                این چه قیمتیه کثافت ؟! خر هم با این قیمت واست بر نمی بره
+                                                سلام علیکم
                                             </span>
                                         </div>
                                     </div>
@@ -123,8 +140,11 @@
                                             <img src="{% static 'expert/img/pharmaceutical.jpg' %}" alt="expert_profile">
                                         </div>
                                         <div class="comment-body">
+                                            <span class="comment-tools">
+                                                <i class="fas fa-reply"></i>
+                                            </span>
                                             <span>
-                                                غلط کردی همینه که هست! می خوای بخواه نمی خوایم هرری!
+                                                علیکم سلام
                                             </span>
                                         </div>
                                     </div>

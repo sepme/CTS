@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5f1c2ee-644f-4c57-a4f6-367668275dd1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/expert/static/expert/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/static/expert/css/style_xs.css" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/css/style_xs.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/static/expert/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/js/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/templates/expert/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/projectList.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/projectList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/project_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/project_details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/showProject.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/showProject.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,13 +21,18 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="260">
               <caret line="887" column="12" selection-start-line="887" selection-start-column="12" selection-end-line="887" selection-end-column="12" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/expert/templates/expert/researcherRequest.html">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -153,9 +151,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="width" value="785" />
-    <option name="height" value="835" />
+    <option name="x" value="-9" />
+    <option name="width" value="1084" />
+    <option name="height" value="1039" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -191,6 +189,30 @@
               <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
               <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
               <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name=".idea" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -212,6 +234,44 @@
               <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
               <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
               <item name="industry" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="fonts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="industry" type="462c0819:PsiDirectoryNode" />
+              <item name="fonts" type="462c0819:PsiDirectoryNode" />
+              <item name="eot" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
@@ -272,15 +332,15 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\expert\templates\expert\layouts" />
-      <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\expert\static\expert" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\templates\registration" />
       <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\expert\static\expert\img" />
       <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\expert\static\expert\css" />
       <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\expert\static" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\expert\templates\expert\layouts" />
+      <recent name="C:\Users\Reza Basereh\Desktop\Work\chamranTeam\aliReza_x\ChamranTeamSite\expert\static\expert" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -339,7 +399,7 @@
       <workItem from="1562139642026" duration="1835000" />
       <workItem from="1562219804300" duration="730000" />
       <workItem from="1562638912449" duration="482000" />
-      <workItem from="1563219653785" duration="431000" />
+      <workItem from="1563219653785" duration="792000" />
     </task>
     <task id="LOCAL-00001" summary="build new branch!">
       <created>1560928339916</created>
@@ -376,14 +436,29 @@
       <option name="project" value="LOCAL" />
       <updated>1562639159810</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add expert researcher request page and edit some designs!">
+      <created>1563220146167</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1563220146167</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add expert researcher request page and edit some designs!">
+      <created>1563220304844</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1563220304844</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68380000" />
+    <option name="totallyTimeSpent" value="68741000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22587131" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -450,7 +525,8 @@
     <MESSAGE value="update files!" />
     <MESSAGE value="project information cards!" />
     <MESSAGE value="add new facilities to project details in expert &amp; build researcher show projects!" />
-    <option name="LAST_COMMIT_MESSAGE" value="add new facilities to project details in expert &amp; build researcher show projects!" />
+    <MESSAGE value="add expert researcher request page and edit some designs!" />
+    <option name="LAST_COMMIT_MESSAGE" value="add expert researcher request page and edit some designs!" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ChamranTeamSite/urls.py">
@@ -665,6 +741,9 @@
           <caret line="887" column="12" selection-start-line="887" selection-start-column="12" selection-end-line="887" selection-end-column="12" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/templates/expert/researcherRequest.html">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
