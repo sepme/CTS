@@ -56,11 +56,6 @@ function init_dialog_btn(element, dialogClass) {
         $(dialogClass).css("display","block");
         close_dialog(dialogClass);
         dialog_comment_init();
-        $('.fa-smile').click(function(e) {
-            e.preventDefault();
-            $('#comment').emojiPicker('toggle');
-            alert("s");
-        });
         load_dialog();
         // $(".project-info-innerDiv").height($(".project-info-content").outerHeight());
         if( dialogClass === ".showProject"){
@@ -110,8 +105,12 @@ function input_focus(){
     });
 }
 function delete_item(className){
-    $(".delete-item").click(function () {
+    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
+    $(".refuse-btn").click(function () {
         $(className+ " div#" + $(this).attr("id")).remove();
+        if($(className).val() === '') {
+            $(className).append(div);
+        }
     });
 }
 function accept_project(){
@@ -129,7 +128,18 @@ function close_dialog(className){
     });
 }
 function dialog_comment_init() {
-    $("label[for='comment-attach']").click(function () {
+    // add emoji to comment
+    $(".new-comment-tools > .fa-smile").click(function() {
+        alert("Not working");
+        // $('#comment').emojiPicker('toggle');
+        // alert("a");
+    });
+    // delete user comment
+    $(".comment-tools > .fa-trash-alt").click(function () {
+        $(this).parents("div.my-comment").remove();
+    });
+    // attach file to comment
+    $(".new-comment-tools > label[for='comment-attach']").click(function () {
         rows = $("textarea#comment").attr("rows");
         $("textarea#comment").attr("rows", ++rows);
         padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
@@ -149,8 +159,8 @@ function dialog_comment_init() {
         "</div>");
         $("div.attachment > div").last().css("bottom", bottom_position + 30);
     });
-    $(".fa-reply").click(function (e) {
-        e.preventDefault();
+    // replay to a comment
+    $(".comment-tools > .fa-reply").click(function () {
         var text = $.trim($(this).closest("div").children(2).text());
         $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
         $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
@@ -188,8 +198,8 @@ function dialog_comment_init() {
             }
         });
     });
-    $(".fa-pen").click(function (e) {
-        e.preventDefault();
+    // edit user comment
+    $(".comment-tools > .fa-pen").click(function () {
         text = $.trim($(this).closest("div").children(2).text());
         $("textarea#comment").html(text);
         $("textarea#comment").focus();

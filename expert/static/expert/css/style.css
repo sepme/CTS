@@ -5,6 +5,9 @@
 .mbottom-lg-25{
   margin-bottom: 25px;
 }
+.mtop-lg-25{
+  margin-top: 25px;
+}
 .mbottom-lg-30{
   margin-bottom: 30px;
 }
@@ -100,7 +103,7 @@ img{
   border-top-left-radius: 15px;
   box-shadow: 0 0 50px #e3e3e3;
   margin: 70px auto;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 input, textarea, select{
   background-color: #fdfdfd;
@@ -134,13 +137,13 @@ label.fix{
   font-size: 13px;
   color: #8d8d8d;
 }
-i.fa-plus{
-  position: absolute;
-  top: 33px;
-  left: 25px;
-  color: #6f7285;
-  cursor: pointer;
-}
+/*i.fa-plus{*/
+/*  position: absolute;*/
+/*  top: 33px;*/
+/*  left: 25px;*/
+/*  color: #6f7285;*/
+/*  cursor: pointer;*/
+/*}*/
 .rankDiv{
   display: flex;
 }
@@ -981,7 +984,7 @@ label[for=comment-attach]{
   overflow: hidden;
   padding: 5px 5px 5px 20px;
 }
-.progress {
+.attach > .progress {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1095,6 +1098,15 @@ span.title-back{
     background-color: #fff;
     border-radius: 0.25em;
     position: relative;
+}
+.education-btn > i, .executive-btn > i, .studious-btn > i, .article-btn > i{
+  position: absolute;
+  top: 5px;
+  left: 15px;
+}
+.education-btn > i:hover, .executive-btn > i:hover, .studious-btn > i:hover, .article-btn > i:hover{
+  color: #3ccd1c;
+  cursor: pointer;
 }
 .project-info-innerDiv{
   padding-right: 44px;

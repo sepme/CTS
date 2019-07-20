@@ -224,27 +224,7 @@
             </div>
             <div class="row mbottom-lg-25">
                 <div class="col-lg-12 text-right">
-                    <div class="project-comment custom-border-title">
-                        <span class="title">نظرات</span>
-                        <span class="title-back"></span>
-                        <div class="project-comment-innerDiv">
-                            <div class="add-comment">
-                                <form action="" method="post">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label for="comment">ثبت نظر جدید</label>
-                                            <textarea dir="rtl" id="comment" class="w-100" name="" rows="5"></textarea>
-                                            <button class="chamran_btn" type="button" style="left: 16px;bottom: 8px;">ثبت نظر</button>
-                                        </div>
-                                    </div>
-                                </form>
-                                <hr>
-                                <div class="comments">
-                                    تاکنون نظری ثبت نشده
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% include 'expert/layouts/comment.html' %}
                 </div>
             </div>
         </div>

@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2480">
-              <caret line="124" column="11" selection-start-line="124" selection-start-column="11" selection-end-line="124" selection-end-column="11" />
+            <state relative-caret-position="20">
+              <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -24,8 +24,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="887" column="12" selection-start-line="887" selection-start-column="12" selection-end-line="887" selection-end-column="12" />
+            <state relative-caret-position="20280">
+              <caret line="1014" column="12" selection-start-line="1014" selection-start-column="12" selection-end-line="1014" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -38,8 +38,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="18" column="2" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="2" />
+            <state relative-caret-position="400">
+              <caret line="20" column="2" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -48,7 +48,7 @@
         <entry file="file://$PROJECT_DIR$/expert/templates/expert/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="540">
-              <caret line="27" column="14" selection-start-line="26" selection-end-line="27" selection-end-column="14" />
+              <caret line="28" column="14" selection-start-line="26" selection-end-line="28" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -151,9 +151,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="width" value="1084" />
-    <option name="height" value="1039" />
+    <option name="x" value="-10" />
+    <option name="width" value="1085" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -400,6 +400,7 @@
       <workItem from="1562219804300" duration="730000" />
       <workItem from="1562638912449" duration="482000" />
       <workItem from="1563219653785" duration="792000" />
+      <workItem from="1563479484292" duration="117000" />
     </task>
     <task id="LOCAL-00001" summary="build new branch!">
       <created>1560928339916</created>
@@ -450,17 +451,24 @@
       <option name="project" value="LOCAL" />
       <updated>1563220304844</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="complete comment part and add envelope to expert project cards!">
+      <created>1563479574852</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1563479574852</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68741000" />
+    <option name="totallyTimeSpent" value="68858000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22587131" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12533513" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -526,7 +534,8 @@
     <MESSAGE value="project information cards!" />
     <MESSAGE value="add new facilities to project details in expert &amp; build researcher show projects!" />
     <MESSAGE value="add expert researcher request page and edit some designs!" />
-    <option name="LAST_COMMIT_MESSAGE" value="add expert researcher request page and edit some designs!" />
+    <MESSAGE value="complete comment part and add envelope to expert project cards!" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete comment part and add envelope to expert project cards!" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ChamranTeamSite/urls.py">
@@ -709,22 +718,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2480">
-          <caret line="124" column="11" selection-start-line="124" selection-start-column="11" selection-end-line="124" selection-end-column="11" />
+        <state relative-caret-position="20">
+          <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20280">
+          <caret line="1014" column="12" selection-start-line="1014" selection-start-column="12" selection-end-line="1014" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="18" column="2" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="2" />
+        <state relative-caret-position="400">
+          <caret line="20" column="2" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/expert/templates/expert/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
-          <caret line="27" column="14" selection-start-line="26" selection-end-line="27" selection-end-column="14" />
+          <caret line="28" column="14" selection-start-line="26" selection-end-line="28" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -732,13 +748,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="887" column="12" selection-start-line="887" selection-start-column="12" selection-end-line="887" selection-end-column="12" />
         </state>
       </provider>
     </entry>

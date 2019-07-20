@@ -60,7 +60,7 @@
                               'right'
                               /*,'top',
                               'bottom'*/];
-    if($.inArray(this.settings.position,possiblePositions) == -1) {
+    if($.inArray(this.settings.position,possiblePositions) === -1) {
       this.settings.position = defaults.position; //current default
     }
 
@@ -74,7 +74,6 @@
   }
 
   $.extend(EmojiPicker.prototype, {
-
     init: function() {
       this.active = false;
       this.addPickerIcon();
@@ -201,7 +200,7 @@
 
       // Step 2
       var elOffset = this.$el.offset();
-      if(this.settings.position == 'right'){
+      if(this.settings.position === 'right'){
         elOffset.left += this.$el.outerWidth() - this.settings.width;
       }
       elOffset.top += this.$el.outerHeight();
@@ -336,9 +335,9 @@
 
       var categoryTitle = '';
       for (var i = 0; i < categories.length; i++) {
-        if (categories[i].name == section) { categoryTitle = categories[i].label; }
+        if (categories[i].name === section) { categoryTitle = categories[i].label; }
       }
-      if (categoryTitle == '') { categoryTitle = 'Recently Used'; }
+      if (categoryTitle === '') { categoryTitle = 'Recently Used'; }
 
       var categoryCount = $('section.' + section).attr('data-count');
       var categoryHtml = '<em class="tabTitle">' + categoryTitle + ' <span class="count">(' + categoryCount + ' emojis)</span></em>';
@@ -354,7 +353,7 @@
         var section = sections[key];
         var offsetFromTop = $(section).position().top;
 
-        if (section.className == 'search' || (section.className == 'people' && offsetFromTop > 0)) {
+        if (section.className === 'search' || (section.className === 'people' && offsetFromTop > 0)) {
           $(section).parents('.emojiPicker').find('nav tab.recent').addClass('active');
           return;
         }

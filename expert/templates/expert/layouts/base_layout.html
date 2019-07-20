@@ -57,7 +57,7 @@
       </div>
       <div class="hr"></div>
       <ul class="list-group">
-        <li class="list-group-item text-right active">
+        <li class="list-group-item text-right">
           <a href="#">
             <div>
               <span>پروژه ها</span>
@@ -89,7 +89,8 @@
             </div>
           </a>
         </li>
-        <li class="list-group-item text-right">
+        {% url 'userInfo' as userInfo %}
+        <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
           <a href="#">
             <div>
               <span>تنظیمات کاربری</span>
