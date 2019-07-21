@@ -12,7 +12,6 @@
       <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
   </head>
   <body>
-  {% block initial_information %}{% endblock %}
   <div class="main {% block blur %}{% endblock %}">
     <div class="top-bar">
       <div class="top-msg">
@@ -32,7 +31,10 @@
       </div>
     </div>
     <div class="content">
-      {% block content %}{% endblock %}
+        <div class="container">
+            {% block initial_information %}{% endblock %}
+            {% block content %}{% endblock %}
+        </div>
     </div>
     <div class="side-bar">
       <div class="topMargin"></div>

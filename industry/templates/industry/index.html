@@ -3,8 +3,48 @@
 {% block title %}<title>پروژه ها</title>{% endblock %}
 
 {% block initial_information %}
-    {% include 'industry/layouts/initial_information.html' %}
+{#    {% include 'industry/layouts/initial_information.html' %}#}
 {% endblock %}
-{% block blur %}blur-div{% endblock %}
+{#{% block blur %}blur-div{% endblock %}#}
 
 {% block name %}رضا باسره{% endblock %}
+
+{% block content %}
+    <div class="row mtop-lg-25">
+        <div class="col-lg-12 text-right">
+            <h5>پروژه ها</h5>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="card project-card text-right">
+                        <div class="status-line active"></div>
+                        <h6>عنوان پروژه شما</h6>
+                        <div class="employer">استاد احسان شریف</div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card project-card">
+                        <div class="status-line check"></div>
+                        <br><br><br><br><br><br><br><br><br><br>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card project-card">
+                        <div class="status-line refuse"></div>
+                        <br><br><br><br><br><br><br><br><br><br>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card project-card">
+                        <div class="status-line"></div>
+                        <br><br><br><br><br><br><br><br><br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

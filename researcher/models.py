@@ -11,12 +11,12 @@ class ResearcherUser(models.Model):
     
 
     def __str__(self):
-        return self.user.get_username()
+        return self.user.get_username() + ' - ' + str(self.pk)
     
     def get_absolute_url(self):
-        return HttpResponseRedirect(reverse("researcher:index", kwargs={"pk": self.pk}))
+        return HttpResponseRedirect(reverse("researcher:index"))
 
-class Status(models.Model):
+class ResearcherStatus(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE ,blank=True)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
@@ -27,7 +27,7 @@ class Status(models.Model):
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS)
-    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
+    inactivate_duration = models.DateTimeField(auto_now=True, auto_now_add=False, blank=True)
 
     def is_inactivate(self):
         return datetime.datetime.now() < self.inactivate_duration
@@ -46,23 +46,28 @@ class MembershipFee(models.Model):
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
                                               on_delete=models.CASCADE ,blank=True)
-    name = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
-    birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد")
-    major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
+    first_name = models.CharField(max_length=300, verbose_name="نام" )
+    last_name  = models.CharField(max_length=300, verbose_name="نام خانوادگی" )
+    photo = models.FileField(upload_to='researcher/uploads/profilePhoto' )
+    birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد" ,null=True)
+    major = models.CharField(max_length=300, verbose_name="رشته تحصیلی" )
+    national_code = models.CharField(max_length=10 ,verbose_name="کد ملی" )
 
     GRADE_CHOICE = (
+        (None ,'انتخاب کنید ...'),
         ('bs', 'کارشناسی'),
         ('ms', 'کارشناسی ارشد'),
         ('phd', 'دکتری'),
         ('proPhd', 'دکتری حرفه‌ای'),
     )
-    grade = models.CharField(max_length=6, choices=GRADE_CHOICE, verbose_name="آخرین مدرک تحصیلی")
-    university = models.CharField(max_length=300, verbose_name="دانشگاه محل تحصیل")
-    entry_year = models.IntegerField(verbose_name="سال ورود")
-    address = models.TextField(verbose_name="آدرس محل سکونت", blank=True)
-    home_number = models.CharField(max_length=50, verbose_name="تلفن منزل")
-    phone_number = models.CharField(max_length=50, verbose_name="تلفن همراه", blank=True)
-    email = models.EmailField(max_length=254, verbose_name="پست الکترونیکی")
+    grade = models.CharField(max_length=6, choices=GRADE_CHOICE, verbose_name="آخرین مدرک تحصیلی" )
+    university = models.CharField(max_length=300, verbose_name="دانشگاه محل تحصیل" )
+    entry_year = models.IntegerField(verbose_name="سال ورود" )
+    student_number = models.CharField(max_length=50 ,verbose_name="شماره دانشجویی" )
+    address = models.TextField(verbose_name="آدرس محل سکونت") 
+    home_number = models.CharField(max_length=50, verbose_name="تلفن منزل" )
+    phone_number = models.CharField(max_length=50, verbose_name="تلفن همراه")
+    email = models.EmailField(max_length=254, verbose_name="پست الکترونیکی" )
 
     one = 1
     two = 2
@@ -77,21 +82,29 @@ class ResearcherProfile(models.Model):
         (five, '5'),
     )
 
-    team_work = models.IntegerField(choices=INT_CHOICE, verbose_name="روحیه کار تیمی")
-    creative = models.IntegerField(choices=INT_CHOICE, verbose_name="تفکر خلاقانه")
-    interest_in_major = models.IntegerField(choices=INT_CHOICE, verbose_name="علاقه به رشته تحصیلی")
-    motivation = models.IntegerField(choices=INT_CHOICE, verbose_name="انگیزه داشتن برای انجام پروژه")
-    sacrifice = models.IntegerField(choices=INT_CHOICE, verbose_name="تعهد داشتن و از خود گذشتگی")
-    diligence = models.IntegerField(choices=INT_CHOICE, verbose_name="پشتکار")
-    interest_in_learn = models.IntegerField(choices=INT_CHOICE, verbose_name="علاقه به یادگیری")
-    timeliness = models.IntegerField(choices=INT_CHOICE, verbose_name="وقت­شناسی")
-    data_collection = models.IntegerField(choices=INT_CHOICE, verbose_name="جمع­ آوری داده­ ها")
-    awareness_of_principles = models.IntegerField(choices=INT_CHOICE, verbose_name="آگاهی از اصول انجام پروژه")
+    team_work = models.IntegerField(choices=INT_CHOICE, verbose_name="روحیه کار تیمی" ,
+                                    blank=True ,null=True)
+    creative = models.IntegerField(choices=INT_CHOICE, verbose_name="تفکر خلاقانه" ,blank=True ,null=True)
 
-    description = models.TextField()
+    interest_in_major = models.IntegerField(choices=INT_CHOICE, verbose_name="علاقه به رشته تحصیلی" ,
+                                            blank=True ,null=True)
+    motivation = models.IntegerField(choices=INT_CHOICE, verbose_name="انگیزه داشتن برای انجام پروژه" ,
+                                     blank=True ,null=True)
+    sacrifice = models.IntegerField(choices=INT_CHOICE, verbose_name="تعهد داشتن و از خود گذشتگی" ,
+                                    blank=True ,null=True)
+    diligence = models.IntegerField(choices=INT_CHOICE, verbose_name="پشتکار" ,blank=True ,null=True)
+    interest_in_learn = models.IntegerField(choices=INT_CHOICE, verbose_name="علاقه به یادگیری" ,
+                                            blank=True ,null=True)
+    timeliness = models.IntegerField(choices=INT_CHOICE, verbose_name="وقت­شناسی" ,blank=True ,null=True)
+    data_collection = models.IntegerField(choices=INT_CHOICE, verbose_name="جمع­ آوری داده­ ها",
+                                          blank=True ,null=True)
+    awareness_of_principles = models.IntegerField(choices=INT_CHOICE, verbose_name="آگاهی از اصول انجام پروژه"
+                                                 ,blank=True ,null=True)
+
+    description = models.TextField( blank=True ,null=True)
 
     def __str__(self):
-        return self.name + " profile"
+        return self.first_name + " " + self.last_name
 
 
 class ResearcherScientificHistory(models.Model):
