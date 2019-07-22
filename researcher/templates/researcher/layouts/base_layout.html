@@ -13,6 +13,7 @@
   </head>
   <body>
   {% block dialog%}{% endblock %}
+  {% block initial_information %}{% endblock %}
   <div class="main {% block blur %}{% endblock %}">
     <div class="top-bar">
       <div class="top-msg">
@@ -33,15 +34,14 @@
     </div>
     <div class="content">
         <div class="container">
-            {% block initial_information %}{% endblock %}
             {% block content %}{% endblock %}
         </div>
     </div>
     <div class="side-bar">
       <div class="topMargin"></div>
       <div class="researcher-icon"></div>
-      <img src="{{user.researcheruser.researcherprofile.photo.url}}" alt="profile" class="profile" width="150px" height="150px">
-      <h5>{{user.researcheruser.researcherprofile.first_name}}</h5>
+      <img src="{{researcheruser.researcherprofile.photo.url}}" alt="profile" class="profile" width="150px" height="150px">
+      <h5>{{researcheruser.researcherprofile.first_name}}</h5>
       <h6>پژوهشگر</h6>
       <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ user.researcheruser.points|default:0 }}</span>/100</p>
       <div class="progress">
