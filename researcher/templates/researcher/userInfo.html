@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="{% static 'researcher/css/persian-datepicker.min.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/datepicker-style.css' %}">
 {% endblock %}
-{% block name %}رضا باسره{% endblock %}
 {% block dialog %}
     {% include 'researcher/layouts/dialog.html' %}
 {% endblock %}
@@ -13,7 +12,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card">
-                <form action="" method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="inner-card card">
                         <div class="row">
@@ -22,43 +21,43 @@
                                 <i class="fas fa-pencil-alt"></i>
                             </label>
                             <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
-                            <input type="file" id="upload-input" accept="image/png, image/jpeg">
+                            <input type="file" id="upload-input" accept="image/png, image/jpeg" name="photo">
                         </div>
                         </div>
                         <div class="row">
                           <div class="col-lg-6">
                             <label for="FirstName">نام</label>
-                            <input type="text" id="FirstName" class="w-100">
+                            <input type="text" id="FirstName" class="w-100" name="first_name">
                           </div>
                           <div class="col-lg-6">
                             <label for="LastName">نام خانوادگی</label>
-                            <input type="text" id="LastName" class="w-100">
+                            <input type="text" id="LastName" class="w-100" name="last_name">
                           </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="Field">رشته تحصیلی</label>
-                                <input type="text" id="Field" class="w-100">
+                                <input type="text" id="Field" class="w-100" name="major">
                             </div>
                             <div class="col-lg-6">
                                 <label for="MelliCode">کد ملی</label>
-                                <input type="text" id="MelliCode" class="w-100">
+                                <input type="text" id="MelliCode" class="w-100" name="national_code">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="student-num">شماره دانشجویی</label>
-                                <input type="text" id="student-num" class="w-100">
+                                <input type="text" id="student-num" class="w-100" name="student_number">
                             </div>
                             <div class="col-lg-6">
                                 <label for="enter-date">سال ورود</label>
-                                <input type="text" id="enter-date" class="w-100">
+                                <input type="text" id="enter-date" class="w-100" name="entry_year">
                             </div>
                         </div>
                         <div class="row">
                           <div class="col-lg-12 rankDiv">
                               <label class="rankLabel" for="rank">آخرین مقطع تحصیلی</label>
-                                <select id="rank">
+                                <select id="rank" name="grade">
                                       <option selected dir="rtl">انتخاب کنید ...</option>
                                       <option value="1">کارشناسی</option>
                                       <option value="2">کارشناسی ارشد</option>
@@ -70,29 +69,29 @@
                         <div class="row">
                           <div class="col-lg-12">
                               <label for="Uni">دانشگاه محل تحصیل</label>
-                              <input type="text" id="Uni" class="w-100">
+                              <input type="text" id="Uni" class="w-100" name="university">
                           </div>
                       </div>
                         <div class="row">
                         <div class="col-lg-12">
                             <label for="Address">آدرس محل سکونت</label>
-                            <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
+                            <textarea dir="rtl" rows="3" class="w-100" id="Address" name="address"></textarea>
                         </div>
                     </div>
                         <div class="row">
                         <div class="col-lg-6">
                             <label for="HomeNum">تلفن منزل</label>
-                            <input type="text" id="HomeNum" class="w-100">
+                            <input type="text" id="HomeNum" class="w-100" name="home_number">
                         </div>
                         <div class="col-lg-6">
                             <label for="PhoneNum">تلفن همراه</label>
-                            <input type="text" id="PhoneNum" class="w-100">
+                            <input type="text" id="PhoneNum" class="w-100" name="phone_number">
                         </div>
                     </div>
                         <div class="row">
                             <div class="col-lg-12">
                             <label for="Email">پست الکترونیکی</label>
-                            <input type="text" id="Email" class="w-100">
+                            <input type="text" id="Email" class="w-100" name="email">
                         </div>
                         </div>
                     </div>
@@ -131,27 +130,27 @@
                                     <table class="w-75">
                                         <tr>
                                             <td class="text-right">روحیه کار تیمی</td>
-                                            <td><input type="radio" name="group-work" id="group-work-1" value="1"><label for="group-work-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-2" value="2"><label for="group-work-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-3" value="3"><label for="group-work-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-4" value="4"><label for="group-work-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-5" value="5"><label for="group-work-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="team_work" id="group-work-1" value="1"><label for="group-work-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="team_work" id="group-work-2" value="2"><label for="group-work-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="team_work" id="group-work-3" value="3"><label for="group-work-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="team_work" id="group-work-4" value="4"><label for="group-work-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="team_work" id="group-work-5" value="5"><label for="group-work-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">تفکر خلاقانه</td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-1" value="1"><label for="creative-thinking-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-2" value="2"><label for="creative-thinking-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-3" value="3"><label for="creative-thinking-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-4" value="4"><label for="creative-thinking-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-5" value="5"><label for="creative-thinking-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative_thinking" id="creative-thinking-1" value="1"><label for="creative-thinking-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative_thinking" id="creative-thinking-2" value="2"><label for="creative-thinking-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative_thinking" id="creative-thinking-3" value="3"><label for="creative-thinking-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative_thinking" id="creative-thinking-4" value="4"><label for="creative-thinking-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative_thinking" id="creative-thinking-5" value="5"><label for="creative-thinking-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">علاقه به رشته تحصیلی</td>
-                                            <td><input type="radio" name="field_love" id="field_love-1" value="1"><label for="field_love-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="field_love" id="field_love-2" value="2"><label for="field_love-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="field_love" id="field_love-3" value="3"><label for="field_love-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="field_love" id="field_love-4" value="4"><label for="field_love-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="field_love" id="field_love-5" value="5"><label for="field_love-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_major" id="field_love-1" value="1"><label for="field_love-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_major" id="field_love-2" value="2"><label for="field_love-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_major" id="field_love-3" value="3"><label for="field_love-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_major" id="field_love-4" value="4"><label for="field_love-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_major" id="field_love-5" value="5"><label for="field_love-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">انگیزه داشتن برای انجام پروژه</td>
@@ -179,11 +178,11 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right">علاقه به یادگیری</td>
-                                            <td><input type="radio" name="learning_love" id="learning_love-1" value="1"><label for="learning_love-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="learning_love" id="learning_love-2" value="2"><label for="learning_love-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="learning_love" id="learning_love-3" value="3"><label for="learning_love-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="learning_love" id="learning_love-4" value="4"><label for="learning_love-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="learning_love" id="learning_love-5" value="5"><label for="learning_love-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_learn" id="learning_love-1" value="1"><label for="learning_love-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_learn" id="learning_love-2" value="2"><label for="learning_love-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_learn" id="learning_love-3" value="3"><label for="learning_love-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_learn" id="learning_love-4" value="4"><label for="learning_love-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="interest_in_learn" id="learning_love-5" value="5"><label for="learning_love-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">وقت شناسی</td>
@@ -195,11 +194,11 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right">جمع آوری داده ها</td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-1" value="1"><label for="data-collection-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-2" value="2"><label for="data-collection-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-3" value="3"><label for="data-collection-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-4" value="4"><label for="data-collection-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-5" value="5"><label for="data-collection-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="data_collection" id="data-collection-1" value="1"><label for="data-collection-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="data_collection" id="data-collection-2" value="2"><label for="data-collection-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="data_collection" id="data-collection-3" value="3"><label for="data-collection-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="data_collection" id="data-collection-4" value="4"><label for="data-collection-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="data_collection" id="data-collection-5" value="5"><label for="data-collection-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">آگاهی از اصول انجام پروژه</td>
@@ -229,12 +228,12 @@
                     <div class="card inner-card">
                         <div class="row">
                             <div class="col-lg-12">
-                                <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea>
+                                <textarea dir="rtl" class="w-100" rows="3" id="introduction-method" name="description"></textarea>
                                 <label for="introduction-method">چه ویژگی در تیم چمران شما را به عضویت در این تیم متمایل کرد؟</label>
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
+                    <button type="submit" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
                 </form>
             </div>
         </div>

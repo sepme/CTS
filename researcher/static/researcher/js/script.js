@@ -63,26 +63,26 @@ $(document).ready(function(){
     $(div).html("<div class='row'>" +
         "<div class='col-lg-6'>" +
           "<label for=\"edu-section"+edu_count+"\">مقطع تحصیلی</label>\n" +
-          "<input type=\"text\" id=\"edu-section"+edu_count+"\" class=\"w-100\">" +
+          "<input type=\"text\" id=\"edu-section"+edu_count+"\" class=\"w-100\" name=\"garade???!!\">" +
         "</div>" +
         "<div class='col-lg-6'>" +
           "<label for=\"edu-subject"+edu_count+"\">رشته تحصیلی</label>\n" +
-          "<input type=\"text\" id=\"edu-subject"+edu_count+"\" class=\"w-100\">" +
+          "<input type=\"text\" id=\"edu-subject"+edu_count+"\" class=\"w-100\" name=\"major???!!\">" +
         "</div>" +
         "</div>"+
         "</div>" +
         "<div class='row'>" +
         "<div class='col-lg-4'>" +
           "<label for=\"university"+edu_count+"\">دانشگاه</label>\n" +
-          "<input type=\"text\" id=\"university"+edu_count+"\" class=\"w-100\">" +
+          "<input type=\"text\" id=\"university"+edu_count+"\" class=\"w-100\" name=\"university???!!\">" +
         "</div>" +
         "<div class='col-lg-3'>" +
           "<label for=\"edu-city"+edu_count+"\">شهر محل تحصیل</label>\n" +
-          "<input type=\"text\" id=\"edu-city"+edu_count+"\" class=\"w-100\">" +
+          "<input type=\"text\" id=\"edu-city"+edu_count+"\" class=\"w-100\" name=\"place???!!\">" +
         "</div>" +
         "<div class='col-lg-3'>" +
           "<label for=\"year"+edu_count+"\">سال اخذ مدرک</label>\n" +
-          "<input type=\"text\" id=\"year"+edu_count+"\" class=\"w-100\">" +
+          "<input type=\"text\" id=\"year"+edu_count+"\" class=\"w-100\" name=\"graduated_year???!!\">" +
         "</div>" +
         "<div class='col-lg-2' style='display:flex'>" +
           "<div class='wait-item' id='"+edu_count+"'>" +

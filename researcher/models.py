@@ -48,7 +48,7 @@ class ResearcherProfile(models.Model):
                                               on_delete=models.CASCADE ,blank=True)
     first_name = models.CharField(max_length=300, verbose_name="نام" )
     last_name  = models.CharField(max_length=300, verbose_name="نام خانوادگی" )
-    photo = models.FileField(upload_to='researcher/uploads/profilePhoto' )
+    photo = models.FileField(upload_to='media/researcher' )
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد" ,null=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی" )
     national_code = models.CharField(max_length=10 ,verbose_name="کد ملی" )
@@ -84,7 +84,7 @@ class ResearcherProfile(models.Model):
 
     team_work = models.IntegerField(choices=INT_CHOICE, verbose_name="روحیه کار تیمی" ,
                                     blank=True ,null=True)
-    creative = models.IntegerField(choices=INT_CHOICE, verbose_name="تفکر خلاقانه" ,blank=True ,null=True)
+    creative_thinking = models.IntegerField(choices=INT_CHOICE, verbose_name="تفکر خلاقانه" ,blank=True ,null=True)
 
     interest_in_major = models.IntegerField(choices=INT_CHOICE, verbose_name="علاقه به رشته تحصیلی" ,
                                             blank=True ,null=True)
@@ -93,12 +93,14 @@ class ResearcherProfile(models.Model):
     sacrifice = models.IntegerField(choices=INT_CHOICE, verbose_name="تعهد داشتن و از خود گذشتگی" ,
                                     blank=True ,null=True)
     diligence = models.IntegerField(choices=INT_CHOICE, verbose_name="پشتکار" ,blank=True ,null=True)
+    
     interest_in_learn = models.IntegerField(choices=INT_CHOICE, verbose_name="علاقه به یادگیری" ,
                                             blank=True ,null=True)
-    timeliness = models.IntegerField(choices=INT_CHOICE, verbose_name="وقت­شناسی" ,blank=True ,null=True)
+    punctuality = models.IntegerField(choices=INT_CHOICE, verbose_name="وقت ­شناسی" ,blank=True ,null=True)
+    
     data_collection = models.IntegerField(choices=INT_CHOICE, verbose_name="جمع­ آوری داده­ ها",
                                           blank=True ,null=True)
-    awareness_of_principles = models.IntegerField(choices=INT_CHOICE, verbose_name="آگاهی از اصول انجام پروژه"
+    project_knowledge = models.IntegerField(choices=INT_CHOICE, verbose_name="آگاهی از اصول انجام پروژه"
                                                  ,blank=True ,null=True)
 
     description = models.TextField( blank=True ,null=True)
@@ -173,7 +175,6 @@ class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
     evaluator = models.OneToOneField("expert.ExpertUser", on_delete=models.CASCADE)
 
-    zero = 0
     one = 1
     two = 2
     three = 3
