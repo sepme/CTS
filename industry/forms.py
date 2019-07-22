@@ -91,12 +91,11 @@ class IndustryInfoForm(forms.ModelForm):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model  = models.ProjectForm
-        # 'key_words', 'research_methodology','required_technique' ,'required_budget' ,
+        # 'key_words','required_technique' ,
         fields = [
-            'project_title_persian' ,'project_title_english' ,
+            'project_title_persian' ,'project_title_english' ,'research_methodology' ,
             'main_problem_and_importance' ,'progress_profitability' ,'required_lab_equipment',
-            'predict_profit', 'innovation' ,'approach' ,'policy',
-            'project_phase',
+            'predict_profit', 'innovation' ,'approach' ,'policy','project_phase','required_budget'
         ]
 
         # widgets ={
@@ -127,72 +126,80 @@ class ProjectForm(forms.ModelForm):
     def clean_project_title_persian(self):
         data = self.cleaned_data["project_title_persian"]
         for item in data:
-            if ord(item)>1611 or ord(item) < 1568:
+            if ord(item)>= 65 and ord(item) <= 90:
+                print("به فارسی تایپ شود لطفا")
+                print(item , ord(item))
+                raise ValidationError(_("به فارسی تایپ شود لطفا"))
+            if ord(item)>= 97 and ord(item) <= 122:
+                print("به فارسی تایپ شود لطفا")
+                print(item , ord(item))
                 raise ValidationError(_("به فارسی تایپ شود لطفا"))
         return data
     
     def clean_project_title_english(self):
         data = self.cleaned_data["project_title_english"]
         for item in data:
-            if ord(item)>122 or ord(item) < 65:
+            if ord(item)<1750 and ord(item) > 1560:
+                print("به انگلیسی تایپ شود لطفا")
                 raise ValidationError(_("به انگلیسی تایپ شود لطفا"))
         return data
     
     # def clean_key_words(self):
     #     data = self.cleaned_data["key_words"]
-    #     print("key_words" ,data)
+    #     print("key_words - " ,data)
     #     return data
 
     def clean_main_problem_and_importance(self):
         data = self.cleaned_data["main_problem_and_importance"]
-        print("main_problem" ,data)
+        print("main_problem_and_importance - " ,data)
         return data
     
-    # def clean_research_methodology(self):
-    #     data = self.cleaned_data["research_methodology"]
-    #     print("research_method" ,data)
-    #     return data
+    def clean_research_methodology(self):
+        data = self.cleaned_data["research_methodology"]
+        print("research_methodology - " ,data)
+        return data
 
     def clean_progress_profitability(self):
         data = self.cleaned_data["progress_profitability"]
-        
+        print("progress_profitability - " ,data)
         return data
     
     def clean_required_lab_equipment(self):
         data = self.cleaned_data["required_lab_equipment"]
-        
+        print("required_lab_equipment - " ,data)
         return data
     
     def clean_innovation(self):
         data = self.cleaned_data["innovation"]
+        print("innovation - " ,data)
         return data
         
     def clean_approach(self):
         data = self.cleaned_data["approach"]
-        
+        print("approach - " ,data)
         return data
     
     # def clean_required_technique(self):
     #     data = self.cleaned_data["required_technique"]
-    #     print("required_technq" ,data)
+    #     print("required_technq - " ,data)
     #     return data
 
     def clean_policy(self):
         data = self.cleaned_data["policy"]
-        
+        print("policy - " ,data)
         return data
     
-    # def clean_required_budget(self):
-    #     data = self.cleaned_data["required_budget"]
-    #     print("requied_budget" ,data)
-    #     return data
+    def clean_required_budget(self):
+        data = self.cleaned_data["required_budget"]
+        print("required_budget - " ,data)
+        return data
 
     def clean_project_phase(self):
         data = self.cleaned_data["project_phase"]
-        
+        print("project_phase - " ,data)
         return data
 
     def clean_predict_profit(self):
         predict_profit = self.cleaned_data.get('predict_profit')
-        
+        print('predict_profit' ,predict_profit)
         return predict_profit

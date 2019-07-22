@@ -62,7 +62,7 @@ class ProjectForm(models.Model):
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
     required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
-    required_budget = models.FloatField(verbose_name="بودجه مورد نیاز" ,null=True)
+    required_budget = models.TextField(verbose_name="بودجه مورد نیاز" ,null=True)
     # papers_and_documentation = models.TextField(verbose_name="مقالات و مستندات" ,null=True)
     policy = models.TextField(verbose_name="نکات اخلاقی")
 
@@ -98,9 +98,9 @@ class Project(models.Model):
                                            related_name="expert_accepted" ,null=True)
 
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه" ,null=True)
-    maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر" )
-    project_detail = models.TextField(verbose_name="جزيات پروژه")
-    project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه")
+    maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر"  ,null =True)
+    project_detail = models.TextField(verbose_name="جزيات پروژه" ,null =True)
+    project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه" ,null =True)
 
     def __str__(self):
         return self.project_form

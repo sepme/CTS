@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
     <link rel="stylesheet" href="{% static 'industry/css/inputTags.min.css' %}">
 {% endblock %}
-{% block name %}{{user.username}}{% endblock %}
+{% block name %}{{industry.industryform.name}}{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -35,11 +35,11 @@
                                 <span class="sub-header" style="position: relative;top: 15px;">روش تحقیق : </span>
                             </div>
                             <div class="col-lg-2 text-right">
-                                <input type="radio" id="quantity" name="research_methodology" class="label-check-radio">
+                                <input type="radio" id="quantity" name="research_methodology" class="label-check-radio" value=1>
                                 <label for="quantity" style="padding: 5px 9px;">کمی</label>
                             </div>
                             <div class="col-lg-2 text-right">
-                                <input type="radio" id="quality" name="research_methodology" class="label-check-radio">
+                                <input type="radio" id="quality" name="research_methodology" class="label-check-radio" value=0>
                                 <label for="quality">کیفی</label>
                             </div>
                             <div class="col-lg-4"></div>

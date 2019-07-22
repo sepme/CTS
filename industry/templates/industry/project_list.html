@@ -1,0 +1,11 @@
+{% extends "industry/layouts/base_layout.html" %}
+{% block content %}
+  <ul>
+      {% for item in projectform_list %}
+      <h1>adsf</h1>
+          <li><h3>{{item.industry_creator}}</h3>
+            <h4>{{item.project_form.project_title_persian}}</h4></li>
+      {% endfor %}
+          
+  </ul>
+{% endblock content %}
