@@ -1,3 +1,4 @@
+<<<<<<< HEAD
     function load_dialog(){
 
         // var contentWidth = $(document).innerWidth();
@@ -116,6 +117,10 @@
         });
     }
 $(window).on("load",function () {
+=======
+$(window).on("load",function () {
+    init_windowSize();
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
     load_dialog();
 }).on("resize",function () {
     init_windowSize();
@@ -127,9 +132,17 @@ $(document).ready(function(){
     exe_count = 0;
     stu_count = 0;
     art_count = 0;
+<<<<<<< HEAD
 
     input_focus();
     if($(window).width() < 575.98){
+=======
+    $('*').persiaNumber();
+    input_focus();
+    init_dialog_btn(".chamran-btn-info" , ".showProject");
+    if($(window).width() < 575.98){
+    // toggle slide-bar => all views
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
            if($(this).hasClass("on")){
@@ -141,16 +154,38 @@ $(document).ready(function(){
                $(".side-bar").css("right","0");
                $(".content").addClass("blur-div");
            }
+<<<<<<< HEAD
         });
     }else{
         // loading();
         init_windowSize();
         init_showProject_btn(".chamran-btn-info");
+=======
+        });
+    // nav-tabs change => index view
+        $(".nav-link").click(function () {
+           $(".nav-link").removeClass("active");
+           $(this).addClass("active");
+           $(".nav").animate({
+               scrollLeft: $(this).offset().left
+           }, "slow");
+        });
+    }else{
+        // loading();
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+        init_windowSize();
+        init_dialog_btn(".researcher-card-button-show" , ".researcher-info-dialog");
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
         // }
+<<<<<<< HEAD
         express_btn();
+=======
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
       $(".form-submit").click(function () {
         blur_div_toggle(".top-bar");
         blur_div_toggle(".side-bar");
@@ -171,11 +206,19 @@ $(document).ready(function(){
       $('input#upload-input').change(function (event) {
         $("img.profile").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
       });
+<<<<<<< HEAD
       $(".chamran_btn.education-btn").click(function () {
         div = document.createElement("div");
         $(div).addClass('card').addClass('ch-card-item');
         $(div).attr("id",edu_count);
         $(div).html("<div class='row'>" +
+=======
+      $(".education-btn > i.fa-plus").click(function (){
+        div = document.createElement("div");
+        $(div).addClass('card').addClass('ch-card-item');
+        $(div).attr("id",edu_count);
+        $(div).html("<form action='' method='post'><div class='row'>" +
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
             "<div class='col-lg-6'>" +
               "<label for=\"edu-section"+edu_count+"\">مقطع تحصیلی</label>\n" +
               "<input type=\"text\" id=\"edu-section"+edu_count+"\" class=\"w-100\">" +
@@ -187,11 +230,19 @@ $(document).ready(function(){
             "</div>"+
             "</div>" +
             "<div class='row'>" +
+<<<<<<< HEAD
             "<div class='col-lg-4'>" +
               "<label for=\"university"+edu_count+"\">دانشگاه</label>\n" +
               "<input type=\"text\" id=\"university"+edu_count+"\" class=\"w-100\">" +
             "</div>" +
             "<div class='col-lg-3'>" +
+=======
+            "<div class='col-lg-5'>" +
+              "<label for=\"university"+edu_count+"\">دانشگاه</label>\n" +
+              "<input type=\"text\" id=\"university"+edu_count+"\" class=\"w-100\">" +
+            "</div>" +
+            "<div class='col-lg-4'>" +
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
               "<label for=\"edu-city"+edu_count+"\">شهر محل تحصیل</label>\n" +
               "<input type=\"text\" id=\"edu-city"+edu_count+"\" class=\"w-100\">" +
             "</div>" +
@@ -199,6 +250,7 @@ $(document).ready(function(){
               "<label for=\"year"+edu_count+"\">سال اخذ مدرک</label>\n" +
               "<input type=\"text\" id=\"year"+edu_count+"\" class=\"w-100\">" +
             "</div>" +
+<<<<<<< HEAD
             "<div class='col-lg-2' style='display:flex'>" +
               "<div class='wait-item' id='"+edu_count+"'>" +
                 "<span>منتظر تایید....</span>"+
@@ -211,15 +263,39 @@ $(document).ready(function(){
             "</div>" +
             "</div>");
         $('.education').append(div);
+=======
+            "</div>" +
+            "<div class='row mtop-lg-25'>" +
+                "<div class='col-lg-9'>" +
+                    "<button type='button' id='"+edu_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
+                "</div>"+
+                "<div class='col-lg-3'>" +
+                    "<button type='button' id='"+edu_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
+                "</div>" +
+            "</div></form>");
+        if($(".education > .initial-value").hasClass("initial-value")) {
+            $(".education").html(div);
+        }else {
+            $('.education').append(div);
+        }
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         delete_item(".education");
         input_focus();
         edu_count ++;
       });
+<<<<<<< HEAD
       $(".chamran_btn.executive-btn").click(function () {
         div = document.createElement("div");
         $(div).addClass('card').addClass('ch-card-item');
         $(div).attr("id",exe_count);
         $(div).html("<div class='row'>" +
+=======
+      $(".executive-btn > i.fa-plus").click(function () {
+        div = document.createElement("div");
+        $(div).addClass('card').addClass('ch-card-item');
+        $(div).attr("id",exe_count);
+        $(div).html("<form action='' method='post'><div class='row'>" +
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
               "<div class='col-lg-5'>" +
                 "<label for='duty"+ exe_count +"'>سمت</label>" +
                 "<input type='text' id='duty"+ exe_count +"' class='w-100'>" +
@@ -245,6 +321,7 @@ $(document).ready(function(){
                 "<label for='exe-city"+ exe_count +"'>شهر</label>" +
                 "<input type='text' id='exe-city"+ exe_count +"' class='w-100'>" +
               "</div>"+
+<<<<<<< HEAD
               "<div class='col-lg-3' style='display:flex'>" +
                 "<div class='wait-item' id='"+exe_count+"'>" +
                   "<span>منتظر تایید....</span>"+
@@ -257,6 +334,23 @@ $(document).ready(function(){
               "</div>" +
             "</div>");
         $('.executive').append(div);
+=======
+              "<div class='col-lg-3'></div>" +
+            "</div>" +
+            "<div class='row mtop-lg-25'>" +
+                "<div class='col-lg-9'>" +
+                    "<button type='button' id='"+exe_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
+                "</div>"+
+                "<div class='col-lg-3'>" +
+                    "<button type='button' id='"+exe_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
+                "</div>" +
+            "</div></form>");
+        if($(".executive > .initial-value").hasClass("initial-value")){
+            $(".executive").html(div);
+        }else {
+            $('.executive').append(div);
+        }
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         delete_item(".executive");
         input_focus();
         $("#from"+ exe_count).persianDatepicker({
@@ -267,11 +361,19 @@ $(document).ready(function(){
         });
         exe_count ++;
       });
+<<<<<<< HEAD
       $(".chamran_btn.studious-btn").click(function () {
         div = document.createElement("div");
         $(div).addClass('card').addClass('ch-card-item');
         $(div).attr("id",stu_count);
         $(div).html("<div class='row'>" +
+=======
+      $(".studious-btn > i.fa-plus").click(function () {
+        div = document.createElement("div");
+        $(div).addClass('card').addClass('ch-card-item');
+        $(div).attr("id",stu_count);
+        $(div).html("<form action='' method='post'><div class='row'>" +
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
               "<div class='col-lg-5'>" +
                 "<label for='subject"+ stu_count +"'>عنوان طرح پژوهشی</label>" +
                 "<input type='text' id='subject"+ stu_count +"' class='w-100'>" +
@@ -295,6 +397,7 @@ $(document).ready(function(){
                   "<option value='3'>متوقف</option>" +
                 "</select>" +
               "</div>"+
+<<<<<<< HEAD
               "<div class='col-lg-5' style='display:flex'>" +
                 "<div class='wait-item' id='"+stu_count+"'>" +
                   "<span>منتظر تایید....</span>"+
@@ -307,15 +410,40 @@ $(document).ready(function(){
               "</div>" +
             "</div>");
         $('.studious').append(div);
+=======
+              "<div class='col-lg-5'></div>" +
+            "</div>" +
+            "<div class='row mtop-lg-25'>" +
+                "<div class='col-lg-9'>" +
+                    "<button type='button' id='"+stu_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
+                "</div>"+
+                "<div class='col-lg-3'>" +
+                    "<button type='button' id='"+stu_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
+                "</div>" +
+            "</div></form>");
+        if($(".studious > .initial-value").hasClass("initial-value")){
+            $(".studious").html(div);
+        }else {
+            $('.studious').append(div);
+        }
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         delete_item(".studious");
         input_focus();
         stu_count ++;
       });
+<<<<<<< HEAD
       $(".chamran_btn.article-btn").click(function () {
         div = document.createElement("div");
         $(div).addClass('card').addClass('ch-card-item');
         $(div).attr("id",art_count);
         $(div).html("<div class='row'>" +
+=======
+      $(".article-btn > i.fa-plus").click(function () {
+        div = document.createElement("div");
+        $(div).addClass('card').addClass('ch-card-item');
+        $(div).attr("id",art_count);
+        $(div).html("<form action='' method='post'><div class='row'>" +
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
               "<div class='col-lg-4'>" +
                 "<label for='article-name"+ art_count +"'>عنوان مقاله</label>" +
                 "<input type='text' id='article-name"+ art_count +"' class='w-100'>" +
@@ -338,6 +466,7 @@ $(document).ready(function(){
                 "<label for='referring-num"+ art_count +"'>تعداد ارجاع به مقاله شما</label>" +
                 "<input type='text' id='referring-num"+ art_count +"' class='w-100'>" +
               "</div>"+
+<<<<<<< HEAD
               "<div class='col-lg-3' style='display:flex'>" +
                 "<div class='wait-item' id='"+art_count+"'>" +
                   "<span>منتظر تایید....</span>"+
@@ -350,6 +479,23 @@ $(document).ready(function(){
               "</div>" +
             "</div>");
         $('.article').append(div);
+=======
+              "<div class='col-lg-3'></div>" +
+            "</div>" +
+            "<div class='row mtop-lg-25'>" +
+                "<div class='col-lg-9'>" +
+                    "<button type='button' id='"+art_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
+                "</div>"+
+                "<div class='col-lg-3'>" +
+                    "<button type='button' id='"+art_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
+                "</div>" +
+            "</div></form>");
+        if($(".article > .initial-value").hasClass("initial-value")){
+            $(".article").html(div);
+        }else {
+            $('.article').append(div);
+        }
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         delete_item(".article");
         input_focus();
         art_count ++;
@@ -357,7 +503,11 @@ $(document).ready(function(){
       $(".chamran_btn.technique").click(function () {
         $(".main").addClass("blur-div");
         $(".dialog-main").css("display","block");
+<<<<<<< HEAD
         close_dialog();
+=======
+        close_dialog(".technique-dialog-main");
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
       });
       // $(".main").addClass("blur-div");
       // $(".dialog-main").css("display","block");

@@ -2,14 +2,18 @@
 {% load static %}
 {% block title %}تنظیمات کاربری{% endblock %}
 {% block header %}
-    <link rel="stylesheet" href="{% static 'expert/css/persian-datepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'expert/css/persian-datepicker.min.css' %}"
+          xmlns="http://www.w3.org/1999/html">
     <link rel="stylesheet" href="{% static 'expert/css/datepicker-style.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/skin-awesome/ui.fancytree.min.css" rel="stylesheet">
 {% endblock %}
-{% block name %}رضا باسره{% endblock %}
+
+{% block name %}دکتر احسان شریف{% endblock %}
+
 {% block dialog %}
     {% include 'expert/layouts/dialog.html' %}
 {% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
@@ -64,8 +68,8 @@
                           <div class="col-lg-12">
                               <label for="Uni">دانشگاه محل فعالیت</label>
                               <input type="text" id="Uni" class="w-100">
-                              <i class="fas fa-plus fa-lg"></i>
-                              <div class="selected_uni"></div>
+{#                              <i class="fas fa-plus fa-lg"></i>#}
+{#                              <div class="selected_uni"></div>#}
                           </div>
                       </div>
                         <div class="row">
@@ -95,8 +99,10 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header">سوابق علمی</span>
-                                <div class="education"></div>
-                                <button class="chamran_btn education-btn" type="button">افزودن</button>
+                                <div class="education text-center w-100">
+                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                </div>
+                                <span class="education-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
@@ -104,8 +110,10 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header">سوابق اجرایی</span>
-                                <div class="executive"></div>
-                                <button class="chamran_btn executive-btn" type="button">افزودن</button>
+                                <div class="executive text-center w-100">
+                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                </div>
+                                <span class="executive-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
@@ -113,8 +121,10 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header">سوابق پژوهشی <span class="sub-header">(بهترین ها طی پنج سال گذشته)</span></span>
-                                <div class="studious"></div>
-                                <button class="chamran_btn studious-btn" type="button">افزودن</button>
+                                <div class="studious text-center w-100">
+                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                </div>
+                                <span class="studious-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
@@ -122,8 +132,10 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header">مقالات <span class="sub-header">(چند مورد از بهترین مقالات)</span></span>
-                                <div class="article"></div>
-                                <button class="chamran_btn article-btn" type="button">افزودن</button>
+                                <div class="article text-center w-100">
+                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                </div>
+                                <span class="article-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
@@ -292,7 +304,6 @@
         $("#fancy-tree").fancytree({
           extensions: ["glyph"],
           // checkbox: true,
-          rtl:true,
           source: [{"title": "Node 1", "key": "1"},
                  {"title": "تکنیک شماره یک", "key": "2", "folder": true, "children": [
                     {"title": "Node 2.1", "key": "3"},

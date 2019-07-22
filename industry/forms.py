@@ -176,12 +176,12 @@ class ProjectForm(forms.ModelForm):
         
     def clean_approach(self):
         data = self.cleaned_data["approach"]
-        print("approach - " ,data)
+        
         return data
     
     # def clean_required_technique(self):
     #     data = self.cleaned_data["required_technique"]
-    #     print("required_technq - " ,data)
+    #     print("required_technq" ,data)
     #     return data
 
     def clean_policy(self):
@@ -201,5 +201,5 @@ class ProjectForm(forms.ModelForm):
 
     def clean_predict_profit(self):
         predict_profit = self.cleaned_data.get('predict_profit')
-        print('predict_profit' ,predict_profit)
+        
         return predict_profit

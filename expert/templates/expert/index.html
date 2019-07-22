@@ -1,4 +1,5 @@
 {% extends "expert/layouts/base_layout.html" %}
+{% load static %}
 
 {% block title %}پروژه ها{% endblock %}
 
@@ -6,9 +7,10 @@
 {#    {% include 'expert/layouts/initial_information.html' %}#}
 {% endblock %}
 
-{% block name %}رضا باسره{% endblock %}
+{% block name %}دکتر احسان شریف{% endblock %}
 
 {% block dialog %}
+    {% include 'expert/layouts/project_details.html' %}
     {% include 'expert/layouts/showProject.html' %}
 {% endblock %}
 
@@ -20,4 +22,11 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{% static 'expert/js/jquery.emojipicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'expert/js/jquery.emojis.js' %}"></script>
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
 {% endblock %}

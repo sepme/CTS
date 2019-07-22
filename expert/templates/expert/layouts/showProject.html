@@ -1,103 +1,112 @@
-<div class="dialog-main">
+{% load static%}
+<div class="dialog-main showProject">
     <div class="card text-right dialog">
         <div class="close"></div>
         <div class="container">
             <div class="row">
                <div class="col-lg-12">
-                   <h6 class="project-title"> عنوان پروژه ( Project title )</h6>
+                   <h6 class="project-title"> محلول کشت سلولی ( FBS )</h6>
                </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <span>مهلت انجام:</span>
-                    <span>تاریخ ثبت:</span>
-                    <span class="sub-header">بودجه: </span>
+            <div class="row mbottom-lg-30">
+                <div class="col-lg-6">
+                    <span class="border-span">محیط کشت سلولی </span>
+                    <span class="border-span">PCR</span>
+                    <span class="border-span">فلوسایتومتری</span>
+                    <span class="border-span">فلوسایتومتری</span>
+                    <span class="border-span">PCR</span>
+                    <span class="border-span">PCR</span>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <span class="border-span">کلیدواژه 1</span>
-                    <span class="border-span">کلیدواژه 2</span>
-                    <span class="border-span">کلیدواژه 3</span>
-                </div>
-            </div>
-            <div class="row-header">
-                <span class="prev-line"></span>
-                <span class="header">شاخص ها</span>
-                <span class="next-line"></span>
-                <span class="slider-btn express-row"><i class="fa fa-chevron-down"></i></span>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     <div class="row">
-                <div class="col-lg-12">
-                    <div class="info">
-                        <span class="title sub-header">لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.</span>
-                        <span class="title-back"></span>
-                        <span class="body">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                        </span>
+                        <div class="establish-time col-6">
+                        <div class="time-head">زمان ثبت</div>
+                        <div class="time-body">22/12/1398</div>
+                    </div>
+                    <div class="time-left col-6">
+                        <div class="time-head">مهلت انجام</div>
+                        <div class="time-body">2 ماه</div>
+                    </div>
                     </div>
                 </div>
             </div>
-                    <div class="row">
-                <div class="col-lg-12">
-                    <div class="info">
-                        <span class="title sub-header">در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟</span>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    <div class="project-info custom-border-title">
+                        <span class="title">اطلاعات پروژه</span>
                         <span class="title-back"></span>
-                        <span class="body">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                        </span>
+                        <div class="project-info-innerDiv">
+                            <div class="project-info-tabs">
+                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"></a>
+                                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"></a>
+                                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"></a>
+                                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false"></a>
+                                </div>
+                            </div>
+                            <div class="project-info-content">
+                                <div>
+                                    <div class="question">
+                                        <span class="question-mark">
+                                            <i class="far fa-question-circle"></i>
+                                        </span>
+                                        لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.
+                                    </div>
+                                    <div class="answer">
+                                        نمونه های موجود در بازار همه از خارج از کشور وارد میشوند و ادعا میشود که از خون جنین گاو در تولید آن ها استفاده میشود ولی این کار بسیار هزینه بر است.
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="question">
+                                        <span class="question-mark">
+                                            <i class="far fa-question-circle"></i>
+                                        </span>
+                                        در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟
+                                    </div>
+                                    <div class="answer">
+                                        مصرف کننده های این محصول ، داروسازی ها و مراکز پژوهشی میباشد که در حال حاضر تولیدکننده این محصول شرکت THERMO FISHER میباشد. اگر کیفیت محصول تولیدی خوب باشد میتواند جایگزین نمونه خارجی شود.
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="question">
+                                        <span class="question-mark">
+                                            <i class="far fa-question-circle"></i>
+                                        </span>
+                                        برآورد شما از سود مالی این پروژه چگونه است؟
+                                    </div>
+                                    <div class="answer">
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-                    <div class="row">
-                <div class="col-lg-12">
-                    <div class="info">
-                        <span class="title sub-header">برآورد شما از سود مالی این پروژه چگونه است؟</span>
-                        <span class="title-back"></span>
-                        <span class="body">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                        </span>
-                    </div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-9">
+                    <button class="w-100 accept-btn btn mbottom-10">تایید و شروع پروژه</button>
+                </div>
+                <div class="col-lg-3">
+                    <button class="w-100 refuse-btn btn mbottom-10">رد پروژه</button>
                 </div>
             </div>
-                </div>
-            </div>
-            <div class="row-header">
-                <span class="prev-line"></span>
-                <span class="header">راهکار ها</span>
-                <span class="next-line"></span>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
-                <div class="col-lg-12">
-                    <div class="info">
-                        <span class="title sub-header">لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید.</span>
-                        <span class="title-back"></span>
-                        <span class="body">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                        </span>
-                    </div>
-                </div>
-            </div>
-                    <div class="row">
-                <div class="col-lg-12">
-                    <div class="info">
-                        <span class="title sub-header">این راه حل چه مشکلاتی می‌تواند داشته باشد؟</span>
-                        <span class="title-back"></span>
-                        <span class="body">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                        </span>
-                    </div>
-                </div>
-            </div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    {% include 'expert/layouts/comment.html' %}
                 </div>
             </div>
         </div>
     </div>
+<<<<<<< HEAD
     <div class="messenger">
         <i class="fas fa-comments fa-2x"></i>
     </div>
+=======
+>>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
 </div>

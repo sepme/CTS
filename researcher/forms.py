@@ -77,7 +77,6 @@ class InitailForm(forms.ModelForm):
             this_year = str(date.today().year)
 
             if data > (int(this_year)-621):
-                print("سال را اشتباه وارد کرده اید.")
                 raise ValidationError(_("سال را اشتباه وارد کرده اید."))
 
         return data

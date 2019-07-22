@@ -8,8 +8,6 @@ from . import models ,forms
 class Index(generic.FormView):
     template_name = 'researcher/layouts/initial_information.html'
     form_class = forms.InitailForm
-    researcher = models.ResearcherUser
-
     def get(self, request, *args, **kwargs):
         try:
             self.researcher = get_object_or_404(models.ResearcherUser ,user=request.user)
@@ -103,8 +101,6 @@ class userInfo(generic.FormView):
             profile.description = form.cleaned_data['description']
             
             profile.save()
-            print('--------------------------newwwww')
-            print(profile)
             return HttpResponseRedirect(reverse("researcher:index"))
         return super().post(self ,request ,*args, **kwargs)
 

@@ -93,14 +93,12 @@ class ResearcherProfile(models.Model):
     sacrifice = models.IntegerField(choices=INT_CHOICE, verbose_name="تعهد داشتن و از خود گذشتگی" ,
                                     blank=True ,null=True)
     diligence = models.IntegerField(choices=INT_CHOICE, verbose_name="پشتکار" ,blank=True ,null=True)
-    
     interest_in_learn = models.IntegerField(choices=INT_CHOICE, verbose_name="علاقه به یادگیری" ,
                                             blank=True ,null=True)
-    punctuality = models.IntegerField(choices=INT_CHOICE, verbose_name="وقت ­شناسی" ,blank=True ,null=True)
-    
+    timeliness = models.IntegerField(choices=INT_CHOICE, verbose_name="وقت­شناسی" ,blank=True ,null=True)
     data_collection = models.IntegerField(choices=INT_CHOICE, verbose_name="جمع­ آوری داده­ ها",
                                           blank=True ,null=True)
-    project_knowledge = models.IntegerField(choices=INT_CHOICE, verbose_name="آگاهی از اصول انجام پروژه"
+    awareness_of_principles = models.IntegerField(choices=INT_CHOICE, verbose_name="آگاهی از اصول انجام پروژه"
                                                  ,blank=True ,null=True)
 
     description = models.TextField( blank=True ,null=True)

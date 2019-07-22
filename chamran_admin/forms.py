@@ -23,10 +23,10 @@ class RegisterEmailForm(forms.Form):
     
     def clean_email(self):
         email           = self.cleaned_data["email"]
-        check_tempUsers = models.TempUser.objects.filter(email=email).count()
-        check_User      = User.objects.filter(email=email).count()
-        if check_tempUsers or check_User:
-            raise(ValidationError(_('ایمیل وارد شده تکراری است')))
+        # check_tempUsers = models.TempUser.objects.filter(email=email).count()
+        # check_User      = User.objects.filter(email=email).count()
+        # if check_tempUsers or check_User:
+        #     raise(ValidationError(_('ایمیل وارد شده تکراری است')))
         return email
 
 class RegisterUserForm(forms.Form):
