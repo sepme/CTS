@@ -5,7 +5,7 @@ function back() {
     $(".signUp-div").css("display","none");
     $(".email").css("display","none");
     $(".new-user").html("کاربر جدید هستید؟ <a href='#' onclick='signUp()' class='sign-up'>عضویت</a>");
-    $("button").text("ورود").removeClass("signUp-btn").addClass("Enter-btn");
+    $("button").text("ورود").removeClass("signUp-btn").addClass("Enter-btn").val("login")
 }
 function signUp() {
     $(".username").css("display","none");
@@ -14,7 +14,7 @@ function signUp() {
     $(".signUp-div").css("display","flex");
     $(".email").css("display","block");
     $(".new-user").html("<a href='#' class='back-login' onclick='back()'><i class='fas fa-arrow-left'></i> بازگشت</a>");
-    $("button").text("عضویت").removeClass("Enter-btn").addClass("signUp-btn");
+    $("button").text("عضویت").removeClass("Enter-btn").addClass("signUp-btn").val("signup");
 }
 $(document).ready(function(){
   $email = $(".email input");

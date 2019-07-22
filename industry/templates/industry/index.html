@@ -3,8 +3,15 @@
 {% block title %}<title>پروژه ها</title>{% endblock %}
 
 {% block initial_information %}
-    {% include 'industry/layouts/initial_information.html' %}
+    {% if basic_info %}
+        {% include 'industry/layouts/initial_information.html' %}
+    {% endif %}
 {% endblock %}
-{% block blur %}blur-div{% endblock %}
 
-{% block name %}رضا باسره{% endblock %}
+{% block blur %}
+    {% if basic_info %}
+        blur-div
+    {% endif %}
+{% endblock %}
+
+{% block name %}{{industry.industryform.name}}{% endblock %}

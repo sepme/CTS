@@ -10,3 +10,7 @@ class ResearcherAdmin(admin.ModelAdmin):
 @admin.register(models.ResearcherProfile)
 class ResearcherProfileAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(models.ResearcherStatus)
+class ResearcherStatusAdmin(admin.ModelAdmin):
+    pass

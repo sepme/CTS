@@ -1,10 +1,10 @@
 {% extends "expert/layouts/base_layout.html" %}
 {% load static %}
-{% block title %}<title>تنظیمات کاربری</title>{% endblock %}
+{% block title %}تنظیمات کاربری{% endblock %}
 {% block header %}
     <link rel="stylesheet" href="{% static 'expert/css/persian-datepicker.min.css' %}">
     <link rel="stylesheet" href="{% static 'expert/css/datepicker-style.css' %}">
-    <link href="{% static 'expert/css/fancytree-style.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/skin-awesome/ui.fancytree.min.css" rel="stylesheet">
 {% endblock %}
 {% block name %}رضا باسره{% endblock %}
 {% block dialog %}
@@ -287,5 +287,80 @@
 {% endblock %}
 {% block script %}
     <script type="text/javascript" src="{% static 'expert/js/persian-datepicker.min.js' %}"></script>
-    <script src="//cdn.jsdelivr.net/npm/jquery.fancytree@2.27/dist/jquery.fancytree-all-deps.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
+    <script type="text/javascript">
+        $("#fancy-tree").fancytree({
+          extensions: ["glyph"],
+          // checkbox: true,
+          rtl:true,
+          source: [{"title": "Node 1", "key": "1"},
+                 {"title": "تکنیک شماره یک", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]},
+                  {"title": "Node 1", "key": "1"},
+                 {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]},
+                  {"title": "Node 1", "key": "1"},
+                 {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]},
+                  {"title": "Node 1", "key": "1"},
+                 {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]},
+                  {"title": "Node 1", "key": "1"},
+                 {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]},
+                  {"title": "Node 1", "key": "1"},
+                 {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]},
+                  {"title": "Node 1", "key": "1"},
+                 {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]},
+                  {"title": "Node 1", "key": "1"},
+                 {"title": "Folder 2", "key": "2", "folder": true, "children": [
+                    {"title": "Node 2.1", "key": "3"},
+                    {"title": "Node 2.2", "key": "4"}
+                  ]}
+                  ],
+          glyph: {
+              preset: "awesome5",
+              map: {
+                  _addClass: "",
+                  checkbox: "fas fa-square",
+                  checkboxSelected: "fas fa-check-square",
+                  checkboxUnknown: "fas fa-square",
+                  radio: "fas fa-circle",
+                  radioSelected: "fas fa-circle",
+                  radioUnknown: "fas fa-dot-circle",
+                  dragHelper: "fas fa-arrow-right",
+                  dropMarker: "fas fa-long-arrow-right",
+                  error: "fas fa-exclamation-triangle",
+                  expanderClosed: "fas fa-chevron-left",
+                  expanderLazy: "fas fa-angle-right",
+                  expanderOpen: "fas fa-chevron-down",
+                  loading: "fas fa-spinner fa-pulse",
+                  nodata: "fas fa-meh",
+                  noExpander: "",
+                  // Default node icons.
+                  // (Use tree.options.icon callback to define custom icons based on node data)
+                  doc: "fas fa-screwdriver",
+                  docOpen: "fas fa-screwdriver",
+                  folder: "fas fa-tools",
+                  folderOpen: "fas fa-tools"
+              }
+          },
+      });
+    </script>
 {% endblock %}
