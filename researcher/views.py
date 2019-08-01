@@ -2,9 +2,10 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, re
 from django.views import generic
 from django.contrib.auth.models import User
 
-from . import models ,forms
+from . import models
 
 
+<<<<<<< HEAD
 class Index(generic.FormView):
     template_name = 'researcher/layouts/initial_information.html'
     form_class = forms.InitailForm
@@ -64,6 +65,10 @@ class Index(generic.FormView):
             researcher_status.save()
             return HttpResponseRedirect(reverse('researcher:index'))
         return super().post(self ,request ,*args, **kwargs)
+=======
+class Index(generic.TemplateView):
+    template_name = 'researcher/index.html'
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
 
 class userInfo(generic.FormView):
     template_name = 'researcher/userInfo.html'
@@ -111,3 +116,10 @@ class Login(generic.TemplateView):
 
 class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
+
+
+def signup(request, username):
+    user = get_object_or_404(User, username=username)
+    researcher = models.ResearcherUser(user=user)
+    researcher.save()
+    return HttpResponseRedirect(reverse('researcher:index'))

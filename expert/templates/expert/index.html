@@ -1,12 +1,13 @@
 {% extends "expert/layouts/base_layout.html" %}
-{% load static %}
 
-{% block title %}پروژه ها{% endblock %}
+{% block title %}<title>پروژه ها</title>{% endblock %}
 
 {% block initial_information %}
-{#    {% include 'expert/layouts/initial_information.html' %}#}
+    {% include 'expert/layouts/initial_information.html' %}
 {% endblock %}
+{% block blur %}blur-div{% endblock %}
 
+<<<<<<< HEAD
 {% block name %}دکتر احسان شریف{% endblock %}
 
 {% block dialog %}
@@ -30,3 +31,6 @@
     <script type="text/javascript" src="{% static 'expert/js/jquery.emojis.js' %}"></script>
 >>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
 {% endblock %}
+=======
+{% block name %}رضا باسره{% endblock %}
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End

@@ -3,6 +3,7 @@
 {% block title %}<title>پروژه ها</title>{% endblock %}
 
 {% block initial_information %}
+<<<<<<< HEAD
     {% if basic_info %}
         {% include 'industry/layouts/initial_information.html' %}
     {% endif %}
@@ -15,3 +16,10 @@
 {% endblock %}
 
 {% block name %}{{industry.industryform.name}}{% endblock %}
+=======
+    {% include 'industry/layouts/initial_information.html' %}
+{% endblock %}
+{% block blur %}blur-div{% endblock %}
+
+{% block name %}رضا باسره{% endblock %}
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End

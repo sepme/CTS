@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      {% block title %}{% endblock %}
       {% load static %}
-      <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <link rel="stylesheet" href="{% static 'expert/css/jquery.emojipicker.css' %}">
-      <link rel="stylesheet" href="{% static 'expert/css/jquery.emojipicker.a.css' %}">
+    <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    {% block header %}{% endblock %}
       <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
-      <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
   </head>
   <body>
-  <div id="loading">
-{#      <canvas id="loading-canvas"></canvas>#}
-  </div>
   {% block dialog%}{% endblock %}
-  <div class="main">
+  {% block initial_information %}{% endblock %}
+  <div class="main {% block blur %}{% endblock %}">
     <div class="top-bar">
-        <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
-        <div class="top-msg">
-            <span class="fas fa-envelope fa-lg"></span>
-        </div>
-        <div class="dropdown">
+      <div class="top-msg">
+        <span class="fas fa-envelope fa-lg"></span>
+      </div>
+      <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
+      <div class="dropdown">
         <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
-          <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
+          <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
         </button>
         <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
           <li><a href="#">اطلاعات کاربری</a></li>
@@ -38,18 +33,15 @@
       </div>
     </div>
     <div class="content">
-        <div class="container">
-            {% block initial_information %}{% endblock %}
-            {% block content %}{% endblock %}
-        </div>
+      {% block content %}{% endblock %}
     </div>
     <div class="side-bar">
       <div class="topMargin"></div>
       <div class="expert-icon"></div>
-      <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="Ehsan" class="profile" width="150px" height="150px">
+      <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
       <h5>{% block name %}{% endblock %}</h5>
       <h6>استاد</h6>
-      <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:3 }}</span>/10</p>
+      <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
       <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0" aria-valuemax="100" style="width: 70px">
           <span class="sr-only">{{ score|default:0 }}% completed</span>
@@ -57,7 +49,8 @@
       </div>
       <div class="hr"></div>
       <ul class="list-group">
-        <li class="list-group-item text-right">
+        {% url "index" as index %}
+        <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
           <a href="#">
             <div>
               <span>پروژه ها</span>
@@ -89,7 +82,7 @@
             </div>
           </a>
         </li>
-        {% url 'userInfo' as userInfo %}
+        {% url 'userInfo' as userInfo%}
         <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
           <a href="{% url 'expert:userInfo'%}">
             <div>
@@ -100,14 +93,11 @@
         </li>
       </ul>
     </div>
-    <a href="#" id="toggle"><span></span></a>
   </div>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="{% static 'expert/js/persianumber.min.js' %}"></script>
   {% block script %}{% endblock %}
-  <script type="text/javascript" src="{% static 'expert/js/script-functions.js' %}"></script>
   <script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
   </body>
 </html>

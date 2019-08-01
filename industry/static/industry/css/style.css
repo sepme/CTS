@@ -1,57 +1,22 @@
-@import "fontiran.css";
-@media screen {
-    .mbottom-lg-25{
-        margin-bottom: 25px;
-    }
-    .mbottom-lg-30{
-        margin-bottom: 30px;
-    }
-    .mtop-lg-25{
-        margin-top: 25px;
-    }
+@font-face {
+  font-family: Shabnam;
+  src: url(../font/Shabnam.ttf);
+}
+@font-face {
+  font-family: Shabnam-Bold;
+  src: url(../font/Shabnam-Bold.ttf);
+}
+@font-face {
+  font-family: Shabnam-Light;
+  src: url(../font/Shabnam-Light.ttf);
 }
 body {
   background-color: #f8fdf7;
-  font-family: iranyekan, serif;
+  font-family: Shabnam;
   color: #fff;
   font-size: 14px;
   overflow-y: hidden;
 }
-/* index.html*/
-h5{
-  color: #6F7285;
-}
-hr{
-  color: #6F7285;
-}
-.project-card{
-  padding: 5px 10px 5px 5px;
-  color: #707070;
-}
-.project-card > h6{
-  font-weight: 600;
-  color: #262626;
-}
-.status-line{
-  position: absolute;
-  top: -1px;
-  right: -2px;
-  width: 5px;
-  height: calc(100% + 1px);
-  background-color: #bdbdbd;
-  border:none;
-  border-radius: 0 0.25em 0.25em 0;
-}
-.status-line.active{
-  background-color: #57e32c !important;
-}
-.status-line.check{
-  background-color: #ffa534 !important;
-}
-.status-line.refuse{
-  background-color: #ff4545 !important;
-}
-/* end index.html*/
 .upload{
   position: absolute;
   top:  calc(100% - 40px) ;
@@ -268,7 +233,6 @@ hr{
 }
 .side-bar > h6 , .side-bar > h5 , .side-bar > p {
   text-align: center;
-  color: #ffffff;
 }
 .list-group-item {
   color: #eff0f2;
@@ -440,9 +404,11 @@ hr{
   padding:0 15px 20px 15px;
 }
 .header{
+  font-family: Shabnam-Bold;
   color: #6f7285;
 }
 .sub-header{
+  font-family: Shabnam-Light;
   color: #6f7285;
 }
 ::-webkit-scrollbar {

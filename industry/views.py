@@ -1,14 +1,8 @@
-from django.shortcuts import HttpResponseRedirect ,reverse ,get_object_or_404 ,render
 from django.views import generic
-from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
-
-from django.conf import settings
-
-from . import forms ,models
 
 class Index(generic.TemplateView):
     template_name = 'industry/index.html'
+<<<<<<< HEAD
     industry = models.IndustryUser
 
     def get(self, request, *args, **kwargs):
@@ -164,3 +158,9 @@ class ProjectListView(generic.ListView):
         if  self.industry.industryform:
             context['photo'] = self.industry.industryform.photo
         return context
+=======
+class userInfo(generic.TemplateView):
+    template_name = 'industry/userInfo.html'
+class newProject(generic.TemplateView):
+    template_name = 'industry/newProject.html'
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End

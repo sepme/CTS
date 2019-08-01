@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
   </head>
   <body>
+  {% block initial_information %}{% endblock %}
   <div class="main {% block blur %}{% endblock %}">
     <div class="top-bar">
       <div class="top-msg">
@@ -30,6 +31,12 @@
         </ul>
       </div>
     </div>
+<<<<<<< HEAD
+=======
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
     <div class="side-bar">
       <div class="topMargin"></div>
       <div class="expert-icon"></div>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import "fontiran.css";
 <<<<<<< HEAD
 body {
@@ -10,33 +11,32 @@ body {
     }
 .mbottom-lg-25{
   margin-bottom: 25px;
+=======
+@font-face {
+  font-family: Shabnam;
+  src: url(../font/Shabnam.ttf);
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
 }
-.mtop-lg-25{
-  margin-top: 25px;
+@font-face {
+  font-family: Shabnam-Bold;
+  src: url(../font/Shabnam-Bold.ttf);
 }
-.mbottom-lg-30{
-  margin-bottom: 30px;
+@font-face {
+  font-family: Shabnam-Light;
+  src: url(../font/Shabnam-Light.ttf);
 }
 body {
   background-color: #f8fdf7;
   /*#EFF0F2*/
+<<<<<<< HEAD
   font-family: iranyekan, serif;
 >>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
+=======
+  font-family: Shabnam;
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
   color: #fff;
   font-size: 14px;
   overflow-y: hidden;
-}
-#loading{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  color: #000;
-  transform: translate(-50%,-50%);
-}
-#loading-canvas{
-  width: 100px;
-  height: 100px;
-  border: 1px solid #000000;
 }
 .upload{
   position: absolute;
@@ -75,7 +75,6 @@ img{
 }
 .mainInfo-body, .dialog-main{
   position: fixed;
-  display: none;
   top: 0;
   left: 0;
   width: 100%;
@@ -87,7 +86,7 @@ img{
   filter: blur(10px);
   opacity: 0.9;
 }
-.mainInfo{
+.mainInfo, .dialog{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -97,6 +96,7 @@ img{
   padding: 5px 10px 50px 10px;
   box-shadow: 0 0 50px #e3e3e3;
 }
+<<<<<<< HEAD
 .dialog-main{
 <<<<<<< HEAD
 =======
@@ -121,6 +121,8 @@ img{
   overflow: hidden;
 >>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
 }
+=======
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
 input, textarea, select{
   background-color: #fdfdfd;
   border: 1px solid #bdbdbd;
@@ -146,20 +148,13 @@ label{
   color: #6f7285;
   transition: 300ms all ease;
 }
-label.fix{
+i.fa-plus{
   position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 13px;
-  color: #8d8d8d;
+  top: 33px;
+  left: 25px;
+  color: #6f7285;
+  cursor: pointer;
 }
-/*i.fa-plus{*/
-/*  position: absolute;*/
-/*  top: 33px;*/
-/*  left: 25px;*/
-/*  color: #6f7285;*/
-/*  cursor: pointer;*/
-/*}*/
 .rankDiv{
   display: flex;
 }
@@ -274,7 +269,7 @@ hr{
 }
 .side-bar > .hr::before {
   content: '';
-  background-color: #F8FDF7;
+  background-color: #707070;
   position: relative;
   display: block;
   width: 230px;
@@ -345,9 +340,6 @@ hr{
   height: 70px;
   z-index: 998;
 }
-#toggle{
-  display: none;
-}
 .top-msg{
   color: #4cd12f;
   position: absolute;
@@ -408,9 +400,9 @@ hr{
   background-color: gold;
 }
 .info-card{
-    margin: 20px 100px;
-    padding: 20px;
-    color: #6f7285;
+  margin: 20px 100px;
+  padding: 20px;
+  color: #000;
 }
 .row{
   direction: rtl!important;
@@ -440,17 +432,16 @@ hr{
   box-shadow: 0 0 20px #e3e3e3;
   outline: none;
 }
-.chamran_btn:hover, .chamran_btn:focus{
+.chamran_btn:hover{
   box-shadow: none;
   background-color: #3CCD1C;
   outline: none;
 }
 .inner-card{
-    padding: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.08)
+  padding: 10px;
+  margin: 20px auto;
+  background-color: #fff;
+  box-shadow: 0 0 20px rgba(0,0,0,0.08)
 }
 .ch-card-item:last-child{
   margin-bottom: 25px;
@@ -460,6 +451,7 @@ hr{
   padding:0 15px 20px 15px;
 }
 .header{
+<<<<<<< HEAD
   /*font-family: Shabnam-Bold;*/
 <<<<<<< HEAD
 }
@@ -472,15 +464,21 @@ hr{
   /*color: #6f7285;*/
   font-weight: 400;
 >>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
+=======
+  font-family: Shabnam-Bold;
+}
+.sub-header{
+  font-family: Shabnam-Light;
+  color: #6f7285;
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
 }
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f1f1;
 }
 ::-webkit-scrollbar-thumb {
-  border-radius: 6px;
   background: #888;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -626,16 +624,16 @@ span.star-warning:after{
 .label-check-radio{
 }
 .label-check-radio+label{
-    position: absolute;
-    top: 10px;
-    padding: 5px;
-    min-width: 45px;
-    text-align: center;
-    border: 1px solid #6f7285;
-    border-radius: 5px 0 5px 0;
-    transition: all ease-in-out 0.3s;
+  position: absolute;
+  top: 10px;
+  padding: 5px;
+  min-width: 45px;
+  text-align: center;
+  border: 1px solid #fff;
+  border-radius: 20px;
 }
 .label-check-radio+label:hover, .label-check-radio:checked+label{
+<<<<<<< HEAD
     border: 1px solid #3CCD1C;
     border-radius: 20px;
     color: #3CCD1C;
@@ -682,32 +680,34 @@ span.star-warning:after{
   border-radius: 50%;
   border: 1px solid #bdbdbd;
   z-index: 100;
+=======
+  border: 1px solid #3CCD1C;
+  border-radius: 20px;
+  color: #3CCD1C;
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
 }
-.close:after,.close:before{
-  background-color: #bdbdbd;
-  content: "";
-  display: block;
-  right: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translateX(50%) translateY(-50%) rotate(-45deg);
-  transform-origin: center center;
+.dialog-main{
+  display: none;
 }
-.close:after{
-  height: 1px;
-  width: 50%;
+.dialog{
+  padding-bottom: 30px;
 }
+<<<<<<< HEAD
 >>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
 .close:before{
   height: 50%;
   width: 1px;
+=======
+.close > i{
+  position: absolute;
+  top: -4px;
+  left: 10px;
+  color: #6d6d6d;
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
 }
-.close:hover{
+.close > i:hover{
   cursor: pointer;
-  border:1px solid #ff4545;
-}
-.close:hover:after,.close:hover:before{
-  background-color: #ff4545;
+  color: #ff4545;
 }
 input#search_technique{
     position: absolute;
@@ -738,27 +738,32 @@ input#search_technique+label{
   overflow-x: hidden;
   height: 400px;
 }
+ul.fancytree-container , .fancytree-treefocus{
+  background-color: #fff;
+  border: none!important;
+}
 .display-toggle{
   display: none;
 }
-ul.ui-fancytree > li{
+.technique-list-item{
   list-style-type: none;
   padding: 2px;
   width: fit-content;
-  color: #6f7285;
+  color: #bdbdbd;
 }
-ul.ui-fancytree > li.active{
+.technique-list-item.active{
   color: #6d6d6d;
 }
-ul.ui-fancytree > li:hover{
+.technique-list-item:hover{
   color: #3CCD1C;
   cursor: pointer;
 }
-.fa-chevron-left, .fa-chevron-down, .fa-tools, .fa-screwdriver{
+.fa-chevron-left{
   padding-left: 5px;
   transition: all ease-in-out 200ms;
 }
 .rotate--90{
+<<<<<<< HEAD
     transform: rotate(-90deg) !important;
     display: block;
 }
@@ -1791,3 +1796,22 @@ table > tbody > tr > td{
 /*  }*/
 /*}*/
 >>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
+=======
+  transform: rotate(-90deg);
+}
+/*!*fancytree*!*/
+/*span.fancytree-node:hover{*/
+/*  color: #3CCD1C;*/
+/*}*/
+/*span.fancytree-node > span.fancytree-title {*/
+/*  font-family: "Shabnam-Light";*/
+/*}*/
+/*span.fancytree-node > span.fancytree-icon{*/
+/*  background-image: none;*/
+/*}*/
+/*#fancytree-drop-marker, span.fancytree-checkbox,*/
+/*span.fancytree-drag-helper-img, span.fancytree-empty,*/
+/*span.fancytree-expander, span.fancytree-icon, span.fancytree-vline{*/
+/*  background-image: none;*/
+/*}*/
+>>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End

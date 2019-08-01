@@ -6,27 +6,26 @@ from django.contrib.auth.models import User
 
 from . import models
 
-ACCOUNT_CHOICE =[
+ACCOUNT_CHOICE =(
     ('industry'   ,'Industry'),
     ('expert'     ,'Expert'),
     ('researcher' ,'Researcher'),
-]
+)
 
 class RegisterEmailForm(forms.Form):
     email = forms.EmailField(label="ایمیل")
-    account_type = forms.ChoiceField(choices=ACCOUNT_CHOICE, label='نوع حساب کاربری')
+    account_type = forms.ChoiceField(choices=ACCOUNT_CHOICE ,label='نوع حساب کاربری')
     class Meta:
         widgets = {
-            'email' : forms.TextInput(attrs={'id':"email",'name':"email" ,'value' :"" }),
             'account_type': forms.RadioSelect(),
         }
     
     def clean_email(self):
         email           = self.cleaned_data["email"]
-        # check_tempUsers = models.TempUser.objects.filter(email=email).count()
-        # check_User      = User.objects.filter(email=email).count()
-        # if check_tempUsers or check_User:
-        #     raise(ValidationError(_('ایمیل وارد شده تکراری است')))
+        check_tempUsers = models.TempUser.objects.filter(email=email).count()
+        check_User      = User.objects.filter(email=email).count()
+        if check_tempUsers or check_User:
+            raise(ValidationError(_('ایمیل وارد شده تکراری است')))
         return email
 
 class RegisterUserForm(forms.Form):
@@ -61,9 +60,13 @@ class RegisterUserForm(forms.Form):
         return confirm_password
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField()
+    username = forms.CharField(label='نام کاربری')
+    password = forms.CharField(widget=forms.PasswordInput() ,label='رمز عبور')
 
+    class Meta:
+        widgets ={
+            'password' : forms.PasswordInput(),
+        }
     
     def clean_username(self):
         data = self.cleaned_data["username"]
