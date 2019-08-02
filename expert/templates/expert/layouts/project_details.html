@@ -1,0 +1,237 @@
+{% load static%}
+<div class="dialog-main project-details">
+    <div class="card text-right dialog">
+        <div class="close"></div>
+        <div class="vote"><i class="fas fa-ellipsis-v"></i><i class="fas fa-chevron-down"></i></div>
+        <div class="vote-dialog">
+            <div class="card industry-back text-center">ارزیابی از صنعت</div>
+            <div class="card researcher-back text-center">ارزیابی از پژوهشگر</div>
+        </div>
+        <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                   <h6 class="project-title"> محلول کشت سلولی ( FBS )</h6>
+               </div>
+            </div>
+            <div class="row mbottom-lg-25">
+                            <div class="col-lg-12 project-detail">
+                                <span class="border-span">محیط کشت سلولی </span>
+                                <span class="border-span">PCR</span>
+                                <span class="border-span">فلوسایتومتری</span>
+                                <span class="border-span">فلوسایتومتری</span>
+                                <span class="border-span">PCR</span>
+                                <span class="border-span">PCR</span>
+                            </div>
+                        </div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    <div class="project-info custom-border-title">
+                        <span class="title">جزییات پروژه</span>
+                        <span class="title-back"></span>
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label for="industry-name" class="fix">کارفرما</label>
+                                            <input type="text" class="w-100" id="industry-name" value="شرکت طب باکس" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label for="enforced-name" class="fix">مجری</label>
+                                            <input type="text" class="w-100" id="enforced-name" value="نمی دونم!" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <label for="executive-info" class="fix">توضیحات اجرایی</label>
+                                            <textarea class="w-100" rows="4" id="executive-info" disabled>توضیحات</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="industry-logo-preview">
+                                        <img src="{% static 'expert/img/industry.jpg' %}" alt="industry-logo">
+                                    </div>
+                                    <div class="budget-section">
+                                        <div class="budget">
+                                            <div class="budget-header">بودجه</div>
+                                            <div class="budget-content">
+                                                <div class="budget-amount">5,000,000</div>
+                                                <div>ریال</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-process">
+                                <div class="progress-row">
+                                    <div class="step-top">
+                                        <div class="time">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="step-content">
+                                            فاز اول
+                                        </div>
+                                    <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="step-content">
+                                            فاز سوم
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-top">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line-100">
+                                    <div class="arrow"></div>
+                                </div>
+                                <div class="progress-row">
+                                    <div class="step-down">
+                                        <div class="step-content">
+                                            شروع پروژه
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="step-content">
+                                            فاز دوم
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="date">
+                                            12/12/1212
+                                        </div>
+                                    </div>
+                                    <div class="step-down">
+                                        <div class="step-content">
+                                            اتمام پروژه
+                                        </div>
+                                        <div class="step-circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+{#                            <div class="row">#}
+{#                                <div class="col-lg-6">#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-lg-9">#}
+{#                                            <input class="w-100" type="text" name="researcher-num" value="" id="researcher-num">#}
+{#                                            <label for="researcher-num">تعداد پژوهشگر ها</label>#}
+{#                                        </div>#}
+{#                                        <div class="col-lg-3">#}
+{#                                            <button class="save-input">ثبت</button>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="col-lg-6">#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-lg-9">#}
+{#                                            <input class="w-100" type="text" name="researcher-time" value="" id="researcher-time">#}
+{#                                            <label for="researcher-time">زمان هفتگی  مورد نیاز هر پژوهشگر</label>#}
+{#                                        </div>#}
+{#                                        <div class="col-lg-3">#}
+{#                                            <button class="save-input">ثبت</button>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+                        <div class="project-info-innerDiv">
+                            <div class="project-info-tabs">
+                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#" role="tab" aria-controls="v-pills-home" aria-selected="true"></a>
+                                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#" role="tab" aria-controls="v-pills-profile" aria-selected="false"></a>
+                                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#" role="tab" aria-controls="v-pills-messages" aria-selected="false"></a>
+                                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#" role="tab" aria-controls="v-pills-settings" aria-selected="false"></a>
+                                </div>
+                            </div>
+                            <div class="project-info-content">
+                                <div>
+                                    <div class="question">
+                                        <span class="question-mark">
+                                            <i class="far fa-question-circle"></i>
+                                        </span>
+                                        لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.
+                                    </div>
+                                    <div class="answer">
+                                        نمونه های موجود در بازار همه از خارج از کشور وارد میشوند و ادعا میشود که از خون جنین گاو در تولید آن ها استفاده میشود ولی این کار بسیار هزینه بر است.
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="question">
+                                        <span class="question-mark">
+                                            <i class="far fa-question-circle"></i>
+                                        </span>
+                                        در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟
+                                    </div>
+                                    <div class="answer">
+                                        مصرف کننده های این محصول ، داروسازی ها و مراکز پژوهشی میباشد که در حال حاضر تولیدکننده این محصول شرکت THERMO FISHER میباشد. اگر کیفیت محصول تولیدی خوب باشد میتواند جایگزین نمونه خارجی شود.
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="question">
+                                        <span class="question-mark">
+                                            <i class="far fa-question-circle"></i>
+                                        </span>
+                                        برآورد شما از سود مالی این پروژه چگونه است؟
+                                    </div>
+                                    <div class="answer">
+                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row add-researcher-row">
+                            <div class="col-lg-12 text-center">
+                                <span class="add-researcher">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="512px" viewBox="-42 0 512 512" width="512px">
+                                        <g>
+                                            <path d="m419.597656 451.914062c4.183594 0 7.574219-3.390624 7.574219-7.574218v-4.738282c0-39.550781-26.613281-74.5625-64.714844-85.136718l-82.933593-23.042969-22.007813-22.007813v-32.519531c27.980469-13.328125 49.007813-38.96875 56.03125-69.875h10.113281c15.3125 0 27.773438-12.457031 27.773438-27.769531v-14.140625c0-8.125-3.507813-15.445313-9.089844-20.527344v-129.433593h34.335938v73.847656c-10.515626 3.242187-18.179688 13.050781-18.179688 24.613281s7.664062 21.371094 18.179688 24.613281v18.808594c0 4.183594 3.390624 7.574219 7.574218 7.574219 4.179688 0 7.570313-3.390625 7.570313-7.574219v-18.808594c10.515625-3.242187 18.179687-13.050781 18.179687-24.613281s-7.664062-21.371094-18.179687-24.613281v-73.847656h7.574219c4.183593 0 7.574218-3.390626 7.574218-7.574219 0-4.183594-3.386718-7.574219-7.570312-7.574219h-371.632813c-4.179687 0-7.574219 3.390625-7.574219 7.574219 0 4.183593 3.394532 7.574219 7.574219 7.574219h57.058594v15.191406c0 4.179687 3.390625 7.570312 7.574219 7.570312s7.574218-3.390625 7.574218-7.570312v-15.191406h227.21875v88.867187h-227.21875v-38.3125c0-4.183594-3.390624-7.574219-7.574218-7.574219s-7.574219 3.390625-7.574219 7.574219v78.878906c-5.582031 5.082031-9.089844 12.40625-9.089844 20.53125v14.136719c0 15.3125 12.460938 27.773438 27.773438 27.773438h10.117187c7.019532 30.90625 28.046875 56.546874 56.027344 69.875v32.515624l-22.007812 22.011719-82.933594 23.039063c-38.101563 10.574218-64.714844 45.585937-64.714844 85.140625v4.734375c0 4.183594 3.390625 7.574218 7.574219 7.574218 4.183593 0 7.574219-3.390624 7.574219-7.574218v-4.734375c0-32.773438 22.046874-61.78125 53.621093-70.542969l49.945313-13.875 28.066406 88.910156c.347656 1.097656.941406 2.105469 1.734375 2.941406l47.40625 49.816407h-104.023437v-23.734375c0-4.183594-3.390626-7.574219-7.574219-7.574219-4.183594 0-7.574219 3.390625-7.574219 7.574219v23.730468h-61.601562v-17.230468c0-4.183594-3.390626-7.574219-7.574219-7.574219-4.183594 0-7.574219 3.390625-7.574219 7.574219v24.804687c0 4.183594 3.390625 7.574219 7.574219 7.574219h412.023437c4.183594 0 7.574219-3.390625 7.574219-7.574219v-24.804687c0-4.183594-3.390625-7.574219-7.574219-7.574219s-7.574218 3.390625-7.574218 7.574219v17.230468h-61.601563v-23.730468c0-4.183594-3.390625-7.574219-7.574219-7.574219s-7.574218 3.390625-7.574218 7.574219v23.730468h-104.023438l47.40625-49.816406c.792969-.835937 1.386719-1.839844 1.734375-2.941406l28.066406-88.910156 49.949219 13.878906c31.570312 8.757812 53.617188 37.765625 53.617188 70.539062v4.738282c0 4.183594 3.390624 7.574218 7.574218 7.574218zm-35.34375-327.699218c-5.847656 0-10.605468-4.757813-10.605468-10.605469s4.757812-10.605469 10.605468-10.605469 10.601563 4.757813 10.601563 10.605469-4.757813 10.605469-10.601563 10.605469zm-183.644531 293.867187h25.953125l10.203125 51-23.179687 24.355469-23.179688-24.355469zm28.707031-15.148437h-31.460937l-12.808594-14.777344 28.539063-28.539062 28.535156 28.539062zm20.675782-28.332032-25.695313-25.695312 25.644531-25.640625 15.722656 15.71875zm86.292968-195.351562c0 6.960938-5.664062 12.621094-12.625 12.621094h-7.574218v-39.382813h7.574218c6.960938 0 12.625 5.664063 12.625 12.625zm-9.089844-41.675781c-1.160156-.148438-2.335937-.234375-3.535156-.234375h-7.574218v-18.175782h11.109374zm-227.21875-18.410157h11.109376v18.179688h-7.574219c-1.199219 0-2.375.082031-3.535157.230469zm11.109376 72.710938h-7.574219c-6.960938 0-12.625-5.664062-12.625-12.625v-14.136719c0-6.960937 5.664062-12.625 12.625-12.625h7.574219zm15.148437-7.574219v-65.136719h174.703125v65.136719c0 48.167969-39.183594 87.351563-87.351562 87.351563-48.167969 0-87.351563-39.1875-87.351563-87.351563zm87.351563 102.5c9.988281 0 19.644531-1.441406 28.78125-4.117187v26.730468l-28.78125 28.78125-28.78125-28.78125v-26.734374c9.136718 2.679687 18.792968 4.121093 28.78125 4.121093zm-36.355469 36.460938 25.644531 25.644531-25.695312 25.695312-15.671876-35.617187zm-43.910157 27.863281 15.128907-4.203125 19.300781 43.863281c.121094.277344.261719.550782.417969.816406.039062.070313.085937.136719.128906.207032.105469.167968.21875.332031.339844.496094.0625.085937.128906.167968.195312.25.050781.0625.097657.128906.152344.191406l17.257813 19.917968-8.597657 43.003907-16.945312-17.804688zm133.152344 86.738281-16.945312 17.804688-8.597656-43.003907 17.257812-19.917968c.054688-.0625.101562-.128906.152344-.191406.066406-.082032.132812-.167969.199218-.253907.117188-.160156.230469-.324219.335938-.492187.042969-.070313.089844-.136719.132812-.210938.152344-.265625.292969-.535156.414063-.8125l19.300781-43.863281 15.128906 4.203125zm0 0" data-original="#000000" class="active-path" data-old_color="#000000" fill="#3CCD1C"/>
+                                        </g>
+                                    </svg>
+{#                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 31.059 31.059" style="enable-background:new 0 0 31.059 31.059;" xml:space="preserve" width="512px" height="512px">#}
+{#                                        <g>#}
+{#                                            <g>#}
+{#                                                <g>#}
+{#		                                            <path d="M15.529,31.059C6.966,31.059,0,24.092,0,15.529C0,6.966,6.966,0,15.529,0    c8.563,0,15.529,6.966,15.529,15.529C31.059,24.092,24.092,31.059,15.529,31.059z M15.529,1.774    c-7.585,0-13.755,6.171-13.755,13.755s6.17,13.754,13.755,13.754c7.584,0,13.754-6.17,13.754-13.754S23.113,1.774,15.529,1.774z" data-original="#010002" class="active-path" data-old_color="#010002" fill="#3CCD1C"/>#}
+{#	                                            </g>#}
+{#	                                            <g>#}
+{#		                                            <path d="M21.652,16.416H9.406c-0.49,0-0.888-0.396-0.888-0.887c0-0.49,0.397-0.888,0.888-0.888h12.246    c0.49,0,0.887,0.398,0.887,0.888C22.539,16.02,22.143,16.416,21.652,16.416z" data-original="#010002" class="active-path" data-old_color="#010002" fill="#3CCD1C"/>#}
+{#	                                            </g>#}
+{#	                                            <g>#}
+{#		                                            <path d="M15.529,22.539c-0.49,0-0.888-0.397-0.888-0.887V9.406c0-0.49,0.398-0.888,0.888-0.888    c0.49,0,0.887,0.398,0.887,0.888v12.246C16.416,22.143,16.02,22.539,15.529,22.539z" data-original="#010002" class="active-path" data-old_color="#010002" fill="#3CCD1C"/>#}
+{#	                                            </g>#}
+{#                                            </g>#}
+{#                                        </g>#}
+{#                                    </svg>#}
+                                    <span>درخواست پژوهشگر</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    {% include 'expert/layouts/comment.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
