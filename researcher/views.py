@@ -3,45 +3,46 @@ from django.views import generic
 from django.contrib.auth.models import User
 
 from . import models
+from . import forms
 
 
-<<<<<<< HEAD
 class Index(generic.FormView):
     template_name = 'researcher/layouts/initial_information.html'
     form_class = forms.InitailForm
+
     def get(self, request, *args, **kwargs):
         try:
-            self.researcher = get_object_or_404(models.ResearcherUser ,user=request.user)
+            self.researcher = get_object_or_404(models.ResearcherUser, user=request.user)
         except:
             return HttpResponseRedirect(reverse('chamran:login'))
-        print(self.researcher.researcherstatus.status)
-        if self.researcher.researcherstatus.status == 'signed_up':
+        print(self.researcher.status.status)
+        if self.researcher.status.status == 'signed_up':
             return super().get(request, *args, **kwargs)
-        return render(request ,'researcher/index.html' ,self.get_context_data())
-    
+        return render(request, 'researcher/index.html', self.get_context_data())
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['researcheruser'] = self.researcher
         return context
 
-    def post(self ,request ,*args, **kwargs):
-        form = forms.InitailForm(request.POST ,request.FILES)
+    def post(self, request, *args, **kwargs):
+        form = forms.InitailForm(request.POST, request.FILES)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name'] 
-            photo = form.cleaned_data['photo'] 
-            address = form.cleaned_data['address'] 
-            national_code = form.cleaned_data['national_code'] 
+            last_name = form.cleaned_data['last_name']
+            photo = form.cleaned_data['photo']
+            address = form.cleaned_data['address']
+            national_code = form.cleaned_data['national_code']
             entry_year = form.cleaned_data['entry_year']
             grade = form.cleaned_data['grade']
             university = form.cleaned_data['university']
             major = form.cleaned_data['major']
             home_number = form.cleaned_data['home_number']
-            phone_number = form.cleaned_data['phone_number'] 
+            phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email']
             student_number = form.cleaned_data['student_number']
 
-            researcher = get_object_or_404(models.ResearcherUser ,user=request.user)
+            researcher = get_object_or_404(models.ResearcherUser, user=request.user)
 
             profile = models.ResearcherProfile(
                 researcher_user=researcher,
@@ -60,33 +61,30 @@ class Index(generic.FormView):
                 student_number=student_number
             )
             profile.save()
-            researcher_status = researcher.researcherstatus
+            researcher_status = researcher.status
             researcher_status.status = 'free'
             researcher_status.save()
             return HttpResponseRedirect(reverse('researcher:index'))
-        return super().post(self ,request ,*args, **kwargs)
-=======
-class Index(generic.TemplateView):
-    template_name = 'researcher/index.html'
->>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
+        return super().post(self, request, *args, **kwargs)
 
-class userInfo(generic.FormView):
+
+class UserInfo(generic.FormView):
     template_name = 'researcher/userInfo.html'
     form_class = forms.ResearcherProfileForm
 
-    def post(self ,request ,*args, **kwargs):
+    def post(self, request, *args, **kwargs):
         print('--------------------------------')
         print(request.POST)
-        form = forms.ResearcherProfileForm(request.POST ,request.FILES)
+        form = forms.ResearcherProfileForm(request.POST, request.FILES)
         if form.is_valid():
             print('form validated!!!!!!!!!')
             profile = request.user.researcheruser.researcherprofile
-            
+
             profile.first_name = form.cleaned_data['first_name']
             profile.last_name = form.cleaned_data['last_name']
             profile.major = form.cleaned_data['major']
             profile.national_code = form.cleaned_data['national_code']
-            profile.grade = form.cleaned_data['grade','university']
+            profile.grade = form.cleaned_data['grade', 'university']
             profile.entry_year = form.cleaned_data['entry_year']
             profile.student_number = form.cleaned_data['student_number']
             profile.address = form.cleaned_data['address']
@@ -104,14 +102,14 @@ class userInfo(generic.FormView):
             profile.data_collection = form.cleaned_data['data_collection']
             profile.project_knowledge = form.cleaned_data['project_knowledge']
             profile.description = form.cleaned_data['description']
-            
+
             profile.save()
             return HttpResponseRedirect(reverse("researcher:index"))
-        return super().post(self ,request ,*args, **kwargs)
+        return super().post(self, request, *args, **kwargs)
 
 
 class Login(generic.TemplateView):
-    template_name = 'registration/base.html'
+    template_name = 'registration/login.html'
 
 
 class UserPass(generic.TemplateView):

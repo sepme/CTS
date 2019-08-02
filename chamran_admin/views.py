@@ -1,7 +1,7 @@
-from django.shortcuts import render ,HttpResponseRedirect ,reverse ,get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404
 from django.views import generic
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate ,login ,logout
+from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 
 from django.conf import settings
@@ -12,23 +12,25 @@ from researcher.models import ResearcherUser
 from expert.models import ExpertUser
 from industry.models import IndustryUser
 
-LOCAL_URL ='127.0.0.1:8000'
+LOCAL_URL = '127.0.0.1:8000'
+
 
 class Home(generic.TemplateView):
     template_name = "base.html"
 
+
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
     template_name = "registration/signup.html"
-    seccess = '/'
+    success = '/'
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterEmailForm(request.POST)
         if form.is_valid():
-            email  = form.cleaned_data['email']
+            email = form.cleaned_data['email']
             account_type = form.cleaned_data['account_type']
-            temp_user = models.TempUser(email=email ,account_type=account_type)
-            
+            temp_user = models.TempUser(email=email, account_type=account_type)
+
             subject = 'Welcome to Chamran Team!!!'
 
             unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
@@ -38,11 +40,12 @@ class SignupEmail(generic.FormView):
                 subject,
                 mess,
                 settings.EMAIL_HOST_USER,
-                [temp_user.email ,settings.EMAIL_HOST_USER]
+                [temp_user.email, settings.EMAIL_HOST_USER]
             )
             temp_user.save()
             return HttpResponseRedirect(reverse('chamran:home'))
-        return super().post(request ,*args, **kwargs)
+        return super().post(request, *args, **kwargs)
+
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
@@ -51,19 +54,19 @@ class SignupUser(generic.FormView):
 
     def get(self, request, *args, **kwargs):
         code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser ,unique=code)
+        temp_user = get_object_or_404(models.TempUser, unique=code)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterUserForm(request.POST)
         code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser ,unique=code)
+        temp_user = get_object_or_404(models.TempUser, unique=code)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             email = temp_user.email
             account_type = temp_user.account_type
-            user = User(username=username ,email=email)
+            user = User(username=username, email=email)
             user.set_password(password)
             user.save()
             if account_type == 'researcher':
@@ -79,13 +82,14 @@ class SignupUser(generic.FormView):
                 return expert.get_absolute_url()
 
             elif account_type == 'industry':
-                industry = IndustryUser(user=user )
+                industry = IndustryUser(user=user)
                 industry.save()
                 temp_user.delete()
                 return industry.get_absolute_url()
 
             return HttpResponseRedirect(reverse('chamran:home'))
         return super().post(request, *args, **kwargs)
+
 
 class LoginView(generic.FormView):
     template_name = 'registration/login.html'
@@ -103,7 +107,7 @@ class LoginView(generic.FormView):
                 except:
                     try:
                         return request.user.researcheruser.get_absolute_url()
-                    except: 
+                    except:
                         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -111,15 +115,15 @@ class LoginView(generic.FormView):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            entry_user = authenticate(request ,username=username ,password=password)
+            entry_user = authenticate(request, username=username, password=password)
             if entry_user is not None:
-                login(request ,entry_user)
-                try :
+                login(request, entry_user)
+                try:
                     user = ResearcherUser.objects.get(user=entry_user)
                     return user.get_absolute_url()
                 except:
                     try:
-                        user = ExpertUser.objects.get(user=entry_user)                
+                        user = ExpertUser.objects.get(user=entry_user)
                         return user.get_absolute_url()
                     except:
                         try:
@@ -130,40 +134,43 @@ class LoginView(generic.FormView):
             else:
                 next_form = forms.LoginForm()
                 context = {
-                    'error' : 'نام کاربری یا رمز شما اشتباه است',
-                    'form'  : next_form
-                    }
-                return render(request ,self.template_name ,context)
+                    'error': 'نام کاربری یا رمز شما اشتباه است',
+                    'form': next_form
+                }
+                return render(request, self.template_name, context)
+
 
 class LogoutView(generic.TemplateView):
     template_name = 'registration/base.html'
 
-    def get(self ,request ,*args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             logout(request)
             return HttpResponseRedirect(reverse('chamran:login'))
         return HttpResponseRedirect(reverse("chamran:home"))
 
+
 def find_user(email):
     try:
-        user = get_object_or_404(ExpertUser ,user__email=email)
+        user = get_object_or_404(ExpertUser, user__email=email)
         return 'expert'
     except:
         try:
-            user = get_object_or_404(IndustryUser ,user__email=email)
+            user = get_object_or_404(IndustryUser, user__email=email)
             return 'industry'
         except:
             try:
-                user = get_object_or_404(ResearcherUser ,user__email=email)
+                user = get_object_or_404(ResearcherUser, user__email=email)
                 return 'researcher'
             except:
                 return 'None'
     return 'None'
 
+
 class ResetPassword(generic.TemplateView):
     template_name = 'registration/reset_password.html'
 
-    def post(self ,request ,*args, **kwargs):
+    def post(self, request, *args, **kwargs):
         email = request.POST['email']
         try:
             temp_user = models.TempUser.objects.get(email=email)
@@ -172,7 +179,7 @@ class ResetPassword(generic.TemplateView):
             if result == 'None':
                 return HttpResponseRedirect(reverse('chamran:home'))
             account_type = result
-            temp_user = models.TempUser(email=email ,account_type=account_type)
+            temp_user = models.TempUser(email=email, account_type=account_type)
             temp_user.save()
 
         subject = 'Reset your password of Chamran Team account.'
@@ -184,10 +191,11 @@ class ResetPassword(generic.TemplateView):
             subject,
             mess,
             settings.EMAIL_HOST_USER,
-            [temp_user.email ,settings.EMAIL_HOST_USER]
+            [temp_user.email, settings.EMAIL_HOST_USER]
         )
 
-        return render(request ,'registration/password_reset_done.html' ,{})
+        return render(request, 'registration/password_reset_done.html', {})
+
 
 class ResetPasswordConfirm(generic.FormView):
     template_name = 'registration/password_reset_confirm.html'
@@ -195,12 +203,12 @@ class ResetPasswordConfirm(generic.FormView):
 
     def get(self, request, *args, **kwargs):
         code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser ,unique=code)
+        temp_user = get_object_or_404(models.TempUser, unique=code)
         return super().get(request, *args, **kwargs)
-    
-    def post(self ,request ,*args, **kwargs):
+
+    def post(self, request, *args, **kwargs):
         code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser ,unique=code)
+        temp_user = get_object_or_404(models.TempUser, unique=code)
         form = forms.ResetPasswordForm(request.POST)
         if form.is_valid():
             password = form.cleaned_data['password']
@@ -215,4 +223,4 @@ class ResetPasswordConfirm(generic.FormView):
                 return user.industryuser.get_absolute_url()
             elif account_type == 'researcher':
                 return user.researcheruser.get_absolute_url()
-        return super().post(request ,*args, **kwargs)
+        return super().post(request, *args, **kwargs)
