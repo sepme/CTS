@@ -1,10 +1,4 @@
 @import "fontiran.css";
-<<<<<<< HEAD
-@media (max-width: 575.98px) {
-    body {
-        background-color: #f8fdf7;
-        font-family: iranyekan;
-=======
 @media (max-width: 576px) {
     .mbottom-xs-10{
         margin-bottom: 10px;
@@ -12,17 +6,13 @@
     body {
         background-color: #f8fdf7;
         font-family: iranyekan, serif;
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         color: #fff;
         font-size: 14px;
         overflow-y: hidden;
     }
-<<<<<<< HEAD
-=======
     .container{
         padding: 0;
     }
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
     .upload {
         position: absolute;
         top: calc(100% - 40px);
@@ -80,29 +70,18 @@
 
     .mainInfo, .dialog {
         position: absolute;
-<<<<<<< HEAD
-        top: 50%;
-        left: 50%;
-        width: 80%;
-        transform: translate(-50%, -50%);
-=======
         top: 50px;
         left: 50%;
         width: 95%;
         transform: translate(-50%);
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         color: #262626;
         padding: 5px 10px 50px 10px;
         box-shadow: 0 0 50px #e3e3e3;
     }
-<<<<<<< HEAD
-
-=======
     .dialog{
         margin: 0 0 50px 0;
         overflow-x: hidden;
     }
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
     input, textarea, select {
         background-color: #fdfdfd;
         border: 1px solid #bdbdbd;
@@ -354,11 +333,7 @@
         display: block;
         width: 28px;
         height: 30px;
-<<<<<<< HEAD
-        position: absolute;
-=======
         position: fixed;
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         bottom: 20px;
         left: 20px;
     }
@@ -470,11 +445,6 @@
     }
 
     .info-card {
-<<<<<<< HEAD
-        margin: 20px 100px;
-        padding: 20px;
-        color: #000;
-=======
         margin: 10px 0;
         padding: 0;
         color: #000;
@@ -482,7 +452,6 @@
         -webkit-box-shadow: none;
         -moz-box-shadow:  none;
         box-shadow:  none;
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
     }
 
     .row {
@@ -526,16 +495,10 @@
 
     .inner-card {
         padding: 10px;
-<<<<<<< HEAD
-        margin: 20px auto;
-        background-color: #fff;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.08)
-=======
         margin: 0 auto;
         background-color: #f8fdf7;
         box-shadow: none;
         border: none;
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
     }
 
     .ch-card-item:last-child {
@@ -546,17 +509,7 @@
         margin-top: 5px;
         padding: 0 15px 20px 15px;
     }
-<<<<<<< HEAD
-
-    .header {
-        font-family: iranyekan;
-    }
-
     .sub-header {
-        font-family: iranyekan;
-=======
-    .sub-header {
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
         color: #6f7285;
     }
 
@@ -764,13 +717,6 @@
     .dialog-main {
         display: none;
     }
-<<<<<<< HEAD
-
-    .dialog {
-        padding-bottom: 30px;
-    }
-
-=======
     .establish-time , .time-left{
         width: fit-content;
         position: relative;
@@ -782,7 +728,6 @@
     .time-left{
         left: 0;
     }
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
     .close > i {
         position: absolute;
         top: -4px;
@@ -861,8 +806,6 @@
     .rotate--90 {
         transform: rotate(-90deg);
     }
-<<<<<<< HEAD
-=======
     .nav.nav-tabs{
         position: relative;
         height: 40px;
@@ -908,5 +851,146 @@
         border-radius: 0 0 0.25em 0.25em;
         padding: 10px 0;
     }
->>>>>>> a437e573a91c12313bf99138fb06e1c01eae7a91
+    /*
+    * vote
+    */
+    .center-dialog{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-top-left-radius: 15px;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        width: 98%;
+        min-height: 50px;
+        padding: 35px 15px;
+    }
+    .vote-question{
+        border: 1px solid #bdbdbd;
+        border-radius: 50%;
+        position: absolute;
+        bottom: -5px;
+        right: -10px;
+        height: 30px;
+        width: 30px;
+        color: #bdbdbd;
+        background-color: #ffffff;
+        box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.16);
+    }
+    .vote-question:hover{
+        color: #3ccd1c;
+        border-color: #3ccd1c;
+        box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.16);
+        cursor: pointer;
+    }
+    .vote-question > span{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -45%);
+        font-size: 22px;
+        font-weight:300;
+    }
+    input.vote-select + label{
+        position: relative;
+        top: 50%;
+        transform: translateY(50%);
+    }
+    input.vote-select.l +{
+        position: relative;
+        top: 0%;
+        left: 0%;
+        /*-webkit-transform: translate(-50%, -50%);*/
+        /*-moz-transform: translate(-50%, -50%);*/
+        /*-ms-transform: translate(-50%, -50%);*/
+        /*-o-transform: translate(-50%, -50%);*/
+        /*transform: translate(-50%, -50%);*/
+        width: 15px;
+        height: 15px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+    }
+    input.vote-select[value='0'] + label{
+        height: 40px;
+        width: 40px;
+        border: 1px solid #ff0505;
+        background-color: #ffffff;
+    }
+    input.vote-select[value='0'] + label:hover, input.vote-select[value='0']:checked + label{
+        background-color: #ff0505;
+        cursor: pointer;
+    }
+    input.vote-select[value='1'] + label{
+        height: 30px;
+        width: 30px;
+        border: 1px solid #ff8f00;
+        background-color: #ffffff;
+    }
+    input.vote-select[value='1'] + label:hover, input.vote-select[value='1']:checked + label{
+        background-color: #ff8f00;
+        cursor: pointer;
+    }
+    input.vote-select[value='2'] + label{
+        height: 20px;
+        width: 20px;
+        border: 1px solid #fff600;
+        background-color: #ffffff;
+    }
+    input.vote-select[value='2'] + label:hover, input.vote-select[value='2']:checked + label{
+        background-color: #fff600;
+        cursor: pointer;
+    }
+    input.vote-select[value='3'] + label{
+        height: 20px;
+        width: 20px;
+        border: 1px solid #78be20;
+        background-color: #ffffff;
+    }
+    input.vote-select[value='3'] + label:hover, input.vote-select[value='3']:checked + label{
+        background-color: #78be20;
+        cursor: pointer;
+    }
+    input.vote-select[value='4'] + label{
+        height: 30px;
+        width: 30px;
+        border: 1px solid #009639;
+        background-color: #ffffff;
+    }
+    input.vote-select[value='4'] + label:hover, input.vote-select[value='4']:checked + label{
+        background-color: #009639;
+        cursor: pointer;
+    }
+    input.vote-select[value='5'] + label{
+        height: 40px;
+        width: 40px;
+        border: 1px solid #006747;
+        background-color: #ffffff;
+    }
+    input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked + label{
+        background-color: #006747;
+        cursor: pointer;
+    }
+    .vote-content{
+        display: flex;
+        padding-right: 20px;
+        font-weight: 300;
+    }
+    .vote-content > div > .number{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+    .vote-select-label{
+        margin: 5px;
+        top: 0;
+        right: 0;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+    }
 }
