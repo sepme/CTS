@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
     <link rel="stylesheet" href="{% static 'industry/css/inputTags.min.css' %}">
 {% endblock %}
-{% block name %}{{industry.industryform.name}}{% endblock %}
+{% block name %}رضا باسره{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -17,17 +17,17 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="persian_label">عنوان پروژه (به فارسی)</label>
-                                <input id="persian_label" type="text" name="project_title_persian" class="w-100">
+                                <input id="persian_label" type="text" name="persian_label" class="w-100">
                             </div>
                             <div class="col-lg-6">
                                 <label for="latin_label">عنوان پروژه (به لاتین)</label>
-                                <input id="latin_label" type="text" name="project_title_english" class="w-100">
+                                <input id="latin_label" type="text" name="latin_label" class="w-100">
                             </div>
                         </div>
                         <div class="row" style="margin-top: 5px">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">کلیدواژه ها</span>
-                                <div id="keys" class="w-100" name="key_words"></div>
+                                <div id="keys" class="w-100"></div>
                             </div>
                         </div>
                         <div class="row">
@@ -35,11 +35,11 @@
                                 <span class="sub-header" style="position: relative;top: 15px;">روش تحقیق : </span>
                             </div>
                             <div class="col-lg-2 text-right">
-                                <input type="radio" id="quantity" name="research_methodology" class="label-check-radio" value=1>
+                                <input type="radio" id="quantity" name="research_methodology" class="label-check-radio">
                                 <label for="quantity" style="padding: 5px 9px;">کمی</label>
                             </div>
                             <div class="col-lg-2 text-right">
-                                <input type="radio" id="quality" name="research_methodology" class="label-check-radio" value=0>
+                                <input type="radio" id="quality" name="research_methodology" class="label-check-radio">
                                 <label for="quality">کیفی</label>
                             </div>
                             <div class="col-lg-4"></div>
@@ -55,19 +55,19 @@
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="main_problem_and_importance"></textarea>
+                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="progress_profitability"></textarea>
+                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">برآورد شما از سود مالی این پروژه چگونه است؟</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="predict_profit"></textarea>
+                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                     </div>
@@ -81,13 +81,13 @@
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید.</span>
-                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="approach"></textarea>
+                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header"> این راه حل چه مشکلاتی می‌تواند داشته باشد؟</span>
-                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="innovation"></textarea>
+                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                     </div>
@@ -101,25 +101,25 @@
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="required_lab_equipment" ></textarea>
+                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="required_technique"></textarea>
+                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا مراحل انجام پروژه خود را مشخص کنید.</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="project_phase"></textarea>
+                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">پروژه شما به چه مقدار بودجه نیاز دارد؟</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="required_budget"></textarea>
+                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                     </div>
@@ -133,11 +133,11 @@
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟</span>
-                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" name="policy"></textarea>
+                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="chamran_btn" style="left: 0;bottom: -1px">افزودن پروژه</button>
+                    <button type="button" class="chamran_btn" style="left: 0;bottom: -1px">افزودن پروژه</button>
                 </form>
             </div>
         </div>

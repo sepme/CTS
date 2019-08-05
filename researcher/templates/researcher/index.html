@@ -1,20 +1,24 @@
 {% extends "researcher/layouts/base_layout.html" %}
 
-{% block title %}<title>پژوهشگر</title>{% endblock %}
+{% block title %}<title>پروژه ها</title>{% endblock %}
 
 {% block initial_information %}
-    {% include 'researcher/layouts/initial_information.html' %}
+{#    {% include 'researcher/layouts/initial_information.html' %}#}
 {% endblock %}
-{% block blur %}blur-div{% endblock %}
+
+{% block dialog %}
+    {% include 'researcher/layouts/showProject.html' %}
+    {% include 'researcher/layouts/vote_dialog.html' %}
+{% endblock %}
 
 {% block name %}رضا باسره{% endblock %}
-<<<<<<< HEAD
 
 {% block content %}
     {% include 'researcher/layouts/projectList.html' %}
 {% endblock %}
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
     <script type="text/javascript">
         $("#fancy-tree").fancytree({
           extensions: ["glyph"],
@@ -91,6 +95,3 @@
       });
     </script>
 {% endblock %}
-
-=======
->>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End

@@ -446,19 +446,118 @@ function dialog_comment_init() {
         $("textarea#comment").focus();
     });
 }
-function vote_dialog_init() {
-    var swiper = new Swiper('.swiper-container', {
-      navigation: {
-        nextEl: '.next-button',
-        prevEl: '.prev-button',
-      },
+function vote_slider_industry(slide_count) {
+    industry_counter = 0;
+    $(".industry-voting .next-button").click(function () {
+        alert("industry_counter = " + industry_counter);
+        if( industry_counter < slide_count - 1) {
+            industry_counter ++;
+            progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
+            width = parseFloat($(".industry-voting .progress-line").css('width'));
+            $(".industry-voting .progress-line").css('width', width + progressWidth);
+            $(".industry-voting .swiper-wrapper").css({
+                "transform" : "translate3d(-" + 100 * industry_counter +"%, 0, 0)",
+                "transition-duration" : "0.3s"
+            });
+        }
+        if( industry_counter === slide_count - 1) {
+            $(this).html("<i class='fas fa-check'></i>" +
+                "ثبت");
+        }
+        if(industry_counter > 0) {
+            $(".industry-voting .prev-button").removeClass("disabled");
+        }
     });
-
+    $(".industry-voting .prev-button").click(function () {
+        alert("industry_counter = " + industry_counter);
+        if(industry_counter > 0) {
+            industry_counter --;
+            progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
+            width = parseFloat($(".industry-voting .progress-line").css('width'));
+            $(".industry-voting .progress-line").css('width', width - progressWidth);
+            $(".industry-voting .swiper-wrapper").css({
+                "transform" : "translate3d(-" + 100 * industry_counter +"%, 0, 0)",
+                "transition-duration" : "0.3s"
+            });
+        }
+        if( industry_counter === slide_count - 2) {
+            $(".industry-voting .next-button").html("<i class='fas fa-arrow-right'></i>" +
+                "بعدی");
+        }
+        if(industry_counter === 0) {
+            $(this).addClass('disabled');
+        }
+    });
+}
+function vote_slider_researcher(slide_count) {
+    researcher_counter = 0;
+    $(".researcher-voting .next-button").click(function () {
+        alert("researcher_counter = " + researcher_counter);
+        if (researcher_counter < slide_count - 1) {
+            researcher_counter++;
+            progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
+            width = parseFloat($(".researcher-voting .progress-line").css('width'));
+            $(".researcher-voting .progress-line").css('width', width + progressWidth);
+            $(".researcher-voting .swiper-wrapper").css({
+                "transform": "translate3d(-" + 100 * researcher_counter + "%, 0, 0)",
+                "transition-duration": "0.3s"
+            });
+        }
+        if (researcher_counter === slide_count - 1) {
+            $(this).html("<i class='fas fa-check'></i>" +
+                "ثبت");
+        }
+        if (researcher_counter > 0) {
+            $(".researcher-voting .prev-button").removeClass("disabled");
+        }
+    });
+    $(".researcher-voting .prev-button").click(function () {
+        alert("researcher_counter = " + researcher_counter);
+        if (researcher_counter > 0) {
+            researcher_counter--;
+            progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
+            width = parseFloat($(".researcher-voting .progress-line").css('width'));
+            $(".researcher-voting .progress-line").css('width', width - progressWidth);
+            $(".researcher-voting .swiper-wrapper").css({
+                "transform": "translate3d(-" + 100 * researcher_counter + "%, 0, 0)",
+                "transition-duration": "0.3s"
+            });
+        }
+        if (researcher_counter === slide_count - 2) {
+            $(".researcher-voting .next-button").html("<i class='fas fa-arrow-right'></i>" +
+                "بعدی");
+        }
+        if (researcher_counter === 0) {
+            $(this).addClass('disabled');
+        }
+    });
+}
+function vote_dialog_init() {
+    flag = 0;
+    $(".vote-question").hover(function () {
+        $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
+            "color": "#3ccd1c",
+            "border-color":"#3ccd1c"
+        });
+    }, function () {
+        if(!$(this).parent('.col-lg-12').children('.vote-question-text').hasClass('fix')) {
+            $(this).parent('.col-lg-12').children('.vote-question-text').slideUp();
+        } else {
+            $(this).parent('.col-lg-12').children('.vote-question-text').css({
+                "color": "#707070",
+                "border-color":"#707070"
+            })
+        }
+    }).click(function () {
+        $(this).parent('.col-lg-12').children('.vote-question-text').toggleClass('fix');
+    });
     $(".vote").click(function () {
         if($('.vote-dialog').css('display') === 'none') {
             $('.vote-dialog').slideDown();
+            $('.vote > .dots').addClass('expand');
         }else{
             $('.vote-dialog').slideUp();
+            $('.vote > .dots').removeClass('expand');
         }
     });
     $(".vote-dialog > .industry-back").hover(function () {
@@ -467,8 +566,10 @@ function vote_dialog_init() {
         $(this).removeClass('hover');
     }).click(function () {
         $(".project-details").slideUp('slow').delay('slow');
-        $(".voting").delay('slow').slideDown('slow');
-        close_dialog('.voting');
+        $(".industry-voting").delay('slow').slideDown('slow');
+        close_dialog('.industry-voting');
+        vote_slider_industry(12);
+        $(".progress-line").css("width","calc(100% / 12)");
     });
     $(".vote-dialog > .researcher-back").hover(function () {
         $(this).addClass('hover');
@@ -476,7 +577,9 @@ function vote_dialog_init() {
         $(this).removeClass('hover');
     }).click(function () {
         $(".project-details").slideUp('slow').delay('slow');
-        $(".voting").delay('delay').slideDown('slow');
-        close_dialog('.voting');
+        $(".researcher-voting").delay('delay').slideDown('slow');
+        close_dialog('.researcher-voting');
+        vote_slider_researcher(10);
+        $(".progress-line").css("width","calc(100% / 10)");
     });
 }

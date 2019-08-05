@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f4e851c1-596f-4fd8-acfc-6030a8ad2762" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/expert/static/expert/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/static/expert/css/style_xs.css" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/css/style_xs.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/static/expert/font/Shabnam-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/static/expert/font/Shabnam-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/static/expert/font/Shabnam.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/static/expert/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/js/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/templates/expert/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/dialog.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/initial_information.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/showProject.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/templates/expert/userInfo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/.idea/base_profile_expert.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/css/rangeslider.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/industry/static/industry/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/font/Shabnam-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/font/Shabnam-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/font/Shabnam.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/js/rangeslider.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/industry/static/industry/js/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/layouts/initial_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/layouts/initial_information.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/newProject.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/newProject.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/project_list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/userInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/userInfo.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/.idea/base_profile_expert.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/static/researcher/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/font/Shabnam-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/font/Shabnam-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/font/Shabnam.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/static/researcher/js/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/templates/researcher/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/templates/researcher/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/templates/researcher/layouts/initial_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/templates/researcher/layouts/initial_information.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/templates/researcher/userInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/templates/researcher/userInfo.html" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="952" />
+    <option name="width" value="977" />
+    <option name="height" value="1038" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="fonts" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../opencv/venv" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="ChamranTeamSite" type="Python.DjangoServer" factoryName="Django server">
+      <module name="ChamranTeamSite" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="ChamranTeamSite.settings" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Reza Basereh\Desktop\Desktop Folders\chamranFile\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f4e851c1-596f-4fd8-acfc-6030a8ad2762" name="Default Changelist" comment="" />
+      <created>1565013773722</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1565013773722</updated>
+      <workItem from="1565013777641" duration="624000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="624000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Python Console" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="SciView" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+</project>
