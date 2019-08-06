@@ -67,7 +67,6 @@
         filter: blur(10px);
         opacity: 0.9;
     }
-
     .mainInfo, .dialog {
         position: absolute;
         top: 50px;
