@@ -7,6 +7,7 @@ app_name = 'chamran'
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
     path('login/', views.LoginView.as_view(), name='login'),
+    path('userpass', views.UserPass.as_view()),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('signup/<str:account_type>/<uuid:code>', views.SignupUser.as_view(), name='signup_username'),
     path('signup/', views.SignupEmail.as_view(), name='signup_email'),

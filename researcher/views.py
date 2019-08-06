@@ -15,9 +15,9 @@ class Index(generic.FormView):
             self.researcher = get_object_or_404(models.ResearcherUser, user=request.user)
         except:
             return HttpResponseRedirect(reverse('chamran:login'))
-        print(self.researcher.status.status)
-        if self.researcher.status.status == 'signed_up':
-            return super().get(request, *args, **kwargs)
+        # print(self.researcher.status.status)
+        # if self.researcher.status.status == 'signed_up':
+        #     return super().get(request, *args, **kwargs)
         return render(request, 'researcher/index.html', self.get_context_data())
 
     def get_context_data(self, **kwargs):
@@ -106,14 +106,6 @@ class UserInfo(generic.FormView):
             profile.save()
             return HttpResponseRedirect(reverse("researcher:index"))
         return super().post(self, request, *args, **kwargs)
-
-
-class Login(generic.TemplateView):
-    template_name = 'registration/login.html'
-
-
-class UserPass(generic.TemplateView):
-    template_name = 'registration/user_pass.html'
 
 
 def signup(request, username):

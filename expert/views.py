@@ -7,3 +7,7 @@ class Index(generic.TemplateView):
 
 class UserInfo(generic.TemplateView):
     template_name = 'expert/userInfo.html'
+
+
+class ResearcherRequest(generic.TemplateView):
+    template_name = 'expert/researcherRequest.html'

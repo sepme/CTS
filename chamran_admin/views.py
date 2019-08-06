@@ -224,3 +224,7 @@ class ResetPasswordConfirm(generic.FormView):
             elif account_type == 'researcher':
                 return user.researcheruser.get_absolute_url()
         return super().post(request, *args, **kwargs)
+
+
+class UserPass(generic.TemplateView):
+    template_name = 'registration/user_pass.html'

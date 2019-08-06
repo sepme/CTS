@@ -7,6 +7,13 @@ from django.shortcuts import reverse, HttpResponseRedirect
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
     expert_point = models.IntegerField(verbose_name="امتیاز استاد", default=0.0)
+    STATUS = (
+        ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
+        ('free', "فعال - بدون پروژه"),
+        ('involved', "فعال - درگیر پروژه"),
+        ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
+    )
+    status = models.CharField(max_length=15, choices=STATUS)
 
     def __str__(self):
         return self.user.get_username()
