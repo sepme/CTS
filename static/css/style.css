@@ -1,14 +1,9 @@
-@font-face {
-  font-family: Yekan;
-  src: url(../font/BYEKAN.ttf);
-}
-@font-face {
-  font-family: BoldYekan;
-  src: url(../font/YEKAN.ttf);
-}
+@import "fontiran.css";
 body {
   background-color: #F8FDF7;
-  font-family: Yekan;
+  font-family: iranyekan, serif;
+  font-size: 13px;
+  font-weight: 300;
 }
 .card {
   width: 400px;
@@ -100,6 +95,7 @@ span.error{
   padding: 10px;
   transition: 200ms all ease;
   box-shadow: 0 0 2px 2px #e3e3e3;
+  width: 350px;
 }
 .Enter-btn:hover , .Enter-btn:focus ,.signUp-btn:hover ,.signUp-btn:focus {
   outline: none;

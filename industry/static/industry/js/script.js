@@ -1,3 +1,10 @@
+$(window).on("load",function () {
+    init_windowSize();
+    load_dialog();
+}).on("resize",function () {
+    init_windowSize();
+    load_dialog();
+});
 $(document).ready(function(){
     // variable
     edu_count = 0;
@@ -20,7 +27,6 @@ $(document).ready(function(){
            }
         });
     }else{
-        // loading();
         init_windowSize();
         init_dialog_btn(".chamran-btn-info" , ".showProject");
         // if($(".mainInfo-body").css("display") === "block"){

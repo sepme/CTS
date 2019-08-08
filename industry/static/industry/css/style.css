@@ -33,11 +33,12 @@
     padding-bottom: 40px;
 }
 body {
-  background-color: #f8fdf7;
-  font-family: iranyekan, serif;
-  color: #fff;
-  font-size: 14px;
-  overflow-y: hidden;
+    background-color: #f8fdf7;
+    font-family: iranyekan, serif;
+    font-weight: 300;
+    font-size: 13px;
+    color: #fff;
+    overflow-y: hidden;
 }
 /* index.html*/
 h5{
@@ -427,6 +428,9 @@ span.title-back{
     border-radius: 30px;
     background-color: #fff;
 }
+.shadow-back{
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 0 5px 0 #ffffff00;
+}
 .project-info-innerDiv{
     border: 1px solid #bdbdbd;
     background-color: #fff;
@@ -739,6 +743,7 @@ input, textarea, select{
   margin-top: 20px;
   direction: rtl;
   padding-right: 10px;
+  font-size: 13px;
 }
 input:focus, textarea:focus{
   outline: none;
@@ -1048,10 +1053,10 @@ hr{
   outline: none;
 }
 .inner-card{
-  padding: 10px;
-  margin: 20px auto;
-  background-color: #fff;
-  box-shadow: 0 0 20px rgba(0,0,0,0.08)
+    padding: 10px;
+    margin: 25px auto;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 0 rgba(0,0,0,0.16);
 }
 .ch-card-item:last-child{
   margin-bottom: 25px;
@@ -1061,7 +1066,8 @@ hr{
   padding:0 15px 20px 15px;
 }
 .header{
-  color: #6f7285;
+    color: #6f7285;
+    font-weight: 400;
 }
 .sub-header{
   color: #6f7285;
@@ -1218,16 +1224,20 @@ span.star-warning:after{
 .label-check-radio{
 }
 .label-check-radio+label{
-  position: absolute;
-  top: 10px;
-  padding: 5px;
-  border: 1px solid #fff;
-  border-radius: 20px;
+    position: absolute;
+    top: 10px;
+    padding: 5px;
+    min-width: 45px;
+    text-align: center;
+    border: 1px solid #6f7285;
+    border-radius: 5px 0 5px 0;
+    transition: all ease-in-out 0.3s;
 }
 .label-check-radio+label:hover, .label-check-radio:checked+label{
-  border: 1px solid #3CCD1C;
-  border-radius: 20px;
-  color: #3CCD1C;
+    border: 1px solid #3CCD1C;
+    border-radius: 20px;
+    color: #3CCD1C;
+    cursor: pointer;
 }
 input[name="foreign_work"]+label:hover , input[name="foreign_work"]:checked+label{
   border-radius: 50%;

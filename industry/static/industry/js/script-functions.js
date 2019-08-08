@@ -77,7 +77,7 @@ function input_focus(){
             return false;
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
         $(inputLabel).css({
-            "font-size":"13px",
+            "font-size":"12px",
             "top":"0px",
             "right":"15px",
             "color":"#3CCD1C"
@@ -90,7 +90,7 @@ function input_focus(){
         $(inputLabel).css("color","#6f7285");
         if($(this).val() === ''){
             $(inputLabel).css({
-                "font-size":"14px",
+                "font-size":"13px",
                 "top":"28px",
                 "right":"25px",
                 "color":"#6f7285"

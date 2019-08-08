@@ -30,11 +30,12 @@
     padding-bottom: 40px;
 }
 body {
-  background-color: #f8fdf7;
-  font-family: iranyekan, serif;
-  color: #fff;
-  font-size: 14px;
-  overflow-y: hidden;
+    background-color: #f8fdf7;
+    font-family: iranyekan, serif;
+    color: #fff;
+    font-weight: 300;
+    font-size: 13px;
+    overflow-y: hidden;
 }
 .upload{
   position: absolute;
@@ -108,7 +109,7 @@ img{
   border-top-left-radius: 15px;
   box-shadow: 0 0 50px #e3e3e3;
   margin: 70px auto;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 .center-dialog{
     position: absolute;
@@ -219,13 +220,13 @@ label{
   color: #6f7285;
   transition: 300ms all ease;
 }
-i.fa-plus{
-  position: absolute;
-  top: 33px;
-  left: 25px;
-  color: #6f7285;
-  cursor: pointer;
-}
+/*i.fa-plus{*/
+/*  position: absolute;*/
+/*  top: 33px;*/
+/*  left: 25px;*/
+/*  color: #6f7285;*/
+/*  cursor: pointer;*/
+/*}*/
 .rankDiv{
   display: flex;
 }
@@ -510,11 +511,11 @@ hr{
   outline: none;
 }
 .inner-card{
-  padding: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background-color: #fff;
-  box-shadow: 0 0 20px rgba(0,0,0,0.08)
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 0 rgba(0,0,0,0.16);
 }
 .ch-card-item:last-child{
   margin-bottom: 25px;
@@ -524,9 +525,12 @@ hr{
   padding:0 15px 20px 15px;
 }
 .header{
+    font-weight: 400;
 }
 .sub-header{
-  color: #6f7285;
+    color: #6f7285;
+    font-weight: 300;
+    font-size: 12px;
 }
 ::-webkit-scrollbar {
   width: 10px;
@@ -572,10 +576,33 @@ hr{
 table{
   color: #6f7285;
   margin: auto;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-collapse: separate!important;
 }
 td{
   position: relative;
   padding: 0;
+}
+table > thead{
+  background-color: #f8fdf7;
+  color: #707070;
+}
+table > thead > tr > td{
+  border-top: none!important;
+}
+table > tbody > tr > td{
+  border-bottom: none!important;
+}
+.table td{
+  padding: 5px;
+  vertical-align: middle;
+  border-left: 1px solid rgba(0, 0, 0, 0.125);
+}
+.table td:last-child{
+    border-left: none;
 }
 input[type="radio"] {
   visibility: hidden;
@@ -712,14 +739,14 @@ input[name="foreign_work"]+label:hover , input[name="foreign_work"]:checked+labe
 }
 input#search_technique{
     position: absolute;
-    top: 10px;
+    top: 0;
     left: 10px;
     padding-left: 30px;
     margin: 0;
 }
 input#search_technique+label{
     position: absolute;
-    top: 20px;
+    top: 10px;
     left: 15px;
     width: fit-content;
     right: auto;
@@ -729,34 +756,52 @@ input#search_technique+label{
   color: #3CCD1C;
 
 }
+.technique-list, #fancy-tree {
+  margin-top: 56px;
+  margin-bottom: 16px;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  padding-right: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 400px;
+}
+.display-toggle{
+  display: none;
+}
+dl, ol, ul{
+    outline: none;
+}
+ul.ui-fancytree > li{
+  list-style-type: none;
+  padding: 2px;
+  color: #6f7285;
+}
+/*ul.ui-fancytree > li.active{*/
+/*  color: #6d1a00;*/
+/*}*/
+/*ul.ui-fancytree > li:hover{*/
+/*  color: #3CCD1C;*/
+/*  cursor: pointer;*/
+/*}*/
+.fa-chevron-left, .fa-chevron-down, .fa-tools, .fa-screwdriver{
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: all ease-in-out 200ms;
+}
+.rotate--90{
+    transform: rotate(-90deg) !important;
+    display: block;
+}
+.rotate-90{
+    transform: rotate(90deg) !important;
+    display: block;
+}
 /*
 * index.html
  */
 .search_technique{
   margin-bottom: 50px;
-}
-#fancy-tree {
-  color: #000;
-}
-ul.ui-fancytree{
-  padding-right: 0;
-}
-ul.ui-fancytree > li{
-  list-style-type: none;
-  text-align: right;
-  padding: 2px;
-  width: 100%;
-  color: #6f7285;
-}
-ul.ui-fancytree > li > span > span{
-  margin-left: 2px;
-}
-ul.ui-fancytree > li.active{
-  color: #6d6d6d;
-}
-ul.ui-fancytree > li:hover{
-  color: #3CCD1C;
-  cursor: pointer;
 }
 .search_technique > input {
   width: calc(100% - 15px);
@@ -1144,6 +1189,15 @@ span.title-back{
     -moz-border-radius: 30px;
     border-radius: 30px;
     background-color: #fff;
+}
+.education-btn > i, .executive-btn > i, .studious-btn > i, .article-btn > i{
+  position: absolute;
+  top: 5px;
+  left: 15px;
+}
+.education-btn > i:hover, .executive-btn > i:hover, .studious-btn > i:hover, .article-btn > i:hover{
+  color: #3ccd1c;
+  cursor: pointer;
 }
 .project-info-innerDiv{
     border: 1px solid #bdbdbd;
