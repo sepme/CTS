@@ -118,8 +118,22 @@ function accept_project(){
         $(".showProject").slideUp('slow').delay('slow');
         $(".project-details").delay('slow').slideDown('slow');
         close_dialog(".project-details");
+        $('.add-researcher').hover(function () {
+            $(this).addClass("hover");
+        }, function () {
+            $(this).removeClass("hover");
+        });
         vote_dialog_init();
         load_dialog();
+    });
+}
+function search_input(className) {
+    $(className).focusin(function () {
+        $(this).css("width", "50%");
+    }).focusout(function () {
+        if( $(this).val() === '') {
+            $(this).css("width", "initial");
+        }
     });
 }
 function close_dialog(className){

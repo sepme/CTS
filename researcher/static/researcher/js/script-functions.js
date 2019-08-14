@@ -110,6 +110,15 @@ function cancel_add(className){
         }
     });
 }
+function search_input(className) {
+    $(className).focusin(function () {
+        $(this).css("width", "50%");
+    }).focusout(function () {
+        if( $(this).val() === '') {
+            $(this).css("width", "initial");
+        }
+    });
+}
 function close_dialog(className){
     $(".close").click(function (){
         $(className).css("display","none");

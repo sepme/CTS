@@ -11,7 +11,7 @@ $(document).ready(function(){
     exe_count = 0;
     stu_count = 0;
     art_count = 0;
-
+    search_input(".search_message");
     input_focus();
     if($(window).width() < 575.98){
         $(".main").removeClass("blur-div");
@@ -29,6 +29,7 @@ $(document).ready(function(){
     }else{
         init_windowSize();
         init_dialog_btn(".chamran-btn-info" , ".showProject");
+        init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");

@@ -13,9 +13,12 @@
   height: 50px;
 }
 .comment-body{
-  width: 100%;
+  width: 75%;
   position: relative;
   padding: 5px;
+  text-align: right;
+  text-align: -webkit-right;
+  text-align: -moz-right;
   height: 100%;
   min-height: 50px;
   border-radius: 0.25em;
@@ -77,8 +80,8 @@
   border-radius: 3px;
 }
 label[for=comment-attach]{
-  top: 0;
-  right: 30px;
+  top: -25px;
+  right: 0;
 }
 #comment{
   padding-bottom: 30px;
@@ -151,6 +154,9 @@ label[for=comment-attach]{
 .your-comment {
   padding-left: 70px;
   padding-right: 20px;
+  text-align: left;
+  text-align: -webkit-left;
+  text-align: -moz-left;
 }
 .your-comment > .comment-profile {
   position: absolute;

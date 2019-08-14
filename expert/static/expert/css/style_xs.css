@@ -4,7 +4,7 @@
         margin-bottom: 10px;
     }
     body {
-        background-color: #f8fdf7;
+        background-color: #fff;
         font-family: iranyekan, serif;
         color: #fff;
         font-size: 14px;
@@ -317,6 +317,7 @@
         left: 0;
         overflow-y: scroll;
         overflow-x: hidden;
+        height: calc(100vh - 70px);
     }
     .top-bar {
         background-color: #fff;
@@ -915,8 +916,8 @@
         border-radius: 50%;
     }
     input.vote-select[value='0'] + label{
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
         border: 1px solid #ff0505;
         background-color: #ffffff;
     }
@@ -925,8 +926,8 @@
         cursor: pointer;
     }
     input.vote-select[value='1'] + label{
-        height: 30px;
-        width: 30px;
+        height: 20px;
+        width: 20px;
         border: 1px solid #ff8f00;
         background-color: #ffffff;
     }
@@ -991,5 +992,43 @@
         -webkit-border-radius: 50%;
         -moz-border-radius: 50%;
         border-radius: 50%;
+    }
+    /*
+    * Messages
+     */
+    .messaging{
+        margin-top: 20px;
+    }
+    .slide-messages {
+        display: block;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .slide-messages::-webkit-scrollbar{
+        width: 0;
+        height: 0;
+    }
+    .message-head {
+        min-width: 60%;
+    }
+    .message-body > button {
+        margin: 15px auto 20px auto;
+    }
+    .slide-messages .slide-message{
+        display: inline-block;
+        white-space: normal;
+        max-width: 60%;
+    }
+    .comment-body{
+        width: 100%;
+    }
+    .message-body{
+        overflow: hidden;
+    }
+    .message-show .dialog{
+        width: 95%;
     }
 }

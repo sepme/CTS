@@ -1,10 +1,18 @@
+$(window).on("load",function () {
+    init_windowSize();
+    load_dialog();
+}).on("resize",function () {
+    init_windowSize();
+    load_dialog();
+});
 $(document).ready(function(){
     // variable
     edu_count = 0;
     exe_count = 0;
     stu_count = 0;
-
+    init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
     input_focus();
+    search_input(".search_message");
     if($(window).width() < 575.98){
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {

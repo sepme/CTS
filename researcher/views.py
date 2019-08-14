@@ -113,3 +113,6 @@ def signup(request, username):
     researcher = models.ResearcherUser(user=user)
     researcher.save()
     return HttpResponseRedirect(reverse('researcher:index'))
+
+class Messages(generic.TemplateView):
+    template_name = 'researcher/messages.html'

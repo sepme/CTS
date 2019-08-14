@@ -11,3 +11,7 @@ class UserInfo(generic.TemplateView):
 
 class ResearcherRequest(generic.TemplateView):
     template_name = 'expert/researcherRequest.html'
+
+
+class Messages(generic.TemplateView):
+    template_name = 'expert/messages.html'

@@ -408,7 +408,7 @@ input.vote-select[value='4'] + label:hover, input.vote-select[value='4']:checked
     border: 1px solid #bdbdbd;
     border-radius: 0.25em;
     background-color: #f8fdf7;
-    padding: 25px 10px;
+    padding: 45px 10px 25px 10px;
 }
 span.title{
     position: absolute;
@@ -1485,4 +1485,279 @@ div.inputTags-list span.inputTags-item{
     border-radius: 20px;
     color: #3CCD1C;
     cursor: pointer;
+}
+
+/*
+ * Mesages
+*/
+.news-message {
+
+}
+.search-message {
+    position: absolute;
+    top: -15px;
+    left: 25px;
+    width: 100%;
+}
+.search-message button{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    position: absolute;
+    top: 50%;
+    left: 0;
+}
+.search-message input.search_message{
+    -webkit-transition: ease 0.5s;
+    -moz-transition: ease 0.5s;
+    -ms-transition: ease 0.5s;
+    -o-transition: ease 0.5s;
+    transition: ease 0.5s;
+}
+.news-message:hover, .alert-message:hover, .notice-message:hover {
+    -webkit-box-shadow: 0px 0px 10px 0 rgba(0,0,0,0.16);
+    -moz-box-shadow: 0px 0px 10px 0 rgba(0,0,0,0.16);
+    box-shadow: 0px 0px 10px 0 rgba(0,0,0,0.16);
+    cursor: pointer;
+}
+.news-message-sm, .notice-message-sm, .alert-message-sm {
+    padding: 5px 5px 5px 65px;
+    margin: 5px auto;
+    border-right: 5px solid #707070;
+    min-height: 70px;
+}
+.notice-message-sm {
+    border-right-color: #3ccd1c;
+}
+.alert-message-sm {
+    border-right-color: #ff4545;
+}
+.message-head {
+    position: relative;
+    background-color: #707070;
+    color: #fff;
+    min-height: 200px;
+    min-width: 100px;
+}
+.alert-message > .message-head {
+    background-color: #ff4545;
+}
+.notice-message > .message-head {
+    background-color: #3ccd1c;
+}
+.message-head > .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.message-head > .icon > img {
+    width: 100px;
+    border-radius: 0;
+}
+.alert-message >.message-head > .icon > img {
+    width: 80px;
+}
+.message-head > data {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+.message-body {
+    background-color: #ffffff;
+    color: #000;
+    text-align: center;
+    padding: 5px;
+}
+.message-body > .title, .message-head-sm > .title {
+    font-size: 14px;
+    font-weight: 400;
+}
+.message-body > .body {
+    text-align: justify;
+}
+.message-body > .message-code, .message-body-sm > .message-code {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    font-size: 12px;
+}
+.message-body > button {
+    border: 1px solid #707070;
+    color: #707070;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
+    margin: 15px auto;
+    outline: none;
+}
+.alert-message > .message-body > button{
+    border-color: #ff4545;
+    color: #ff4545;
+}
+.notice-message > .message-body > button{
+    border-color: #3ccd1c;
+    color: #3ccd1c;
+}
+.message-body > button:hover {
+    -webkit-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.16);
+}
+.message-body-sm > button{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    outline: none;
+    border: 1px solid #707070;
+    -webkit-box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
+}
+.alert-message-sm button {
+    border-color: #ff4545;
+    color: #ff4545;
+}
+.notice-message-sm button {
+    border-color: #3ccd1c;
+    color: #3ccd1c;
+}
+.message-body-sm > button:hover{
+    -webkit-box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.16);
+    -moz-box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.16);
+    box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.16);
+}
+/*
+* Message Dialog
+ */
+.message-innerDiv{
+    padding: 10px;
+    text-align: right;
+}
+.message-show .dialog{
+    width: 50%;
+    padding: 0;
+}
+.message-show-image > img{
+    border-radius: 0.25em;
+    width: 100%;
+    margin: 5px auto;
+}
+.message-show-head > .title {
+    font-size: 17px;
+    font-weight: 400;
+}
+.message-show-head > .date {
+    display: block;
+    float: left;
+    color: #3ccd1c;
+    font-weight: 500;
+}
+.message-show-body{
+    line-height: 25px;
+}
+.message-show-body > .message-writer{
+    font-weight: 400;
+}
+.message-connect{
+    margin-top: 5px;
+
+}
+.message-connect > span {
+    margin: 5px;
+}
+.message-connect .fa-phone, .message-connect .fa-telegram-plane{
+  border: 1px solid transparent;
+  padding: 6px;
+  background-color: transparent;
+  border-radius: 3px;
+}
+.message-connect .fa-phone:hover, .message-connect .fa-telegram-plane:hover{
+  cursor: pointer;
+  color: #3ccd1c;
+  border: 1px solid #3ccd1c;
+  padding: 6px;
+  background-color: transparent;
+  border-radius: 3px;
+}
+.message-writer {
+    text-align: left;
+}
+.message-show-head > .icon > img{
+    border-radius: 0;
+    height: 30px;
+}
+.message-show-head .title {
+    display: inline;
+    font-size: 14px;
+    font-weight: 400;
+    padding-right: 10px;
+}
+.notice-message-show .message-show-head{
+    background-color: #3ccd1c;
+    color: #ffffff;
+    padding: 5px 10px 5px 5px;
+}
+.message-show-body{
+    padding: 5px 10px;
+}
+.message-show-body .body{
+    direction: rtl;
+    text-align: justify;
+    padding: 5px;
+}
+.message-show-body .message-info {
+    text-align: left;
+    font-size: 11px;
+}
+.message-show-body .message-info i.fa-calendar-alt {
+    padding-left: 5px;
+}
+.message-show-body .message-info > div{
+    display: inline-block;
+    direction: rtl;
+}
+.message-show-body .message-connect{
+    direction: rtl;
+    font-size: 11px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+.message-show .close{
+    opacity: 1;
+    border-color: #ffffff;
+}
+.message-show .close:after{
+    background-color: #ffffff;
+}
+.message-show .close:before{
+    background-color: #ffffff;
+}
+.message-show .close:hover{
+    opacity: 1;
+    border-color: #ff4545;
+}
+.message-show .close:hover:after{
+    background-color: #ff4545;
+}
+.message-show .close:hover:before{
+    background-color: #ff4545;
 }

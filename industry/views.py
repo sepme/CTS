@@ -174,3 +174,6 @@ class UserInfo(generic.TemplateView):
 
 class NewProject(generic.TemplateView):
     template_name = 'industry/newProject.html'
+
+class Messages(generic.TemplateView):
+    template_name = 'industry/messages.html'

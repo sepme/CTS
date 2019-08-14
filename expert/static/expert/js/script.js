@@ -14,6 +14,8 @@ $(document).ready(function(){
     $('*').persiaNumber();
     input_focus();
     init_dialog_btn(".chamran-btn-info" , ".showProject");
+    init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
+    search_input(".search_message");
     if($(window).width() < 575.98){
     // toggle slide-bar => all views
         $(".main").removeClass("blur-div");
@@ -36,6 +38,7 @@ $(document).ready(function(){
                scrollLeft: $(this).offset().left
            }, "slow");
         });
+
     }else{
         // loading();
         $(function () {
