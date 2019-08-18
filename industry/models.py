@@ -1,15 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from django.shortcuts import reverse ,HttpResponseRedirect
+from django.shortcuts import reverse, HttpResponseRedirect
+
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
-    industry_points = models.FloatField(verbose_name="امتیاز صنعت" ,default=0.0)
+    industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
 
     def __str__(self):
         return self.user.get_username()
-    
+
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
 
@@ -33,6 +34,7 @@ class IndustryForm(models.Model):
     services_products = models.TextField(verbose_name="خدمات/محصولات")
     awards_honors = models.TextField(verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
+    photo = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -60,14 +62,10 @@ class ProjectForm(models.Model):
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
     required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
-<<<<<<< HEAD
-    required_budget = models.TextField(verbose_name="بودجه مورد نیاز" ,null=True)
-    # papers_and_documentation = models.TextField(verbose_name="مقالات و مستندات" ,null=True)
-=======
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     papers_and_documentation = models.TextField(verbose_name="مقالات و مستندات")
->>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
     policy = models.TextField(verbose_name="نکات اخلاقی")
+    predict_profit = models.IntegerField()
 
     def __str__(self):
         return self.project_title_english
@@ -91,23 +89,13 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied")
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده",
-<<<<<<< HEAD
-                                           related_name="expert_accepted" ,null=True)
-
-    cost_of_project = models.FloatField(verbose_name="هزینه پروژه" ,null=True)
-    maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر"  ,null =True)
-    project_detail = models.TextField(verbose_name="جزيات پروژه" ,null =True)
-    project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه" ,null =True)
-=======
-                                           related_name="expert_accepted")
+                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted")
     industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
                                             verbose_name="صنعت صاحب پروژه")
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
     project_detail = models.TextField(verbose_name="جزيات پروژه")
     project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه")
->>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
 
     def __str__(self):
         return self.project_form

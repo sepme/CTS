@@ -1,0 +1,158 @@
+{% extends "researcher/layouts/base_layout.html" %}
+{% load static %}
+{% block title %}پیام ها{% endblock %}
+
+{% block name %} دکتر احسان شریف{% endblock %}
+
+{% block dialog %}
+    {% include 'researcher/layouts/message_show.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="card info-card messaging">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="custom-border-title">
+                    <span class="title">جدیدترین خبر ها</span>
+                    <span class="title-back"></span>
+                    <div class="row slide-messages">
+                        <div class="col-lg-4 slide-message">
+                            <div class="messages-container">
+                                <div class="card notice-message">
+                                    <div class="message-head">
+                                        <div class="icon">
+                                            <img src="{% static 'researcher/img/tick.svg' %}" alt="message-type-icon">
+                                        </div>
+                                        <div class="date">12 مرداد 1398</div>
+                                    </div>
+                                    <div class="message-body">
+                                        <div class="title">
+                                            <span>عنوان اطلاعیه</span>
+                                        </div>
+                                        <div class="text">
+                                            <span>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
+                                        </div>
+                                        <button>مشاهده</button>
+                                        <div class="message-code">123-456-789</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 slide-message">
+                                <div class="messages-container">
+                                    <div class="card alert-message">
+                                        <div class="message-head">
+                                            <div class="icon">
+                                                <img src="{% static 'researcher/img/close.svg' %}" alt="message-type-icon">
+                                            </div>
+                                            <div class="date">12 مرداد 1398</div>
+                                        </div>
+                                        <div class="message-body">
+                                            <div class="title">
+                                                <span>عنوان اخطار</span>
+                                            </div>
+                                            <div class="text">
+                                                <span>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
+                                            </div>
+                                            <button>مشاهده</button>
+                                            <div class="message-code">123-456-789</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-lg-4 slide-message">
+                            <div class="messages-container">
+                                <div class="card news-message">
+                                    <div class="message-head">
+                                        <div class="icon">
+                                            <img src="{% static 'researcher/img/megaphone.png' %}" alt="message-type-icon">
+                                        </div>
+                                        <div class="date">12 مرداد 1398</div>
+                                    </div>
+                                    <div class="message-body">
+                                        <div class="title">
+                                            <span>عنوان خبر</span>
+                                        </div>
+                                        <div class="text">
+                                            <span>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
+                                        </div>
+                                        <button>مشاهده</button>
+                                        <div class="message-code">123-456-789</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card info-card messaging">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="custom-border-title">
+                    <span class="title">لیست اخبار</span>
+                    <span class="title-back"></span>
+                    <div class="row">
+                        <div class="search-message">
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <button type="submit">
+                                    <i class='fas fa-search fa-lg'></i>
+                                </button>
+                                <input type="text" name="search" class="search_message" required>
+                            </form>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card text-right notice-message-sm">
+                                <div class="message-head-sm">
+                                    <div class="title">
+                                        <span>عنوان</span>
+                                        <span class="sub-header">( 1 ماه قبل )</span>
+                                    </div>
+                                </div>
+                                <div class="message-body-sm">
+                                    <span class="body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
+                                    <button>مشاهده</button>
+                                    <span class="message-code">123-456</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card text-right alert-message-sm">
+                                <div class="message-head-sm">
+                                    <div class="title">
+                                        <span>عنوان</span>
+                                        <span class="sub-header">( 1 ماه قبل )</span>
+                                    </div>
+                                </div>
+                                <div class="message-body-sm">
+                                    <span class="body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
+                                    <button>مشاهده</button>
+                                    <span class="message-code">123-456</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card text-right news-message-sm">
+                                <div class="message-head-sm">
+                                    <div class="title">
+                                        <span>عنوان</span>
+                                        <span class="sub-header">( 1 ماه قبل )</span>
+                                    </div>
+                                </div>
+                                <div class="message-body-sm">
+                                    <span class="body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
+                                    <button>مشاهده</button>
+                                    <span class="message-code">123-456</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}{% endblock %}

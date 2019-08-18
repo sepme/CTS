@@ -30,7 +30,7 @@ $(document).ready(function(){
       });
     }else {
       $( $className + " label").css({
-        "font-size":"15px",
+        "font-size":"12px",
         "top":"0px",
         "right":"25px",
         "color":"#3CCD1C"
@@ -45,13 +45,13 @@ $(document).ready(function(){
     if($(this).val() === '') {
       if($(window).width() < 600) {
         $($className +" label").css({
-          "font-size":"17px",
+          "font-size":"13px",
           "top":"28px",
           "right":"10px"
         });
       }else {
         $($className +" label").css({
-          "font-size":"17px",
+          "font-size":"13px",
           "top":"28px",
           "right":"35px"
         });

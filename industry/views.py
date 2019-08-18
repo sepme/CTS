@@ -1,29 +1,35 @@
 from django.views import generic
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+
+from . import models
+from . import forms
+
 
 class Index(generic.TemplateView):
     template_name = 'industry/index.html'
-<<<<<<< HEAD
     industry = models.IndustryUser
 
-    def get(self, request, *args, **kwargs):
-        try:
-            self.industry = get_object_or_404(models.IndustryUser ,user=request.user)
-        except:
-            return HttpResponseRedirect(reverse('chamran:login'))
-        return super().get(request ,*args, **kwargs)
-    
+    # def get(self, request, *args, **kwargs):
+    #     try:
+    #         self.industry = get_object_or_404(models.IndustryUser, user=request.user)
+    #     except:
+    #         return HttpResponseRedirect(reverse('chamran:login'))
+    #     return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['industry'] = self.industry
         try:
-            if  self.industry.industryform:
+            if self.industry.industryform:
                 context['photo'] = self.industry.industryform.photo
         except:
             context['basic_info'] = True
         return context
-    
-    def post(self ,request ,*args, **kwargs):
-        form = forms.IndustryBasicInfoForm(request.POST ,request.FILES)
+
+    def post(self, request, *args, **kwargs):
+        form = forms.IndustryBasicInfoForm(request.POST, request.FILES)
         if form.is_valid():
             photo = form.cleaned_data['photo']
             name = form.cleaned_data['name']
@@ -38,16 +44,17 @@ class Index(generic.TemplateView):
             #     raise ValidationError(_('پست الکترونیکی مطابقت ندارد.'))
             industry_info = models.IndustryForm(industry_user=request.user.industryuser,
                                                 photo=photo,
-                                                name=name ,
-                                                registration_number =registration_number,
+                                                name=name,
+                                                registration_number=registration_number,
                                                 date_of_foundation=date_of_foundation,
                                                 research_field=research_field,
                                                 industry_type=industry_type,
-                                                industry_address =industry_address,
+                                                industry_address=industry_address,
                                                 phone_number=phone_number,
                                                 email_address=email_address)
             industry_info.save()
         return HttpResponseRedirect(reverse('industry:index'))
+
 
 class userInfo(generic.FormView):
     template_name = 'industry/userInfo.html'
@@ -56,18 +63,18 @@ class userInfo(generic.FormView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.industry = get_object_or_404(models.IndustryUser ,user=request.user)
+            self.industry = get_object_or_404(models.IndustryUser, user=request.user)
         except:
             return HttpResponseRedirect(reverse('chamran:login'))
-        return super().get(request ,*args, **kwargs)
-        
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['photo'] = self.industry.industryform.photo
         return context
 
     def post(self, request, *args, **kwargs):
-        form = forms.IndustryInfoForm(request.POST ,request.FILES)
+        form = forms.IndustryInfoForm(request.POST, request.FILES)
         if form.is_valid():
             industry_form = request.user.industryuser.industryform
             industry_form.name = form.cleaned_data['name']
@@ -94,24 +101,24 @@ class newProject(generic.FormView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.industry = get_object_or_404(models.IndustryUser ,user=request.user)
+            self.industry = get_object_or_404(models.IndustryUser, user=request.user)
         except:
             return HttpResponseRedirect(reverse('chamran:login'))
-        return super().get(request ,*args, **kwargs)
-    
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['industry'] = self.industry
-        if  self.industry.industryform:
+        if self.industry.industryform:
             context['photo'] = self.industry.industryform.photo
         return context
 
-    def post(self ,request ,*args, **kwargs):
+    def post(self, request, *args, **kwargs):
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
             # 'required_technique'
-            project_title_persian =  form.cleaned_data['project_title_persian']
-            project_title_english =  form.cleaned_data['project_title_english']
+            project_title_persian = form.cleaned_data['project_title_persian']
+            project_title_english = form.cleaned_data['project_title_english']
             # key_words = form.cleaned_data['key_words']
             research_methodology = form.cleaned_data['research_methodology']
             main_problem_and_importance = form.cleaned_data['main_problem_and_importance']
@@ -122,24 +129,25 @@ class newProject(generic.FormView):
             policy = form.cleaned_data['policy']
             required_budget = form.cleaned_data['required_budget']
             project_phase = form.cleaned_data['project_phase']
-        
+
             new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
-                                             project_title_english=project_title_english,
-                                             research_methodology=research_methodology,
-                                             main_problem_and_importance=main_problem_and_importance,
-                                             predict_profit=predict_profit,
-                                             required_lab_equipment=required_lab_equipment,
-                                             innovation=innovation,
-                                             approach=approach,
-                                             policy=policy,
-                                             required_budget=required_budget,
-                                             project_phase=project_phase,
-                                             )
+                                                  project_title_english=project_title_english,
+                                                  research_methodology=research_methodology,
+                                                  main_problem_and_importance=main_problem_and_importance,
+                                                  predict_profit=predict_profit,
+                                                  required_lab_equipment=required_lab_equipment,
+                                                  innovation=innovation,
+                                                  approach=approach,
+                                                  policy=policy,
+                                                  required_budget=required_budget,
+                                                  project_phase=project_phase,
+                                                  )
             new_project_form.save()
-            new_project = models.Project(project_form=new_project_form ,industry_creator=request.user.industryuser)
+            new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
             return HttpResponseRedirect(reverse('industry:project_list'))
-        return super().post(request ,args ,kwargs)
+        return super().post(request, args, kwargs)
+
 
 class ProjectListView(generic.ListView):
     template_name = 'industry/project_list.html'
@@ -147,20 +155,25 @@ class ProjectListView(generic.ListView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.industry = get_object_or_404(models.IndustryUser ,user=request.user)
+            self.industry = get_object_or_404(models.IndustryUser, user=request.user)
         except:
             return HttpResponseRedirect(reverse('chamran:login'))
-        return super().get(request ,*args, **kwargs)
-    
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['industry'] = self.industry
-        if  self.industry.industryform:
+        if self.industry.industryform:
             context['photo'] = self.industry.industryform.photo
         return context
-=======
-class userInfo(generic.TemplateView):
+
+
+class UserInfo(generic.TemplateView):
     template_name = 'industry/userInfo.html'
-class newProject(generic.TemplateView):
+
+
+class NewProject(generic.TemplateView):
     template_name = 'industry/newProject.html'
->>>>>>> parent of a437e57... "Projects" Section Front-End + "Researcher Apply" Section Front-End
+
+class Messages(generic.TemplateView):
+    template_name = 'industry/messages.html'
