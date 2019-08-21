@@ -13,8 +13,12 @@ $(document).ready(function(){
     art_count = 0;
     $('*').persiaNumber();
     input_focus();
+    question_dialog_init();
+    question_page_init();
     init_dialog_btn(".chamran-btn-info" , ".showProject");
     init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
+    init_dialog_btn(".show-btn", ".show-question");
+    init_dialog_btn(".add-new-question", ".add-question");
     search_input(".search_message");
     if($(window).width() < 575.98){
     // toggle slide-bar => all views

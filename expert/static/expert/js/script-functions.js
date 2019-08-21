@@ -783,3 +783,49 @@ function vote_dialog_init() {
         $(".progress-line").css("width","calc(100% / 10)");
     });
 }
+function question_page_init() {
+
+}
+function question_dialog_init() {
+    $(".answer").hover(function () {
+        if( !$(this).find('button').hasClass('answered') ) {
+            $(this).find('.correct button').fadeIn('slow');
+            $(this).find(".wrong button").fadeIn('slow');
+        }
+    }, function () {
+        if( !$(this).find('button').hasClass('answered') ) {
+            $(this).find('.correct button').fadeOut('slow');
+            $(this).find(".wrong button").fadeOut('slow');
+        }
+    });
+    $(".answer .check .correct button").click(function () {
+        var div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
+        $(this).closest('.check').find('.correct').css('display','none');
+        $(this).closest('.check').find('.wrong').css('display','none');
+        $(this).closest('.check').find('button').addClass('answered');
+        $(this).closest('.check').find('.status').addClass('correct-answer');
+        $(this).closest('.check').children('.status').append(div);
+        $(this).closest('.check').find('.status').fadeIn('slow');
+    });
+    $(".answer .check .wrong button").click(function () {
+        var div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
+        $(this).closest('.check').find('.correct').css('display','none');
+        $(this).closest('.check').find('.wrong').css('display','none');
+        $(this).closest('.check').find('button').addClass('answered');
+        $(this).closest('.check').find('.status').addClass('wrong-answer');
+        $(this).closest('.check').children('.status').append(div);
+        $(this).closest('.check').find('.status').fadeIn('slow');
+    });
+
+
+    $(".question-attach input[type='file']").on('change', function () {
+        var fileType = $(this).val().split('.').pop().toLowerCase();
+        var fileName = $(this).val().split('\\').pop();
+        attach_li= "<li class='list-item'><a href='#' class='attach-file'>" +
+            "<span class='" + fileType + "-file'></span>" +
+            "<span dir='ltr'>" + fileName + "</span>" +
+            "</a></li>";
+        $(this).closest('ul.inline-list').append(attach_li);
+    });
+
+}
