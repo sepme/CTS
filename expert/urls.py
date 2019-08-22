@@ -8,4 +8,4 @@ urlpatterns = [
     path('userInfo/', views.user_info, name="userInfo"),
     path('researcher/', views.ResearcherRequest.as_view(), name="researcherRequest"),
     path('messages/', views.Messages.as_view(), name="messages"),
-]
+]   
