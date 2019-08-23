@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card">
-                <form action="{% url 'expert:userInfo' %}" method="post">
+                <form action="" method="post">
                     {% csrf_token %}
                     <div class="inner-card card">
                         <div class="row">
@@ -33,21 +33,21 @@
                         <div class="row">
                           <div class="col-lg-6">
                             <label for="FirstName">نام</label>
-                            <input type="text" id="FirstName" name="first_name" class="w-100">
+                            <input type="text" id="FirstName" class="w-100">
                           </div>
                           <div class="col-lg-6">
                             <label for="LastName">نام خانوادگی</label>
-                            <input type="text" id="LastName" name="last_name" class="w-100">
+                            <input type="text" id="LastName" class="w-100">
                           </div>
                     </div>
                         <div class="row">
                         <div class="col-lg-6">
                               <label for="Field">حوزه تخصصی</label>
-                              <input type="text" id="Field" name="special_field" class="w-100">
+                              <input type="text" id="Field" class="w-100">
                         </div>
                         <div class="col-lg-6">
                             <label for="MelliCode">کد ملی</label>
-                            <input type="text" id="MelliCode" name="melli_code" class="w-100">
+                            <input type="text" id="MelliCode" class="w-100">
                         </div>
                     </div>
                         <div class="row">
@@ -55,19 +55,19 @@
                               <label class="rankLabel" for="rank">مرتبه علمی</label>
                               <select id="rank">
                                   <option selected dir="rtl">انتخاب کنید ...</option>
-                                  <option value="1" name="scientific_rank">مربی</option>
-                                  <option value="2" name="scientific_rank">استادیار</option>
-                                  <option value="3" name="scientific_rank">دانشیار</option>
-                                  <option value="4" name="scientific_rank">استاد</option>
-                                  <option value="5" name="scientific_rank">استاد تمام</option>
-                                  <option value="6" name="scientific_rank">پژوهشگر</option>
+                                  <option value="1">مربی</option>
+                                  <option value="2">استادیار</option>
+                                  <option value="3">دانشیار</option>
+                                  <option value="4">استاد</option>
+                                  <option value="5">استاد تمام</option>
+                                  <option value="6">پژوهشگر</option>
                               </select>
                           </div>
                       </div>
                         <div class="row">
                           <div class="col-lg-12">
                               <label for="Uni">دانشگاه محل فعالیت</label>
-                              <input type="text" id="Uni" name="university" class="w-100">
+                              <input type="text" id="Uni" class="w-100">
 {#                              <i class="fas fa-plus fa-lg"></i>#}
 {#                              <div class="selected_uni"></div>#}
                           </div>
@@ -75,23 +75,23 @@
                         <div class="row">
                         <div class="col-lg-12">
                             <label for="Address">آدرس</label>
-                            <textarea dir="rtl" rows="3" class="w-100" name="address" id="Address"></textarea>
+                            <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
                         </div>
                     </div>
                         <div class="row">
                         <div class="col-lg-6">
                             <label for="HomeNum">تلفن منزل</label>
-                            <input type="text" id="HomeNum" name="home_number" class="w-100">
+                            <input type="text" id="HomeNum" class="w-100">
                         </div>
                         <div class="col-lg-6">
                             <label for="PhoneNum">تلفن همراه</label>
-                            <input type="text" id="PhoneNum" name="phone_number" class="w-100">
+                            <input type="text" id="PhoneNum" class="w-100">
                         </div>
                     </div>
                         <div class="row">
                             <div class="col-lg-12">
                             <label for="Email">پست الکترونیکی</label>
-                            <input type="email" id="Email" name="email" class="w-100">
+                            <input type="text" id="Email" class="w-100">
                         </div>
                         </div>
                     </div>
@@ -241,7 +241,7 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header">افتخارات <span class="sub-header">(چند نمونه از بهترین افتخارات - مقالات خاص، جوایز و ...- به همراه سال وقوع)</span></span>
-                                <textarea dir="rtl" rows="5" class="w-100" id="honours" name="honors" placeholder="اینجا وارد کنید ..."></textarea>
+                                <textarea dir="rtl" rows="5" class="w-100" id="honours" placeholder="اینجا وارد کنید ..."></textarea>
                             </div>
                         </div>
                     </div>
@@ -324,7 +324,7 @@
                     <div class="card inner-card">
                         <div class="row">
                             <div class="col-lg-12">
-                                <textarea dir="rtl" class="w-100" rows="3" id="introduction-method" name="method_of_introduction"></textarea>
+                                <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea>
                                 <label for="introduction-method">نحوه آشنایی شما با چمران تیم</label>
                             </div>
                         </div>
@@ -367,13 +367,13 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">مجموعاً، تا به حال چند بار موفق به دریافت گرنت شده اید؟</span>
-                                <textarea dir="rtl" class="w-100" rows="4" name="" placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
+                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا در صورت تسلط بر زبانهای خارجی، زبان مورد نظر و مقدار تسلط خود را ذکر بفرمایید.</span>
-                                <textarea dir="rtl" class="w-100" rows="4" name="number_of_grants" placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
+                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -389,13 +389,12 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
+                    <button type="button" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
                 </form>
             </div>
         </div>
     </div>
 {% endblock %}
-
 {% block script %}
     <script type="text/javascript" src="{% static 'expert/js/persian-datepicker.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
