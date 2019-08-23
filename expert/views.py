@@ -1,5 +1,5 @@
 from django.views import generic
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse
 from .models import ExpertForm, EqTest
 from .forms import InitialInfoForm
 
@@ -68,13 +68,14 @@ def index(request):
         form = InitialInfoForm(request.POST or None)
         if form.is_valid():
             print(form.cleaned_data)
-
+            return HttpResponseRedirect(reverse('expert:test'))
     else:
         form = InitialInfoForm()
     return render(request, 'expert/index.html', {'form': form})
 
 
-
+def test(request):
+    return HttpResponse('Test view')
 
 
 
