@@ -72,7 +72,11 @@ class ExpertForm(models.Model):
         (3, '+60'),
     )
     number_of_researcher = models.IntegerField(choices=number_of_researcher_choice, verbose_name="دانشجو تحت نظارت")
-    has_industrial_research = models.BooleanField(verbose_name="همکاری با شرکت خارج دانشگاه")
+    has_industrial_research_choice = (
+        ('آری', 'آری'),
+        ('خیر', 'خیر'),
+    )
+    has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice, verbose_name="همکاری با شرکت خارج دانشگاه")
     number_of_grants = models.IntegerField(verbose_name="تعداد گرنت")
     technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک")
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی")
