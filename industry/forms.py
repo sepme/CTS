@@ -13,10 +13,18 @@ class IndustryBasicInfoForm(forms.Form):
     registration_number = forms.CharField(max_length=50, required=False)
     date_of_foundation = forms.CharField(max_length=50, required=False)
     research_field = forms.CharField(max_length=300, required=False)
-    industry_type = forms.IntegerField()
+    industry_type = forms.IntegerField(error_messages={'invalid': 'لطفا نوع شرکت را انتخاب کنید.'})
     industry_address = forms.CharField(max_length=3000)
     phone_number = forms.CharField(max_length=15)
     email_address = forms.EmailField()
+
+    class Meta:
+
+        default_error_messages = {
+            'industry_type': {
+                'invalid': 'لطفا نوع شرکت را انتخاب کنید',
+            }
+        }
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]
@@ -35,12 +43,20 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_registration_number(self):
         data = self.cleaned_data["registration_number"]
+        try:
+            int(data)
+        except ValueError:
+            raise ValidationError(_('شماره ثبت باید یک عدد باشد.'))
         if len(str(data)) != 5:
             raise ValidationError(_("شماره ثبت باید 5 رقمی باشد."))
         return data
 
     def clean_date_of_foundation(self):
         data = self.cleaned_data["date_of_foundation"]
+        try:
+            int(data)
+        except ValueError:
+            raise ValidationError(_("سال تاسیس باید یک عدد باشد."))
         if len(str(data)) != 4:
             raise ValidationError(_("سال تاسیس باید 4 رقمی باشد."))
         return data
@@ -51,6 +67,7 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_industry_type(self):
         data = self.cleaned_data["industry_type"]
+        print('industry_type is', data)
         return data
 
     def clean_industry_address(self):
@@ -59,6 +76,9 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_phone_number(self):
         data = self.cleaned_data["phone_number"]
+        for ch in data:
+            if ch not in '+0123456789':
+                raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
         return data
 
     def clean_email_address(self):
