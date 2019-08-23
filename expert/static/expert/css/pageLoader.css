@@ -1,0 +1,14 @@
+.page-loader canvas{
+    position: relative;
+    transition: all ease 0.3s;
+}
+.page-loader .loader{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.page-loader .loader > div{
+  color: #000;
+  direction: rtl;
+}

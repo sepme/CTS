@@ -2,28 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5395593-0ec3-49c3-bd20-8129760ead3c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/expert/static/expert/img/attachment(2).png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/static/expert/img/attachment.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/static/expert/img/doc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/static/expert/img/jpg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/static/expert/img/pdf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/static/expert/img/png.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/add_new_question.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/show_question.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/expert/templates/expert/questions.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/industry/static/industry/img/attachment.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ChamranTeamSite.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ChamranTeamSite.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/expert/static/expert/css/pageLoader.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/expert/static/expert/js/pageLoader.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/pageLoader.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/expert/static/expert/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/expert/static/expert/js/script-functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/js/script-functions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/expert/static/expert/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/expert/static/expert/js/script.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/expert/templates/expert/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/projectList.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/projectList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/templates/expert/userInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/userInfo.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/expert/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expert/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/expert/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/expert/templates/expert/layouts/initial_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/expert/templates/expert/layouts/initial_information.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/industry/static/industry/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/static/industry/js/script-functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/industry/static/industry/js/script-functions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/industry/templates/industry/layouts/initial_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/industry/templates/industry/layouts/initial_information.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/static/researcher/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/static/researcher/js/script-functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/static/researcher/js/script-functions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/templates/researcher/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/templates/researcher/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/researcher/templates/researcher/layouts/initial_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/researcher/templates/researcher/layouts/initial_information.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,26 +51,38 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="728">
-              <caret line="306" column="44" lean-forward="true" selection-start-line="306" selection-start-column="44" selection-end-line="306" selection-end-column="44" />
+            <state relative-caret-position="20">
+              <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/expert/templates/expert/userInfo.html">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6880">
-              <caret line="344" column="81" selection-start-line="344" selection-start-column="81" selection-end-line="344" selection-end-column="81" />
+            <state relative-caret-position="120">
+              <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/expert/templates/expert/questions.html">
+        <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script-functions.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1300">
+              <caret line="65" selection-start-line="65" selection-end-line="132" selection-end-column="1" />
+              <folding>
+                <element signature="n#!!block;n#input_focus#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/pageLoader.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="20">
-              <caret line="46" column="107" selection-start-line="46" selection-start-column="107" selection-end-line="46" selection-end-column="107" />
+              <caret line="1" column="34" selection-start-line="1" selection-start-column="34" selection-end-line="1" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -80,67 +90,33 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="24" column="18" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+            <state relative-caret-position="360">
+              <caret line="18" column="8" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/show_question.html">
+        <entry file="file://$PROJECT_DIR$/expert/static/expert/js/pageLoader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="619">
-              <caret line="150" column="22" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/add_new_question.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="29" column="37" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="33" selection-start-column="33" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script-functions.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="841" column="1" lean-forward="true" selection-start-line="841" selection-start-column="1" selection-end-line="841" selection-end-column="1" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#label#0;n#div#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="300">
+              <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>title</find>
-      <find>.custom-border-title</find>
-      <find>span.tit</find>
-      <find>value=</find>
-      <find>innwe</find>
       <find>message</find>
       <find>fa-re</find>
       <find>conte</find>
@@ -158,7 +134,6 @@
       <find>answer</find>
       <find>init</find>
       <find>.inline-lis</find>
-      <find>main</find>
       <find>show</find>
       <find>blur</find>
       <find>.question-info &gt; .answers .num</find>
@@ -166,6 +141,12 @@
       <find>attach</find>
       <find>defa</find>
       <find>.label-</find>
+      <find>fix</find>
+      <find>fixed-back</find>
+      <find>main</find>
+      <find>fixe</find>
+      <find>label</find>
+      <find>input</find>
     </findStrings>
     <replaceStrings>
       <replace>exe_count</replace>
@@ -186,8 +167,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/researcher/templates/researcher/layouts/projectList.html" />
-        <option value="$PROJECT_DIR$/static/js/script.js" />
         <option value="$PROJECT_DIR$/static/css/style.css" />
         <option value="$PROJECT_DIR$/researcher/templates/researcher/layouts/dialog.html" />
         <option value="$PROJECT_DIR$/expert/templates/expert/layouts/comment.html" />
@@ -206,33 +185,39 @@
         <option value="$PROJECT_DIR$/industry/templates/industry/layouts/message_show.html" />
         <option value="$PROJECT_DIR$/industry/urls.py" />
         <option value="$PROJECT_DIR$/researcher/urls.py" />
-        <option value="$PROJECT_DIR$/researcher/views.py" />
         <option value="$PROJECT_DIR$/industry/views.py" />
         <option value="$PROJECT_DIR$/industry/templates/industry/newProject.html" />
         <option value="$PROJECT_DIR$/industry/templates/industry/userInfo.html" />
-        <option value="$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html" />
-        <option value="$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html" />
-        <option value="$PROJECT_DIR$/researcher/templates/researcher/index.html" />
         <option value="$PROJECT_DIR$/researcher/templates/researcher/userInfo.html" />
-        <option value="$PROJECT_DIR$/industry/static/industry/js/script-functions.js" />
-        <option value="$PROJECT_DIR$/researcher/static/researcher/js/script-functions.js" />
         <option value="$PROJECT_DIR$/industry/static/industry/js/script.js" />
         <option value="$PROJECT_DIR$/researcher/static/researcher/js/script.js" />
-        <option value="$PROJECT_DIR$/researcher/static/researcher/css/style.css" />
-        <option value="$PROJECT_DIR$/industry/static/industry/css/style.css" />
         <option value="$PROJECT_DIR$/expert/urls.py" />
         <option value="$PROJECT_DIR$/expert/views.py" />
         <option value="$PROJECT_DIR$/expert/templates/expert/layouts/projectList.html" />
-        <option value="$PROJECT_DIR$/industry/templates/industry/index.html" />
-        <option value="$PROJECT_DIR$/expert/templates/expert/index.html" />
-        <option value="$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html" />
-        <option value="$PROJECT_DIR$/expert/static/expert/js/script.js" />
         <option value="$PROJECT_DIR$/expert/templates/expert/questions.html" />
         <option value="$PROJECT_DIR$/expert/templates/expert/layouts/add_new_question.html" />
         <option value="$PROJECT_DIR$/expert/templates/expert/userInfo.html" />
-        <option value="$PROJECT_DIR$/expert/static/expert/css/style.css" />
         <option value="$PROJECT_DIR$/expert/templates/expert/layouts/show_question.html" />
+        <option value="$PROJECT_DIR$/industry/templates/industry/layouts/initial_information.html" />
+        <option value="$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html" />
+        <option value="$PROJECT_DIR$/researcher/views.py" />
+        <option value="$PROJECT_DIR$/researcher/templates/researcher/layouts/initial_information.html" />
+        <option value="$PROJECT_DIR$/researcher/templates/researcher/index.html" />
+        <option value="$PROJECT_DIR$/industry/templates/industry/index.html" />
+        <option value="$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html" />
         <option value="$PROJECT_DIR$/expert/static/expert/js/script-functions.js" />
+        <option value="$PROJECT_DIR$/expert/templates/expert/layouts/initial_information.html" />
+        <option value="$PROJECT_DIR$/industry/static/industry/js/script-functions.js" />
+        <option value="$PROJECT_DIR$/researcher/static/researcher/js/script-functions.js" />
+        <option value="$PROJECT_DIR$/industry/static/industry/css/style.css" />
+        <option value="$PROJECT_DIR$/researcher/static/researcher/css/style.css" />
+        <option value="$PROJECT_DIR$/expert/templates/expert/index.html" />
+        <option value="$PROJECT_DIR$/expert/templates/expert/layouts/pageLoader.html" />
+        <option value="$PROJECT_DIR$/expert/static/expert/css/style.css" />
+        <option value="$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html" />
+        <option value="$PROJECT_DIR$/expert/static/expert/css/pageLoader.css" />
+        <option value="$PROJECT_DIR$/expert/static/expert/js/pageLoader.js" />
+        <option value="$PROJECT_DIR$/expert/static/expert/js/script.js" />
       </list>
     </option>
   </component>
@@ -247,6 +232,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -257,11 +243,6 @@
             <path>
               <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
               <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
-              <item name="chamran_admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
               <item name="expert" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -276,6 +257,22 @@
               <item name="expert" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
               <item name="expert" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChamranTeamSite" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="expert" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ChamranTeamSite" type="b2602c69:ProjectViewProjectNode" />
@@ -302,13 +299,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -385,7 +382,11 @@
       <workItem from="1566277799512" duration="213000" />
       <workItem from="1566339064940" duration="926000" />
       <workItem from="1566356238417" duration="1702000" />
-      <workItem from="1566393981158" duration="2474000" />
+      <workItem from="1566393981158" duration="4704000" />
+      <workItem from="1566473940816" duration="1884000" />
+      <workItem from="1566495669114" duration="7534000" />
+      <workItem from="1566572121556" duration="1370000" />
+      <workItem from="1566575432952" duration="595000" />
     </task>
     <task id="LOCAL-00001" summary="edit required files">
       <created>1565254304657</created>
@@ -401,22 +402,29 @@
       <option name="project" value="LOCAL" />
       <updated>1565764666513</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="researching questions page">
+      <created>1566396724855</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1566396724855</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="111576000" />
+    <option name="totallyTimeSpent" value="125189000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19638069" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20710456" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.39886847" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.39886847" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -440,37 +448,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="edit required files" />
     <MESSAGE value="build messages part of website" />
-    <option name="LAST_COMMIT_MESSAGE" value="build messages part of website" />
+    <MESSAGE value="researching questions page" />
+    <option name="LAST_COMMIT_MESSAGE" value="researching questions page" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/researcher/templates/researcher/layouts/comment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/industry/templates/industry/layouts/comment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-601">
-          <caret line="14" column="116" selection-start-line="14" selection-start-column="116" selection-end-line="14" selection-end-column="116" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/researcher/static/researcher/css/comments.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="156" column="2" lean-forward="true" selection-start-line="156" selection-start-column="2" selection-end-line="158" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/industry/static/industry/css/comments.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="158" column="24" selection-start-line="158" selection-start-column="24" selection-end-line="158" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/comment.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="399">
@@ -522,42 +503,12 @@
     <entry file="file://$PROJECT_DIR$/expert/apps.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/researcher/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="18" lean-forward="true" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/industry/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/industry/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="175" column="27" lean-forward="true" selection-start-line="175" selection-start-column="27" selection-end-line="175" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/researcher/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="117" column="31" selection-start-line="117" selection-start-column="31" selection-end-line="117" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#85#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -583,27 +534,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="23" lean-forward="true" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/researcher/templates/researcher/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/researcher/templates/researcher/messages.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="640">
@@ -618,74 +548,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/industry/static/industry/js/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
-          <folding>
-            <element signature="n#style#0;n#div#3;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#label#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/researcher/static/researcher/js/script.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/industry/static/industry/js/script-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="59" column="22" lean-forward="true" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#label#0;n#div#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/researcher/static/researcher/js/script-functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="328" column="27" selection-start-line="328" selection-start-column="24" selection-end-line="328" selection-end-column="27" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#label#0;n#div#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/dialog.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="130" selection-start-line="10" selection-start-column="130" selection-end-line="10" selection-end-column="130" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/industry/static/industry/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="415" column="7" lean-forward="true" selection-start-line="415" selection-start-column="7" selection-end-line="415" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/researcher/static/researcher/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="1172" column="32" selection-start-line="1172" selection-start-column="32" selection-end-line="1172" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -717,13 +583,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/initial_information.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="68" column="83" lean-forward="true" selection-start-line="67" selection-start-column="16" selection-end-line="68" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/projectList.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="542">
@@ -738,55 +597,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/industry/templates/industry/layouts/initial_information.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/expert/templates/expert/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="13" column="19" lean-forward="true" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/industry/templates/industry/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="23" lean-forward="true" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/expert/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="20">
           <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/expert/templates/expert/userInfo.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6880">
-          <caret line="344" column="81" selection-start-line="344" selection-start-column="81" selection-end-line="344" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="728">
-          <caret line="306" column="44" lean-forward="true" selection-start-line="306" selection-start-column="44" selection-end-line="306" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="24" column="18" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="33" selection-start-column="33" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -797,34 +611,220 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/dialog.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="33" selection-start-column="33" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/add_new_question.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="29" column="37" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
+        <state relative-caret-position="320">
+          <caret line="16" column="49" selection-start-line="16" selection-start-column="49" selection-end-line="16" selection-end-column="49" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/show_question.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="619">
-          <caret line="150" column="22" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
+        <state relative-caret-position="459">
+          <caret line="151" column="18" lean-forward="true" selection-start-line="151" selection-start-column="18" selection-end-line="151" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script-functions.js">
+    <entry file="file://$PROJECT_DIR$/expert/templates/expert/userInfo.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="841" column="1" lean-forward="true" selection-start-line="841" selection-start-column="1" selection-end-line="841" selection-end-column="1" />
+        <state relative-caret-position="180">
+          <caret line="66" column="40" selection-start-line="66" selection-start-column="40" selection-end-line="66" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/industry/static/industry/js/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/industry/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3500">
+          <caret line="175" column="27" lean-forward="true" selection-start-line="175" selection-start-column="27" selection-end-line="175" selection-end-column="27" />
           <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/researcher/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="8" column="18" lean-forward="true" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/researcher/templates/researcher/layouts/base_layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/researcher/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="10" column="34" lean-forward="true" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/researcher/templates/researcher/layouts/initial_information.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="800">
+          <caret line="94" column="22" selection-start-line="94" selection-start-column="22" selection-end-line="94" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/industry/templates/industry/layouts/initial_information.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="70" column="22" lean-forward="true" selection-start-line="68" selection-start-column="16" selection-end-line="70" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/researcher/templates/researcher/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="10" column="29" lean-forward="true" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/industry/templates/industry/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="11" lean-forward="true" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/industry/templates/industry/layouts/base_layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="18" column="24" lean-forward="true" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/researcher/static/researcher/js/script-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="129" column="1" selection-start-line="129" selection-start-column="1" selection-end-line="129" selection-end-column="1" />
+          <folding>
+            <element signature="n#!!block;n#input_focus#0" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#label#0;n#div#0;n#div#1;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/industry/static/industry/js/script-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1397">
+          <caret line="129" column="1" selection-start-line="129" selection-start-column="1" selection-end-line="129" selection-end-column="1" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#label#0;n#div#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/researcher/static/researcher/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="364" column="1" selection-start-line="364" selection-start-column="1" selection-end-line="364" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/industry/static/industry/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="906" column="1" selection-start-line="906" selection-start-column="1" selection-end-line="906" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/templates/expert/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="7" column="18" lean-forward="true" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/initial_information.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="13" column="24" lean-forward="true" selection-end-line="95" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/static/expert/css/pageLoader.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script-functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1300">
+          <caret line="65" selection-start-line="65" selection-end-line="132" selection-end-column="1" />
+          <folding>
+            <element signature="n#!!block;n#input_focus#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/pageLoader.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="1" column="34" selection-start-line="1" selection-start-column="34" selection-end-line="1" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/templates/expert/layouts/base_layout.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="18" column="8" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/static/expert/js/pageLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/expert/static/expert/js/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
         </state>
       </provider>
     </entry>

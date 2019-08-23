@@ -196,6 +196,9 @@ img{
     font-size: 15px;
     color: #3ccd1c;
 }
+.fixed-back.initial-information input#Email{
+    margin-bottom: 10px;
+}
 .fixed-back .card-footer {
     position: absolute;
     bottom: 0;
@@ -619,6 +622,18 @@ label.fix{
   right: 25px;
   font-size: 13px;
   color: #8d8d8d;
+}
+input.error, textarea.error {
+    background-color: #fdf7f8;
+    border: 1px solid #ff4545;
+    color: #ff4545;
+}
+div.error{
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    font-size: 10px;
+    color: #ff4545;
 }
 /*i.fa-plus{*/
 /*  position: absolute;*/

@@ -1,6 +1,8 @@
 $(window).on("load",function () {
     init_windowSize();
     load_dialog();
+    // $(".page-loader").css("display", "none");
+    // $(".main").removeClass("blur-div");
 }).on("resize",function () {
     init_windowSize();
     load_dialog();
