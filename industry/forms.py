@@ -18,14 +18,6 @@ class IndustryBasicInfoForm(forms.Form):
     phone_number = forms.CharField(max_length=15)
     email_address = forms.EmailField()
 
-    class Meta:
-
-        default_error_messages = {
-            'industry_type': {
-                'invalid': 'لطفا نوع شرکت را انتخاب کنید',
-            }
-        }
-
     def clean_photo(self):
         data = self.cleaned_data["photo"]
         if data and (data.width > 200 or data.height > 200):
