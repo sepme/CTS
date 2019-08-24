@@ -5,3 +5,6 @@ from . import models
 @admin.register(models.ExpertUser)
 class ExpertAdmin(admin.ModelAdmin):
     pass
+
+
+admin.site.register(models.ExpertForm)
