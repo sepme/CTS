@@ -3,8 +3,14 @@ from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse
 from .models import ExpertForm, EqTest
 from .forms import InitialInfoForm
 
+
 class Index(generic.TemplateView):
     template_name = 'expert/index.html'
+
+
+
+
+
 
 
 class UserInfo(generic.TemplateView):
@@ -68,7 +74,25 @@ def index(request):
         form = InitialInfoForm(request.POST or None)
         if form.is_valid():
             print(form.cleaned_data)
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            special_field = form.cleaned_data['special_field']
+            melli_code = form.cleaned_data['melli_code']
+            scientific_rank = form.cleaned_data['scientific_rank']
+            university = form.cleaned_data['university']
+            address = form.cleaned_data['address']
+            home_number = form.cleaned_data['home_number']
+            phone_number = form.cleaned_data['phone_number']
+            email = form.cleaned_data['email_address']
+
+            expert_form = ExpertForm.objects.create(expert_lastname=last_name, special_field=special_field, national_code=melli_code,
+                                                    scientific_rank=scientific_rank, university=university,phone_number=home_number,home_address=address,
+                                                    mobile_phone=phone_number, email_address=email)
+            expert_form.expert_firstname = first_name
+            expert_form.save()
+            print(expert_form)
             return HttpResponseRedirect(reverse('expert:test'))
+
     else:
         form = InitialInfoForm()
     return render(request, 'expert/index.html', {'form': form})
@@ -78,8 +102,13 @@ def test(request):
     return HttpResponse('Test view')
 
 
+
+
 class Questions(generic.TemplateView):
     template_name = 'expert/questions.html'
+
+
+
 
 
 

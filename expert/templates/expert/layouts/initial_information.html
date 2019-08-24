@@ -4,7 +4,7 @@
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
         <div class="container">
-            <form action="" method="post">
+            <form action="{% url 'expert:index' %}" method="post">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">
@@ -23,6 +23,7 @@
                                 {#for adding error add class "error" to input or textarea then add following div after that#}
                                 <label for="FirstName">نام</label>
                                 {% render_field form.first_name class="w-100" %}
+                                {% render_field form.first_name.errors %}
                                 <div class="error">
                                     <span>*</span>
                                     <span class="error-body">Error Body</span>
@@ -43,6 +44,7 @@
                             <div class="col-lg-12">
                                 <label for="MelliCode">کد ملی</label>
                                 {% render_field form.melli_code class="w-100" %}
+                                {% render_field form.melli_code.errors %}
                             </div>
                         </div>
                         <div class="row">
@@ -76,16 +78,19 @@
                             <div class="col-lg-6">
                                 <label for="HomeNum">تلفن منزل</label>
                                 {% render_field form.home_number class="w-100" %}
+                                {% render_field form.home_number.errors %}
                             </div>
                             <div class="col-lg-6">
                                 <label for="PhoneNum">تلفن همراه</label>
                                 {% render_field form.phone_number class="w-100" %}
+                                {% render_field form.phone_number.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Email">پست الکترونیکی</label>
                                 {% render_field form.email_address class="w-100" %}
+                                {% render_field form.email_address.errors %}
                             </div>
                         </div>
                     </div>
