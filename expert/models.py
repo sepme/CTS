@@ -60,26 +60,26 @@ class ExpertForm(models.Model):
     phone_number = models.IntegerField(verbose_name="شماره منزل")
     mobile_phone = models.IntegerField(verbose_name="شماره تلفن همراه")
     email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
-    eq_test = models.OneToOneField(EqTest, on_delete=models.CASCADE, verbose_name="تست EQ")
-    awards = models.TextField(verbose_name="افتخارات")
-    method_of_introduction = models.TextField(verbose_name="طریقه اشنایی با چمران تیم")
-    positive_feature = models.TextField(verbose_name="ویژگی های مثبت چمران تیم")
-    lab_equipment = models.TextField(verbose_name="امکانات پژوهشی")
+    eq_test = models.OneToOneField(EqTest, on_delete=models.CASCADE, verbose_name="تست EQ", blank=True)
+    awards = models.TextField(blank=True, verbose_name="افتخارات")
+    method_of_introduction = models.TextField(verbose_name="طریقه اشنایی با چمران تیم", blank=True)
+    positive_feature = models.TextField(verbose_name="ویژگی های مثبت چمران تیم", blank=True)
+    lab_equipment = models.TextField(verbose_name="امکانات پژوهشی", blank=True)
     number_of_researcher_choice = (
         (0, '1-10'),
         (1, '11-30'),
         (2, '31-60'),
         (3, '+60'),
     )
-    number_of_researcher = models.IntegerField(choices=number_of_researcher_choice, verbose_name="دانشجو تحت نظارت")
+    number_of_researcher = models.IntegerField(choices=number_of_researcher_choice, verbose_name="دانشجو تحت نظارت", blank=True)
     has_industrial_research_choice = (
         ('آری', 'آری'),
         ('خیر', 'خیر'),
     )
-    has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice, verbose_name="همکاری با شرکت خارج دانشگاه")
-    number_of_grants = models.IntegerField(verbose_name="تعداد گرنت")
-    technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک")
-    languages = models.TextField(verbose_name="تسلط بر زبان های خارجی")
+    has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice, verbose_name="همکاری با شرکت خارج دانشگاه" , blank=True)
+    number_of_grants = models.IntegerField(verbose_name="تعداد گرنت" , blank=True)
+    technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True)
+    languages = models.TextField(verbose_name= "تسلط بر زبان های خارجی" , blank=True)
 
     def __str__(self):
         return self.expert_firstname + self.expert_lastname
