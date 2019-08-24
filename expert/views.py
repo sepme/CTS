@@ -78,6 +78,8 @@ def test(request):
     return HttpResponse('Test view')
 
 
+class Questions(generic.TemplateView):
+    template_name = 'expert/questions.html'
 
 
 

@@ -3,13 +3,11 @@
 
 {% block title %}پروژه ها{% endblock %}
 
-{% block initial_information %}
-    {% include 'expert/layouts/initial_information.html' %}
-{% endblock %}
 
 {% block name %} دکتر احسان شریف{% endblock %}
 
 {% block dialog %}
+    {% include 'expert/layouts/initial_information.html' %}
     {% include 'expert/layouts/project_details.html' %}
     {% include 'expert/layouts/showProject.html' %}
     {% include 'expert/layouts/vote_dialog_industry.html' %}

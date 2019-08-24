@@ -612,7 +612,11 @@ img{
 #upload-input{
   display: none;
 }
+<<<<<<< HEAD
 .mainInfo-body, .dialog-main{
+=======
+.mainInfo-body, .dialog-main, .fixed-back{
+>>>>>>> rzbasereh
   position: fixed;
   display: none;
   top: 0;
@@ -636,7 +640,11 @@ img{
   padding: 5px 10px 50px 10px;
   box-shadow: 0 0 50px #e3e3e3;
 }
+<<<<<<< HEAD
 .dialog-main{
+=======
+.dialog-main, .fixed-back{
+>>>>>>> rzbasereh
   display: none;
   overflow-y: scroll;
   justify-content: center;
@@ -651,6 +659,134 @@ img{
   margin: 70px auto;
   overflow-y: hidden;
 }
+<<<<<<< HEAD
+=======
+
+.fixed-back > .card {
+    position: relative;
+    color: #262626;
+    padding: 35px 10px 45px 10px;
+    margin: 70px auto;
+    overflow: hidden;
+    border-color: #BDBDBD;
+    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+}
+@media (min-width: 1200px) {
+    .fixed-back > .card {
+        width: 50%;
+    }
+}
+@media (max-width: 1200px) {
+    .fixed-back > .card {
+        width: 50%;
+    }
+}
+@media (max-width: 992px) {
+    .fixed-back > .card {
+        width: 70%;
+    }
+}
+@media (max-width: 768px) {
+    .fixed-back > .card {
+        width: 75%;
+    }
+}
+@media (max-width: 576px) {
+    .fixed-back > .card {
+        width: 95%;
+    }
+}
+.fixed-back .close{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: none;
+  z-index: 100;
+}
+.fixed-back .close:after,.fixed-back .close:before{
+    background-color: #707070;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translateX(50%) translateY(-50%) rotate(-45deg);
+    transform-origin: center center;
+}
+.fixed-back .close:after{
+  height: 1.5px;
+  width: 70%;
+}
+.fixed-back .close:before{
+  height: 70%;
+  width: 1.5px;
+}
+.fixed-back .close:hover{
+  cursor: pointer;
+  border:none;
+    background-color: #ff4545;
+}
+.fixed-back .close:hover:after,.fixed-back .close:hover:before{
+  background-color: #fff;
+}
+.fixed-back .card-head {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: 400;
+    font-size: 15px;
+    color: #3ccd1c;
+}
+.fixed-back.initial-information input#Email{
+    margin-bottom: 10px;
+}
+.fixed-back .card-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 45px;
+    width: 100%;
+    border: none;
+    background-color: #E3FFDD;
+    text-align: left;
+    padding: 8px;
+}
+.fixed-back .card-footer .reject-btn, .fixed-back .card-footer .save-btn{
+    border: none;
+    outline: none;
+    padding: 5px 15px;
+    text-align: center;
+    min-width: 100px;
+    border-radius: 0.25em;
+}
+.fixed-back .card-footer .reject-btn{
+    background-color: #ffffff;
+    color: #89E076;
+}
+.fixed-back .card-footer .reject-btn:hover{
+    color: #3ccd1c;
+}
+.fixed-back .card-footer .save-btn{
+    background-color: #89E076;
+    color: #ffffff;
+}
+.fixed-back .card-footer .save-btn:hover{
+    background-color: #3ccd1c;
+}
+
+a{
+    color: #5cb85c;
+}
+a:hover, a:focus{
+    color: #3ccd1c;
+}
+
+>>>>>>> rzbasereh
 .center-dialog{
     position: absolute;
     top: 50%;
@@ -760,6 +896,25 @@ label{
   right: 25px;
   color: #6f7285;
   transition: 300ms all ease;
+}
+label.fix{
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 13px;
+  color: #8d8d8d;
+}
+input.error, textarea.error {
+    background-color: #fdf7f8;
+    border: 1px solid #ff4545;
+    color: #ff4545;
+}
+div.error{
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    font-size: 10px;
+    color: #ff4545;
 }
 i.fa-plus{
   position: absolute;

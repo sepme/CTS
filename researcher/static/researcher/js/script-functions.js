@@ -72,6 +72,7 @@ function input_focus(){
             });
         });
     }
+<<<<<<< HEAD
     $("input,textarea").on("focus", function () {
         if($(this).hasClass("solid-label"))
             return false;
@@ -98,6 +99,61 @@ function input_focus(){
         }else {
             $(this).css("color","#8d8d8d");
             $(inputLabel).css("color","#8d8d8d");
+=======
+    $("input,textarea").each(function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).val() !== ''){
+            $(inputLabel).css({
+                    "font-size":"12px",
+                    "top":"0px",
+                    "right":"15px",
+                    "color":"#6f7285"
+                });
+        }
+        if( $(this).hasClass("error") ) {
+            $(inputLabel).css("color","#ff4545");
+        }
+    }).on("focus", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).hasClass("solid-label")) {
+            return false;
+        } else if($(this).hasClass("error")) {
+            var errorDiv = $(this).next(".error");
+            $(this).on("change", function () {
+            if( $(this).hasClass("error") ) {
+                $(this).removeClass("error");
+                $(errorDiv).remove();
+            }
+        });
+        } else{
+            $(inputLabel).css({
+                "font-size":"12px",
+                "top":"0px",
+                "right":"15px",
+                "color":"#3CCD1C"
+            });
+            $(this).css("color","#3ccd1c");
+        }
+    }).on("focusout", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).hasClass("solid-label")){
+            return false;
+        } else if($(this).hasClass("error")) {
+
+        } else {
+            $(inputLabel).css("color","#6f7285");
+            if($(this).val() === ''){
+                $(inputLabel).css({
+                    "font-size":"13px",
+                    "top":"28px",
+                    "right":"25px",
+                    "color":"#6f7285"
+                });
+            }else {
+                $(this).css("color","#8d8d8d");
+                $(inputLabel).css("color","#8d8d8d");
+            }
+>>>>>>> rzbasereh
         }
     });
 }

@@ -3,5 +3,9 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+<<<<<<< HEAD:.idea/misc.xml
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.6 (ChamranTeamSite)" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.6 (venv)" project-jdk-type="Python SDK" />
+>>>>>>> rzbasereh:.idea/misc.xml
 </project>

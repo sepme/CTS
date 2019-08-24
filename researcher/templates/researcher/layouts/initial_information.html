@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% load static %}
 <div class="mainInfo-body">
     <div class="card mainInfo text-right">
@@ -97,3 +98,104 @@
       </form>
     </div>
   </div>
+=======
+{% load static%}
+<div class="fixed-back initial-information" style="display: block">
+    <div class="card text-right">
+        <div class="card-head">اطلاعات اولیه</div>
+        <div class="container">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                          <div class="col-lg-12 text-center">
+                            <label for="upload-input" class="upload text-center">
+                              <i class="fas fa-pencil-alt"></i>
+                            </label>
+                            <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
+                            <input type="file" id="upload-input" accept="image/png, image/jpeg">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <label for="FirstName">نام</label>
+                            <input type="text" id="FirstName" class="w-100">
+                          </div>
+                            <div class="col-lg-6">
+                                <label for="LastName">نام خانوادگی</label>
+                                <input type="text" id="LastName" class="w-100">
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <label for="Field">رشته تحصیلی</label>
+                            <input type="text" id="Field" class="w-100">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <label for="MelliCode">کد ملی</label>
+                            <input type="text" id="MelliCode" class="w-100">
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="student-num">شماره دانشجویی</label>
+                                <input type="text" id="student-num" class="w-100">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="enter-date">سال ورود</label>
+                                <input type="text" id="enter-date" class="w-100">
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12 rankDiv">
+                              <label class="rankLabel" for="rank">آخرین مقطع تحصیلی</label>
+                                <select id="rank">
+                                      <option selected dir="rtl">انتخاب کنید ...</option>
+                                      <option value="1">کارشناسی</option>
+                                      <option value="2">کارشناسی ارشد</option>
+                                      <option value="3">دکتری</option>
+                                      <option value="4">دکتری حرفه ای</option>
+                                </select>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <label for="Uni">دانشگاه محل تحصیل</label>
+                            <input type="text" id="Uni" class="w-100">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <label for="Address">آدرس محل سکونت</label>
+                            <textarea dir="rtl" rows="5" class="w-100" id="Address"></textarea>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="PhoneNum">تلفن همراه</label>
+                                <input type="text" id="PhoneNum" class="w-100">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="HomeNum">تلفن منزل</label>
+                                <input type="text" id="HomeNum" class="w-100">
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <label for="Email">پست الکترونیکی</label>
+                            <input type="text" id="Email" class="w-100">
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="save-btn" type="submit">ذخیره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+>>>>>>> rzbasereh
