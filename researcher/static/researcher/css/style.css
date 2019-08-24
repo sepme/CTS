@@ -344,6 +344,7 @@ label{
   color: #6f7285;
   transition: 300ms all ease;
 }
+
 label.fix{
   position: absolute;
   top: 0;

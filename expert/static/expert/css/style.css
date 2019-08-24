@@ -116,6 +116,7 @@ img{
   margin: 70px auto;
   overflow: hidden;
 }
+
 .fixed-back > .card {
     position: relative;
     color: #262626;
@@ -623,6 +624,7 @@ label.fix{
   font-size: 13px;
   color: #8d8d8d;
 }
+
 input.error, textarea.error {
     background-color: #fdf7f8;
     border: 1px solid #ff4545;
@@ -635,6 +637,7 @@ div.error{
     font-size: 10px;
     color: #ff4545;
 }
+
 /*i.fa-plus{*/
 /*  position: absolute;*/
 /*  top: 33px;*/
