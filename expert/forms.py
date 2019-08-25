@@ -16,11 +16,10 @@ class InitialInfoForm(forms.Form):
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
-        print(first_name)
+        print("errors", self.errors)
         if first_name is None or first_name == '':
 
-            raise forms.ValidationError('نام نمی تواند خالی باشد.')
-
+            raise forms.ValidationError("نام نمی تواند خالی باشد.")
         return first_name
 
     def clean_last_name(self):
@@ -28,7 +27,7 @@ class InitialInfoForm(forms.Form):
         print(last_name)
         if last_name is None or last_name == '':
 
-            raise forms.ValidationError('نام نمی تواند خالی باشد.')
+            raise forms.ValidationError('نام خانوادگی نمی تواند خالی باشد.')
 
         return last_name
 
@@ -37,8 +36,7 @@ class InitialInfoForm(forms.Form):
         email = ExpertForm.objects.filter(email_address=current_email)
         if email.exists():
             raise forms.ValidationError('کاربر با این ایمیل قبلا ثبت نام شده است')
-        elif not current_email.endswith('gmail.com') or not current_email.endswith('yahoo.com'):
-            raise forms.ValidationError('آدرس ایمیل معتبر نیست. لطفا آدرس معتبر وارد کنید.')
+
         return current_email
 
     def clean_melli_code(self):
