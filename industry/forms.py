@@ -18,6 +18,10 @@ class IndustryBasicInfoForm(forms.Form):
     phone_number = forms.CharField(max_length=15)
     email_address = forms.EmailField()
 
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
     def clean_photo(self):
         data = self.cleaned_data["photo"]
         if data and (data.width > 200 or data.height > 200):
@@ -75,7 +79,9 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_email_address(self):
         email_address = self.cleaned_data.get('email_address')
-
+        print(self.user.email, ' ?= ', email_address)
+        if self.user.email and self.user.email != email_address:
+            raise ValidationError(_('ایمیل وارد شده با ایمیل شما مطالبفت ندارد.'))
         return email_address
 
 
