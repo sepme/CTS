@@ -96,11 +96,7 @@ img{
   padding: 5px 10px 50px 10px;
   box-shadow: 0 0 50px #e3e3e3;
 }
-<<<<<<< HEAD
-.dialog-main{
-=======
 .dialog-main, .fixed-back{
->>>>>>> rzbasereh
   display: none;
   overflow-y: scroll;
   justify-content: center;
@@ -115,8 +111,6 @@ img{
   margin: 70px auto;
   overflow: hidden;
 }
-<<<<<<< HEAD
-=======
 
 .fixed-back > .card {
     position: relative;
@@ -241,7 +235,6 @@ a:hover, a:focus{
     color: #3ccd1c;
 }
 
->>>>>>> rzbasereh
 .center-dialog{
     position: absolute;
     top: 50%;
@@ -351,8 +344,7 @@ label{
   color: #6f7285;
   transition: 300ms all ease;
 }
-<<<<<<< HEAD
-=======
+
 label.fix{
   position: absolute;
   top: 0;
@@ -372,7 +364,6 @@ div.error{
     font-size: 10px;
     color: #ff4545;
 }
->>>>>>> rzbasereh
 /*i.fa-plus{*/
 /*  position: absolute;*/
 /*  top: 33px;*/

@@ -101,11 +101,7 @@ img{
   padding: 5px 10px 50px 10px;
   box-shadow: 0 0 50px #e3e3e3;
 }
-<<<<<<< HEAD
-.dialog-main{
-=======
 .dialog-main, .fixed-back{
->>>>>>> rzbasereh
   display: none;
   overflow-y: scroll;
   justify-content: center;
@@ -120,8 +116,7 @@ img{
   margin: 70px auto;
   overflow: hidden;
 }
-<<<<<<< HEAD
-=======
+
 .fixed-back > .card {
     position: relative;
     color: #262626;
@@ -511,7 +506,6 @@ a:hover, a:focus{
     color: #3ccd1c;
 }
 
->>>>>>> rzbasereh
 .center-dialog{
     position: absolute;
     top: 50%;
@@ -630,8 +624,7 @@ label.fix{
   font-size: 13px;
   color: #8d8d8d;
 }
-<<<<<<< HEAD
-=======
+
 input.error, textarea.error {
     background-color: #fdf7f8;
     border: 1px solid #ff4545;
@@ -644,7 +637,7 @@ div.error{
     font-size: 10px;
     color: #ff4545;
 }
->>>>>>> rzbasereh
+
 /*i.fa-plus{*/
 /*  position: absolute;*/
 /*  top: 33px;*/
@@ -901,11 +894,7 @@ hr{
 }
 .info-card{
     margin: 20px 100px;
-<<<<<<< HEAD
-    padding: 20px;
-=======
     padding: 10px;
->>>>>>> rzbasereh
     color: #6f7285;
 }
 .row{
@@ -1126,16 +1115,11 @@ span.star-warning:after{
     padding: 5px;
     min-width: 45px;
     text-align: center;
-<<<<<<< HEAD
-    border: 1px solid #6f7285;
-    border-radius: 5px 0 5px 0;
-=======
     -webkit-border-radius: 0.25em;
     -moz-border-radius: 0.25em;
     border-radius: 0.25em;
     border: 1px solid transparent;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.16);
->>>>>>> rzbasereh
     transition: all ease-in-out 0.3s;
 }
 .label-check-radio+label:hover, .label-check-radio:checked+label{
@@ -1144,12 +1128,9 @@ span.star-warning:after{
     box-shadow: none;
     cursor: pointer;
 }
-<<<<<<< HEAD
-=======
 .label-check-radio:checked+label{
     background-color: rgba(60, 205, 28, 0.01);
 }
->>>>>>> rzbasereh
 .close{
   position: absolute;
   top: 5px;
@@ -1619,7 +1600,6 @@ span.border-span{
     background-color: #ffffff;
     box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.16);
     z-index: 1;
-<<<<<<< HEAD
 }
 .vote-question:hover{
     color: #3ccd1c;
@@ -1755,143 +1735,6 @@ input.vote-select[value='4'] + label:hover, input.vote-select[value='4']:checked
     top: 0;
     right: 0;
 }
-=======
-}
-.vote-question:hover{
-    color: #3ccd1c;
-    border-color: #3ccd1c;
-    box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.16);
-    cursor: pointer;
-}
-.vote-question > span{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -45%);
-    font-size: 22px;
-    font-weight:300;
-}
-.vote-question-text{
-    position: absolute;
-    top: 35px;
-    left: 25px;
-    border: 1px solid #3ccd1c;
-    border-radius: 0 5px 5px 5px;
-    padding: 5px;
-    background-color: #fff;
-    color: #3ccd1c;
-    -webkit-box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
-    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
-    font-size: 13px;
-    max-width: 50%;
-    z-index: 2;
-    display: none;
-}
-.vote-question-text:before{
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -1px;
-    height: 5px;
-    width: 5px;
-    border-left: 1px solid #3ccd1c;
-    background-color: #fff;
-}
-.vote-question-text:after{
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: 0;
-    height: 5px;
-    width: 5px;
-    border-bottom: 1px solid #3ccd1c;
-    border-bottom-left-radius: 10px;
-    background-color: #fff;
-}
-input.vote-select + label{
-    position: relative;
-    top: 50%;
-    transform: translateY(50%);
-}
-input.vote-select.l +{
-    position: relative;
-    top: 0%;
-    left: 0%;
-    /*-webkit-transform: translate(-50%, -50%);*/
-    /*-moz-transform: translate(-50%, -50%);*/
-    /*-ms-transform: translate(-50%, -50%);*/
-    /*-o-transform: translate(-50%, -50%);*/
-    /*transform: translate(-50%, -50%);*/
-    width: 15px;
-    height: 15px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-}
-input.vote-select[value='0'] + label{
-    height: 40px;
-    width: 40px;
-    border: 1px solid #ff0505;
-    background-color: #ffffff;
-}
-input.vote-select[value='0'] + label:hover, input.vote-select[value='0']:checked + label{
-    background-color: #ff0505;
-    cursor: pointer;
-}
-input.vote-select[value='1'] + label{
-    height: 30px;
-    width: 30px;
-    border: 1px solid #ff0505;
-    background-color: #ffffff;
-}
-input.vote-select[value='1'] + label:hover, input.vote-select[value='1']:checked + label{
-    background-color: #ff0505;
-    cursor: pointer;
-}
-input.vote-select[value='2'] + label{
-    height: 20px;
-    width: 20px;
-    border: 1px solid #fff600;
-    background-color: #ffffff;
-}
-input.vote-select[value='2'] + label:hover, input.vote-select[value='2']:checked + label{
-    background-color: #fff600;
-    cursor: pointer;
-}
-input.vote-select[value='3'] + label{
-    height: 30px;
-    width: 30px;
-    border: 1px solid #009639;
-    background-color: #ffffff;
-}
-input.vote-select[value='3'] + label:hover, input.vote-select[value='3']:checked + label{
-    background-color: #009639;
-    cursor: pointer;
-}
-input.vote-select[value='4'] + label{
-    height: 40px;
-    width: 40px;
-    border: 1px solid #009639;
-    background-color: #ffffff;
-}
-input.vote-select[value='4'] + label:hover, input.vote-select[value='4']:checked + label{
-    background-color: #009639;
-    cursor: pointer;
-}
-.vote-content{
-    display: flex;
-    padding-right: 20px;
-    padding-left: 15px;
-    font-weight: 300;
-    color: #000;
-}
-.swiper-slide > .vote-content > .number{
-    position: absolute;
-    top: 0;
-    right: 0;
-}
->>>>>>> rzbasereh
 .vote-select-label{
     margin: 5px;
     top: 0;
@@ -2459,7 +2302,6 @@ table > tbody > tr > td{
   padding: 5px;
   vertical-align: middle;
   border-left: 1px solid rgba(0, 0, 0, 0.125);
-<<<<<<< HEAD
 }
 .table td:last-child{
     border-left: none;
@@ -2467,15 +2309,6 @@ table > tbody > tr > td{
 .voting{
     color: #000000;
 }
-=======
-}
-.table td:last-child{
-    border-left: none;
-}
-.voting{
-    color: #000000;
-}
->>>>>>> rzbasereh
 
 /*@keyframes ripple {*/
 /*  0% {*/
@@ -2804,8 +2637,6 @@ table > tbody > tr > td{
 }
 .message-show .close:hover:before{
     background-color: #ff4545;
-<<<<<<< HEAD
-=======
 }
 /*
 *   Questions
@@ -2935,5 +2766,4 @@ ul.nav-tabs{
 .green-btn:hover{
     background-color: #3ccd1c;
     color: #ffffff;
->>>>>>> rzbasereh
 }

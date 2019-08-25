@@ -612,11 +612,7 @@ img{
 #upload-input{
   display: none;
 }
-<<<<<<< HEAD
-.mainInfo-body, .dialog-main{
-=======
 .mainInfo-body, .dialog-main, .fixed-back{
->>>>>>> rzbasereh
   position: fixed;
   display: none;
   top: 0;
@@ -640,11 +636,7 @@ img{
   padding: 5px 10px 50px 10px;
   box-shadow: 0 0 50px #e3e3e3;
 }
-<<<<<<< HEAD
-.dialog-main{
-=======
 .dialog-main, .fixed-back{
->>>>>>> rzbasereh
   display: none;
   overflow-y: scroll;
   justify-content: center;
@@ -659,8 +651,6 @@ img{
   margin: 70px auto;
   overflow-y: hidden;
 }
-<<<<<<< HEAD
-=======
 
 .fixed-back > .card {
     position: relative;
@@ -786,7 +776,6 @@ a:hover, a:focus{
     color: #3ccd1c;
 }
 
->>>>>>> rzbasereh
 .center-dialog{
     position: absolute;
     top: 50%;
