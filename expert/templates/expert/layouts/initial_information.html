@@ -4,7 +4,7 @@
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
         <div class="container">
-            <form action="{% url 'expert:index' %}" method="post">
+            <form action="{% url 'expert:index' %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">
@@ -32,12 +32,14 @@
                             <div class="col-lg-6">
                                 <label for="LastName">نام خانوادگی</label>
                                 {% render_field form.last_name class="w-100" %}
+                                {% render_field form.last_name.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Field">حوزه تخصصی</label>
                                 {% render_field form.special_field class="w-100" %}
+                                {% render_field form.special_field.errors %}
                             </div>
                         </div>
                         <div class="row">
@@ -60,17 +62,20 @@
                                     <option value="6">پژوهشگر</option>
                                 </select>
                             </div>
+                                {% render_field form.scientific_rank.errors %}
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Uni">دانشگاه محل فعالیت</label>
                                 {% render_field form.university class="w-100" %}
+                                {% render_field form.university.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Address">آدرس</label>
                                 {% render_field form.address class="w-100" %}
+                                {% render_field form.address.errors %}
 
                             </div>
                         </div>
