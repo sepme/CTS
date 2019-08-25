@@ -1,11 +1,18 @@
 from django import forms
 from .models import ExpertForm
-from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
 
 
 def is_numeric(string):
     for ch in string:
         if ch in '0123456789':
+            return True
+    return False
+
+
+def is_alphabetic(string):
+    for ch in string:
+        if ch not in '0123456789':
             return True
     return False
 
@@ -20,9 +27,9 @@ class InitialInfoForm(forms.Form):
     university = forms.CharField(max_length=128, error_messages={'required': "دانشگاه مورد نظر نمی تواند خالی باشد."})
     address = forms.CharField(widget=forms.Textarea(), error_messages={'required': "آدرس  نمی تواند خالی باشد."})
     home_number = forms.IntegerField(error_messages={'required': "شماره تلفن منزل نمی تواند خالی باشد.",
-                                                     'invalid' : 'شماره تلفن ملی باید عدد باشد.'})
+                                                     'invalid' : 'شماره تلفن  باید عدد باشد.'})
     phone_number = forms.IntegerField(error_messages={'required': "شماره تلفن همراه نمی تواند خالی باشد.",
-                                                      'invalid' : 'شماره تلفن ملی باید عدد باشد.'})
+                                                      'invalid' : 'شماره تلفن  باید عدد باشد.'})
     email_address = forms.EmailField(error_messages={'required': "ایمیل نمی تواند خالی باشد." ,
                                                      'invalid': 'ایمیل وارد شده نامعتبر است.'})
 
@@ -48,27 +55,33 @@ class InitialInfoForm(forms.Form):
 
     def clean_melli_code(self):
         melli_code = self.cleaned_data.get('melli_code')
+        print(type(melli_code))
+        # try:
+        #     int(melli_code)
+        # except ValueError:
+        #     print('HIIIIIi')
+        #     # raise ValidationError('کد ملی باید عدد باشد.')
 
         if len(str(melli_code)) != 10:
             raise forms.ValidationError('کد ملی باید ده رقمی باشد.')
+        elif is_alphabetic(str(melli_code)):
+            raise forms.ValidationError('کد ملی باید عدد باشد.')
         return melli_code
 
     def clean_home_number(self):
         home_number = self.cleaned_data.get('home_number')
         if len(str(home_number)) != 10:
             raise forms.ValidationError('شماره تلفن منزل باید ده رقمی باشد.')
+        elif is_alphabetic(str(home_number)):
+            raise forms.ValidationError('کد ملی باید عدد باشد.')
         return home_number
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
         if len(str(phone_number)) != 10:
             raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
+        elif is_alphabetic(str(phone_number)):
+            raise forms.ValidationError('شماره تلفن همراه باید عدد باشد.')
         return phone_number
 
-    def clean_scientific_rank(self):
-        rank = self.cleaned_data.get('scientific_rank')
-        print(rank)
-        if rank is None or rank == '':
-            raise forms.ValidationError('لطفا مرتبه علمی را انتخاب کنید.')
-        return rank
 

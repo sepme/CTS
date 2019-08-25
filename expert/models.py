@@ -6,14 +6,14 @@ from django.shortcuts import reverse, HttpResponseRedirect
 
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
-    expert_point = models.IntegerField(verbose_name="امتیاز استاد", default=0.0)
+    expert_point = models.IntegerField(verbose_name="امتیاز استاد", default=0.0, null=True, blank=True)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('free', "فعال - بدون پروژه"),
         ('involved', "فعال - درگیر پروژه"),
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
-    status = models.CharField(max_length=15, choices=STATUS)
+    status = models.CharField(max_length=15, choices=STATUS, null=True , blank=True)
 
     def __str__(self):
         return self.user.get_username()
@@ -41,18 +41,19 @@ class EqTest(models.Model):
 
 
 class ExpertForm(models.Model):
-    expert_form = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
-                                       blank=True, null=True)
+    expert_form = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد")
     expert_firstname = models.CharField(max_length=32, verbose_name="نام")
     expert_lastname = models.CharField(max_length=32, verbose_name="نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
     national_code = models.IntegerField(verbose_name="کد ملی")
     scientific_rank_choice = (
-        (0, 'مربی'),
-        (1, 'استادیار'),
-        (2, 'دانشیار'),
-        (3, 'استاد'),
-        (4, 'استاد تمام'),
+        (1, 'مربی'),
+        (2, 'استادیار'),
+        (3, 'دانشیار'),
+        (4, 'استاد'),
+        (5, 'استاد تمام'),
+        (6, 'پژوهشگر'),
+
     )
     scientific_rank = models.IntegerField(choices=scientific_rank_choice, verbose_name="مرتبه علمی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه محل فعالیت")
@@ -78,7 +79,7 @@ class ExpertForm(models.Model):
     )
     has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice, verbose_name="همکاری با شرکت خارج دانشگاه" , blank=True)
     number_of_grants = models.IntegerField(verbose_name="تعداد گرنت" , blank=True, null=True)
-    technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
+    # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name= "تسلط بر زبان های خارجی" , blank=True, null=True)
 
     def __str__(self):
