@@ -12,18 +12,18 @@ class Index(generic.TemplateView):
     template_name = 'industry/index.html'
     industry = models.IndustryUser
 
-    # def get(self, request, *args, **kwargs):
-    #     try:
-    #         self.industry = get_object_or_404(models.IndustryUser, user=request.user)
-    #     except:
-    #         return HttpResponseRedirect(reverse('chamran:login'))
-    #     return super().get(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        try:
+            self.industry = get_object_or_404(models.IndustryUser, user=request.user)
+        except:
+            return HttpResponseRedirect(reverse('chamran:login'))
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['industry'] = self.industry
-        # if this is the first login:
-        context['form'] = forms.IndustryBasicInfoForm
+        if self.request.user.industryuser.first_login:
+            context['form'] = forms.IndustryBasicInfoForm(self.request.user)
         try:
             if self.industry.industryform:
                 context['photo'] = self.industry.industryform.photo
@@ -32,9 +32,8 @@ class Index(generic.TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        form = forms.IndustryBasicInfoForm(request.POST, request.FILES)
+        form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
         if form.is_valid():
-            print('data is valid. raising some error for fun')
             photo = form.cleaned_data['photo']
             name = form.cleaned_data['name']
             registration_number = form.cleaned_data['registration_number']
@@ -44,11 +43,8 @@ class Index(generic.TemplateView):
             industry_address = form.cleaned_data['industry_address']
             phone_number = form.cleaned_data['phone_number']
             email_address = form.cleaned_data['email_address']
-            if email_address != request.user.email:
-                raise ValidationError(_('پست الکترونیکی مطابقت ندارد.'))
             industry_user = request.user.industryuser
-            industry_info = models.IndustryForm(industry_user=industry_user,
-                                                photo=photo,
+            industry_info = models.IndustryForm(photo=photo,
                                                 name=name,
                                                 registration_number=registration_number,
                                                 date_of_foundation=date_of_foundation,
@@ -59,6 +55,7 @@ class Index(generic.TemplateView):
                                                 email_address=email_address)
             industry_info.save()
             industry_user.first_login = False
+            industry_user.industryform = industry_info
             industry_user.save()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/index.html', context={'form': form})
