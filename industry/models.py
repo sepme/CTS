@@ -8,6 +8,7 @@ class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
     first_login = models.BooleanField(default=True)
+    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE, verbose_name="فرم صنعت")
 
     def __str__(self):
         return self.user.get_username()
@@ -17,7 +18,6 @@ class IndustryUser(models.Model):
 
 
 class IndustryForm(models.Model):
-    industry_user = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE, verbose_name="فرم صنعت")
     name = models.CharField(max_length=64, verbose_name="نام شرکت")
     registration_number = models.IntegerField(verbose_name="شماره ثبت")
     date_of_foundation = models.IntegerField(verbose_name="تاریخ تاسیس")
@@ -29,13 +29,13 @@ class IndustryForm(models.Model):
     industry_type = models.IntegerField(choices=industry_type_choice, verbose_name="نوع شرکت")
     industry_address = models.TextField(verbose_name="ادرس شرکت")
     phone_number = models.IntegerField(verbose_name="شماره تلفن")
-    international_activities = models.TextField(verbose_name="سابقه فعالیت بین المللی")
-    tax_declaration = models.FileField(upload_to='./uploads', verbose_name="اظهارنامه مالیاتی")
-    turn_over = models.FloatField(verbose_name="گردش مالی")
-    services_products = models.TextField(verbose_name="خدمات/محصولات")
-    awards_honors = models.TextField(verbose_name="افتخارات")
+    international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
+    tax_declaration = models.FileField(null=True, upload_to='./uploads', verbose_name="اظهارنامه مالیاتی")
+    turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
+    services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
+    awards_honors = models.TextField(null=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.IntegerField()
+    photo = models.IntegerField(null=True)
 
     def __str__(self):
         return self.name
