@@ -12,7 +12,8 @@ class IndustryBasicInfoForm(forms.Form):
     name = forms.CharField(max_length=300, required=False)
     registration_number = forms.CharField(max_length=50, required=False)
     date_of_foundation = forms.CharField(max_length=50, required=False)
-    research_field = forms.CharField(max_length=300, required=False)
+    research_field = forms.CharField(max_length=300, required=True,
+                                     error_messages={'required': 'حوزه فعالیت را وارد کنید'})
     industry_type = forms.IntegerField(error_messages={'invalid': 'لطفا نوع شرکت را انتخاب کنید.'})
     industry_address = forms.CharField(max_length=3000)
     phone_number = forms.CharField(max_length=15)
