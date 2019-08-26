@@ -1,7 +1,8 @@
+from django.core.exceptions import ValidationError
 from django.views import generic
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 from . import models
 from . import forms
@@ -21,6 +22,8 @@ class Index(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['industry'] = self.industry
+        # if this is the first login:
+        context['form'] = forms.IndustryBasicInfoForm
         try:
             if self.industry.industryform:
                 context['photo'] = self.industry.industryform.photo
@@ -31,6 +34,7 @@ class Index(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         form = forms.IndustryBasicInfoForm(request.POST, request.FILES)
         if form.is_valid():
+            print('data is valid. raising some error for fun')
             photo = form.cleaned_data['photo']
             name = form.cleaned_data['name']
             registration_number = form.cleaned_data['registration_number']
@@ -40,9 +44,10 @@ class Index(generic.TemplateView):
             industry_address = form.cleaned_data['industry_address']
             phone_number = form.cleaned_data['phone_number']
             email_address = form.cleaned_data['email_address']
-            # if email_address != request.user.email:
-            #     raise ValidationError(_('پست الکترونیکی مطابقت ندارد.'))
-            industry_info = models.IndustryForm(industry_user=request.user.industryuser,
+            if email_address != request.user.email:
+                raise ValidationError(_('پست الکترونیکی مطابقت ندارد.'))
+            industry_user = request.user.industryuser
+            industry_info = models.IndustryForm(industry_user=industry_user,
                                                 photo=photo,
                                                 name=name,
                                                 registration_number=registration_number,
@@ -53,7 +58,10 @@ class Index(generic.TemplateView):
                                                 phone_number=phone_number,
                                                 email_address=email_address)
             industry_info.save()
-        return HttpResponseRedirect(reverse('industry:index'))
+            industry_user.first_login = False
+            industry_user.save()
+            return HttpResponseRedirect(reverse('industry:index'))
+        return render(request, 'industry/index.html', context={'form': form})
 
 
 class userInfo(generic.FormView):

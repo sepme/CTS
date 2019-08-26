@@ -7,6 +7,7 @@ from django.shortcuts import reverse, HttpResponseRedirect
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
+    first_login = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.get_username()
