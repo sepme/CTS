@@ -41,11 +41,11 @@ class EqTest(models.Model):
 
 
 class ExpertForm(models.Model):
-    expert_form = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد")
+    expert_form = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد" , null=True, blank=True)
     expert_firstname = models.CharField(max_length=32, verbose_name="نام")
     expert_lastname = models.CharField(max_length=32, verbose_name="نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
-    national_code = models.IntegerField(verbose_name="کد ملی")
+    national_code = models.CharField(max_length=15, verbose_name="کد ملی")
     scientific_rank_choice = (
         (1, 'مربی'),
         (2, 'استادیار'),
@@ -58,8 +58,8 @@ class ExpertForm(models.Model):
     scientific_rank = models.IntegerField(choices=scientific_rank_choice, verbose_name="مرتبه علمی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه محل فعالیت")
     home_address = models.CharField(max_length=512, verbose_name="ادرس منزل")
-    phone_number = models.IntegerField(verbose_name="شماره منزل")
-    mobile_phone = models.IntegerField(verbose_name="شماره تلفن همراه")
+    phone_number = models.CharField(max_length=15, verbose_name="شماره منزل")
+    mobile_phone = models.CharField(max_length=15, verbose_name="شماره تلفن همراه")
     email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
     eq_test = models.OneToOneField(EqTest, on_delete=models.CASCADE, verbose_name="تست EQ", blank=True, null=True)
     awards = models.TextField(blank=True, verbose_name="افتخارات" ,  null=True)
