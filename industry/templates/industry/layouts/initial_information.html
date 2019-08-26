@@ -1,75 +1,85 @@
-{% load static%}
+{% load static %}
+{% load widget_tweaks %}
 <div class="fixed-back initial-information" style="display: block">
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
         <div class="container">
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                          <div class="col-lg-12 text-center">
+        <form enctype="multipart/form-data" method="post" action="">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
                             <label for="upload-input" class="upload text-center">
-                              <i class="fas fa-pencil-alt"></i>
+                                <i class="fas fa-pencil-alt"></i>
                             </label>
-                            <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
+                            <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile"
+                                 width="150px" height="150px">
                             <input type="file" id="upload-input" accept="image/png, image/jpeg">
-                          </div>
                         </div>
-                        <div class="row">
-                          <div class="col-lg-12">
-                            <label for="firmName">نام شرکت</label>
-                            <input type="text" id="firmName" class="w-100">
-                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="id_name">نام شرکت</label>
+                            {% render_field form.name class+="w-100" %}
+                            {% render_field form.name.errors %}
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                            <label for="registerNum">شماره ثبت</label>
-                            <input type="text" id="registerNum" class="w-100">
-                          </div>
-                            <div class="col-lg-6">
-                            <label for="establishmentDate">سال تاسیس</label>
-                            <input type="text" id="establishmentDate" class="w-100">
-                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="id_registration_number">شماره ثبت</label>
+                            {% render_field form.registration_number class+="w-100" %}
+                            {% render_field form.registration_number.errors %}
                         </div>
-                        <div class="row">
-                          <div class="col-lg-12">
-                            <label for="Field">حوزه فعالیت</label>
-                            <input type="text" id="Field" class="w-100">
-                          </div>
+                        <div class="col-lg-6">
+                            <label for="id_date_of_foundation">سال تاسیس</label>
+                            {% render_field form.date_of_foundation class+="w-100" %}
+                            {% render_field form.date_of_foundation.errors %}
                         </div>
-                        <div class="row">
-                          <div class="col-lg-12 rankDiv">
-                              <label class="rankLabel" for="rank">نوع شرکت</label>
-                            <select id="rank">
-                              <option selected dir="rtl">انتخاب کنید ...</option>
-                              <option value="1">دولتی</option>
-                              <option value="2">خصوصی</option>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="id_research_field">حوزه فعالیت</label>
+                            {% render_field form.research_field class+="w-100" %}
+                            {% render_field form.research_field.errors %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 rankDiv">
+                            <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
+                            <select id="id_industry_type" name="industry_type">
+                                <option selected dir="rtl">انتخاب کنید ...</option>
+                                <option value="1">دولتی</option>
+                                <option value="2">خصوصی</option>
                             </select>
-                          </div>
+                            {% render_field form.industry_type.errors %}
                         </div>
-                        <div class="row">
-                          <div class="col-lg-12">
-                            <label for="Address">نشانی</label>
-                            <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
-                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="id_industry_address">نشانی</label>
+                            {% render_field form.industry_address class+="w-100" rows="3" dir="rtl" %}
+                            {% render_field form.industry_address.errors %}
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label for="phoneNum">تلفن</label>
-                                <input type="text" id="phoneNum" class="w-100">
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="Email">پست الکترونیکی</label>
-                                <input type="text" id="Email" class="w-100">
-                             </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="id_phone_number">تلفن</label>
+                            {% render_field form.phone_number class+="w-100" %}
+                            {% render_field form.phone_number.errors %}
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_email_address">پست الکترونیکی</label>
+                            {% render_field form.email_address class+="w-100" %}
+                            {% render_field form.email_address.errors %}
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
                     <button class="save-btn" type="submit">ذخیره</button>
                 </div>
-            </form>
+            </div>
+        </form>
         </div>
     </div>
 </div>
