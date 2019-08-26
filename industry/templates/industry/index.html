@@ -2,12 +2,10 @@
 
 {% block title %}پروژه ها{% endblock %}
 
-{% block initial_information %}
-{#    {% if user.industryuser.first_login %}#}
-        {% include 'industry/layouts/initial_information.html' %}
-{#    {% endif %}#}
-{% endblock %}
 {% block dialog%}
+    {% if user.industryuser.first_login %}
+        {% include 'industry/layouts/initial_information.html' %}
+    {% endif %}
     {% include 'industry/layouts/showProject.html' %}
     {% include 'industry/layouts/vote_dialog.html' %}
 {% endblock %}

@@ -34,6 +34,7 @@ class Index(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
         if form.is_valid():
+            print('data is valid. raising some error for fun')
             photo = form.cleaned_data['photo']
             name = form.cleaned_data['name']
             registration_number = form.cleaned_data['registration_number']

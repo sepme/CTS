@@ -79,7 +79,6 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_email_address(self):
         email_address = self.cleaned_data.get('email_address')
-        print(self.user.email, ' ?= ', email_address)
         if self.user.email and self.user.email != email_address:
             raise ValidationError(_('ایمیل وارد شده با ایمیل شما مطالبفت ندارد.'))
         return email_address
