@@ -10,27 +10,17 @@ def is_numeric(string):
     return False
 
 
-def is_alphabetic(string):
-    for ch in string:
-        if ch not in '0123456789':
-            return True
-    return False
-
-
 class InitialInfoForm(forms.Form):
     first_name = forms.CharField(max_length=32, error_messages={'required': "نام نمی تواند خالی باشد."})
     last_name = forms.CharField(max_length=32, error_messages={'required': "نام خانوادگی نمی تواند خالی باشد."})
     special_field = forms.CharField(max_length=256, error_messages={'required': "حوزه تخصصی نمی تواند خالی باشد."})
-    melli_code = forms.IntegerField(error_messages={'required': "کد ملی نمی تواند خالی باشد.",
-                                                    'invalid' : 'کد ملی باید عدد باشد.'})
+    melli_code = forms.CharField(error_messages={'required': "کد ملی نمی تواند خالی باشد."})
     scientific_rank = forms.IntegerField(error_messages={'invalid': 'مرتبه علمی نباید خالی باشد!'})
     university = forms.CharField(max_length=128, error_messages={'required': "دانشگاه مورد نظر نمی تواند خالی باشد."})
     address = forms.CharField(widget=forms.Textarea(), error_messages={'required': "آدرس  نمی تواند خالی باشد."})
-    home_number = forms.IntegerField(error_messages={'required': "شماره تلفن منزل نمی تواند خالی باشد.",
-                                                     'invalid' : 'شماره تلفن  باید عدد باشد.'})
-    phone_number = forms.IntegerField(error_messages={'required': "شماره تلفن همراه نمی تواند خالی باشد.",
-                                                      'invalid' : 'شماره تلفن  باید عدد باشد.'})
-    email_address = forms.EmailField(error_messages={'required': "ایمیل نمی تواند خالی باشد." ,
+    home_number = forms.CharField(error_messages={'required': "شماره تلفن منزل نمی تواند خالی باشد."})
+    phone_number = forms.CharField(error_messages={'required': "شماره تلفن همراه نمی تواند خالی باشد."})
+    email_address = forms.EmailField(error_messages={'required': "ایمیل نمی تواند خالی باشد.",
                                                      'invalid': 'ایمیل وارد شده نامعتبر است.'})
 
     def clean_first_name(self):
@@ -55,33 +45,42 @@ class InitialInfoForm(forms.Form):
 
     def clean_melli_code(self):
         melli_code = self.cleaned_data.get('melli_code')
-        print(type(melli_code))
-        # try:
-        #     int(melli_code)
-        # except ValueError:
-        #     print('HIIIIIi')
-        #     # raise ValidationError('کد ملی باید عدد باشد.')
+        print('mellicode:', melli_code)
+        try:
+            int(melli_code)
+        except ValueError:
+            print('HIIIIIi')
+            raise forms.ValidationError('کد ملی باید یک عدد باشد.')
 
-        if len(str(melli_code)) != 10:
+        if len(melli_code) != 10:
             raise forms.ValidationError('کد ملی باید ده رقمی باشد.')
-        elif is_alphabetic(str(melli_code)):
-            raise forms.ValidationError('کد ملی باید عدد باشد.')
+
         return melli_code
 
     def clean_home_number(self):
         home_number = self.cleaned_data.get('home_number')
-        if len(str(home_number)) != 10:
-            raise forms.ValidationError('شماره تلفن منزل باید ده رقمی باشد.')
-        elif is_alphabetic(str(home_number)):
-            raise forms.ValidationError('کد ملی باید عدد باشد.')
+        print('home_number:', home_number)
+        try:
+            int(home_number)
+        except ValueError:
+            print('HIIIIIi')
+            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
+
+        if len(home_number) != 11:
+            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
+
         return home_number
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
-        if len(str(phone_number)) != 10:
+        print('phone_number:', phone_number)
+        try:
+            int(phone_number)
+        except ValueError:
+            print('HIIIIIi')
+            raise forms.ValidationError('شماره تلفن همراه باید یک عدد باشد.')
+
+        if len(phone_number) != 11:
             raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
-        elif is_alphabetic(str(phone_number)):
-            raise forms.ValidationError('شماره تلفن همراه باید عدد باشد.')
+
         return phone_number
-
-
