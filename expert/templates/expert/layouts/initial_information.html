@@ -1,6 +1,6 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back initial-information" style="display: block">
+<div class="fixed-back initial-information"{% if first_time %} style="display: block" {% endif %}>
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
         <div class="container">
@@ -22,31 +22,51 @@
                             <div class="col-lg-6">
                                 {#for adding error add class "error" to input or textarea then add following div after that#}
                                 <label for="FirstName">نام</label>
-                                {% render_field form.first_name class="w-100" %}
-                                {% render_field form.first_name.errors %}
+                                {% if form.first_name.errors %}
+                                    {% render_field form.first_name class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.first_name class="w-100" %}
+                                {% endif %}
                                 <div class="error">
-                                    <span>*</span>
-                                    <span class="error-body">Error Body</span>
+                                    <span class="error-body">{% render_field form.first_name.errors %}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="LastName">نام خانوادگی</label>
-                                {% render_field form.last_name class="w-100" %}
-                                {% render_field form.last_name.errors %}
+                                {% if form.last_name.errors %}
+                                    {% render_field form.last_name class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.last_name class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.last_name.errors %}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Field">حوزه تخصصی</label>
-                                {% render_field form.special_field class="w-100" %}
-                                {% render_field form.special_field.errors %}
+                                {% if form.special_field.errors %}
+                                    {% render_field form.special_field class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.special_field class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.special_field.errors %}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="MelliCode">کد ملی</label>
-                                {% render_field form.melli_code class="w-100" %}
-                                {% render_field form.melli_code.errors %}
+                                {% if form.melli_code.errors %}
+                                    {% render_field form.melli_code class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.melli_code class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.melli_code.errors %}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -61,41 +81,74 @@
                                     <option value="5">استاد تمام</option>
                                     <option value="6">پژوهشگر</option>
                                 </select>
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.scientific_rank.errors %}</span>
+                                </div>
                             </div>
-                                {% render_field form.scientific_rank.errors %}
+
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Uni">دانشگاه محل فعالیت</label>
-                                {% render_field form.university class="w-100" %}
-                                {% render_field form.university.errors %}
+                                {% if form.university.errors %}
+                                    {% render_field form.university class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.university class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.university.errors %}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Address">آدرس</label>
-                                {% render_field form.address class="w-100" %}
-                                {% render_field form.address.errors %}
+                                {% if form.address.errors %}
+                                    {% render_field form.address class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.address class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.address.errors %}</span>
+                                </div>
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="HomeNum">تلفن منزل</label>
-                                {% render_field form.home_number class="w-100" %}
-                                {% render_field form.home_number.errors %}
+                                {% if form.home_number.errors %}
+                                    {% render_field form.home_number class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.home_number class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.home_number.errors %}</span>
+                                </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="PhoneNum">تلفن همراه</label>
-                                {% render_field form.phone_number class="w-100" %}
-                                {% render_field form.phone_number.errors %}
+                                {% if form.phone_number.errors %}
+                                    {% render_field form.phone_number class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.phone_number class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.phone_number.errors %}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Email">پست الکترونیکی</label>
-                                {% render_field form.email_address class="w-100" %}
-                                {% render_field form.email_address.errors %}
+                                {% if form.email_address.errors %}
+                                    {% render_field form.email_address class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.email_address class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.email_address.errors %}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -23,8 +23,10 @@ class Messages(generic.TemplateView):
 
 @login_required(login_url='/login/')
 def index(request):
+    first_time = True
     if request.method == 'POST':
         form = InitialInfoForm(request.POST or None)
+        print(form.is_valid())
         if form.is_valid():
             print(form.cleaned_data)
             first_name = form.cleaned_data['first_name']
@@ -44,13 +46,13 @@ def index(request):
             expert_user = ExpertUser.objects.create(user=request.user)
             expert_form.expert_form = expert_user
             expert_form.save()
-
+            first_time = False
             print(expert_form)
-            return HttpResponseRedirect(reverse('expert:test'))
+            return render(request, 'expert/index.html', {'form': form, 'first_time': first_time})
 
     else:
         form = InitialInfoForm()
-    return render(request, 'expert/index.html', {'form': form})
+    return render(request, 'expert/index.html', {'form': form, 'first_time': first_time})
 
 
 def test(request):
