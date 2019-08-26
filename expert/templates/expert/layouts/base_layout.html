@@ -22,7 +22,7 @@
 {#<canvas id="loading-canvas"></canvas>#}
 {#  </div>#}
   {% block dialog%}{% endblock %}
-  <div class="main">
+  <div class="main blur-div">
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
         <div class="top-msg">
@@ -42,7 +42,6 @@
     </div>
     <div class="content">
         <div class="container">
-            {% block initial_information %}{% endblock %}
             {% block content %}{% endblock %}
         </div>
     </div>

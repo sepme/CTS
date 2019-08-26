@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'expert.apps.ExpertConfig',
     'researcher.apps.ResearcherConfig',
     'industry.apps.IndustryConfig',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
