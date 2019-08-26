@@ -22,7 +22,7 @@ class Index(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['industry'] = self.industry
-        if self.request.user.industryuser.first_login:
+        if self.request.user.industryuser.status == 'signed_up':
             context['form'] = forms.IndustryBasicInfoForm(self.request.user)
         try:
             if self.industry.industryform:
@@ -55,7 +55,7 @@ class Index(generic.TemplateView):
                                                 phone_number=phone_number,
                                                 email_address=email_address)
             industry_info.save()
-            industry_user.first_login = False
+            industry_user.status = 'free'
             industry_user.industryform = industry_info
             industry_user.save()
             return HttpResponseRedirect(reverse('industry:index'))
