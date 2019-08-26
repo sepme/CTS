@@ -115,7 +115,7 @@ img{
 .fixed-back > .card {
     position: relative;
     color: #262626;
-    padding: 35px 10px 45px 10px;
+    padding: 35px 10px 55px 10px;
     margin: 70px auto;
     overflow: hidden;
     border-color: #BDBDBD;
@@ -191,9 +191,6 @@ img{
     font-weight: 400;
     font-size: 15px;
     color: #3ccd1c;
-}
-.fixed-back.initial-information input#Email{
-    margin-bottom: 10px;
 }
 .fixed-back .card-footer {
     position: absolute;
@@ -327,6 +324,9 @@ input, textarea, select{
   margin-top: 20px;
   direction: rtl;
   padding-right: 10px;
+}
+select{
+    border-radius: 5px 0 0 5px;
 }
 input:focus, textarea:focus{
   outline: none;

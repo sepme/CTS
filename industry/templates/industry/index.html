@@ -3,7 +3,9 @@
 {% block title %}پروژه ها{% endblock %}
 
 {% block dialog%}
-{#    {% include 'industry/layouts/initial_information.html' %}#}
+    {#    {% if user.industryuser.first_login %}#}
+        {% include 'industry/layouts/initial_information.html' %}
+{#    {% endif %}#}
     {% include 'industry/layouts/showProject.html' %}
     {% include 'industry/layouts/vote_dialog.html' %}
 {% endblock %}
