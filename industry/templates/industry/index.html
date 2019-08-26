@@ -3,7 +3,7 @@
 {% block title %}پروژه ها{% endblock %}
 
 {% block dialog%}
-    {% if user.industryuser.first_login %}
+    {% if user.industryuser.status == 'signed_up' %}
         {% include 'industry/layouts/initial_information.html' %}
     {% endif %}
     {% include 'industry/layouts/showProject.html' %}

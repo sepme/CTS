@@ -7,8 +7,16 @@ from django.shortcuts import reverse, HttpResponseRedirect
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
-    first_login = models.BooleanField(default=True)
     industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE, verbose_name="فرم صنعت")
+    STATUS = (
+        ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
+        ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
+        ('free', "فعال - بدون پروژه"),
+        ('waiting', "فعال - در حال انتظار پروژه"),
+        ('involved', "فعال - درگیر پروژه"),
+        ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
+    )
+    status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
 
     def __str__(self):
         return self.user.get_username()
