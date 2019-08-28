@@ -25,8 +25,9 @@ class Messages(generic.TemplateView):
 def index(request):
     expert_user = get_object_or_404(ExpertUser, user=request.user)
     if request.method == 'POST':
-        form = InitialInfoForm(request.POST or None)
+        form = InitialInfoForm(request.POST, request.FILES)
         print(form.is_valid())
+
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -38,11 +39,13 @@ def index(request):
             home_number = form.cleaned_data['home_number']
             phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email_address']
-
             expert_form = ExpertForm.objects.create(expert_firstname=first_name, expert_lastname=last_name, special_field=special_field, national_code=melli_code,
                                                     scientific_rank=scientific_rank, university=university, phone_number=home_number,home_address=address,
                                                     mobile_phone=phone_number, email_address=email)
             expert_form.expert_user = expert_user
+            if request.FILES.get('photo'):
+                photo = request.FILES.get('photo')
+                expert_form.photo.save(photo.name, photo)
             expert_user.status = 'free'
             expert_user.save()
             expert_form.save()

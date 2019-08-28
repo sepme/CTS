@@ -1,7 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import os
 from django.shortcuts import reverse, HttpResponseRedirect
+
+
+def get_image_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format('profile', ext)
+
+    return os.path.join('unique', instance.expert_user.user.username, filename)
 
 
 class ExpertUser(models.Model):
@@ -81,9 +88,10 @@ class ExpertForm(models.Model):
     number_of_grants = models.IntegerField(verbose_name="تعداد گرنت" , blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name= "تسلط بر زبان های خارجی" , blank=True, null=True)
+    photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.expert_firstname + self.expert_lastname
+        return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
 
 
 class ScientificRecord(models.Model):
