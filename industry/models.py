@@ -1,3 +1,6 @@
+import os
+from ChamranTeamSite import settings
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -25,6 +28,10 @@ class IndustryUser(models.Model):
         return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
 
 
+def upload_and_rename_profile(instance, file_name):
+    return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
+
+
 class IndustryForm(models.Model):
     name = models.CharField(max_length=64, verbose_name="نام شرکت")
     registration_number = models.IntegerField(verbose_name="شماره ثبت")
@@ -43,10 +50,23 @@ class IndustryForm(models.Model):
     services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
     awards_honors = models.TextField(null=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.IntegerField(null=True)
+    photo = models.ImageField(upload_to=upload_and_rename_profile, null=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        extension = None
+        if self.photo:
+            extension = self.photo.name.split('.')[-1]
+        super().save()
+        img = Image.open("media/{}/profile.{}".format(self.name, extension))
+        rgb = img.convert('RGB')
+        os.remove(os.path.join(settings.MEDIA_ROOT, '{}/profile.{}'.format(self.name, extension)))
+        rgb.save("media/{}/profile.jpg".format(self.name))
+        self.photo.name = "profile.jpg"
+        super().save()
+        print('the path is ', self.photo.path)
 
 
 class Keyword(models.Model):
