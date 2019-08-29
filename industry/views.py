@@ -12,12 +12,12 @@ class Index(generic.TemplateView):
     template_name = 'industry/index.html'
     industry = models.IndustryUser
 
-    # def get(self, request, *args, **kwargs):
-    #     try:
-    #         self.industry = get_object_or_404(models.IndustryUser, user=request.user)
-    #     except:
-    #         return HttpResponseRedirect(reverse('chamran:login'))
-    #     return super().get(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        try:
+            self.industry = get_object_or_404(models.IndustryUser, user=request.user)
+        except:
+            return HttpResponseRedirect(reverse('chamran:login'))
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
