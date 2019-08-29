@@ -12,11 +12,16 @@ class IndustryBasicInfoForm(forms.Form):
     name = forms.CharField(max_length=300, required=False)
     registration_number = forms.CharField(max_length=50, required=False)
     date_of_foundation = forms.CharField(max_length=50, required=False)
-    research_field = forms.CharField(max_length=300, required=False)
+    research_field = forms.CharField(max_length=300, required=True,
+                                     error_messages={'required': 'حوزه فعالیت را وارد کنید'})
     industry_type = forms.IntegerField(error_messages={'invalid': 'لطفا نوع شرکت را انتخاب کنید.'})
     industry_address = forms.CharField(max_length=3000)
     phone_number = forms.CharField(max_length=15)
     email_address = forms.EmailField()
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]
@@ -75,7 +80,8 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_email_address(self):
         email_address = self.cleaned_data.get('email_address')
-
+        if self.user.email and self.user.email != email_address:
+            raise ValidationError(_('ایمیل وارد شده با ایمیل شما مطالبفت ندارد.'))
         return email_address
 
 

@@ -1,3 +1,6 @@
+import os
+from ChamranTeamSite import settings
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -7,7 +10,16 @@ from django.shortcuts import reverse, HttpResponseRedirect
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
-    first_login = models.BooleanField(default=True)
+    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE, verbose_name="فرم صنعت")
+    STATUS = (
+        ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
+        ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
+        ('free', "فعال - بدون پروژه"),
+        ('waiting', "فعال - در حال انتظار پروژه"),
+        ('involved', "فعال - درگیر پروژه"),
+        ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
+    )
+    status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
 
     def __str__(self):
         return self.user.get_username()
@@ -16,8 +28,11 @@ class IndustryUser(models.Model):
         return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
 
 
+def upload_and_rename_profile(instance, file_name):
+    return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
+
+
 class IndustryForm(models.Model):
-    industry_user = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE, verbose_name="فرم صنعت")
     name = models.CharField(max_length=64, verbose_name="نام شرکت")
     registration_number = models.IntegerField(verbose_name="شماره ثبت")
     date_of_foundation = models.IntegerField(verbose_name="تاریخ تاسیس")
@@ -29,16 +44,29 @@ class IndustryForm(models.Model):
     industry_type = models.IntegerField(choices=industry_type_choice, verbose_name="نوع شرکت")
     industry_address = models.TextField(verbose_name="ادرس شرکت")
     phone_number = models.IntegerField(verbose_name="شماره تلفن")
-    international_activities = models.TextField(verbose_name="سابقه فعالیت بین المللی")
-    tax_declaration = models.FileField(upload_to='./uploads', verbose_name="اظهارنامه مالیاتی")
-    turn_over = models.FloatField(verbose_name="گردش مالی")
-    services_products = models.TextField(verbose_name="خدمات/محصولات")
-    awards_honors = models.TextField(verbose_name="افتخارات")
+    international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
+    tax_declaration = models.FileField(null=True, upload_to='./uploads', verbose_name="اظهارنامه مالیاتی")
+    turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
+    services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
+    awards_honors = models.TextField(null=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.IntegerField()
+    photo = models.ImageField(upload_to=upload_and_rename_profile, null=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        extension = None
+        if self.photo:
+            extension = self.photo.name.split('.')[-1]
+        super().save()
+        img = Image.open("media/{}/profile.{}".format(self.name, extension))
+        rgb = img.convert('RGB')
+        os.remove(os.path.join(settings.MEDIA_ROOT, '{}/profile.{}'.format(self.name, extension)))
+        rgb.save("media/{}/profile.jpg".format(self.name))
+        self.photo.name = "profile.jpg"
+        super().save()
+        print('the path is ', self.photo.path)
 
 
 class Keyword(models.Model):
