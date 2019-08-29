@@ -1,6 +1,7 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back initial-information"{% if expert_user.status == "signed_up" %} style="display: block" {% endif %}>
+<div class="fixed-back initial-information"{% if expert_user.status == "signed_up" %}
+     style="display: block" {% endif %}>
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
         <div class="container">
@@ -23,9 +24,9 @@
                                 {#for adding error add class "error" to input or textarea then add following div after that#}
                                 <label for="FirstName">نام</label>
                                 {% if form.first_name.errors %}
-                                    {% render_field form.first_name class="error w-100" %}
+                                    {{ form.first_name|attr:"id:FirstName"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.first_name class="w-100" %}
+                                    {{ form.first_name|attr:"id:FirstName"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.first_name.errors %}</span>
@@ -34,9 +35,9 @@
                             <div class="col-lg-6">
                                 <label for="LastName">نام خانوادگی</label>
                                 {% if form.last_name.errors %}
-                                    {% render_field form.last_name class="error w-100" %}
+                                    {{ form.last_name|attr:"id:LastName"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.last_name class="w-100" %}
+                                    {{ form.last_name|attr:"id:LastName"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.last_name.errors %}</span>
@@ -47,9 +48,9 @@
                             <div class="col-lg-12">
                                 <label for="Field">حوزه تخصصی</label>
                                 {% if form.special_field.errors %}
-                                    {% render_field form.special_field class="error w-100" %}
+                                    {{ form.special_field|attr:"id:Field"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.special_field class="w-100" %}
+                                    {{ form.special_field|attr:"id:Field"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.special_field.errors %}</span>
@@ -60,9 +61,9 @@
                             <div class="col-lg-12">
                                 <label for="MelliCode">کد ملی</label>
                                 {% if form.melli_code.errors %}
-                                    {% render_field form.melli_code class="error w-100" %}
+                                    {{ form.melli_code|attr:"id:MelliCode"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.melli_code class="w-100" %}
+                                    {{ form.melli_code|attr:"id:MelliCode"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.melli_code.errors %}</span>
@@ -91,9 +92,9 @@
                             <div class="col-lg-12">
                                 <label for="Uni">دانشگاه محل فعالیت</label>
                                 {% if form.university.errors %}
-                                    {% render_field form.university class="error w-100" %}
+                                    {{ form.university|attr:"id:Uni"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.university class="w-100" %}
+                                    {{ form.university|attr:"id:Uni"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.university.errors %}</span>
@@ -104,9 +105,9 @@
                             <div class="col-lg-12">
                                 <label for="Address">آدرس</label>
                                 {% if form.address.errors %}
-                                    {% render_field form.address class="error w-100" %}
+                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.address class="w-100" %}
+                                    {{ form.address|attr:"id:Address"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.address.errors %}</span>
@@ -118,9 +119,9 @@
                             <div class="col-lg-6">
                                 <label for="HomeNum">تلفن منزل</label>
                                 {% if form.home_number.errors %}
-                                    {% render_field form.home_number class="error w-100" %}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.home_number class="w-100" %}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.home_number.errors %}</span>
@@ -129,9 +130,9 @@
                             <div class="col-lg-6">
                                 <label for="PhoneNum">تلفن همراه</label>
                                 {% if form.phone_number.errors %}
-                                    {% render_field form.phone_number class="error w-100" %}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.phone_number class="w-100" %}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.phone_number.errors %}</span>
@@ -142,9 +143,9 @@
                             <div class="col-lg-12">
                                 <label for="Email">پست الکترونیکی</label>
                                 {% if form.email_address.errors %}
-                                    {% render_field form.email_address class="error w-100" %}
+                                    {{ form.email_address|attr:"id:Email"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {% render_field form.email_address class="w-100" %}
+                                    {{ form.email_address|attr:"id:Email"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.email_address.errors %}</span>
