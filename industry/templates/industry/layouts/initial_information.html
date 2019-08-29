@@ -15,7 +15,7 @@
                                     </label>
                                     <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile"
                                          width="150px" height="150px">
-                                    <input type="file" id="upload-input" accept="image/png, image/jpeg">
+                                    {% render_field form.photo id="upload-input" accept="image/png, image/jpeg" %}
                                 </div>
                             </div>
                             <div class="row">
