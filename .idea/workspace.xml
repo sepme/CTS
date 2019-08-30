@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e5395593-0ec3-49c3-bd20-8129760ead3c" name="Default Changelist" comment="edit required files">
-      <change beforePath="$PROJECT_DIR$/.idea/ChamranTeamSite.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ChamranTeamSite.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="e5395593-0ec3-49c3-bd20-8129760ead3c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/industry/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/industry/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/industry/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/industry/models.py" afterDir="false" />
@@ -40,7 +38,7 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/industry/views.py">
+        <entry file="file://$PROJECT_DIR$/expert/static/expert/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="710">
               <caret line="88" selection-start-line="88" selection-end-line="88" />
@@ -128,13 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>close_dialog</find>
-      <find>tech</find>
-      <find>.fa-chevron-left, .fa-chevron-down, .fa-tools, .fa-screwdriver</find>
-      <find>tec</find>
-      <find>label[for=comment-attach]</find>
-      <find>comment-body</find>
-      <find>.comment-body</find>
       <find>your</find>
       <find>your-comm</find>
       <find>add-resea</find>
@@ -158,6 +149,13 @@
       <find>tit</find>
       <find>load</find>
       <find>ini</find>
+      <find>error</find>
+      <find>label</find>
+      <find>enter</find>
+      <find>card-f</find>
+      <find>card</find>
+      <find>user</find>
+      <find>input</find>
     </findStrings>
     <replaceStrings>
       <replace>exe_count</replace>
@@ -171,7 +169,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="shahriar" />
       </map>
     </option>
   </component>
@@ -179,8 +177,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/researcher/templates/researcher/layouts/projectList.html" />
-        <option value="$PROJECT_DIR$/static/js/script.js" />
-        <option value="$PROJECT_DIR$/static/css/style.css" />
         <option value="$PROJECT_DIR$/researcher/templates/researcher/layouts/dialog.html" />
         <option value="$PROJECT_DIR$/expert/templates/expert/userInfo.html" />
         <option value="$PROJECT_DIR$/expert/templates/expert/layouts/comment.html" />
@@ -421,7 +417,7 @@
     <option name="totallyTimeSpent" value="105795000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18096514" />
@@ -429,7 +425,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3280116" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32673267" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />

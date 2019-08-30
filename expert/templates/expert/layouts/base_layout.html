@@ -6,23 +6,20 @@
       <title>{% block title %}{% endblock %}</title>
       {% load static %}
       <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
+      <link rel="stylesheet" href="{% static 'expert/css/pageLoader.css' %}">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-      <link rel="stylesheet" href="{% static 'expert/css/jquery.emojipicker.css' %}">
-      <link rel="stylesheet" href="{% static 'expert/css/jquery.emojipicker.a.css' %}">
+      <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
       <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
       <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
   </head>
   <body>
-{#  <div id="loading">#}
-{#<canvas id="loading-canvas"></canvas>#}
-{#  </div>#}
+{#  {% include 'expert/layouts/pageLoader.html' %}#}
   {% block dialog%}{% endblock %}
-  <div class="main blur-div">
+  <div class="main">
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
         <div class="top-msg">
@@ -78,7 +75,7 @@
         <li class="list-group-item text-right">
           <a href="#">
             <div>
-              <span>طرح سوال</span>
+              <span>سوالات پژوهشی</span>
               <span class="fas fa-question"></span>
             </div>
           </a>
@@ -105,6 +102,7 @@
     <a href="#" id="toggle"><span></span></a>
   </div>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script type="text/javascript" src="{% static 'expert/js/pageLoader.js' %}"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="{% static 'expert/js/persianumber.min.js' %}"></script>
