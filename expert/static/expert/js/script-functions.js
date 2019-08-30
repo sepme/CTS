@@ -75,32 +75,59 @@ function input_focus(){
             });
         });
     }
-    $("input,textarea").on("focus", function () {
-        if($(this).hasClass("solid-label"))
-            return false;
+    $("input,textarea").each(function () {
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        $(inputLabel).css({
-            "font-size":"12px",
-            "top":"0px",
-            "right":"15px",
-            "color":"#3CCD1C"
-        });
-        $(this).css("color","#3ccd1c");
-    }).on("focusout", function () {
-        if($(this).hasClass("solid-label"))
-            return false;
-        var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        $(inputLabel).css("color","#6f7285");
-        if($(this).val() === ''){
+        if($(this).val() !== ''){
             $(inputLabel).css({
-                "font-size":"13px",
-                "top":"28px",
-                "right":"25px",
-                "color":"#6f7285"
+                    "font-size":"12px",
+                    "top":"0px",
+                    "right":"15px",
+                    "color":"#6f7285"
+                });
+        }
+        if( $(this).hasClass("error") ) {
+            $(inputLabel).css("color","#ff4545");
+        }
+    }).on("focus", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).hasClass("solid-label")) {
+            return false;
+        } else if($(this).hasClass("error")) {
+            var errorDiv = $(this).next(".error");
+            $(this).on("change", function () {
+            if( $(this).hasClass("error") ) {
+                $(this).removeClass("error");
+                $(errorDiv).remove();
+            }
+        });
+        } else{
+            $(inputLabel).css({
+                "font-size":"12px",
+                "top":"0px",
+                "right":"15px",
+                "color":"#3CCD1C"
             });
-        }else {
-            $(this).css("color","#8d8d8d");
-            $(inputLabel).css("color","#8d8d8d");
+            $(this).css("color","#3ccd1c");
+        }
+    }).on("focusout", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).hasClass("solid-label")){
+            return false;
+        } else if($(this).hasClass("error")) {
+
+        } else {
+            $(inputLabel).css("color","#6f7285");
+            if($(this).val() === ''){
+                $(inputLabel).css({
+                    "font-size":"13px",
+                    "top":"28px",
+                    "right":"25px",
+                    "color":"#6f7285"
+                });
+            }else {
+                $(this).css("color","#8d8d8d");
+                $(inputLabel).css("color","#8d8d8d");
+            }
         }
     });
 }
@@ -781,5 +808,50 @@ function vote_dialog_init() {
         close_dialog('.researcher-voting');
         vote_slider_researcher(10);
         $(".progress-line").css("width","calc(100% / 10)");
+    });
+}
+function question_page_init() {
+
+}
+function question_dialog_init() {
+    $(".answer").hover(function () {
+        if( !$(this).find('button').hasClass('answered') ) {
+            $(this).find('.correct button').fadeIn('slow');
+            $(this).find(".wrong button").fadeIn('slow');
+        }
+    }, function () {
+        if( !$(this).find('button').hasClass('answered') ) {
+            $(this).find('.correct button').fadeOut('slow');
+            $(this).find(".wrong button").fadeOut('slow');
+        }
+    });
+    $(".answer .check .correct button").click(function () {
+        var div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
+        $(this).closest('.check').find('.correct').css('display','none');
+        $(this).closest('.check').find('.wrong').css('display','none');
+        $(this).closest('.check').find('button').addClass('answered');
+        $(this).closest('.check').find('.status').addClass('correct-answer');
+        $(this).closest('.check').children('.status').append(div);
+        $(this).closest('.check').find('.status').fadeIn('slow');
+    });
+    $(".answer .check .wrong button").click(function () {
+        var div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
+        $(this).closest('.check').find('.correct').css('display','none');
+        $(this).closest('.check').find('.wrong').css('display','none');
+        $(this).closest('.check').find('button').addClass('answered');
+        $(this).closest('.check').find('.status').addClass('wrong-answer');
+        $(this).closest('.check').children('.status').append(div);
+        $(this).closest('.check').find('.status').fadeIn('slow');
+    });
+
+
+    $(".question-attach input[type='file']").on('change', function () {
+        var fileType = $(this).val().split('.').pop().toLowerCase();
+        var fileName = $(this).val().split('\\').pop();
+        attach_li= "<li class='list-item'><a href='#' class='attach-file'>" +
+            "<span class='" + fileType + "-file'></span>" +
+            "<span dir='ltr'>" + fileName + "</span>" +
+            "</a></li>";
+        $(this).closest('ul.inline-list').append(attach_li);
     });
 }
