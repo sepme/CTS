@@ -1,69 +1,90 @@
 {% extends "industry/layouts/base_layout.html" %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title %}تنظیمات کاربری{% endblock %}
 {% block name %}رضا باسره{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card">
-                <form action="" method="post">
+                <form enctype="multipart/form-data" method="POST">
                     {% csrf_token %}
                     <div class="inner-card card">
                         <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <label for="upload-input" class="upload text-center">
-                                <i class="fas fa-pencil-alt"></i>
-                            </label>
-                            <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
-                            <input type="file" id="upload-input" accept="image/png, image/jpeg">
-                        </div>
-                        </div>
-                            <div class="row">
-                              <div class="col-lg-12">
-                                <label for="firmName">نام شرکت</label>
-                                <input type="text" id="firmName" class="w-100">
-                              </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label for="registerNum">شماره ثبت</label>
-                                <input type="text" id="registerNum" class="w-100">
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="establishmentDate">سال تاسیس</label>
-                                <input type="text" id="establishmentDate" class="w-100">
+                            <div class="col-lg-12 text-center">
+                                <label for="id_photo" class="upload text-center">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </label>
+                                <img
+                                        {% if user.industryuser.industryform.photo %}
+                                            src="/media/{{ user.industryuser.industryform.name }}/profile.jpg"
+                                        {% else %}
+                                            src="{% static 'industry/img/profile.jpg' %}"
+                                        {% endif %}
+                                            alt="profile" class="profile" width="150px" height="150px">
+                                <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg">
+{#                                {% render_field form.photo accept="image/png, image/jpeg" %}#}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <label for="Field">حوزه فعالیت</label>
-                                <input type="text" id="Field" class="w-100">
+                                <label for="id_name">نام شرکت</label>
+                                {#                                <input type="text" id="firmName" class="w-100">#}
+                                {% render_field form.name class+="w-100" readonly="true" %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="id_registration_number">شماره ثبت</label>
+                                {#                                <input type="text" id="registerNum" class="w-100">#}
+                                {% render_field form.registration_number class+="w-100" readonly="true" %}
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="id_date_of_foundation">سال تاسیس</label>
+                                {#                                <input type="text" id="establishmentDate" class="w-100">#}
+                                {% render_field form.date_of_foundation class+="w-100" readonly="true" %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label for="id_research_field">حوزه فعالیت</label>
+                                {#                                <input type="text" id="Field" class="w-100">#}
+                                {% render_field form.research_field class+="w-100" readonly="true" %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 rankDiv">
-                                <label class="rankLabel" for="rank">نوع شرکت</label>
-                                <select id="rank">
-                                    <option selected dir="rtl">انتخاب کنید ...</option>
-                                    <option value="1">دولتی</option>
-                                    <option value="2">خصوصی</option>
+                                <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
+                                <select id="id_industry_type" name="industry_type">
+                                    <option dir="rtl">انتخاب کنید ...</option>
+                                    {#                                    <option value="1">دولتی</option>#}
+                                    {#                                    <option value="2">خصوصی</option>#}
+                                    {% for option in form.industry_type %}
+                                        {{ option }}
+                                    {% endfor %}
                                 </select>
-                          </div>
+                                {% render_field form.industry_type.errors %}
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <label for="Address">آدرس</label>
-                                <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
+                                <label for="id_industry_address">آدرس</label>
+                                {#                                <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>#}
+                                {% render_field form.industry_address dir="rtl" rows="3" class="w-100" readonly="true" %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <label for="phoneNum">تلفن</label>
-                                <input type="text" id="phoneNum" class="w-100">
+                                <label for="id_phone_number">تلفن</label>
+                                {#                                <input type="text" id="phoneNum" class="w-100">#}
+                                {% render_field form.phone_number class+="w-100" readonly="true" %}
+                                {% render_field form.phone_number.errors %}
                             </div>
                             <div class="col-lg-6">
-                                <label for="Email">پست الکترونیکی</label>
-                                <input type="text" id="Email" class="w-100">
+                                <label for="id_email_address">پست الکترونیکی</label>
+                                {#                                <input type="text" id="Email" class="w-100">#}
+                                {% render_field form.email_address class+="w-100" readonly="true" %}
+                                {% render_field form.email_address.errors %}
                             </div>
                         </div>
                     </div>
@@ -71,13 +92,15 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا چند نمونه از خدمات / محصولاتی را که توسط شرکت شما ارائه می شود، ذکر بفرمایید.</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {#                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>#}
+                                {% render_field form.services_products class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ...." style="margin-top: 0" %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا چند نمونه از افتخارات شرکت مربوطه را نام ببرید.</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {#                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>#}
+                                {% render_field form.awards_honors class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
                             </div>
                         </div>
                         <div class="row">
@@ -87,7 +110,8 @@
                                 </span>
                                 <div class="text-center w-100">
                                     <label class="attach-label">
-                                        <input type="file" name="declaration" class="attach-input">
+                                        {#                                        <input type="file" name="declaration" class="attach-input">#}
+                                        {% render_field form.tax_declaration class+="attach-input" %}
                                         <i class="fas fa-cloud-upload-alt"></i>
                                         <span class="file-name">بارگذاری اظهارنامه مالیاتی ...</span>
                                     </label>
@@ -95,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="chamran_btn" style="left: 0;bottom: 0">ذخیره تغییرات</button>
+                    <button type="submit" class="chamran_btn" style="left: 0;bottom: 0">ذخیره تغییرات</button>
                 </form>
             </div>
         </div>

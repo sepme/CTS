@@ -32,6 +32,10 @@ def upload_and_rename_profile(instance, file_name):
     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
 
 
+def unique_upload(instance, file_name):
+    return os.path.join('{}/'.format(instance.name), file_name)
+
+
 class IndustryForm(models.Model):
     name = models.CharField(max_length=64, verbose_name="نام شرکت")
     registration_number = models.IntegerField(verbose_name="شماره ثبت")
@@ -45,7 +49,7 @@ class IndustryForm(models.Model):
     industry_address = models.TextField(verbose_name="ادرس شرکت")
     phone_number = models.IntegerField(verbose_name="شماره تلفن")
     international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
-    tax_declaration = models.FileField(null=True, upload_to='./uploads', verbose_name="اظهارنامه مالیاتی")
+    tax_declaration = models.FileField(null=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
     turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
     services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
     awards_honors = models.TextField(null=True, verbose_name="افتخارات")
@@ -58,15 +62,16 @@ class IndustryForm(models.Model):
     def save(self, *args, **kwargs):
         extension = None
         if self.photo:
+            print('the photo is ', self.photo)
             extension = self.photo.name.split('.')[-1]
         super().save()
-        img = Image.open("media/{}/profile.{}".format(self.name, extension))
-        rgb = img.convert('RGB')
-        os.remove(os.path.join(settings.MEDIA_ROOT, '{}/profile.{}'.format(self.name, extension)))
-        rgb.save("media/{}/profile.jpg".format(self.name))
-        self.photo.name = "profile.jpg"
-        super().save()
-        print('the path is ', self.photo.path)
+        if self.photo:
+            img = Image.open("media/{}".format(self.photo.name))
+            rgb = img.convert('RGB')
+            os.remove(os.path.join(settings.MEDIA_ROOT, self.photo.name))
+            rgb.save("media/{}/profile.jpg".format(self.name))
+            self.photo.name = "profile.jpg"
+            super().save()
 
 
 class Keyword(models.Model):

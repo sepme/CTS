@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.views import generic
+from django.views import generic, View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -34,7 +34,6 @@ class Index(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
         if form.is_valid():
-            print('data is valid. raising some error for fun')
             photo = form.cleaned_data['photo']
             name = form.cleaned_data['name']
             registration_number = form.cleaned_data['registration_number']
@@ -55,49 +54,39 @@ class Index(generic.TemplateView):
                                                 phone_number=phone_number,
                                                 email_address=email_address)
             industry_info.save()
-            industry_user.status = 'free'
+            industry_user.status = 'not_answered'
             industry_user.industryform = industry_info
             industry_user.save()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/index.html', context={'form': form})
 
 
-class userInfo(generic.FormView):
-    template_name = 'industry/userInfo.html'
-    form_class = forms.IndustryInfoForm
+class userInfo(View):
     industry = models.IndustryUser
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         try:
             self.industry = get_object_or_404(models.IndustryUser, user=request.user)
         except:
             return HttpResponseRedirect(reverse('chamran:login'))
-        return super().get(request, *args, **kwargs)
+        context = {
+            'form': forms.IndustryInfoForm(self.request.user,
+                                           instance=self.industry.industryform,
+                                           initial={
+                                               'industry_type':
+                                                   self.request.user.industryuser.industryform.industry_type})
+        }
+        return render(request, 'industry/userInfo.html', context=context)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['photo'] = self.industry.industryform.photo
-        return context
-
-    def post(self, request, *args, **kwargs):
-        form = forms.IndustryInfoForm(request.POST, request.FILES)
+    def post(self, request):
+        form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES)
         if form.is_valid():
-            industry_form = request.user.industryuser.industryform
-            industry_form.name = form.cleaned_data['name']
-            industry_form.photo = form.cleaned_data['photo']
-            industry_form.registration_number = form.cleaned_data['registration_number']
-            industry_form.date_of_foundation = form.cleaned_data['date_of_foundation']
-            industry_form.research_field = form.cleaned_data['research_field']
-            industry_form.industry_type = form.cleaned_data['industry_type']
-            industry_form.industry_address = form.cleaned_data['industry_address']
-            industry_form.phone_number = form.cleaned_data['phone_number']
-            industry_form.email_address = form.cleaned_data['email_address']
-            industry_form.awards_honors = form.cleaned_data['awards_honors']
-            industry_form.tax_declaration = form.cleaned_data['tax_declaration']
-
-            industry_form.save()
+            form.save()
+            industry_user = self.request.user.industryuser
+            industry_user.industryform = form.save(commit=False)
+            industry_user.save()
             return HttpResponseRedirect(reverse('industry:index'))
-        return super().post(request, *args, **kwargs)
+        return render(request, 'industry/userInfo.html', context={'form': form})
 
 
 class newProject(generic.FormView):
@@ -180,6 +169,7 @@ class UserInfo(generic.TemplateView):
 
 class NewProject(generic.TemplateView):
     template_name = 'industry/newProject.html'
+
 
 class Messages(generic.TemplateView):
     template_name = 'industry/messages.html'
