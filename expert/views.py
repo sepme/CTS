@@ -1,7 +1,10 @@
 from django.views import generic
+from django.views.generic.edit import CreateView
+from django.views.generic.detail import SingleObjectMixin
+from django.views import View
 from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
 from .models import ExpertForm, EqTest, ExpertUser
-from .forms import InitialInfoForm
+from .forms import *
 from django.contrib.auth.decorators import login_required
 
 
@@ -13,12 +16,29 @@ class UserInfo(generic.TemplateView):
     template_name = 'expert/userInfo.html'
 
 
+    def get_context_data(self, **kwargs):
+        pass
+
+    def post(self, request, *args, **kwargs):
+        expert_info_form = ExpertInfoForm(request.POST or None)
+        scientific_form = ScientificRecordForm(request.POST or None)
+        executive_form = ExecutiveRecordForm(request.POST or None)
+        research_form = ResearchRecordForm(request.POST or None)
+        paper_form = PaperRecordForm(request.POST or None)
+        print()
+
+
+
 class ResearcherRequest(generic.TemplateView):
     template_name = 'expert/researcherRequest.html'
 
 
 class Messages(generic.TemplateView):
     template_name = 'expert/messages.html'
+
+
+class Questions(generic.TemplateView):
+    template_name = 'expert/questions.html'
 
 
 @login_required(login_url='/login/')
@@ -56,18 +76,38 @@ def index(request):
     return render(request, 'expert/index.html', {'form': form, 'expert_user': expert_user})
 
 
-def test(request):
-    return HttpResponse('Test view')
+def user_info(request):
+    instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
+    if request.method == 'POST':
+        expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
+        scientific_form = ScientificRecordForm(request.POST or None)
+        executive_form = ExecutiveRecordForm(request.POST or None)
+        research_form = ResearchRecordForm(request.POST or None)
+        paper_form = PaperRecordForm(request.POST or None)
+
+        if expert_info_form.is_valid() and scientific_form.is_valid() and executive_form.is_valid() and research_form.is_valid() and paper_form.is_valid():
+            expert_info_form.save()
+            print("scientific form:", scientific_form.cleaned_data)
+            print("executive form:", executive_form.cleaned_data)
+            print("research form:", research_form.cleaned_data)
+            print("paper form:", paper_form.cleaned_data)
+            return HttpResponseRedirect(reverse('expert:test'))
+    else:
+        expert_info_form = ExpertInfoForm(instance=instance)
+        scientific_form = ScientificRecordForm()
+        executive_form = ExecutiveRecordForm()
+        research_form = ResearchRecordForm()
+        print(request.user)
+    return render(request, 'expert/userInfo.html', {'scientific_form' : scientific_form,
+                                                    'executive_form'  : executive_form,
+                                                    'research_form'   : research_form,
+                                                    'expert_info_form': expert_info_form})
 
 
 
 
-class Questions(generic.TemplateView):
-    template_name = 'expert/questions.html'
-
-
-
-
+def test_view(request):
+    return HttpResponse('Test View!')
 
 
 

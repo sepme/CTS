@@ -1,11 +1,13 @@
 {% extends "expert/layouts/base_layout.html" %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title %}تنظیمات کاربری{% endblock %}
 {% block header %}
     <link rel="stylesheet" href="{% static 'expert/css/persian-datepicker.min.css' %}"
           xmlns="http://www.w3.org/1999/html">
     <link rel="stylesheet" href="{% static 'expert/css/datepicker-style.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/skin-awesome/ui.fancytree.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/skin-awesome/ui.fancytree.min.css"
+          rel="stylesheet">
 {% endblock %}
 
 {% block name %}دکتر احسان شریف{% endblock %}
@@ -18,81 +20,86 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card">
-                <form action="" method="post">
+                <form action="{% url 'expert:userInfo' %}" method="post">
                     {% csrf_token %}
                     <div class="inner-card card">
                         <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <label for="upload-input" class="upload text-center">
-                                <i class="fas fa-pencil-alt"></i>
-                            </label>
-                            <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
-                            <input type="file" id="upload-input" accept="image/png, image/jpeg">
+                            <div class="col-lg-12 text-center">
+                                <label for="upload-input" class="upload text-center">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </label>
+                                <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="profile"
+                                     width="150px" height="150px">
+                                <input type="file" id="upload-input" name="photo" accept="image/png, image/jpeg">
+                            </div>
                         </div>
-                    </div>
                         <div class="row">
-                          <div class="col-lg-6">
-                            <label for="FirstName">نام</label>
-                            <input type="text" id="FirstName" class="w-100">
-                          </div>
-                          <div class="col-lg-6">
-                            <label for="LastName">نام خانوادگی</label>
-                            <input type="text" id="LastName" class="w-100">
-                          </div>
-                    </div>
-                        <div class="row">
-                        <div class="col-lg-6">
-                              <label for="Field">حوزه تخصصی</label>
-                              <input type="text" id="Field" class="w-100">
+                            <div class="col-lg-6">
+                                <label for="FirstName">نام</label>
+                                {{ expert_info_form.expert_firstname|attr:"id:FirstName"|attr:"readonly:True"|attr:"class:w-100" }}
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="LastName">نام خانوادگی</label>
+                                {{ expert_info_form.expert_lastname|attr:"id:LastName"|attr:"readonly:True"|attr:"class:w-100" }}
+                            </div>
                         </div>
-                        <div class="col-lg-6">
-                            <label for="MelliCode">کد ملی</label>
-                            <input type="text" id="MelliCode" class="w-100">
-                        </div>
-                    </div>
                         <div class="row">
-                          <div class="col-lg-12 rankDiv">
-                              <label class="rankLabel" for="rank">مرتبه علمی</label>
-                              <select id="rank">
-                                  <option selected dir="rtl">انتخاب کنید ...</option>
-                                  <option value="1">مربی</option>
-                                  <option value="2">استادیار</option>
-                                  <option value="3">دانشیار</option>
-                                  <option value="4">استاد</option>
-                                  <option value="5">استاد تمام</option>
-                                  <option value="6">پژوهشگر</option>
-                              </select>
-                          </div>
-                      </div>
-                        <div class="row">
-                          <div class="col-lg-12">
-                              <label for="Uni">دانشگاه محل فعالیت</label>
-                              <input type="text" id="Uni" class="w-100">
-{#                              <i class="fas fa-plus fa-lg"></i>#}
-{#                              <div class="selected_uni"></div>#}
-                          </div>
-                      </div>
-                        <div class="row">
-                        <div class="col-lg-12">
-                            <label for="Address">آدرس</label>
-                            <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
+                            <div class="col-lg-6">
+                                <label for="Field">حوزه تخصصی</label>
+                                {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:w-100" }}
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="MelliCode">کد ملی</label>
+                                {{ expert_info_form.national_code|attr:"id:MelliCode"|attr:"readonly:True"|attr:"class:w-100" }}
+                            </div>
                         </div>
-                    </div>
                         <div class="row">
-                        <div class="col-lg-6">
-                            <label for="HomeNum">تلفن منزل</label>
-                            <input type="text" id="HomeNum" class="w-100">
+                            <div class="col-lg-12 rankDiv">
+                                <label class="rankLabel" for="rank">مرتبه علمی</label>
+{#                                <select id="rank" name="scientific_rank">#}
+{#                                    <option selected dir="rtl">انتخاب کنید ...</option>#}
+{#                                    <option value="1">مربی</option>#}
+{#                                    <option value="2">استادیار</option>#}
+{#                                    <option value="3">دانشیار</option>#}
+{#                                    <option value="4">استاد</option>#}
+{#                                    <option value="5">استاد تمام</option>#}
+{#                                    <option value="6">پژوهشگر</option>#}
+{#                                </select>#}
+                                {{ expert_info_form.scientific_rank|attr:"id:rank"|attr:"class:w-100" }}
+
+                            </div>
                         </div>
-                        <div class="col-lg-6">
-                            <label for="PhoneNum">تلفن همراه</label>
-                            <input type="text" id="PhoneNum" class="w-100">
-                        </div>
-                    </div>
                         <div class="row">
                             <div class="col-lg-12">
-                            <label for="Email">پست الکترونیکی</label>
-                            <input type="text" id="Email" class="w-100">
+                                <label for="Uni">دانشگاه محل فعالیت</label>
+                                {{ expert_info_form.university|attr:"id:Uni"|attr:"readonly:True"|attr:"class:w-100" }}
+
+                                {#                              <i class="fas fa-plus fa-lg"></i>#}
+                                {#                              <div class="selected_uni"></div>#}
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label for="Address">آدرس</label>
+                                {{ expert_info_form.home_address|attr:"id:Address"|attr:"class:w-100" }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="HomeNum">تلفن منزل</label>
+                                {{ expert_info_form.phone_number|attr:"id:HomeNum"|attr:"class:w-100" }}
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="PhoneNum">تلفن همراه</label>
+                                {{ expert_info_form.mobile_phone|attr:"id:PhoneNum"|attr:"class:w-100" }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label for="Email">پست الکترونیکی</label>
+                                {{ expert_info_form.email_address|attr:"id:Email"|attr:"readonly:True"|attr:"class:w-100" }}
+
+                            </div>
                         </div>
                     </div>
                     <div class="inner-card card">
@@ -100,34 +107,37 @@
                             <div class="col-lg-12 text-right">
                                 <span class="label header">سوابق علمی</span>
                                 <div class="education text-center w-100">
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
-{#                                    <table class="table mtop-lg-25">#}
-{#                                        <thead>#}
-{#                                            <tr>#}
-{#                                                <td>مقطع تحصیلی</td>#}
-{#                                                <td>رشته تحصیلی</td>#}
-{#                                                <td>دانشگاه</td>#}
-{#                                                <td>شهر محل تحصیل</td>#}
-{#                                                <td>سال اخذ مدرک</td>#}
-{#                                                <td></td>#}
-{#                                            </tr>#}
-{#                                        </thead>#}
-{#                                        <tbody>#}
-{#                                            <tr>#}
-{#                                                <td>کارشناسی</td>#}
-{#                                                <td>مهندسی برق</td>#}
-{#                                                <td>صنعتی شریف</td>#}
-{#                                                <td>تهران</td>#}
-{#                                                <td>1400</td>#}
-{#                                                <td>#}
-{#                                                    <i class="fas fa-pen"></i>#}
-{#                                                    <i class="fas fa-trash-alt"></i>#}
-{#                                                </td>#}
-{#                                            </tr>#}
-{#                                        </tbody>#}
-{#                                    </table>#}
+                                    <span class="initial-value"
+                                          style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                            class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {#                                    <table class="table mtop-lg-25">#}
+                                    {#                                        <thead>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>مقطع تحصیلی</td>#}
+                                    {#                                                <td>رشته تحصیلی</td>#}
+                                    {#                                                <td>دانشگاه</td>#}
+                                    {#                                                <td>شهر محل تحصیل</td>#}
+                                    {#                                                <td>سال اخذ مدرک</td>#}
+                                    {#                                                <td></td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </thead>#}
+                                    {#                                        <tbody>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>کارشناسی</td>#}
+                                    {#                                                <td>مهندسی برق</td>#}
+                                    {#                                                <td>صنعتی شریف</td>#}
+                                    {#                                                <td>تهران</td>#}
+                                    {#                                                <td>1400</td>#}
+                                    {#                                                <td>#}
+                                    {#                                                    <i class="fas fa-pen"></i>#}
+                                    {#                                                    <i class="fas fa-trash-alt"></i>#}
+                                    {#                                                </td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </tbody>#}
+                                    {#                                    </table>#}
                                 </div>
-                                <span class="education-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
+                                <span class="education-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
+                                                               data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
@@ -136,34 +146,37 @@
                             <div class="col-lg-12 text-right">
                                 <span class="label header">سوابق اجرایی</span>
                                 <div class="executive text-center w-100">
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
-{#                                    <table class="table mtop-lg-25">#}
-{#                                        <thead>#}
-{#                                            <tr>#}
-{#                                                <td>سمت</td>#}
-{#                                                <td>محل خدمت</td>#}
-{#                                                <td>شهر</td>#}
-{#                                                <td>از تاریخ</td>#}
-{#                                                <td>تا تاریخ</td>#}
-{#                                                <td></td>#}
-{#                                            </tr>#}
-{#                                        </thead>#}
-{#                                        <tbody>#}
-{#                                            <tr>#}
-{#                                                <td>برنامه نویس</td>#}
-{#                                                <td>چمران تیم</td>#}
-{#                                                <td>تهران</td>#}
-{#                                                <td>1/1/1398</td>#}
-{#                                                <td>1/6/1398</td>#}
-{#                                                <td>#}
-{#                                                    <i class="fas fa-pen"></i>#}
-{#                                                    <i class="fas fa-trash-alt"></i>#}
-{#                                                </td>#}
-{#                                            </tr>#}
-{#                                        </tbody>#}
-{#                                    </table>#}
+                                    <span class="initial-value"
+                                          style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                            class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {#                                    <table class="table mtop-lg-25">#}
+                                    {#                                        <thead>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>سمت</td>#}
+                                    {#                                                <td>محل خدمت</td>#}
+                                    {#                                                <td>شهر</td>#}
+                                    {#                                                <td>از تاریخ</td>#}
+                                    {#                                                <td>تا تاریخ</td>#}
+                                    {#                                                <td></td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </thead>#}
+                                    {#                                        <tbody>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>برنامه نویس</td>#}
+                                    {#                                                <td>چمران تیم</td>#}
+                                    {#                                                <td>تهران</td>#}
+                                    {#                                                <td>1/1/1398</td>#}
+                                    {#                                                <td>1/6/1398</td>#}
+                                    {#                                                <td>#}
+                                    {#                                                    <i class="fas fa-pen"></i>#}
+                                    {#                                                    <i class="fas fa-trash-alt"></i>#}
+                                    {#                                                </td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </tbody>#}
+                                    {#                                    </table>#}
                                 </div>
-                                <span class="executive-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
+                                <span class="executive-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
+                                                               data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
@@ -172,68 +185,75 @@
                             <div class="col-lg-12 text-right">
                                 <span class="label header">سوابق پژوهشی <span class="sub-header">(بهترین ها طی پنج سال گذشته)</span></span>
                                 <div class="studious text-center w-100">
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
-{#                                    <table class="table mtop-lg-25">#}
-{#                                        <thead>#}
-{#                                            <tr>#}
-{#                                                <td>عنوان طرح پژوهشی</td>#}
-{#                                                <td>مجری</td>#}
-{#                                                <td>مسئول اجرا/ همکار</td>#}
-{#                                                <td>وضعیت طرح پژوهشی</td>#}
-{#                                                <td></td>#}
-{#                                            </tr>#}
-{#                                        </thead>#}
-{#                                        <tbody>#}
-{#                                            <tr>#}
-{#                                                <td>نمی دونم</td>#}
-{#                                                <td>سپهر خان</td>#}
-{#                                                <td>علی آقا</td>#}
-{#                                                <td>فعال</td>#}
-{#                                                <td>#}
-{#                                                    <i class="fas fa-pen"></i>#}
-{#                                                    <i class="fas fa-trash-alt"></i>#}
-{#                                                </td>#}
-{#                                            </tr>#}
-{#                                        </tbody>#}
-{#                                    </table>#}
+                                    <span class="initial-value"
+                                          style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                            class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {#                                    <table class="table mtop-lg-25">#}
+                                    {#                                        <thead>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>عنوان طرح پژوهشی</td>#}
+                                    {#                                                <td>مجری</td>#}
+                                    {#                                                <td>مسئول اجرا/ همکار</td>#}
+                                    {#                                                <td>وضعیت طرح پژوهشی</td>#}
+                                    {#                                                <td></td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </thead>#}
+                                    {#                                        <tbody>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>نمی دونم</td>#}
+                                    {#                                                <td>سپهر خان</td>#}
+                                    {#                                                <td>علی آقا</td>#}
+                                    {#                                                <td>فعال</td>#}
+                                    {#                                                <td>#}
+                                    {#                                                    <i class="fas fa-pen"></i>#}
+                                    {#                                                    <i class="fas fa-trash-alt"></i>#}
+                                    {#                                                </td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </tbody>#}
+                                    {#                                    </table>#}
                                 </div>
-                                <span class="studious-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
+                                <span class="studious-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
+                                                              data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">مقالات <span class="sub-header">(چند مورد از بهترین مقالات)</span></span>
+                                <span class="label header">مقالات <span
+                                        class="sub-header">(چند مورد از بهترین مقالات)</span></span>
                                 <div class="article text-center w-100">
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
-{#                                    <table class="table mtop-lg-25">#}
-{#                                        <thead>#}
-{#                                            <tr>#}
-{#                                                <td>عنوان مقاله</td>#}
-{#                                                <td>تاریخ انتشار</td>#}
-{#                                                <td>محل دقیق انتشار</td>#}
-{#                                                <td>Impact Factor</td>#}
-{#                                                <td>تعداد ارجاع</td>#}
-{#                                                <td></td>#}
-{#                                            </tr>#}
-{#                                        </thead>#}
-{#                                        <tbody>#}
-{#                                            <tr>#}
-{#                                                <td>کارشناسی</td>#}
-{#                                                <td>مهندسی برق</td>#}
-{#                                                <td>صنعتی شریف</td>#}
-{#                                                <td>تهران</td>#}
-{#                                                <td>1400</td>#}
-{#                                                <td>#}
-{#                                                    <i class="fas fa-pen"></i>#}
-{#                                                    <i class="fas fa-trash-alt"></i>#}
-{#                                                </td>#}
-{#                                            </tr>#}
-{#                                        </tbody>#}
-{#                                    </table>#}
+                                    <span class="initial-value"
+                                          style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                            class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {#                                    <table class="table mtop-lg-25">#}
+                                    {#                                        <thead>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>عنوان مقاله</td>#}
+                                    {#                                                <td>تاریخ انتشار</td>#}
+                                    {#                                                <td>محل دقیق انتشار</td>#}
+                                    {#                                                <td>Impact Factor</td>#}
+                                    {#                                                <td>تعداد ارجاع</td>#}
+                                    {#                                                <td></td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </thead>#}
+                                    {#                                        <tbody>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>کارشناسی</td>#}
+                                    {#                                                <td>مهندسی برق</td>#}
+                                    {#                                                <td>صنعتی شریف</td>#}
+                                    {#                                                <td>تهران</td>#}
+                                    {#                                                <td>1400</td>#}
+                                    {#                                                <td>#}
+                                    {#                                                    <i class="fas fa-pen"></i>#}
+                                    {#                                                    <i class="fas fa-trash-alt"></i>#}
+                                    {#                                                </td>#}
+                                    {#                                            </tr>#}
+                                    {#                                        </tbody>#}
+                                    {#                                    </table>#}
                                 </div>
-                                <span class="article-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip" data-placement="left" title="افزودن"></i></span>
+                                <span class="article-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
+                                                             data-placement="left" title="افزودن"></i></span>
                             </div>
                         </div>
                     </div>
@@ -241,7 +261,8 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header">افتخارات <span class="sub-header">(چند نمونه از بهترین افتخارات - مقالات خاص، جوایز و ...- به همراه سال وقوع)</span></span>
-                                <textarea dir="rtl" rows="5" class="w-100" id="honours" placeholder="اینجا وارد کنید ..."></textarea>
+                                <textarea dir="rtl" rows="5" class="w-100" id="honours"
+                                          placeholder="اینجا وارد کنید ..."></textarea>
                             </div>
                         </div>
                     </div>
@@ -253,71 +274,127 @@
                                     <table class="w-75">
                                         <tr>
                                             <td class="text-right">روحیه کار تیمی</td>
-                                            <td><input type="radio" name="group-work" id="group-work-1" value="1"><label for="group-work-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-2" value="2"><label for="group-work-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-3" value="3"><label for="group-work-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-4" value="4"><label for="group-work-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-5" value="5"><label for="group-work-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="group-work" id="group-work-1" value="1"><label
+                                                    for="group-work-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="group-work" id="group-work-2" value="2"><label
+                                                    for="group-work-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="group-work" id="group-work-3" value="3"><label
+                                                    for="group-work-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="group-work" id="group-work-4" value="4"><label
+                                                    for="group-work-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="group-work" id="group-work-5" value="5"><label
+                                                    for="group-work-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">تفکر خلاقانه</td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-1" value="1"><label for="creative-thinking-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-2" value="2"><label for="creative-thinking-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-3" value="3"><label for="creative-thinking-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-4" value="4"><label for="creative-thinking-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-5" value="5"><label for="creative-thinking-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-1"
+                                                       value="1"><label for="creative-thinking-1"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-2"
+                                                       value="2"><label for="creative-thinking-2"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-3"
+                                                       value="3"><label for="creative-thinking-3"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-4"
+                                                       value="4"><label for="creative-thinking-4"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-5"
+                                                       value="5"><label for="creative-thinking-5"
+                                                                        class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">تعهد داشتن و از خودگذشتگی</td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-1" value="1"><label for="sacrifice-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-2" value="2"><label for="sacrifice-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-3" value="3"><label for="sacrifice-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-4" value="4"><label for="sacrifice-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-5" value="5"><label for="sacrifice-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="sacrifice" id="sacrifice-1" value="1"><label
+                                                    for="sacrifice-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="sacrifice" id="sacrifice-2" value="2"><label
+                                                    for="sacrifice-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="sacrifice" id="sacrifice-3" value="3"><label
+                                                    for="sacrifice-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="sacrifice" id="sacrifice-4" value="4"><label
+                                                    for="sacrifice-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="sacrifice" id="sacrifice-5" value="5"><label
+                                                    for="sacrifice-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">انجام پژوهش محصول محور</td>
-                                            <td><input type="radio" name="researching" id="researching-1" value="1"><label for="researching-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="researching" id="researching-2" value="2"><label for="researching-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="researching" id="researching-3" value="3"><label for="researching-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="researching" id="researching-4" value="4"><label for="researching-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="researching" id="researching-5" value="5"><label for="researching-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="researching" id="researching-1"
+                                                       value="1"><label for="researching-1" class="radio-label"></label>
+                                            </td>
+                                            <td><input type="radio" name="researching" id="researching-2"
+                                                       value="2"><label for="researching-2" class="radio-label"></label>
+                                            </td>
+                                            <td><input type="radio" name="researching" id="researching-3"
+                                                       value="3"><label for="researching-3" class="radio-label"></label>
+                                            </td>
+                                            <td><input type="radio" name="researching" id="researching-4"
+                                                       value="4"><label for="researching-4" class="radio-label"></label>
+                                            </td>
+                                            <td><input type="radio" name="researching" id="researching-5"
+                                                       value="5"><label for="researching-5" class="radio-label"></label>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">تعهد ملی</td>
-                                            <td><input type="radio" name="obligation" id="obligation-1" value="1"><label for="obligation-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-2" value="2"><label for="obligation-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-3" value="3"><label for="obligation-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-4" value="4"><label for="obligation-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-5" value="5"><label for="obligation-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="obligation" id="obligation-1" value="1"><label
+                                                    for="obligation-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="obligation" id="obligation-2" value="2"><label
+                                                    for="obligation-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="obligation" id="obligation-3" value="3"><label
+                                                    for="obligation-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="obligation" id="obligation-4" value="4"><label
+                                                    for="obligation-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="obligation" id="obligation-5" value="5"><label
+                                                    for="obligation-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">جمع آوری داده</td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-1" value="1"><label for="data-collection-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-2" value="2"><label for="data-collection-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-3" value="3"><label for="data-collection-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-4" value="4"><label for="data-collection-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-5" value="5"><label for="data-collection-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="data-collection" id="data-collection-1"
+                                                       value="1"><label for="data-collection-1"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="data-collection" id="data-collection-2"
+                                                       value="2"><label for="data-collection-2"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="data-collection" id="data-collection-3"
+                                                       value="3"><label for="data-collection-3"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="data-collection" id="data-collection-4"
+                                                       value="4"><label for="data-collection-4"
+                                                                        class="radio-label"></label></td>
+                                            <td><input type="radio" name="data-collection" id="data-collection-5"
+                                                       value="5"><label for="data-collection-5"
+                                                                        class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">روحیه بیزنسی</td>
-                                            <td><input type="radio" name="morale" id="morale-1" value="1"><label for="morale-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-2" value="2"><label for="morale-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-3" value="3"><label for="morale-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-4" value="4"><label for="morale-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-5" value="5"><label for="morale-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="morale" id="morale-1" value="1"><label
+                                                    for="morale-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="morale" id="morale-2" value="2"><label
+                                                    for="morale-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="morale" id="morale-3" value="3"><label
+                                                    for="morale-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="morale" id="morale-4" value="4"><label
+                                                    for="morale-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="morale" id="morale-5" value="5"><label
+                                                    for="morale-5" class="radio-label"></label></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right">ریسک پذیری</td>
-                                            <td><input type="radio" name="risk" id="risk-1" value="1"><label for="risk-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-2" value="2"><label for="risk-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-3" value="3"><label for="risk-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-4" value="4"><label for="risk-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-5" value="5"><label for="risk-5" class="radio-label"></label></td>
+                                            <td><input type="radio" name="risk" id="risk-1" value="1"><label
+                                                    for="risk-1" class="radio-label"></label></td>
+                                            <td><input type="radio" name="risk" id="risk-2" value="2"><label
+                                                    for="risk-2" class="radio-label"></label></td>
+                                            <td><input type="radio" name="risk" id="risk-3" value="3"><label
+                                                    for="risk-3" class="radio-label"></label></td>
+                                            <td><input type="radio" name="risk" id="risk-4" value="4"><label
+                                                    for="risk-4" class="radio-label"></label></td>
+                                            <td><input type="radio" name="risk" id="risk-5" value="5"><label
+                                                    for="risk-5" class="radio-label"></label></td>
                                         </tr>
                                     </table>
                                 </div>
-                                <span class="sub-header"><span class="star-warning"></span>اگر از توانایی هایتان در موارد بالا اطمینان کامل ندارید می تواند از این آزمون کمک بگیرید! <a href="#">تست هوش هیجانی (EQ)</a> </span>
+                                <span class="sub-header"><span class="star-warning"></span>اگر از توانایی هایتان در موارد بالا اطمینان کامل ندارید می تواند از این آزمون کمک بگیرید! <a
+                                        href="#">تست هوش هیجانی (EQ)</a> </span>
                             </div>
                         </div>
                     </div>
@@ -333,19 +410,23 @@
                                 <span class="sub-header">در حال حاضر،چه تعداد دانشجو تحت نظر شما، در حال انجام فعالیت های پژوهشی هستند؟</span>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num0" name="student_num" value="1-10" class="label-check-radio">
+                                        <input type="radio" id="student_num0" name="student_num" value="1-10"
+                                               class="label-check-radio">
                                         <label for="student_num0">1 تا 10 نفر</label>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num1" name="student_num" value="11-30" class="label-check-radio">
+                                        <input type="radio" id="student_num1" name="student_num" value="11-30"
+                                               class="label-check-radio">
                                         <label for="student_num1">11 تا 30 نفر</label>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num2" name="student_num" value="31-60" class="label-check-radio">
+                                        <input type="radio" id="student_num2" name="student_num" value="31-60"
+                                               class="label-check-radio">
                                         <label for="student_num2">31 تا 60 نفر</label>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num3" name="student_num" value=">60" class="label-check-radio">
+                                        <input type="radio" id="student_num3" name="student_num" value=">60"
+                                               class="label-check-radio">
                                         <label for="student_num3">بیش از 60 نفر</label>
                                     </div>
                                 </div>
@@ -356,24 +437,28 @@
                                 <span class="sub-header" style="top: 10px;position: relative;">آیا تا به حال با شرکت های خارج دانشگاه قرارداد پژوهشی داشته اید؟</span>
                             </div>
                             <div class="col-lg-2 col-md-6 col-6 text-center">
-                                <input type="radio" id="foreign_yes" name="foreign_work" value="1-10" class="label-check-radio">
+                                <input type="radio" id="foreign_yes" name="foreign_work" value="1-10"
+                                       class="label-check-radio">
                                 <label for="foreign_yes">آری</label>
                             </div>
                             <div class="col-lg-2 col-md-6 col-6 text-center">
-                                <input type="radio" id="foreign_no" name="foreign_work" value="1-10" class="label-check-radio">
+                                <input type="radio" id="foreign_no" name="foreign_work" value="1-10"
+                                       class="label-check-radio">
                                 <label for="foreign_no">خیر</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">مجموعاً، تا به حال چند بار موفق به دریافت گرنت شده اید؟</span>
-                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
+                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..."
+                                          style="margin-top: 0;"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا در صورت تسلط بر زبانهای خارجی، زبان مورد نظر و مقدار تسلط خود را ذکر بفرمایید.</span>
-                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
+                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..."
+                                          style="margin-top: 0;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -389,7 +474,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
+                    <input type="submit" value="اعمال تغییرات" class="chamran_btn" style="left: 0;bottom: -1px;">
                 </form>
             </div>
         </div>
@@ -405,77 +490,83 @@
             selectMode: 3,
             checkboxAutoHide: true,
             clickFolderMode: 3,
-            lazyLoad: function(event, data) {
-                  data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
-                },
-            activate: function(event, data) {
+            lazyLoad: function (event, data) {
+                data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+            },
+            activate: function (event, data) {
                 {#alert(event.type + ": " + data.node);#}
             },
-            select: function(event, data) {
+            select: function (event, data) {
                 {#alert(event.type + ": " + data.node.isSelected() + " " + data.node)#}
             },
-          source: [
-                 {"title": "histology", "key": "1", "folder": true, "children": [
-                     {"title": "Sterile Tissue Harvest", "key": "101", "folder": true, "childern":[
-                            {"title": "Sterile Tissue Harvest", "key": "10101"},
-                            {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
-                            ]},
-                         {"title": "Tissue Cryopreservation", "key": "102"},
-                         {"title": "Tissue Fixation", "key": "103"},
-                         {"title": "Microtome Sectioning", "key": "104"},
-                         {"title": "Cryostat Sectioning", "key": "105"},
-                         {"title": "H&E staining", "key": "106"},
-                         {"title": "Histochemistry", "key": "107"},
-                         {"title": "Histoflouresence", "key": "108"}
-                  ]},
-                 {"title": "general lab", "key": "2", "folder": true, "children": [
-                         {"title": "An Introduction to the Centrifuge", "key": "201"},
-                         {"title": "Regulating Temperature in the Lab Preserving Sample Using Cold", "key": "202"},
-                         {"title": "Introduction to the Bunsen Burner", "key": "203"},
-                         {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
-                         {"title": "An Introduction to the Micropipettor", "key": "205"},
-                         {"title": "Making Solutions in the Laboratory", "key": "206"},
-                         {"title": "Understanding Concentration and Measuring Volums", "key": "207"},
-                         {"title": "Introduction to the Microplate Reader", "key": "208"},
-                         {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
-                         {"title": "Common Lab Glassware and Users", "key": "210"},
-                         {"title": "Solutions and Concentrations", "key": "211"},
-                         {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
-                         {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
-                         {"title": "Determining the Empirical Formula", "key": "214"},
-                         {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
-                         {"title": "Using a pH Meter", "key": "216"},
-                         {"title": "Introduction to Titration", "key": "217"},
-                         {"title": "Ideal Gas Law", "key": "218"}
-                  ]}
-                  ],
-          glyph: {
-              preset: "awesome5",
-              map: {
-                  _addClass: "",
-                  checkbox: "fas fa-square",
-                  checkboxSelected: "fas fa-check-square",
-                  checkboxUnknown: "fas fa-square",
-                  radio: "fas fa-circle",
-                  radioSelected: "fas fa-circle",
-                  radioUnknown: "fas fa-dot-circle",
-                  dragHelper: "fas fa-arrow-right",
-                  dropMarker: "fas fa-long-arrow-right",
-                  error: "fas fa-exclamation-triangle",
-                  expanderClosed: "fas fa-chevron-left",
-                  expanderLazy: "fas fa-angle-right",
-                  expanderOpen: "fas fa-chevron-down",
-                  loading: "fas fa-spinner fa-pulse",
-                  nodata: "fas fa-meh",
-                  noExpander: "",
-                  // Default node icons.
-                  // (Use tree.options.icon callback to define custom icons based on node data)
-                  doc: "fas fa-screwdriver",
-                  docOpen: "fas fa-screwdriver",
-                  folder: "fas fa-tools",
-                  folderOpen: "fas fa-tools"
-              }
-          },
-      });
+            source: [
+                {
+                    "title": "histology", "key": "1", "folder": true, "children": [
+                        {
+                            "title": "Sterile Tissue Harvest", "key": "101", "folder": true, "childern": [
+                                {"title": "Sterile Tissue Harvest", "key": "10101"},
+                                {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
+                            ]
+                        },
+                        {"title": "Tissue Cryopreservation", "key": "102"},
+                        {"title": "Tissue Fixation", "key": "103"},
+                        {"title": "Microtome Sectioning", "key": "104"},
+                        {"title": "Cryostat Sectioning", "key": "105"},
+                        {"title": "H&E staining", "key": "106"},
+                        {"title": "Histochemistry", "key": "107"},
+                        {"title": "Histoflouresence", "key": "108"}
+                    ]
+                },
+                {
+                    "title": "general lab", "key": "2", "folder": true, "children": [
+                        {"title": "An Introduction to the Centrifuge", "key": "201"},
+                        {"title": "Regulating Temperature in the Lab Preserving Sample Using Cold", "key": "202"},
+                        {"title": "Introduction to the Bunsen Burner", "key": "203"},
+                        {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
+                        {"title": "An Introduction to the Micropipettor", "key": "205"},
+                        {"title": "Making Solutions in the Laboratory", "key": "206"},
+                        {"title": "Understanding Concentration and Measuring Volums", "key": "207"},
+                        {"title": "Introduction to the Microplate Reader", "key": "208"},
+                        {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
+                        {"title": "Common Lab Glassware and Users", "key": "210"},
+                        {"title": "Solutions and Concentrations", "key": "211"},
+                        {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
+                        {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
+                        {"title": "Determining the Empirical Formula", "key": "214"},
+                        {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
+                        {"title": "Using a pH Meter", "key": "216"},
+                        {"title": "Introduction to Titration", "key": "217"},
+                        {"title": "Ideal Gas Law", "key": "218"}
+                    ]
+                }
+            ],
+            glyph: {
+                preset: "awesome5",
+                map: {
+                    _addClass: "",
+                    checkbox: "fas fa-square",
+                    checkboxSelected: "fas fa-check-square",
+                    checkboxUnknown: "fas fa-square",
+                    radio: "fas fa-circle",
+                    radioSelected: "fas fa-circle",
+                    radioUnknown: "fas fa-dot-circle",
+                    dragHelper: "fas fa-arrow-right",
+                    dropMarker: "fas fa-long-arrow-right",
+                    error: "fas fa-exclamation-triangle",
+                    expanderClosed: "fas fa-chevron-left",
+                    expanderLazy: "fas fa-angle-right",
+                    expanderOpen: "fas fa-chevron-down",
+                    loading: "fas fa-spinner fa-pulse",
+                    nodata: "fas fa-meh",
+                    noExpander: "",
+                    // Default node icons.
+                    // (Use tree.options.icon callback to define custom icons based on node data)
+                    doc: "fas fa-screwdriver",
+                    docOpen: "fas fa-screwdriver",
+                    folder: "fas fa-tools",
+                    folderOpen: "fas fa-tools"
+                }
+            },
+        });
     </script>
 {% endblock %}
