@@ -76,15 +76,22 @@ class userInfo(View):
                                                'industry_type':
                                                    self.request.user.industryuser.industryform.industry_type})
         }
+        # print('the industry type is:', context['form']['industry_type'])
+        print('the industry type is:', self.industry.industryform.industry_type)
         return render(request, 'industry/userInfo.html', context=context)
 
     def post(self, request):
-        form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES)
+        print('post is ', request.POST)
+        form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES,
+                                      initial={
+                                          'industry_type': self.request.user.industryuser.industryform.industry_type})
         if form.is_valid():
-            form.save()
+            # form.save()
             industry_user = self.request.user.industryuser
-            industry_user.industryform = form.save(commit=False)
+            industry_user.industryform = form.save()
+            # industry_user.industryform.save()
             industry_user.save()
+            print('the form is', self.request.user.industryuser.industryform)
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/userInfo.html', context={'form': form})
 

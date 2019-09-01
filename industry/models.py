@@ -47,7 +47,7 @@ class IndustryForm(models.Model):
     )
     industry_type = models.IntegerField(choices=industry_type_choice, verbose_name="نوع شرکت")
     industry_address = models.TextField(verbose_name="ادرس شرکت")
-    phone_number = models.IntegerField(verbose_name="شماره تلفن")
+    phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
     international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
     tax_declaration = models.FileField(null=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
     turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
@@ -60,10 +60,6 @@ class IndustryForm(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        extension = None
-        if self.photo:
-            print('the photo is ', self.photo)
-            extension = self.photo.name.split('.')[-1]
         super().save()
         if self.photo:
             img = Image.open("media/{}".format(self.photo.name))

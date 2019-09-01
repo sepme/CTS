@@ -70,9 +70,8 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_phone_number(self):
         data = self.cleaned_data["phone_number"]
-        for ch in data:
-            if ch not in '+0123456789':
-                raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
+        if not re.match(r'^([\d]+)$', data):
+            raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
         return data
 
     def clean_email_address(self):
@@ -90,7 +89,7 @@ class IndustryInfoForm(forms.ModelForm):
     research_field = forms.TextInput()
     industry_type = forms.TextInput()
     industry_address = forms.Textarea()
-    phone_number = forms.DecimalField()
+    phone_number = forms.TextInput()
     email_address = forms.EmailField()
     services_products = forms.CharField(required=False)
     awards_honors = forms.CharField(required=False)
@@ -141,7 +140,7 @@ class IndustryInfoForm(forms.ModelForm):
 
     def clean_industry_type(self):
         data = self.cleaned_data.get('industry_type')
-        if not data:
+        if data is None:
             raise ValidationError(_('لطفا نوع شرکت را انتخاب کنید.'))
         return data
 
@@ -153,7 +152,7 @@ class IndustryInfoForm(forms.ModelForm):
 
     def clean_phone_number(self):
         data = self.cleaned_data.get('phone_number')
-        if data <= 0:
+        if not re.match(r'^([+\d]+)$', data):
             raise ValidationError(_('لطفا شماره تلفن را به درستی وارد نمایید.'))
         return data
 
