@@ -232,6 +232,7 @@ function record_edit(className) {
     });
 }
 function education_data_form(edu_count) {
+    console.log(form);
     div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
     $(div).attr("id",edu_count);
