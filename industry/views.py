@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.views import generic, View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
+from industry.models import IndustryForm
 from . import models
 from . import forms
 
@@ -86,12 +88,16 @@ class userInfo(View):
                                       initial={
                                           'industry_type': self.request.user.industryuser.industryform.industry_type})
         if form.is_valid():
-            # form.save()
-            industry_user = self.request.user.industryuser
-            industry_user.industryform = form.save()
-            # industry_user.industryform.save()
-            industry_user.save()
-            print('the form is', self.request.user.industryuser.industryform)
+            model_form = form.save(commit=False)
+            IndustryForm.objects.filter(name=model_form.name).update(
+                industry_type=model_form.industry_type,
+                tax_declaration=model_form.tax_declaration,
+                services_products=model_form.services_products,
+                awards_honors=model_form.awards_honors
+            )
+            if model_form.photo:
+                model_form.photo.save(model_form.photo.name, model_form.photo)
+                IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/userInfo.html', context={'form': form})
 
