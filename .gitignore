@@ -6,6 +6,8 @@
 *.log
 *.pot
 *.pyc
+*.xml
+*.iml
 __pycache__/
 migrations/
 .idea/
