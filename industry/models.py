@@ -118,9 +118,9 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied")
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted")
+                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
     industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
-                                            verbose_name="صنعت صاحب پروژه")
+                                            verbose_name="صنعت صاحب پروژه", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
     project_detail = models.TextField(verbose_name="جزيات پروژه")

@@ -15,7 +15,6 @@ class Index(generic.TemplateView):
 class UserInfo(generic.TemplateView):
     template_name = 'expert/userInfo.html'
 
-
     def get_context_data(self, **kwargs):
         pass
 
@@ -26,7 +25,6 @@ class UserInfo(generic.TemplateView):
         research_form = ResearchRecordForm(request.POST or None)
         paper_form = PaperRecordForm(request.POST or None)
         print()
-
 
 
 class ResearcherRequest(generic.TemplateView):
@@ -59,8 +57,10 @@ def index(request):
             home_number = form.cleaned_data['home_number']
             phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email_address']
-            expert_form = ExpertForm.objects.create(expert_firstname=first_name, expert_lastname=last_name, special_field=special_field, national_code=melli_code,
-                                                    scientific_rank=scientific_rank, university=university, phone_number=home_number,home_address=address,
+            expert_form = ExpertForm.objects.create(expert_firstname=first_name, expert_lastname=last_name,
+                                                    special_field=special_field, national_code=melli_code,
+                                                    scientific_rank=scientific_rank, university=university,
+                                                    phone_number=home_number, home_address=address,
                                                     mobile_phone=phone_number, email_address=email)
             expert_form.expert_user = expert_user
             if request.FILES.get('photo'):
@@ -78,6 +78,8 @@ def index(request):
 
 def user_info(request):
     instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
+    print(instance.expert_lastname)
+    text = 'Hey fsdfsdfds!'
     if request.method == 'POST':
         expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
         scientific_form = ScientificRecordForm(request.POST or None)
@@ -98,37 +100,13 @@ def user_info(request):
         executive_form = ExecutiveRecordForm()
         research_form = ResearchRecordForm()
         print(request.user)
-    return render(request, 'expert/userInfo.html', {'scientific_form' : scientific_form,
-                                                    'executive_form'  : executive_form,
-                                                    'research_form'   : research_form,
-                                                    'expert_info_form': expert_info_form})
-
-
+    return render(request, 'expert/userInfo.html', {'scientific_form': scientific_form,
+                                                    'executive_form': executive_form,
+                                                    'research_form': research_form,
+                                                    'expert_info_form': expert_info_form,
+                                                    'some_text': text,
+                                                    'instance': instance})
 
 
 def test_view(request):
     return HttpResponse('Test View!')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

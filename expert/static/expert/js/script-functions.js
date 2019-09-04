@@ -232,43 +232,46 @@ function record_edit(className) {
     });
 }
 function education_data_form(edu_count) {
-    console.log(form);
     div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
     $(div).attr("id",edu_count);
-    $(div).html("<form action='' method='post'><div class='row'>" +
+    $(div).html("<div class='row'>" +
         "<div class='col-lg-6'>" +
         "<label for=\"edu-section"+edu_count+"\">مقطع تحصیلی</label>\n" +
-        "<input type=\"text\" id=\"edu-section"+edu_count+"\" class=\"w-100\">" +
+        "<input type=\"text\" name='degree' id=\"edu-section"+edu_count+"\" class=\"w-100\">" +
         "</div>" +
         "<div class='col-lg-6'>" +
         "<label for=\"edu-subject"+edu_count+"\">رشته تحصیلی</label>\n" +
-        "<input type=\"text\" id=\"edu-subject"+edu_count+"\" class=\"w-100\">" +
+        "<input type=\"text\" name='degree' id=\"edu-subject"+edu_count+"\" class=\"w-100\">" +
         "</div>" +
         "</div>"+
         "</div>" +
         "<div class='row'>" +
         "<div class='col-lg-5'>" +
         "<label for=\"university"+edu_count+"\">دانشگاه</label>\n" +
-        "<input type=\"text\" id=\"university"+edu_count+"\" class=\"w-100\">" +
+        "<input type=\"text\" name='degree' id=\"university"+edu_count+"\" class=\"w-100\">" +
         "</div>" +
         "<div class='col-lg-4'>" +
         "<label for=\"edu-city"+edu_count+"\">شهر محل تحصیل</label>\n" +
-        "<input type=\"text\" id=\"edu-city"+edu_count+"\" class=\"w-100\">" +
+        "<input type=\"text\" name='degree' id=\"edu-city"+edu_count+"\" class=\"w-100\">" +
         "</div>" +
         "<div class='col-lg-3'>" +
         "<label for=\"edu-year"+edu_count+"\">سال اخذ مدرک</label>\n" +
-        "<input type=\"text\" id=\"edu-year"+edu_count+"\" class=\"w-100\">" +
+        "<input type=\"text\" name='degree' id=\"edu-year"+edu_count+"\" class=\"w-100\">" +
         "</div>" +
         "</div>" +
         "<div class='row mtop-lg-25'>" +
         "<div class='col-lg-9'>" +
-        "<button type='button' id='"+edu_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
+        "<input type='submit' id='"+edu_count+"' class='w-100 accept-btn btn' value='افزودن'>" +
         "</div>"+
         "<div class='col-lg-3'>" +
         "<button type='button' id='"+edu_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
         "</div>" +
-        "</div></form>");
+        "</div>");
+    // console.log(expert);
+    console.log(instance)
+    // console.log(scientific_form);
+    // console.log(some_text);
     return div;
 }
 function education_record() {

@@ -39,7 +39,9 @@
     </div>
     <div class="content">
         <div class="container">
-            {% block content %}{% endblock %}
+            {% block content %}
+
+            {% endblock %}
         </div>
     </div>
     <div class="side-bar">
@@ -61,6 +63,7 @@
                 <a href="#">
                     <div>
                         <span>پروژه ها</span>
+                        <h1>{{ instance.university }}</h1>
                         <span class="fas fa-list-ul"></span>
                     </div>
                 </a>
@@ -69,6 +72,7 @@
                 <a href="#">
                     <div>
                         <span>پیام ها</span>
+                        {{ expert_info_form.expert_firstname }}
                         <span class="fas fa-envelope"></span>
                     </div>
                 </a>
@@ -108,10 +112,18 @@
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{% static 'expert/js/persianumber.min.js' %}"></script>
 {% block script %}{% endblock %}
-<script>
-    var form = "{{ scientific_form }}"
-</script>
-<script type="text/javascript" src="{% static 'expert/js/script-functions.js' %}"></script>
-<script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
+
+<form action='{% url 'expert:userInfo' %}' method='post'>
+    {% csrf_token %}
+    <script>
+        {#var expert = "{{ expert_info_form.expert_firstname }}";#}
+        var instance = "{{ instance }}";
+        {#var some_text = "{{ some_text }}";#}
+        {#var scientific_form = "{{ scientific_form }}";#}
+    </script>
+</form>
+
+    <script type="text/javascript" src="{% static 'expert/js/script-functions.js' %}"></script>
+    <script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
 </body>
 </html>

@@ -152,7 +152,7 @@ class ExpertProjectHistory(models.Model):
 class IndustryEvaluateExpert(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
     industry = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
-                                    verbose_name="صنعت ارزیابی کننده")
+                                    verbose_name="صنعت ارزیابی کننده", blank=True, null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -191,7 +191,7 @@ class IndustryEvaluateExpert(models.Model):
 
 class ResearcherEvaluateExpert(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="")
-    researcher = models.OneToOneField('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="")
+    researcher = models.OneToOneField('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="", blank=True, null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -254,4 +254,4 @@ class ResearchQuestionInstance(models.Model):
     hand_out_date = models.DateField(auto_now_add=True, verbose_name="تاریخ واگذاری")
     answer = models.FileField(upload_to='./uploads', verbose_name="پاسخ")
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده")
-    researcher = models.ForeignKey('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="پژوهشگر")
+    researcher = models.ForeignKey('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="پژوهشگر", blank=True, null=True)
