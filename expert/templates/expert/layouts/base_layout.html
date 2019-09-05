@@ -19,7 +19,7 @@
   <body>
 {#  {% include 'expert/layouts/pageLoader.html' %}#}
   {% block dialog%}{% endblock %}
-  <div class="main">
+  <div class="main {% if expert_user.status == "signed_up" %} blur-div" {% endif %}>
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
         <div class="top-msg">
@@ -30,10 +30,10 @@
           <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
         </button>
         <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-          <li><a href="#">اطلاعات کاربری</a></li>
-          <li><a href="#">تغییر رمز عبور</a></li>
+          <li><a href="{% url 'expert:userInfo' %}">اطلاعات کاربری</a></li>
+          <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور</a></li>
           <li class="divider"></li>
-          <li><a href="#">خروج</a></li>
+          <li><a href="{% url 'chamran:logout' %}">خروج</a></li>
         </ul>
       </div>
     </div>
@@ -56,41 +56,45 @@
       </div>
       <div class="hr"></div>
       <ul class="list-group">
-        <li class="list-group-item text-right">
-          <a href="#">
+        {% url 'expert:index' as index_url %}
+        <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
+          <a href="{{ index_url }}">
             <div>
               <span>پروژه ها</span>
               <span class="fas fa-list-ul"></span>
             </div>
           </a>
         </li>
-        <li class="list-group-item text-right">
-          <a href="#">
+        {% url 'expert:messages' as messages_url %}
+        <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
+          <a href="{{ messages_url }}">
             <div>
               <span>پیام ها</span>
               <span class="fas fa-envelope"></span>
             </div>
           </a>
         </li>
-        <li class="list-group-item text-right">
-          <a href="#">
+        {% url 'expert:questions' as questions_url %}
+        <li class="list-group-item text-right {% if request.get_full_path == questions_url %}active{% endif %}">
+          <a href="{{ questions_url }}">
             <div>
               <span>سوالات پژوهشی</span>
               <span class="fas fa-question"></span>
             </div>
           </a>
         </li>
-        <li class="list-group-item text-right">
-          <a href="#">
+        {% url 'expert:researcherRequest' as researcherRequest_url %}
+        <li class="list-group-item text-right {% if request.get_full_path == researcherRequest_url %}active{% endif %}">
+          <a href="{{ researcherRequest_url }}">
             <div>
               <span>درخواست پژوهشگر</span>
               <span class="fas fa-user-graduate"></span>
             </div>
           </a>
         </li>
-        {% url 'userInfo' as userInfo %}
-        <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
-          <a href="#">
+        {% url 'expert:userInfo' as userInfo_url %}
+        <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
+          <a href="{{ userInfo_url }}">
             <div>
               <span>تنظیمات کاربری</span>
               <span class="fas fa-cog"></span>

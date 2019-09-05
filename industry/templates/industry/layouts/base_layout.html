@@ -32,10 +32,10 @@
               alt="profile" class="dropdown-img profile" height="45px">
         </button>
         <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-          <li><a href="#">اطلاعات کاربری</a></li>
-          <li><a href="#">تغییر رمز عبور</a></li>
+          <li><a href="{% url 'industry:userInfo' %}">اطلاعات کاربری</a></li>
+          <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور</a></li>
           <li class="divider"></li>
-          <li><a href="#">خروج</a></li>
+          <li><a href="{% url 'chamran:logout' %}">خروج</a></li>
         </ul>
       </div>
     </div>
@@ -64,32 +64,34 @@
       </div>
       <div class="hr"></div>
       <ul class="list-group">
-        {% url "index" as index %}
+        {% url "industry:index" as index %}
         <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
-          <a href="#">
+          <a href='{{  index }}'>
             <div>
               <span>پروژه ها</span>
               <span class="fas fa-list-ul"></span>
             </div>
           </a>
         </li>
-        <li class="list-group-item text-right">
-          <a href="#">
+        {% url "industry:messages" as messages %}
+        <li class="list-group-item text-right {% if request.get_full_path == messages %}active{% endif %}">
+          <a href="{{ messages }}">
             <div>
               <span>پیام ها</span>
               <span class="fas fa-envelope"></span>
             </div>
           </a>
         </li>
-        {% url "newProject" as newProject %}
+        {% url "industry:newProject" as newProject %}
         <li class="list-group-item text-right {% if request.get_full_path == newProject %}active{% endif %}">
-          <a href="#">
+          <a href='{{ newProject }}'>
             <div>
                 <span>ثبت پروژه جدید</span>
                 <span class="fas fa-plus-circle"></span>
             </div>
           </a>
         </li>
+{#            TODO#}
         <li class="list-group-item text-right">
           <a href="#">
             <div>
@@ -98,9 +100,9 @@
             </div>
           </a>
         </li>
-        {% url 'userInfo' as userInfo%}
+        {% url 'industry:userInfo' as userInfo%}
         <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
-          <a href="#">
+          <a href="{{ userInfo }}">
             <div>
               <span>تنظیمات کاربری</span>
               <span class="fas fa-cog"></span>
