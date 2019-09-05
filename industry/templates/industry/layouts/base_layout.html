@@ -23,7 +23,13 @@
       <img src="{% static 'industry/img/logoName.png' %}" alt="chamranTeam">
       <div class="dropdown">
         <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
-          <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
+          <img
+              {% if user.industryuser.industryform.photo %}
+                 src="/media/{{ user.industryuser.industryform.name }}/profile.jpg"
+              {% else %}
+                 src="{% static 'industry/img/profile.jpg' %}"
+              {% endif %}
+              alt="profile" class="dropdown-img profile" height="45px">
         </button>
         <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
           <li><a href="#">اطلاعات کاربری</a></li>
@@ -41,7 +47,13 @@
     <div class="side-bar">
       <div class="topMargin"></div>
       <div class="expert-icon"></div>
-      <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
+      <img
+              {% if user.industryuser.industryform.photo %}
+                 src="/media/{{ user.industryuser.industryform.name }}/profile.jpg"
+              {% else %}
+                 src="{% static 'industry/img/profile.jpg' %}"
+              {% endif %}
+              alt="profile" class="profile" width="150px" height="150px">
       <h5>{% block name %}{% endblock %}</h5>
       <h6>صنعت</h6>
       <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>

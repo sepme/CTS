@@ -137,6 +137,3 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'chamranteaminfo@gmail.com'
 EMAIL_HOST_PASSWORD = 'chamran@98'
 EMAIL_PORT = 587
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

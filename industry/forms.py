@@ -1,5 +1,5 @@
 from django import forms
-
+import re
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -25,8 +25,6 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]
-        if data and (data.width > 200 or data.height > 200):
-            data.thumbnail((200, 200))
         return data
 
     def clean_name(self):
@@ -64,7 +62,6 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_industry_type(self):
         data = self.cleaned_data["industry_type"]
-        print('industry_type is', data)
         return data
 
     def clean_industry_address(self):
@@ -73,9 +70,8 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_phone_number(self):
         data = self.cleaned_data["phone_number"]
-        for ch in data:
-            if ch not in '+0123456789':
-                raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
+        if not re.match(r'^([\d]+)$', data):
+            raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
         return data
 
     def clean_email_address(self):
@@ -86,27 +82,85 @@ class IndustryBasicInfoForm(forms.Form):
 
 
 class IndustryInfoForm(forms.ModelForm):
+    photo = forms.FileField(required=False)
+    name = forms.CharField()
+    registration_number = forms.TextInput()
+    date_of_foundation = forms.TextInput()
+    research_field = forms.TextInput()
+    industry_type = forms.TextInput()
+    industry_address = forms.Textarea()
+    phone_number = forms.TextInput()
+    email_address = forms.EmailField()
+    services_products = forms.CharField(required=False)
+    awards_honors = forms.CharField(required=False)
+    tax_declaration = forms.FileField(required=False)
+
     class Meta:
         model = models.IndustryForm
         fields = ['photo', 'name', 'registration_number', 'date_of_foundation', 'research_field',
                   'industry_type', 'industry_address', 'phone_number', 'services_products',
                   'email_address', 'awards_honors', 'tax_declaration']
-        widgets = {
-            'photo': forms.FileInput(attrs={'id': "upload-input", 'accept': "image/png, image/jpeg"}),
-            'name': forms.TextInput(attrs={'class': "w-100", 'id': 'firmName'}),
-            'registration_number': forms.TextInput(attrs={'class': "w-100", 'id': 'registerNum'}),
-            'date_of_foundation': forms.TextInput(attrs={'class': "w-100", 'id': 'establishmentDate'}),
-            'research_field': forms.TextInput(attrs={'class': "w-100", 'id': 'Field'}),
-            'industry_type': forms.Select(attrs={"id": 'rank', "dir": 'rtl'}),
-            'industry_address': forms.Textarea(attrs={'rows': "3", 'class': "w-100", 'id': "Address", 'dir': 'rtl'}),
-            'phone_number': forms.TextInput(attrs={'class': "w-100", 'id': "phoneNum"}),
-            'email_address': forms.EmailInput(attrs={'class': "w-100", 'id': "Email"}),
-            'services_products': forms.Textarea(attrs={"class": "w-100", "placeholder": "اینجا وارد کنید ...",
-                                                       "dir": "rtl", "rows": "5", "style": "margin-top: 0"}),
-            'awards_honors': forms.Textarea(attrs={"class": "w-100", "placeholder": "اینجا وارد کنید ...",
-                                                   "dir": "rtl", "rows": "5", "style": "margin-top: 0"}),
-            'tax_declaration': forms.FileInput(attrs={'name': 'declaration', 'class': 'attach-input'}),
-        }
+        error_messages = {'industry_type': {
+            'required': 'لطفا نوع شرکت را انتخاب نمایید.'
+        }}
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_name(self):
+        data = self.cleaned_data.get('name')
+        if not data:
+            raise ValidationError(_('لطفا نام شرکت را وارد کنید.'))
+        return data
+
+    def clean_registration_number(self):
+        data = self.cleaned_data.get('registration_number')
+        if not data:
+            raise ValidationError(_("لطفا شماره ثبت را وارد کنید."))
+        if data <= 0 or len(str(data)) != 5:
+            raise ValidationError(_("شماره ثبت یک عدد پنج رقمی است."))
+        return data
+
+    def clean_date_of_foundation(self):
+        data = self.cleaned_data.get('date_of_foundation')
+        if not data:
+            raise ValidationError(_('لطفا تاریخ تاسیس را وارد نمایید.'))
+        if data <= 0 or len(str(data)) != 4:
+            raise ValidationError(_('تاریخ تاسیس یک عدد چهار رقمی است.'))
+        return data
+
+    def clean_email_address(self):
+        data = self.cleaned_data.get('email_address')
+        if not data:
+            raise ValidationError(_('لطفا ایمیل شرکت را وارد نمایید.'))
+        if self.user.email and self.user.email != data:
+            raise ValidationError(_("ایمیل وارد شده با ایمیل شما مطابقت ندارد."))
+        return data
+
+    def clean_industry_type(self):
+        data = self.cleaned_data.get('industry_type')
+        if data is None:
+            raise ValidationError(_('لطفا نوع شرکت را انتخاب کنید.'))
+        return data
+
+    def clean_industry_address(self):
+        data = self.cleaned_data.get('industry_address')
+        if not data:
+            raise ValidationError(_('لطفا نشانی را وارد نمایید.'))
+        return data
+
+    def clean_phone_number(self):
+        data = self.cleaned_data.get('phone_number')
+        if not re.match(r'^([+\d]+)$', data):
+            raise ValidationError(_('لطفا شماره تلفن را به درستی وارد نمایید.'))
+        return data
+
+    def clean_research_field(self):
+        data = self.cleaned_data.get('research_field')
+        if not data:
+            raise ValidationError(_('لطفا حوزه فعالیت را وارد نمایید.'))
+        return data
 
 
 class ProjectForm(forms.ModelForm):

@@ -854,4 +854,5 @@ function question_dialog_init() {
             "</a></li>";
         $(this).closest('ul.inline-list').append(attach_li);
     });
+
 }
