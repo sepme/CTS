@@ -13,7 +13,7 @@ class ResearcherUser(models.Model):
         return self.user.get_username()
 
     def get_absolute_url(self):
-        return HttpResponseRedirect(reverse("researcher:index", kwargs={"pk": self.pk}))
+        return HttpResponseRedirect(reverse("researcher:index"))
 
 
 class Status(models.Model):
