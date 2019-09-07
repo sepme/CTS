@@ -12,21 +12,6 @@ class Index(generic.TemplateView):
     template_name = 'expert/index.html'
 
 
-class UserInfo(generic.TemplateView):
-    template_name = 'expert/userInfo.html'
-
-    def get_context_data(self, **kwargs):
-        pass
-
-    def post(self, request, *args, **kwargs):
-        expert_info_form = ExpertInfoForm(request.POST or None)
-        scientific_form = ScientificRecordForm(request.POST or None)
-        executive_form = ExecutiveRecordForm(request.POST or None)
-        research_form = ResearchRecordForm(request.POST or None)
-        paper_form = PaperRecordForm(request.POST or None)
-        print()
-
-
 class ResearcherRequest(generic.TemplateView):
     template_name = 'expert/researcherRequest.html'
 
@@ -79,7 +64,6 @@ def index(request):
 def user_info(request):
     instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
     print(instance.expert_lastname)
-    text = 'Hey fsdfsdfds!'
     if request.method == 'POST':
         expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
         scientific_form = ScientificRecordForm(request.POST or None)
@@ -104,7 +88,6 @@ def user_info(request):
                                                     'executive_form': executive_form,
                                                     'research_form': research_form,
                                                     'expert_info_form': expert_info_form,
-                                                    'some_text': text,
                                                     'instance': instance})
 
 
