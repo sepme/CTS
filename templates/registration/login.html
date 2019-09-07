@@ -1,38 +1,42 @@
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <title>ورود</title>
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css">
-      <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  </head>
-  <body>
-    <div class="card">
-        <img src="{% static 'img/logo.png' %}" alt="ChamranLogo">
-        <p class="ChamranTeam">چمران تیم</p>
-        <form method="post">
-          {% csrf_token %}
-          {{error}}<br>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="card">
+    <img src="{% static 'img/logo.png' %}" alt="ChamranLogo">
+    <p class="ChamranTeam">چمران تیم</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
         <div class="username">
-          <label for="username">نام کاربری</label>
-          {{form.username}}
-          <!-- <input type="text" id="username" name="username" value=""> -->
-          <i class="fas fa-user-alt fa-lg"></i>
+            <label for="username">نام کاربری</label>
+            {{ form.username|attr:"id:username"}}
+            {{ form.username.errors }}
+            <!-- <input type="text" id="username" name="username" value=""> -->
+            <i class="fas fa-user-alt fa-lg"></i>
         </div>
         <div class="password">
-          <label for="password">رمز عبور</label>
-          <!-- <input type="password" id="password" name="password" value=""> -->
-          {{form.password}}
-          <i class="fas fa-lock fa-lg"></i>
-          <button type="submit" name="enter" class="Enter-btn">ورود</button>
+            <label for="password">رمز عبور</label>
+            <!-- <input type="password" id="password" name="password" value=""> -->
+            {{ error }}
+            {{ form.password|attr:"id:password"}}
+            {{ form.password.errors }}
+            <i class="fas fa-lock fa-lg"></i>
+            <button type="submit" name="enter" class="Enter-btn">ورود</button>
         </div>
-      </form>
-        <a href="#" class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
-        <!-- <form method="POST" action=
+    </form>
+    <a href="#" class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
+    <!-- <form method="POST" action=
         <div class="signUp-div">
             <input type="radio" name="user-type" id="researcher" value="researcher">
             <label for="researcher" class="user-type researcher text-center">
@@ -57,13 +61,13 @@
         </div>
         <button type="button" name="enter" class="Enter-btn">ورود</button>
       </form> -->
-        <div class="hr"></div>
-        <p class="new-user">کاربر جدید هستید؟    <a href="#" onclick='signUp()' >عضویت</a></p>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
-  </body>
+    <div class="hr"></div>
+    <p class="new-user">کاربر جدید هستید؟ <a href="#" onclick='signUp()'>عضویت</a></p>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+</body>
 </html>
