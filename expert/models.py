@@ -13,13 +13,13 @@ class ExpertUser(models.Model):
         ('involved', "فعال - درگیر پروژه"),
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
-    status = models.CharField(max_length=15, choices=STATUS)
+    status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
 
     def __str__(self):
         return self.user.get_username()
 
     def get_absolute_url(self):
-        return HttpResponseRedirect(reverse("expert:index", kwargs={"pk": self.pk}))
+        return HttpResponseRedirect(reverse("expert:index"))
 
 
 class EqTest(models.Model):

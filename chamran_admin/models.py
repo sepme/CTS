@@ -44,8 +44,8 @@ class News(models.Model):
 
 
 class TempUser(models.Model):
-    email = models.EmailField(max_length=254 )
-    unique = models.UUIDField(unique=True, default=uuid.uuid4())
+    email = models.EmailField(max_length=254)
+    unique = models.UUIDField(unique=True, default=uuid.uuid4)
     CHOICE = (
         ('expert', 'Expert'),
         ('industry', 'Industry'),
@@ -54,7 +54,7 @@ class TempUser(models.Model):
     account_type = models.CharField(max_length=50, choices=CHOICE)
 
     def __str__(self):
-        return self.account_type + ' - ' + str(self.pk)
+        return self.account_type + ' - ' + str(self.email)
 
     def get_absolute_url(self):
         return reverse("chamran:home")
