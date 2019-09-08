@@ -93,16 +93,24 @@ class SignupUser(generic.FormView):
         return super().post(request, *args, **kwargs)
 
 
-class LoginView(generic.FormView):
+class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
-    form_class = forms.LoginForm
+
+    def get(self, request, *args, **kwargs):
+        login_form = forms.LoginForm()
+        register_form = forms.RegisterEmailForm()
+        context = {'form': login_form,
+                   'register_form': register_form}
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        form = forms.LoginForm(request.POST or None)
-        context = {'form': form}
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+        login_form = forms.LoginForm(request.POST or None)
+        register_form = forms.RegisterEmailForm(request.POST or None)
+        context = {'form': login_form,
+                   'register_form': register_form}
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
             entry_user = authenticate(request, username=username, password=password)
             print(entry_user)
             if entry_user is not None:
@@ -122,8 +130,28 @@ class LoginView(generic.FormView):
                         except IndustryUser.DoesNotExist:
                             raise ValidationError('کابر مربوطه وجود ندارد.')
             else:
-                context = {'form': form,
+                context = {'form': login_form,
                            'error': 'گذرواژه اشتباه است'}
+
+        elif register_form.is_valid():
+            print(register_form.cleaned_data)
+            email = register_form.cleaned_data['email']
+            account_type = register_form.cleaned_data['account_type']
+            temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+            print(temp_user)
+            subject = 'Welcome to Chamran Team!!!'
+
+            unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
+            message = 'EmailValidation\nyour url:\n' + unique_url
+
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False
+            )
+            return HttpResponseRedirect(reverse('chamran:home'))
         return render(request, self.template_name, context)
 
 

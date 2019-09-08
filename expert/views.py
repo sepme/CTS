@@ -89,7 +89,3 @@ def user_info(request):
                                                     'research_form': research_form,
                                                     'expert_info_form': expert_info_form,
                                                     'instance': instance})
-
-
-def test_view(request):
-    return HttpResponse('Test View!')

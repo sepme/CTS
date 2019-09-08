@@ -16,26 +16,53 @@
 <div class="card">
     <img src="{% static 'img/logo.png' %}" alt="ChamranLogo">
     <p class="ChamranTeam">چمران تیم</p>
-    <form method="post" novalidate>
-        {% csrf_token %}
-        <div class="username">
-            <label for="username">نام کاربری</label>
-            {{ form.username|attr:"id:username" }}
-            {{ form.username.errors }}
-            <i class="fas fa-user-alt fa-lg"></i>
-        </div>
-        <div class="password">
-            <label for="password">رمز عبور</label>
-            {{ error }}
-            {{ form.password|attr:"id:password" }}
-            {{ form.password.errors }}
-            <i class="fas fa-lock fa-lg"></i>
-            <button type="submit" name="enter" class="Enter-btn">ورود</button>
-        </div>
-    </form>
-    <a href="#" class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
-    <div class="hr"></div>
-    <p class="new-user">کاربر جدید هستید؟ <a href="#" onclick='signUp()'>عضویت</a></p>
+    <div class="login-div">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="username">
+                <label for="id_username">نام کاربری</label>
+                {{ form.username|attr:"id:id_username" }}
+                {{ form.username.errors }}
+                <i class="fas fa-user-alt fa-lg"></i>
+            </div>
+            <div class="password">
+                <label for="id_password">رمز عبور</label>
+                {{ error }}<br>
+                {{ form.password|attr:"id:id_password" }}
+                {{ form.password.errors }}
+                <i class="fas fa-lock fa-lg"></i>
+                <button type="submit" name="enter" class="Enter-btn">ورود</button>
+            </div>
+        </form>
+    </div>
+    <div class="signUp-div">
+        <form method="post" action="" novalidate>
+            {% csrf_token %}
+            <div class="user-type-container">
+{#                <input type="radio" name="user-type" id="researcher" value="researcher">#}
+{#                {{ register_form.account_type.2|attr:"id:researcher" }}#}
+{#                <label for="researcher" class="user-type researcher text-center">پژوهشگر</label>#}
+{#                <input type="radio" name="user-type" id="expert" value="expert">#}
+{#                <label for="expert" class="user-type expert text-center">استاد</label>#}
+{#                <input type="radio" name="user-type" id="industry" value="industry">#}
+{#                <label for="industry" class="user-type industry text-center">صنعت</label>#}
+                {{ register_form.account_type }}
+
+            </div>
+            <div class="email">
+                <label for="email">پست الکترونیکی</label>
+{#                <input type="text" id="email" name="email" value="">#}
+                {{ register_form.email|attr:"id:email" }}
+
+                <i class="fas fa-at fa-lg"></i>
+            </div>
+            <button type="submit" name="enter" class="Enter-btn">عضویت</button>
+        </form>
+    </div>
+    <div class="card-footer">
+        <a href="#" class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
+        <p class="new-user">کاربر جدید هستید؟ <a href="#" onclick='signUp()'>عضویت</a></p>
+    </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
