@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -137,20 +137,25 @@ class LoginView(generic.TemplateView):
             print(register_form.cleaned_data)
             email = register_form.cleaned_data['email']
             account_type = register_form.cleaned_data['account_type']
-            temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+            # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+            temp_user = models.TempUser(email=email, account_type=account_type)
             print(temp_user)
             subject = 'Welcome to Chamran Team!!!'
 
             unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
             message = 'EmailValidation\nyour url:\n' + unique_url
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[email],
+                    fail_silently=False
+                )
+                temp_user.save()
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
 
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email],
-                fail_silently=False
-            )
             return HttpResponseRedirect(reverse('chamran:home'))
         return render(request, self.template_name, context)
 
