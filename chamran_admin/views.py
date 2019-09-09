@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse,Http404
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -11,6 +11,7 @@ from . import forms
 from researcher.models import ResearcherUser
 from expert.models import ExpertUser
 from industry.models import IndustryUser
+from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
 
@@ -51,7 +52,13 @@ class SignupUser(generic.FormView):
     template_name = 'registration/password_confirmation.html'
 
     def get(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+        path = request.path
+        [account_type, uuid] = path.split('/')[2:]
+        try:
+            models.TempUser.objects.get(account_type=account_type, unique=uuid)
+        except models.TempUser.DoesNotExist:
+            raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterUserForm(request.POST or None)
