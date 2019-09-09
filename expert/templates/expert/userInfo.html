@@ -28,7 +28,7 @@
                                 <label for="upload-input" class="upload text-center">
                                     <i class="fas fa-pencil-alt"></i>
                                 </label>
-                                <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="profile"
+                                <img src="{{ request.user.expertuser.expertform.photo.url }}" alt="profile" class="profile"
                                      width="150px" height="150px">
                                 <input type="file" id="upload-input" name="photo" accept="image/png, image/jpeg">
                             </div>

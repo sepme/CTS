@@ -19,7 +19,7 @@
 <body>
 {#  {% include 'expert/layouts/pageLoader.html' %}#}
 {% block dialog %}{% endblock %}
-<div class="main {% if expert_user.status == "signed_up" %} blur-div" {% endif %}>
+<div class="main {% if request.user.expertuser.status == "signed_up" %} blur-div" {% endif %}>
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
         <div class="top-msg">
@@ -27,7 +27,8 @@
         </div>
         <div class="dropdown">
             <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
-                <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
+                <img src="{{ request.user.expertuser.expertform.photo.url }}" alt="profile" class="dropdown-img profile"
+                     height="45px">
             </button>
             <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
                 <li><a href="{% url 'expert:userInfo' %}">اطلاعات کاربری</a></li>
@@ -47,7 +48,8 @@
     <div class="side-bar">
         <div class="topMargin"></div>
         <div class="expert-icon"></div>
-        <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="Ehsan" class="profile" width="150px" height="150px">
+        <img src="{{ request.user.expertuser.expertform.photo.url }}" alt="Ehsan" class="profile" width="150px"
+             height="150px">
         <h5>{% block name %}{% endblock %}</h5>
         <h6>استاد</h6>
         <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:3 }}</span>/10</p>
