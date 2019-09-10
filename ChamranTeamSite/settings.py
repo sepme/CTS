@@ -131,9 +131,9 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-#email
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'chamranteaminfo@gmail.com'
-EMAIL_HOST_PASSWORD = 'chamran@98'
+EMAIL_HOST = 'mail.chamranteam.ir'
+EMAIL_HOST_USER = 'noreply@chamranteam.ir'
+EMAIL_HOST_PASSWORD = 'chamranteam97'
 EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+

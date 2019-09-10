@@ -1,5 +1,5 @@
 from django import forms
-from .models import ExpertForm
+from .models import ExpertForm, ScientificRecord, ExecutiveRecord, PaperRecord, ResearchRecord
 from django.core.exceptions import ValidationError
 
 
@@ -58,6 +58,7 @@ class InitialInfoForm(forms.Form):
 
     def clean_home_number(self):
         home_number = self.cleaned_data.get('home_number')
+        print('home_number:', home_number)
         try:
             int(home_number)
         except ValueError:
@@ -80,3 +81,47 @@ class InitialInfoForm(forms.Form):
             raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
 
         return phone_number
+
+class ExpertInfoForm(forms.ModelForm):
+
+    prefix = 'expert_info'
+
+    class Meta:
+        model = ExpertForm
+        fields = '__all__'
+
+
+class ScientificRecordForm(forms.ModelForm):
+
+    prefix = 'scientific_info'
+
+    class Meta:
+        model = ScientificRecord
+        exclude = ['expert_form']
+
+
+class ExecutiveRecordForm(forms.ModelForm):
+
+    prefix = 'executive_info'
+
+    class Meta:
+        model = ExecutiveRecord
+        exclude = ['expert_form']
+
+
+class ResearchRecordForm(forms.ModelForm):
+
+    prefix = 'research_info'
+
+    class Meta:
+        model = ResearchRecord
+        exclude = ['expert_form']
+
+
+class PaperRecordForm(forms.ModelForm):
+
+    prefix = 'paper_info'
+
+    class Meta:
+        model = PaperRecord
+        exclude = ['expert_form']
