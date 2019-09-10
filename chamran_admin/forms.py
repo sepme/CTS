@@ -75,7 +75,7 @@ class LoginForm(forms.Form):
         researcher = ResearcherUser.objects.filter(user__username=username)
         expert = ExpertUser.objects.filter(user__username=username)
         industry = IndustryUser.objects.filter(user__username=username)
-        print(researcher, expert, industry)
+        # print(researcher, expert, industry)
         if not (researcher or expert or industry):
             raise forms.ValidationError('این نام کابری ثبت نام نشده است')
         return username

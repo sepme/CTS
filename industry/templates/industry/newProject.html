@@ -1,11 +1,13 @@
 {% extends "industry/layouts/base_layout.html" %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title %}پذیرش پروژه{% endblock %}
 {% block header %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
     <link rel="stylesheet" href="{% static 'industry/css/inputTags.min.css' %}">
     <style rel="stylesheet">
-        div.container{
+        div.container {
             display: block;
             width: 100%;
             margin: 0;
@@ -21,23 +23,26 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card">
-                <form action="" method="post">
+                <form enctype="multipart/form-data" method="post">
                     {% csrf_token %}
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-6">
-                                <label for="persian_label">عنوان پروژه (به فارسی)</label>
-                                <input id="persian_label" type="text" name="persian_label" class="w-100">
+                                <label for="id_project_title_persian">عنوان پروژه (به فارسی)</label>
+                                {% render_field form.project_title_persian class="w-100" %}
+                                {% render_field form.project_title_persian.errors class="w-100" %}
                             </div>
                             <div class="col-lg-6">
-                                <label for="latin_label">عنوان پروژه (به لاتین)</label>
-                                <input id="latin_label" type="text" name="latin_label" class="w-100">
+                                <label for="id_project_title_english">عنوان پروژه (به لاتین)</label>
+                                {% render_field form.project_title_english class="w-100" %}
+                                {% render_field forms.project_title_english.errors class="w-100" %}
                             </div>
                         </div>
                         <div class="row" style="margin-top: 5px">
                             <div class="col-lg-12 text-right">
-                                <span class="sub-header">کلیدواژه ها</span>
-                                <div id="keys" class="w-100"></div>
+                                <label for="id_key_words">کلید واژه ها</label>
+                                {% render_field form.key_words class="w-100" %}
+                                {% render_field form.key_words.erros class="w-100" %}
                             </div>
                         </div>
                         <div class="row">
@@ -45,13 +50,16 @@
                                 <span class="sub-header" style="position: relative;top: 15px;">روش تحقیق : </span>
                             </div>
                             <div class="col-lg-2 text-right">
-                                <input type="radio" id="quantity" name="research_methodology" class="label-check-radio">
-                                <label for="quantity" style="padding: 5px 9px;">کمی</label>
+                                <input type="radio" id="id_research_methodology_0" name="research_methodology"
+                                       class="label-check-radio" value="0">
+                                <label for="id_research_methodology_0" style="padding: 5px 9px;">کمی</label>
                             </div>
                             <div class="col-lg-2 text-right">
-                                <input type="radio" id="quality" name="research_methodology" class="label-check-radio">
-                                <label for="quality">کیفی</label>
+                                <input type="radio" id="id_research_methodology_1" name="research_methodology"
+                                       class="label-check-radio" value="1">
+                                <label for="id_research_methodology_1">کیفی</label>
                             </div>
+                            {% render_field form.research_methodology.errors %}
                             <div class="col-lg-4"></div>
                         </div>
                     </div>
@@ -65,39 +73,45 @@
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.main_problem_and_importance class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.main_problem_and_importance.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.progress_profitability class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.progress_profitability.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">برآورد شما از سود مالی این پروژه چگونه است؟</span>
-                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.predict_profit class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.predict_profit.errors %}
                             </div>
                         </div>
                     </div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="header">راهکار ها <span class="sub-header">(در صورت وجود پیشنهاد)</span></span>
+                                <span class="header">راهکار ها <span
+                                        class="sub-header">(در صورت وجود پیشنهاد)</span></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید.</span>
-                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.approach class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.approach.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header"> این راه حل چه مشکلاتی می‌تواند داشته باشد؟</span>
-                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.potential_problems class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.potential_problems.errors %}
                             </div>
                         </div>
                     </div>
@@ -111,25 +125,29 @@
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.required_lab_equipment class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.required_lab_equipment.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.required_technique class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top:0" %}
+                                {% render_field form.required_technique.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">لطفا مراحل انجام پروژه خود را مشخص کنید.</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.project_phase class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.project_phase.errors %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">پروژه شما به چه مقدار بودجه نیاز دارد؟</span>
-                                <textarea class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.required_budget class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.required_budget.errors %}
                             </div>
                         </div>
                     </div>
@@ -143,11 +161,12 @@
                             <div class="col-lg-12 text-right">
                                 <br>
                                 <span class="sub-header">از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟</span>
-                                <textarea class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>
+                                {% render_field form.policy class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.policy.errors %}
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="chamran_btn" style="left: 0;bottom: -1px">افزودن پروژه</button>
+                    <button type="submit" class="chamran_btn" style="left: 0;bottom: -1px">افزودن پروژه</button>
                 </form>
             </div>
         </div>

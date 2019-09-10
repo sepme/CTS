@@ -88,7 +88,7 @@ class IndustryInfoForm(forms.ModelForm):
     date_of_foundation = forms.TextInput()
     research_field = forms.TextInput()
     industry_type = forms.TextInput()
-    industry_address = forms.Textarea()
+    industry_address = forms.CharField()
     phone_number = forms.TextInput()
     email_address = forms.EmailField()
     services_products = forms.CharField(required=False)
@@ -163,51 +163,41 @@ class IndustryInfoForm(forms.ModelForm):
         return data
 
 
-class ProjectForm(forms.ModelForm):
+class ProjectForm(forms.Form):
+    key_words = forms.CharField(required=False  )
+    potential_problems = forms.CharField(required=False)
+    project_title_persian = forms.CharField()
+    project_title_english = forms.CharField()
+    research_methodology_choice = (
+        (0, 'کیفی'),
+        (1, 'کمی'),
+    )
+    research_methodology = forms.IntegerField(widget=forms.RadioSelect(choices=research_methodology_choice),
+                                              error_messages={'required': 'روش تحقیق را انتخاب نمایید'})
+    main_problem_and_importance = forms.CharField()
+    approach = forms.CharField(required=False)
+    progress_profitability = forms.CharField()
+    predict_profit = forms.IntegerField()
+    required_lab_equipment = forms.CharField()
+    required_technique = forms.CharField()
+    project_phase = forms.CharField()
+    required_budget = forms.IntegerField()
+    policy = forms.CharField()
+
     class Meta:
-        model = models.ProjectForm
-        # 'key_words','required_technique' ,
         fields = [
-            'project_title_persian', 'project_title_english', 'research_methodology',
+            'project_title_persian', 'project_title_english', 'key_words', 'research_methodology',
             'main_problem_and_importance', 'progress_profitability', 'required_lab_equipment',
-            'predict_profit', 'innovation', 'approach', 'policy', 'project_phase', 'required_budget'
+            'predict_profit', 'approach', 'policy', 'project_phase', 'required_budget', 'required_technique',
+            'potential_problems',
         ]
-
-        # widgets ={
-        #     "project_title_persian" : forms.TextInput(attrs={'id':"persian_label" ,'class':"w-100",}),
-        #     "project_title_english" : forms.TextInput(attrs={'id':"latin_label" ,'class':"w-100",}),
-        #     "main_problem_and_importance" : forms.Textarea(attrs={'rows':"5" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-        #     "progress_profitability" : forms.Textarea(attrs={'rows':"5" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-
-        #     'approach' : forms.Textarea(attrs={'rows':"7" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-        #     'innovation' : forms.Textarea(attrs={'rows':"7" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-
-        #     'required_lab_equipment' : forms.Textarea(attrs={'rows':"4" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-        #     'required_technique'  : forms.Textarea(attrs={'rows':"4" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-        #     'project_phase' : forms.Textarea(attrs={'rows':"4" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-        #     'required_budget' : forms.Textarea(attrs={'rows':"4" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-        #     'policy' : forms.Textarea(attrs={'rows':"7" ,'dir':"rtl" ,'placeholder':"اینجا وارد کنید ...",
-        #                                                     'style':"margin-top: 0",'class':"w-100",}),
-        # }
 
     def clean_project_title_persian(self):
         data = self.cleaned_data["project_title_persian"]
         for item in data:
             if 65 <= ord(item) <= 90:
-                print("به فارسی تایپ شود لطفا")
-                print(item, ord(item))
                 raise ValidationError(_("به فارسی تایپ شود لطفا"))
             if 97 <= ord(item) <= 122:
-                print("به فارسی تایپ شود لطفا")
-                print(item, ord(item))
                 raise ValidationError(_("به فارسی تایپ شود لطفا"))
         return data
 
@@ -215,66 +205,5 @@ class ProjectForm(forms.ModelForm):
         data = self.cleaned_data["project_title_english"]
         for item in data:
             if 1750 > ord(item) > 1560:
-                print("به انگلیسی تایپ شود لطفا")
                 raise ValidationError(_("به انگلیسی تایپ شود لطفا"))
         return data
-
-    # def clean_key_words(self):
-    #     data = self.cleaned_data["key_words"]
-    #     print("key_words - " ,data)
-    #     return data
-
-    def clean_main_problem_and_importance(self):
-        data = self.cleaned_data["main_problem_and_importance"]
-        print("main_problem_and_importance - ", data)
-        return data
-
-    def clean_research_methodology(self):
-        data = self.cleaned_data["research_methodology"]
-        print("research_methodology - ", data)
-        return data
-
-    def clean_progress_profitability(self):
-        data = self.cleaned_data["progress_profitability"]
-        print("progress_profitability - ", data)
-        return data
-
-    def clean_required_lab_equipment(self):
-        data = self.cleaned_data["required_lab_equipment"]
-        print("required_lab_equipment - ", data)
-        return data
-
-    def clean_innovation(self):
-        data = self.cleaned_data["innovation"]
-        print("innovation - ", data)
-        return data
-
-    def clean_approach(self):
-        data = self.cleaned_data["approach"]
-
-        return data
-
-    # def clean_required_technique(self):
-    #     data = self.cleaned_data["required_technique"]
-    #     print("required_technq" ,data)
-    #     return data
-
-    def clean_policy(self):
-        data = self.cleaned_data["policy"]
-        print("policy - ", data)
-        return data
-
-    def clean_required_budget(self):
-        data = self.cleaned_data["required_budget"]
-        print("required_budget - ", data)
-        return data
-
-    def clean_project_phase(self):
-        data = self.cleaned_data["project_phase"]
-        print("project_phase - ", data)
-        return data
-
-    def clean_predict_profit(self):
-        predict_profit = self.cleaned_data.get('predict_profit')
-
-        return predict_profit

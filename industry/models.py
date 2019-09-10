@@ -13,9 +13,7 @@ class IndustryUser(models.Model):
     industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE, verbose_name="فرم صنعت")
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
-        ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
         ('free', "فعال - بدون پروژه"),
-        ('waiting', "فعال - در حال انتظار پروژه"),
         ('involved', "فعال - درگیر پروژه"),
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
@@ -25,7 +23,7 @@ class IndustryUser(models.Model):
         return self.user.get_username()
 
     def get_absolute_url(self):
-        return HttpResponseRedirect(reverse("industry:index"))
+        return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
 
 
 def upload_and_rename_profile(instance, file_name):
@@ -61,25 +59,22 @@ class IndustryForm(models.Model):
 
     def save(self, *args, **kwargs):
         super().save()
-        if self.photo:
-            img = Image.open("media/{}".format(self.photo.name))
-            rgb = img.convert('RGB')
-            os.remove(os.path.join(settings.MEDIA_ROOT, self.photo.name))
-            rgb.save("media/{}/profile.jpg".format(self.name))
-            self.photo.name = "profile.jpg"
-            super().save()
+        img = Image.open("media/{}".format(self.photo.name))
+        rgb = img.convert('RGB')
+        os.remove(os.path.join(settings.MEDIA_ROOT, self.photo.name))
+        rgb.save("media/{}/profile.jpg".format(self.name))
+        self.photo.name = "profile.jpg"
+        super().save()
 
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, primary_key=True)
 
 
 class ProjectForm(models.Model):
+    key_words = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
     project_title_persian = models.CharField(max_length=128, verbose_name="عنوان پروژه فارسی")
     project_title_english = models.CharField(max_length=128, verbose_name="عنوان پروژه انگلیسی")
-    key_words = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
-    percentage_wet_lab = models.FloatField(verbose_name="درصد wet_lab")
-    percentage_dry_lab = models.FloatField(verbose_name="درصد dry_lab ")
     research_methodology_choice = (
         (0, 'کیفی'),
         (1, 'کمی'),
@@ -87,13 +82,13 @@ class ProjectForm(models.Model):
     research_methodology = models.IntegerField(choices=research_methodology_choice, verbose_name="روش تحقیق")
     main_problem_and_importance = models.TextField(verbose_name="مشکلات اصلی و اهداف")
     progress_profitability = models.TextField(verbose_name="پیشرفت های حاصل")
-    approach = models.TextField(verbose_name="راه کار ها")
-    innovation = models.TextField(verbose_name="نو آوری ها")
+    approach = models.TextField(null=True, blank=True, verbose_name="راه کار ها")
+    potential_problems = models.TextField(null=True, blank=True, verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
+    # required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
+    required_technique = models.TextField(default='no technique', verbose_name='تکنیک های مورد نیاز')
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
-    papers_and_documentation = models.TextField(verbose_name="مقالات و مستندات")
     policy = models.TextField(verbose_name="نکات اخلاقی")
     predict_profit = models.IntegerField()
 
@@ -119,9 +114,9 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied")
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
+                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted")
     industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
-                                            verbose_name="صنعت صاحب پروژه", blank=True, null=True)
+                                            verbose_name="صنعت صاحب پروژه")
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
     project_detail = models.TextField(verbose_name="جزيات پروژه")
