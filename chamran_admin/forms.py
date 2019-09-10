@@ -36,10 +36,11 @@ class RegisterEmailForm(forms.Form):
 
 
 class RegisterUserForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput, label="رمز عبور",
+    password = forms.CharField(widget=forms.PasswordInput,
                                error_messages={'required': 'لطفا گذرواژه خود را وارد کنید'})
-    confirm_password = forms.CharField(widget=forms.PasswordInput, label="تایید رمز عبور",
-                                       error_messages={'required': "لطفا گذرواژه را دوباره وارد کنید"})
+    confirm_password = forms.CharField(widget=forms.PasswordInput,
+                                       error_messages={'required': "لطفا گذرواژه را دوباره وارد کنید"}
+                                       )
 
     class Meta:
         widgets = {
