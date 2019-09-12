@@ -7,12 +7,12 @@ body {
 }
 .card {
   width: 400px;
-  padding-bottom: 23px;
+  padding: 0 25px 50px 25px;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0px 0px 20px #e3e3e3;
+  box-shadow: 0 0 20px #e3e3e3;
 }
 img {
   width: 105px;
@@ -49,33 +49,34 @@ img {
   margin-bottom: 10px;
 }
 input {
-  background-color: #fdfdfd;
+  background-color: #fdfdfd!important;
   border: 1px solid #bdbdbd;
+  color: #6f7285;
   border-radius: 5px;
-  height: 40px;
-  width: 350px;
-  margin-left: 25px;
   margin-top: 20px;
   direction: rtl;
-  padding-right: 10px;
+  padding: 10px;
+  width: 100%;
 }
-.username > label , .password > label, .confirm_password > label, .email > label {
-  color: #bdbdbd;
+label {
   position: absolute;
-  right: 35px;
   top: 28px;
+  right: 10px;
+  color: #6f7285;
   transition: 300ms all ease;
 }
 input:focus {
   outline: none;
   border: 1px solid #3CCD1C;
+  color: #3CCD1C;
+  background-color: #fff;
 }
 .username > i , .password > i, .confirm_password > i , .email > i{
   width: 35px;
   height: 35px;
   position: absolute;
   top: 33px;
-  left: 30px;
+  left: 10px;
   color: #bdbdbd;
 }
 span.error{
@@ -85,23 +86,31 @@ span.error{
   color: #FF2525;
   font-size: 13px;
 }
+.card-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 45px;
+    width: 100%;
+    border: none;
+    background-color: #E3FFDD;
+    text-align: left;
+    padding: 8px;
+}
 .Enter-btn, .signUp-btn{
-  background-color: transparent;
-  border: 1px solid #3CCD1C;
-  color: #3CCD1C;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  margin: 10px 25px;
+  background-color: #89E076;
+  border: none;
+  color: #ffffff;
+  border-radius: 0.25em;
+  margin: 10px auto;
   padding: 10px;
   transition: 200ms all ease;
-  box-shadow: 0 0 2px 2px #e3e3e3;
-  width: 350px;
+  width: 100%;
 }
 .Enter-btn:hover , .Enter-btn:focus ,.signUp-btn:hover ,.signUp-btn:focus {
   outline: none;
   color: #fff;
   background-color: #3CCD1C;
-  box-shadow: 0 0 5px 2px #e3e3e3;
 }
 .hr::before {
   content: '';
@@ -109,7 +118,6 @@ span.error{
   height: 1px;
   width: 350px;
   background-color: #bdbdbd;
-  margin-left: 25px;
 }
 .hr {
   margin-bottom: 10px;
@@ -132,7 +140,18 @@ a:focus {
 }
 .card > a {
   margin-top: 5px;
-  margin-left: 25px;
+}
+input.error, textarea.error {
+    background-color: #fdf7f8;
+    border: 1px solid #ff4545;
+    color: #ff4545;
+}
+div.error{
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    font-size: 10px;
+    color: #ff4545;
 }
 @media only screen and (max-width: 600px) {
   .card {
@@ -419,7 +438,12 @@ a:focus {
   margin-top:10px;
   display: none;
 }
+.user-type-container{
+  display: flex;
+  width: 100%;
+}
 .user-type{
+  position: relative;
   width: 100px;
   height: 100px;
   margin-left: 25px;
@@ -428,16 +452,50 @@ a:focus {
   border-radius: 5px;
   box-shadow: none;
   background-color: #fdfdfd;
+  padding-top: 75px;
 }
 .user-type:hover {
   cursor: pointer;
   border:1px solid #3CCD1C;
-  color: #3CCD1C;
+  color: #3CCD1C!important;
   box-shadow: 0 0 5px 0 #3CCD1C;
 }
 .user-type > img{
   width: 62px;
   height: 62px;
+}
+label.user-type:after{
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 62px;
+  height: 62px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+label.user-type.expert:after{
+  background-image: url("../img/mind.png");
+}
+label.user-type.industry:after{
+  background-image: url("../img/settings.png");
+}
+label.user-type.researcher:after{
+  background-image: url("../img/research.png");
+}
+label.user-type.select.expert:after{
+  background-image: url("../img/mind_hover.png");
+}
+label.user-type.select.industry:after{
+  background-image: url("../img/settings_hover.png");
+}
+label.user-type.select.researcher:after{
+  background-image: url("../img/research_hover.png");
 }
 .email{
   position: relative;
@@ -449,6 +507,22 @@ input[type="radio"]{
 input[type="radio"]:checked+label{
   cursor: pointer;
   border:1px solid #3CCD1C;
-  color: #3CCD1C;
+  color: #3CCD1C!important;
   box-shadow: 0 0 5px 0 #3CCD1C;
+}
+.forget-pass{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5px;
+  color: #3ccd1c;
+}
+.new-user{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 5px;
+}
+.new-user > a{
+  color: #3ccd1c;
 }

@@ -1,113 +1,133 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>{% block title %}{% endblock %}</title>
-      {% load static %}
-      <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
-      <link rel="stylesheet" href="{% static 'expert/css/pageLoader.css' %}">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
-      <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-      <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
-      <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
-  </head>
-  <body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
+    <link rel="stylesheet" href="{% static 'expert/css/pageLoader.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
+</head>
+<body>
 {#  {% include 'expert/layouts/pageLoader.html' %}#}
-  {% block dialog%}{% endblock %}
-  <div class="main blur-div">
+{% block dialog %}{% endblock %}
+<div class="main {% if request.user.expertuser.status == "signed_up" %} blur-div" {% endif %}>
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
         <div class="top-msg">
             <span class="fas fa-envelope fa-lg"></span>
         </div>
         <div class="dropdown">
-        <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
-          <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
-        </button>
-        <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-          <li><a href="#">اطلاعات کاربری</a></li>
-          <li><a href="#">تغییر رمز عبور</a></li>
-          <li class="divider"></li>
-          <li><a href="#">خروج</a></li>
-        </ul>
-      </div>
+            <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
+                <img src="{{ request.user.expertuser.expertform.photo.url }}" alt="profile" class="dropdown-img profile"
+                     height="45px">
+            </button>
+            <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
+                <li><a href="{% url 'expert:userInfo' %}">اطلاعات کاربری</a></li>
+                <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'chamran:logout' %}">خروج</a></li>
+            </ul>
+        </div>
     </div>
     <div class="content">
         <div class="container">
-            {% block content %}{% endblock %}
+            {% block content %}
+
+            {% endblock %}
         </div>
     </div>
     <div class="side-bar">
-      <div class="topMargin"></div>
-      <div class="expert-icon"></div>
-      <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="Ehsan" class="profile" width="150px" height="150px">
-      <h5>{% block name %}{% endblock %}</h5>
-      <h6>استاد</h6>
-      <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:3 }}</span>/10</p>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0" aria-valuemax="100" style="width: 70px">
-          <span class="sr-only">{{ score|default:0 }}% completed</span>
+        <div class="topMargin"></div>
+        <div class="expert-icon"></div>
+        <img src="{{ request.user.expertuser.expertform.photo.url }}" alt="Ehsan" class="profile" width="150px"
+             height="150px">
+        <h5>{% block name %}{% endblock %}</h5>
+        <h6>استاد</h6>
+        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:3 }}</span>/10</p>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0"
+                 aria-valuemax="100" style="width: 70px">
+                <span class="sr-only">{{ score|default:0 }}% completed</span>
+            </div>
         </div>
-      </div>
-      <div class="hr"></div>
-      <ul class="list-group">
-        <li class="list-group-item text-right">
-          <a href="#">
-            <div>
-              <span>پروژه ها</span>
-              <span class="fas fa-list-ul"></span>
-            </div>
-          </a>
-        </li>
-        <li class="list-group-item text-right">
-          <a href="#">
-            <div>
-              <span>پیام ها</span>
-              <span class="fas fa-envelope"></span>
-            </div>
-          </a>
-        </li>
-        <li class="list-group-item text-right">
-          <a href="#">
-            <div>
-              <span>سوالات پژوهشی</span>
-              <span class="fas fa-question"></span>
-            </div>
-          </a>
-        </li>
-        <li class="list-group-item text-right">
-          <a href="#">
-            <div>
-              <span>درخواست پژوهشگر</span>
-              <span class="fas fa-user-graduate"></span>
-            </div>
-          </a>
-        </li>
-        {% url 'userInfo' as userInfo %}
-        <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
-          <a href="#">
-            <div>
-              <span>تنظیمات کاربری</span>
-              <span class="fas fa-cog"></span>
-            </div>
-          </a>
-        </li>
-      </ul>
+        <div class="hr"></div>
+        <ul class="list-group">
+            {% url 'expert:index' as index_url %}
+            <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
+                <a href="{{ index_url }}">
+                    <div>
+                        <span>پروژه ها</span>
+                        <span class="fas fa-list-ul"></span>
+                    </div>
+                </a>
+            </li>
+            {% url 'expert:messages' as messages_url %}
+            <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
+                <a href="{{ messages_url }}">
+                    <div>
+                        <span>پیام ها</span>
+                        <span class="fas fa-envelope"></span>
+                    </div>
+                </a>
+            </li>
+            {% url 'expert:questions' as questions_url %}
+            <li class="list-group-item text-right {% if request.get_full_path == questions_url %}active{% endif %}">
+                <a href="{{ questions_url }}">
+                    <div>
+                        <span>سوالات پژوهشی</span>
+                        <span class="fas fa-question"></span>
+                    </div>
+                </a>
+            </li>
+            {% url 'expert:researcherRequest' as researcherRequest_url %}
+            <li class="list-group-item text-right {% if request.get_full_path == researcherRequest_url %}active{% endif %}">
+                <a href="{{ researcherRequest_url }}">
+                    <div>
+                        <span>درخواست پژوهشگر</span>
+                        <span class="fas fa-user-graduate"></span>
+                    </div>
+                </a>
+            </li>
+            {% url 'expert:userInfo' as userInfo_url %}
+            <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
+                <a href="{{ userInfo_url }}">
+                    <div>
+                        <span>تنظیمات کاربری</span>
+                        <span class="fas fa-cog"></span>
+                    </div>
+                </a>
+            </li>
+        </ul>
     </div>
     <a href="#" id="toggle"><span></span></a>
-  </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-  <script type="text/javascript" src="{% static 'expert/js/pageLoader.js' %}"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="{% static 'expert/js/persianumber.min.js' %}"></script>
-  {% block script %}{% endblock %}
-  <script type="text/javascript" src="{% static 'expert/js/script-functions.js' %}"></script>
-  <script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
-  </body>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'expert/js/pageLoader.js' %}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{% static 'expert/js/persianumber.min.js' %}"></script>
+{% block script %}{% endblock %}
+
+<form action='{% url 'expert:userInfo' %}' method='post'>
+    {% csrf_token %}
+    <script>
+        {#var expert = "{{ expert_info_form.expert_firstname }}";#}
+        var instance = "{{ instance }}";
+        {#var some_text = "{{ some_text }}";#}
+        {#var scientific_form = "{{ scientific_form }}";#}
+    </script>
+</form>
+
+<script type="text/javascript" src="{% static 'expert/js/script-functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
+</body>
 </html>

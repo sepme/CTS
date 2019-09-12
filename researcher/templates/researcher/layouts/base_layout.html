@@ -25,10 +25,10 @@
           <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
         </button>
         <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-          <li><a href="#">اطلاعات کاربری</a></li>
-          <li><a href="#">تغییر رمز عبور</a></li>
+          <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری</a></li>
+          <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور</a></li>
           <li class="divider"></li>
-          <li><a href="#">خروج</a></li>
+          <li><a href="{% url 'chamran:logout' %}">خروج</a></li>
         </ul>
       </div>
     </div>
@@ -51,23 +51,25 @@
       </div>
       <div class="hr"></div>
       <ul class="list-group">
-        {% url "index" as index %}
-        <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
-          <a href="#">
+        {% url "index" as index_url %}
+        <li class="list-group-item text-right {% if request.get_full_path == index_url %}active{% endif %}">
+          <a href="{{ index_url }}">
             <div>
               <span>پروژه ها</span>
               <span class="fas fa-list-ul"></span>
             </div>
           </a>
         </li>
-        <li class="list-group-item text-right">
-          <a href="#">
+        {% url 'researcher:messages' as messages_url %}
+        <li class="list-group-item text-right {% if messages_url == request.get_full_path %}active{% endif %}">
+          <a href="{{ messages_url }}">
             <div>
               <span>پیام ها</span>
               <span class="fas fa-envelope"></span>
             </div>
           </a>
         </li>
+{#      TODO#}
         <li class="list-group-item text-right">
           <a href="#">
             <div>
@@ -84,9 +86,9 @@
             </div>
           </a>
         </li>
-        {% url 'userInfo' as userInfo%}
-        <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
-          <a href="#">
+        {% url 'userInfo' as userInfo_url %}
+        <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
+          <a href="{{ userInfo_url }}">
             <div>
               <span>تنظیمات کاربری</span>
               <span class="fas fa-cog"></span>

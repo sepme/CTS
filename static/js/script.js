@@ -1,6 +1,5 @@
 function back() {
-    $(".username").css("display","block");
-    $(".password").css("display","block");
+    $(".login-div").css("display","block");
     $(".forget-pass").css("display","block");
     $(".signUp-div").css("display","none");
     $(".email").css("display","none");
@@ -8,109 +7,118 @@ function back() {
     $("button").text("ورود").removeClass("signUp-btn").addClass("Enter-btn");
 }
 function signUp() {
-    $(".username").css("display","none");
-    $(".password").css("display","none");
+    $(".login-div").css("display","none");
     $(".forget-pass").css("display","none");
-    $(".signUp-div").css("display","flex");
+    $(".signUp-div").css("display","block");
     $(".email").css("display","block");
     $(".new-user").html("<a href='#' class='back-login' onclick='back()'><i class='fas fa-arrow-left'></i> بازگشت</a>");
     $("button").text("عضویت").removeClass("Enter-btn").addClass("signUp-btn");
 }
-$(document).ready(function(){
-  $email = $(".email input");
-  $("input").on('focus', function() {
-      $className = "."+ $(this).closest("div").attr("class");
-    $($className + ' i').css("color","#3CCD1C");
-    if($(window).width() < 600) {
-      $($className+ " label").css({
-        "font-size":"15px",
-        "top":"0px",
-        "right":"5px",
-        "color":"#3CCD1C"
-      });
-    }else {
-      $( $className + " label").css({
-        "font-size":"12px",
-        "top":"0px",
-        "right":"25px",
-        "color":"#3CCD1C"
-      });
+function input_focus(){
+    if( $("input,textarea").prop("disabled") ) {
+        $(this).each(function () {
+            var inputLabel = "label[for='"+$(this).attr("id")+"']";
+            $(inputLabel).css({
+                "font-size":"13px",
+                "top":"0px",
+                "right":"5px",
+                "color":"#8d8d8d"
+            });
+        });
     }
-  }).on('focusout', function() {
-      $className = "."+ $(this).closest("div").attr("class");
-    $($className + ' i').css("color","#bdbdbd");
-    $($className +" label").css({
-      "color":"#bdbdbd"
-    });
-    if($(this).val() === '') {
-      if($(window).width() < 600) {
-        $($className +" label").css({
-          "font-size":"13px",
-          "top":"28px",
-          "right":"10px"
+    $("input,textarea").each(function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).val() !== ''){
+            $(inputLabel).css({
+                    "font-size":"12px",
+                    "top":"0px",
+                    "right":"5px",
+                    "color":"#6f7285"
+                });
+        }
+        if( $(this).hasClass("error") ) {
+            $(inputLabel).css("color","#ff4545");
+        }
+    }).on("focus", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).hasClass("solid-label")) {
+            return false;
+        } else if($(this).hasClass("error")) {
+            var errorDiv = $(this).next(".error");
+            $(this).on("change", function () {
+            if( $(this).hasClass("error") ) {
+                $(this).removeClass("error");
+                $(errorDiv).remove();
+            }
         });
-      }else {
-        $($className +" label").css({
-          "font-size":"13px",
-          "top":"28px",
-          "right":"35px"
-        });
-      }
-    }
-  });
-  $email.on("focus", function () {
-      $('.email i').css("color","#3CCD1C");
-      $(".email label").css({
-          "font-size":"15px",
-          "top":"0px",
-          "right":"25px",
-          "color":"#3CCD1C"
-      });
-  }).on("focusout", function () {
-      $('.email i').css("color","#bdbdbd");
-      $(".email label").css("color","#bdbdbd");
-    if($email.val() === ''){
-        $(".email label").css({
-            "font-size":"17px",
-            "top":"28px",
-            "right":"35px"
-        });
-    }else {
+        } else{
+            $(inputLabel).css({
+                "font-size":"12px",
+                "top":"0px",
+                "right":"5px",
+                "color":"#3CCD1C"
+            });
+            $(this).css("color","#3ccd1c");
+        }
+    }).on("focusout", function () {
+        var inputLabel = "label[for='"+$(this).attr("id")+"']";
+        if($(this).hasClass("solid-label")){
+            return false;
+        } else if($(this).hasClass("error")) {
 
-    }
-  });
-  $("input:radio[name='user-type']").change(function () {
-      $user_id = $("input[type='radio']:checked+label").attr("for");
-      if($user_id === "researcher"){
-          $(".expert img").attr("src","img/mind.png");
-          $(".industry img").attr("src","img/settings.png");
-      } else if($user_id === "expert"){
-          $(".researcher img").attr("src","img/research.png");
-          $(".industry img").attr("src","img/settings.png");
-      } else if($user_id === "industry"){
-          $(".researcher img").attr("src","img/research.png");
-          $(".expert img").attr("src","img/mind.png");
-      }
-  });
-  $(".researcher").mouseover(function () {
-     $(".researcher img").attr("src","img/research_hover.png");
-  }).mouseleave(function () {
-      if($("input[type='radio']:checked+label").attr("for") !== "researcher") {
-          $(".researcher img").attr("src","img/research.png");
-      }
-  });
-  $(".expert").mouseover(function () {
-      $(".expert img").attr("src","img/mind_hover.png");
-  }).mouseleave(function () {
-      if($("input[type='radio']:checked+label").attr("for") !== "expert") {
-          $(".expert img").attr("src","img/mind.png");
-      }
-  });
-  $(".industry").mouseover(function () {
-      $(".industry img").attr("src","img/settings_hover.png");
-  }).mouseleave(function () {
-      if($("input[type='radio']:checked+label").attr("for") !== "industry") {
-          $(".industry img").attr("src","img/settings.png");
-      }
-  });
+        } else {
+            $(inputLabel).css("color","#6f7285");
+            if($(this).val() === ''){
+                $(inputLabel).css({
+                    "font-size":"13px",
+                    "top":"28px",
+                    "right":"10px",
+                    "color":"#6f7285"
+                });
+            }else {
+                $(this).css("color","#8d8d8d");
+                $(inputLabel).css("color","#8d8d8d");
+            }
+        }
+    });
+}
+$(window).on("load", function () {
+    input_focus();
+});
+$(document).ready(function(){
+    input_focus();
+    $("input:radio[name='user-type']").change(function () {
+        $user_id = $("input[type='radio']:checked+label").attr("for");
+        if($user_id === "researcher"){
+            $(".exper").removeClass("select");
+            $(".industry").removeClass("select");
+        } else if($user_id === "expert"){
+            $(".researcher").removeClass("select");
+            $(".industry").removeClass("select");
+        } else if($user_id === "industry"){
+            $(".researcher").removeClass("select");
+            $(".expert").removeClass("select");
+        }
+    });
+    $(".researcher").hover(function () {
+       $(this).addClass("select");
+    }, function () {
+        if($("input[type='radio']:checked+label").attr("for") !== "researcher") {
+            $(this).removeClass("select");
+        }
+    });
+    $(".expert").hover(function () {
+        $(this).addClass("select");
+    }, function () {
+        if($("input[type='radio']:checked+label").attr("for") !== "expert") {
+            $(this).removeClass("select");
+        }
+    });
+    $(".industry").hover(function () {
+        $(this).addClass("select");
+    }, function () {
+        if($("input[type='radio']:checked+label").attr("for") !== "industry") {
+            $(this).removeClass("select");
+        }
+    });
 });

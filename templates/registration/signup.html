@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-        {{form.as_p}}
-    <input type="submit" class="Enter-btn">
+    <form method="post" action="{% url 'chamran:signup_email' %} "
+          novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="Enter-btn">
     </form>
 {% endblock content %}

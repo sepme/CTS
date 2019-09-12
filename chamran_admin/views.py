@@ -1,9 +1,9 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse,Http404
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
-
+from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from . import models
@@ -11,6 +11,7 @@ from . import forms
 from researcher.models import ResearcherUser
 from expert.models import ExpertUser
 from industry.models import IndustryUser
+from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
 
@@ -22,122 +23,148 @@ class Home(generic.TemplateView):
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
     template_name = "registration/signup.html"
-    success = '/'
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterEmailForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             account_type = form.cleaned_data['account_type']
-            temp_user = models.TempUser(email=email, account_type=account_type)
-
+            temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+            print(temp_user)
             subject = 'Welcome to Chamran Team!!!'
 
             unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
-            mess = 'EmailValidation\nyour url:\n' + unique_url
+            message = 'EmailValidation\nyour url:\n' + unique_url
 
             send_mail(
-                subject,
-                mess,
-                settings.EMAIL_HOST_USER,
-                [temp_user.email, settings.EMAIL_HOST_USER]
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False
             )
-            temp_user.save()
             return HttpResponseRedirect(reverse('chamran:home'))
         return super().post(request, *args, **kwargs)
 
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
-    template_name = 'registration/signup.html'
-    success_url = '/'
+    template_name = 'registration/password_confirmation.html'
 
     def get(self, request, *args, **kwargs):
-        code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser, unique=code)
+        path = request.path
+        [account_type, uuid] = path.split('/')[2:]
+        try:
+            models.TempUser.objects.get(account_type=account_type, unique=uuid)
+        except models.TempUser.DoesNotExist:
+            raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        form = forms.RegisterUserForm(request.POST)
-        code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser, unique=code)
+        form = forms.RegisterUserForm(request.POST or None)
+        unique_id = kwargs['unique_id']
+        print(unique_id)
+        temp_user = get_object_or_404(models.TempUser, unique=unique_id)
         if form.is_valid():
-            username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             email = temp_user.email
+            username = email
             account_type = temp_user.account_type
             user = User(username=username, email=email)
             user.set_password(password)
             user.save()
             if account_type == 'researcher':
-                researcher = ResearcherUser(user=user)
-                researcher.save()
+                researcher = ResearcherUser.objects.create(user=user)
                 temp_user.delete()
+                new_user = authenticate(request, username=username, password=password)
+                if new_user is not None:
+                    login(request, new_user)
                 return researcher.get_absolute_url()
 
             elif account_type == 'expert':
-                expert = ExpertUser(user=user)
-                expert.save()
+                expert = ExpertUser.objects.create(user=user)
                 temp_user.delete()
+                new_user = authenticate(request, username=username, password=password)
+                if new_user is not None:
+                    login(request, new_user)
                 return expert.get_absolute_url()
 
             elif account_type == 'industry':
-                industry = IndustryUser(user=user)
-                industry.save()
+                industry = IndustryUser.objects.create(user=user)
                 temp_user.delete()
+                new_user = authenticate(request, username=username, password=password)
+                if new_user is not None:
+                    login(request, new_user)
                 return industry.get_absolute_url()
 
-            return HttpResponseRedirect(reverse('chamran:home'))
         return super().post(request, *args, **kwargs)
 
 
-class LoginView(generic.FormView):
+class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
-    form_class = forms.LoginForm
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return super().get(request, *args, **kwargs)
-        else:
-            try:
-                return request.user.expertuser.get_absolute_url()
-            except:
-                try:
-                    return request.user.industryuser.get_absolute_url()
-                except:
-                    try:
-                        return request.user.researcheruser.get_absolute_url()
-                    except:
-                        return super().get(request, *args, **kwargs)
+        login_form = forms.LoginForm()
+        register_form = forms.RegisterEmailForm()
+        context = {'form': login_form,
+                   'register_form': register_form}
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+        login_form = forms.LoginForm(request.POST or None)
+        register_form = forms.RegisterEmailForm(request.POST or None)
+        context = {'form': login_form,
+                   'register_form': register_form}
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
             entry_user = authenticate(request, username=username, password=password)
+            print(entry_user)
             if entry_user is not None:
                 login(request, entry_user)
+
                 try:
                     user = ResearcherUser.objects.get(user=entry_user)
                     return user.get_absolute_url()
-                except:
+                except ResearcherUser.DoesNotExist:
                     try:
                         user = ExpertUser.objects.get(user=entry_user)
                         return user.get_absolute_url()
-                    except:
+                    except ExpertUser.DoesNotExist:
                         try:
                             user = IndustryUser.objects.get(user=entry_user)
                             return user.get_absolute_url()
-                        except:
-                            return HttpResponseRedirect(reverse('chamran:home'))
+                        except IndustryUser.DoesNotExist:
+                            raise ValidationError('کابر مربوطه وجود ندارد.')
             else:
-                next_form = forms.LoginForm()
-                context = {
-                    'error': 'نام کاربری یا رمز شما اشتباه است',
-                    'form': next_form
-                }
-                return render(request, self.template_name, context)
+                context = {'form': login_form,
+                           'error': 'گذرواژه اشتباه است'}
+
+        elif register_form.is_valid():
+            print(register_form.cleaned_data)
+            email = register_form.cleaned_data['email']
+            account_type = register_form.cleaned_data['account_type']
+            # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+            temp_user = models.TempUser(email=email, account_type=account_type)
+            print(temp_user)
+            subject = 'Welcome to Chamran Team!!!'
+
+            unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
+            message = 'EmailValidation\nyour url:\n' + unique_url
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[email],
+                    fail_silently=False
+                )
+                temp_user.save()
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
+
+            return HttpResponseRedirect(reverse('chamran:home'))
+        return render(request, self.template_name, context)
 
 
 class LogoutView(generic.TemplateView):
@@ -146,7 +173,6 @@ class LogoutView(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             logout(request)
-            return HttpResponseRedirect(reverse('chamran:login'))
         return HttpResponseRedirect(reverse("chamran:home"))
 
 
@@ -228,3 +254,18 @@ class ResetPasswordConfirm(generic.FormView):
 
 class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
+
+
+class SendEmail(generic.TemplateView):
+    template_name = 'registration/send_email.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {'content': 'Email Sent Successfully!'}
+        send_mail(
+            'Helllo',
+            'This is a practical Email',
+            'info@chamranteam.ir',
+            ['hamidranjbarpour771@gmail.com'],
+            fail_silently=False
+        )
+        return render(request, self.template_name, context)

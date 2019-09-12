@@ -1,3 +1,6 @@
+import os
+from ChamranTeamSite import settings
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -7,17 +10,33 @@ from django.shortcuts import reverse, HttpResponseRedirect
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
-    first_login = models.BooleanField(default=True)
+    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE, verbose_name="فرم صنعت")
+    STATUS = (
+        ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
+        ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
+        ('free', "فعال - بدون پروژه"),
+        ('waiting', "فعال - در حال انتظار پروژه"),
+        ('involved', "فعال - درگیر پروژه"),
+        ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
+    )
+    status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
 
     def __str__(self):
         return self.user.get_username()
 
     def get_absolute_url(self):
-        return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
+        return HttpResponseRedirect(reverse("industry:index"))
+
+
+def upload_and_rename_profile(instance, file_name):
+    return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
+
+
+def unique_upload(instance, file_name):
+    return os.path.join('{}/'.format(instance.name), file_name)
 
 
 class IndustryForm(models.Model):
-    industry_user = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE, verbose_name="فرم صنعت")
     name = models.CharField(max_length=64, verbose_name="نام شرکت")
     registration_number = models.IntegerField(verbose_name="شماره ثبت")
     date_of_foundation = models.IntegerField(verbose_name="تاریخ تاسیس")
@@ -28,17 +47,27 @@ class IndustryForm(models.Model):
     )
     industry_type = models.IntegerField(choices=industry_type_choice, verbose_name="نوع شرکت")
     industry_address = models.TextField(verbose_name="ادرس شرکت")
-    phone_number = models.IntegerField(verbose_name="شماره تلفن")
-    international_activities = models.TextField(verbose_name="سابقه فعالیت بین المللی")
-    tax_declaration = models.FileField(upload_to='./uploads', verbose_name="اظهارنامه مالیاتی")
-    turn_over = models.FloatField(verbose_name="گردش مالی")
-    services_products = models.TextField(verbose_name="خدمات/محصولات")
-    awards_honors = models.TextField(verbose_name="افتخارات")
+    phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
+    international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
+    tax_declaration = models.FileField(null=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
+    turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
+    services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
+    awards_honors = models.TextField(null=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.IntegerField()
+    photo = models.ImageField(upload_to=upload_and_rename_profile, null=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        super().save()
+        if self.photo:
+            img = Image.open("media/{}".format(self.photo.name))
+            rgb = img.convert('RGB')
+            os.remove(os.path.join(settings.MEDIA_ROOT, self.photo.name))
+            rgb.save("media/{}/profile.jpg".format(self.name))
+            self.photo.name = "profile.jpg"
+            super().save()
 
 
 class Keyword(models.Model):
@@ -90,9 +119,9 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied")
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted")
+                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
     industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
-                                            verbose_name="صنعت صاحب پروژه")
+                                            verbose_name="صنعت صاحب پروژه", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
     project_detail = models.TextField(verbose_name="جزيات پروژه")
