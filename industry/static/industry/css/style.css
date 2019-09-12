@@ -1045,6 +1045,7 @@ hr{
   display: inline-block;
   float: right;
   margin: 2px 10px;
+    width: 92%;
 }
 .list-group-item a{
   color: inherit;

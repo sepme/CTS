@@ -65,32 +65,32 @@
       <div class="hr"></div>
       <ul class="list-group">
         {% url "industry:index" as index %}
-        <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
-          <a href='{{  index }}'>
-            <div>
-              <span>پروژه ها</span>
-              <span class="fas fa-list-ul"></span>
-            </div>
-          </a>
-        </li>
+        <a href='{{ index }}'>
+            <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
+                <div>
+                  <span>پروژه ها</span>
+                  <span class="fas fa-list-ul"></span>
+                </div>
+            </li>
+        </a>
         {% url "industry:messages" as messages %}
-        <li class="list-group-item text-right {% if request.get_full_path == messages %}active{% endif %}">
-          <a href="{{ messages }}">
-            <div>
-              <span>پیام ها</span>
-              <span class="fas fa-envelope"></span>
-            </div>
-          </a>
-        </li>
+        <a href="{{ messages }}">
+            <li class="list-group-item text-right {% if request.get_full_path == messages %}active{% endif %}">
+                <div>
+                  <span>پیام ها</span>
+                  <span class="fas fa-envelope"></span>
+                </div>
+            </li>
+        </a>
         {% url "industry:newProject" as newProject %}
+      <a href='{{ newProject }}'>
         <li class="list-group-item text-right {% if request.get_full_path == newProject %}active{% endif %}">
-          <a href='{{ newProject }}'>
             <div>
                 <span>ثبت پروژه جدید</span>
                 <span class="fas fa-plus-circle"></span>
             </div>
-          </a>
         </li>
+      </a>
 {#            TODO#}
         <li class="list-group-item text-right">
           <a href="#">
