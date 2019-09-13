@@ -20,7 +20,7 @@ function input_focus(){
             var inputLabel = "label[for='"+$(this).attr("id")+"']";
             $(inputLabel).css({
                 "font-size":"13px",
-                "top":"0px",
+                "top":"3px",
                 "right":"5px",
                 "color":"#8d8d8d"
             });
@@ -31,7 +31,7 @@ function input_focus(){
         if($(this).val() !== ''){
             $(inputLabel).css({
                     "font-size":"12px",
-                    "top":"0px",
+                    "top":"3px",
                     "right":"5px",
                     "color":"#6f7285"
                 });
@@ -54,7 +54,7 @@ function input_focus(){
         } else{
             $(inputLabel).css({
                 "font-size":"12px",
-                "top":"0px",
+                "top":"3px",
                 "right":"5px",
                 "color":"#3CCD1C"
             });
@@ -71,7 +71,7 @@ function input_focus(){
             if($(this).val() === ''){
                 $(inputLabel).css({
                     "font-size":"13px",
-                    "top":"28px",
+                    "top":"31px",
                     "right":"10px",
                     "color":"#6f7285"
                 });

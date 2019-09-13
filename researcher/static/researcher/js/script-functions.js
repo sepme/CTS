@@ -640,3 +640,40 @@ function vote_slider(slide_count) {
         }
     });
 }
+function select_technique(className) {
+    function slide_up() {
+        $(".fixed-back .all-techniques").slideUp('slow');
+        return $.Deferred().resolve(false);
+    }
+    function remove_class() {
+        $(".fixed-back input#technique-name").removeClass("expand");
+    }
+    function expand() {
+        $(".fixed-back .all-techniques").slideDown('slow');
+        $(".fixed-back input#technique-name").addClass("expand");
+        $(".fixed-back .select-technique i").removeClass("fa-plus").addClass("fa-search");
+        $(".fixed-back label[for='technique-name']").html("جستجو تکنیک");
+    }
+    function express() {
+        slide_up().done(remove_class());
+        $(".fixed-back .select-technique i").removeClass("fa-search").addClass("fa-plus");
+        $(".fixed-back label[for='technique-name']").html("نام تکنیک");
+    }
+    $(className).click(function () {
+        if( $(".fixed-back input#technique-name").hasClass("expand") ) {
+            express();
+        }else {
+            expand();
+        }
+    });
+    $("li[role='treeitem']").click(function () {
+        var tree = $("#fancy-tree").fancytree({
+            activate: function(event, data){
+                    node = data.node;
+                    $("input#technique-name").val(node.title);
+                    express();
+                    input_focus();
+            }
+        });
+    });
+}

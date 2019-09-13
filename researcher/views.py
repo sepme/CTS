@@ -11,13 +11,13 @@ class Index(generic.FormView):
     form_class = forms.InitailForm
 
     def get(self, request, *args, **kwargs):
-    #     try:
-    #         self.researcher = get_object_or_404(models.ResearcherUser, user=request.user)
-    #     except:
-    #         return HttpResponseRedirect(reverse('chamran:login'))
-    #     # print(self.researcher.status.status)
-    #     # if self.researcher.status.status == 'signed_up':
-    #     #     return super().get(request, *args, **kwargs)
+        #     try:
+        #         self.researcher = get_object_or_404(models.ResearcherUser, user=request.user)
+        #     except:
+        #         return HttpResponseRedirect(reverse('chamran:login'))
+        #     # print(self.researcher.status.status)
+        #     # if self.researcher.status.status == 'signed_up':
+        #     #     return super().get(request, *args, **kwargs)
         return render(request, 'researcher/index.html', self.get_context_data())
 
     def get_context_data(self, **kwargs):
@@ -114,5 +114,10 @@ def signup(request, username):
     researcher.save()
     return HttpResponseRedirect(reverse('researcher:index'))
 
+
 class Messages(generic.TemplateView):
     template_name = 'researcher/messages.html'
+
+
+class Technique(generic.TemplateView):
+    template_name = 'researcher/technique.html'

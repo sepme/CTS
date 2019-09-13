@@ -11,6 +11,8 @@ $(document).ready(function(){
     exe_count = 0;
     stu_count = 0;
     init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
+    init_dialog_btn(".add-new-technique", ".add-technique");
+    select_technique(".select-technique");
     input_focus();
     search_input(".search_message");
     if($(window).width() < 575.98){

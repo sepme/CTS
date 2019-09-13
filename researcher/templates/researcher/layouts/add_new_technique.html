@@ -1,0 +1,55 @@
+{% load static%}
+<div class="fixed-back add-technique">
+    <div class="card text-right">
+        <div class="close"></div>
+        <div class="card-head">ثبت تکنیک جدید</div>
+        <div class="container">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input id="technique-name" name="technique-name" value="" class="w-100">
+                        <label for="technique-name">نام تکنیک</label>
+                        <button class="select-technique" type="button">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div class="all-techniques">
+                            <div id="fancy-tree"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <div class="confirmation">
+                            <span class="title">نحوه ثبت تکنیک</span>
+                            <div class="radio-group row">
+                                <div class="form-group col-lg-4 col-md-4">
+                                    <input class="" type="radio" name="confirmation_method" id="exam" hidden>
+                                    <label for="exam">
+                                        <div class="title">درخواست آزمون آنلاین</div>
+                                    </label>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4">
+                                    <input class="" type="radio" name="confirmation_method" id="upload-s" hidden>
+                                    <label for="upload-s">
+                                        <div class="title">آپلود گواهی نامه</div>
+                                    </label>
+                                </div>
+                                <div class="form-group col-lg-4 col-md-4">
+                                    <input class="" type="radio" name="confirmation_method" id="article" hidden>
+                                    <label for="article">
+                                        <div class="title">آپلود مقاله</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="save-btn" type="submit">افزودن</button>
+                    <button class="reject-btn" type="reset">لغو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -7,41 +7,63 @@ body {
 }
 .card {
   width: 400px;
-  padding: 0 25px 50px 25px;
+  padding: 10px 25px 25px 25px;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 20px #e3e3e3;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.16);
 }
-img {
+.card.login-card{
+  padding: 10px 25px 50px 25px;
+}
+img.registration-card-icon {
   width: 105px;
   height: 100px;
   margin: 10px auto 0 auto;
+  animation: 1s rotate;
+}
+@keyframes rotate {
+  0% {
+    transform: rotateY(0deg);
+  }
+  25% {
+    transform: rotateY(-90deg);
+  }
+  50% {
+    transform: rotateY(-180deg);
+  }
+  75% {
+    transform: rotateY(-90deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
 }
 .ChamranTeam {
-  font-size: 20px;
+  font-weight: 400;
+  font-size: 17px;
   color: #454545;
   margin: 10px auto 0px auto;
 }
-.ChamranTeam::after {
-  content: '';
-  background-color: #bdbdbd;
-  width: 130px;
-  height: 1px;
-  position: absolute;
-  left: 245px;
-  top: 135px;
-}
-.ChamranTeam::before {
-  content: '';
-  background-color: #bdbdbd;
-  width: 130px;
-  height: 1px;
-  position: absolute;
-  left: 25px;
-  top: 135px;
-}
+/*.ChamranTeam::after {*/
+/*  content: '';*/
+/*  background-color: #bdbdbd;*/
+/*  width: 130px;*/
+/*  height: 1px;*/
+/*  position: absolute;*/
+/*  left: 245px;*/
+/*  top: 135px;*/
+/*}*/
+/*.ChamranTeam::before {*/
+/*  content: '';*/
+/*  background-color: #bdbdbd;*/
+/*  width: 130px;*/
+/*  height: 1px;*/
+/*  position: absolute;*/
+/*  left: 25px;*/
+/*  top: 135px;*/
+/*}*/
 .username, .password , .confirm_password{
   position: relative;
 }
@@ -50,17 +72,17 @@ img {
 }
 input {
   background-color: #fdfdfd!important;
-  border: 1px solid #bdbdbd;
+  border: 1px solid #bdbdbd85;
   color: #6f7285;
   border-radius: 5px;
-  margin-top: 20px;
+  margin-top: 23px;
   direction: rtl;
   padding: 10px;
   width: 100%;
 }
 label {
   position: absolute;
-  top: 28px;
+  top: 31px;
   right: 10px;
   color: #6f7285;
   transition: 300ms all ease;
@@ -75,9 +97,9 @@ input:focus {
   width: 35px;
   height: 35px;
   position: absolute;
-  top: 33px;
+  top: 36px;
   left: 10px;
-  color: #bdbdbd;
+  color: #bdbdbd85;
 }
 span.error{
   position: absolute;
@@ -153,287 +175,309 @@ div.error{
     font-size: 10px;
     color: #ff4545;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 560px) {
   .card {
-    width: auto;
-    height: 440px;
-    background-color: #F8FDF7;
-    border: none;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: none;
+  width: 95%;
+  padding: 10px 15px 25px 15px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.16);
+}
+.card.login-card{
+  padding: 10px 15px 50px 15px;
+}
+img.registration-card-icon {
+  width: 105px;
+  height: 100px;
+  margin: 10px auto 0 auto;
+  animation: 1s rotate;
+}
+@keyframes rotate {
+  0% {
+    transform: rotateY(0deg);
   }
-  .ChamranTeam {
-    font-size: 20px;
-    color: #454545;
-    margin: 10px auto 0px auto;
+  25% {
+    transform: rotateY(-90deg);
   }
-  .ChamranTeam::after {
-    content: '';
-    background-color: #bdbdbd;
-    width: 130px;
-    height: 1px;
-    position: absolute;
-    left: 230px;
-    top: 135px;
+  50% {
+    transform: rotateY(-180deg);
   }
-  .ChamranTeam::before {
-    content: '';
-    background-color: #bdbdbd;
-    width: 130px;
-    height: 1px;
-    position: absolute;
-    left: 10px;
-    top: 135px;
+  75% {
+    transform: rotateY(-90deg);
   }
-  .username > input , .password > input , .email > input {
-    background-color: #fdfdfd;
-    border: 1px solid #bdbdbd;
-    border-radius: 5px;
-    height: 40px;
-    width: 355px;
-    margin-left: 10px;
-    margin-top: 20px;
-    direction: rtl;
-    padding-right: 10px;
-  }
-  .username > label {
-    color: #bdbdbd;
-    position: absolute;
-    right: 10px;
-    top: 177px;
-    transition: 300ms all ease;
-  }
-  .username > input:focus {
-    outline: none;
-    border: 1px solid #3CCD1C;
-  }
-  .password > label {
-    color: #bdbdbd;
-    position: absolute;
-    right: 10px;
-    top: 237px;
-    transition: 300ms all ease;
-  }
-  .password > input:focus {
-    outline: none;
-    border: 1px solid #3CCD1C;
-  }
-  .username > i {
-    width: 35px;
-    height: 35px;
-    position: absolute;
-    top: 183px;
-    left: 20px;
-    color: #bdbdbd;
-  }
-  .password > i {
-    width: 35px;
-    height: 35px;
-    position: absolute;
-    top: 243px;
-    left: 20px;
-    color: #bdbdbd;
-  }
-  .email > label {
-    color: #bdbdbd;
-    position: absolute;
-    right: 10px;
-    top: 177px;
-    transition: 300ms all ease;
-  }
-  .email > input:focus {
-    outline: none;
-    border: 1px solid #3CCD1C;
-  }
-  .email > i{
-    width: 35px;
-    height: 35px;
-    position: absolute;
-    top: 243px;
-    left: 20px;
-    color: #bdbdbd;
-  }
-  .Enter-btn{
-    background-color: #89E076;
-    border: none;
-    color: #F8FDF7;
-    border-top-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    width: 360px;
-    margin: 10px auto;
-    margin-left: 10px;
-    padding: 10px;
-    transition: 200ms all ease;
-  }
-  .Enter-btn:hover , .Enter-btn:focus {
-    outline: none;
-    color: #fff;
-    background-color: #3CCD1C;
-    box-shadow: 0 0 2px 2px #e3e3e3;
-  }
-  .hr::before {
-    content: '';
-    position: absolute;
-    height: 1px;
-    width: 360px;
-    background-color: #bdbdbd;
-    margin-left: 10px;
-    margin-top: 10px;
-  }
-  .hr {
-    margin-bottom: 20px;
-  }
-  p {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  a {
-    color: #89E076;
-    width: auto;
-  }
-  a:hover {
-    text-decoration: none;
-    color: #3CCD1C;
-  }
-  .card > a {
-    margin-top: 5px;
-    margin-left: 10px;
+  100% {
+    transform: rotateY(0deg);
   }
 }
-@media only screen and (max-width: 400px) {
-  .card {
-    width: auto;
-    height: 440px;
-    background-color: #F8FDF7;
-    border: none;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: none;
-  }
-  .ChamranTeam {
-    font-size: 20px;
-    color: #454545;
-    margin: 10px auto 0px auto;
-  }
-  .ChamranTeam::after {
-    content: '';
-    background-color: #bdbdbd;
-    width: 130px;
-    height: 1px;
-    position: absolute;
-    left: 230px;
-    top: 135px;
-  }
-  .ChamranTeam::before {
-    content: '';
-    background-color: #bdbdbd;
-    width: 130px;
-    height: 1px;
-    position: absolute;
-    left: 10px;
-    top: 135px;
-  }
-  .username > input , .password > input {
-    background-color: #fdfdfd;
-    border: 1px solid #bdbdbd;
-    border-radius: 5px;
-    height: 40px;
-    width: 355px;
-    margin-left: 10px;
-    margin-top: 20px;
-    direction: rtl;
-    padding-right: 10px;
-  }
-  .username > label {
-    color: #bdbdbd;
-    position: absolute;
-    right: 10px;
-    top: 177px;
-    transition: 300ms all ease;
-  }
-  .username > input:focus {
-    outline: none;
-    border: 1px solid #3CCD1C;
-  }
-  .password > label {
-    color: #bdbdbd;
-    position: absolute;
-    right: 10px;
-    top: 237px;
-    transition: 300ms all ease;
-  }
-  .password > input:focus {
-    outline: none;
-    border: 1px solid #3CCD1C;
-  }
-  .username > i {
-    width: 35px;
-    height: 35px;
-    position: absolute;
-    top: 183px;
-    left: 20px;
-    color: #bdbdbd;
-  }
-  .password > i {
-    width: 35px;
-    height: 35px;
-    position: absolute;
-    top: 243px;
-    left: 20px;
-    color: #bdbdbd;
-  }
-  .Enter-btn{
-    background-color: #89E076;
-    border: none;
-    color: #F8FDF7;
-    border-top-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    width: 360px;
-    margin: 10px auto;
-    margin-left: 10px;
-    padding: 10px;
-    transition: 200ms all ease;
-  }
-  .Enter-btn:hover , .Enter-btn:focus {
-    outline: none;
-    color: #fff;
-    background-color: #3CCD1C;
-    box-shadow: 0 0 2px 2px #e3e3e3;
-  }
-  .hr::before {
-    content: '';
-    position: absolute;
-    height: 1px;
-    width: 360px;
-    background-color: #bdbdbd;
-    margin-left: 10px;
-    margin-top: 10px;
-  }
-  .hr {
-    margin-bottom: 20px;
-  }
-  p {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  a {
-    color: #89E076;
-    width: auto;
-  }
-  a:hover {
-    text-decoration: none;
-    color: #3CCD1C;
-  }
-  .card > a {
-    margin-top: 5px;
-    margin-left: 10px;
-  }
+.ChamranTeam {
+  font-weight: 400;
+  font-size: 17px;
+  color: #454545;
+  margin: 10px auto 0px auto;
 }
+/*.ChamranTeam::after {*/
+/*  content: '';*/
+/*  background-color: #bdbdbd;*/
+/*  width: 130px;*/
+/*  height: 1px;*/
+/*  position: absolute;*/
+/*  left: 245px;*/
+/*  top: 135px;*/
+/*}*/
+/*.ChamranTeam::before {*/
+/*  content: '';*/
+/*  background-color: #bdbdbd;*/
+/*  width: 130px;*/
+/*  height: 1px;*/
+/*  position: absolute;*/
+/*  left: 25px;*/
+/*  top: 135px;*/
+/*}*/
+.username, .password , .confirm_password{
+  position: relative;
+}
+.confirm_password > input{
+  margin-bottom: 10px;
+}
+input {
+  background-color: #fdfdfd!important;
+  border: 1px solid #bdbdbd85;
+  color: #6f7285;
+  border-radius: 5px;
+  margin-top: 23px;
+  direction: rtl;
+  padding: 10px;
+  width: 100%;
+}
+label {
+  position: absolute;
+  top: 31px;
+  right: 10px;
+  color: #6f7285;
+  transition: 300ms all ease;
+}
+input:focus {
+  outline: none;
+  border: 1px solid #3CCD1C;
+  color: #3CCD1C;
+  background-color: #fff;
+}
+.username > i , .password > i, .confirm_password > i , .email > i{
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 36px;
+  left: 10px;
+  color: #bdbdbd85;
+}
+span.error{
+  position: absolute;
+  left: 25px;
+  bottom: -7px;
+  color: #FF2525;
+  font-size: 13px;
+}
+.card-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 45px;
+    width: 100%;
+    border: none;
+    background-color: #E3FFDD;
+    text-align: left;
+    padding: 8px;
+}
+.Enter-btn, .signUp-btn{
+  background-color: #89E076;
+  border: none;
+  color: #ffffff;
+  border-radius: 0.25em;
+  margin: 10px auto;
+  padding: 10px;
+  transition: 200ms all ease;
+  width: 100%;
+}
+.Enter-btn:hover , .Enter-btn:focus ,.signUp-btn:hover ,.signUp-btn:focus {
+  outline: none;
+  color: #fff;
+  background-color: #3CCD1C;
+}
+.hr::before {
+  content: '';
+  position: absolute;
+  height: 1px;
+  width: 350px;
+  background-color: #bdbdbd;
+}
+.hr {
+  margin-bottom: 10px;
+}
+p {
+  margin-left: auto;
+  margin-right: auto;
+}
+a {
+  color: #78e051;
+  width: auto;
+}
+a:hover {
+  text-decoration: none;
+  color: #3CCD1C;
+}
+a:focus {
+  text-decoration: underline;
+  color: #3CCD1C;
+}
+.card > a {
+  margin-top: 5px;
+}
+input.error, textarea.error {
+    background-color: #fdf7f8;
+    border: 1px solid #ff4545;
+    color: #ff4545;
+}
+div.error{
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    font-size: 10px;
+    color: #ff4545;
+}
+}
+/*@media only screen and (max-width: 400px) {*/
+/*  .card {*/
+/*    width: auto;*/
+/*    height: 440px;*/
+/*    background-color: #F8FDF7;*/
+/*    border: none;*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    box-shadow: none;*/
+/*  }*/
+/*  .ChamranTeam {*/
+/*    font-size: 20px;*/
+/*    color: #454545;*/
+/*    margin: 10px auto 0px auto;*/
+/*  }*/
+/*  .ChamranTeam::after {*/
+/*    content: '';*/
+/*    background-color: #bdbdbd;*/
+/*    width: 130px;*/
+/*    height: 1px;*/
+/*    position: absolute;*/
+/*    left: 230px;*/
+/*    top: 135px;*/
+/*  }*/
+/*  .ChamranTeam::before {*/
+/*    content: '';*/
+/*    background-color: #bdbdbd;*/
+/*    width: 130px;*/
+/*    height: 1px;*/
+/*    position: absolute;*/
+/*    left: 10px;*/
+/*    top: 135px;*/
+/*  }*/
+/*  .username > input , .password > input {*/
+/*    background-color: #fdfdfd;*/
+/*    border: 1px solid #bdbdbd;*/
+/*    border-radius: 5px;*/
+/*    height: 40px;*/
+/*    width: 355px;*/
+/*    margin-left: 10px;*/
+/*    margin-top: 20px;*/
+/*    direction: rtl;*/
+/*    padding-right: 10px;*/
+/*  }*/
+/*  .username > label {*/
+/*    color: #bdbdbd;*/
+/*    position: absolute;*/
+/*    right: 10px;*/
+/*    top: 177px;*/
+/*    transition: 300ms all ease;*/
+/*  }*/
+/*  .username > input:focus {*/
+/*    outline: none;*/
+/*    border: 1px solid #3CCD1C;*/
+/*  }*/
+/*  .password > label {*/
+/*    color: #bdbdbd;*/
+/*    position: absolute;*/
+/*    right: 10px;*/
+/*    top: 237px;*/
+/*    transition: 300ms all ease;*/
+/*  }*/
+/*  .password > input:focus {*/
+/*    outline: none;*/
+/*    border: 1px solid #3CCD1C;*/
+/*  }*/
+/*  .username > i {*/
+/*    width: 35px;*/
+/*    height: 35px;*/
+/*    position: absolute;*/
+/*    top: 183px;*/
+/*    left: 20px;*/
+/*    color: #bdbdbd;*/
+/*  }*/
+/*  .password > i {*/
+/*    width: 35px;*/
+/*    height: 35px;*/
+/*    position: absolute;*/
+/*    top: 243px;*/
+/*    left: 20px;*/
+/*    color: #bdbdbd;*/
+/*  }*/
+/*  .Enter-btn{*/
+/*    background-color: #89E076;*/
+/*    border: none;*/
+/*    color: #F8FDF7;*/
+/*    border-top-right-radius: 15px;*/
+/*    border-bottom-left-radius: 15px;*/
+/*    width: 360px;*/
+/*    margin: 10px auto;*/
+/*    margin-left: 10px;*/
+/*    padding: 10px;*/
+/*    transition: 200ms all ease;*/
+/*  }*/
+/*  .Enter-btn:hover , .Enter-btn:focus {*/
+/*    outline: none;*/
+/*    color: #fff;*/
+/*    background-color: #3CCD1C;*/
+/*    box-shadow: 0 0 2px 2px #e3e3e3;*/
+/*  }*/
+/*  .hr::before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    height: 1px;*/
+/*    width: 360px;*/
+/*    background-color: #bdbdbd;*/
+/*    margin-left: 10px;*/
+/*    margin-top: 10px;*/
+/*  }*/
+/*  .hr {*/
+/*    margin-bottom: 20px;*/
+/*  }*/
+/*  p {*/
+/*    margin-left: auto;*/
+/*    margin-right: auto;*/
+/*  }*/
+/*  a {*/
+/*    color: #89E076;*/
+/*    width: auto;*/
+/*  }*/
+/*  a:hover {*/
+/*    text-decoration: none;*/
+/*    color: #3CCD1C;*/
+/*  }*/
+/*  .card > a {*/
+/*    margin-top: 5px;*/
+/*    margin-left: 10px;*/
+/*  }*/
+/*}*/
 .signUp-div{
   margin-top:10px;
   display: none;
