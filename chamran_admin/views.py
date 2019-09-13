@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse,Http404
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -49,22 +49,26 @@ class SignupEmail(generic.FormView):
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
-    template_name = 'registration/password_confirmation.html'
+    template_name = 'registration/user_pass.html'
 
     def get(self, request, *args, **kwargs):
         path = request.path
         [account_type, uuid] = path.split('/')[2:]
         try:
-            models.TempUser.objects.get(account_type=account_type, unique=uuid)
+            temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
         except models.TempUser.DoesNotExist:
             raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
-        return super().get(request, *args, **kwargs)
+        context = {'form': forms.RegisterUserForm(),
+                   'username': temp_user.email}
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
         print(unique_id)
         temp_user = get_object_or_404(models.TempUser, unique=unique_id)
+        context = {'form': form,
+                   'username': temp_user.email}
         if form.is_valid():
             password = form.cleaned_data['password']
             email = temp_user.email
@@ -97,7 +101,7 @@ class SignupUser(generic.FormView):
                     login(request, new_user)
                 return industry.get_absolute_url()
 
-        return super().post(request, *args, **kwargs)
+        return render(request, self.template_name, context)
 
 
 class LoginView(generic.TemplateView):
