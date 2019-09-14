@@ -1,8 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import reverse, HttpResponseRedirect
-
+import os
 import datetime
+
+
+def get_image_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format('profile', ext)
+
+    return os.path.join('unique', instance.researcher_user.user.username, filename)
 
 
 class ResearcherUser(models.Model):
@@ -26,11 +33,14 @@ class Status(models.Model):
         ('involved', "فعال - درگیر پروژه"),
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
-    status = models.CharField(max_length=15, choices=STATUS)
-    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
+    status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
+    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
 
     def is_inactivate(self):
         return datetime.datetime.now() < self.inactivate_duration
+
+    def __str__(self):
+        return '{user}- {status}'.format(user=self.researcher_user, status=self.status)
 
 
 class MembershipFee(models.Model):
@@ -46,28 +56,28 @@ class MembershipFee(models.Model):
 
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
-                                           on_delete=models.CASCADE, blank=True)
+                                           on_delete=models.CASCADE, blank=True, null=True)
     first_name = models.CharField(max_length=300, verbose_name="نام")
     last_name = models.CharField(max_length=300, verbose_name="نام خانوادگی")
-    photo = models.FileField(upload_to='media/researcher')
-    birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True)
+    photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
+    birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     national_code = models.CharField(max_length=10, verbose_name="کد ملی")
 
     GRADE_CHOICE = (
-        ('bs', 'کارشناسی'),
-        ('ms', 'کارشناسی ارشد'),
-        ('phd', 'دکتری'),
-        ('proPhd', 'دکتری حرفه‌ای'),
+        (1, 'کارشناسی'),
+        (2, 'کارشناسی ارشد'),
+        (3, 'دکتری'),
+        (4, 'دکتری حرفه‌ای'),
     )
-    grade = models.CharField(max_length=6, choices=GRADE_CHOICE, verbose_name="آخرین مدرک تحصیلی")
+    grade = models.IntegerField(choices=GRADE_CHOICE, verbose_name="آخرین مدرک تحصیلی")
     university = models.CharField(max_length=300, verbose_name="دانشگاه محل تحصیل")
-    entry_year = models.IntegerField(verbose_name="سال ورود")
-    address = models.TextField(verbose_name="آدرس محل سکونت", blank=True)
+    entry_year = models.CharField(max_length=6, verbose_name="سال ورود")
+    address = models.TextField(verbose_name="آدرس محل سکونت")
     home_number = models.CharField(max_length=50, verbose_name="تلفن منزل")
-    phone_number = models.CharField(max_length=50, verbose_name="تلفن همراه", blank=True)
+    phone_number = models.CharField(max_length=50, verbose_name="تلفن همراه")
     email = models.EmailField(max_length=254, verbose_name="پست الکترونیکی")
-    student_number = models.IntegerField()
+    student_number = models.CharField(max_length=10, verbose_name="شماره دانشجویی")
 
     one = 1
     two = 2
@@ -104,7 +114,7 @@ class ResearcherProfile(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.first_name + self.last_name + " profile"
+        return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
 
 class ResearcherScientificHistory(models.Model):

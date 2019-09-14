@@ -14,7 +14,7 @@
   </head>
   <body>
   {% block dialog%}{% endblock %}
-  <div class="main blur-div">
+  <div class="main  {% if request.user.researcheruser.status.status == 'signed_up' %} blur-div {% endif %}">
     <div class="top-bar">
       <div class="top-msg">
         <span class="fas fa-envelope fa-lg"></span>
