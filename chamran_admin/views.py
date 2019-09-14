@@ -8,7 +8,7 @@ from django.conf import settings
 
 from . import models
 from . import forms
-from researcher.models import ResearcherUser
+from researcher.models import ResearcherUser,Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser
 from django.urls import resolve
@@ -55,12 +55,18 @@ class SignupUser(generic.FormView):
         path = request.path
         [account_type, uuid] = path.split('/')[2:]
         try:
-            temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
+            self.temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
         except models.TempUser.DoesNotExist:
             raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
-        context = {'form': forms.RegisterUserForm(),
-                   'username': temp_user.email}
-        return render(request, self.template_name, context)
+        # context = {'form': forms.RegisterUserForm(),
+        #            'username': temp_user.email}
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = forms.RegisterUserForm()
+        context['username'] = self.temp_user.email
+        return context
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterUserForm(request.POST or None)
@@ -79,6 +85,7 @@ class SignupUser(generic.FormView):
             user.save()
             if account_type == 'researcher':
                 researcher = ResearcherUser.objects.create(user=user)
+                Status.objects.create(researcher_user=researcher)
                 temp_user.delete()
                 new_user = authenticate(request, username=username, password=password)
                 if new_user is not None:
