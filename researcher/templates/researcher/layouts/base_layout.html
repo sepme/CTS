@@ -23,9 +23,14 @@
         <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">
         <div class="dropdown">
             <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
-                <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile"
-                     class="dropdown-img profile"
-                     height="45px">
+                {% if request.user.researcheruser.researcherprofile.photo %}
+                    <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile"
+                         class="dropdown-img profile"
+                         height="45px">
+                {% else %}
+                     <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
+                {% endif %}
+
             </button>
             <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
                 <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری</a></li>
@@ -43,8 +48,14 @@
     <div class="side-bar">
         <div class="topMargin"></div>
         <div class="researcher-icon"></div>
-        <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile" class="profile"
-             width="150px" height="150px">
+        {% if request.user.researcheruser.researcherprofile.photo %}
+            <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile" class="profile"
+                 width="150px" height="150px">
+        {% else %}
+            <img src="{% static 'researcher/img/profile.jpg' %}" alt="Ehsan" class="profile" width="150px"
+                 height="150px">
+        {% endif %}
+
         <h5>{% block name %}{% endblock %}</h5>
         <h6>پژوهشگر</h6>
         <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
