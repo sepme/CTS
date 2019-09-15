@@ -371,4 +371,8 @@ class InitialInfoForm(forms.ModelForm):
 
     def clean_entry_year(self):
         entry_year = self.cleaned_data.get('entry_year')
+        try:
+            int(entry_year)
+        except ValueError:
+            raise forms.ValidationError('سال ورود باید یک عدد باشد.')
         return entry_year

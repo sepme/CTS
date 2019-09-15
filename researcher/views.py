@@ -30,17 +30,17 @@ class Index(LoginRequiredMixin, generic.FormView):
         return super().get(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        researcher = get_object_or_404(models.ResearcherUser, user=request.user)
         form = forms.InitialInfoForm(request.POST, request.FILES)
         # form = forms.InitialInfoForm(request.FILES, request.POST)
         print(form.is_valid())
         if form.is_valid():
-            researcher_profile = form.save()
-            researcher = get_object_or_404(models.ResearcherUser, user=request.user)
+            researcher_profile = form.save(commit=False)
             researcher_profile.researcher_user = researcher
             researcher_profile.save()
-            # if request.FILES.get('photo'):
-            #     photo = request.FILES.get('photo')
-            #     researcher_profile.photo.save(photo.name, photo)
+            if request.FILES.get('photo'):
+                photo = request.FILES.get('photo')
+                researcher_profile.photo.save(photo.name, photo)
             status = models.Status.objects.get(researcher_user=researcher)
             status.status = 'free'
             status.save()
