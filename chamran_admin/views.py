@@ -8,12 +8,24 @@ from django.conf import settings
 
 from . import models
 from . import forms
-from researcher.models import ResearcherUser,Status
+from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser
 from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
+
+
+def find_account_type(user):
+    expert = ExpertUser.objects.filter(user=user)
+    researcher = ResearcherUser.objects.filter(user=user)
+    industry = IndustryUser.objects.filter(user=user)
+    if expert.exists():
+        return 'expert'
+    elif researcher.exists():
+        return 'researcher'
+    elif industry.exists():
+        return 'industry'
 
 
 class Home(generic.TemplateView):
@@ -115,11 +127,19 @@ class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
     def get(self, request, *args, **kwargs):
-        login_form = forms.LoginForm()
-        register_form = forms.RegisterEmailForm()
-        context = {'form': login_form,
-                   'register_form': register_form}
-        return render(request, self.template_name, context)
+        if request.user.is_authenticated:
+            if find_account_type(request.user) == 'expert':
+                return request.user.expertuser.get_absolute_url()
+            elif find_account_type(request.user) == 'researcher':
+                return request.user.researcheruser.get_absolute_url()
+            elif find_account_type(request.user) == 'industry':
+                return request.user.industryuser.get_absolute_url()
+        else:
+            login_form = forms.LoginForm()
+            register_form = forms.RegisterEmailForm()
+            context = {'form': login_form,
+                       'register_form': register_form}
+            return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         login_form = forms.LoginForm(request.POST or None)
