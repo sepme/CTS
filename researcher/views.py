@@ -32,7 +32,6 @@ class Index(LoginRequiredMixin, generic.FormView):
     def post(self, request, *args, **kwargs):
         researcher = get_object_or_404(models.ResearcherUser, user=request.user)
         form = forms.InitialInfoForm(request.POST, request.FILES)
-        # form = forms.InitialInfoForm(request.FILES, request.POST)
         print(form.is_valid())
         if form.is_valid():
             researcher_profile = form.save(commit=False)

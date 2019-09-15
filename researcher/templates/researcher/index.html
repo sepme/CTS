@@ -8,7 +8,7 @@
     {% include 'researcher/layouts/vote_dialog.html' %}
 {% endblock %}
 
-{% block name %}رضا باسره{% endblock %}
+{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}
 
 {% block content %}
     {% include 'researcher/layouts/projectList.html' %}
