@@ -1,70 +1,51 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse, Http404
 from django.views import generic
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import models
 from . import forms
 
 
-class Index(generic.FormView):
-    template_name = 'researcher/layouts/initial_information.html'
-    form_class = forms.InitailForm
+class Index(LoginRequiredMixin, generic.FormView):
+    template_name = 'researcher/index.html'
+    form_class = forms.InitialInfoForm
+    login_url = '/login/'
+
+    # def get(self, request, *args, **kwargs):
+    # #     try:
+    # #         self.researcher = get_object_or_404(models.ResearcherUser, user=request.user)
+    # #     except:
+    # #         return HttpResponseRedirect(reverse('chamran:login'))
+    # #     # print(self.researcher.status.status)
+    # #     # if self.researcher.status.status == 'signed_up':
+    # #     #     return super().get(request, *args, **kwargs)
+    #     return render(request, 'researcher/index.html', self.get_context_data())
 
     def get(self, request, *args, **kwargs):
-        #     try:
-        #         self.researcher = get_object_or_404(models.ResearcherUser, user=request.user)
-        #     except:
-        #         return HttpResponseRedirect(reverse('chamran:login'))
-        #     # print(self.researcher.status.status)
-        #     # if self.researcher.status.status == 'signed_up':
-        #     #     return super().get(request, *args, **kwargs)
-        return render(request, 'researcher/index.html', self.get_context_data())
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['researcheruser'] = self.researcher
-        return context
+        try:
+            models.ResearcherUser.objects.get(user=request.user)
+        except models.ResearcherUser.DoesNotExist:
+            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
+        return super().get(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        form = forms.InitailForm(request.POST, request.FILES)
+        researcher = get_object_or_404(models.ResearcherUser, user=request.user)
+        form = forms.InitialInfoForm(request.POST, request.FILES)
+        print(form.is_valid())
         if form.is_valid():
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            photo = form.cleaned_data['photo']
-            address = form.cleaned_data['address']
-            national_code = form.cleaned_data['national_code']
-            entry_year = form.cleaned_data['entry_year']
-            grade = form.cleaned_data['grade']
-            university = form.cleaned_data['university']
-            major = form.cleaned_data['major']
-            home_number = form.cleaned_data['home_number']
-            phone_number = form.cleaned_data['phone_number']
-            email = form.cleaned_data['email']
-            student_number = form.cleaned_data['student_number']
-
-            researcher = get_object_or_404(models.ResearcherUser, user=request.user)
-
-            profile = models.ResearcherProfile(
-                researcher_user=researcher,
-                first_name=first_name,
-                last_name=last_name,
-                photo=photo,
-                address=address,
-                national_code=national_code,
-                entry_year=entry_year,
-                grade=grade,
-                university=university,
-                major=major,
-                home_number=home_number,
-                phone_number=phone_number,
-                email=email,
-                student_number=student_number
-            )
-            profile.save()
-            researcher_status = researcher.status
-            researcher_status.status = 'free'
-            researcher_status.save()
+            researcher_profile = form.save(commit=False)
+            researcher_profile.researcher_user = researcher
+            researcher_profile.save()
+            if request.FILES.get('photo'):
+                photo = request.FILES.get('photo')
+                researcher_profile.photo.save(photo.name, photo)
+            status = models.Status.objects.get(researcher_user=researcher)
+            status.status = 'free'
+            status.save()
+            print(researcher_profile)
             return HttpResponseRedirect(reverse('researcher:index'))
+
         return super().post(self, request, *args, **kwargs)
 
 
@@ -117,7 +98,6 @@ def signup(request, username):
 
 class Messages(generic.TemplateView):
     template_name = 'researcher/messages.html'
-
 
 class Technique(generic.TemplateView):
     template_name = 'researcher/technique.html'
