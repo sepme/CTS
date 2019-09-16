@@ -1,10 +1,15 @@
+import os
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.views import generic, View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from PIL import Image
+
+from ChamranTeamSite.settings import BASE_DIR
 from industry.models import IndustryForm
 from . import models
 from . import forms
@@ -31,9 +36,6 @@ class Index(generic.TemplateView):
         form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
         if form.is_valid():
             photo = form.cleaned_data['photo']
-            if not photo:
-                photo = Image.open('industry/static/industry/img/profile.jpg')
-                print('the photo is ', photo)
             name = form.cleaned_data['name']
             registration_number = form.cleaned_data['registration_number']
             date_of_foundation = form.cleaned_data['date_of_foundation']
@@ -53,6 +55,10 @@ class Index(generic.TemplateView):
                                                 phone_number=phone_number,
                                                 email_address=email_address)
             industry_info.save()
+            if not industry_info.photo:
+                with open(os.path.join(BASE_DIR, 'industry/static/industry/img/profile.jpg'), 'rb') as image_file:
+                    default_image = image_file.read()
+                    industry_info.photo.save('profile.jpg', ContentFile(default_image))
             industry_user.status = 'free'
             industry_user.industryform = industry_info
             industry_user.save()
@@ -94,7 +100,7 @@ class UserInfo(View):
 
 class NewProject(View):
     def get(self, request):
-        if request.user.is_authenticated() and (not models.IndustryUser.objects.filter(user=request.user).count()):
+        if request.user.is_authenticated and (not models.IndustryUser.objects.filter(user=request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
         return render(request, 'industry/newProject.html', context={'form': forms.ProjectForm()})
 

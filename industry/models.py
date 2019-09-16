@@ -59,12 +59,13 @@ class IndustryForm(models.Model):
 
     def save(self, *args, **kwargs):
         super().save()
-        img = Image.open("media/{}".format(self.photo.name))
-        rgb = img.convert('RGB')
-        os.remove(os.path.join(settings.MEDIA_ROOT, self.photo.name))
-        rgb.save("media/{}/profile.jpg".format(self.name))
-        self.photo.name = "profile.jpg"
-        super().save()
+        if self.photo:
+            img = Image.open("media/{}".format(self.photo.name))
+            rgb = img.convert('RGB')
+            os.remove(os.path.join(settings.MEDIA_ROOT, self.photo.name))
+            rgb.save("media/{}/profile.jpg".format(self.name))
+            self.photo.name = "profile.jpg"
+            super().save()
 
 
 class Keyword(models.Model):
