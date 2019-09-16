@@ -4,6 +4,7 @@
 
 {% block dialog %}
     {% include 'researcher/layouts/add_new_technique.html' %}
+    {% include 'researcher/layouts/technique_review_request.html' %}
 {% endblock %}
 
 {% block name %}رضا باسره{% endblock %}
@@ -22,7 +23,7 @@
                             <div class="w-25"></div>
                             <div class="mark w-25"><span>A</span></div>
                             <div class="date w-25"><span>دو روز پیش</span></div>
-                            <div class="show w-25"><button class="default-btn show-btn">ارتقا نمره</button></div>
+                            <div class="show w-25"><button class="default-btn show-btn new-review-request">ارتقا نمره</button></div>
                         </div>
                     </div>
                 </div>
@@ -47,10 +48,10 @@
             },
           source: [
                  {"title": "histology", "key": "1", "folder": true, "children": [
-                     {"title": "Sterile Tissue Harvest", "key": "101", "folder": true, "childern":[
-                            {"title": "Sterile Tissue Harvest", "key": "10101"},
-                            {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
-                            ]},
+                         {"title": "Sterile Tissue Harvest", "key": "101", "folder": true, "children":[
+                             {"title": "Sterile Tissue Harvest", "key": "10101"},
+                             {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
+                         ]},
                          {"title": "Tissue Cryopreservation", "key": "102"},
                          {"title": "Tissue Fixation", "key": "103"},
                          {"title": "Microtome Sectioning", "key": "104"},
@@ -103,8 +104,8 @@
                   // (Use tree.options.icon callback to define custom icons based on node data)
                   doc: "fas fa-screwdriver",
                   docOpen: "fas fa-screwdriver",
-                  folder: "fas fa-tools",
-                  folderOpen: "fas fa-tools"
+                  folder: "fas fa-folder",
+                  folderOpen: "fas fa-folder-open"
               }
           },
       });

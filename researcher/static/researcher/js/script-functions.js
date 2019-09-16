@@ -676,4 +676,22 @@ function select_technique(className) {
             }
         });
     });
+    $(".fixed-back input.upload-resume").next().hover(function () {
+        $(this).find("svg").find("path").attr("fill", "#3ccd1c");
+    }, function () {
+        $(this).find("svg").find("path").attr("fill", "#bdbdbd");
+    });
+    $(".fixed-back .confirmation .upload-file").click(function () {
+        $(this).closest("form").find("input.upload-resume").next().slideDown("slow").closest("div.col-12").css("padding-bottom","15px");
+    });
+    $(".fixed-back .confirmation .close-upload").click(function () {
+        $(this).closest("form").find("input.upload-resume").next().slideUp("slow").closest("div.col-12").css("padding-bottom","0px");
+    });
+    $(".fixed-back input.upload-resume").on("change", function () {
+        $(this).next().find("svg").first().css("display", "none");
+        $(this).next().find("svg").last().css("display", "block");
+        var fileName  = $(this).val().split("\\").pop();
+        $(this).next().find(".upload-file-text").css("padding-top", "5px")
+            .html(fileName);
+    });
 }
