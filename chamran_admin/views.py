@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse,Http404
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -8,12 +8,24 @@ from django.conf import settings
 
 from . import models
 from . import forms
-from researcher.models import ResearcherUser
+from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser
 from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
+
+
+def find_account_type(user):
+    expert = ExpertUser.objects.filter(user=user)
+    researcher = ResearcherUser.objects.filter(user=user)
+    industry = IndustryUser.objects.filter(user=user)
+    if expert.exists():
+        return 'expert'
+    elif researcher.exists():
+        return 'researcher'
+    elif industry.exists():
+        return 'industry'
 
 
 class Home(generic.TemplateView):
@@ -49,22 +61,32 @@ class SignupEmail(generic.FormView):
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
-    template_name = 'registration/password_confirmation.html'
+    template_name = 'registration/user_pass.html'
 
     def get(self, request, *args, **kwargs):
         path = request.path
         [account_type, uuid] = path.split('/')[2:]
         try:
-            models.TempUser.objects.get(account_type=account_type, unique=uuid)
+            self.temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
         except models.TempUser.DoesNotExist:
             raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
+        # context = {'form': forms.RegisterUserForm(),
+        #            'username': temp_user.email}
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = forms.RegisterUserForm()
+        context['username'] = self.temp_user.email
+        return context
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
         print(unique_id)
         temp_user = get_object_or_404(models.TempUser, unique=unique_id)
+        context = {'form': form,
+                   'username': temp_user.email}
         if form.is_valid():
             password = form.cleaned_data['password']
             email = temp_user.email
@@ -75,6 +97,7 @@ class SignupUser(generic.FormView):
             user.save()
             if account_type == 'researcher':
                 researcher = ResearcherUser.objects.create(user=user)
+                Status.objects.create(researcher_user=researcher)
                 temp_user.delete()
                 new_user = authenticate(request, username=username, password=password)
                 if new_user is not None:
@@ -97,18 +120,26 @@ class SignupUser(generic.FormView):
                     login(request, new_user)
                 return industry.get_absolute_url()
 
-        return super().post(request, *args, **kwargs)
+        return render(request, self.template_name, context)
 
 
 class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
     def get(self, request, *args, **kwargs):
-        login_form = forms.LoginForm()
-        register_form = forms.RegisterEmailForm()
-        context = {'form': login_form,
-                   'register_form': register_form}
-        return render(request, self.template_name, context)
+        if request.user.is_authenticated:
+            if find_account_type(request.user) == 'expert':
+                return request.user.expertuser.get_absolute_url()
+            elif find_account_type(request.user) == 'researcher':
+                return request.user.researcheruser.get_absolute_url()
+            elif find_account_type(request.user) == 'industry':
+                return request.user.industryuser.get_absolute_url()
+        else:
+            login_form = forms.LoginForm()
+            register_form = forms.RegisterEmailForm()
+            context = {'form': login_form,
+                       'register_form': register_form}
+            return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         login_form = forms.LoginForm(request.POST or None)
