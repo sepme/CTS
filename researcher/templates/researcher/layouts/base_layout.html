@@ -10,35 +10,32 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
-    {% block header %}{% endblock %}
-    <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
-</head>
-<body>
-{% block dialog %}{% endblock %}
-<div class="main  {% if request.user.researcheruser.status.status == 'signed_up' %} blur-div {% endif %}">
+      {% block header %}{% endblock %}
+      <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
+      <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}">
+  </head>
+  <body>
+  {% block dialog%}{% endblock %}
+  <div class="main  {% if request.user.researcheruser.status.status == 'signed_up' %} blur-div {% endif %}">
     <div class="top-bar">
-        <div class="top-msg">
-            <span class="fas fa-envelope fa-lg"></span>
-        </div>
-        <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">
-        <div class="dropdown">
-            <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
-                {% if request.user.researcheruser.researcherprofile.photo %}
-                    <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile"
+      <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">
+      <div class="dropdown">
+        <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
+          {% if request.user.researcheruser.researcherprofile.photo %}
+               <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile"
                          class="dropdown-img profile"
                          height="45px">
-                {% else %}
-                     <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
-                {% endif %}
-
-            </button>
-            <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-                <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری</a></li>
-                <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور</a></li>
-                <li class="divider"></li>
-                <li><a href="{% url 'chamran:logout' %}">خروج</a></li>
-            </ul>
-        </div>
+        {% else %}
+             <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
+        {% endif %}
+        </button>
+        <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
+          <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
+          <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
+          <li class="divider"></li>
+          <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
+        </ul>
+      </div>
     </div>
     <div class="content">
         <div class="container">

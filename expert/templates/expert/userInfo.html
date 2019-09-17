@@ -19,7 +19,7 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="card info-card">
+            <div class="card info-card user-info">
                 <form action="{% url 'expert:userInfo' %}" method="post">
                     {% csrf_token %}
                     <div class="inner-card card">

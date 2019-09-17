@@ -12,8 +12,8 @@
 </head>
 <body>
 <div class="card">
-    <img src="{% static 'img/logo.png' %}" alt="ChamranLogo">
-    <p class="ChamranTeam">چمران تیم</p>
+    <img class="registration-card-icon" src="{% static 'img/logo.png' %}" alt="ChamranLogo">
+    <p class="ChamranTeam">ef</p>
     
     {% if user.is_authenticated %}
         <p>{{user.username}}</p>

@@ -1,0 +1,113 @@
+{% extends "researcher/layouts/base_layout.html" %}
+
+{% block title %}تکنیک ها{% endblock %}
+
+{% block dialog %}
+    {% include 'researcher/layouts/add_new_technique.html' %}
+    {% include 'researcher/layouts/technique_review_request.html' %}
+{% endblock %}
+
+{% block name %}رضا باسره{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card info-card">
+                <div class="techniques-list">
+                    <div class="w-100 text-left">
+                        <div class="add-new-technique">افزودن تکنیک</div>
+                    </div>
+                    <div class="card active-question flow-root-display">
+                        <div class="technique-title w-50">تکنیک شماره 1</div>
+                        <div class="technique-info w-50">
+                            <div class="w-25"></div>
+                            <div class="mark w-25"><span>A</span></div>
+                            <div class="date w-25"><span>دو روز پیش</span></div>
+                            <div class="show w-25"><button class="default-btn show-btn new-review-request">ارتقا نمره</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
+    <script type="text/javascript">
+        $("#fancy-tree").fancytree({
+            extensions: ["glyph"],
+            checkbox: false,
+            selectMode: 1,
+            checkboxAutoHide: true,
+            clickFolderMode: 2,
+            lazyLoad: function(event, data) {
+                  data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+            },
+            select: function(event, data) {
+                {#alert(event.type + ": " + data.node.isSelected() + " " + data.node)#}
+            },
+          source: [
+                 {"title": "histology", "key": "1", "folder": true, "children": [
+                         {"title": "Sterile Tissue Harvest", "key": "101", "folder": true, "children":[
+                             {"title": "Sterile Tissue Harvest", "key": "10101"},
+                             {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
+                         ]},
+                         {"title": "Tissue Cryopreservation", "key": "102"},
+                         {"title": "Tissue Fixation", "key": "103"},
+                         {"title": "Microtome Sectioning", "key": "104"},
+                         {"title": "Cryostat Sectioning", "key": "105"},
+                         {"title": "H&E staining", "key": "106"},
+                         {"title": "Histochemistry", "key": "107"},
+                         {"title": "Histoflouresence", "key": "108"}
+                  ]},
+                 {"title": "general lab", "key": "2", "folder": true, "children": [
+                         {"title": "An Introduction to the Centrifuge", "key": "201"},
+                         {"title": "Regulating Temperature in the Lab Preserving Sample Using Cold", "key": "202"},
+                         {"title": "Introduction to the Bunsen Burner", "key": "203"},
+                         {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
+                         {"title": "An Introduction to the Micropipettor", "key": "205"},
+                         {"title": "Making Solutions in the Laboratory", "key": "206"},
+                         {"title": "Understanding Concentration and Measuring Volums", "key": "207"},
+                         {"title": "Introduction to the Microplate Reader", "key": "208"},
+                         {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
+                         {"title": "Common Lab Glassware and Users", "key": "210"},
+                         {"title": "Solutions and Concentrations", "key": "211"},
+                         {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
+                         {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
+                         {"title": "Determining the Empirical Formula", "key": "214"},
+                         {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
+                         {"title": "Using a pH Meter", "key": "216"},
+                         {"title": "Introduction to Titration", "key": "217"},
+                         {"title": "Ideal Gas Law", "key": "218"}
+                  ]}
+                  ],
+          glyph: {
+              preset: "awesome5",
+              map: {
+                  _addClass: "",
+                  checkbox: "fas fa-square",
+                  checkboxSelected: "fas fa-check-square",
+                  checkboxUnknown: "fas fa-square",
+                  radio: "fas fa-circle",
+                  radioSelected: "fas fa-circle",
+                  radioUnknown: "fas fa-dot-circle",
+                  dragHelper: "fas fa-arrow-right",
+                  dropMarker: "fas fa-long-arrow-right",
+                  error: "fas fa-exclamation-triangle",
+                  expanderClosed: "fas fa-chevron-left",
+                  expanderLazy: "fas fa-angle-right",
+                  expanderOpen: "fas fa-chevron-down",
+                  loading: "fas fa-spinner fa-pulse",
+                  nodata: "fas fa-meh",
+                  noExpander: "",
+                  // Default node icons.
+                  // (Use tree.options.icon callback to define custom icons based on node data)
+                  doc: "fas fa-screwdriver",
+                  docOpen: "fas fa-screwdriver",
+                  folder: "fas fa-folder",
+                  folderOpen: "fas fa-folder-open"
+              }
+          },
+      });
+    </script>
+{% endblock %}

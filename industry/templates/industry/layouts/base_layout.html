@@ -17,9 +17,6 @@
   <div class="main
         {% if user.industryuser.status == 'signed_up' %} blur-div {% endif %}">
     <div class="top-bar">
-      <div class="top-msg">
-        <span class="fas fa-envelope fa-lg"></span>
-      </div>
       <img src="{% static 'industry/img/logoName.png' %}" alt="chamranTeam">
       <div class="dropdown">
         <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
@@ -32,10 +29,10 @@
               alt="profile" class="dropdown-img profile" height="45px">
         </button>
         <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-          <li><a href="{% url 'industry:userInfo' %}">اطلاعات کاربری</a></li>
-          <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور</a></li>
+          <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
+          <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
           <li class="divider"></li>
-          <li><a href="{% url 'chamran:logout' %}">خروج</a></li>
+          <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
         </ul>
       </div>
     </div>
@@ -65,32 +62,32 @@
       <div class="hr"></div>
       <ul class="list-group">
         {% url "industry:index" as index %}
-        <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
-          <a href='{{  index }}'>
-            <div>
-              <span>پروژه ها</span>
-              <span class="fas fa-list-ul"></span>
-            </div>
-          </a>
-        </li>
+        <a href='{{ index }}'>
+            <li class="list-group-item text-right {% if request.get_full_path == index %}active{% endif %}">
+                <div>
+                  <span>پروژه ها</span>
+                  <span class="fas fa-list-ul"></span>
+                </div>
+            </li>
+        </a>
         {% url "industry:messages" as messages %}
-        <li class="list-group-item text-right {% if request.get_full_path == messages %}active{% endif %}">
-          <a href="{{ messages }}">
-            <div>
-              <span>پیام ها</span>
-              <span class="fas fa-envelope"></span>
-            </div>
-          </a>
-        </li>
+        <a href="{{ messages }}">
+            <li class="list-group-item text-right {% if request.get_full_path == messages %}active{% endif %}">
+                <div>
+                  <span>پیام ها</span>
+                  <span class="fas fa-envelope"></span>
+                </div>
+            </li>
+        </a>
         {% url "industry:newProject" as newProject %}
+      <a href='{{ newProject }}'>
         <li class="list-group-item text-right {% if request.get_full_path == newProject %}active{% endif %}">
-          <a href='{{ newProject }}'>
             <div>
                 <span>ثبت پروژه جدید</span>
                 <span class="fas fa-plus-circle"></span>
             </div>
-          </a>
         </li>
+      </a>
 {#            TODO#}
         <li class="list-group-item text-right">
           <a href="#">

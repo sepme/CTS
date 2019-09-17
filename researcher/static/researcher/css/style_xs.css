@@ -412,11 +412,9 @@
         left: 0;
         transform: translate(0, -50%);
     }
-
     .top-bar .dropdown .dropdown-menu {
         margin-left: calc(7.5px);
     }
-
     .top-bar > .dropdown > .btn > img {
         width: 45px;
     }

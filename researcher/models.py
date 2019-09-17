@@ -13,7 +13,7 @@ def get_image_path(instance, filename):
 
 
 class ResearcherUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
 
     def __str__(self):
@@ -24,7 +24,7 @@ class ResearcherUser(models.Model):
 
 
 class Status(models.Model):
-    researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True)
+    researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
@@ -45,7 +45,7 @@ class Status(models.Model):
 
 class MembershipFee(models.Model):
     researcher_user = models.OneToOneField('ResearcherUser', verbose_name="حق عضویت", on_delete=models.CASCADE,
-                                           blank=True)
+                                           blank=True, null=True)
     fee = models.IntegerField(verbose_name='هزینه')
     start = models.DateField(auto_now=False, auto_now_add=False, verbose_name="اولین پرداخت")
     rePay = models.DateField(auto_now=False, auto_now_add=False, verbose_name="آخرین پرداخت")
@@ -181,7 +181,7 @@ class ResearcherHistory(models.Model):
 
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
-    evaluator = models.OneToOneField("expert.ExpertUser", on_delete=models.CASCADE)
+    evaluator = models.OneToOneField("expert.ExpertUser", on_delete=models.CASCADE, null=True, blank=True)
 
     one = 1
     two = 2
@@ -247,7 +247,7 @@ class Technique(models.Model):
 
 class TechniqueInstance(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
-    technique = models.OneToOneField("Technique", verbose_name="مهارت", on_delete=models.CASCADE)
+    technique = models.OneToOneField("Technique", verbose_name="مهارت", on_delete=models.CASCADE, null=True, blank=True)
     TECH_GRADE = (
         ('A', 'به صورت عملی در پروژه انجام داده است.'),
         ('B', 'به صورت عملی در کارگاه آموزش دیده است.'),
@@ -264,7 +264,7 @@ class TechniqueInstance(models.Model):
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
-    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE)
+    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
     date_requested = models.DateField(auto_now=False, auto_now_add=False, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')

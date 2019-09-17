@@ -640,3 +640,58 @@ function vote_slider(slide_count) {
         }
     });
 }
+function select_technique(className) {
+    function slide_up() {
+        $(".fixed-back .all-techniques").slideUp('slow');
+        return $.Deferred().resolve(false);
+    }
+    function remove_class() {
+        $(".fixed-back input#technique-name").removeClass("expand");
+    }
+    function expand() {
+        $(".fixed-back .all-techniques").slideDown('slow');
+        $(".fixed-back input#technique-name").addClass("expand");
+        $(".fixed-back .select-technique i").removeClass("fa-plus").addClass("fa-search");
+        $(".fixed-back label[for='technique-name']").html("جستجو تکنیک");
+    }
+    function express() {
+        slide_up().done(remove_class());
+        $(".fixed-back .select-technique i").removeClass("fa-search").addClass("fa-plus");
+        $(".fixed-back label[for='technique-name']").html("نام تکنیک");
+    }
+    $(className).click(function () {
+        if( $(".fixed-back input#technique-name").hasClass("expand") ) {
+            express();
+        }else {
+            expand();
+        }
+    });
+    $("li[role='treeitem']").click(function () {
+        var tree = $("#fancy-tree").fancytree({
+            activate: function(event, data){
+                    node = data.node;
+                    $("input#technique-name").val(node.title);
+                    express();
+                    input_focus();
+            }
+        });
+    });
+    $(".fixed-back input.upload-resume").next().hover(function () {
+        $(this).find("svg").find("path").attr("fill", "#3ccd1c");
+    }, function () {
+        $(this).find("svg").find("path").attr("fill", "#bdbdbd");
+    });
+    $(".fixed-back .confirmation .upload-file").click(function () {
+        $(this).closest("form").find("input.upload-resume").next().slideDown("slow").closest("div.col-12").css("padding-bottom","15px");
+    });
+    $(".fixed-back .confirmation .close-upload").click(function () {
+        $(this).closest("form").find("input.upload-resume").next().slideUp("slow").closest("div.col-12").css("padding-bottom","0px");
+    });
+    $(".fixed-back input.upload-resume").on("change", function () {
+        $(this).next().find("svg").first().css("display", "none");
+        $(this).next().find("svg").last().css("display", "block");
+        var fileName  = $(this).val().split("\\").pop();
+        $(this).next().find(".upload-file-text").css("padding-top", "5px")
+            .html(fileName);
+    });
+}
