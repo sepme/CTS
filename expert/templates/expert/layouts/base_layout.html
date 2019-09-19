@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{% csrf_token %}" />
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
     <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
@@ -19,7 +20,7 @@
 <body>
 {#  {% include 'expert/layouts/pageLoader.html' %}#}
 {% block dialog %}{% endblock %}
-<div class="main {% if request.user.expertuser.status == "signed_up" %} blur-div" {% endif %}>
+<div class="main {% if request.user.expertuser.status == "signed_up" %} blur-div {% endif %}">
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
         <div class="top-msg">
