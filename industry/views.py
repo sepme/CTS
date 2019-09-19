@@ -68,7 +68,7 @@ class Index(generic.TemplateView):
 
 class UserInfo(View):
     def get(self, request):
-        if (not request.user.is_athenticated) or (not models.IndustryUser.objects.filter(user=request.user).count()):
+        if (not request.user.is_authenticated) or (not models.IndustryUser.objects.filter(user=request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
         context = {
             'form': forms.IndustryInfoForm(self.request.user,
