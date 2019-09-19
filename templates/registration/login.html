@@ -31,12 +31,12 @@
                 {{ form.password|attr:"id:id_password" }}
                 {{ form.password.errors }}
                 <i class="fas fa-lock fa-lg"></i>
-                <button type="submit" name="enter" class="Enter-btn">ورود</button>
+                <button type="submit" name="sign_in" class="Enter-btn">ورود</button>
             </div>
         </form>
     </div>
     <div class="signUp-div">
-        <form method="post" action="" novalidate>
+        <form method="post" action="{% url 'chamran:register' %}" novalidate>
             {% csrf_token %}
             <div class="user-type-container">
 {#                <input type="radio" name="user-type" id="researcher" value="researcher">#}
@@ -53,10 +53,10 @@
                 <label for="email">پست الکترونیکی</label>
 {#                <input type="text" id="email" name="email" value="">#}
                 {{ register_form.email|attr:"id:email" }}
-
+                {{ register_form.email.errors }}
                 <i class="fas fa-at fa-lg"></i>
             </div>
-            <button type="submit" name="enter" class="Enter-btn">عضویت</button>
+            <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
         </form>
     </div>
     <div class="card-footer">

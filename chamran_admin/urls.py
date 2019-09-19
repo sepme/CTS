@@ -13,5 +13,6 @@ urlpatterns = [
     path('signup/', views.SignupEmail.as_view(), name='signup_email'),
     path('resetpassword/', views.ResetPassword.as_view(), name='send_reset_email'),
     path('resetpassword/<uuid:code>/', views.ResetPasswordConfirm.as_view(), name='reset_password'),
-    path('send/', views.SendEmail.as_view(), name='send_email'),
+    path('register/', views.register_view, name='register'),
+
 ]
