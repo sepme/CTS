@@ -23,9 +23,6 @@
 <div class="main {% if request.user.expertuser.status == "signed_up" %} blur-div {% endif %}">
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
-        <div class="top-msg">
-            <span class="fas fa-envelope fa-lg"></span>
-        </div>
         <div class="dropdown">
             <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
                 {% if request.user.expertuser.expertform.photo %}
@@ -39,10 +36,10 @@
                 {% endif %}
             </button>
             <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-                <li><a href="{% url 'expert:userInfo' %}">اطلاعات کاربری</a></li>
-                <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور</a></li>
-                <li class="divider"></li>
-                <li><a href="{% url 'chamran:logout' %}">خروج</a></li>
+              <li><a href="{% url 'expert:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
+              <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
+              <li class="divider"></li>
+              <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
     </div>
@@ -75,50 +72,51 @@
         <div class="hr"></div>
         <ul class="list-group">
             {% url 'expert:index' as index_url %}
-            <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
-                <a href="{{ index_url }}">
+            <a href="{{ index_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
                     <div>
                         <span>پروژه ها</span>
                         <span class="fas fa-list-ul"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
             {% url 'expert:messages' as messages_url %}
-            <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
-                <a href="{{ messages_url }}">
+            <a href="{{ messages_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
                     <div>
                         <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
                     </div>
-                </a>
-            </li>
+
+                </li>
+            </a>
             {% url 'expert:questions' as questions_url %}
-            <li class="list-group-item text-right {% if request.get_full_path == questions_url %}active{% endif %}">
-                <a href="{{ questions_url }}">
+            <a href="{{ questions_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path == questions_url %}active{% endif %}">
                     <div>
                         <span>سوالات پژوهشی</span>
                         <span class="fas fa-question"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
             {% url 'expert:researcherRequest' as researcherRequest_url %}
-            <li class="list-group-item text-right {% if request.get_full_path == researcherRequest_url %}active{% endif %}">
-                <a href="{{ researcherRequest_url }}">
+            <a href="{{ researcherRequest_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path == researcherRequest_url %}active{% endif %}">
                     <div>
                         <span>درخواست پژوهشگر</span>
                         <span class="fas fa-user-graduate"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
             {% url 'expert:userInfo' as userInfo_url %}
-            <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
-                <a href="{{ userInfo_url }}">
+            <a href="{{ userInfo_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
                     <div>
                         <span>تنظیمات کاربری</span>
                         <span class="fas fa-cog"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
         </ul>
     </div>
     <a href="#" id="toggle"><span></span></a>

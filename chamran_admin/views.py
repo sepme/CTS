@@ -141,6 +141,11 @@ class LoginView(generic.TemplateView):
             elif find_account_type(request.user) == 'industry':
                 return request.user.industryuser.get_absolute_url()
 
+        else:
+            login_form = forms.LoginForm()
+            register_form = forms.RegisterEmailForm()
+            context = {'form': login_form,
+                       'register_form': register_form}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):

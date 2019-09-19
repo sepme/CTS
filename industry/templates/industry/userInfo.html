@@ -22,7 +22,7 @@
                                             src="{% static 'industry/img/profile.jpg' %}"
                                         {% endif %}
                                             alt="profile" class="profile" width="150px" height="150px">
-                                <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg">
+                                <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg" hidden>
 {#                                {% render_field form.photo accept="image/png, image/jpeg" %}#}
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="row">
                             <div class="col-lg-12 rankDiv">
                                 <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
-                                <select id="id_industry_type" name="industry_type">
+                                <select id="id_industry_type" name="industry_type" class="w-100">
                                     <option dir="rtl">انتخاب کنید ...</option>
                                     {#                                    <option value="1">دولتی</option>#}
                                     {#                                    <option value="2">خصوصی</option>#}

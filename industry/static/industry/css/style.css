@@ -1045,6 +1045,7 @@ hr{
   display: inline-block;
   float: right;
   margin: 2px 10px;
+    width: 92%;
 }
 .list-group-item a{
   color: inherit;
@@ -1128,20 +1129,95 @@ hr{
   transform: translate(0, -50%);
 }
 .top-bar > .dropdown > .btn {
-  width: 100px;
   position: absolute;
   top: 0;
   left: 10px;
   transform: translate(0, -50%);
 }
+.top-bar > .dropdown > .btn:after{
+    display: none;
+}
+.top-bar > .dropdown > .btn:focus,
+.top-bar > .dropdown > .btn:hover{
+    outline: none;
+    box-shadow: none;
+}
+.top-bar > .dropdown > .btn img,
+.top-bar > .dropdown > .btn img{
+    transition: all ease-in-out 0.3s;
+}
+.top-bar > .dropdown > .btn:focus img,
+.top-bar > .dropdown > .btn:hover img {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
+}
+.top-bar .dropdown .dropdown-menu {
+    margin-top: 0.75rem;
+    margin-left: calc(0.75rem + 7.5px);
+}
+.top-bar .dropdown .dropdown-menu:after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    width: 10px;
+    height: 10px;
+    border: 5px solid transparent;
+    border-bottom: 5px solid #ffffff;
+}
+.top-bar .dropdown .dropdown-menu:before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 9px;
+    width: 12px;
+    height: 11px;
+    border: 6px solid transparent;
+    border-bottom: 6px solid rgba(0,0,0,.15);
+}
 .top-bar > .dropdown > .btn > img {
   width: 45px;
 }
 .dropdown-menu > li > a {
-  color: #454545;
+    color: #454545;
+    font-size: 13px;
+    display: block;
+    padding: 5px 0;
+    border-radius: 0.25em;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    text-decoration: none;
+    background-color: #3ccd1c;
+    color: #ffffff;
 }
 .dropdown-menu > li:last-child > a {
   color: #E50505;
+}
+.dropdown-menu > li:last-child > a:hover,
+.dropdown-menu > li:last-child > a:focus {
+    text-decoration: none;
+    background-color: #ff4545;
+    color: #ffffff;
+}
+.dropdown-menu > li > a i {
+    margin-left: 5px;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+}
+.dropdown-menu > li > a i:hover,
+.dropdown-menu > li > a i:focus {
+    cursor: pointer;
+    color: inherit;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
 }
 .topMargin {
   margin-top: 77px;
