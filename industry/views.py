@@ -1,15 +1,11 @@
 import os
-
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.views import generic, View
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from PIL import Image
-
-from ChamranTeamSite.settings import BASE_DIR
+from ChamranTeamSite import settings
 from industry.models import IndustryForm
 from . import models
 from . import forms
@@ -56,7 +52,8 @@ class Index(generic.TemplateView):
                                                 email_address=email_address)
             industry_info.save()
             if not industry_info.photo:
-                with open(os.path.join(BASE_DIR, 'industry/static/industry/img/profile.jpg'), 'rb') as image_file:
+                with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
+                          'rb') as image_file:
                     default_image = image_file.read()
                     industry_info.photo.save('profile.jpg', ContentFile(default_image))
             industry_user.status = 'free'
@@ -91,9 +88,17 @@ class UserInfo(View):
                 services_products=model_form.services_products,
                 awards_honors=model_form.awards_honors
             )
+            if request.user.industryuser.industryform.photo:
+                os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
+                                       request.user.industryuser.industryform.photo.name))
             if model_form.photo:
                 model_form.photo.save(model_form.photo.name, model_form.photo)
                 IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
+            else:
+                with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
+                          'rb') as image_file:
+                    default_image = image_file.read()
+                    model_form.photo.save('profile.jpg', ContentFile(default_image))
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/userInfo.html', context={'form': form})
 
