@@ -21,7 +21,9 @@
         {{ form.non_field_errors }}
         <div class="username">
             <label for="username">نام کاربری</label>
-            <input type="text" id="username" name="username" value="{% firstof username request.user %}" readonly>
+
+            <input type="text" id="username" name="username" {% if request.user.is_authenticated %}
+                   value="{{ request.user }}" {% else %} value="{{ username }}"{% endif %} readonly>
             <i class="fas fa-user-alt fa-lg"></i>
         </div>
         <div class="password">
