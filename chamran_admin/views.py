@@ -1,7 +1,9 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.conf import settings
@@ -235,8 +237,30 @@ def find_user(email):
     return 'None'
 
 
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class ResetPassword(generic.TemplateView):
     template_name = 'registration/reset_password.html'
+
+    def get(self, request, *args, **kwargs):
+        if find_account_type(request.user):
+            if find_account_type(request.user) == 'expert':
+                unique = request.user.expertuser.unique
+            elif find_account_type(request.user) == 'researcher':
+                unique = request.user.researcheruser.unique
+            elif find_account_type(request.user) == 'industry':
+                unique = request.user.industryuser.unique
+            url = LOCAL_URL + '/resetpassword/' + str(unique)
+            message = ':لینک تغییر رمز عبور' + '\n' + url
+            send_mail(
+                subject='تغییر رمز عبور',
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[request.user.username],
+                fail_silently=False
+            )
+            return HttpResponseRedirect(reverse('chamran:home'))
+        else:
+            return redirect(reverse('chamran:login'))
 
     def post(self, request, *args, **kwargs):
         email = request.POST['email']
@@ -266,32 +290,81 @@ class ResetPassword(generic.TemplateView):
 
 
 class ResetPasswordConfirm(generic.FormView):
-    template_name = 'registration/password_reset_confirm.html'
-    form_class = forms.ResetPasswordForm
+    template_name = 'registration/user_pass.html'
+    form_class = forms.RegisterUserForm
 
     def get(self, request, *args, **kwargs):
-        code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser, unique=code)
+        path = request.path
+        uuid = path.split('/')[-2]
+        print('uuid', uuid)
+        try:
+            self.expert_user = ExpertUser.objects.get(unique__exact=uuid)
+        except ExpertUser.DoesNotExist:
+            try:
+                self.industry_user = IndustryUser.objects.get(unique__exact=uuid)
+            except IndustryUser.DoesNotExist:
+                try:
+                    self.researcher_user = ResearcherUser.objects.get(unique__exact=uuid)
+                except ResearcherUser.DoesNotExist:
+                    raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
         return super().get(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = forms.RegisterUserForm()
+        # context['username'] = self.
+        return context
+
     def post(self, request, *args, **kwargs):
-        code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser, unique=code)
-        form = forms.ResetPasswordForm(request.POST)
+        form = forms.RegisterUserForm(request.POST or None)
+        unique_id = kwargs['unique_id']
+        print(unique_id)
+        # temp_user = get_object_or_404(models.TempUser, unique=unique_id)
+        if find_account_type(request.user) == 'expert':
+            user = request.user.expertuser
+        elif find_account_type(request.user) == 'researcher':
+            user = request.user.researcheruser
+        elif find_account_type(request.user) == 'industry':
+            user = request.user.industryuser
+
+        context = {'form': form}
         if form.is_valid():
+            print('user:', user)
             password = form.cleaned_data['password']
-            user = User.objects.get(email=temp_user.email)
-            user.set_password(password)
-            user.save()
-            account_type = temp_user.account_type
-            temp_user.delete()
-            if account_type == 'expert':
-                return user.expertuser.get_absolute_url()
-            elif account_type == 'industry':
-                return user.industryuser.get_absolute_url()
-            elif account_type == 'researcher':
-                return user.researcheruser.get_absolute_url()
-        return super().post(request, *args, **kwargs)
+            user.user.set_password(password)
+            user.user.save()
+            print('username:', user.user.username, 'pass: ', user.user.password)
+            new_user = authenticate(username=user.user.username, password=password)
+            print('new_user:', new_user)
+            if new_user is not None:
+                login(request, new_user)
+            return user.get_absolute_url()
+            # if account_type == 'researcher':
+            #     researcher = ResearcherUser.objects.create(user=user)
+            #     Status.objects.create(researcher_user=researcher)
+            #     temp_user.delete()
+            #     new_user = authenticate(request, username=username, password=password)
+            #     if new_user is not None:
+            #         login(request, new_user)
+            #     return researcher.get_absolute_url()
+            #
+            # elif account_type == 'expert':
+            #     expert = ExpertUser.objects.create(user=user)
+            #     temp_user.delete()
+            #     new_user = authenticate(request, username=username, password=password)
+            #     if new_user is not None:
+            #         login(request, new_user)
+            #     return expert.get_absolute_url()
+            #
+            # elif account_type == 'industry':
+            #     industry = IndustryUser.objects.create(user=user)
+            #     temp_user.delete()
+            #     new_user = authenticate(request, username=username, password=password)
+            #     if new_user is not None:
+            #         login(request, new_user)
+            #     return industry.get_absolute_url()
+
+        return render(request, self.template_name, context)
 
 
 class UserPass(generic.TemplateView):
