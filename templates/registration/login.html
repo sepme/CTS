@@ -35,33 +35,11 @@
             </div>
         </form>
     </div>
-    <div class="signUp-div">
-        <form method="post" action="{% url 'chamran:register' %}" novalidate>
-            {% csrf_token %}
-            <div class="user-type-container">
-{#                <input type="radio" name="user-type" id="researcher" value="researcher">#}
-{#                {{ register_form.account_type.2|attr:"id:researcher" }}#}
-{#                <label for="researcher" class="user-type researcher text-center">پژوهشگر</label>#}
-{#                <input type="radio" name="user-type" id="expert" value="expert">#}
-{#                <label for="expert" class="user-type expert text-center">استاد</label>#}
-{#                <input type="radio" name="user-type" id="industry" value="industry">#}
-{#                <label for="industry" class="user-type industry text-center">صنعت</label>#}
-                {{ register_form.account_type }}
 
-            </div>
-            <div class="email">
-                <label for="email">پست الکترونیکی</label>
-{#                <input type="text" id="email" name="email" value="">#}
-                {{ register_form.email|attr:"id:email" }}
-                {{ register_form.email.errors }}
-                <i class="fas fa-at fa-lg"></i>
-            </div>
-            <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
-        </form>
-    </div>
     <div class="card-footer">
-        <a href="#" class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
-        <p class="new-user">کاربر جدید هستید؟ <a href="#" onclick='signUp()'>عضویت</a></p>
+        <a href="{% url 'chamran:recover_password' %} " class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
+        <p class="new-user">کاربر جدید هستید؟ <a href="{% url 'chamran:signup_email' %}" onclick='signUp()'>عضویت</a>
+        </p>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
