@@ -26,7 +26,7 @@ class IndustryUser(models.Model):
         return self.user.get_username()
 
     def get_absolute_url(self):
-        return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
+        return HttpResponseRedirect(reverse("industry:index"))
 
 
 def upload_and_rename_profile(instance, file_name):
