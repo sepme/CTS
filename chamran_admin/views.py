@@ -235,18 +235,64 @@ class ResetPasswordConfirm(generic.FormView):
     template_name = 'registration/user_pass.html'
     form_class = forms.RegisterUserForm
 
-    def __init__(self):
-        self.recover = False
-        self.user = None
+    def get(self, request, *args, **kwargs):
+        path = request.path
+        print(path)
+        uuid = path.split('/')[-2]
+        print('uuid', uuid)
+        try:
+            ExpertUser.objects.get(unique__exact=uuid)
+        except ExpertUser.DoesNotExist:
+            try:
+                IndustryUser.objects.get(unique__exact=uuid)
+            except IndustryUser.DoesNotExist:
+                try:
+                    ResearcherUser.objects.get(unique__exact=uuid)
+                except ResearcherUser.DoesNotExist:
+                    raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
+        return super().get(request, *args, **kwargs)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(ResetPasswordConfirm, self).get_context_data(**kwargs)
+    #     # context['form'] = forms.RegisterUserForm()
+    #     # print(self.user.user.username)
+    #     print('context recover', self.recover)
+    #     if self.recover:
+    #         context['username'] = self.user.user.username
+    #     return context
+
+    def post(self, request, *args, **kwargs):
+        # print('recover: \nuser: ', self.recover, self.user)
+        form = forms.RegisterUserForm(request.POST or None)
+        unique_id = kwargs['unique_id']
+        print(unique_id)
+        user = find_user(request.user)
+        # context = {'form': form,
+        #            'username': self.user.user.username}
+        if form.is_valid():
+            print('user:', user)
+            password = form.cleaned_data['password']
+            user.user.set_password(password)
+            user.user.save()
+            print('username:', user.user.username, 'pass: ', user.user.password)
+            new_user = authenticate(username=user.user.username, password=password)
+            print('new_user:', new_user)
+            if new_user is not None:
+                login(request, new_user)
+            return user.get_absolute_url()
+
+        return super().post(request, *args, **kwargs)
+
+
+class RecoverPasswordConfirm(generic.FormView):
+    template_name = 'registration/user_pass.html'
+    form_class = forms.RegisterUserForm
+    user = None
 
     def get(self, request, *args, **kwargs):
         path = request.path
         print(path)
         uuid = path.split('/')[-2]
-        reset_type = path.split('/')[1]
-        if reset_type == 'recover_password':
-            self.recover = True
-        print(reset_type)
         print('uuid', uuid)
         try:
             self.user = ExpertUser.objects.get(unique__exact=uuid)
@@ -260,22 +306,21 @@ class ResetPasswordConfirm(generic.FormView):
                     raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
         return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = forms.RegisterUserForm()
-        print(self.user.user.username)
-        print(self.recover)
-        if self.recover:
-            context['username'] = self.user.user.username
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(RecoverPasswordConfirm, self).get_context_data(**kwargs)
+    #     # context['form'] = forms.RegisterUserForm()
+    #     # print(self.user.user.username)
+    #     context['username'] =
+    #     return context
 
     def post(self, request, *args, **kwargs):
+        # print('recover: \nuser: ', self.recover, self.user)
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
         print(unique_id)
         user = self.user
         context = {'form': form,
-                   'username': self.user.user.username}
+                   'username': user}
         if form.is_valid():
             print('user:', user)
             password = form.cleaned_data['password']
