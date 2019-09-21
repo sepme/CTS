@@ -106,10 +106,26 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header">سوابق علمی</span>
-                                <div class="education text-center w-100">
-                                    <span class="initial-value"
-                                          style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
-                                            class="fas fa-plus"></i>  کلیک کنید!  </span>
+{#                                <div class="education text-center w-100">#}
+{#                                    <span class="initial-value"#}
+{#                                          style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i#}
+{#                                            class="fas fa-plus"></i>  کلیک کنید!  </span>#}
+{#                                </div>#}
+                                <div class="education text-center w-100"><div class="card ch-card-item" id="0">
+                                    <form method='post'>
+                                    <div class="row"><div class="col-lg-6"><label for="edu-section0">مقطع تحصیلی</label>
+                                        {{ scientific_form.major }}
+                                        {{ scientific_form.university }}
+                                        {{ scientific_form.city }}
+                                        {{ scientific_form.date_of_graduation }}
+{#                                    <input type="text" name="major" id="edu-section0" class="w-100"></div><div class="col-lg-6"><label for="edu-subject0">رشته تحصیلی</label>#}
+{#                                    <input type="text" name="university" id="edu-subject0" class="w-100"></div></div><div class="row"><div class="col-lg-5"><label for="university0">دانشگاه</label>#}
+{#                                    <input type="text" name="degree" id="university0" class="w-100"></div><div class="col-lg-4"><label for="edu-city0">شهر محل تحصیل</label>#}
+{#                                    <input type="text" name="degree" id="edu-city0" class="w-100"></div><div class="col-lg-3"><label for="edu-year0">سال اخذ مدرک</label>#}
+                                    <input type="text" name="degree" id="edu-year0" class="w-100">
+                                    </div></div><div class="row mtop-lg-25"><div class="col-lg-9"><input type="button" id="accept-btn-ajax" class="w-100 accept-btn btn" value="افزودن"></div><div class="col-lg-3"><button type="button" id="0" class="w-100 refuse-btn btn">لغو</button></div></div>
+                                    </form>
+                                </div>
                                 </div>
                                 <span class="education-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
                                                                data-placement="left" title="افزودن"></i></span>

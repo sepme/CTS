@@ -5,12 +5,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.shortcuts import reverse, HttpResponseRedirect
+import uuid
 
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
-    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE, verbose_name="فرم صنعت")
+    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE,
+                                        verbose_name="فرم صنعت")
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('free', "فعال - بدون پروژه"),
@@ -18,12 +20,12 @@ class IndustryUser(models.Model):
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
+    unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     def __str__(self):
         return self.user.get_username()
 
-    @staticmethod
-    def get_absolute_url():
+    def get_absolute_url(self):
         return HttpResponseRedirect(reverse("industry:index"))
 
 
@@ -117,9 +119,10 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied")
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted")
+                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
+                                           null=True)
     industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
-                                            verbose_name="صنعت صاحب پروژه")
+                                            verbose_name="صنعت صاحب پروژه", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
     project_detail = models.TextField(verbose_name="جزيات پروژه")
@@ -166,7 +169,7 @@ class ProjectHistory(models.Model):
 
 class ExpertEvaluateIndustry(models.Model):
     industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
-    expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE)
+    expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),

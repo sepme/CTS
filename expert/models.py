@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import os
 from django.shortcuts import reverse, HttpResponseRedirect
+import uuid
 
 
 def get_image_path(instance, filename):
@@ -21,6 +22,7 @@ class ExpertUser(models.Model):
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
+    unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     def __str__(self):
         return self.user.get_username()
@@ -48,7 +50,8 @@ class EqTest(models.Model):
 
 
 class ExpertForm(models.Model):
-    expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد" , null=True, blank=True)
+    expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
+                                       null=True, blank=True)
     expert_firstname = models.CharField(max_length=32, verbose_name="نام")
     expert_lastname = models.CharField(max_length=32, verbose_name="نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
@@ -69,7 +72,7 @@ class ExpertForm(models.Model):
     mobile_phone = models.CharField(max_length=15, verbose_name="شماره تلفن همراه")
     email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
     eq_test = models.OneToOneField(EqTest, on_delete=models.CASCADE, verbose_name="تست EQ", blank=True, null=True)
-    awards = models.TextField(blank=True, verbose_name="افتخارات" ,  null=True)
+    awards = models.TextField(blank=True, verbose_name="افتخارات", null=True)
     method_of_introduction = models.TextField(verbose_name="طریقه اشنایی با چمران تیم", blank=True, null=True)
     positive_feature = models.TextField(verbose_name="ویژگی های مثبت چمران تیم", blank=True, null=True)
     lab_equipment = models.TextField(verbose_name="امکانات پژوهشی", blank=True, null=True)
@@ -79,15 +82,17 @@ class ExpertForm(models.Model):
         (2, '31-60'),
         (3, '+60'),
     )
-    number_of_researcher = models.IntegerField(choices=number_of_researcher_choice, verbose_name="دانشجو تحت نظارت", blank=True, null=True)
+    number_of_researcher = models.IntegerField(choices=number_of_researcher_choice, verbose_name="دانشجو تحت نظارت",
+                                               blank=True, null=True)
     has_industrial_research_choice = (
         ('آری', 'آری'),
         ('خیر', 'خیر'),
     )
-    has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice, verbose_name="همکاری با شرکت خارج دانشگاه" , blank=True)
-    number_of_grants = models.IntegerField(verbose_name="تعداد گرنت" , blank=True, null=True)
+    has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice,
+                                               verbose_name="همکاری با شرکت خارج دانشگاه", blank=True)
+    number_of_grants = models.IntegerField(verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
-    languages = models.TextField(verbose_name= "تسلط بر زبان های خارجی" , blank=True, null=True)
+    languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
     photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
 
     def __str__(self):
@@ -191,7 +196,8 @@ class IndustryEvaluateExpert(models.Model):
 
 class ResearcherEvaluateExpert(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="")
-    researcher = models.OneToOneField('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="", blank=True, null=True)
+    researcher = models.OneToOneField('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="",
+                                      blank=True, null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -254,4 +260,5 @@ class ResearchQuestionInstance(models.Model):
     hand_out_date = models.DateField(auto_now_add=True, verbose_name="تاریخ واگذاری")
     answer = models.FileField(upload_to='./uploads', verbose_name="پاسخ")
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده")
-    researcher = models.ForeignKey('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="پژوهشگر", blank=True, null=True)
+    researcher = models.ForeignKey('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="پژوهشگر",
+                                   blank=True, null=True)

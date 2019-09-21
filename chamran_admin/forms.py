@@ -27,10 +27,10 @@ class RegisterEmailForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        check_tempUsers = models.TempUser.objects.filter(email=email).count()
-        check_User = User.objects.filter(email=email).count()
-        if check_tempUsers or check_User:
-            raise ValidationError(_('ایمیل وارد شده تکراری است'))
+        temp_user = models.TempUser.objects.filter(email=email).count()
+        user = User.objects.filter(username=email).count()
+        if user or temp_user:
+            raise ValidationError(_('کاربر با این ایمیل ثبت نام شده است.'))
 
         return email
 
@@ -107,3 +107,14 @@ class ResetPasswordForm(forms.Form):
     def clean_password(self):
         data = self.cleaned_data["password"]
         return data
+
+
+class RecoverPasswordForm(forms.Form):
+    username = forms.CharField(label='نام کاربری', error_messages={'required': 'لطفا نام کاربری خود را وارد کنید'})
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        user = User.objects.filter(username=username)
+        if not user:
+            raise forms.ValidationError('کاربر با این نام کاربری ثبت نام نشده است.')
+        return username

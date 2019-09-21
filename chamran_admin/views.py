@@ -1,7 +1,9 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404
+from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.conf import settings
@@ -26,6 +28,33 @@ def find_account_type(user):
         return 'researcher'
     elif industry.exists():
         return 'industry'
+    else:
+        return False
+
+
+def find_user(user):
+    if find_account_type(user) == 'expert':
+        return user.expertuser
+    elif find_account_type(user) == 'researcher':
+        return user.researcheruser
+    elif find_account_type(user) == 'industry':
+        return user.industryuser
+    else:
+        return False
+
+
+def get_user_by_unique_id(unique):
+    expert = ExpertUser.objects.filter(unique__exact=unique)
+    researcher = ResearcherUser.objects.filter(unique__exact=unique)
+    industry = IndustryUser.objects.filter(unique__exact=unique)
+    if expert.exists():
+        return expert[0]
+    elif researcher.exists():
+        return researcher[0]
+    elif industry.exists():
+        return industry[0]
+    else:
+        return False
 
 
 class Home(generic.TemplateView):
@@ -36,26 +65,39 @@ class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
     template_name = "registration/signup.html"
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['register_form'] = forms.RegisterEmailForm()
+    #     return context
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         form = forms.RegisterEmailForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             account_type = form.cleaned_data['account_type']
-            temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
-            print(temp_user)
+            # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+            temp_user = models.TempUser(email=email, account_type=account_type)
             subject = 'Welcome to Chamran Team!!!'
 
             unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
             message = 'EmailValidation\nyour url:\n' + unique_url
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[email],
+                    fail_silently=False
+                )
+                temp_user.save()
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
 
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email],
-                fail_silently=False
-            )
             return HttpResponseRedirect(reverse('chamran:home'))
+
         return super().post(request, *args, **kwargs)
 
 
@@ -127,74 +169,49 @@ class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
     def get(self, request, *args, **kwargs):
+        login_form = forms.LoginForm()
+        register_form = forms.RegisterEmailForm()
+        context = {'form': login_form,
+                   'register_form': register_form}
         if request.user.is_authenticated:
-            if find_account_type(request.user) == 'expert':
-                return request.user.expertuser.get_absolute_url()
-            elif find_account_type(request.user) == 'researcher':
-                return request.user.researcheruser.get_absolute_url()
-            elif find_account_type(request.user) == 'industry':
-                return request.user.industryuser.get_absolute_url()
+            return find_user(request.user).get_absolute_url()
+
         else:
             login_form = forms.LoginForm()
             register_form = forms.RegisterEmailForm()
             context = {'form': login_form,
                        'register_form': register_form}
-            return render(request, self.template_name, context)
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         login_form = forms.LoginForm(request.POST or None)
-        register_form = forms.RegisterEmailForm(request.POST or None)
-        context = {'form': login_form,
-                   'register_form': register_form}
-        if login_form.is_valid():
-            username = login_form.cleaned_data['username']
-            password = login_form.cleaned_data['password']
-            entry_user = authenticate(request, username=username, password=password)
-            print(entry_user)
-            if entry_user is not None:
-                login(request, entry_user)
+        context = {'form': login_form}
+        if 'sign_in' in request.POST:
+            print('sign_in')
+            if login_form.is_valid():
+                username = login_form.cleaned_data['username']
+                password = login_form.cleaned_data['password']
+                entry_user = authenticate(request, username=username, password=password)
+                print(entry_user)
+                if entry_user is not None:
+                    login(request, entry_user)
 
-                try:
-                    user = ResearcherUser.objects.get(user=entry_user)
-                    return user.get_absolute_url()
-                except ResearcherUser.DoesNotExist:
                     try:
-                        user = ExpertUser.objects.get(user=entry_user)
+                        user = ResearcherUser.objects.get(user=entry_user)
                         return user.get_absolute_url()
-                    except ExpertUser.DoesNotExist:
+                    except ResearcherUser.DoesNotExist:
                         try:
-                            user = IndustryUser.objects.get(user=entry_user)
+                            user = ExpertUser.objects.get(user=entry_user)
                             return user.get_absolute_url()
-                        except IndustryUser.DoesNotExist:
-                            raise ValidationError('کابر مربوطه وجود ندارد.')
-            else:
-                context = {'form': login_form,
-                           'error': 'گذرواژه اشتباه است'}
-
-        elif register_form.is_valid():
-            print(register_form.cleaned_data)
-            email = register_form.cleaned_data['email']
-            account_type = register_form.cleaned_data['account_type']
-            # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
-            temp_user = models.TempUser(email=email, account_type=account_type)
-            print(temp_user)
-            subject = 'Welcome to Chamran Team!!!'
-
-            unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
-            message = 'EmailValidation\nyour url:\n' + unique_url
-            try:
-                send_mail(
-                    subject=subject,
-                    message=message,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[email],
-                    fail_silently=False
-                )
-                temp_user.save()
-            except TimeoutError:
-                return HttpResponse('Timeout Error!!')
-
-            return HttpResponseRedirect(reverse('chamran:home'))
+                        except ExpertUser.DoesNotExist:
+                            try:
+                                user = IndustryUser.objects.get(user=entry_user)
+                                return user.get_absolute_url()
+                            except IndustryUser.DoesNotExist:
+                                raise ValidationError('کابر مربوطه وجود ندارد.')
+                else:
+                    context = {'form': login_form,
+                               'error': 'گذرواژه اشتباه است'}
         return render(request, self.template_name, context)
 
 
@@ -207,96 +224,150 @@ class LogoutView(generic.TemplateView):
         return HttpResponseRedirect(reverse("chamran:home"))
 
 
-def find_user(email):
-    try:
-        user = get_object_or_404(ExpertUser, user__email=email)
-        return 'expert'
-    except:
-        try:
-            user = get_object_or_404(IndustryUser, user__email=email)
-            return 'industry'
-        except:
-            try:
-                user = get_object_or_404(ResearcherUser, user__email=email)
-                return 'researcher'
-            except:
-                return 'None'
-    return 'None'
-
-
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class ResetPassword(generic.TemplateView):
     template_name = 'registration/reset_password.html'
 
-    def post(self, request, *args, **kwargs):
-        email = request.POST['email']
-        try:
-            temp_user = models.TempUser.objects.get(email=email)
-        except:
-            result = find_user(email)
-            if result == 'None':
-                return HttpResponseRedirect(reverse('chamran:home'))
-            account_type = result
-            temp_user = models.TempUser(email=email, account_type=account_type)
-            temp_user.save()
-
-        subject = 'Reset your password of Chamran Team account.'
-
-        reset_url = LOCAL_URL + '/resetpassword/' + str(temp_user.unique)
-        mess = 'Reset Validation\nyour url:\n' + reset_url
-
-        send_mail(
-            subject,
-            mess,
-            settings.EMAIL_HOST_USER,
-            [temp_user.email, settings.EMAIL_HOST_USER]
-        )
-
-        return render(request, 'registration/password_reset_done.html', {})
+    def get(self, request, *args, **kwargs):
+        if find_account_type(request.user):
+            unique = find_user(request.user).unique
+            url = LOCAL_URL + '/resetpassword/' + str(unique)
+            message = ':لینک تغییر رمز عبور' + '\n' + url
+            send_mail(
+                subject='تغییر رمز عبور',
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[request.user.username],
+                fail_silently=False
+            )
+            return HttpResponseRedirect(reverse('chamran:home'))
+        else:
+            return redirect(reverse('chamran:login'))
 
 
 class ResetPasswordConfirm(generic.FormView):
-    template_name = 'registration/password_reset_confirm.html'
-    form_class = forms.ResetPasswordForm
+    template_name = 'registration/user_pass.html'
+    form_class = forms.RegisterUserForm
 
     def get(self, request, *args, **kwargs):
-        code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser, unique=code)
+        path = request.path
+        print(path)
+        uuid = path.split('/')[-2]
+        print('uuid', uuid)
+        try:
+            ExpertUser.objects.get(unique__exact=uuid)
+        except ExpertUser.DoesNotExist:
+            try:
+                IndustryUser.objects.get(unique__exact=uuid)
+            except IndustryUser.DoesNotExist:
+                try:
+                    ResearcherUser.objects.get(unique__exact=uuid)
+                except ResearcherUser.DoesNotExist:
+                    raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
         return super().get(request, *args, **kwargs)
 
+    # def get_context_data(self, **kwargs):
+    #     context = super(ResetPasswordConfirm, self).get_context_data(**kwargs)
+    #     # context['form'] = forms.RegisterUserForm()
+    #     # print(self.user.user.username)
+    #     print('context recover', self.recover)
+    #     if self.recover:
+    #         context['username'] = self.user.user.username
+    #     return context
+
     def post(self, request, *args, **kwargs):
-        code = kwargs['code']
-        temp_user = get_object_or_404(models.TempUser, unique=code)
-        form = forms.ResetPasswordForm(request.POST)
+        # print('recover: \nuser: ', self.recover, self.user)
+        form = forms.RegisterUserForm(request.POST or None)
+        unique_id = kwargs['unique_id']
+        print(unique_id)
+        user = find_user(request.user)
+        # context = {'form': form,
+        #            'username': self.user.user.username}
         if form.is_valid():
+            print('user:', user)
             password = form.cleaned_data['password']
-            user = User.objects.get(email=temp_user.email)
-            user.set_password(password)
-            user.save()
-            account_type = temp_user.account_type
-            temp_user.delete()
-            if account_type == 'expert':
-                return user.expertuser.get_absolute_url()
-            elif account_type == 'industry':
-                return user.industryuser.get_absolute_url()
-            elif account_type == 'researcher':
-                return user.researcheruser.get_absolute_url()
+            user.user.set_password(password)
+            user.user.save()
+            print('username:', user.user.username, 'pass: ', user.user.password)
+            new_user = authenticate(username=user.user.username, password=password)
+            print('new_user:', new_user)
+            if new_user is not None:
+                login(request, new_user)
+            return user.get_absolute_url()
+
         return super().post(request, *args, **kwargs)
+
+
+class RecoverPasswordConfirm(generic.FormView):
+    template_name = 'registration/user_pass.html'
+    form_class = forms.RegisterUserForm
+
+    def get(self, request, *args, **kwargs):
+        path = request.path
+        print(path)
+        uuid = path.split('/')[-2]
+        print('uuid', uuid)
+        try:
+            user = ExpertUser.objects.get(unique__exact=uuid)
+        except ExpertUser.DoesNotExist:
+            try:
+                user = IndustryUser.objects.get(unique__exact=uuid)
+            except IndustryUser.DoesNotExist:
+                try:
+                    user = ResearcherUser.objects.get(unique__exact=uuid)
+                except ResearcherUser.DoesNotExist:
+                    raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
+        return render(request, self.template_name, {'form': forms.RegisterUserForm(),
+                                                    'username': user.user.username})
+
+    def post(self, request, *args, **kwargs):
+        # print('recover: \nuser: ', self.recover, self.user)
+        form = forms.RegisterUserForm(request.POST or None)
+        unique_id = kwargs['unique_id']
+        print(unique_id)
+        user = get_user_by_unique_id(unique_id)
+        context = {'form': form,
+                   'username': user.user.username}
+        if form.is_valid():
+            print('user:', user)
+            password = form.cleaned_data['password']
+            user.user.set_password(password)
+            user.user.save()
+            print('username:', user.user.username, 'pass: ', user.user.password)
+            new_user = authenticate(username=user.user.username, password=password)
+            print('new_user:', new_user)
+            if new_user is not None:
+                login(request, new_user)
+            return user.get_absolute_url()
+
+        return render(request, self.template_name, context)
 
 
 class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
-class SendEmail(generic.TemplateView):
-    template_name = 'registration/send_email.html'
+class RecoverPassword(generic.FormView):
+    template_name = 'registration/recover_pass.html'
+    form_class = forms.RecoverPasswordForm
 
-    def get(self, request, *args, **kwargs):
-        context = {'content': 'Email Sent Successfully!'}
-        send_mail(
-            'Helllo',
-            'This is a practical Email',
-            'info@chamranteam.ir',
-            ['hamidranjbarpour771@gmail.com'],
-            fail_silently=False
-        )
-        return render(request, self.template_name, context)
+    # def get(self, request, *args, **kwargs):
+    #     return super().get(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        form = forms.RecoverPasswordForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            temp = get_object_or_404(User, username=username)
+            user = find_user(temp)
+            url = LOCAL_URL + '/recover_password/' + str(user.unique)
+            message = ':لینک بازیابی رمز عبور' + '\n' + url
+            send_mail(
+                subject='تغییر رمز عبور',
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[username],
+                fail_silently=False
+            )
+
+            return HttpResponseRedirect(reverse('chamran:home'))
+        return super().post(request, *args, **kwargs)

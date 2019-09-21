@@ -15,7 +15,7 @@
       <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}">
   </head>
   <body>
-  {% block dialog%}{% endblock %}
+  {% block dialog %}{% endblock %}
   <div class="main  {% if request.user.researcheruser.status.status == 'signed_up' %} blur-div {% endif %}">
     <div class="top-bar">
       <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">

@@ -6,6 +6,7 @@ from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse
 from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 
 class Index(generic.TemplateView):
@@ -65,19 +66,20 @@ def user_info(request):
     instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
     print(instance.expert_lastname)
     if request.method == 'POST':
+        print(request.POST)
         expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
         scientific_form = ScientificRecordForm(request.POST or None)
         executive_form = ExecutiveRecordForm(request.POST or None)
         research_form = ResearchRecordForm(request.POST or None)
         paper_form = PaperRecordForm(request.POST or None)
-
-        if expert_info_form.is_valid() and scientific_form.is_valid() and executive_form.is_valid() and research_form.is_valid() and paper_form.is_valid():
-            expert_info_form.save()
-            print("scientific form:", scientific_form.cleaned_data)
-            print("executive form:", executive_form.cleaned_data)
-            print("research form:", research_form.cleaned_data)
-            print("paper form:", paper_form.cleaned_data)
-            return HttpResponseRedirect(reverse('expert:test'))
+        #
+        # if expert_info_form.is_valid() and scientific_form.is_valid() and executive_form.is_valid() and research_form.is_valid() and paper_form.is_valid():
+        #     expert_info_form.save()
+        #     print("scientific form:", scientific_form.cleaned_data)
+        #     print("executive form:", executive_form.cleaned_data)
+        #     print("research form:", research_form.cleaned_data)
+        #     print("paper form:", paper_form.cleaned_data)
+        #     return HttpResponseRedirect(reverse('expert:test'))
     else:
         expert_info_form = ExpertInfoForm(instance=instance)
         scientific_form = ScientificRecordForm()
@@ -89,3 +91,11 @@ def user_info(request):
                                                     'research_form': research_form,
                                                     'expert_info_form': expert_info_form,
                                                     'instance': instance})
+
+
+def ajax_view(request):
+    # scientific_form = ScientificRecordForm(request.POST or None)
+    # if scientific_form.is_valid():
+    #     return JsonResponse('ok')
+    pass
+
