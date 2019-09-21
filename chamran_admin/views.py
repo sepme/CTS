@@ -43,6 +43,20 @@ def find_user(user):
         return False
 
 
+def get_user_by_unique_id(unique):
+    expert = ExpertUser.objects.filter(unique__exact=unique)
+    researcher = ResearcherUser.objects.filter(unique__exact=unique)
+    industry = IndustryUser.objects.filter(unique__exact=unique)
+    if expert.exists():
+        return expert[0]
+    elif researcher.exists():
+        return researcher[0]
+    elif industry.exists():
+        return industry[0]
+    else:
+        return False
+
+
 class Home(generic.TemplateView):
     template_name = "base.html"
 
@@ -287,7 +301,6 @@ class ResetPasswordConfirm(generic.FormView):
 class RecoverPasswordConfirm(generic.FormView):
     template_name = 'registration/user_pass.html'
     form_class = forms.RegisterUserForm
-    user = None
 
     def get(self, request, *args, **kwargs):
         path = request.path
@@ -295,32 +308,26 @@ class RecoverPasswordConfirm(generic.FormView):
         uuid = path.split('/')[-2]
         print('uuid', uuid)
         try:
-            self.user = ExpertUser.objects.get(unique__exact=uuid)
+            user = ExpertUser.objects.get(unique__exact=uuid)
         except ExpertUser.DoesNotExist:
             try:
-                self.user = IndustryUser.objects.get(unique__exact=uuid)
+                user = IndustryUser.objects.get(unique__exact=uuid)
             except IndustryUser.DoesNotExist:
                 try:
-                    self.user = ResearcherUser.objects.get(unique__exact=uuid)
+                    user = ResearcherUser.objects.get(unique__exact=uuid)
                 except ResearcherUser.DoesNotExist:
                     raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
-        return super().get(request, *args, **kwargs)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(RecoverPasswordConfirm, self).get_context_data(**kwargs)
-    #     # context['form'] = forms.RegisterUserForm()
-    #     # print(self.user.user.username)
-    #     context['username'] =
-    #     return context
+        return render(request, self.template_name, {'form': forms.RegisterUserForm(),
+                                                    'username': user.user.username})
 
     def post(self, request, *args, **kwargs):
         # print('recover: \nuser: ', self.recover, self.user)
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
         print(unique_id)
-        user = self.user
+        user = get_user_by_unique_id(unique_id)
         context = {'form': form,
-                   'username': user}
+                   'username': user.user.username}
         if form.is_valid():
             print('user:', user)
             password = form.cleaned_data['password']
