@@ -1,0 +1,41 @@
+{% load static%}
+<div class="fixed-back paper_form">
+    <div class="card text-right">
+        <div class="close"></div>
+        <div class="card-head">ثبت مقاله</div>
+        <div class="container">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class='row'>
+                    <div class='col-lg-4'>
+                        <label for='article-name'>عنوان مقاله</label>
+                        <input type='text' id='article-name' class='w-100'>
+                    </div>
+                    <div class='col-lg-4'>
+                        <label for='publish-date'>تاریخ انتشار</label>
+                        <input type='text' id='publish-date' class='w-100'>
+                    </div>
+                    <div class='col-lg-4'>
+                        <label for='published-at'>محل دقیق انتشار</label>
+                        <input type='text' id='published-at' class='w-100'>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-lg-5'>
+                        <label for='impact-factor'>Impact Factor</label>
+                        <input type='text' id='impact-factor' class='w-100'>
+                    </div>
+                    <div class='col-lg-4'>
+                        <label for='referring-num'>تعداد ارجاع به مقاله شما</label>
+                        <input type='text' id='referring-num' class='w-100'>
+                    </div>
+                    <div class='col-lg-3'></div>
+                </div>
+                <div class="card-footer">
+                    <button class="save-btn" type="submit">افزودن</button>
+                    <button class="reject-btn" type="reset">لغو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

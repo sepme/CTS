@@ -1,0 +1,46 @@
+{% load static%}
+<div class="fixed-back executive_form">
+    <div class="card text-right">
+        <div class="close"></div>
+        <div class="card-head">ثبت سابقه اجرایی</div>
+        <div class="container">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class='row'>
+                    <div class='col-lg-5'>
+                        <label for='duty'>سمت</label>
+                        <input type='text' id='duty' class='w-100'>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class='col-lg-2'>
+                        <span class='center-vr'>زمان :</span>
+                    </div>
+                    <div class='col-lg-5'>
+                        <label for='from'>از تاریخ</label>
+                        <input type='text' id='from' class='w-100'>
+                    </div>
+                    <div class='col-lg-5'>
+                        <label for='until'>تا تاریخ</label>
+                        <input type='text' id='until' class='w-100'>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-lg-5'>
+                        <label for='workplace'>محل خدمت</label>
+                        <input type='text' id='workplace' class='w-100'>
+                    </div>
+                    <div class='col-lg-4'>
+                        <label for='exe-city'>شهر</label>
+                        <input type='text' id='exe-city' class='w-100'>
+                    </div>
+                    <div class='col-lg-3'></div>
+                </div>
+                <div class="card-footer">
+                    <button class="save-btn" type="submit">افزودن</button>
+                    <button class="reject-btn" type="reset">لغو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

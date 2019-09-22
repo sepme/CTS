@@ -14,14 +14,19 @@
 
 {% block dialog %}
     {% include 'expert/layouts/dialog.html' %}
+    {% include 'expert/layouts/scientific_form.html' %}
+    {% include 'expert/layouts/executive_form.html' %}
+    {% include 'expert/layouts/research_form.html' %}
+    {% include 'expert/layouts/paper_form.html' %}
 {% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="card info-card user-info">
+            <div class="card info-card user-info text-right">
                 <form action="{% url 'expert:userInfo' %}" method="post">
                     {% csrf_token %}
+                    <div class="card-header">اطلاعات کاربری</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-center">
@@ -102,200 +107,281 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">سوابق علمی</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">سوابق علمی</span>
                                 <div class="education text-center w-100">
                                     <span class="initial-value"
                                           style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
                                             class="fas fa-plus"></i>  کلیک کنید!  </span>
                                 </div>
-                                <span class="education-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
-                                                               data-placement="left" title="افزودن"></i></span>
+                                <button type="button" class="education-btn success-btn">افزودن</button>
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">سوابق اجرایی</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">سوابق اجرایی</span>
+                                <span class="label header"></span>
                                 <div class="executive text-center w-100">
                                     <span class="initial-value"
                                           style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
                                             class="fas fa-plus"></i>  کلیک کنید!  </span>
                                 </div>
-                                <span class="executive-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
-                                                               data-placement="left" title="افزودن"></i></span>
+                                <button type="button" class="executive-btn success-btn">افزودن</button>
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">سوابق پژوهشی</div>
+                    <div class="card-header-info">بهترین ها طی پنج سال گذشته</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">سوابق پژوهشی <span class="sub-header">(بهترین ها طی پنج سال گذشته)</span></span>
+                                <span class="label header"> <span class="sub-header"></span></span>
                                 <div class="studious text-center w-100">
                                     <span class="initial-value"
                                           style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
                                             class="fas fa-plus"></i>  کلیک کنید!  </span>
-
                                 </div>
-                                <span class="studious-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
-                                                              data-placement="left" title="افزودن"></i></span>
+                                <button type="button" class="research-btn success-btn">افزودن</button>
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">مقالات</div>
+                    <div class="card-header-info">چند مورد از بهترین مقالات</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">مقالات <span
-                                        class="sub-header">(چند مورد از بهترین مقالات)</span></span>
+                                <span class="label header"> <span
+                                        class="sub-header"></span></span>
                                 <div class="article text-center w-100">
                                     <span class="initial-value"
                                           style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
                                             class="fas fa-plus"></i>  کلیک کنید!  </span>
 
                                 </div>
-                                <span class="article-btn"><i class="fas fa-plus fa-lg" data-toggle="tooltip"
-                                                             data-placement="left" title="افزودن"></i></span>
+                                <button type="button" class="article-btn success-btn">افزودن</button>
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">افتخارات</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">افتخارات <span class="sub-header">(چند نمونه از بهترین افتخارات - مقالات خاص، جوایز و ...- به همراه سال وقوع)</span></span>
+                                <span class="sub-header">چند نمونه از بهترین افتخارات - مقالات خاص، جوایز و ...- به همراه سال وقوع</span>
                                 <textarea dir="rtl" rows="5" class="w-100" id="honours"
-                                          placeholder="اینجا وارد کنید ..."></textarea>
+                                          placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">هوش هیجانی</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">هوش هیجانی <span class="sub-header"></span></span>
+                                <span class="label header"><span class="sub-header"></span></span>
                                 <div class="w-100 text-center">
-                                    <table class="w-75">
-                                        <tr>
-                                            <td class="text-right">روحیه کار تیمی</td>
-                                            <td><input type="radio" name="group-work" id="group-work-1" value="1"><label
-                                                    for="group-work-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-2" value="2"><label
-                                                    for="group-work-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-3" value="3"><label
-                                                    for="group-work-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-4" value="4"><label
-                                                    for="group-work-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="group-work" id="group-work-5" value="5"><label
-                                                    for="group-work-5" class="radio-label"></label></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right">تفکر خلاقانه</td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-1"
-                                                       value="1"><label for="creative-thinking-1"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-2"
-                                                       value="2"><label for="creative-thinking-2"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-3"
-                                                       value="3"><label for="creative-thinking-3"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-4"
-                                                       value="4"><label for="creative-thinking-4"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="creative-thinking" id="creative-thinking-5"
-                                                       value="5"><label for="creative-thinking-5"
-                                                                        class="radio-label"></label></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right">تعهد داشتن و از خودگذشتگی</td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-1" value="1"><label
-                                                    for="sacrifice-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-2" value="2"><label
-                                                    for="sacrifice-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-3" value="3"><label
-                                                    for="sacrifice-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-4" value="4"><label
-                                                    for="sacrifice-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="sacrifice" id="sacrifice-5" value="5"><label
-                                                    for="sacrifice-5" class="radio-label"></label></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right">انجام پژوهش محصول محور</td>
-                                            <td><input type="radio" name="researching" id="researching-1"
-                                                       value="1"><label for="researching-1" class="radio-label"></label>
-                                            </td>
-                                            <td><input type="radio" name="researching" id="researching-2"
-                                                       value="2"><label for="researching-2" class="radio-label"></label>
-                                            </td>
-                                            <td><input type="radio" name="researching" id="researching-3"
-                                                       value="3"><label for="researching-3" class="radio-label"></label>
-                                            </td>
-                                            <td><input type="radio" name="researching" id="researching-4"
-                                                       value="4"><label for="researching-4" class="radio-label"></label>
-                                            </td>
-                                            <td><input type="radio" name="researching" id="researching-5"
-                                                       value="5"><label for="researching-5" class="radio-label"></label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right">تعهد ملی</td>
-                                            <td><input type="radio" name="obligation" id="obligation-1" value="1"><label
-                                                    for="obligation-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-2" value="2"><label
-                                                    for="obligation-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-3" value="3"><label
-                                                    for="obligation-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-4" value="4"><label
-                                                    for="obligation-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="obligation" id="obligation-5" value="5"><label
-                                                    for="obligation-5" class="radio-label"></label></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right">جمع آوری داده</td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-1"
-                                                       value="1"><label for="data-collection-1"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-2"
-                                                       value="2"><label for="data-collection-2"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-3"
-                                                       value="3"><label for="data-collection-3"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-4"
-                                                       value="4"><label for="data-collection-4"
-                                                                        class="radio-label"></label></td>
-                                            <td><input type="radio" name="data-collection" id="data-collection-5"
-                                                       value="5"><label for="data-collection-5"
-                                                                        class="radio-label"></label></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right">روحیه بیزنسی</td>
-                                            <td><input type="radio" name="morale" id="morale-1" value="1"><label
-                                                    for="morale-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-2" value="2"><label
-                                                    for="morale-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-3" value="3"><label
-                                                    for="morale-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-4" value="4"><label
-                                                    for="morale-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="morale" id="morale-5" value="5"><label
-                                                    for="morale-5" class="radio-label"></label></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right">ریسک پذیری</td>
-                                            <td><input type="radio" name="risk" id="risk-1" value="1"><label
-                                                    for="risk-1" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-2" value="2"><label
-                                                    for="risk-2" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-3" value="3"><label
-                                                    for="risk-3" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-4" value="4"><label
-                                                    for="risk-4" class="radio-label"></label></td>
-                                            <td><input type="radio" name="risk" id="risk-5" value="5"><label
-                                                    for="risk-5" class="radio-label"></label></td>
-                                        </tr>
-                                    </table>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">روحیه کار تیمی</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="group-work" id="group-work-1" value="1"><label
+                                                        for="group-work-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="group-work" id="group-work-2" value="2"><label
+                                                        for="group-work-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="group-work" id="group-work-3" value="3"><label
+                                                        for="group-work-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="group-work" id="group-work-4" value="4"><label
+                                                        for="group-work-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="group-work" id="group-work-5" value="5"><label
+                                                        for="group-work-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">تفکر خلاقانه</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="creative-thinking" id="creative-thinking-1" value="1">
+                                                <label for="creative-thinking-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="creative-thinking" id="creative-thinking-2" value="2">
+                                                <label for="creative-thinking-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="creative-thinking" id="creative-thinking-3" value="3">
+                                                <label for="creative-thinking-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="creative-thinking" id="creative-thinking-4" value="4">
+                                                <label for="creative-thinking-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="creative-thinking" id="creative-thinking-5" value="5">
+                                                <label for="creative-thinking-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">تعهد داشتن و از خودگذشتگی</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="sacrifice" id="sacrifice-1" value="1">
+                                                <label for="sacrifice-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="sacrifice" id="sacrifice-2" value="2">
+                                                <label for="sacrifice-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="sacrifice" id="sacrifice-3" value="3">
+                                                <label for="sacrifice-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="sacrifice" id="sacrifice-4" value="4">
+                                                <label for="sacrifice-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="sacrifice" id="sacrifice-5" value="5">
+                                                <label for="sacrifice-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">انجام پژوهش محصول محور</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="researching" id="researching-1" value="1">
+                                                <label for="researching-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="researching" id="researching-2" value="2">
+                                                <label for="researching-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="researching" id="researching-3" value="3">
+                                                <label for="researching-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="researching" id="researching-4" value="4">
+                                                <label for="researching-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="researching" id="researching-5" value="5">
+                                                <label for="researching-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">تعهد ملی</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="obligation" id="obligation-1" value="1">
+                                                <label for="obligation-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="obligation" id="obligation-2" value="2">
+                                                <label for="obligation-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="obligation" id="obligation-3" value="3">
+                                                <label for="obligation-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="obligation" id="obligation-4" value="4">
+                                                <label for="obligation-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="obligation" id="obligation-5" value="5">
+                                                <label for="obligation-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">جمع آوری داده</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="data-collection" id="data-collection-1" value="1">
+                                                <label for="data-collection-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="data-collection" id="data-collection-2" value="2">
+                                                <label for="data-collection-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="data-collection" id="data-collection-3" value="3">
+                                                <label for="data-collection-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="data-collection" id="data-collection-4" value="4">
+                                                <label for="data-collection-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="data-collection" id="data-collection-5" value="5">
+                                                <label for="data-collection-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">روحیه بیزنسی</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="morale" id="morale-1" value="1">
+                                                <label for="morale-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="morale" id="morale-2" value="2">
+                                                <label for="morale-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="morale" id="morale-3" value="3">
+                                                <label for="morale-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="morale" id="morale-4" value="4">
+                                                <label for="morale-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="morale" id="morale-5" value="5">
+                                                <label for="morale-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-7 col-12">ریسک پذیری</div>
+                                        <div class="col-lg-5 col-12">
+                                            <div class="radio-item">
+                                                <input type="radio" name="risk" id="risk-1" value="1">
+                                                <label for="risk-1" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="risk" id="risk-2" value="2">
+                                                <label for="risk-2" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="risk" id="risk-3" value="3">
+                                                <label for="risk-3" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="risk" id="risk-4" value="4">
+                                                <label for="risk-4" class="radio-label"></label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" name="risk" id="risk-5" value="5">
+                                                <label for="risk-5" class="radio-label"></label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <span class="sub-header"><span class="star-warning"></span>اگر از توانایی هایتان در
                                     موارد بالا اطمینان کامل ندارید می تواند از این آزمون کمک بگیرید! <a
@@ -303,11 +389,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">اطلاعات تکمیلی</div>
                     <div class="card inner-card">
                         <div class="row">
                             <div class="col-lg-12">
-                                <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea>
-                                <label for="introduction-method">نحوه آشنایی شما با چمران تیم</label>
+                                <span class="sub-header">نحوه آشنایی شما با چمران تیم</span>
+                                <textarea dir="rtl" class="w-100" rows="3" placeholder="اینجا وارد کنید ..." style="margin-top: 0;"></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -338,15 +425,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-8 col-md-12 col-12 text-right">
+                            <div class="col-lg-6 col-md-12 col-12 text-right">
                                 <span class="sub-header" style="top: 10px;position: relative;">آیا تا به حال با شرکت های خارج دانشگاه قرارداد پژوهشی داشته اید؟</span>
                             </div>
-                            <div class="col-lg-2 col-md-6 col-6 text-center">
+                            <div class="col-lg-3 col-md-6 col-6 text-center">
                                 <input type="radio" id="foreign_yes" name="foreign_work" value="1-10"
                                        class="label-check-radio">
                                 <label for="foreign_yes">آری</label>
                             </div>
-                            <div class="col-lg-2 col-md-6 col-6 text-center">
+                            <div class="col-lg-3 col-md-6 col-6 text-center">
                                 <input type="radio" id="foreign_no" name="foreign_work" value="1-10"
                                        class="label-check-radio">
                                 <label for="foreign_no">خیر</label>
@@ -367,15 +454,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-header">تکنیک ها</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header">تکنیک ها</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <button class="chamran_btn technique" type="button">افزودن</button>
+                                <span class="label header"></span>
+                                <button class="success-btn technique" type="button">افزودن</button>
                             </div>
                         </div>
                     </div>

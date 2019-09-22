@@ -17,7 +17,7 @@ class Message(models.Model):
 
     type = models.IntegerField(default=0, choices=MESSAGE_TYPES, verbose_name="نوع")
     attachment = models.FileField(upload_to=None, verbose_name="ضمیمه")
-    receiver = models.ManyToManyField(User, verbose_name="گیرندگان")
+    receiver = models.ManyToManyField(User, verbose_name="گیرندگان", blank=True, null=True)
 
     def __str__(self):
         return self.title

@@ -13,9 +13,12 @@ $(document).ready(function(){
     init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
     init_dialog_btn(".add-new-technique", ".add-technique");
     init_dialog_btn(".new-review-request", ".review-request");
+    init_dialog_btn(".send-answer", ".thanks_response");
+    init_dialog_btn(".start-question", ".confirmation");
     select_technique(".select-technique");
     input_focus();
     search_input(".search_message");
+    question();
     if($(window).width() < 575.98){
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
