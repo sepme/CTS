@@ -12,6 +12,8 @@ urlpatterns = [
     path('signup/<str:account_type>/<uuid:unique_id>', views.SignupUser.as_view(), name='signup_username'),
     path('signup/', views.SignupEmail.as_view(), name='signup_email'),
     path('resetpassword/', views.ResetPassword.as_view(), name='send_reset_email'),
-    path('resetpassword/<uuid:code>/', views.ResetPasswordConfirm.as_view(), name='reset_password'),
-    path('send/', views.SendEmail.as_view(), name='send_email'),
+    path('resetpassword/<uuid:unique_id>/', views.ResetPasswordConfirm.as_view(), name='reset_password'),
+    path('recover_password/', views.RecoverPassword.as_view(), name='recover_password'),
+    path('recover_password/<uuid:unique_id>/', views.RecoverPasswordConfirm.as_view(), name='recover_password_confirm'),
+
 ]

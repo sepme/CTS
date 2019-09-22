@@ -5,12 +5,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.shortcuts import reverse, HttpResponseRedirect
+import uuid
 
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
-    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE, verbose_name="فرم صنعت")
+    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE,
+                                        verbose_name="فرم صنعت")
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('free', "فعال - بدون پروژه"),
@@ -18,16 +20,17 @@ class IndustryUser(models.Model):
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
+    unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     def __str__(self):
         return self.user.get_username()
 
     def get_absolute_url(self):
-        return HttpResponseRedirect(reverse("industry:index", kwargs={"pk": self.pk}))
+        return HttpResponseRedirect(reverse("industry:index"))
 
 
-def upload_and_rename_profile(instance, file_name):
-    return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
+# def upload_and_rename_profile(instance, file_name):
+#     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
 
 
 def unique_upload(instance, file_name):
@@ -52,7 +55,7 @@ class IndustryForm(models.Model):
     services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
     awards_honors = models.TextField(null=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.ImageField(upload_to=upload_and_rename_profile, null=True)
+    photo = models.ImageField(upload_to=unique_upload, null=True)
 
     def __str__(self):
         return self.name
@@ -60,12 +63,13 @@ class IndustryForm(models.Model):
     def save(self, *args, **kwargs):
         super().save()
         if self.photo:
-            img = Image.open("media/{}".format(self.photo.name))
-            rgb = img.convert('RGB')
-            os.remove(os.path.join(settings.MEDIA_ROOT, self.photo.name))
-            rgb.save("media/{}/profile.jpg".format(self.name))
-            self.photo.name = "profile.jpg"
-            super().save()
+            print('before:', self.photo.name)
+            if '\\' in self.photo.name:
+                self.photo.name = self.photo.name.split('\\')[-1]
+            elif '/' in self.photo.name:
+                self.photo.name = self.photo.name.split('/')[-1]
+            print('after:', self.photo.name)
+        super().save()
 
 
 class Keyword(models.Model):
@@ -83,8 +87,8 @@ class ProjectForm(models.Model):
     research_methodology = models.IntegerField(choices=research_methodology_choice, verbose_name="روش تحقیق")
     main_problem_and_importance = models.TextField(verbose_name="مشکلات اصلی و اهداف")
     progress_profitability = models.TextField(verbose_name="پیشرفت های حاصل")
-    approach = models.TextField(null=True, blank=True, verbose_name="راه کار ها")
-    potential_problems = models.TextField(null=True, blank=True, verbose_name='مشکلات احتمالی')
+    approach = models.TextField(verbose_name="راه کار ها")
+    potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
     # required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     required_technique = models.TextField(default='no technique', verbose_name='تکنیک های مورد نیاز')
@@ -115,7 +119,8 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied", blank=True, null=True)
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
+                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
+                                           null=True)
     industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
                                             verbose_name="صنعت صاحب پروژه", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")

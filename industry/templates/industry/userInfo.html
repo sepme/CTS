@@ -17,7 +17,8 @@
                                 </label>
                                 <img
                                         {% if user.industryuser.industryform.photo %}
-                                            src="/media/{{ user.industryuser.industryform.name }}/profile.jpg"
+                                            src="/media/{{ user.industryuser.industryform.name }}/
+{{ user.industryuser.industryform.photo.name }}"
                                         {% else %}
                                             src="{% static 'industry/img/profile.jpg' %}"
                                         {% endif %}

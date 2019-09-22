@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse, HttpResponseRedirect
 import os
 import datetime
-
+import uuid
 
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -15,6 +15,7 @@ def get_image_path(instance, filename):
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
+    unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     def __str__(self):
         return self.user.get_username()

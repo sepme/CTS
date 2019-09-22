@@ -282,28 +282,45 @@ function education_data_form(edu_count) {
     return div;
 }
 function education_record() {
-    $(".education-btn > i.fa-plus").click(function (){
-        if( $(".education .ch-card-item").length === 0 ) {
-            if($(".education > .initial-value").hasClass("initial-value")) {
-                // $(".education").html(education_data_form(edu_count));
-
-            }else {
-                // $('.education').append(education_data_form(edu_count));
-
+    $("#accept-btn-ajax").click(function () {
+      var major = $("#id_scientific_info-major").val();
+      var university = $("#id_scientific_info-university").val();
+      var city =$("#id_scientific_info-city").val();
+      var date_of_graduation = $("#id_scientific_info-date_of_graduation").val();
+        $.ajax({
+            url: '/scientific',
+            type: 'post',
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                major: major,
+                university: university,
+                city: city,
+                date_of_graduation: date_of_graduation
+            },
+            success: function (data) {
+                alert(data)
+            },
+            error: function (data) {
+                console.log(data)
             }
-            cancel_add(".education");
-            add_education_record(edu_count);
-            input_focus();
-            edu_count ++;
-        }
+       });
     });
-
-    $(".education-btn > i.fa-plus").click(function (){
-        $(".education .ch-card-item").slideDown("slow");
-    });
-    $(".education .reject-btn").click(function () {
-        $(".education .ch-card-item").slideUp("slow");
-    });
+//     $(".education-btn > i.fa-plus").click(function (){
+//         if( $(".education .ch-card-item").length === 0 ) {
+//             if($(".education > .initial-value").hasClass("initial-value")) {
+//                 $(".education").html(education_data_form(edu_count));
+//             }else {
+//                 $('.education').append(education_data_form(edu_count));
+//             }
+//             cancel_add(".education");
+//             add_education_record(edu_count);
+//             input_focus();
+//             edu_count ++;
+//         }
+//     });
 }
 function add_education_record(edu_count) {
     div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
