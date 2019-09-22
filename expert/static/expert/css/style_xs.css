@@ -1,15 +1,5 @@
 @import "fontiran.css";
 @media (max-width: 576px) {
-    .mbottom-xs-10{
-        margin-bottom: 10px;
-    }
-    body {
-        background-color: #fff;
-        font-family: iranyekan, serif;
-        color: #fff;
-        font-size: 14px;
-        overflow-y: hidden;
-    }
     .container{
         padding: 0;
     }
@@ -130,7 +120,7 @@
         top: 20px;
         right: 0;
         height: 40px;
-        width: 90px;
+        width: 120px;
         text-align: center;
         padding-top: 6px;
         padding-right: 3px;
@@ -173,18 +163,6 @@
 
     .uni-item > i:hover {
         color: #00b613;
-    }
-
-    .green {
-        color: #0DCA08;
-    }
-
-    .red {
-        color: #FF0E0E;
-    }
-
-    hr {
-        margin: 5px;
     }
 
     .form-submit {
@@ -334,8 +312,9 @@
         width: 28px;
         height: 30px;
         position: fixed;
-        bottom: 20px;
-        left: 20px;
+        top: 33px;
+        right: 20px;
+        z-index: 10000;
     }
     #toggle span:after,
     #toggle span:before {
@@ -384,7 +363,7 @@
         position: absolute;
         border-radius: 0;
         top: 50%;
-        right: 5px;
+        right: 60px;
         transform: translate(0, -50%);
         transition: 0.2s ease-in-out all;
     }
@@ -449,13 +428,13 @@
     }
 
     .info-card {
-        margin: 10px 0;
-        padding: 0;
+        margin: 20px 10px;
+        padding: 5px;
         color: #000;
-        border:none;
-        -webkit-box-shadow: none;
-        -moz-box-shadow:  none;
-        box-shadow:  none;
+        border: none;
+        -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.09);
+        -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,.09);
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.09);
     }
 
     .row {
@@ -497,14 +476,21 @@
         outline: none;
     }
 
-    .inner-card {
-        padding: 10px;
-        margin: 0 auto;
-        background-color: #f8fdf7;
-        box-shadow: none;
-        border: none;
+    .education-btn, .executive-btn, .research-btn, .article-btn, .technique {
+        top: -40px;
+        left: 10px;
     }
-
+    .card-header {
+        padding-right: 10px;
+        padding-top: 10px;
+    }
+    .inner-card {
+        padding: 5px 10px;
+        /*margin: 0 auto;*/
+        /*background-color: #f8fdf7;*/
+        /*box-shadow: none;*/
+        /*border: none;*/
+    }
     .ch-card-item:last-child {
         margin-bottom: 25px;
     }

@@ -695,3 +695,37 @@ function select_technique(className) {
             .html(fileName);
     });
 }
+function question() {
+    $(".show-researching-question").click(function () {
+       $(".question-initial-info").css("display","none");
+       $(".preview-question").css("display", "block");
+       $(".confirmation").css("display","none");
+       $(".main").removeClass("blur-div");
+    });
+    $(".close-thanks-response").click(function () {
+       $(".thanks_response").css("display","none");
+       $(".main").removeClass("blur-div");
+    });
+    $("input.upload-answer").next().hover(function () {
+        $(this).find("svg").find("path").attr("fill", "#3ccd1c");
+    }, function () {
+        $(this).find("svg").find("path").attr("fill", "#bdbdbd");
+    });
+    $(".confirmation .upload-file").click(function () {
+        $(this).closest("form").find("input.upload-answer").next().slideDown("slow").closest("div.col-12").css("padding-bottom", "15px");
+    });
+    $(".confirmation .close-upload").click(function () {
+        $(this).closest("form").find("input.upload-answer").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
+    });
+    $("input.upload-answer").on("change", function () {
+        $(this).next().find("svg").first().css("display", "none");
+        $(this).next().find("svg").last().css("display", "block");
+        var fileName = $(this).val().split("\\").pop();
+        $(this).next().find(".upload-file-text").css("padding-top", "5px")
+            .html(fileName);
+    });
+    function counter() {
+
+    }
+    counter();
+}

@@ -8,11 +8,6 @@ $(window).on("load",function () {
     load_dialog();
 });
 $(document).ready(function(){
-    // variable
-    edu_count = 0;
-    exe_count = 0;
-    stu_count = 0;
-    art_count = 0;
     $('*').persiaNumber();
     input_focus();
     question_dialog_init();
@@ -21,6 +16,10 @@ $(document).ready(function(){
     init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
     init_dialog_btn(".show-btn", ".show-question");
     init_dialog_btn(".add-new-question", ".add-question");
+    init_dialog_btn(".education-btn", ".scientific_form");
+    init_dialog_btn(".executive-btn", ".executive_form");
+    init_dialog_btn(".research-btn", ".research_form");
+    init_dialog_btn(".article-btn", ".paper_form");
     search_input(".search_message");
     if($(window).width() < 575.98){
     // toggle slide-bar => all views
@@ -76,10 +75,10 @@ $(document).ready(function(){
       $('input#upload-input').change(function (event) {
         $("img.profile").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
       });
-      education_record();
-      executive_record();
-      studious_record();
-      article_record();
+      // education_record();
+      // executive_record();
+      // studious_record();
+      // article_record();
       $(".chamran_btn.technique").click(function () {
         $(".main").addClass("blur-div");
         $(".dialog-main").css("display","block");

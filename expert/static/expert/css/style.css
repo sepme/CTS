@@ -21,6 +21,22 @@
 .pb-40{
     padding-bottom: 40px;
 }
+.success-btn {
+    border: none;
+    outline: none;
+    padding: 5px 15px;
+    text-align: center;
+    min-width: 100px;
+    height: auto;
+    margin-top: 0!important;
+    border-radius: 0.25em;
+    background-color: #89E076;
+    color: #ffffff!important;
+}
+.success-btn:hover{
+    background-color: #3ccd1c;
+}
+
 body{
     background-color: #f8fdf7;
     /*#EFF0F2*/
@@ -151,6 +167,38 @@ img{
 @media (max-width: 576px) {
     .fixed-back > .card {
         width: 95%;
+    }
+}
+.fixed-back > .small-card {
+    padding: 35px 10px 55px 10px;
+    margin: 70px auto;
+    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+}
+@media (min-width: 1200px) {
+    .fixed-back > .small-card {
+        width: 550px;
+    }
+}
+@media (max-width: 1200px) {
+    .fixed-back > .small-card {
+        width: 550px;
+    }
+}
+@media (max-width: 992px) {
+    .fixed-back > .small-card {
+        width: 500px;
+    }
+}
+@media (max-width: 768px) {
+    .fixed-back > .small-card {
+        width: 450px;
+    }
+}
+@media (max-width: 576px) {
+    .fixed-back > .small-card {
+        width: 80%;
     }
 }
 .fixed-back .close{
@@ -592,8 +640,8 @@ a:hover, a:focus{
 }
 
 input, textarea, select{
-  background-color: #fdfdfd;
-  border: 1px solid #bdbdbd;
+  background-color: #fefefe;
+  border: 1px solid #bdbdbd85;
   color: #6f7285;
   border-radius: 5px;
   margin-top: 20px;
@@ -617,7 +665,28 @@ label{
   top: 28px;
   right: 25px;
   color: #6f7285;
+  z-index: 0;
   transition: 300ms all ease;
+}
+label.full-focus-out:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ffffff;
+    z-index: -1;
+    -webkit-transition: all ease 0.3s;
+    -moz-transition: all ease 0.3s;
+    -ms-transition: all ease 0.3s;
+    -o-transition: all ease 0.3s;
+    transition: all ease 0.3s;
 }
 label.fix{
   position: absolute;
@@ -1009,20 +1078,67 @@ hr{
   background-color: #3CCD1C;
   outline: none;
 }
+.card-header {
+    padding: 0;
+    font-weight: 800;
+    font-size: 16px;
+    border: none;
+    margin: 0;
+    background-color: transparent;
+}
+.card-header-info {
+
+}
 .inner-card{
-    padding: 10px;
-    margin-top: 25px;
+    padding: 20px;
+    margin-top: 10px;
     margin-bottom: 25px;
     background-color: #fff;
-    box-shadow: 0px 0px 5px 0 rgba(0,0,0,0.16);
-}
-.ch-card-item:last-child{
-  margin-bottom: 25px;
+    border: none;
+    border-top: 1px solid #dee2e6;
+    border-radius: 0;
 }
 .ch-card-item{
+  position: relative;
   margin-top: 5px;
-  padding:0 15px 20px 15px;
-  box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.2);
+  padding:0 15px 55px 15px;
+  display: none;
+  /*box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.2);*/
+}
+.ch-card-item .footer-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 45px;
+    width: 100%;
+    border: none;
+    background-color: #E3FFDD;
+    text-align: left;
+    padding: 8px;
+}
+.ch-card-item .footer-bottom .reject-btn, .ch-card-item .footer-bottom .save-btn{
+    border: none;
+    outline: none;
+    padding: 5px 15px;
+    text-align: center;
+    min-width: 100px;
+    height: auto;
+    margin-top: 0!important;
+    border-radius: 0.25em;
+}
+.ch-card-item .footer-bottom .reject-btn{
+    background-color: #ffffff;
+    color: #89E076;
+}
+.ch-card-item .footer-bottom .reject-btn:hover{
+    color: #3ccd1c;
+}
+.ch-card-item .footer-bottom .save-btn{
+    background-color: #89E076;
+    color: #ffffff!important;
+}
+.ch-card-item .footer-bottom .save-btn:hover{
+    background-color: #3ccd1c;
 }
 .header{
   font-weight: 400;
@@ -1092,6 +1208,11 @@ td{
 input[type="radio"] {
   visibility: hidden;
   margin: 0;
+}
+.radio-item {
+    display: inline-block;
+    position: relative;
+    min-width: 30px;
 }
 .radio-label{
   position: absolute;
@@ -1195,17 +1316,18 @@ span.star-warning:after{
     position: absolute;
     top: 10px;
     padding: 5px;
-    min-width: 45px;
+    min-width: 100px;
     text-align: center;
     -webkit-border-radius: 0.25em;
     -moz-border-radius: 0.25em;
     border-radius: 0.25em;
-    border: 1px solid transparent;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.16);
+    border: 1px solid #bdbdbd85;
     transition: all ease-in-out 0.3s;
+    background-color: #fefefe;
 }
 .label-check-radio+label:hover, .label-check-radio:checked+label{
     border: 1px solid #3CCD1C;
+    background-color: #ffffff;
     color: #3CCD1C;
     box-shadow: none;
     cursor: pointer;
@@ -1887,14 +2009,19 @@ span.title-back{
     border-radius: 0.25em;
     position: relative;
 }
-.education-btn > i, .executive-btn > i, .studious-btn > i, .article-btn > i{
+.education-btn > i, .executive-btn > i, .research-btn > i, .article-btn > i{
   position: absolute;
   top: 5px;
   left: 15px;
 }
-.education-btn > i:hover, .executive-btn > i:hover, .studious-btn > i:hover, .article-btn > i:hover{
+.education-btn > i:hover, .executive-btn > i:hover, .research-btn > i:hover, .article-btn > i:hover{
   color: #3ccd1c;
   cursor: pointer;
+}
+.education-btn, .executive-btn, .research-btn, .article-btn, .technique{
+    position: absolute;
+    top: -55px;
+    left: 5px;
 }
 .project-info-innerDiv{
   padding-right: 44px;
@@ -2331,9 +2458,41 @@ div.researcher-info-innerDiv{
   color: #6f7285;
   position: absolute;
 }
-.researcher-card-button-close{
-  left: 10px;
-  top: 10px;
+.close{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: none;
+  z-index: 100;
+}
+.close:after, .close:before{
+    background-color: #707070;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translateX(50%) translateY(-50%) rotate(-45deg);
+    transform-origin: center center;
+}
+.close:after{
+  height: 1.5px;
+  width: 70%;
+}
+.close:before{
+  height: 70%;
+  width: 1.5px;
+}
+.close:hover{
+  cursor: pointer;
+  border:none;
+    background-color: #ff4545;
+}
+.close:hover:after, .close:hover:before{
+  background-color: #fff;
 }
 .researcher-card-button-show{
   padding: 5px;

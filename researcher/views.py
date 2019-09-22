@@ -99,5 +99,11 @@ def signup(request, username):
 class Messages(generic.TemplateView):
     template_name = 'researcher/messages.html'
 
+
 class Technique(generic.TemplateView):
     template_name = 'researcher/technique.html'
+
+
+class Question(generic.TemplateView):
+    template_name = 'researcher/question.html'
+

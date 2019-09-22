@@ -113,11 +113,11 @@ class Project(models.Model):
     date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم")
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه")
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
-                                                related_name="researchers_applied")
+                                                related_name="researchers_applied", blank=True, null=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
-                                                 related_name="researchers_accepted")
+                                                 related_name="researchers_accepted", blank=True, null=True)
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
-                                            related_name="experts_applied")
+                                            related_name="experts_applied", blank=True, null=True)
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
                                            verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
                                            null=True)
