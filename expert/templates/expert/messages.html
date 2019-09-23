@@ -16,72 +16,46 @@
                     <span class="title">جدیدترین خبر ها</span>
                     <span class="title-back"></span>
                     <div class="row slide-messages">
+                        {% for message in top_3 %}
                         <div class="col-lg-4 slide-message">
                             <div class="messages-container">
-                                <div class="card notice-message">
+                                <div class="card
+                                    {% if message.0.type == 0 %}
+                                        notice-message
+                                    {% elif message.0.type == 1 %}
+                                        alert-message
+                                    {% else %}
+                                        news-message
+                                    {% endif %}
+                                ">
                                     <div class="message-head">
                                         <div class="icon">
-                                            <img src="{% static 'expert/img/tick.svg' %}" alt="message-type-icon">
+                                            <img src="
+                                            {% if  message.0.type == 0 %}
+                                                {% static 'industry/img/tick.svg' %}
+                                            {% elif message.0.type == 1 %}
+                                                {% static 'industry/img/close.svg' %}
+                                            {% else %}
+                                                {% static 'industry/img/megaphone.png' %}
+                                            {% endif %}
+                                            " alt="message-type-icon">
                                         </div>
-                                        <div class="date">12 مرداد 1398</div>
+                                        <div class="date">{{ message.1 }}</div>
                                     </div>
                                     <div class="message-body">
                                         <div class="title">
-                                            <span>عنوان اطلاعیه</span>
+                                            <span>{{ message.0.title }}</span>
                                         </div>
                                         <div class="text">
-                                            <span>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
+                                            <span>{{ message.0.text }}</span>
                                         </div>
                                         <button>مشاهده</button>
-                                        <div class="message-code">123-456-789</div>
+                                        <div class="message-code">{{ message.0.code }}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 slide-message">
-                                <div class="messages-container">
-                                    <div class="card alert-message">
-                                        <div class="message-head">
-                                            <div class="icon">
-                                                <img src="{% static 'expert/img/close.svg' %}" alt="message-type-icon">
-                                            </div>
-                                            <div class="date">12 مرداد 1398</div>
-                                        </div>
-                                        <div class="message-body">
-                                            <div class="title">
-                                                <span>عنوان اخطار</span>
-                                            </div>
-                                            <div class="text">
-                                                <span>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
-                                            </div>
-                                            <button>مشاهده</button>
-                                            <div class="message-code">123-456-789</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <div class="col-lg-4 slide-message">
-                            <div class="messages-container">
-                                <div class="card news-message">
-                                    <div class="message-head">
-                                        <div class="icon">
-                                            <img src="{% static 'expert/img/megaphone.png' %}" alt="message-type-icon">
-                                        </div>
-                                        <div class="date">12 مرداد 1398</div>
-                                    </div>
-                                    <div class="message-body">
-                                        <div class="title">
-                                            <span>عنوان خبر</span>
-                                        </div>
-                                        <div class="text">
-                                            <span>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
-                                        </div>
-                                        <button>مشاهده</button>
-                                        <div class="message-code">123-456-789</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -91,7 +65,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="custom-border-title">
-                    <span class="title">لیست اخبار</span>
+                    <span class="title">لیست پیام ها</span>
                     <span class="title-back"></span>
                     <div class="row">
                         <div class="search-message">
@@ -103,56 +77,36 @@
                                 <input type="text" name="search" class="search_message" required>
                             </form>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="card text-right notice-message-sm">
-                                <div class="message-head-sm">
-                                    <div class="title">
-                                        <span>عنوان</span>
-                                        <span class="sub-header">( 1 ماه قبل )</span>
+                        {% for message in other_messages %}
+                            <div class="col-lg-12">
+                                <div class="card text-right
+                                {% if message.0.type == 0 %}
+                                    notice-message-sm
+                                {% elif message.0.type == 1 %}
+                                    alert-message-sm
+                                {% else %}
+                                    news-message-sm
+                                {% endif %}
+                            ">
+                                    <div class="message-head-sm">
+                                        <div class="title">
+                                            <span>{{ message.0.title }}</span>
+                                            <span class="sub-header">{{  message.2 }}</span>
+                                        </div>
+                                    </div>
+                                    <div class=" message-body-sm">
+                                        <span class="body">{{ message.0.text }}</span>
+                                        <button>مشاهده</button>
+                                        <span class="message-code">{{ message.0.code }}</span>
                                     </div>
                                 </div>
-                                <div class="message-body-sm">
-                                    <span class="body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
-                                    <button>مشاهده</button>
-                                    <span class="message-code">123-456</span>
-                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card text-right alert-message-sm">
-                                <div class="message-head-sm">
-                                    <div class="title">
-                                        <span>عنوان</span>
-                                        <span class="sub-header">( 1 ماه قبل )</span>
-                                    </div>
-                                </div>
-                                <div class="message-body-sm">
-                                    <span class="body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
-                                    <button>مشاهده</button>
-                                    <span class="message-code">123-456</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card text-right news-message-sm">
-                                <div class="message-head-sm">
-                                    <div class="title">
-                                        <span>عنوان</span>
-                                        <span class="sub-header">( 1 ماه قبل )</span>
-                                    </div>
-                                </div>
-                                <div class="message-body-sm">
-                                    <span class="body">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است...</span>
-                                    <button>مشاهده</button>
-                                    <span class="message-code">123-456</span>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
-
 {% block script %}{% endblock %}
+

@@ -1,5 +1,8 @@
+import datetime
+
+from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
-from django.views import generic
+from django.views import generic, View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,7 +10,9 @@ from django.utils.decorators import method_decorator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from persiantools.jdatetime import JalaliDate
 
+from chamran_admin.models import Message
 from . import models
 from . import forms
 from researcher.models import ResearcherUser, Status
@@ -16,6 +21,41 @@ from industry.models import IndustryUser
 from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
+
+class MessagesView(View):
+    jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
+                     'دی', 'بهمن', 'اسفند')
+
+    @staticmethod
+    def jalali_date(jdate):
+        return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month] + ' ' + str(jdate.year)
+
+    @staticmethod
+    def date_dif(jdate):
+        delta = relativedelta(datetime.datetime.now(), jdate.to_gregorian())
+        if delta.years > 0:
+            return '(' + str(delta.years) + ' سال پیش' + ')'
+        elif delta.months > 0:
+            return '(' + str(delta.months) + ' ماه پیش' + ')'
+        elif delta.days > 0:
+            return '(' + str(delta.days) + ' روز پیش' + ')'
+        else:
+            return '(امروز)'
+
+    def get(self, request):
+        all_messages = Message.get_user_messages(request.user.id)
+        top_3 = []
+        other_messages = []
+        for i, message in enumerate(all_messages):
+            jdate = JalaliDate(message.date)
+            if i < 3:
+                top_3.append((message, MessagesView.jalali_date(jdate), MessagesView.date_dif(jdate)))
+            else:
+                other_messages.append((message, MessagesView.jalali_date(jdate), MessagesView.date_dif(jdate)))
+        return render(request, find_account_type(request.user) + '/messages.html', context={
+            'top_3': top_3,
+            'other_messages': other_messages,
+        })
 
 
 def find_account_type(user):

@@ -168,5 +168,5 @@ class ProjectListView(generic.ListView):
         return context
 
 
-class Messages(generic.TemplateView):
-    template_name = 'industry/messages.html'
+# class Messages(generic.TemplateView):
+#     template_name = 'industry/messages.html'

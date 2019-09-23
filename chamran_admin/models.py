@@ -1,28 +1,40 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 
 import uuid
 
+from ChamranTeamSite import settings
+
+
+def upload_to(instance, file_name):
+    return os.path.join(settings.MEDIA_ROOT, 'message_attachments', file_name)
+
 
 class Message(models.Model):
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
     text = models.TextField(verbose_name="متن پیام")
+    date = models.DateField(auto_now_add=True, null=True)
+    is_read = models.BooleanField(default=False)
+    code = models.CharField(max_length=15, verbose_name='کد', default='000-000')
 
     MESSAGE_TYPES = (
         (0, "اطلاعیه"),
         (1, "اخطار"),
-        (2, "پیشنهاد"),
+        (2, "اخبار"),
     )
 
     type = models.IntegerField(default=0, choices=MESSAGE_TYPES, verbose_name="نوع")
-    attachment = models.FileField(upload_to=None, verbose_name="ضمیمه")
-    receiver = models.ManyToManyField(User, verbose_name="گیرندگان", blank=True, null=True)
+    attachment = models.FileField(upload_to=upload_to, blank=True, null=True, verbose_name="ضمیمه")
+    receiver = models.ManyToManyField(User, verbose_name="گیرندگان")
 
     def __str__(self):
         return self.title
 
-    def get_user_messages(self, user_id):
+    @staticmethod
+    def get_user_messages(user_id):
         user_messages = Message.objects.filter(receiver=User.objects.get(id=user_id))
         return user_messages
 
