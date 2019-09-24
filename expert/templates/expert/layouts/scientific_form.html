@@ -1,43 +1,44 @@
-{% load static%}
+{% load static %}
+{% load widget_tweaks %}
 <div class="fixed-back scientific_form">
     <div class="card small-card text-right">
         <div class="close"></div>
         <div class="card-head">ثبت سابقه علمی</div>
         <div class="container">
-            <form method="post" action="">
+            <form method="post" action="" class="ajax-sci-form">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="edu-section">مقطع تحصیلی</label>
-                        <input type="text" name="degree" id="edu-section" class="w-100">
+                        {{ scientific_form.degree|attr:"id:edu-section"|attr:"class:w-100" }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="edu-subject">رشته تحصیلی</label>
-                        <input type="text" name="degree" id="edu-subject" class="w-100">
+                        {{ scientific_form.major|attr:"id:edu-subject"|attr:"class:w-100" }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="university">دانشگاه</label>
-                        <input type="text" name="degree" id="university" class="w-100">
+                        {{ scientific_form.university|attr:"id:university"|attr:"class:w-100" }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="edu-city">شهر محل تحصیل</label>
-                        <input type="text" name="degree" id="edu-city" class="w-100">
+                        {{ scientific_form.city|attr:"id:edu-city"|attr:"class:w-100" }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="edu-year">سال اخذ مدرک</label>
-                        <input type="text" name="degree" id="edu-year" class="w-100">
+                        {{ scientific_form.date_of_graduation|attr:"id:edu-year"|attr:"class:w-100" }}
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="save-btn" type="submit">افزودن</button>
+                    <button class="save-btn" type="submit" >افزودن</button>
                     <button class="reject-btn" type="reset">لغو</button>
                 </div>
             </form>

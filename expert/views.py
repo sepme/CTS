@@ -97,5 +97,6 @@ def ajax_view(request):
     # scientific_form = ScientificRecordForm(request.POST or None)
     # if scientific_form.is_valid():
     #     return JsonResponse('ok')
-    pass
-
+    form = request.GET.get('$formData', None)
+    print(form)
+    return JsonResponse('success')
