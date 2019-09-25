@@ -833,9 +833,8 @@ hr{
 /* new */
 .info-card{
   margin: 20px 100px;
-  padding: 20px;
-  color: #000;
-  font-weight: 300;
+  padding: 10px;
+  color: #6f7285;
 }
 .row{
   direction: rtl!important;
@@ -980,6 +979,11 @@ table > tbody > tr > td{
 input[type="radio"] {
   visibility: hidden;
   margin: 0;
+}
+.radio-item {
+    display: inline-block;
+    position: relative;
+    min-width: 30px;
 }
 .radio-label{
   position: absolute;
@@ -1571,6 +1575,11 @@ span.title-back{
 .education-btn > i:hover, .executive-btn > i:hover, .studious-btn > i:hover, .article-btn > i:hover{
   color: #3ccd1c;
   cursor: pointer;
+}
+.education-btn, .executive-btn, .research-btn, .article-btn, .technique{
+    position: absolute;
+    top: -55px;
+    left: 5px;
 }
 .project-info-innerDiv{
     border: 1px solid #bdbdbd;

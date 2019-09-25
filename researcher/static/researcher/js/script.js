@@ -19,6 +19,9 @@ $(document).ready(function(){
     input_focus();
     search_input(".search_message");
     question();
+    $('input#upload-input').change(function (event) {
+        $("img.profile").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
+    });
     if($(window).width() < 575.98){
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
