@@ -5,8 +5,7 @@
         <div class="close"></div>
         <div class="card-head">ثبت سابقه علمی</div>
         <div class="container">
-            <form method="post" action="" class="ajax-sci-form">
-                {% csrf_token %}
+            <form method="post" action="" class="ajax-sci-form" data-url="{% url 'expert:ajax_scientific' %}">
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="edu-section">مقطع تحصیلی</label>

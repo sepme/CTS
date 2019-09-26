@@ -82,8 +82,8 @@ class InitialInfoForm(forms.Form):
 
         return phone_number
 
-class ExpertInfoForm(forms.ModelForm):
 
+class ExpertInfoForm(forms.ModelForm):
     prefix = 'expert_info'
 
     class Meta:
@@ -92,16 +92,20 @@ class ExpertInfoForm(forms.ModelForm):
 
 
 class ScientificRecordForm(forms.ModelForm):
-
-    prefix = 'scientific_info'
-
     class Meta:
         model = ScientificRecord
-        exclude = ['expert_form']
+        fields = ['degree', 'major', 'university', 'city', 'date_of_graduation']
+
+    def clean_date_of_graduation(self):
+        year = self.cleaned_data.get('date_of_graduation')
+        try:
+            int(year)
+        except ValueError:
+            raise forms.ValidationError('سال اخذ مدرک باید عدد باشد.')
+        return year
 
 
 class ExecutiveRecordForm(forms.ModelForm):
-
     prefix = 'executive_info'
 
     class Meta:
@@ -110,7 +114,6 @@ class ExecutiveRecordForm(forms.ModelForm):
 
 
 class ResearchRecordForm(forms.ModelForm):
-
     prefix = 'research_info'
 
     class Meta:
@@ -119,7 +122,6 @@ class ResearchRecordForm(forms.ModelForm):
 
 
 class PaperRecordForm(forms.ModelForm):
-
     prefix = 'paper_info'
 
     class Meta:

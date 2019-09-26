@@ -75,7 +75,7 @@ $(document).ready(function(){
       $('input#upload-input').change(function (event) {
         $("img.profile").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
       });
-      // education_record();
+      education_record();
       // executive_record();
       // studious_record();
       // article_record();

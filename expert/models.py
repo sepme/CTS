@@ -104,7 +104,7 @@ class ScientificRecord(models.Model):
     major = models.CharField(max_length=64, verbose_name="رشته تحصیلی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه")
     city = models.CharField(max_length=32, verbose_name="شهر")
-    date_of_graduation = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال اخذ مدرک")
+    date_of_graduation = models.CharField(max_length=10,verbose_name="سال اخذ مدرک")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 

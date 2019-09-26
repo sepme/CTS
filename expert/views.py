@@ -6,7 +6,7 @@ from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse
 from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 
 
 class Index(generic.TemplateView):
@@ -64,11 +64,10 @@ def index(request):
 
 def user_info(request):
     instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-    print(instance.expert_lastname)
+    scientific_form = ScientificRecordForm()
     if request.method == 'POST':
-        print(request.POST)
         expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
-        scientific_form = ScientificRecordForm(request.POST or None)
+        # scientific_form = ScientificRecordForm(request.POST or None)
         executive_form = ExecutiveRecordForm(request.POST or None)
         research_form = ResearchRecordForm(request.POST or None)
         paper_form = PaperRecordForm(request.POST or None)
@@ -82,7 +81,6 @@ def user_info(request):
         #     return HttpResponseRedirect(reverse('expert:test'))
     else:
         expert_info_form = ExpertInfoForm(instance=instance)
-        scientific_form = ScientificRecordForm()
         executive_form = ExecutiveRecordForm()
         research_form = ResearchRecordForm()
         print(request.user)
@@ -94,9 +92,15 @@ def user_info(request):
 
 
 def ajax_view(request):
-    # scientific_form = ScientificRecordForm(request.POST or None)
-    # if scientific_form.is_valid():
-    #     return JsonResponse('ok')
-    form = request.GET.get('$formData', None)
-    print(form)
-    return JsonResponse('success')
+    print(request.is_ajax())
+    # form = request.GET.get('formData', None)
+    # print(form)
+    print(request.POST)
+    scientific_form = ScientificRecordForm(request.POST)
+    if scientific_form.is_valid():
+        print(scientific_form.cleaned_data)
+        data = {'success': 'successful'}
+        return JsonResponse(data)
+    else:
+        print('form error occured')
+        return JsonResponse(scientific_form.errors, status=400)
