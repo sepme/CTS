@@ -1,0 +1,42 @@
+{% load static%}
+<div class="fixed-back research_form">
+    <div class="card text-right">
+        <div class="close"></div>
+        <div class="card-head">ثبت سابقه پژوهشی</div>
+        <div class="container">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class='row'>
+                    <div class='col-lg-5'>
+                        <label for='subject'>عنوان طرح پژوهشی</label>
+                        <input type='text' id='subject' class='w-100'>
+                    </div>
+                    <div class='col-lg-3'>
+                        <label for='admin'>نام مجری</label>
+                        <input type='text' id='admin' class='w-100'>
+                    </div>
+                    <div class='col-lg-4'>
+                        <label for='liable'>مسئول اجرا/همکار</label>
+                        <input type='text' id='liable' class='w-100'>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-lg-7 rankDiv'>
+                        <label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>
+                        <select id='rank'>
+                            <option selected dir='rtl'>انتخاب کنید ...</option>
+                            <option value='1'>در دست  اجرا</option>
+                            <option value='2'>خاتمه یافته</option>
+                            <option value='3'>متوقف</option>
+                        </select>
+                    </div>
+                    <div class='col-lg-5'></div>
+                </div>
+                <div class="card-footer">
+                    <button class="save-btn" type="submit">افزودن</button>
+                    <button class="reject-btn" type="reset">لغو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

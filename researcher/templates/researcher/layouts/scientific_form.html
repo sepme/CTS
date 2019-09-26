@@ -1,0 +1,41 @@
+{% load static%}
+<div class="fixed-back scientific_form">
+    <div class="card small-card text-right">
+        <div class="close"></div>
+        <div class="card-head">ثبت سابقه علمی</div>
+        <div class="container">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class='row'>
+                    <div class='col-lg-6'>
+                        <label for="edu-section">مقطع تحصیلی</label>
+                        <input type="text" id="edu-section" class="w-100">
+                    </div>
+                    <div class='col-lg-6'>
+                        <label for="edu-subject">رشته تحصیلی</label>
+                        <input type="text" id="edu-subject" class="w-100">
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-lg-4'>
+                        <label for="university">دانشگاه</label>
+                        <input type="text" id="university" class="w-100">
+                    </div>
+                    <div class='col-lg-3'>
+                        <label for="edu-city">شهر محل تحصیل</label>
+                        <input type="text" id="edu-city" class="w-100">
+                    </div>
+                    <div class='col-lg-3'>
+                        <label for="year">سال اخذ مدرک</label>
+                        <input type="text" id="year" class="w-100">
+                    </div>
+                    <div class='col-lg-2'></div>
+                </div>
+                <div class="card-footer">
+                    <button class="save-btn" type="submit">افزودن</button>
+                    <button class="reject-btn" type="reset">لغو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
