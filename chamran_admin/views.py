@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.conf import settings
-
+from django.http import JsonResponse
 from . import models
 from . import forms
 from researcher.models import ResearcherUser, Status
@@ -99,6 +99,36 @@ class SignupEmail(generic.FormView):
             return HttpResponseRedirect(reverse('chamran:home'))
 
         return super().post(request, *args, **kwargs)
+
+
+def signup_email_ajax(request):
+    print(request.is_ajax())
+    form = forms.RegisterEmailForm(request.POST)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        account_type = form.cleaned_data['account_type']
+        # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+        temp_user = models.TempUser(email=email, account_type=account_type)
+        subject = 'Welcome to Chamran Team!!!'
+
+        unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
+        message = 'EmailValidation\nyour url:\n' + unique_url
+        data = {'success': 'successful'}
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False
+            )
+            temp_user.save()
+        except TimeoutError:
+            return HttpResponse('Timeout Error!!')
+        return JsonResponse(data)
+    else:
+        return JsonResponse(form.errors, status=400)
+
 
 
 class SignupUser(generic.FormView):
