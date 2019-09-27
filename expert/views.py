@@ -103,4 +103,4 @@ def ajax_view(request):
         return JsonResponse(data)
     else:
         print('form error occured')
-        return JsonResponse(scientific_form.errors, status=400)
+        return JsonResponse(scientific_form.errors)

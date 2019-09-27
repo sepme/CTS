@@ -100,6 +100,9 @@ button:hover, button:focus {
     border-color: #3ccd1c;
     background-color: transparent!important;
 }
+.flex-display {
+    display: flex!important;
+}
 body{
     background-color: #f8fdf7;
     font-family: iranyekan, serif;

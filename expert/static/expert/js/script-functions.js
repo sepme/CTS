@@ -336,7 +336,7 @@ function education_record() {
             // headers: {'X-CSRFToken': '{{ csrf_token }}'},
             // contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                alert(data.success)
+                console.log(data)
             },
             error: function (data) {
                 console.log(data)
