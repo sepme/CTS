@@ -49,13 +49,13 @@ class IndustryForm(models.Model):
     industry_type = models.IntegerField(choices=industry_type_choice, verbose_name="نوع شرکت")
     industry_address = models.TextField(verbose_name="ادرس شرکت")
     phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
-    international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
-    tax_declaration = models.FileField(null=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
-    turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
-    services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
-    awards_honors = models.TextField(null=True, verbose_name="افتخارات")
+    # international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
+    tax_declaration = models.FileField(null=True, blank=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
+    # turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
+    services_products = models.TextField(null=True, blank=True, verbose_name="خدمات/محصولات")
+    awards_honors = models.TextField(null=True, blank=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.ImageField(upload_to=unique_upload, null=True)
+    photo = models.ImageField(upload_to=unique_upload, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -63,12 +63,10 @@ class IndustryForm(models.Model):
     def save(self, *args, **kwargs):
         super().save()
         if self.photo:
-            print('before:', self.photo.name)
             if '\\' in self.photo.name:
                 self.photo.name = self.photo.name.split('\\')[-1]
             elif '/' in self.photo.name:
                 self.photo.name = self.photo.name.split('/')[-1]
-            print('after:', self.photo.name)
         super().save()
 
 
@@ -121,8 +119,8 @@ class Project(models.Model):
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
                                            verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
                                            null=True)
-    industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
-                                            verbose_name="صنعت صاحب پروژه", blank=True, null=True)
+    industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
+                                         verbose_name="صنعت صاحب پروژه", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
     project_detail = models.TextField(verbose_name="جزيات پروژه")

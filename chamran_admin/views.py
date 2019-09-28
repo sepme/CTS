@@ -1,6 +1,7 @@
 import datetime
 
 from dateutil.relativedelta import relativedelta
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
 from django.views import generic, View
 from django.contrib.auth.models import User
@@ -22,13 +23,31 @@ from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
 
+
+def jalali_date(jdate):
+    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month] + ' ' + str(jdate.year)
+
+
+def get_message_detail(request, message_id):
+    message = Message.objects.filter(receiver=request.user).get(id=message_id)
+    message.is_read = True
+    attachment = None
+    if message.attachment:
+        attachment = message.attachment.url
+    return JsonResponse({
+        'text':  message.text,
+        'date': jalali_date(message.date),
+        'title': message.title,
+        'is_read': message.is_read,
+        'code': message.code,
+        'type': message.type,
+        'attachment': attachment,
+    })
+
+
 class MessagesView(View):
     jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
                      'دی', 'بهمن', 'اسفند')
-
-    @staticmethod
-    def jalali_date(jdate):
-        return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month] + ' ' + str(jdate.year)
 
     @staticmethod
     def date_dif(jdate):
@@ -49,9 +68,9 @@ class MessagesView(View):
         for i, message in enumerate(all_messages):
             jdate = JalaliDate(message.date)
             if i < 3:
-                top_3.append((message, MessagesView.jalali_date(jdate), MessagesView.date_dif(jdate)))
+                top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate)))
             else:
-                other_messages.append((message, MessagesView.jalali_date(jdate), MessagesView.date_dif(jdate)))
+                other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate)))
         return render(request, find_account_type(request.user) + '/messages.html', context={
             'top_3': top_3,
             'other_messages': other_messages,

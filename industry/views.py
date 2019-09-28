@@ -92,14 +92,18 @@ class UserInfo(View):
                 os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
                                        request.user.industryuser.industryform.photo.name))
             if model_form.photo:
+                print('the form has this pic:', model_form.photo)
                 model_form.photo.save(model_form.photo.name, model_form.photo)
-                IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
             else:
+                print('the form ain\'t have no photo')
                 with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
                           'rb') as image_file:
                     default_image = image_file.read()
                     model_form.photo.save('profile.jpg', ContentFile(default_image))
+            IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
             return HttpResponseRedirect(reverse('industry:index'))
+        else:
+            print('the errors are:', form.errors)
         return render(request, 'industry/userInfo.html', context={'form': form})
 
 

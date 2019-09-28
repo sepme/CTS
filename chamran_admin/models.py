@@ -33,6 +33,11 @@ class Message(models.Model):
     def __str__(self):
         return self.title
 
+    def get_short_text(self):
+        if len(self.text) > 30:
+            return self.text[:30] + '...'
+        return self.text
+
     @staticmethod
     def get_user_messages(user_id):
         user_messages = Message.objects.filter(receiver=User.objects.get(id=user_id))

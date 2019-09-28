@@ -47,9 +47,9 @@
                                             <span>{{ message.0.title }}</span>
                                         </div>
                                         <div class="text">
-                                            <span>{{ message.0.text }}</span>
+                                            <span>{{ message.0.get_short_text }}</span>
                                         </div>
-                                        <button>مشاهده</button>
+                                        <button id="{{ message.0.id }}">مشاهده</button>
                                         <div class="message-code">{{ message.0.code }}</div>
                                     </div>
                                 </div>
@@ -95,8 +95,8 @@
                                         </div>
                                     </div>
                                     <div class=" message-body-sm">
-                                        <span class="body">{{ message.0.text }}</span>
-                                        <button>مشاهده</button>
+                                        <span class="body">{{ message.0.get_short_text }}</span>
+                                        <button id="{{ message.0.id }}">مشاهده</button>
                                         <span class="message-code">{{ message.0.code }}</span>
                                     </div>
                                 </div>
@@ -108,4 +108,20 @@
         </div>
     </div>
 {% endblock %}
-{% block script %}{% endblock %}
+{% block script %}
+    <script>
+        {#just for test#}
+        $("button").click(function(){
+            const id = $(this).attr('id');
+            console.log('id is ' + id);
+            $.ajax({
+                url: '/message_detail/' + id,
+                data: {},
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -82,31 +82,46 @@ class IndustryBasicInfoForm(forms.Form):
 
 
 class IndustryInfoForm(forms.ModelForm):
-    photo = forms.FileField(required=False)
-    name = forms.CharField()
-    registration_number = forms.TextInput()
-    date_of_foundation = forms.TextInput()
-    research_field = forms.TextInput()
-    industry_type = forms.TextInput()
-    industry_address = forms.CharField()
-    phone_number = forms.TextInput()
-    email_address = forms.EmailField()
-    services_products = forms.CharField(required=False)
-    awards_honors = forms.CharField(required=False)
-    tax_declaration = forms.FileField(required=False)
+    # photo = forms.FileField(required=False)
+    # name = forms.CharField()
+    # registration_number = forms.TextInput()
+    # date_of_foundation = forms.TextInput()
+    # research_field = forms.TextInput()
+    # industry_type_choices = (
+    #     (0, 'خصوصی'),
+    #     (1, 'دولتی'),
+    # )
+    # industry_type = forms.IntegerField(error_messages={
+    #     'invalid': 'لطفا نوع شرکت را انتخاب کنید.',
+    #     'required': 'لطفا نوع شرکت را انتخاب کنید.',
+    # })
+    # industry_address = forms.CharField()
+    # phone_number = forms.TextInput()
+    # email_address = forms.EmailField()
+    # services_products = forms.CharField(widget=forms.Textarea, required=False)
+    # awards_honors = forms.CharField(widget=forms.Textarea, required=False)
+    # tax_declaration = forms.FileField(required=False)
 
     class Meta:
         model = models.IndustryForm
-        fields = ['photo', 'name', 'registration_number', 'date_of_foundation', 'research_field',
-                  'industry_type', 'industry_address', 'phone_number', 'services_products',
-                  'email_address', 'awards_honors', 'tax_declaration']
+        fields = '__all__'
+        # fields = ['photo', 'name', 'registration_number', 'date_of_foundation', 'research_field',
+        #           'industry_type', 'industry_address', 'phone_number', 'services_products',
+        #           'email_address', 'awards_honors', 'tax_declaration']
         error_messages = {'industry_type': {
-            'required': 'لطفا نوع شرکت را انتخاب نمایید.'
+            'required': 'لطفا نوع شرکت را انتخاب نمایید.',
+            'invalid': 'لطفا نوع شرکت را انتخاب نمایید',
         }}
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super().__init__(*args, **kwargs)
+
+    def clean_industry_type(self):
+        industry_type = self.cleaned_data.get('industry_type')
+        print('the type is ', industry_type)
+        if industry_type != 0 and industry_type != 1:
+            raise ValidationError(_('لطفا نوع شرکت را انتخاب نمایید.'))
 
     def clean_name(self):
         data = self.cleaned_data.get('name')
@@ -164,7 +179,7 @@ class IndustryInfoForm(forms.ModelForm):
 
 
 class ProjectForm(forms.Form):
-    key_words = forms.CharField(required=False  )
+    key_words = forms.CharField(required=False)
     potential_problems = forms.CharField(required=False)
     project_title_persian = forms.CharField()
     project_title_english = forms.CharField()
