@@ -214,7 +214,7 @@ img.registration-card-icon {
   margin-bottom: 10px;
 }
 input {
-  background-color: #fdfdfd!important;
+  background-color: #fdfdfd;
   border: 1px solid #bdbdbd85;
   color: #6f7285;
   border-radius: 5px;
@@ -315,6 +315,7 @@ div.error{
     position: absolute;
     top: 5px;
     left: 15px;
+    direction: rtl;
     font-size: 10px;
     color: #ff4545;
 }

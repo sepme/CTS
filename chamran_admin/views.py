@@ -103,7 +103,9 @@ class SignupEmail(generic.FormView):
 
 def signup_email_ajax(request):
     print(request.is_ajax())
+    print(request.POST)
     form = forms.RegisterEmailForm(request.POST)
+    print('is valid: ', form.is_valid())
     if form.is_valid():
         email = form.cleaned_data['email']
         account_type = form.cleaned_data['account_type']
@@ -124,9 +126,10 @@ def signup_email_ajax(request):
             )
             temp_user.save()
         except TimeoutError:
-            return HttpResponse('Timeout Error!!')
+            return JsonResponse({'Error': 'Timeout Error!'})
         return JsonResponse(data)
     else:
+        print('form error')
         return JsonResponse(form.errors, status=400)
 
 
@@ -212,36 +215,36 @@ class LoginView(generic.TemplateView):
                        'register_form': register_form}
         return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
-        login_form = forms.LoginForm(request.POST or None)
-        context = {'form': login_form}
-        if 'sign_in' in request.POST:
-            print('sign_in')
-            if login_form.is_valid():
-                username = login_form.cleaned_data['username']
-                password = login_form.cleaned_data['password']
-                entry_user = authenticate(request, username=username, password=password)
-                print(entry_user)
-                if entry_user is not None:
-                    login(request, entry_user)
-
-                    try:
-                        user = ResearcherUser.objects.get(user=entry_user)
-                        return user.get_absolute_url()
-                    except ResearcherUser.DoesNotExist:
-                        try:
-                            user = ExpertUser.objects.get(user=entry_user)
-                            return user.get_absolute_url()
-                        except ExpertUser.DoesNotExist:
-                            try:
-                                user = IndustryUser.objects.get(user=entry_user)
-                                return user.get_absolute_url()
-                            except IndustryUser.DoesNotExist:
-                                raise ValidationError('کابر مربوطه وجود ندارد.')
-                else:
-                    context = {'form': login_form,
-                               'error': 'گذرواژه اشتباه است'}
-        return render(request, self.template_name, context)
+    # def post(self, request, *args, **kwargs):
+    #     login_form = forms.LoginForm(request.POST or None)
+    #     context = {'form': login_form}
+    #     if 'sign_in' in request.POST:
+    #         print('sign_in')
+    #         if login_form.is_valid():
+    #             username = login_form.cleaned_data['username']
+    #             password = login_form.cleaned_data['password']
+    #             entry_user = authenticate(request, username=username, password=password)
+    #             print(entry_user)
+    #             if entry_user is not None:
+    #                 login(request, entry_user)
+    #
+    #                 try:
+    #                     user = ResearcherUser.objects.get(user=entry_user)
+    #                     return user.get_absolute_url()
+    #                 except ResearcherUser.DoesNotExist:
+    #                     try:
+    #                         user = ExpertUser.objects.get(user=entry_user)
+    #                         return user.get_absolute_url()
+    #                     except ExpertUser.DoesNotExist:
+    #                         try:
+    #                             user = IndustryUser.objects.get(user=entry_user)
+    #                             return user.get_absolute_url()
+    #                         except IndustryUser.DoesNotExist:
+    #                             raise ValidationError('کابر مربوطه وجود ندارد.')
+    #             else:
+    #                 context = {'form': login_form,
+    #                            'error': 'گذرواژه اشتباه است'}
+    #     return render(request, self.template_name, context)
 
 
 class LogoutView(generic.TemplateView):
