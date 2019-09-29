@@ -1,19 +1,19 @@
-function back() {
-    $(".login-div").css("display","block");
-    $(".forget-pass").css("display","block");
-    $(".signUp-div").css("display","none");
-    $(".email").css("display","none");
-    $(".new-user").html("کاربر جدید هستید؟ <a href='#' onclick='signUp()' class='sign-up'>عضویت</a>");
-    $("button").text("ورود").removeClass("signUp-btn").addClass("Enter-btn");
-}
-function signUp() {
-    $(".login-div").css("display","none");
-    $(".forget-pass").css("display","none");
-    $(".signUp-div").css("display","block");
-    $(".email").css("display","block");
-    $(".new-user").html("<a href='#' class='back-login' onclick='back()'><i class='fas fa-arrow-left'></i> بازگشت</a>");
-    $("button").text("عضویت").removeClass("Enter-btn").addClass("signUp-btn");
-}
+// function back() {
+//     $(".login-div").css("display","block");
+//     $(".forget-pass").css("display","block");
+//     $(".signUp-div").css("display","none");
+//     $(".email").css("display","none");
+//     $(".new-user").html("کاربر جدید هستید؟ <a href='#' onclick='signUp()' class='sign-up'>عضویت</a>");
+//     $("button").text("ورود").removeClass("signUp-btn").addClass("Enter-btn");
+// }
+// function signUp() {
+//     $(".login-div").css("display","none");
+//     $(".forget-pass").css("display","none");
+//     $(".signUp-div").css("display","block");
+//     $(".email").css("display","block");
+//     $(".new-user").html("<a href='#' class='back-login' onclick='back()'><i class='fas fa-arrow-left'></i> بازگشت</a>");
+//     $("button").text("عضویت").removeClass("Enter-btn").addClass("signUp-btn");
+// }
 function input_focus(){
     if( $("input,textarea").prop("disabled") ) {
         $(this).each(function () {
@@ -125,6 +125,8 @@ $(document).ready(function(){
 
 var myForm = $('.sign-up-ajax');
 myForm.submit(function (event) {
+    $(".loading").css('display', "block");
+    $(".registration").css('display', "none");
     event.preventDefault();
     // var formData = $(this).serialize();
     // var major = $("#edu-subject").val();
@@ -141,7 +143,9 @@ myForm.submit(function (event) {
         // headers: {'X-CSRFToken': '{{ csrf_token }}'},
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            alert(data.success)
+            alert(data.success);
+            $('.circle-loader').toggleClass('load-complete');
+            $('.checkmark').toggle();
         },
         error: function (data) {
             console.log(data)

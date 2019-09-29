@@ -13,51 +13,54 @@
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
 </head>
 <body>
-<div class="card login-card">
+{#<div class="card">#}
+{#    {% include 'registration/loading.html' %}#}
+{#</div>#}
+{% include 'registration/loading.html' %}
+<div class="card registration login-card">
     <img class="registration-card-icon" src="{% static 'img/logo.png' %}" alt="ChamranLogo">
     <p class="ChamranTeam">چمران تیم</p>
     <div class="login-div">
-        <form method="post" novalidate>
-            {% csrf_token %}
-            <div class="username">
-                <label for="id_username">نام کاربری</label>
-                {{ form.username|attr:"id:id_username" }}
-                {{ form.username.errors }}
-                <i class="fas fa-user-alt fa-lg"></i>
-            </div>
-            <div class="password">
-                <label for="id_password">رمز عبور</label>
-                {{ error }}
-                {{ form.password|attr:"id:id_password" }}
-                {{ form.password.errors }}
-                <i class="fas fa-lock fa-lg"></i>
-                <button type="submit" name="sign_in" class="Enter-btn">ورود</button>
-            </div>
-        </form>
-    </div>
+{#        <form method="post" novalidate>#}
+{#            {% csrf_token %}#}
+{#            <div class="username">#}
+{#                <label for="id_username">نام کاربری</label>#}
+{#                {{ form.username|attr:"id:id_username" }}#}
+{#                {{ form.username.errors }}#}
+{#                <i class="fas fa-user-alt fa-lg"></i>#}
+{#            </div>#}
+{#            <div class="password">#}
+{#                <label for="id_password">رمز عبور</label>#}
+{#                {{ error }}#}
+{#                {{ form.password|attr:"id:id_password" }}#}
+{#                {{ form.password.errors }}#}
+{#                <i class="fas fa-lock fa-lg"></i>#}
+{#                <button type="submit" name="sign_in" class="Enter-btn">ورود</button>#}
+{#            </div>#}
+{#        </form>#}
+{#    </div>#}
 
     <form method="post" action="" novalidate class="sign-up-ajax" data-url="{% url 'chamran:signup_email' %}">
         {% csrf_token %}
         <div class="user-type-container">
-            {#                <input type="radio" name="user-type" id="researcher" value="researcher">#}
-            {#                {{ form.account_type.2|attr:"id:researcher" }}#}
-            {#                <label for="researcher" class="user-type researcher text-center">پژوهشگر</label>#}
-            {#                <input type="radio" name="user-type" id="expert" value="expert">#}
-            {#                <label for="expert" class="user-type expert text-center">استاد</label>#}
-            {#                <input type="radio" name="user-type" id="industry" value="industry">#}
-            {#                <label for="industry" class="user-type industry text-center">صنعت</label>#}
+                            <input type="radio" name="user-type" id="researcher" value="researcher">
+                            {{ form.account_type.2|attr:"id:researcher" }}
+                            <label for="researcher" class="user-type researcher text-center">پژوهشگر</label>
+                            <input type="radio" name="user-type" id="expert" value="expert">
+                            <label for="expert" class="user-type expert text-center">استاد</label>
+                            <input type="radio" name="user-type" id="industry" value="industry">
+                            <label for="industry" class="user-type industry text-center">صنعت</label>
             {{ form.account_type }}
-
         </div>
-{#        <div class="email">#}
+        <div class="email">
             <label for="email">پست الکترونیکی</label>
             {{ form.email|attr:"id:email" }}
             {{ form.email.errors }}
             <i class="fas fa-at fa-lg"></i>
-{#        </div>#}
+        </div>
         <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
     </form>
-
+    </div>
     <div class="card-footer">
         <a href="{% url 'chamran:recover_password' %} " class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
         <p class="new-user">کاربر جدید هستید؟ <a href="#" onclick='signUp()'>عضویت</a>

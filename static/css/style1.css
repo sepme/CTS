@@ -165,7 +165,6 @@ img.registration-card-icon {
   width: 105px;
   height: 100px;
   margin: 10px auto 0 auto;
-  animation: 1s rotate;
 }
 @keyframes rotate {
   0% {
@@ -710,6 +709,7 @@ input[type="radio"]:checked+label{
   top: 50%;
   transform: translateY(-50%);
   left: 5px;
+  color: #343a40;
 }
 .new-user > a{
   color: #3ccd1c;
@@ -814,3 +814,9 @@ input[type="radio"]:checked+label{
         stroke-dashoffset: -124;
     }
 }
+.loading {
+    display: none;
+}
+
+
+

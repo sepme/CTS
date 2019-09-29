@@ -130,7 +130,6 @@ def signup_email_ajax(request):
         return JsonResponse(form.errors, status=400)
 
 
-
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
     template_name = 'registration/user_pass.html'

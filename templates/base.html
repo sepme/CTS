@@ -11,9 +11,12 @@
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
 </head>
 <body>
-<div class="card">
+{% include 'registration/loading.html' %}
+<div class="card registration">
     <img class="registration-card-icon" src="{% static 'img/logo.png' %}" alt="ChamranLogo">
-    <p class="ChamranTeam">ef</p>
+    <p class="ChamranTeam">
+        {% block page %}{% endblock %}
+    </p>
     
     {% if user.is_authenticated %}
         <p>{{user.username}}</p>

@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
 </head>
 <body>
-<div class="card">
+{% include 'registration/loading.html' %}
+<div class="card registration">
     <img class="registration-card-icon" src="{% static 'img/logo.png' %}" alt="ChamranLogo">
     <p class="ChamranTeam">ثبت نام کاربری و رمز عبور</p>
     <form method="post">
@@ -21,7 +22,6 @@
         {{ form.non_field_errors }}
         <div class="username">
             <label for="username">نام کاربری</label>
-
             <input type="text" id="username" name="username" {% if request.user.is_authenticated %}
                    value="{{ request.user }}" {% else %} value="{{ username }}"{% endif %} readonly>
             <i class="fas fa-user-alt fa-lg"></i>
