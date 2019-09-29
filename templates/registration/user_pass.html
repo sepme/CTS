@@ -10,11 +10,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css">
-    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-{% include 'registration/loading.html' %}
-<div class="card registration">
+<div class="card">
     <img class="registration-card-icon" src="{% static 'img/logo.png' %}" alt="ChamranLogo">
     <p class="ChamranTeam">ثبت نام کاربری و رمز عبور</p>
     <form method="post">
@@ -22,6 +21,7 @@
         {{ form.non_field_errors }}
         <div class="username">
             <label for="username">نام کاربری</label>
+
             <input type="text" id="username" name="username" {% if request.user.is_authenticated %}
                    value="{{ request.user }}" {% else %} value="{{ username }}"{% endif %} readonly>
             <i class="fas fa-user-alt fa-lg"></i>

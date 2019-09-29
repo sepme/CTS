@@ -6,10 +6,9 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="card info-card user-info text-right">
+            <div class="card info-card">
                 <form enctype="multipart/form-data" method="POST">
                     {% csrf_token %}
-                    <div class="card-header">اطلاعات شرکت</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-center">
@@ -90,7 +89,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">درباره شرکت</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">

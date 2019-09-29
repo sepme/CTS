@@ -90,7 +90,7 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
+    # required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     required_technique = models.TextField(default='no technique', verbose_name='تکنیک های مورد نیاز')
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")

@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-{% block page %}
-    بازیابی رمز عبور
-{% endblock %}
 {% block content %}
+
     <form method="post" action="" novalidate>
         {% csrf_token %}
-            <div class="username">
-                <label for="username">نام کاربری</label>
-                {{ form.username|attr:"id:username" }}
-                {{ form.username.errors }}
-                <i class="fas fa-user-alt fa-lg"></i>
-            </div>
-        <button type="submit" name="sign_up" class="Enter-btn">بازیابی</button>
+        {#        <div class="email">#}
+        <label for="email">نام کاربری</label>
+        {{ form.username|attr:"id:email" }}
+        {{ form.username.errors }}
+        <i class="fas fa-at fa-lg"></i>
+        {#        </div>#}
+        <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
     </form>
 {% endblock content %}

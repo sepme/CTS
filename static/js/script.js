@@ -125,8 +125,6 @@ $(document).ready(function(){
 
 var myForm = $('.sign-up-ajax');
 myForm.submit(function (event) {
-    $(".loading").css('display', "block");
-    $(".registration").css('display', "none");
     event.preventDefault();
     // var formData = $(this).serialize();
     // var major = $("#edu-subject").val();
@@ -135,43 +133,6 @@ myForm.submit(function (event) {
     // var city = $("#edu-city").val();
     // var date_of_graduation = $("#edu-year").val();
     var $thisURL = myForm.attr('data-url');
-    $.ajax({
-        method: 'POST',
-        url: $thisURL,
-        dataType: 'json',
-        data: $(this).serialize(),
-        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        // contentType: 'application/json; charset=utf-8',
-        success: function (data) {
-            $('.circle-loader').toggleClass('load-complete');
-            $('.checkmark').toggle();
-        },
-        error: function (data) {
-            $(".loading").css('display', "none");
-            $(".registration").css('display', "block");
-            var obj = JSON.parse(data.responseText);
-            $(".email").append("<div class='error'>" +
-                "<span class='error-body'>" +
-                "<ul class='errorlist'>" +
-                "<li>" + obj.email + "</li>" +
-                "</ul>" +
-                "</span>" +
-                "</div>");
-            $("input#email").addClass("error").css("color","rgb(255, 69, 69)").prev().css("color","rgb(255, 69, 69)");
-        },
-    })
-});
-
-var loginForm = $('.login-ajax');
-loginForm.submit(function (event) {
-    event.preventDefault();
-    // var formData = $(this).serialize();
-    // var major = $("#edu-subject").val();
-    // var degree = $("#edu-section").val();
-    // var university = $("#university").val();
-    // var city = $("#edu-city").val();
-    // var date_of_graduation = $("#edu-year").val();
-    var $thisURL = loginForm.attr('data-url');
     $.ajax({
         method: 'POST',
         url: $thisURL,

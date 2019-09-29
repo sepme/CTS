@@ -20,7 +20,6 @@ $(document).ready(function(){
     init_dialog_btn(".executive-btn", ".executive_form");
     init_dialog_btn(".research-btn", ".research_form");
     init_dialog_btn(".article-btn", ".paper_form");
-    init_dialog_btn(".technique",".technique-dialog-main");
     search_input(".search_message");
     if($(window).width() < 575.98){
     // toggle slide-bar => all views
@@ -52,7 +51,11 @@ $(document).ready(function(){
         });
         init_windowSize();
         init_dialog_btn(".researcher-card-button-show" , ".researcher-info-dialog");
-              $(".form-submit").click(function () {
+        // if($(".mainInfo-body").css("display") === "block"){
+        //     blur_div_toggle(".top-bar");
+        //     blur_div_toggle(".side-bar");
+        // }
+      $(".form-submit").click(function () {
         blur_div_toggle(".top-bar");
         blur_div_toggle(".side-bar");
         $(".mainInfo-body").css("display","none");
