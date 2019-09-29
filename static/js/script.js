@@ -161,3 +161,29 @@ myForm.submit(function (event) {
         },
     })
 });
+
+var loginForm = $('.login-ajax');
+loginForm.submit(function (event) {
+    event.preventDefault();
+    // var formData = $(this).serialize();
+    // var major = $("#edu-subject").val();
+    // var degree = $("#edu-section").val();
+    // var university = $("#university").val();
+    // var city = $("#edu-city").val();
+    // var date_of_graduation = $("#edu-year").val();
+    var $thisURL = loginForm.attr('data-url');
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: $(this).serialize(),
+        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        // contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            alert(data.success)
+        },
+        error: function (data) {
+            console.log(data)
+        },
+    })
+});
