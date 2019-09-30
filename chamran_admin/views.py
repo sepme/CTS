@@ -145,19 +145,20 @@ def login_ajax(request):
         if entry_user is not None:
             login(request, entry_user)
 
-            # try:
-            #     user = ResearcherUser.objects.get(user=entry_user)
-            #     return user.get_absolute_url()
-            # except ResearcherUser.DoesNotExist:
-            #     try:
-            #         user = ExpertUser.objects.get(user=entry_user)
-            #         return user.get_absolute_url()
-            #     except ExpertUser.DoesNotExist:
-            #         try:
-            #             user = IndustryUser.objects.get(user=entry_user)
-            #             return user.get_absolute_url()
-            #         except IndustryUser.DoesNotExist:
-            #             raise ValidationError('کابر مربوطه وجود ندارد.')
+            try:
+                user = ResearcherUser.objects.get(user=entry_user)
+                data['type'] = 'researcher'
+            except ResearcherUser.DoesNotExist:
+                try:
+                    user = ExpertUser.objects.get(user=entry_user)
+                    data['type'] = 'expert'
+                except ExpertUser.DoesNotExist:
+                    try:
+                        user = IndustryUser.objects.get(user=entry_user)
+                        data['type'] = 'industry'
+                        return user.get_absolute_url()
+                    except IndustryUser.DoesNotExist:
+                        raise ValidationError('کابر مربوطه وجود ندارد.')
             return JsonResponse(data)
         else:
             # context = {'form': form,

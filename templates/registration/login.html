@@ -19,7 +19,6 @@
     <p class="ChamranTeam">چمران تیم</p>
     <div class="login-div">
         <form method="post" novalidate class="login-ajax" data-url="{% url 'chamran:login_ajax' %}">
-            {% csrf_token %}
             <div class="username">
                 <label for="id_username">نام کاربری</label>
                 {{ form.username|attr:"id:id_username" }}
@@ -35,7 +34,6 @@
     </div>
     <div class="signUp-div">
         <form method="post" action="" novalidate class="sign-up-ajax" data-url="{% url 'chamran:signup_email' %}">
-            {% csrf_token %}
             <div class="user-type-container">
 {#                                <input type="radio" name="user-type" id="researcher" value="researcher">#}
 {#                                {{ form.account_type.2|attr:"id:researcher" }}#}
