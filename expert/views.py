@@ -81,6 +81,10 @@ def user_info(request):
         #     return HttpResponseRedirect(reverse('expert:test'))
     else:
         expert_info_form = ExpertInfoForm(instance=instance)
+        # try:
+        scientific_instance = ScientificRecord.objects.filter(expert_form=request.user.expertuser.expertform)
+        # scientific_form = ScientificRecordForm(instance=scientific_instance)
+        # except ScientificRecord.DoesNotExist():
         executive_form = ExecutiveRecordForm()
         research_form = ResearchRecordForm()
         print(request.user)
@@ -88,7 +92,8 @@ def user_info(request):
                                                     'executive_form': executive_form,
                                                     'research_form': research_form,
                                                     'expert_info_form': expert_info_form,
-                                                    'instance': instance})
+                                                    'instance': instance,
+                                                    'scientific_instance': scientific_instance})
 
 
 def ajax_view(request):
@@ -100,6 +105,9 @@ def ajax_view(request):
     if scientific_form.is_valid():
         print(scientific_form.cleaned_data)
         data = {'success': 'successful'}
+        scientific_record = scientific_form.save(commit=False)
+        scientific_record.expert_form = request.user.expertuser.expertform
+        scientific_record.save()
         return JsonResponse(data)
     else:
         print('form error occured')

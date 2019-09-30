@@ -119,9 +119,35 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="education text-center w-100">
-                                    <span class="initial-value"
-                                          style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
-                                            class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {% if not scientific_instance %}
+                                        <span class="initial-value"
+                                              style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                                class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {% else %}
+                                        <table class='table mtop-lg-25'>
+                                            <thead>
+                                            <tr>
+                                                <td>مقطع تحصیلی</td>
+                                                <td>رشته تحصیلی</td>
+                                                <td>دانشگاه</td>
+                                                <td>شهر محل تحصیل</td>
+                                                <td>سال اخذ مدرک</td>
+                                                <td></td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for instance in scientific_instance %}
+                                                <tr>
+                                                    <td>{{ instance.degree }}</td>
+                                                    <td>{{ instance.major }}</td>
+                                                    <td>{{ instance.university }}</td>
+                                                    <td>{{ instance.city }}</td>
+                                                    <td>{{ instance.date_of_graduation }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% endif %}
                                 </div>
                                 <button type="button" class="education-btn success-btn">افزودن</button>
                             </div>

@@ -9,3 +9,4 @@ class ExpertAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.ExpertForm)
+admin.site.register(models.ScientificRecord)

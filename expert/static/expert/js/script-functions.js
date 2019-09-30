@@ -294,39 +294,9 @@ function education_data_form(edu_count) {
 }
 
 function education_record() {
-    // var major = $("#id_scientific_info-major").val();
-    // var university = $("#id_scientific_info-university").val();
-    // var city =$("#id_scientific_info-city").val();
-    // var date_of_graduation = $("#id_scientific_info-date_of_graduation").val();
-    //   $.ajax({
-    //       url: '/scientific',
-    //       type: 'post',
-    //       dataType: 'json',
-    //       headers: {
-    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //       },
-    //       data: {
-    //           major: major,
-    //           university: university,
-    //           city: city,
-    //           date_of_graduation: date_of_graduation
-    //       },
-    //       success: function (data) {
-    //           alert(data)
-    //       },
-    //       error: function (data) {
-    //           console.log(data)
-    //       }
-    //  });
     var myForm = $('.ajax-sci-form');
     myForm.submit(function (event) {
         event.preventDefault();
-        // var formData = $(this).serialize();
-        // var major = $("#edu-subject").val();
-        // var degree = $("#edu-section").val();
-        // var university = $("#university").val();
-        // var city = $("#edu-city").val();
-        // var date_of_graduation = $("#edu-year").val();
         var $thisURL = myForm.attr('data-url');
         $.ajax({
             method: 'POST',
@@ -343,38 +313,6 @@ function education_record() {
             },
         })
     })
-
-    // $(document).ready(function () {
-    //     var $myForm = $('.ajax-sci-form');
-    //     $myForm.submit(function (event) {
-    //         event.preventDefault();
-    //         var $formData = $(this).serialize();
-    //         // var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
-    //         $.ajax({
-    //             method: "POST",
-    //             url: '/scientific/',
-    //             data: $formData,
-    //             success: function (data) {
-    //                 alert(data)
-    //             },
-    //             error: function (data) {
-    //                 console.log(data)
-    //             },
-    //         })
-    //     })
-//     $(".education-btn > i.fa-plus").click(function (){
-//         if( $(".education .ch-card-item").length === 0 ) {
-//             if($(".education > .initial-value").hasClass("initial-value")) {
-//                 $(".education").html(education_data_form(edu_count));
-//             }else {
-//                 $('.education').append(education_data_form(edu_count));
-//             }
-//             cancel_add(".education");
-//             add_education_record(edu_count);
-//             input_focus();
-//             edu_count ++;
-//         }
-//     });
 }
 
 function getCookie(name) {
