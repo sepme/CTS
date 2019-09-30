@@ -46,7 +46,7 @@ class IndustryForm(models.Model):
         (0, 'خصوصی'),
         (1, 'دولتی'),
     )
-    industry_type = models.IntegerField(choices=industry_type_choice, verbose_name="نوع شرکت")
+    industry_type = models.IntegerField(choices=industry_type_choice, blank=False, null=False, verbose_name="نوع شرکت")
     industry_address = models.TextField(verbose_name="ادرس شرکت")
     phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
     # international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
@@ -119,8 +119,8 @@ class Project(models.Model):
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
                                            verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
                                            null=True)
-    industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
-                                         verbose_name="صنعت صاحب پروژه", blank=True, null=True)
+    # industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
+    #                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
     project_detail = models.TextField(verbose_name="جزيات پروژه")

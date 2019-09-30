@@ -17,7 +17,7 @@ class Message(models.Model):
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
     text = models.TextField(verbose_name="متن پیام")
     date = models.DateField(auto_now_add=True, null=True)
-    is_read = models.BooleanField(default=False)
+    read_by = models.ManyToManyField(User, related_name='read_by', blank=True)
     code = models.CharField(max_length=15, verbose_name='کد', default='000-000')
 
     MESSAGE_TYPES = (

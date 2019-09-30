@@ -24,7 +24,7 @@
                                         {% endif %}
                                             alt="profile" class="profile" width="150px" height="150px">
                                 <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg" hidden>
-{#                                {% render_field form.photo accept="image/png, image/jpeg" %}#}
+                                {#                                {% render_field form.photo accept="image/png, image/jpeg" %}#}
                             </div>
                         </div>
                         <div class="row">
@@ -56,13 +56,12 @@
                         <div class="row">
                             <div class="col-lg-12 rankDiv">
                                 <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
-{#                                <select id="id_industry_type" name="industry_type" class="w-100">#}
-{#                                    <option dir="rtl">انتخاب کنید ...</option>#}
-{#                                    {% for option in form.industry_type %}#}
-{#                                        {{ option }}#}
-{#                                    {% endfor %}#}
-                                    {{ form.industry_type|attr:"class:w-100" }}
-{#                                </select>#}
+                                <select id="id_industry_type" name="industry_type" class="w-100">
+                                    <option value="0" {% if form.industr_type.value == 0 %} selected
+                                            {% endif %}>خصوصی</option>
+                                    <option value="1" {% if form.industry_type.value == 1 %} selected
+                                            {% endif %}>دولتی</option>
+                                </select>
                                 {% render_field form.industry_type.errors %}
                             </div>
                         </div>
@@ -109,8 +108,9 @@
                                 </span>
                                 <div class="text-center w-100">
                                     <label class="attach-label">
-                                        <input type="file" name="tax_declaration" id="id_tax_declaration" class="attach-input">
-{#                                        {% render_field form.tax_declaration class+="attach-input" %}#}
+                                        <input type="file" name="tax_declaration" id="id_tax_declaration"
+                                               class="attach-input">
+                                        {#                                        {% render_field form.tax_declaration class+="attach-input" %}#}
                                         <i class="fas fa-cloud-upload-alt"></i>
                                         <span class="file-name">بارگذاری اظهارنامه مالیاتی ...</span>
                                     </label>

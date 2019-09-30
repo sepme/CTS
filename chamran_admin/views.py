@@ -30,15 +30,16 @@ def jalali_date(jdate):
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
-    message.is_read = True
+    if not message.read_by.filter(username=request.user.username).exists():
+        message.read_by.add(request.user)
+        message.save()
     attachment = None
     if message.attachment:
         attachment = message.attachment.url
     return JsonResponse({
-        'text':  message.text,
+        'text': message.text,
         'date': jalali_date(message.date),
         'title': message.title,
-        'is_read': message.is_read,
         'code': message.code,
         'type': message.type,
         'attachment': attachment,
@@ -68,9 +69,12 @@ class MessagesView(View):
         for i, message in enumerate(all_messages):
             jdate = JalaliDate(message.date)
             if i < 3:
-                top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate)))
+                top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate), message.read_by.filter(
+                    username=request.user.username).exists()))
             else:
-                other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate)))
+                other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
+                                       message.read_by.filter(
+                                           username=request.user.username).exists()))
         return render(request, find_account_type(request.user) + '/messages.html', context={
             'top_3': top_3,
             'other_messages': other_messages,
