@@ -1,5 +1,5 @@
 from django import forms
-from .models import ExpertForm, ScientificRecord, ExecutiveRecord, PaperRecord, ResearchRecord
+from .models import *
 from django.core.exceptions import ValidationError
 
 
@@ -37,9 +37,10 @@ class InitialInfoForm(forms.Form):
 
     def clean_email_address(self):
         current_email = self.cleaned_data.get('email_address')
-        email = ExpertForm.objects.filter(email_address=current_email)
-        if email.exists():
-            raise forms.ValidationError('کاربر با این ایمیل قبلا ثبت نام شده است')
+        try:
+            ExpertUser.objects.get(user__username=current_email)
+        except ExpertUser.DoesNotExist:
+            raise forms.ValidationError('ایمیل وارد شده نادرست است.')
 
         return current_email
 
