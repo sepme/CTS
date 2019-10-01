@@ -89,7 +89,7 @@ class ExpertInfoForm(forms.ModelForm):
 
     class Meta:
         model = ExpertForm
-        fields = '__all__'
+        exclude = ['eq_test']
 
 
 class ScientificRecordForm(forms.ModelForm):
@@ -107,24 +107,52 @@ class ScientificRecordForm(forms.ModelForm):
 
 
 class ExecutiveRecordForm(forms.ModelForm):
-    prefix = 'executive_info'
-
     class Meta:
         model = ExecutiveRecord
         exclude = ['expert_form']
 
 
 class ResearchRecordForm(forms.ModelForm):
-    prefix = 'research_info'
-
     class Meta:
         model = ResearchRecord
         exclude = ['expert_form']
 
 
 class PaperRecordForm(forms.ModelForm):
-    prefix = 'paper_info'
-
     class Meta:
         model = PaperRecord
         exclude = ['expert_form']
+
+    def clean_citation(self):
+        citation = self.cleaned_data.get('citation')
+        try:
+            int(citation)
+        except ValueError:
+            raise forms.ValidationError('تعداد ارجاع باید عدد باشد.')
+
+        return citation
+
+
+# class EQTestForm(forms.ModelForm):
+#     class Meta:
+#         model = EqTest
+#         fields = '__all__'
+#         widgets = {
+#             'team_work': forms.RadioSelect()
+#         }
+
+class EQTestForm(forms.Form):
+    INT_CHOICE = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+    team_work = forms.ChoiceField(widget=forms.RadioSelect(attrs={'id': 'group-work'}), choices=INT_CHOICE)
+
+    # def __init__(self, *args, **kwargs):
+    #     super(EQTestForm, self).__init__(*args, **kwargs)
+    #     self.fields['team_work'].widget = forms.RadioSelect(attrs={
+    #         'id': 'group-work'
+    #     })

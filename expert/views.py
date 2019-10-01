@@ -64,14 +64,24 @@ def index(request):
 
 def user_info(request):
     instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-    scientific_form = ScientificRecordForm()
+    expert_form = request.user.expertuser.expertform
+    scientific_instance = ScientificRecord.objects.filter(expert_form=expert_form)
+    executive_instance = ExecutiveRecord.objects.filter(expert_form=expert_form)
+    research_instance = ResearchRecord.objects.filter(expert_form=expert_form)
+    paper_instance = PaperRecord.objects.filter(expert_form=expert_form)
     if request.method == 'POST':
+        print(request.POST)
+        eq_test_form = EQTestForm(request.POST)
         expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
-        # scientific_form = ScientificRecordForm(request.POST or None)
-        executive_form = ExecutiveRecordForm(request.POST or None)
-        research_form = ResearchRecordForm(request.POST or None)
-        paper_form = PaperRecordForm(request.POST or None)
-        #
+        team_work = request.POST['team_work']
+        creative_thinking = request.POST['creative-thinking']
+        sacrifice = request.POST['sacrifice']
+        researching = request.POST['researching']
+        obligation = request.POST['obligation']
+        data_collection = request.POST['data-collection']
+        morale = request.POST['morale']
+        risk = request.POST['risk']
+
         # if expert_info_form.is_valid() and scientific_form.is_valid() and executive_form.is_valid() and research_form.is_valid() and paper_form.is_valid():
         #     expert_info_form.save()
         #     print("scientific form:", scientific_form.cleaned_data)
@@ -80,23 +90,22 @@ def user_info(request):
         #     print("paper form:", paper_form.cleaned_data)
         #     return HttpResponseRedirect(reverse('expert:test'))
     else:
+        eq_test_form = EQTestForm()
         expert_info_form = ExpertInfoForm(instance=instance)
-        # try:
-        scientific_instance = ScientificRecord.objects.filter(expert_form=request.user.expertuser.expertform)
-        # scientific_form = ScientificRecordForm(instance=scientific_instance)
-        # except ScientificRecord.DoesNotExist():
-        executive_form = ExecutiveRecordForm()
-        research_form = ResearchRecordForm()
         print(request.user)
-    return render(request, 'expert/userInfo.html', {'scientific_form': scientific_form,
-                                                    'executive_form': executive_form,
-                                                    'research_form': research_form,
+    return render(request, 'expert/userInfo.html', {'scientific_form': ScientificRecordForm(),
+                                                    'executive_form': ExecutiveRecordForm(),
+                                                    'research_form': ResearchRecordForm(),
+                                                    'paper_form': PaperRecordForm(),
+                                                    'eq_test_form': eq_test_form,
                                                     'expert_info_form': expert_info_form,
-                                                    'instance': instance,
-                                                    'scientific_instance': scientific_instance})
+                                                    'scientific_instance': scientific_instance,
+                                                    'executive_instance': executive_instance,
+                                                    'research_instance': research_instance,
+                                                    'paper_instance': paper_instance})
 
 
-def ajax_view(request):
+def scienfic_record_view(request):
     print(request.is_ajax())
     # form = request.GET.get('formData', None)
     # print(form)
@@ -112,3 +121,45 @@ def ajax_view(request):
     else:
         print('form error occured')
         return JsonResponse(scientific_form.errors)
+
+
+def executive_record_view(request):
+    executive_form = ExecutiveRecordForm(request.POST)
+    if executive_form.is_valid():
+        print(executive_form.cleaned_data)
+        data = {'success': 'successful'}
+        executive_record = executive_form.save(commit=False)
+        executive_record.expert_form = request.user.expertuser.expertform
+        executive_record.save()
+        return JsonResponse(data)
+    else:
+        print('form error occured')
+        return JsonResponse(executive_form.errors)
+
+
+def research_record_view(request):
+    research_form = ResearchRecordForm(request.POST)
+    if research_form.is_valid():
+        print(research_form.cleaned_data)
+        data = {'success': 'successful'}
+        research_record = research_form.save(commit=False)
+        research_record.expert_form = request.user.expertuser.expertform
+        research_record.save()
+        return JsonResponse(data)
+    else:
+        print('form error occured')
+        return JsonResponse(research_form.errors)
+
+
+def paper_record_view(request):
+    paper_form = PaperRecordForm(request.POST)
+    if paper_form.is_valid():
+        print(paper_form.cleaned_data)
+        data = {'success': 'successful'}
+        paper_record = paper_form.save(commit=False)
+        paper_record.expert_form = request.user.expertuser.expertform
+        paper_record.save()
+        return JsonResponse(data)
+    else:
+        print('form error occured')
+        return JsonResponse(paper_form.errors)

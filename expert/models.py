@@ -104,30 +104,35 @@ class ScientificRecord(models.Model):
     major = models.CharField(max_length=64, verbose_name="رشته تحصیلی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه")
     city = models.CharField(max_length=32, verbose_name="شهر")
-    date_of_graduation = models.CharField(max_length=10,verbose_name="سال اخذ مدرک")
+    date_of_graduation = models.CharField(max_length=10, verbose_name="سال اخذ مدرک")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
 class ExecutiveRecord(models.Model):
     executive_post = models.CharField(max_length=64, verbose_name="سمت")
-    date_start_post = models.DateField(auto_now=False, auto_now_add=False, verbose_name="تلریخ شروع")
-    date_end_post = models.DateField(auto_now=False, auto_now_add=False, verbose_name="تاریخ پایان")
+    date_start_post = models.CharField(max_length=15, verbose_name="تلریخ شروع")
+    date_end_post = models.CharField(max_length=15, verbose_name="تاریخ پایان")
     city = models.CharField(max_length=32, verbose_name="شهر")
     organization = models.CharField(max_length=32, verbose_name="مجل خدمت")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
 class ResearchRecord(models.Model):
+    STATUS_CHOICE = (
+        (1, 'در دست اجرا'),
+        (2, 'خاتمه یافته'),
+        (3, 'متوقف')
+    )
     research_title = models.CharField(max_length=128, verbose_name="عنوان طرح")
     researcher = models.CharField(max_length=64, verbose_name="نام مجری")
     co_researcher = models.CharField(max_length=512, verbose_name="همکار")
-    status = models.CharField(max_length=16, verbose_name="وضعیت")
+    status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
 class PaperRecord(models.Model):
     research_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")
-    date_published = models.DateField(auto_now=False, auto_now_add=False, verbose_name="تاریخ انتشار")
+    date_published = models.CharField(max_length=15, verbose_name="تاریخ انتشار")
     published_at = models.CharField(max_length=32, verbose_name="محل انتشار")
     impact_factor = models.FloatField(verbose_name="impact factor")
     citation = models.IntegerField(verbose_name="تعداد ارجاع")
@@ -138,8 +143,8 @@ class ExpertProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128, verbose_name="عنوان مقاله")
     key_words = models.ManyToManyField('industry.Keyword', verbose_name="کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name="اولویت پروژه")
-    project_start_date = models.DateField(auto_now=False, auto_now_add=False, verbose_name="تاریخ شروع")
-    project_end_date = models.DateField(auto_now=False, auto_now_add=False, verbose_name="تاریخ پایان")
+    project_start_date = models.CharField(max_length=15, verbose_name="تاریخ شروع")
+    project_end_date = models.CharField(max_length=15, verbose_name="تاریخ پایان")
     STATUS_CHOICE = (
         ('completed', 'completed'),
         ('stopped', 'stopped'),

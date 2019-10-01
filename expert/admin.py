@@ -10,3 +10,4 @@ class ExpertAdmin(admin.ModelAdmin):
 
 admin.site.register(models.ExpertForm)
 admin.site.register(models.ScientificRecord)
+admin.site.register(models.ExecutiveRecord)

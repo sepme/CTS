@@ -1,41 +1,42 @@
 {% load static%}
+{% load widget_tweaks %}
 <div class="fixed-back paper_form">
     <div class="card small-card text-right">
         <div class="close"></div>
         <div class="card-head">ثبت مقاله</div>
         <div class="container">
-            <form method="post" action="">
+            <form method="post" action="" class="ajax-paper-form" data-url="{% url 'expert:ajax_paper' %}">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-6">
                         <div class='row'>
                             <div class='col-lg-12'>
                                 <label for='article-name'>عنوان مقاله</label>
-                                <input type='text' id='article-name' class='w-100'>
+                                {{ paper_form.research_title|attr:"id:article-name"|attr:"class:w-100" }}
                             </div>
                         </div>
                         <div class="row">
                             <div class='col-lg-12'>
                                 <label for='publish-date'>تاریخ انتشار</label>
-                                <input type='text' id='publish-date' class='w-100'>
+                                {{ paper_form.date_published|attr:"id:publish-date"|attr:"class:w-100" }}
                             </div>
                         </div>
                         <div class="row">
                             <div class='col-lg-12'>
                                 <label for='published-at'>محل دقیق انتشار</label>
-                                <input type='text' id='published-at' class='w-100'>
+                                {{ paper_form.published_at|attr:"id:published-at"|attr:"class:w-100" }}
                             </div>
                         </div>
                         <div class='row'>
                             <div class='col-lg-12'>
                                 <label for='impact-factor'>Impact Factor</label>
-                                <input type='text' id='impact-factor' class='w-100'>
+                                {{ paper_form.impact_factor|attr:"id:impact-factor"|attr:"class:w-100" }}
                             </div>
                         </div>
                         <div class="row">
                             <div class='col-lg-12'>
                                 <label for='referring-num'>تعداد ارجاع به مقاله شما</label>
-                                <input type='text' id='referring-num' class='w-100'>
+                                {{ paper_form.citation|attr:"id:referring-num"|attr:"class:w-100" }}
                             </div>
                         </div>
                     </div>
