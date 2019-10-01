@@ -75,9 +75,10 @@ class MessagesView(View):
                 other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
                                        message.read_by.filter(
                                            username=request.user.username).exists()))
-        return render(request, find_account_type(request.user) + '/messages.html', context={
+        return render(request, 'chamran_admin/messages.html', context={
             'top_3': top_3,
             'other_messages': other_messages,
+            'account_type': find_account_type(request.user),
         })
 
 

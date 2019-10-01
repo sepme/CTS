@@ -1,0 +1,129 @@
+{% extends account_type|add:"/layouts/base_layout.html" %}
+{% load static %}
+{% block title %}پیام ها{% endblock %}
+
+{% block name %} دکتر احسان شریف{% endblock %}
+
+{% block dialog %}
+    {% with account_type|add:"/layouts/message_show.html" as dialog_template %}
+        {% include  dialog_template %}
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+    <div class="card info-card messaging">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="custom-border-title">
+                    <span class="title">جدیدترین خبر ها</span>
+                    <span class="title-back"></span>
+                    <div class="row slide-messages">
+                        {% for message in top_3 %}
+                        <div class="col-lg-4 slide-message">
+                            <div class="messages-container">
+                                <div class="card
+                                    {% if message.0.type == 0 %}
+                                        notice-message
+                                    {% elif message.0.type == 1 %}
+                                        alert-message
+                                    {% else %}
+                                        news-message
+                                    {% endif %}
+                                ">
+                                    <div class="message-head">
+                                        <div class="icon">
+                                            <img src="
+                                            {% if  message.0.type == 0 %}
+                                                {% static 'img/tick.svg' %}
+                                            {% elif message.0.type == 1 %}
+                                                {% static 'img/close.svg' %}
+                                            {% else %}
+                                                {% static 'img/megaphone.png' %}
+                                            {% endif %}
+                                            " alt="message-type-icon">
+                                        </div>
+                                        <div class="date">{{ message.1 }}</div>
+                                    </div>
+                                    <div class="message-body">
+                                        <div class="title">
+                                            <span>{{ message.0.title }}</span>
+                                        </div>
+                                        <div class="text">
+                                            <span>{{ message.0.get_short_text }}</span>
+                                        </div>
+                                        <button id="{{ message.0.id }}">مشاهده</button>
+                                        <div class="message-code">{{ message.3 }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card info-card messaging">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="custom-border-title">
+                    <span class="title">لیست پیام ها</span>
+                    <span class="title-back"></span>
+                    <div class="row">
+                        <div class="search-message">
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <button type="submit">
+                                    <i class='fas fa-search fa-lg'></i>
+                                </button>
+                                <input type="text" name="search" class="search_message" required>
+                            </form>
+                        </div>
+                        {% for message in other_messages %}
+                            <div class="col-lg-12">
+                                <div class="card text-right
+                                {% if message.0.type == 0 %}
+                                    notice-message-sm
+                                {% elif message.0.type == 1 %}
+                                    alert-message-sm
+                                {% else %}
+                                    news-message-sm
+                                {% endif %}
+                            ">
+                                    <div class="message-head-sm">
+                                        <div class="title">
+                                            <span>{{ message.0.title }}</span>
+                                            <span class="sub-header">{{  message.2 }}</span>
+                                        </div>
+                                    </div>
+                                    <div class=" message-body-sm">
+                                        <span class="body">{{ message.0.get_short_text }}</span>
+                                        <button id="{{ message.0.id }}">مشاهده</button>
+                                        <span class="message-code">{{ message.0.code }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        {#just for test#}
+        $("button").click(function(){
+            const id = $(this).attr('id');
+            console.log('id is ' + id);
+            $.ajax({
+                url: '/message_detail/' + id,
+                data: {},
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+{% endblock %}
