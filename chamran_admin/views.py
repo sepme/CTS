@@ -173,9 +173,10 @@ class LoginView(generic.TemplateView):
         register_form = forms.RegisterEmailForm()
         context = {'form': login_form,
                    'register_form': register_form}
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and not request.user.is_superuser:
             return find_user(request.user).get_absolute_url()
-
+        elif request.user.is_superuser:
+            return HttpResponseRedirect(reverse('chamran:home'))
         else:
             login_form = forms.LoginForm()
             register_form = forms.RegisterEmailForm()
