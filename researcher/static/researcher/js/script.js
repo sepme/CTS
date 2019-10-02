@@ -16,9 +16,16 @@ $(document).ready(function(){
     init_dialog_btn(".send-answer", ".thanks_response");
     init_dialog_btn(".start-question", ".confirmation");
     select_technique(".select-technique");
+    init_dialog_btn(".education-btn", ".scientific_form");
+    init_dialog_btn(".executive-btn", ".executive_form");
+    init_dialog_btn(".research-btn", ".research_form");
+    init_dialog_btn(".technique", ".technique-dialog-main");
     input_focus();
     search_input(".search_message");
     question();
+    $('input#upload-input').change(function (event) {
+        $("img.profile").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
+    });
     if($(window).width() < 575.98){
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
@@ -45,11 +52,6 @@ $(document).ready(function(){
         executive_record();
         studious_record();
 
-        $(".chamran_btn.technique").click(function () {
-        $(".main").addClass("blur-div");
-        $(".dialog-main").css("display","block");
-        close_dialog('.technique-dialog-main');
-      });
         $(".technique-list-item").click(function () {
         $(this).toggleClass("active");
         $(this).children("span").children(".fa-chevron-left").toggleClass("rotate--90");

@@ -64,7 +64,7 @@
         </div>
         <div class="hr"></div>
         <ul class="list-group">
-            {% url "index" as index_url %}
+            {% url "researcher:index" as index_url %}
             <li class="list-group-item text-right {% if request.get_full_path == index_url %}active{% endif %}">
                 <a href="{{ index_url }}">
                     <div>
@@ -91,15 +91,16 @@
                     </div>
                 </a>
             </li>
+            {% url 'researcher:question' as question_url %}
             <li class="list-group-item text-right">
-                <a href="#">
+                <a href="{{ question_url }}">
                     <div>
                         <span>سوالات پژوهشی</span>
                         <span class="fas fa-question"></span>
                     </div>
                 </a>
             </li>
-            {% url 'userInfo' as userInfo_url %}
+            {% url 'researcher:userInfo' as userInfo_url %}
             <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
                 <a href="{{ userInfo_url }}">
                     <div>

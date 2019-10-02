@@ -118,7 +118,7 @@ class ResearcherProfile(models.Model):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
 
-class ResearcherScientificHistory(models.Model):
+class ScientificRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
 
     grade = models.CharField(max_length=300, verbose_name="مقطع تحصیلی")
@@ -131,7 +131,7 @@ class ResearcherScientificHistory(models.Model):
         return self.grade
 
 
-class ResearcherRecord(models.Model):
+class ExecutiveRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
 
     post = models.CharField(max_length=300, verbose_name="سمت")
@@ -144,18 +144,18 @@ class ResearcherRecord(models.Model):
         return self.post
 
 
-class ResearchActivities(models.Model):
+class StudiousRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق پژوهشی", on_delete=models.CASCADE)
 
     title = models.CharField(max_length=300, verbose_name="عنوان طرح پژوهشی")
     presenter = models.CharField(max_length=50, verbose_name="نام مجری")
-    Responsible = models.CharField(max_length=50, verbose_name="مسئول اجرا / همکار")
+    responsible = models.CharField(max_length=50, verbose_name="مسئول اجرا / همکار")
     STATUS_CHOICE = (
-        ('running', 'در دست اجرا'),
-        ('finished', 'خاتمه یافته'),
-        ('stopped', 'متوقف'),
+        (1, 'در دست اجرا'),
+        (2, 'خاتمه یافته'),
+        (3, 'متوقف'),
     )
-    status = models.CharField(max_length=8, choices=STATUS_CHOICE, verbose_name="وضعیت طرح پژوهشی")
+    status = models.IntegerField( choices=STATUS_CHOICE, verbose_name="وضعیت طرح پژوهشی")
 
     def __str__(self):
         return self.title

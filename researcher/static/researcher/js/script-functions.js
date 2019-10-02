@@ -15,7 +15,7 @@ function init_windowSize() {
     if($(window).width() < 575.98){
     }else {
         var contentWidth = $(document).innerWidth() - 250;
-        var contentMargin = 0.0862 * contentWidth - 63.9655;
+        var contentMargin = 0.0862 * contentWidth - 54.9655;
         $(".info-card").css({
             "margin-right": contentMargin,
             "margin-left": contentMargin
@@ -61,25 +61,29 @@ function init_dialog_btn(element, dialogClass) {
     });
 }
 function input_focus(){
-    if( $("input,textarea").prop("disabled") ) {
+    if( $("input[type='text'],input[type='email'],textarea").prop("disabled") ) {
         $(this).each(function () {
             var inputLabel = "label[for='"+$(this).attr("id")+"']";
+            $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
                 "font-size":"13px",
-                "top":"0px",
-                "right":"15px",
+                "top":"12px",
+                "right":"30px",
                 "color":"#8d8d8d"
             });
+
         });
     }
-    $("input,textarea").each(function () {
+    $("input[type='text'],input[type='email'],textarea").each(function () {
         var inputLabel = "label[for='"+$(this).attr("id")+"']";
         if($(this).val() !== ''){
+            $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
                     "font-size":"12px",
-                    "top":"0px",
-                    "right":"15px",
-                    "color":"#6f7285"
+                    "top":"12px",
+                    "right":"30px",
+                    "color":"#6f7285",
+                    "padding":"0 10px"
                 });
         }
         if( $(this).hasClass("error") ) {
@@ -98,11 +102,13 @@ function input_focus(){
             }
         });
         } else{
+            $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
                 "font-size":"12px",
-                "top":"0px",
-                "right":"15px",
-                "color":"#3CCD1C"
+                "top":"12px",
+                "right":"30px",
+                "color":"#3CCD1C",
+                "padding":"0 10px"
             });
             $(this).css("color","#3ccd1c");
         }
@@ -119,8 +125,10 @@ function input_focus(){
                     "font-size":"13px",
                     "top":"28px",
                     "right":"25px",
-                    "color":"#6f7285"
+                    "color":"#6f7285",
+                    "padding":"0"
                 });
+                $(inputLabel).removeClass("full-focus-out");
             }else {
                 $(this).css("color","#8d8d8d");
                 $(inputLabel).css("color","#8d8d8d");
@@ -728,4 +736,94 @@ function question() {
 
     }
     counter();
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+function scientific_record() {    
+    var form = $('#ajax-sci-form');
+    form.submit(function (event) {        
+        event.preventDefault();
+        // form.$("#submit_button").cancel_add(education-btn);
+        // console.log(form.$("#submit_button"));
+        console.log(form)
+        $.ajax({
+            method: 'POST',
+            url: form.attr('url'),
+            dataType: 'json',
+            data: form.serialize(),
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (data) {
+                console.log(data)
+            },
+        })
+    })
+}
+
+function executive_record() {
+    var form = $('.ajax-exe-form');
+    form.submit(function (event) {
+        event.preventDefault();        
+        $.ajax({
+            method: 'POST',
+            url: form.attr('url'),
+            dataType: 'json',
+            data: form.serialize(),
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (data) {
+                console.log(data)
+            },
+        })
+    })
+}
+function studious_record() {
+    var form = $('.ajax-std-form');
+    form.submit(function (event) {
+        event.preventDefault();        
+        $.ajax({
+            method: 'POST',
+            url: form.attr('url'),
+            dataType: 'json',
+            data: form.serialize(),
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (data) {
+                console.log(data)
+            },
+        })
+    })
 }

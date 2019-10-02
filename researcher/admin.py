@@ -13,3 +13,15 @@ class ResearcherProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Status)
+
+@admin.register(models.ScientificRecord)
+class ScientificRecordAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.ExecutiveRecord)
+class ExecutiveRecordAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.StudiousRecord)
+class StudiousRecordAdmin(admin.ModelAdmin):
+    pass
