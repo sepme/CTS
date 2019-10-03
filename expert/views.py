@@ -62,49 +62,6 @@ def index(request):
     return render(request, 'expert/index.html', {'form': form, 'expert_user': expert_user})
 
 
-# def user_info(request):
-#     instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-#     expert_form = request.user.expertuser.expertform
-#     scientific_instance = ScientificRecord.objects.filter(expert_form=expert_form)
-#     executive_instance = ExecutiveRecord.objects.filter(expert_form=expert_form)
-#     research_instance = ResearchRecord.objects.filter(expert_form=expert_form)
-#     paper_instance = PaperRecord.objects.filter(expert_form=expert_form)
-#     if request.method == 'POST':
-#         print(request.POST)
-#         eq_test_form = EQTestForm(request.POST)
-#         expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
-#         team_work = request.POST['team_work']
-#         creative_thinking = request.POST['creative-thinking']
-#         sacrifice = request.POST['sacrifice']
-#         researching = request.POST['researching']
-#         obligation = request.POST['obligation']
-#         data_collection = request.POST['data-collection']
-#         morale = request.POST['morale']
-#         risk = request.POST['risk']
-#
-#         # if expert_info_form.is_valid() and scientific_form.is_valid() and executive_form.is_valid() and research_form.is_valid() and paper_form.is_valid():
-#         #     expert_info_form.save()
-#         #     print("scientific form:", scientific_form.cleaned_data)
-#         #     print("executive form:", executive_form.cleaned_data)
-#         #     print("research form:", research_form.cleaned_data)
-#         #     print("paper form:", paper_form.cleaned_data)
-#         #     return HttpResponseRedirect(reverse('expert:test'))
-#     else:
-#         eq_test_form = EQTestForm()
-#         expert_info_form = ExpertInfoForm(instance=instance)
-#         print(request.user)
-#     return render(request, 'expert/userInfo.html', {'scientific_form': ScientificRecordForm(),
-#                                                     'executive_form': ExecutiveRecordForm(),
-#                                                     'research_form': ResearchRecordForm(),
-#                                                     'paper_form': PaperRecordForm(),
-#                                                     'eq_test_form': eq_test_form,
-#                                                     'expert_info_form': expert_info_form,
-#                                                     'scientific_instance': scientific_instance,
-#                                                     'executive_instance': executive_instance,
-#                                                     'research_instance': research_instance,
-#                                                     'paper_instance': paper_instance})
-
-
 class UserInfo(generic.FormView):
     template_name = 'expert/userInfo.html'
     form_class = ExpertInfoForm

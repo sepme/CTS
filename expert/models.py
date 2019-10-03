@@ -83,8 +83,8 @@ class ExpertForm(models.Model):
         (4, '+60'),
     )
     number_of_researcher = models.IntegerField(max_length=10, choices=number_of_researcher_choice,
-                                            verbose_name="دانشجو تحت نظارت",
-                                            blank=True, null=True)
+                                               verbose_name="دانشجو تحت نظارت",
+                                               blank=True, null=True)
     has_industrial_research_choice = (
         ('آری', 'آری'),
         ('خیر', 'خیر'),
@@ -107,6 +107,9 @@ class ScientificRecord(models.Model):
     city = models.CharField(max_length=32, verbose_name="شهر")
     date_of_graduation = models.CharField(max_length=10, verbose_name="سال اخذ مدرک")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
+
+    def __str__(self):
+        return '{} - {}'.format(self.expert_form.expert_user, self.pk)
 
 
 class ExecutiveRecord(models.Model):
@@ -136,7 +139,7 @@ class PaperRecord(models.Model):
     date_published = models.CharField(max_length=15, verbose_name="تاریخ انتشار")
     published_at = models.CharField(max_length=32, verbose_name="محل انتشار")
     impact_factor = models.FloatField(verbose_name="impact factor")
-    citation = models.IntegerField(verbose_name="تعداد ارجاع")
+    citation = models.CharField(max_length=5, verbose_name="تعداد ارجاع")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
