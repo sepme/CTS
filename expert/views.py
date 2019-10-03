@@ -121,16 +121,13 @@ class UserInfo(generic.FormView):
                    'executive_instance': executive_instance,
                    'research_instance': research_instance,
                    'paper_instance': paper_instance,
-                   'expert_form': instance}
+                   'expert_form': instance,
+                   'scientific_form': ScientificRecordForm(),
+                   'executive_form': ExecutiveRecordForm(),
+                   'research_form': ResearchRecordForm(),
+                   'paper_form': PaperRecordForm()
+                   }
         return render(request, self.template_name, context)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['scientific_form']: ScientificRecordForm()
-        context['executive_form']: ExecutiveRecordForm()
-        context['research_form']: ResearchRecordForm()
-        context['paper_form']: PaperRecordForm()
-        return context
 
     def post(self, request, *args, **kwargs):
         print(request.POST)
@@ -155,7 +152,12 @@ class UserInfo(generic.FormView):
                    'executive_instance': executive_instance,
                    'research_instance': research_instance,
                    'paper_instance': paper_instance,
-                   'expert_form': instance}
+                   'expert_form': instance,
+                   'scientific_form': ScientificRecordForm(),
+                   'executive_form': ExecutiveRecordForm(),
+                   'research_form': ResearchRecordForm(),
+                   'paper_form': PaperRecordForm()
+                   }
         if expert_info_form.is_valid():
             expert_form = expert_info_form.save(commit=False)
             expert_form.expert_user = request.user.expertuser
