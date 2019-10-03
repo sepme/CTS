@@ -71,26 +71,27 @@ class ExpertForm(models.Model):
     phone_number = models.CharField(max_length=15, verbose_name="شماره منزل")
     mobile_phone = models.CharField(max_length=15, verbose_name="شماره تلفن همراه")
     email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
-    eq_test = models.OneToOneField(EqTest, on_delete=models.CASCADE, verbose_name="تست EQ", blank=True, null=True)
+    eq_test = models.OneToOneField(EqTest, on_delete=models.SET_NULL, verbose_name="تست EQ", blank=True, null=True)
     awards = models.TextField(blank=True, verbose_name="افتخارات", null=True)
     method_of_introduction = models.TextField(verbose_name="طریقه اشنایی با چمران تیم", blank=True, null=True)
     positive_feature = models.TextField(verbose_name="ویژگی های مثبت چمران تیم", blank=True, null=True)
     lab_equipment = models.TextField(verbose_name="امکانات پژوهشی", blank=True, null=True)
     number_of_researcher_choice = (
-        (0, '1-10'),
-        (1, '11-30'),
-        (2, '31-60'),
-        (3, '+60'),
+        (1, '1-10'),
+        (2, '11-30'),
+        (3, '31-60'),
+        (4, '+60'),
     )
-    number_of_researcher = models.IntegerField(choices=number_of_researcher_choice, verbose_name="دانشجو تحت نظارت",
-                                               blank=True, null=True)
+    number_of_researcher = models.IntegerField(max_length=10, choices=number_of_researcher_choice,
+                                            verbose_name="دانشجو تحت نظارت",
+                                            blank=True, null=True)
     has_industrial_research_choice = (
         ('آری', 'آری'),
         ('خیر', 'خیر'),
     )
     has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice,
                                                verbose_name="همکاری با شرکت خارج دانشگاه", blank=True)
-    number_of_grants = models.IntegerField(verbose_name="تعداد گرنت", blank=True, null=True)
+    number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
     photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)

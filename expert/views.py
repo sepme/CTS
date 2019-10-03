@@ -62,47 +62,130 @@ def index(request):
     return render(request, 'expert/index.html', {'form': form, 'expert_user': expert_user})
 
 
-def user_info(request):
-    instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-    expert_form = request.user.expertuser.expertform
-    scientific_instance = ScientificRecord.objects.filter(expert_form=expert_form)
-    executive_instance = ExecutiveRecord.objects.filter(expert_form=expert_form)
-    research_instance = ResearchRecord.objects.filter(expert_form=expert_form)
-    paper_instance = PaperRecord.objects.filter(expert_form=expert_form)
-    if request.method == 'POST':
-        print(request.POST)
-        eq_test_form = EQTestForm(request.POST)
-        expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
-        team_work = request.POST['team_work']
-        creative_thinking = request.POST['creative-thinking']
-        sacrifice = request.POST['sacrifice']
-        researching = request.POST['researching']
-        obligation = request.POST['obligation']
-        data_collection = request.POST['data-collection']
-        morale = request.POST['morale']
-        risk = request.POST['risk']
+# def user_info(request):
+#     instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
+#     expert_form = request.user.expertuser.expertform
+#     scientific_instance = ScientificRecord.objects.filter(expert_form=expert_form)
+#     executive_instance = ExecutiveRecord.objects.filter(expert_form=expert_form)
+#     research_instance = ResearchRecord.objects.filter(expert_form=expert_form)
+#     paper_instance = PaperRecord.objects.filter(expert_form=expert_form)
+#     if request.method == 'POST':
+#         print(request.POST)
+#         eq_test_form = EQTestForm(request.POST)
+#         expert_info_form = ExpertInfoForm(request.POST or None, instance=instance)
+#         team_work = request.POST['team_work']
+#         creative_thinking = request.POST['creative-thinking']
+#         sacrifice = request.POST['sacrifice']
+#         researching = request.POST['researching']
+#         obligation = request.POST['obligation']
+#         data_collection = request.POST['data-collection']
+#         morale = request.POST['morale']
+#         risk = request.POST['risk']
+#
+#         # if expert_info_form.is_valid() and scientific_form.is_valid() and executive_form.is_valid() and research_form.is_valid() and paper_form.is_valid():
+#         #     expert_info_form.save()
+#         #     print("scientific form:", scientific_form.cleaned_data)
+#         #     print("executive form:", executive_form.cleaned_data)
+#         #     print("research form:", research_form.cleaned_data)
+#         #     print("paper form:", paper_form.cleaned_data)
+#         #     return HttpResponseRedirect(reverse('expert:test'))
+#     else:
+#         eq_test_form = EQTestForm()
+#         expert_info_form = ExpertInfoForm(instance=instance)
+#         print(request.user)
+#     return render(request, 'expert/userInfo.html', {'scientific_form': ScientificRecordForm(),
+#                                                     'executive_form': ExecutiveRecordForm(),
+#                                                     'research_form': ResearchRecordForm(),
+#                                                     'paper_form': PaperRecordForm(),
+#                                                     'eq_test_form': eq_test_form,
+#                                                     'expert_info_form': expert_info_form,
+#                                                     'scientific_instance': scientific_instance,
+#                                                     'executive_instance': executive_instance,
+#                                                     'research_instance': research_instance,
+#                                                     'paper_instance': paper_instance})
 
-        # if expert_info_form.is_valid() and scientific_form.is_valid() and executive_form.is_valid() and research_form.is_valid() and paper_form.is_valid():
-        #     expert_info_form.save()
-        #     print("scientific form:", scientific_form.cleaned_data)
-        #     print("executive form:", executive_form.cleaned_data)
-        #     print("research form:", research_form.cleaned_data)
-        #     print("paper form:", paper_form.cleaned_data)
-        #     return HttpResponseRedirect(reverse('expert:test'))
-    else:
-        eq_test_form = EQTestForm()
+
+class UserInfo(generic.FormView):
+    template_name = 'expert/userInfo.html'
+    form_class = ExpertInfoForm
+
+    def get(self, request, *args, **kwargs):
+        instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
         expert_info_form = ExpertInfoForm(instance=instance)
-        print(request.user)
-    return render(request, 'expert/userInfo.html', {'scientific_form': ScientificRecordForm(),
-                                                    'executive_form': ExecutiveRecordForm(),
-                                                    'research_form': ResearchRecordForm(),
-                                                    'paper_form': PaperRecordForm(),
-                                                    'eq_test_form': eq_test_form,
-                                                    'expert_info_form': expert_info_form,
-                                                    'scientific_instance': scientific_instance,
-                                                    'executive_instance': executive_instance,
-                                                    'research_instance': research_instance,
-                                                    'paper_instance': paper_instance})
+        scientific_instance = ScientificRecord.objects.filter(expert_form=instance)
+        executive_instance = ExecutiveRecord.objects.filter(expert_form=instance)
+        research_instance = ResearchRecord.objects.filter(expert_form=instance)
+        paper_instance = PaperRecord.objects.filter(expert_form=instance)
+        context = {'expert_info_form': expert_info_form,
+                   'scientific_instance': scientific_instance,
+                   'executive_instance': executive_instance,
+                   'research_instance': research_instance,
+                   'paper_instance': paper_instance,
+                   'expert_form': instance}
+        return render(request, self.template_name, context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['scientific_form']: ScientificRecordForm()
+        context['executive_form']: ExecutiveRecordForm()
+        context['research_form']: ResearchRecordForm()
+        context['paper_form']: PaperRecordForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
+        expert_info_form = ExpertInfoForm(request.POST, request.FILES, instance=instance)
+        team_work = request.POST.get('team_work', False)
+        creative_thinking = request.POST.get('creative-thinking', False)
+        sacrifice = request.POST.get('sacrifice', False)
+        researching = request.POST.get('researching', False)
+        obligation = request.POST.get('obligation', False)
+        data_collection = request.POST.get('data-collection', False)
+        morale = request.POST.get('morale', False)
+        risk = request.POST.get('risk', False)
+        student_num = request.POST.get('student_num', False)
+        foreign_work = request.POST.get('foreign_work', False)
+        scientific_instance = ScientificRecord.objects.filter(expert_form=instance)
+        executive_instance = ExecutiveRecord.objects.filter(expert_form=instance)
+        research_instance = ResearchRecord.objects.filter(expert_form=instance)
+        paper_instance = PaperRecord.objects.filter(expert_form=instance)
+        context = {'expert_info_form': expert_info_form,
+                   'scientific_instance': scientific_instance,
+                   'executive_instance': executive_instance,
+                   'research_instance': research_instance,
+                   'paper_instance': paper_instance,
+                   'expert_form': instance}
+        if expert_info_form.is_valid():
+            expert_form = expert_info_form.save(commit=False)
+            expert_form.expert_user = request.user.expertuser
+            if team_work and creative_thinking and sacrifice and researching and obligation and data_collection and morale and risk:
+                if instance.eq_test:
+                    eq_test = instance.eq_test
+                else:
+                    eq_test = EqTest()
+                eq_test.team_work = team_work
+                eq_test.innovation = creative_thinking
+                eq_test.devotion = sacrifice
+                eq_test.productive_research = researching
+                eq_test.national_commitment = obligation
+                eq_test.collecting_information = data_collection
+                eq_test.business_thinking = morale
+                eq_test.risk_averse = risk
+                eq_test.save()
+                expert_form.eq_test = eq_test
+            if foreign_work and student_num:
+                print('2 variables initiated')
+                expert_form.has_industrial_research = foreign_work
+                expert_form.number_of_researcher = student_num
+
+            if request.FILES.get('photo'):
+                photo = request.FILES.get('photo')
+                expert_form.photo.save(photo.name, photo)
+            expert_form.save()
+            return HttpResponseRedirect(reverse('expert:index'))
+
+        return render(request, self.template_name, context)
 
 
 def scienfic_record_view(request):

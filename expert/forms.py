@@ -89,7 +89,44 @@ class ExpertInfoForm(forms.ModelForm):
 
     class Meta:
         model = ExpertForm
-        exclude = ['eq_test']
+        exclude = ['eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
+        error_messages = {
+            'special_field': {
+                'required': 'حوزه تخصصی نمی تواند خالی باشد.'
+            },
+            'home_address': {
+                'required': 'آدرس نمی تواند خالی باشد.'
+            },
+            'scientific_rank': {
+                'required': 'مرتبه علمی نمی تواند خالی باشد'
+            }
+        }
+
+    def clean_mobile_phone(self):
+        home_number = self.cleaned_data.get('mobile_phone')
+        print('home_number:', home_number)
+        try:
+            int(home_number)
+        except ValueError:
+            raise forms.ValidationError('شماره تلفن همراه باید یک عدد باشد.')
+
+        if len(home_number) != 11:
+            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
+
+        return home_number
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        print('phone_number:', phone_number)
+        try:
+            int(phone_number)
+        except ValueError:
+            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
+
+        if len(phone_number) != 11:
+            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
+
+        return phone_number
 
 
 class ScientificRecordForm(forms.ModelForm):
