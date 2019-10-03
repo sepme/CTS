@@ -122,6 +122,9 @@
                 dataType: 'json',
                 success: function(data){
                     console.log(data);
+                    $(".message-show-body .body").html(data.text);
+                    $(".message-show-head .title").html(data.title);
+                    $(".message-show-body .message-info .date span").html(data.date);
                 }
             });
         });

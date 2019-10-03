@@ -119,7 +119,9 @@
                 data: {},
                 dataType: 'json',
                 success: function(data){
-                    console.log(data);
+                    var msg = JSON.parse(data);
+                    console.log(msg.title);
+
                 }
             });
         });
