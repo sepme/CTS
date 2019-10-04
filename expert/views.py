@@ -162,7 +162,7 @@ def scienfic_record_view(request):
         return JsonResponse(data)
     else:
         print('form error occured')
-        return JsonResponse(scientific_form.errors)
+        return JsonResponse(scientific_form.errors, status=400)
 
 
 def executive_record_view(request):
@@ -176,7 +176,7 @@ def executive_record_view(request):
         return JsonResponse(data)
     else:
         print('form error occured')
-        return JsonResponse(executive_form.errors)
+        return JsonResponse(executive_form.errors, status=400)
 
 
 def research_record_view(request):
@@ -190,7 +190,7 @@ def research_record_view(request):
         return JsonResponse(data)
     else:
         print('form error occured')
-        return JsonResponse(research_form.errors)
+        return JsonResponse(research_form.errors, status=400)
 
 
 def paper_record_view(request):
@@ -204,4 +204,4 @@ def paper_record_view(request):
         return JsonResponse(data)
     else:
         print('form error occured')
-        return JsonResponse(paper_form.errors)
+        return JsonResponse(paper_form.errors, status=400)
