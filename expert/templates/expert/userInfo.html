@@ -177,6 +177,10 @@
                                                     <td>{{ instance.university }}</td>
                                                     <td>{{ instance.city }}</td>
                                                     <td>{{ instance.date_of_graduation }}</td>
+                                                    <td>
+                                                        <i class='fas fa-pen' id='edit_edu'></i>
+                                                        <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -206,6 +210,7 @@
                                                 <td>تا تاریخ:</td>
                                                 <td>محل خدمت:</td>
                                                 <td>شهر:</td>
+                                                <td></td>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -216,6 +221,10 @@
                                                     <td>{{ instance.date_end_post }}</td>
                                                     <td>{{ instance.organization }}</td>
                                                     <td>{{ instance.city }}</td>
+                                                    <td>
+                                                        <i class='fas fa-pen' id='edit_exe'></i>
+                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -232,7 +241,7 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="label header"> <span class="sub-header"></span></span>
-                                <div class="studious text-center w-100">
+                                <div class="research text-center w-100">
                                     {% if not research_instance %}
                                         <span class="initial-value"
                                               style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
@@ -244,7 +253,7 @@
                                                 <td>عنوان طرح پژوهشی</td>
                                                 <td>نام مجری</td>
                                                 <td>مسئول اجرا/همکار</td>
-
+                                                <td></td>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -253,6 +262,10 @@
                                                     <td>{{ instance.research_title }}</td>
                                                     <td>{{ instance.researcher }}</td>
                                                     <td>{{ instance.co_researcher }}</td>
+                                                    <td>
+                                                        <i class='fas fa-pen' id='edit_exe'></i>
+                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -270,7 +283,7 @@
                             <div class="col-lg-12 text-right">
                                 <span class="label header"> <span
                                         class="sub-header"></span></span>
-                                <div class="article text-center w-100">
+                                <div class="paper text-center w-100">
                                     {% if not paper_instance %}
                                         <span class="initial-value"
                                               style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
@@ -295,6 +308,10 @@
                                                     <td>{{ instance.published_at }}</td>
                                                     <td>{{ instance.impact_factor }}</td>
                                                     <td>{{ instance.citation }}</td>
+                                                    <td>
+                                                        <i class='fas fa-pen' id='edit_exe'></i>
+                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -302,7 +319,7 @@
                                     {% endif %}
 
                                 </div>
-                                <button type="button" class="article-btn success-btn">افزودن</button>
+                                <button type="button" class="paper-btn success-btn">افزودن</button>
                             </div>
                         </div>
                     </div>

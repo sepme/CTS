@@ -207,19 +207,19 @@ function record_edit(className) {
                 $("#until" + count).val($(this).closest('tr').children("td:nth-child(3)").text());
                 $("#workplace" + count).val($(this).closest('tr').children("td:nth-child(4)").text());
                 $("#exe-city" + count).vaal($(this).closest('tr').children("td:nth-child(5)").text());
-            } else if (className === '.studious') {
+            } else if (className === '.research') {
                 var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
-                $(className).append(studious_data_form(count));
-                cancel_add(".studious");
+                $(className).append(research_data_form(count));
+                cancel_add(".research");
                 $("#subject" + count).val($(this).closest('tr').children("td:nth-child(1)").text());
                 $("#admin" + count).val($(this).closest('tr').children("td:nth-child(2)").text());
                 $("#liable" + count).val($(this).closest('tr').children("td:nth-child(3)").text());
                 $("#rank" + count).val($(this).closest('tr').children("td:nth-child(4)").text());
-            } else if (className === '.article') {
+            } else if (className === '.paper') {
                 var count = parseInt($(this).attr('id').replace('edit_art_', ''));
-                $(className).append(article_data_form(count));
-                cancel_add(".article");
-                $("#article-name" + art_count).val($(this).closest('tr').children("td:nth-child(1)").text());
+                $(className).append(paper_data_form(count));
+                cancel_add(".paper");
+                $("#paper-name" + art_count).val($(this).closest('tr').children("td:nth-child(1)").text());
                 $("#publish-date" + art_count).val($(this).closest('tr').children("td:nth-child(2)").text());
                 $("#published-at" + art_count).val($(this).closest('tr').children("td:nth-child(3)").text());
                 $("#impact-factor" + art_count).val($(this).closest('tr').children("td:nth-child(4)").text());
@@ -236,10 +236,10 @@ function record_edit(className) {
         } else if (className === '.executive') {
             var count = parseInt($(this).attr('id').replace('edit_exe_', ''));
             $(this).closest("tr").remove();
-        } else if (className === '.studious') {
+        } else if (className === '.research') {
             var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
             $(this).closest("tr").remove();
-        } else if (className === '.article') {
+        } else if (className === '.paper') {
             var count = parseInt($(this).attr('id').replace('edit_art_', ''));
             $(this).closest("tr").remove();
         }
@@ -293,94 +293,40 @@ function education_data_form(edu_count) {
     return div;
 }
 
-function education_record() {
-    var myForm = $('.ajax-sci-form');
-    myForm.submit(function (event) {
-        event.preventDefault();
-        var $thisURL = myForm.attr('data-url');
-        $.ajax({
-            method: 'POST',
-            url: $thisURL,
-            dataType: 'json',
-            data: $(this).serialize(),
-            // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-            // contentType: 'application/json; charset=utf-8',
-            success: function (data) {
-                console.log(data)
-            },
-            error: function (data) {
-                console.log(data)
-            },
-        })
-    })
-}
 
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
+function show_scientific_record() {
+    row = "<tr>" +
+        "<td>" + $("#edu-section").val() + "</td>" +
+        "<td>" + $("#edu-subject").val() + "</td>" +
+        "<td>" + $("#university").val() + "</td>" +
+        "<td>" + $("#edu-city").val() + "</td>" +
+        "<td>" + $("#edu-year").val() + "</td>" +
+        "<td>" +
+        "<i class='fas fa-pen' id='edit_edu'></i>" +
+        "<i class='fas fa-trash-alt' id='delete_edu'></i>" +
+        "</td>" +
+        "</tr>";
+
+    if (!$(".education > table").hasClass("table")) {
+        table = "<table class='table mtop-lg-25'>" +
+            "<thead>" +
+            "<tr>" +
+            "<td>مقطع تحصیلی</td>" +
+            "<td>رشته تحصیلی</td>" +
+            "<td>دانشگاه</td>" +
+            "<td>شهر محل تحصیل</td>" +
+            "<td>سال اخذ مدرک</td>" +
+            "<td></td>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>" +
+            "</table>";
+        $(".education").html(table);
     }
-    return cookieValue;
-}
-
-var csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-$.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
-
-function add_education_record(edu_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".education .accept-btn").click(function () {
-        row = "<tr>" +
-            "<td>" + $("#edu-section" + edu_count).val() + "</td>" +
-            "<td>" + $("#edu-subject" + edu_count).val() + "</td>" +
-            "<td>" + $("#university" + edu_count).val() + "</td>" +
-            "<td>" + $("#edu-city" + edu_count).val() + "</td>" +
-            "<td>" + $("#edu-year" + edu_count).val() + "</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_edu_" + edu_count + "'></i>" +
-            "<i class='fas fa-trash-alt' id='delete_edu_" + edu_count + "'></i>" +
-            "</td>" +
-            "</tr>";
-        if (!$(".education > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                "<thead>" +
-                "<tr>" +
-                "<td>مقطع تحصیلی</td>" +
-                "<td>رشته تحصیلی</td>" +
-                "<td>دانشگاه</td>" +
-                "<td>شهر محل تحصیل</td>" +
-                "<td>سال اخذ مدرک</td>" +
-                "<td></td>" +
-                "</tr>" +
-                "</thead>" +
-                "<tbody>" +
-                "</tbody>" +
-                "</table>";
-            $(".education").html(table);
-        }
-        $(".education > table > tbody").append(row);
-        $(".education div#" + $(this).attr("id")).remove();
-        record_edit(".education");
-    });
+    $(".education > table > tbody").append(row);
+    $(".education div#" + $(this).attr("id")).remove();
+    record_edit(".education");
 }
 
 function executive_data_form(exe_count) {
@@ -444,44 +390,41 @@ function executive_record() {
     });
 }
 
-function add_executive_record(exe_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".executive .accept-btn").click(function () {
-        row = "<tr>" +
-            "<td>" + $("#duty" + exe_count).val() + "</td>" +
-            "<td>" + $("#from" + exe_count).val() + "</td>" +
-            "<td>" + $("#until" + exe_count).val() + "</td>" +
-            "<td>" + $("#workplace" + exe_count).val() + "</td>" +
-            "<td>" + $("#exe-city" + exe_count).val() + "</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_exe_" + exe_count + "'></i>" +
-            "<i class='fas fa-trash-alt' id='delete_exe_" + exe_count + "'></i>" +
-            "</td>" +
-            "</tr>";
-        if (!$(".executive > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                "<thead>" +
-                "<tr>" +
-                "<td>سمت</td>" +
-                "<td>محل خدمت</td>" +
-                "<td>شهر</td>" +
-                "<td>از تاریخ</td>" +
-                "<td>تا تاریخ</td>" +
-                "<td></td>" +
-                "</tr>" +
-                "</thead>" +
-                "<tbody>" +
-                "</tbody>" +
-                "</table>";
-            $(".executive").html(table);
-        }
-        $(".executive > table > tbody").append(row);
-        $(".executive div#" + $(this).attr("id")).remove();
-        record_edit(".executive");
-    });
+function show_executive_record() {
+    row = "<tr>" +
+        "<td>" + $("#duty").val() + "</td>" +
+        "<td>" + $("#from").val() + "</td>" +
+        "<td>" + $("#until").val() + "</td>" +
+        "<td>" + $("#workplace").val() + "</td>" +
+        "<td>" + $("#exe-city").val() + "</td>" +
+        "<td>" +
+        "<i class='fas fa-pen' id='edit_exe'></i>" +
+        "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
+        "</td>" +
+        "</tr>";
+    if (!$(".executive > table").hasClass("table")) {
+        table = "<table class='table mtop-lg-25'>" +
+            "<thead>" +
+            "<tr>" +
+            "<td>سمت</td>" +
+            "<td>محل خدمت</td>" +
+            "<td>شهر</td>" +
+            "<td>از تاریخ</td>" +
+            "<td>تا تاریخ</td>" +
+            "<td></td>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>" +
+            "</table>";
+        $(".executive").html(table);
+    }
+    $(".executive > table > tbody").append(row);
+    $(".executive div#" + $(this).attr("id")).remove();
+    record_edit(".executive");
 }
 
-function studious_data_form(stu_count) {
+function research_data_form(stu_count) {
     div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
     $(div).attr("id", stu_count);
@@ -522,65 +465,62 @@ function studious_data_form(stu_count) {
     return div;
 }
 
-function studious_record() {
-    $(".studious-btn > i.fa-plus").click(function () {
-        if ($(".studious .ch-card-item").length === 0) {
-            if ($(".studious > .initial-value").hasClass("initial-value")) {
-                $(".studious").html(studious_data_form(stu_count));
+function research_record() {
+    $(".research-btn > i.fa-plus").click(function () {
+        if ($(".research .ch-card-item").length === 0) {
+            if ($(".research > .initial-value").hasClass("initial-value")) {
+                $(".research").html(research_data_form(stu_count));
             } else {
-                $('.studious').append(studious_data_form(stu_count));
+                $('.research').append(research_data_form(stu_count));
             }
-            cancel_add(".studious");
-            add_studious_record(stu_count);
+            cancel_add(".research");
+            add_research_record(stu_count);
             input_focus();
             stu_count++;
         }
     });
 }
 
-function add_studious_record(stu_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".studious .accept-btn").click(function () {
-        row = "<tr>" +
-            "<td>" + $("#subject" + stu_count).val() + "</td>" +
-            "<td>" + $("#admin" + stu_count).val() + "</td>" +
-            "<td>" + $("#liable" + stu_count).val() + "</td>" +
-            "<td>" + $("#rank" + stu_count).val() + "</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_stu_" + stu_count + "'></i>" +
-            "<i class='fas fa-trash-alt' id='edit_stu_" + stu_count + "'></i>" +
-            "</td>" +
-            "</tr>";
-        if (!$(".studious > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                "<thead>" +
-                "<tr>" +
-                "<td>عنوان طرح پژوهشی</td>" +
-                "<td>مجری</td>" +
-                "<td>مسئول اجرا/ همکار</td>" +
-                "<td>وضعیت طرح پژوهشی</td>" +
-                "<td></td>" +
-                "</tr>" +
-                "</thead>" +
-                "<tbody>" +
-                "</tbody>" +
-                "</table>";
-            $(".studious").html(table);
-        }
-        $(".studious > table > tbody").append(row);
-        $(".studious div#" + $(this).attr("id")).remove();
-        record_edit(".studious");
-    });
+function show_research_record() {
+    row = "<tr>" +
+        "<td>" + $("#subject").val() + "</td>" +
+        "<td>" + $("#admin").val() + "</td>" +
+        "<td>" + $("#liable").val() + "</td>" +
+        "<td>" + $("#rank").val() + "</td>" +
+        "<td>" +
+        "<i class='fas fa-pen' id='edit_stu'></i>" +
+        "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+        "</td>" +
+        "</tr>";
+    if (!$(".research > table").hasClass("table")) {
+        table = "<table class='table mtop-lg-25'>" +
+            "<thead>" +
+            "<tr>" +
+            "<td>عنوان طرح پژوهشی</td>" +
+            "<td>مجری</td>" +
+            "<td>مسئول اجرا/ همکار</td>" +
+            "<td>وضعیت طرح پژوهشی</td>" +
+            "<td></td>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>" +
+            "</table>";
+        $(".research").html(table);
+    }
+    $(".research > table > tbody").append(row);
+    $(".research div#" + $(this).attr("id")).remove();
+    record_edit(".research");
 }
 
-function article_data_form(art_count) {
+function paper_data_form(art_count) {
     div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
     $(div).attr("id", art_count);
     $(div).html("<form action='' method='post'><div class='row'>" +
         "<div class='col-lg-4'>" +
-        "<label for='article-name" + art_count + "'>عنوان مقاله</label>" +
-        "<input type='text' id='article-name" + art_count + "' class='w-100'>" +
+        "<label for='paper-name" + art_count + "'>عنوان مقاله</label>" +
+        "<input type='text' id='paper-name" + art_count + "' class='w-100'>" +
         "</div>" +
         "<div class='col-lg-4'>" +
         "<label for='publish-date" + art_count + "'>تاریخ انتشار</label>" +
@@ -613,57 +553,54 @@ function article_data_form(art_count) {
     return div;
 }
 
-function article_record() {
-    $(".article-btn > i.fa-plus").click(function () {
-        if ($(".article .ch-card-item").length === 0) {
-            if ($(".article > .initial-value").hasClass("initial-value")) {
-                $(".article").html(article_data_form(art_count));
+function paper_record() {
+    $(".paper-btn > i.fa-plus").click(function () {
+        if ($(".paper .ch-card-item").length === 0) {
+            if ($(".paper > .initial-value").hasClass("initial-value")) {
+                $(".paper").html(paper_data_form(art_count));
             } else {
-                $('.article').append(article_data_form(art_count));
+                $('.paper').append(paper_data_form(art_count));
             }
-            cancel_add(".article");
-            add_article_record(art_count);
+            cancel_add(".paper");
+            add_paper_record(art_count);
             input_focus();
             art_count++;
         }
     });
 }
 
-function add_article_record(art_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".article .accept-btn").click(function () {
-        row = "<tr>" +
-            "<td>" + $("#article-name" + art_count).val() + "</td>" +
-            "<td>" + $("#publish-date" + art_count).val() + "</td>" +
-            "<td>" + $("#published-at" + art_count).val() + "</td>" +
-            "<td>" + $("#impact-factor" + art_count).val() + "</td>" +
-            "<td>" + $("#referring-num" + art_count).val() + "</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_art_" + art_count + "'></i>" +
-            "<i class='fas fa-trash-alt' id='edit_art_" + art_count + "'></i>" +
-            "</td>" +
-            "</tr>";
-        if (!$(".article > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                "<thead>" +
-                "<tr>" +
-                "<td>عنوان مقاله</td>" +
-                "<td>تاریخ انتشار</td>" +
-                "<td>محل دقیق انتشار</td>" +
-                "<td>Impact Factor</td>" +
-                "<td>تعداد ارجاع</td>" +
-                "<td></td>" +
-                "</tr>" +
-                "</thead>" +
-                "<tbody>" +
-                "</tbody>" +
-                "</table>";
-            $(".article").html(table);
-        }
-        $(".article > table > tbody").append(row);
-        $(".article div#" + $(this).attr("id")).remove();
-        record_edit(".article");
-    });
+function show_paper_record() {
+    row = "<tr>" +
+        "<td>" + $("#paper-name").val() + "</td>" +
+        "<td>" + $("#publish-date").val() + "</td>" +
+        "<td>" + $("#published-at").val() + "</td>" +
+        "<td>" + $("#impact-factor").val() + "</td>" +
+        "<td>" + $("#referring-num").val() + "</td>" +
+        "<td>" +
+        "<i class='fas fa-pen' id='edit_art'></i>" +
+        "<i class='fas fa-trash-alt' id='edit_art'></i>" +
+        "</td>" +
+        "</tr>";
+    if (!$(".paper > table").hasClass("table")) {
+        table = "<table class='table mtop-lg-25'>" +
+            "<thead>" +
+            "<tr>" +
+            "<td>عنوان مقاله</td>" +
+            "<td>تاریخ انتشار</td>" +
+            "<td>محل دقیق انتشار</td>" +
+            "<td>Impact Factor</td>" +
+            "<td>تعداد ارجاع</td>" +
+            "<td></td>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>" +
+            "</table>";
+        $(".paper").html(table);
+    }
+    $(".paper > table > tbody").append(row);
+    $(".paper div#" + $(this).attr("id")).remove();
+    record_edit(".paper");
 }
 
 function dialog_comment_init() {
