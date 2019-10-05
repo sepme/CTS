@@ -1,11 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{% csrf_token %}" />
     <title>{% block title %}{% endblock %}</title>
-    {% load static %}
     <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
     <link rel="stylesheet" href="{% static 'expert/css/pageLoader.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -14,8 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">#}
 </head>
 <body>
 {#  {% include 'expert/layouts/pageLoader.html' %}#}
@@ -36,10 +37,10 @@
                 {% endif %}
             </button>
             <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-              <li><a href="{% url 'expert:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
-              <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
-              <li class="divider"></li>
-              <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
+                <li><a href="{% url 'expert:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
+                <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
     </div>
@@ -125,6 +126,7 @@
 <script type="text/javascript" src="{% static 'expert/js/pageLoader.js' %}"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 <script type="text/javascript" src="{% static 'expert/js/persianumber.min.js' %}"></script>
 {% block script %}{% endblock %}
 

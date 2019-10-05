@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.conf import settings
-
+from django.http import JsonResponse
 from . import models
 from . import forms
 from researcher.models import ResearcherUser, Status
@@ -101,6 +101,76 @@ class SignupEmail(generic.FormView):
         return super().post(request, *args, **kwargs)
 
 
+def signup_email_ajax(request):
+    print(request.is_ajax())
+    print(request.POST)
+    form = forms.RegisterEmailForm(request.POST)
+    print('is valid: ', form.is_valid())
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        account_type = form.cleaned_data['account_type']
+        # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
+        temp_user = models.TempUser(email=email, account_type=account_type)
+        subject = 'Welcome to Chamran Team!!!'
+
+        unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
+        message = 'EmailValidation\nyour url:\n' + unique_url
+        data = {'success': 'successful'}
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False
+            )
+            temp_user.save()
+        except TimeoutError:
+            return JsonResponse({'Error': 'Timeout Error!'})
+        return JsonResponse(data)
+    else:
+        print('form error')
+        return JsonResponse(form.errors, status=400)
+
+
+def login_ajax(request):
+    print(request.is_ajax())
+    form = forms.LoginForm(request.POST)
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        entry_user = authenticate(request, username=username, password=password)
+        print(entry_user)
+        data = {'success': 'successful'}
+        if entry_user is not None:
+            login(request, entry_user)
+
+            try:
+                user = ResearcherUser.objects.get(user=entry_user)
+                data['type'] = 'researcher'
+            except ResearcherUser.DoesNotExist:
+                try:
+                    user = ExpertUser.objects.get(user=entry_user)
+                    data['type'] = 'expert'
+                except ExpertUser.DoesNotExist:
+                    try:
+                        user = IndustryUser.objects.get(user=entry_user)
+                        data['type'] = 'industry'
+                        return user.get_absolute_url()
+                    except IndustryUser.DoesNotExist:
+                        raise ValidationError('کابر مربوطه وجود ندارد.')
+            return JsonResponse(data)
+        else:
+            # context = {'form': form,
+            #            'error': 'گذرواژه اشتباه است'}
+            return JsonResponse({
+                'error': 'گذرواژه اشتباه است'
+            })
+    else:
+        print('form error')
+        return JsonResponse(form.errors, status=400)
+
+
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
     template_name = 'registration/user_pass.html'
@@ -169,10 +239,6 @@ class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
     def get(self, request, *args, **kwargs):
-        login_form = forms.LoginForm()
-        register_form = forms.RegisterEmailForm()
-        context = {'form': login_form,
-                   'register_form': register_form}
         if request.user.is_authenticated:
             return find_user(request.user).get_absolute_url()
 
@@ -183,36 +249,7 @@ class LoginView(generic.TemplateView):
                        'register_form': register_form}
         return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
-        login_form = forms.LoginForm(request.POST or None)
-        context = {'form': login_form}
-        if 'sign_in' in request.POST:
-            print('sign_in')
-            if login_form.is_valid():
-                username = login_form.cleaned_data['username']
-                password = login_form.cleaned_data['password']
-                entry_user = authenticate(request, username=username, password=password)
-                print(entry_user)
-                if entry_user is not None:
-                    login(request, entry_user)
 
-                    try:
-                        user = ResearcherUser.objects.get(user=entry_user)
-                        return user.get_absolute_url()
-                    except ResearcherUser.DoesNotExist:
-                        try:
-                            user = ExpertUser.objects.get(user=entry_user)
-                            return user.get_absolute_url()
-                        except ExpertUser.DoesNotExist:
-                            try:
-                                user = IndustryUser.objects.get(user=entry_user)
-                                return user.get_absolute_url()
-                            except IndustryUser.DoesNotExist:
-                                raise ValidationError('کابر مربوطه وجود ندارد.')
-                else:
-                    context = {'form': login_form,
-                               'error': 'گذرواژه اشتباه است'}
-        return render(request, self.template_name, context)
 
 
 class LogoutView(generic.TemplateView):

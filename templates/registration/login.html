@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <title>ورود</title>
     {% load static %}
@@ -10,35 +10,53 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
 </head>
 <body>
-<div class="card login-card">
+{% include 'registration/loading.html' %}
+<div class="card login-card registration text-center">
     <img class="registration-card-icon" src="{% static 'img/logo.png' %}" alt="ChamranLogo">
     <p class="ChamranTeam">چمران تیم</p>
     <div class="login-div">
-        <form method="post" novalidate>
-            {% csrf_token %}
+        <form method="post" novalidate class="login-ajax" data-url="{% url 'chamran:login_ajax' %}">
             <div class="username">
                 <label for="id_username">نام کاربری</label>
                 {{ form.username|attr:"id:id_username" }}
-                {{ form.username.errors }}
                 <i class="fas fa-user-alt fa-lg"></i>
             </div>
             <div class="password">
                 <label for="id_password">رمز عبور</label>
-                {{ error }}
                 {{ form.password|attr:"id:id_password" }}
-                {{ form.password.errors }}
                 <i class="fas fa-lock fa-lg"></i>
-                <button type="submit" name="sign_in" class="Enter-btn">ورود</button>
+                <button type="submit" class="Enter-btn">ورود</button>
             </div>
+        </form>
+    </div>
+    <div class="signUp-div">
+        <form method="post" action="" novalidate class="sign-up-ajax" data-url="{% url 'chamran:signup_email' %}">
+            <div class="user-type-container">
+{#                                <input type="radio" name="user-type" id="researcher" value="researcher">#}
+{#                                {{ form.account_type.2|attr:"id:researcher" }}#}
+{#                                <label for="researcher" class="user-type researcher text-center">پژوهشگر</label>#}
+{#                                <input type="radio" name="user-type" id="expert" value="expert">#}
+{#                                <label for="expert" class="user-type expert text-center">استاد</label>#}
+{#                                <input type="radio" name="user-type" id="industry" value="industry">#}
+{#                                <label for="industry" class="user-type industry text-center">صنعت</label>#}
+                {{ register_form.account_type }}
+
+            </div>
+            <div class="email">
+                <label for="email">پست الکترونیکی</label>
+                {{ register_form.email|attr:"id:email" }}
+                <i class="fas fa-at fa-lg"></i>
+            </div>
+            <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
         </form>
     </div>
 
     <div class="card-footer">
         <a href="{% url 'chamran:recover_password' %} " class="forget-pass">رمز عبور خود را فراموش کرده اید؟</a>
-        <p class="new-user">کاربر جدید هستید؟ <a href="{% url 'chamran:signup_email' %}" onclick='signUp()'>عضویت</a>
+        <p class="new-user">کاربر جدید هستید؟ <a href="#" onclick='signUp()'>عضویت</a>
         </p>
     </div>
 </div>
