@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.http import JsonResponse
@@ -13,6 +13,7 @@ from . import forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser
+from django.template.loader import get_template
 from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
@@ -85,13 +86,19 @@ class SignupEmail(generic.FormView):
             unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
             message = 'EmailValidation\nyour url:\n' + unique_url
             try:
-                send_mail(
-                    subject=subject,
-                    message=message,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[email],
-                    fail_silently=False
-                )
+                # send_mail(
+                #     subject=subject,
+                #     message=message,
+                #     from_email=settings.EMAIL_HOST_USER,
+                #     recipient_list=[email],
+                #     fail_silently=False
+                # )
+                email_template = get_template('registration/email_template.html')
+                msg = EmailMultiAlternatives(subject=subject, body=message, from_email=settings.EMAIL_HOST_USER,
+                                             to=[email])
+                msg.attach_alternative(email_template, "text/html")
+                msg.send()
+                print('WTF??')
                 temp_user.save()
             except TimeoutError:
                 return HttpResponse('Timeout Error!!')
@@ -114,16 +121,23 @@ def signup_email_ajax(request):
         subject = 'Welcome to Chamran Team!!!'
 
         unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
-        message = 'EmailValidation\nyour url:\n' + unique_url
+        message = ':لینک ثبت نام' + '\n' + unique_url
         data = {'success': 'successful'}
         try:
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email],
-                fail_silently=False
-            )
+            # send_mail(
+            #     subject=subject,
+            #     message=message,
+            #     from_email=settings.EMAIL_HOST_USER,
+            #     recipient_list=[email],
+            #     fail_silently=False
+            # )
+            html_template = get_template('registration/email_template.html')
+            email_template = html_template.render({'message': message})
+            msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                         to=[email])
+            msg.attach_alternative(email_template, 'text/html')
+            msg.send()
+            print('WTF??')
             temp_user.save()
         except TimeoutError:
             return JsonResponse({'Error': 'Timeout Error!'})
@@ -248,8 +262,6 @@ class LoginView(generic.TemplateView):
             context = {'form': login_form,
                        'register_form': register_form}
         return render(request, self.template_name, context)
-
-
 
 
 class LogoutView(generic.TemplateView):
