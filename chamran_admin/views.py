@@ -25,20 +25,20 @@ LOCAL_URL = '127.0.0.1:8000'
 
 
 def jalali_date(jdate):
-    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month] + ' ' + str(jdate.year)
+    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month-1] + ' ' + str(jdate.year)
 
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
     if not message.read_by.filter(username=request.user.username).exists():
         message.read_by.add(request.user)
-        message.save()
     attachment = None
     if message.attachment:
         attachment = message.attachment.url
+    print(message.date)
     return JsonResponse({
         'text': message.text,
-        'date': jalali_date(message.date),
+        'date': jalali_date(JalaliDate(message.date)),
         'title': message.title,
         'code': message.code,
         'type': message.type,

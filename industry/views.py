@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
+# industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
+#                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
 from industry.models import IndustryForm
 from . import models
 from . import forms
@@ -147,8 +149,10 @@ class NewProject(View):
             new_project_form.save()
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
-            # new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
-            # new_project.save()
+            new_project = models.Project(project_form=new_project_form)
+            new_project.save()
+            request.user.industryuser.projects.add(new_project)
+            # models.IndustryUser.objects.filter(user=request.user).update()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/newProject.html', context={'form': form})
 
