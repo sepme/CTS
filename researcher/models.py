@@ -11,6 +11,11 @@ def get_image_path(instance, filename):
 
     return os.path.join('unique', instance.researcher_user.user.username, filename)
 
+def get_attachFile_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format("answer-"+instance.researcher.user.username+"-"+"-".join(filename.split('.')[:-1]), ext)
+    folder_name = instance.research_question.question_title+"-"+str(instance.research_question.uniqe_id)
+    return os.path.join('questions', folder_name, filename)
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -23,6 +28,15 @@ class ResearcherUser(models.Model):
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("researcher:index"))
 
+    def question_status(self):
+        if self.status.status == "not_answered":
+            deltatime = datetime.date.today()-self.researchquestioninstance.hand_out_date        
+            if deltatime.days > 15:
+                self.status.status = 'inactivated'
+                self.status.status.save()
+                return "inactivated"
+            return 'not_answered'
+        return 'free'
 
 class Status(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
@@ -247,7 +261,7 @@ class Technique(models.Model):
 
 
 class TechniqueInstance(models.Model):
-    researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
+    researcher = models.ForeignKey("ResearcherUser", on_delete=models.CASCADE)
     technique = models.OneToOneField("Technique", verbose_name="مهارت", on_delete=models.CASCADE, null=True, blank=True)
     TECH_GRADE = (
         ('A', 'به صورت عملی در پروژه انجام داده است.'),
@@ -269,3 +283,16 @@ class RequestedProject(models.Model):
     date_requested = models.DateField(auto_now=False, auto_now_add=False, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
+
+class ResearchQuestionInstance(models.Model):
+    research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,
+                                           verbose_name="سوال پژوهشی")
+    researcher = models.OneToOneField(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
+                                    blank=True, null=True)
+    hand_out_date = models.DateField( verbose_name="تاریخ واگذاری" ,auto_now_add=True)
+    answer = models.FileField(upload_to=get_attachFile_path, verbose_name="پاسخ" ,null=True)
+    is_answered = models.BooleanField(verbose_name="پاسخ داده شده" ,default=False)
+    is_correct = models.BooleanField(verbose_name="تایید استاد" ,default=False)
+
+    def __str__(self):
+        return str(self.research_question) + ' - ' + self.researcher.user.username

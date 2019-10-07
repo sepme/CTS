@@ -25,3 +25,7 @@ class ExecutiveRecordAdmin(admin.ModelAdmin):
 @admin.register(models.StudiousRecord)
 class StudiousRecordAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(models.ResearchQuestionInstance)
+class ResearchQuestionInstanceAdmin(admin.ModelAdmin):
+    pass

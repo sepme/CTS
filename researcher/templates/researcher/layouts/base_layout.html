@@ -91,7 +91,13 @@
                     </div>
                 </a>
             </li>
-            {% url 'researcher:question' as question_url %}
+            <!-- {% url 'researcher:question-alert' as question_url %} -->
+            {% if question_instance %}                
+                {% url 'researcher:question-show' question_id=uuid as question_url %}
+            {% else %}
+                <h1>{{question_instance}}</h1>
+                {% url 'researcher:question-alert' as question_url %}
+            {% endif %}
             <li class="list-group-item text-right">
                 <a href="{{ question_url }}">
                     <div>

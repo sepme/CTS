@@ -23,8 +23,11 @@
             </div>
             <div class="row">
                 <div class="col-12 text-center">
+                    <form method="POST">
+                        {% csrf_token %}
                     <button class="close-btn-danger">لغو</button>
-                    <button class="danger-btn show-researching-question">مشاهده سوال</button>
+                    <button type="submit" class="danger-btn show-researching-question">مشاهده سوال</button>
+                </form>
                 </div>
             </div>
         </div>

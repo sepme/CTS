@@ -4,10 +4,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 
-import os
+import os ,random ,datetime
 
 from . import models
 from . import forms
+from expert.models import ResearchQuestion
 
 
 class Index(LoginRequiredMixin, generic.FormView):
@@ -32,6 +33,16 @@ class Index(LoginRequiredMixin, generic.FormView):
             raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
         return super().get(self, request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        try:
+            if self.request.user.researcheruser.researchquestioninstance:
+                context['question_instance'] = "True"
+                context['uuid'] = self.request.user.researcheruser.researchquestioninstance.research_question.uniqe_id
+                return context
+        except:
+            return context
+
     def post(self, request, *args, **kwargs):
         researcher = get_object_or_404(models.ResearcherUser, user=request.user)
         form = forms.InitialInfoForm(request.POST, request.FILES)
@@ -43,9 +54,8 @@ class Index(LoginRequiredMixin, generic.FormView):
                 photo = request.FILES.get('photo')
                 researcher_profile.photo.save(photo.name, photo)
             status = models.Status.objects.get(researcher_user=researcher)
-            status.status = 'free'
+            status.status = 'not_answered'
             status.save()
-            print(researcher_profile)
             return HttpResponseRedirect(reverse('researcher:index'))
 
         return super().post(self, request, *args, **kwargs)
@@ -67,6 +77,12 @@ class UserInfo(generic.FormView):
                                                 'email':
                                                     self.request.user.username})
                     }
+        context['scientificrecord_set'] = self.request.user.researcheruser.researcherprofile.scientificrecord_set.all()
+        context['executiverecord_set'] = self.request.user.researcheruser.researcherprofile.executiverecord_set.all()
+        context['studiousrecord_set'] = self.request.user.researcheruser.researcherprofile.studiousrecord_set.all()
+        print(request.user.researcheruser.researcherprofile.scientificrecord_set.all())
+        print(request.user.researcheruser.researcherprofile.executiverecord_set.all())
+        print(request.user.researcheruser.researcherprofile.studiousrecord_set.all())
         return render(request ,'researcher/userInfo.html' ,context=context)
         # return super().get(request, *args, **kwargs)
     
@@ -79,6 +95,11 @@ class UserInfo(generic.FormView):
                                                    self.request.user.researcheruser.researcherprofile.grade,
                                                 'email':
                                                     self.request.user.username})
+        context['scientificrecord_set'] = self.request.user.researcheruser.researcherprofile.scientificrecord_set.all()
+        context['executiverecord_set'] = self.request.user.researcheruser.researcherprofile.executiverecord_set.all()
+        context['studiousrecord_set'] = self.request.user.researcheruser.researcherprofile.studiousrecord_set.all()
+        print("_---------------+++++++++++")
+        print(context['studiousrecord_set'])
         return context
 
     def post(self, request, *args, **kwargs):
@@ -91,29 +112,38 @@ class UserInfo(generic.FormView):
         print(self.request.POST)
         if form.is_valid():
             profile = request.user.researcheruser.researcherprofile
-            if profile.photo:
-                if os.path.isfile(profile.photo.path):
-                    os.remove(profile.photo.path)
-                profile.photo = form.cleaned_data['photo']
-            else:
-                profile.photo = form.cleaned_data['photo']
-                print(profile.photo)
-            print(profile.photo)
+            if form.cleaned_data['photo'] is not None:
+                if profile.photo:
+                    if os.path.isfile(profile.photo.path):
+                        os.remove(profile.photo.path)
+                    profile.photo = form.cleaned_data['photo']
+                else:
+                    profile.photo = form.cleaned_data['photo']
             profile.address = form.cleaned_data['address']
             profile.email = form.cleaned_data['email']
             profile.home_number = form.cleaned_data['home_number']
             profile.phone_number = form.cleaned_data['phone_number']
             profile.grade = form.cleaned_data['grade']
-            profile.team_work = form.cleaned_data['team_work']
-            profile.creative_thinking = form.cleaned_data['creative_thinking']
-            profile.interest_in_major = form.cleaned_data['interest_in_major']
-            profile.motivation = form.cleaned_data['motivation']
-            profile.sacrifice = form.cleaned_data['sacrifice']
-            profile.diligence = form.cleaned_data['diligence']
-            profile.interest_in_learn = form.cleaned_data['interest_in_learn']
-            profile.punctuality = form.cleaned_data['punctuality']
-            profile.data_collection = form.cleaned_data['data_collection']
-            profile.project_knowledge = form.cleaned_data['project_knowledge']
+            if form.cleaned_data['team_work'] is not None:
+                profile.team_work = form.cleaned_data['team_work']
+            if form.cleaned_data['creative_thinking'] is not None:
+                profile.creative_thinking = form.cleaned_data['creative_thinking']
+            if form.cleaned_data['interest_in_major'] is not None:
+                profile.interest_in_major = form.cleaned_data['interest_in_major']
+            if form.cleaned_data['motivation'] is not None:
+                profile.motivation = form.cleaned_data['motivation']
+            if form.cleaned_data['sacrifice'] is not None:
+                profile.sacrifice = form.cleaned_data['sacrifice']
+            if form.cleaned_data['diligence'] is not None:
+                profile.diligence = form.cleaned_data['diligence']
+            if form.cleaned_data['interest_in_learn'] is not None:
+                profile.interest_in_learn = form.cleaned_data['interest_in_learn']
+            if form.cleaned_data['punctuality'] is not None:
+                profile.punctuality = form.cleaned_data['punctuality']
+            if form.cleaned_data['data_collection'] is not None:
+                profile.data_collection = form.cleaned_data['data_collection']
+            if form.cleaned_data['project_knowledge'] is not None:
+                profile.project_knowledge = form.cleaned_data['project_knowledge']
             profile.description = form.cleaned_data['description']
 
             profile.save()
@@ -188,3 +218,66 @@ class Technique(generic.TemplateView):
 
 class Question(generic.TemplateView):
     template_name = 'researcher/question.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+           researcher = models.ResearcherUser.objects.get(user=request.user)
+        except models.ResearcherUser.DoesNotExist:
+            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
+        if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
+            return HttpResponseRedirect(reverse('chamran:login'))
+        # if researcher.status.status == 'not_answered':
+        #     return super().get(self, request, *args, **kwargs)
+        # else:
+        #     raise Http404('شما به سوال ارزیابی پاسخ داده اید.')
+        return super().get(self, request, *args, **kwargs)
+        
+    def post(self, request, *args, **kwargs):
+        accident_number = random.randint(1 ,ResearchQuestion.objects.all().count())        
+        question = ResearchQuestion.objects.get(pk= accident_number)
+        while not question:
+            accident_number = random.randint(1 ,ResearchQuestion.objects.all().count())
+            question = ResearchQuestion.objects.get(pk= accident_number)
+        question_instance = models.ResearchQuestionInstance(research_question=question,
+                                                            researcher = request.user.researcheruser)
+        question_instance.save()
+        return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={"question_id" :question.uniqe_id}))
+
+class QuestionShow(generic.TemplateView ):
+    template_name = 'researcher/layouts/preview_question.html'
+
+    def get(self ,request ,*args, **kwargs):
+        if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
+            return HttpResponseRedirect(reverse('chamran:login'))
+        question_id = kwargs['question_id']
+        if question_id != request.user.researcheruser.researchquestioninstance.research_question.uniqe_id:
+            raise Http404("سوال مورد نظر پیدا نشد.")
+        question = get_object_or_404(models.ResearchQuestionInstance ,researcher=request.user.researcheruser)
+        deltatime = datetime.date.today()-question.hand_out_date
+        if deltatime.days < 15:
+            if question.is_answered:
+                pass #show its in waiting for evaliator answer
+            if question.is_correct :
+                request.user.researcheruser.status.status = 'free'
+                request.user.researcheruser.status.status.save()
+                #show massage that u have answered
+        else:
+            status = request.user.researcheruser.status
+            status.status = 'inactivated'
+            inactivate_date = datetime.date.today()+ datetime.timedelta(days=30)
+            status.inactivate_duration = inactivate_date
+            status.save()
+        return super().get(request ,args, kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question = get_object_or_404(models.ResearchQuestionInstance ,researcher=self.request.user.researcheruser)        
+        deltatime = datetime.date.today() - question.hand_out_date
+        if deltatime.days < 15:
+            context['rest_days'] = 15 - deltatime.days
+        context['question_title'] = question.research_question.question_title
+        context['question'] = question.research_question.question
+        context['attach_file'] = question.research_question.attach_file
+        return context
+    # 7072488c-02ab-4362-9e51-7100dae78473
+    #persiontools
