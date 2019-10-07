@@ -1,5 +1,9 @@
+import datetime
+
+from dateutil.relativedelta import relativedelta
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
-from django.views import generic
+from django.views import generic, View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,6 +11,8 @@ from django.utils.decorators import method_decorator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from persiantools.jdatetime import JalaliDate
+from chamran_admin.models import Message
 from django.http import JsonResponse
 from . import models
 from . import forms
@@ -16,6 +22,64 @@ from industry.models import IndustryUser
 from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
+
+
+def jalali_date(jdate):
+    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month-1] + ' ' + str(jdate.year)
+
+
+def get_message_detail(request, message_id):
+    message = Message.objects.filter(receiver=request.user).get(id=message_id)
+    if not message.read_by.filter(username=request.user.username).exists():
+        message.read_by.add(request.user)
+    attachment = None
+    if message.attachment:
+        attachment = message.attachment.url
+    print(message.date)
+    return JsonResponse({
+        'text': message.text,
+        'date': jalali_date(JalaliDate(message.date)),
+        'title': message.title,
+        'code': message.code,
+        'type': message.type,
+        'attachment': attachment,
+    })
+
+
+class MessagesView(View):
+    jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
+                     'دی', 'بهمن', 'اسفند')
+
+    @staticmethod
+    def date_dif(jdate):
+        delta = relativedelta(datetime.datetime.now(), jdate.to_gregorian())
+        if delta.years > 0:
+            return '(' + str(delta.years) + ' سال پیش' + ')'
+        elif delta.months > 0:
+            return '(' + str(delta.months) + ' ماه پیش' + ')'
+        elif delta.days > 0:
+            return '(' + str(delta.days) + ' روز پیش' + ')'
+        else:
+            return '(امروز)'
+
+    def get(self, request):
+        all_messages = Message.get_user_messages(request.user.id)
+        top_3 = []
+        other_messages = []
+        for i, message in enumerate(all_messages):
+            jdate = JalaliDate(message.date)
+            if i < 3:
+                top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate), message.read_by.filter(
+                    username=request.user.username).exists()))
+            else:
+                other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
+                                       message.read_by.filter(
+                                           username=request.user.username).exists()))
+        return render(request, 'chamran_admin/messages.html', context={
+            'top_3': top_3,
+            'other_messages': other_messages,
+            'account_type': find_account_type(request.user),
+        })
 
 
 def find_account_type(user):

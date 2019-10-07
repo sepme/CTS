@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from chamran_admin import views as chamran_admin_views
 
 app_name = 'industry'
 
@@ -8,5 +9,5 @@ urlpatterns = [
     path('userInfo/', views.UserInfo.as_view(), name="userInfo"),
     path('newProject/', views.NewProject.as_view(), name="newProject"),
     path('project_list/', views.ProjectListView.as_view(), name='project_list'),
-    path('messages/', views.Messages.as_view(), name="messages"),
+    path('messages/', chamran_admin_views.MessagesView.as_view(), name="messages"),
 ]

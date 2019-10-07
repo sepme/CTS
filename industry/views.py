@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
+# industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
+#                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
 from industry.models import IndustryForm
 from . import models
 from . import forms
@@ -92,14 +94,18 @@ class UserInfo(View):
                 os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
                                        request.user.industryuser.industryform.photo.name))
             if model_form.photo:
+                print('the form has this pic:', model_form.photo)
                 model_form.photo.save(model_form.photo.name, model_form.photo)
-                IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
             else:
+                print('the form ain\'t have no photo')
                 with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
                           'rb') as image_file:
                     default_image = image_file.read()
                     model_form.photo.save('profile.jpg', ContentFile(default_image))
+            IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
             return HttpResponseRedirect(reverse('industry:index'))
+        else:
+            print('the errors are:', form.errors)
         return render(request, 'industry/userInfo.html', context={'form': form})
 
 
@@ -143,8 +149,10 @@ class NewProject(View):
             new_project_form.save()
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
-            # new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
-            # new_project.save()
+            new_project = models.Project(project_form=new_project_form)
+            new_project.save()
+            request.user.industryuser.projects.add(new_project)
+            # models.IndustryUser.objects.filter(user=request.user).update()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/newProject.html', context={'form': form})
 
@@ -168,5 +176,5 @@ class ProjectListView(generic.ListView):
         return context
 
 
-class Messages(generic.TemplateView):
-    template_name = 'industry/messages.html'
+# class Messages(generic.TemplateView):
+#     template_name = 'industry/messages.html'
