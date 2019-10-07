@@ -1,5 +1,5 @@
 from django import forms
-from .models import ExpertForm, ScientificRecord, ExecutiveRecord, PaperRecord, ResearchRecord
+from .models import *
 from django.core.exceptions import ValidationError
 
 
@@ -8,6 +8,14 @@ def is_numeric(string):
         if ch in '0123456789':
             return True
     return False
+
+
+def completely_numeric(string):
+    b = True
+    for ch in string:
+        if ch not in '0123456789':
+            b = False
+    return b
 
 
 class InitialInfoForm(forms.Form):
@@ -37,9 +45,10 @@ class InitialInfoForm(forms.Form):
 
     def clean_email_address(self):
         current_email = self.cleaned_data.get('email_address')
-        email = ExpertForm.objects.filter(email_address=current_email)
-        if email.exists():
-            raise forms.ValidationError('کاربر با این ایمیل قبلا ثبت نام شده است')
+        try:
+            ExpertUser.objects.get(user__username=current_email)
+        except ExpertUser.DoesNotExist:
+            raise forms.ValidationError('ایمیل وارد شده نادرست است.')
 
         return current_email
 
@@ -82,46 +91,216 @@ class InitialInfoForm(forms.Form):
 
         return phone_number
 
-class ExpertInfoForm(forms.ModelForm):
 
+class ExpertInfoForm(forms.ModelForm):
     prefix = 'expert_info'
 
     class Meta:
         model = ExpertForm
-        fields = '__all__'
+        exclude = ['eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
+        error_messages = {
+            'special_field': {
+                'required': 'حوزه تخصصی نمی تواند خالی باشد.'
+            },
+            'home_address': {
+                'required': 'آدرس نمی تواند خالی باشد.'
+            },
+            'scientific_rank': {
+                'required': 'مرتبه علمی نمی تواند خالی باشد'
+            }
+        }
+
+    def clean_mobile_phone(self):
+        home_number = self.cleaned_data.get('mobile_phone')
+        print('home_number:', home_number)
+        try:
+            int(home_number)
+        except ValueError:
+            raise forms.ValidationError('شماره تلفن همراه باید یک عدد باشد.')
+
+        if len(home_number) != 11:
+            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
+
+        return home_number
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        print('phone_number:', phone_number)
+        try:
+            int(phone_number)
+        except ValueError:
+            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
+
+        if len(phone_number) != 11:
+            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
+
+        return phone_number
 
 
 class ScientificRecordForm(forms.ModelForm):
-
-    prefix = 'scientific_info'
-
     class Meta:
         model = ScientificRecord
-        exclude = ['expert_form']
+        fields = ['degree', 'major', 'university', 'city', 'date_of_graduation']
+
+    def clean_date_of_graduation(self):
+        year = self.cleaned_data.get('date_of_graduation')
+        try:
+            int(year)
+        except ValueError:
+            raise forms.ValidationError('سال اخذ مدرک باید عدد باشد.')
+        return year
+
+    def clean_degree(self):
+        degree = self.cleaned_data.get('degree')
+        if completely_numeric(degree):
+            raise forms.ValidationError('مقطع تحصیلی نمی تواند عدد باشد')
+        return degree
+
+    def clean_major(self):
+        major = self.cleaned_data.get('major')
+        if completely_numeric(major):
+            raise forms.ValidationError('رشته تحصیلی نمی تواند عدد باشد')
+        return major
+
+    def clean_university(self):
+        university = self.cleaned_data.get('university')
+        if completely_numeric(university):
+            raise forms.ValidationError('دانشگاه نمی تواند عدد باشد')
+        return university
+
+    def clean_city(self):
+        city = self.cleaned_data.get('city')
+        if completely_numeric(city):
+            raise forms.ValidationError('شهر نمی تواند عدد باشد')
+        return city
 
 
 class ExecutiveRecordForm(forms.ModelForm):
-
-    prefix = 'executive_info'
-
     class Meta:
         model = ExecutiveRecord
         exclude = ['expert_form']
 
+    def clean_executive_post(self):
+        executive_post = self.cleaned_data.get('executive_post')
+        if completely_numeric(executive_post):
+            raise forms.ValidationError('سمت نمی تواند عدد باشد')
+        return executive_post
+
+    def clean_city(self):
+        city = self.cleaned_data.get('city')
+        if completely_numeric(city):
+            raise forms.ValidationError('شهر نمی تواند عدد باشد')
+        return city
+
+    def clean_organization(self):
+        organization = self.cleaned_data.get('organization')
+        if completely_numeric(organization):
+            raise forms.ValidationError('محل خدمت نمی تواند عدد باشد')
+        return organization
+
+    def clean_date_start_post(self):
+        start = self.cleaned_data.get('date_start_post')
+        try:
+            int(start)
+        except ValueError:
+            raise forms.ValidationError('لطفا عدد چهار رقمی وارد کنید.')
+        if len(start) != 4:
+            raise forms.ValidationError('سال ورود باید چهار رقمی باشد.')
+        return start
+
+    def clean_date_end_post(self):
+        end = self.cleaned_data.get('date_end_post')
+        try:
+            int(end)
+        except ValueError:
+            raise forms.ValidationError('لطفا عدد چهار رقمی وارد کنید.')
+        if len(end) != 4:
+            raise forms.ValidationError('تاریخ پایان باید چهار رقمی باشد.')
+        return end
+
 
 class ResearchRecordForm(forms.ModelForm):
-
-    prefix = 'research_info'
-
     class Meta:
         model = ResearchRecord
         exclude = ['expert_form']
 
+    def clean_research_title(self):
+        title = self.cleaned_data.get('research_title')
+        if completely_numeric(title):
+            raise forms.ValidationError('عنوان طرح نمی تواند عدد باشد')
+        return title
+
+    def clean_researcher(self):
+        researcher = self.cleaned_data.get('researcher')
+        if is_numeric(researcher):
+            raise forms.ValidationError('نام مجری نمی تواند عدد باشد')
+        return researcher
+
+    def clean_co_researcher(self):
+        co_researcher = self.cleaned_data.get('co_researcher')
+        if is_numeric(co_researcher):
+            raise forms.ValidationError('نام همکار نمی تواند عدد باشد')
+        return co_researcher
+
 
 class PaperRecordForm(forms.ModelForm):
-
-    prefix = 'paper_info'
-
     class Meta:
         model = PaperRecord
         exclude = ['expert_form']
+
+    def clean_citation(self):
+        citation = self.cleaned_data.get('citation')
+        try:
+            int(citation)
+        except ValueError:
+            raise forms.ValidationError('تعداد ارجاع باید عدد باشد.')
+
+        return citation
+
+    def clean_research_title(self):
+        title = self.cleaned_data.get('research_title')
+        if completely_numeric(title):
+            raise forms.ValidationError('عنوان مقاله نمی تواند عدد باشد')
+        return title
+
+    def clean_date_published(self):
+        date_published = self.cleaned_data.get('date_published')
+        try:
+            int(date_published)
+        except ValueError:
+            raise forms.ValidationError('لطفا عدد چهار رقمی وارد کنید.')
+        if len(date_published) != 4:
+            raise forms.ValidationError('تاریخ انتشار باید چهار رقمی باشد.')
+        return date_published
+
+    def clean_published_at(self):
+        published_at = self.cleaned_data.get('published_at')
+        if completely_numeric(published_at):
+            raise forms.ValidationError('عنوان مقاله نمی تواند عدد باشد')
+        return published_at
+
+    def clean_impact_factor(self):
+        impact_factor = self.cleaned_data.get('impact_factor')
+        try:
+            int(impact_factor)
+        except ValueError:
+            raise forms.ValidationError('فاکتور تاثیرگذاری باید عدد باشد.')
+
+        return impact_factor
+
+
+class EQTestForm(forms.Form):
+    INT_CHOICE = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+    team_work = forms.ChoiceField(widget=forms.RadioSelect(attrs={'id': 'group-work'}), choices=INT_CHOICE)
+
+    # def __init__(self, *args, **kwargs):
+    #     super(EQTestForm, self).__init__(*args, **kwargs)
+    #     self.fields['team_work'].widget = forms.RadioSelect(attrs={
+    #         'id': 'group-work'
+    #     })
