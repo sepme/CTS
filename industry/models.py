@@ -89,7 +89,7 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
+    # required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     required_technique = models.TextField(default='no technique', verbose_name='تکنیک های مورد نیاز')
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
@@ -114,17 +114,20 @@ class Project(models.Model):
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
                                                 related_name="researchers_applied", blank=True, null=True)
-    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
-                                                 related_name="researchers_accepted", blank=True, null=True)
-    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
-                                            related_name="experts_applied", blank=True, null=True)
-    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
-                                           null=True)
+    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده", related_name="researchers_accepted", blank=True, null=True)
+    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده", related_name="experts_applied", blank=True, null=True)
+    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True)
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True)
     project_detail = models.TextField(verbose_name="جزيات پروژه", null=True)
     project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه", null=True)
+    PROJECT_STATUS_CHOICES = (
+        (0, 'در حال بررسی'),
+        (1, 'فعال'),
+        (2, 'معلق'),
+        (3, 'انجام شد'),
+    )
+    status = models.IntegerField(choices=PROJECT_STATUS_CHOICES, verbose_name='وضعیت پروژه', default=0, blank=True)
 
     def __str__(self):
         return self.project_form.project_title_english

@@ -28,6 +28,12 @@ class Index(generic.TemplateView):
                 models.IndustryUser.objects.filter(user=self.request.user).count() and \
                 self.request.user.industryuser.status == 'signed_up':
             context['form'] = forms.IndustryBasicInfoForm(self.request.user)
+        else:
+            industry_user = self.request.user.industryuser
+            # print('he\'s got {} projects'.format(industry_user.projects.count()))
+            print('his projects are:')
+            for project in industry_user.projects.all():
+                print(project.project_form.project_title_persian)
         return context
 
     def post(self, request, *args, **kwargs):
