@@ -1,6 +1,6 @@
 import os
 from ChamranTeamSite import settings
-from PIL import Image
+# from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -102,7 +102,7 @@ class ProjectForm(models.Model):
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
-    comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True)
+    comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True, related_name='+')
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
     date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True)
     date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True)
@@ -145,7 +145,7 @@ class Comment(models.Model):
         (1, 'صنعت')
     )
     sender_type = models.IntegerField(choices=SENDER)
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
