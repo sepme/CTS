@@ -137,6 +137,7 @@ function education_record() {
             },
             error: function (data) {
                 var obj = JSON.parse(data.responseText);
+                console.log(data);
                 myForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                     .prop("disabled", false);
                 myForm.find("button[type='reset']").prop("disabled", false);
