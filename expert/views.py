@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, QueryDict
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
+from django.core import serializers
 
 
 def calculate_date_remaining(first_date, second_date):
@@ -222,3 +223,19 @@ def paper_record_view(request):
     else:
         print('form error occured')
         return JsonResponse(paper_form.errors, status=400)
+
+
+def show_project_view(request):
+    expert_user = request.user.expertuser
+    id = request.GET.get('id')
+    project = expert_user.experts_applied.get(id=id)
+    project_form = project.project_form
+    data = {
+        'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
+        'keywords': serializers.serialize('json', project_form.key_words.all()),
+        'main_problem': project_form.main_problem_and_importance,
+        'progress': project_form.progress_profitability,
+        'equipments': project_form.required_lab_equipment,
+        'approach': project_form.approach
+    }
+    return JsonResponse(data)
