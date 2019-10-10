@@ -135,10 +135,10 @@ class Project(models.Model):
         return project_comments
 
     def calculate_date_past(self):
-        diff = JalaliDate.today() - JalaliDate(self.date_submitted_by_industry)
+        diff = JalaliDate.today() - JalaliDate(self.date_finished)
         days = diff.days
         if days < 0:
-            return None
+            return '0 روز'
         elif days < 7:
             return '{} روز'.format(days)
         elif days < 30:
@@ -152,7 +152,7 @@ class Project(models.Model):
         diff = JalaliDate(self.date_finished) - JalaliDate.today()
         days = diff.days
         if days < 0:
-            return None
+            return '0 روز'
         elif days < 7:
             return '{} روز'.format(days)
         elif days < 30:
@@ -176,9 +176,11 @@ class Project(models.Model):
         else:
             return '{} سال'.format(int(days / 365))
 
+    class Meta:
+        ordering = ['-date_submitted_by_industry']
 
 def upload_comment(instance, file_name):
-    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
+        return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
 
 
 class Comment(models.Model):

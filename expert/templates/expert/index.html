@@ -36,12 +36,12 @@
                                                 <div class="alert"><span>فرم نظرسنجی فعال شده است!</span></div>
                                             {% endif %}
                                             <span class="header">{{ project.project_form.project_title_persian }} <span
-                                                    class="sub-header"> ( {{ project.calculate_date_remaining }} قبل ) </span></span>
+                                                    class="sub-header"> ( {{ project.calculate_date_past }} قبل ) </span></span>
                                             <span><i class="far fa-envelope"></i> پیام ها </span>
                                             <span><i
                                                     class="fas fa-dollar-sign"></i><span>{{ project.cost_of_project }}</span> ریال </span>
                                             <span><i
-                                                    class="fas fa-hourglass-end"></i><span>{{ project.calculate_date_past }}</span> تا اتمام پروژه</span>
+                                                    class="fas fa-hourglass-end"></i><span>{{ project.calculate_date_remaining }}</span> تا اتمام پروژه</span>
                                             <button type="button" class="chamran-btn-info" id="{{ project.id }}" data-url="{% url 'expert:show_project' %}">مشاهده</button>
                                             <button type="button" class="chamran-btn-delete">رد</button>
                                         </div>
