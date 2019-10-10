@@ -18,12 +18,12 @@ ACCOUNT_CHOICE = (
 class RegisterEmailForm(forms.Form):
     email = forms.EmailField(label="ایمیل", error_messages={'required': 'لطفا ایمیل خود را وارد کنید',
                                                             'invalid': 'ایمیل وارد شده نامعتبر است'})
-    account_type = forms.ChoiceField(choices=ACCOUNT_CHOICE)
-
-    class Meta:
-        widgets = {
-            'account_type': forms.RadioSelect(),
-        }
+    # account_type = forms.ChoiceField(choices=ACCOUNT_CHOICE)
+    #
+    # class Meta:
+    #     widgets = {
+    #         'account_type': forms.RadioSelect(),
+    #     }
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
