@@ -82,7 +82,7 @@ class ExpertForm(models.Model):
         (3, '31-60'),
         (4, '+60'),
     )
-    number_of_researcher = models.IntegerField(max_length=10, choices=number_of_researcher_choice,
+    number_of_researcher = models.IntegerField(choices=number_of_researcher_choice,
                                                verbose_name="دانشجو تحت نظارت",
                                                blank=True, null=True)
     has_industrial_research_choice = (
