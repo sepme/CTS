@@ -162,6 +162,20 @@ class Project(models.Model):
         else:
             return '{} سال'.format(int(days / 365))
 
+    def calculate_deadline(self):
+        diff = JalaliDate(self.date_finished) - JalaliDate(self.date_submitted_by_industry)
+        days = diff.days
+        if days < 0:
+            return None
+        elif days < 7:
+            return '{} روز'.format(days)
+        elif days < 30:
+            return '{} هفته'.format(int(days / 7))
+        elif days < 365:
+            return '{} ماه'.format(int(days / 30))
+        else:
+            return '{} سال'.format(int(days / 365))
+
 
 def upload_comment(instance, file_name):
     return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)

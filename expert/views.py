@@ -236,6 +236,7 @@ def show_project_view(request):
         'main_problem': project_form.main_problem_and_importance,
         'progress': project_form.progress_profitability,
         'equipments': project_form.required_lab_equipment,
-        'approach': project_form.approach
+        'approach': project_form.approach,
+        'deadline': project.calculate_deadline()
     }
     return JsonResponse(data)
