@@ -343,35 +343,35 @@ function executive_data_form(exe_count) {
         "</div></form>");
     return div;
 }
-function executive_record() {
-    $(".executive-btn > i.fa-plus").click(function () {
-        if( $(".executive .ch-card-item").length === 0 ) {
-            if ($(".executive > .initial-value").hasClass("initial-value")) {
-                $(".executive").html(executive_data_form(exe_count));
-            } else {
-                $('.executive').append(executive_data_form(exe_count));
-            }
-            cancel_add(".executive");
-            add_executive_record(exe_count);
-            input_focus();
-            $("#from" + exe_count).persianDatepicker({});
-            $("#until" + exe_count).persianDatepicker({});
-            exe_count++;
-        }
-    });
-}
+// function executive_record() {
+//     $(".executive-btn > i.fa-plus").click(function () {
+//         if( $(".executive .ch-card-item").length === 0 ) {
+//             if ($(".executive > .initial-value").hasClass("initial-value")) {
+//                 $(".executive").html(executive_data_form(exe_count));
+//             } else {
+//                 $('.executive').append(executive_data_form(exe_count));
+//             }
+//             cancel_add(".executive");
+//             add_executive_record(exe_count);
+//             input_focus();
+//             $("#from" + exe_count).persianDatepicker({});
+//             $("#until" + exe_count).persianDatepicker({});
+//             exe_count++;
+//         }
+//     });
+// }
 function add_executive_record(exe_count) {
     div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
     $(".executive .accept-btn").click(function () {
         row = "<tr>" +
-                    "<td>" + $("#duty" + exe_count).val() + "</td>" +
-                    "<td>" + $("#from" + exe_count).val() + "</td>" +
-                    "<td>" + $("#until" + exe_count).val() + "</td>" +
-                    "<td>" + $("#workplace" + exe_count).val() + "</td>" +
-                    "<td>" + $("#exe-city" + exe_count).val() + "</td>" +
+                    "<td>" + $("#duty").val() + "</td>" +
+                    "<td>" + $("#from").val() + "</td>" +
+                    "<td>" + $("#until").val() + "</td>" +
+                    "<td>" + $("#workplace").val() + "</td>" +
+                    "<td>" + $("#exe-city").val() + "</td>" +
                     "<td>" +
-                        "<i class='fas fa-pen' id='edit_exe_" + exe_count + "'></i>" +
-                        "<i class='fas fa-trash-alt' id='delete_exe_" + exe_count + "'></i>" +
+                        "<i class='fas fa-pen' id='edit_exe'></i>" +
+                        "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
                     "</td>" +
                 "</tr>";
         if(! $(".executive > table").hasClass("table")) {
@@ -769,61 +769,175 @@ $.ajaxSetup({
     }
 });
 
-function scientific_record() {    
-    var form = $('#ajax-sci-form');
-    form.submit(function (event) {        
-        event.preventDefault();
-        // form.$("#submit_button").cancel_add(education-btn);
-        // console.log(form.$("#submit_button"));
-        console.log(form)
-        $.ajax({
-            method: 'POST',
-            url: form.attr('url'),
-            dataType: 'json',
-            data: form.serialize(),
-            success: function (data) {
-                console.log(data)
-            },
-            error: function (data) {
-                console.log(data)
-            },
-        })
-    })
-}
+// function scientific_record() {  
+//     console.log("asdfadfadfdasf")
+//     var form = $('#ajax-sci-form');
+//     form.submit(function (event) {        
+//         event.preventDefault();
+//         // form.$("#submit_button").cancel_add(education-btn);  
+//         $.ajax({
+//             method: 'POST',
+//             url: form.attr('url'),
+//             dataType: 'json',
+//             data: form.serialize(),
+//             success: function (data) {
+//                 console.log(data)
+//             },
+//             error: function (data) {
+//                 console.log(data)
+//             },
+//         })
+//     })
+// }
 
-function executive_record() {
-    var form = $('.ajax-exe-form');
-    form.submit(function (event) {
-        event.preventDefault();        
-        $.ajax({
-            method: 'POST',
-            url: form.attr('url'),
-            dataType: 'json',
-            data: form.serialize(),
-            success: function (data) {
-                console.log(data)
-            },
-            error: function (data) {
-                console.log(data)
-            },
-        })
-    })
-}
-function studious_record() {
-    var form = $('.ajax-std-form');
-    form.submit(function (event) {
-        event.preventDefault();        
-        $.ajax({
-            method: 'POST',
-            url: form.attr('url'),
-            dataType: 'json',
-            data: form.serialize(),
-            success: function (data) {
-                console.log(data)
-            },
-            error: function (data) {
-                console.log(data)
-            },
-        })
-    })
-}
+// function executive_record() {
+//     console.log("exe call!!!")
+//     var form = $('.ajax-exe-form');
+//     form.submit(function (event) {
+//         event.preventDefault();        
+//         form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+//             .attr("disabled", "true");
+//         form.find("button[type='reset']").attr("disabled", "true");
+//         form.find("label").addClass("progress-cursor");
+//         form.closest(".fixed-back").find(".card").addClass("wait");
+//         form.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+//         $.ajax({
+//             method: 'POST',
+//             url: form.attr('url'),
+//             dataType: 'json',
+//             data: form.serialize(),
+//             success: function (data) {
+//                 console.log("++++++++")
+//                 console.log(data)
+//                 form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+//                     .prop("disabled", false);
+//                 form.find("button[type='reset']").prop("disabled", false);
+//                 form.find("input").prop("disabled", false).removeClass("progress-cursor");
+//                 form.find("label").removeClass("progress-cursor");
+//                 form.closest(".fixed-back").find(".card").removeClass("wait");
+//                 if (data.success === "successful") {
+//                     $(".ajax-exe-form").css("display", "none");
+//                     $(".main").removeClass("blur-div");
+//                     // show_scientific_record();
+//                     iziToast.success({
+//                         rtl: true,
+//                         message: "اطلاعات با موفقیت ذخیره شد!",
+//                         position: 'bottomLeft'
+//                     });
+//                     form[0].reset();
+//                 }
+//             },
+//             error: function (data) {
+//                 console.log("-----------")
+//                 console.log(data)
+//                 var obj = JSON.parse(data.responseText);
+//                 form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+//                     .prop("disabled", false);
+//                 form.find("button[type='reset']").prop("disabled", false);
+//                 form.find("input").prop("disabled", false).removeClass("progress-cursor");
+//                 form.find("label").removeClass("progress-cursor");
+//                 form.closest(".fixed-back").find(".card").removeClass("wait");
+//                 if (obj.post) {
+//                     console.log(obj.post)
+//                     $("#duty").closest("div").append("<div class='error'>" +
+//                         "<span class='error-body'>" +
+//                         "<ul class='errorlist'>" +
+//                         "<li>" + obj.post + "</li>" +
+//                         "</ul>" +
+//                         "</span>" +
+//                         "</div>");
+//                     $("input#duty").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+//                 }
+//                 if (obj.start) {
+//                     console.log(obj.start)
+//                     $("#from").closest("div").append("<div class='error'>" +
+//                         "<span class='error-body'>" +
+//                         "<ul class='errorlist'>" +
+//                         "<li>" + obj.start + "</li>" +
+//                         "</ul>" +
+//                         "</span>" +
+//                         "</div>");
+//                     $("input#from").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+//                 }
+//                 if (obj.end) {
+//                     console.log(obj.end)
+//                     $("#until").closest("div").append("<div class='error'>" +
+//                         "<span class='error-body'>" +
+//                         "<ul class='errorlist'>" +
+//                         "<li>" + obj.end + "</li>" +
+//                         "</ul>" +
+//                         "</span>" +
+//                         "</div>");
+//                     $("input#until").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+//                 }
+//                 if (obj.place) {
+//                     console.log(obj.place)
+//                     $("#workplace").closest("div").append("<div class='error'>" +
+//                         "<span class='error-body'>" +
+//                         "<ul class='errorlist'>" +
+//                         "<li>" + obj.place + "</li>" +
+//                         "</ul>" +
+//                         "</span>" +
+//                         "</div>");
+//                     $("input#workplace").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+//                 }
+//                 if (obj.city) {
+//                     $("#exe-city").closest("div").append("<div class='error'>" +
+//                         "<span class='error-body'>" +
+//                         "<ul class='errorlist'>" +
+//                         "<li>" + obj.city + "</li>" +
+//                         "</ul>" +
+//                         "</span>" +
+//                         "</div>");
+//                     $("input#exe-city").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+//                 }
+//             },
+//         })
+//     })
+// }
+
+// function executive_record() {
+//     console.log("adsf12312312312")
+//     var form = $('.ajax-exe-form');
+//     form.submit(function (event) {
+//         event.preventDefault();        
+//         form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+//             .attr("disabled", "true");
+//         form.find("button[type='reset']").attr("disabled", "true");
+//         form.find("label").addClass("progress-cursor");
+//         form.closest(".fixed-back").find(".card").addClass("wait");
+//         form.find("input").attr("disabled", "true").addClass("progress-cursor");
+//         $.ajax({
+//             method: 'POST',
+//             url: form.attr('url'),
+//             dataType: 'json',
+//             data: form.serialize(),
+//             success: function (data) {
+//                 console.log(data)
+//             },
+//             error: function (data) {
+//                 console.log(data)
+//             },
+//         })
+//     })
+// }
+// function studious_record() {
+//     console.log("asdfadfadfdasf");
+//     var form = $('.ajax-std-form');
+//     form.submit(function (event) {
+//         event.preventDefault();        
+//         $.ajax({
+//             method: 'POST',
+//             url: form.attr('url'),
+//             dataType: 'json',
+//             data: form.serialize(),
+//             success: function (data) {
+//                 console.log(data)
+//             },
+//             error: function (data) {
+//                 console.log(data)
+//             },
+//         })
+//     })
+// }

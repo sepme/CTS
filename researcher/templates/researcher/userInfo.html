@@ -129,7 +129,29 @@
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <div class="education text-center w-100">
+                                <div class="education text-center w-100">                                                                    
+                                    <table class='table mtop-lg-25'>
+                                            <thead>
+                                                <tr>
+                                                        <td>مقطع تحصیلی</td>
+                                                        <td>رشته تحصیلی</td>
+                                                        <td>دانشگاه</td>
+                                                        <td>شهر محل تحصیل</td>
+                                                        <td>سال اخذ مدرک</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for record in scientificrecord_set %}
+                                                <tr>
+                                                        <td>{{record.grade}}</td>
+                                                        <td>{{record.major}}</td>
+                                                        <td>{{record.university}}</td>
+                                                        <td>{{record.place}}</td>
+                                                        <td>{{record.graduated_year}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
                                 </div>
                                 <button type="button" class="education-btn success-btn">افزودن</button>
@@ -141,6 +163,29 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="executive text-center w-100">
+                                        <table class='table mtop-lg-25'>
+                                                <thead>
+                                                    <tr>
+                                                            <td>سمت</td>
+                                                            <td>محل خدمت</td>
+                                                            <td>شهر</td>
+                                                            <td>از سال</td>
+                                                            <td>تا سال</td>
+                                                            <!-- <td></td> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for record in executiverecord_set %}
+                                                    <tr>
+                                                            <td>{{record.post}}</td>
+                                                            <td>{{record.place}}</td>
+                                                            <td>{{record.city}}</td>
+                                                            <td>{{record.start}}</td>
+                                                            <td>{{record.end}}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
                                     <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
                                 </div>
                                 <button type="button" class="executive-btn success-btn">افزودن</button>
@@ -153,8 +198,28 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="studious text-center w-100">
+                                        <table class='table mtop-lg-25'>
+                                                <thead>
+                                                    <tr>
+                                                        <td>عنوان طرح پژوهشی</td>
+                                                        <td>مجری</td>
+                                                        <td>مسئول اجرا/ همکار</td>
+                                                        <td>وضعیت طرح پژوهشی</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for record in studiousrecord_set %}
+                                                    <tr>
+                                                            <td>{{record.title}}</td>
+                                                            <td>{{record.presenter}}</td>
+                                                            <td>{{record.responsible}}</td>
+                                                            <td>{{record.status}}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
                                     <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
-                                </div>
+                                </div> 
                                 <button type="button" class="research-btn success-btn">افزودن</button>
                             </div>
                         </div>
@@ -420,14 +485,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">تکنیک ها</div>
+                    <!-- <div class="card-header">تکنیک ها</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <button class="success-btn technique" type="button">افزودن</button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="card-header"></div>
                     <div class="card inner-card">
                         <div class="row">

@@ -139,7 +139,7 @@ class ScientificRecord(models.Model):
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     university = models.CharField(max_length=300, verbose_name="دانشگاه")
     place = models.CharField(max_length=300, verbose_name="شهر محل تحصیل")
-    graduated_year = models.IntegerField(verbose_name="سال اخذ مدرک")
+    graduated_year = models.CharField(max_length = 5,verbose_name="سال اخذ مدرک")
 
     def __str__(self):
         return self.grade

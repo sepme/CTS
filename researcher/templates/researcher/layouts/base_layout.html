@@ -53,7 +53,7 @@
                  height="150px">
         {% endif %}
 
-        <h5>{% block name %}{% endblock %}</h5>
+        <h5>{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}</h5>
         <h6>پژوهشگر</h6>
         <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
         <div class="progress">

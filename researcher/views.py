@@ -157,7 +157,7 @@ def ajax_ScientificRecord(request):
         scientific_record.researcherProfile = request.user.researcheruser.researcherprofile
         scientific_record.save()
         data = {
-            'success' : 'success',
+            'success' : 'successful',
         }
         return JsonResponse(data)
     else:
@@ -171,7 +171,7 @@ def ajax_ExecutiveRecord(request):
         executive_record.researcherProfile = request.user.researcheruser.researcherprofile
         executive_record.save()
         data = {
-            'success' : 'success',
+            'success' : 'successful',
         }
         return JsonResponse(data)
     else:
@@ -185,7 +185,7 @@ def ajax_StudiousRecord(request):
         studious_record.researcherProfile = request.user.researcheruser.researcherprofile
         studious_record.save()
         data = {
-            'success' : 'success',
+            'success' : 'successful',
         }
         return JsonResponse(data)
     else:

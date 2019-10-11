@@ -8,10 +8,18 @@ from . import models
 
 from datetime import date
 
-PER_ZERO = 1632
-PER_NINE = 1641
-ENG_ZERO = 48
-ENG_NINE = 57
+def is_numeric(string):
+    for ch in string:
+        if ch in '0123456789':
+            return True
+    return False
+
+def completely_numeric(string):
+    check = True
+    for ch in string:
+        if ch in '0123456789':
+            check = False
+    return check
 
 
 class InitailForm(forms.ModelForm):
@@ -40,10 +48,10 @@ class InitailForm(forms.ModelForm):
 
     def clean_national_code(self):
         data = self.cleaned_data["national_code"]
-        for item in data:
-            if ord(item) < ENG_ZERO or ord(item) > ENG_NINE:
-                if ord(item) < PER_ZERO or ord(item) > PER_NINE:
-                    raise ValidationError(_("فقط عدد وارد کنید."))
+        try:
+            int(data)
+        except:
+            raise ValidationError(_("فقط عدد وارد کنید."))
         if len(data) < 10 and len(data) != 0:
             print('تعداد اعداد وارد شده اشتباه است.')
             raise ValidationError(_("تعداد اعداد وارد شده اشتباه است."))
@@ -380,20 +388,29 @@ class ScientificRecordForm(forms.ModelForm):
 
     def clean_grade(self):
         grade = self.cleaned_data.get('grade')
+        if is_numeric(grade):
+            raise ValidationError(_("مقطع تحصیلی نمی تواند شامل عدد باشد."))
         print('grade' ,grade)
         return grade
 
     def clean_major(self):
         data = self.cleaned_data["major"]
+        if is_numeric(data):
+            raise ValidationError(_("رشته تحصیلی نمی تواند شامل عدد باشد."))
         print('major' ,data)
         return data
+
     def clean_university(self):
         data = self.cleaned_data["university"]
+        if is_numeric(data):
+            raise ValidationError(_("دانشگاه نمی تواند شامل عدد باشد."))
         print('university' ,data)
         return data
     
     def clean_place(self):
         data = self.cleaned_data["place"]
+        if is_numeric(data):
+            raise ValidationError(_("شهر نمی تواند شامل عدد باشد."))
         print('place' ,data)
         return data
     
@@ -401,9 +418,13 @@ class ScientificRecordForm(forms.ModelForm):
         data = self.cleaned_data["graduated_year"]
         print('year' ,data)
         if data:
+            try :
+                int(data)
+            except:
+                raise ValidationError(_("عدد چهار رقمی وارد کنید."))    
             this_year = str(date.today().year)
 
-            if data > (int(this_year) - 621):
+            if int(data) > (int(this_year) - 621):
                 raise ValidationError(_("سال را اشتباه وارد کرده اید."))
             
             if (int(data)/1000) < 1:
@@ -425,7 +446,8 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_post(self):
         data = self.cleaned_data["post"]
-        
+        if is_numeric(data):
+            raise ValidationError(_("سمت نمی تواند شامل عدد باشد."))
         return data
     
     def clean_start(self):
@@ -469,12 +491,14 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_place(self):
         data = self.cleaned_data["place"]
-        
+        if is_numeric(data):
+            raise ValidationError(_("محل خدمت نمی تواند شامل عدد باشد."))
         return data
     
     def clean_city(self):
         data = self.cleaned_data["city"]
-        
+        if is_numeric(data):
+            raise ValidationError(_("شهر نمی تواند شامل عدد باشد."))
         return data
 
 class StudiousRecordForm(forms.ModelForm):
@@ -491,17 +515,20 @@ class StudiousRecordForm(forms.ModelForm):
 
     def clean_title(self):
         data = self.cleaned_data["title"]
-        
+        if is_numeric(data):
+            raise ValidationError(_("عنوان طرح پژوهشی نمی تواند شامل عدد باشد."))
         return data
     
     def clean_presenter(self):
         data = self.cleaned_data["presenter"]
-        
+        if is_numeric(data):
+            raise ValidationError(_("مجری نمی تواند شامل عدد باشد."))
         return data
     
     def clean_responsible(self):
         data = self.cleaned_data["responsible"]
-        
+        if is_numeric(data):
+            raise ValidationError(_("مسئول اجرا / همکار نمی تواند شامل عدد باشد."))
         return data
     
     def clean_status(self):
