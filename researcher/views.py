@@ -35,13 +35,10 @@ class Index(LoginRequiredMixin, generic.FormView):
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
-        try:
-            if self.request.user.researcheruser.researchquestioninstance:
-                context['question_instance'] = "True"
-                context['uuid'] = self.request.user.researcheruser.researchquestioninstance.research_question.uniqe_id
-                return context
-        except:
-            return context
+        if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
+            context['question_instance'] = "True"
+            context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
+        return context
 
     def post(self, request, *args, **kwargs):
         researcher = get_object_or_404(models.ResearcherUser, user=request.user)
@@ -61,49 +58,44 @@ class Index(LoginRequiredMixin, generic.FormView):
         return super().post(self, request, *args, **kwargs)
 
 
-class UserInfo(generic.FormView):
+class UserInfo(generic.TemplateView):
     template_name = 'researcher/userInfo.html'
     form_class = forms.ResearcherProfileForm
 
+
     def get(self, request, *args, **kwargs):
-        if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
+        if (not self.request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=self.request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
-        context = {
-                    'form' :  forms.ResearcherProfileForm(self.request.user,
+        print(request)
+        return super().get(request, *args, **kwargs)    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = forms.ResearcherProfileForm(self.request.user,
                                            instance=self.request.user.researcheruser.researcherprofile,
                                            initial={
                                                 'grade':
                                                     self.request.user.researcheruser.researcherprofile.grade,
                                                 'email':
                                                     self.request.user.username})
-                    }
+        # context = {
+        #             'form' :  forms.ResearcherProfileForm(self.request.user,
+        #                                    instance=self.request.user.researcheruser.researcherprofile,
+        #                                    initial={
+        #                                         'grade':
+        #                                             self.request.user.researcheruser.researcherprofile.grade,
+        #                                         'email':
+        #                                             self.request.user.username})
+        #             }
         context['scientificrecord_set'] = self.request.user.researcheruser.researcherprofile.scientificrecord_set.all()
         context['executiverecord_set'] = self.request.user.researcheruser.researcherprofile.executiverecord_set.all()
         context['studiousrecord_set'] = self.request.user.researcheruser.researcherprofile.studiousrecord_set.all()
-        print(request.user.researcheruser.researcherprofile.scientificrecord_set.all())
-        print(request.user.researcheruser.researcherprofile.executiverecord_set.all())
-        print(request.user.researcheruser.researcherprofile.studiousrecord_set.all())
-        return render(request ,'researcher/userInfo.html' ,context=context)
-        # return super().get(request, *args, **kwargs)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] =  forms.ResearcherProfileForm(self.request.user,
-                                           instance=self.request.user.researcheruser.researcherprofile,
-                                           initial={
-                                               'grade':
-                                                   self.request.user.researcheruser.researcherprofile.grade,
-                                                'email':
-                                                    self.request.user.username})
-        context['scientificrecord_set'] = self.request.user.researcheruser.researcherprofile.scientificrecord_set.all()
-        context['executiverecord_set'] = self.request.user.researcheruser.researcherprofile.executiverecord_set.all()
-        context['studiousrecord_set'] = self.request.user.researcheruser.researcherprofile.studiousrecord_set.all()
-        print("_---------------+++++++++++")
-        print(context['studiousrecord_set'])
+        if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
+            context['question_instance'] = "True"
+            context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id 
         return context
 
-    def post(self, request, *args, **kwargs):
-        print('--------------------------------')
+    def post(self, request, *args, **kwargs):        
         form = forms.ResearcherProfileForm(self.request.user ,request.POST, request.FILES,
                                         #    initial={
                                         #        'grade':
@@ -148,14 +140,8 @@ class UserInfo(generic.FormView):
 
             profile.save()
             return HttpResponseRedirect(reverse("researcher:index"))
-        context = {
-                    'form' :  forms.ResearcherProfileForm(self.request.user,
-                                           instance=self.request.user.researcheruser.researcherprofile,
-                                           initial={
-                                               'grade':
-                                                   self.request.user.researcheruser.researcherprofile.grade,}),
-                    }
-
+        context=self.get_context_data(**kwargs)
+        
         if form.errors['home_number']:
             context['home_number_error'] = form.errors['home_number']
 
@@ -175,7 +161,8 @@ def ajax_ScientificRecord(request):
         }
         return JsonResponse(data)
     else:
-        return JsonResponse(form.errors)
+        print("error happened")
+        return JsonResponse(form.errors ,status=400)
 
 def ajax_ExecutiveRecord(request):
     form = forms.ExecutiveRecordForm(request.POST)
@@ -188,7 +175,8 @@ def ajax_ExecutiveRecord(request):
         }
         return JsonResponse(data)
     else:
-        return JsonResponse(form.errors)
+        print("error happened")
+        return JsonResponse(form.errors ,status=400)
 
 def ajax_StudiousRecord(request):
     form = forms.StudiousRecordForm(request.POST)
@@ -201,7 +189,7 @@ def ajax_StudiousRecord(request):
         }
         return JsonResponse(data)
     else:
-        return JsonResponse(form.errors)
+        return JsonResponse(form.errors ,status=400)
 
 def signup(request, username):
     user = get_object_or_404(User, username=username)
@@ -226,18 +214,27 @@ class Question(generic.TemplateView):
             raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
         if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
-        # if researcher.status.status == 'not_answered':
-        #     return super().get(self, request, *args, **kwargs)
-        # else:
-        #     raise Http404('شما به سوال ارزیابی پاسخ داده اید.')
+        if researcher.status.status == 'not_answered':
+            if researcher.researchquestioninstance_set.all().count():
+                question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
+                return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={'question_id' : question.research_question.uniqe_id}))
+            return super().get(self, request, *args, **kwargs)
+        else:
+            raise Http404('شما به سوال ارزیابی پاسخ داده اید.')
         return super().get(self, request, *args, **kwargs)
         
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
+            context['question_instance'] = "True"
+            context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
+        return context
+
     def post(self, request, *args, **kwargs):
-        accident_number = random.randint(1 ,ResearchQuestion.objects.all().count())        
-        question = ResearchQuestion.objects.get(pk= accident_number)
-        while not question:
-            accident_number = random.randint(1 ,ResearchQuestion.objects.all().count())
-            question = ResearchQuestion.objects.get(pk= accident_number)
+        question_list = ResearchQuestion.objects.filter(is_answered=False)
+        print(len(question_list))
+        print(random.randint(1 ,len(question_list)))
+        question = question_list[random.randint(1 ,len(question_list))-1]
         question_instance = models.ResearchQuestionInstance(research_question=question,
                                                             researcher = request.user.researcheruser)
         question_instance.save()
@@ -249,13 +246,13 @@ class QuestionShow(generic.TemplateView ):
     def get(self ,request ,*args, **kwargs):
         if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
-        question_id = kwargs['question_id']
-        if question_id != request.user.researcheruser.researchquestioninstance.research_question.uniqe_id:
+        if kwargs['question_id'] != request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id:
             raise Http404("سوال مورد نظر پیدا نشد.")
-        question = get_object_or_404(models.ResearchQuestionInstance ,researcher=request.user.researcheruser)
-        deltatime = datetime.date.today()-question.hand_out_date
-        if deltatime.days < 15:
+        question = request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]        
+        deltatime = datetime.date.today() - question.hand_out_date
+        if deltatime.days < 8:
             if question.is_answered:
+                print("+_+_+_+_+_+_+_+_+_+_====")
                 pass #show its in waiting for evaliator answer
             if question.is_correct :
                 request.user.researcheruser.status.status = 'free'
@@ -271,13 +268,25 @@ class QuestionShow(generic.TemplateView ):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        question = get_object_or_404(models.ResearchQuestionInstance ,researcher=self.request.user.researcheruser)        
+        question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse()[0]
         deltatime = datetime.date.today() - question.hand_out_date
-        if deltatime.days < 15:
-            context['rest_days'] = 15 - deltatime.days
+        if deltatime.days < 8:
+            context['rest_days'] = 8 - deltatime.days
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question
         context['attach_file'] = question.research_question.attach_file
+        context['hour'] = datetime.datetime.now().hour
+        context['minute'] = datetime.datetime.now().minute
+        context['second'] = datetime.datetime.now().second
         return context
-    # 7072488c-02ab-4362-9e51-7100dae78473
-    #persiontools
+    
+    def post(self ,request ,*args, **kwargs):
+        question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
+        uuid_id = question.research_question.uniqe_id
+        question.answer = request.FILES['answer']
+        question.is_answered = True
+        question.save()
+        return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
+    
+# 7072488c-02ab-4362-9e51-7100dae78473
+#persiontools
