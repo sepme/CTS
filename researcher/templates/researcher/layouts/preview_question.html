@@ -31,7 +31,7 @@
                                     <span>fileName</span>
                                 </a>
                             </li>
-                            <li class="list-item">
+                            <!-- <li class="list-item">
                                 <a href="#" class="attach-file">
                                     <span class="png-file"></span>
                                     <span>fileName</span>
@@ -48,7 +48,7 @@
                                     <span class="jpg-file"></span>
                                     <span>fileName</span>
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                                 </div>
                             </div>
@@ -82,6 +82,8 @@
                                     </div>
                                 </div>
                             </div>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
                             <div class="row">
                     <div class="col-12">
                         <input type="file" class="upload-answer" name="answer" id="upload-answer" hidden>
@@ -111,8 +113,9 @@
                         </div>
     <div class="row">
                             <div class="col-12 text-left">
-                                <button class="success-btn send-answer">ارسال پاسخ</button>
+                                <button type="submit" class="success-btn send-answer">ارسال پاسخ</button>
                             </div>
                         </div>
+        </form>
                 <!-- </div> -->
 {% endblock content %}

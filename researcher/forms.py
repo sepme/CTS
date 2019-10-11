@@ -405,6 +405,9 @@ class ScientificRecordForm(forms.ModelForm):
 
             if data > (int(this_year) - 621):
                 raise ValidationError(_("سال را اشتباه وارد کرده اید."))
+            
+            if (int(data)/1000) < 1:
+                raise ValidationError(_("عدد چهار رقمی وارد کنید."))
         return data
     
 class ExecutiveRecordForm(forms.ModelForm):
@@ -427,12 +430,41 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_start(self):
         data = self.cleaned_data["start"]
+        print('start : ' ,data)
+        if data:
+            try:
+                int(data)
+            except ValueError:
+                raise forms.ValidationError('سال باید یک عدد باشد.')
 
+            this_year = int(date.today().year)
+
+            if int(data) > (this_year - 621):
+                raise ValidationError(_("سال را اشتباه وارد کرده اید."))
+            
+            if (int(data)/1000) < 1:
+                raise ValidationError(_("عدد چهار رقمی وارد کنید."))
         return data
-    
+
     def clean_end(self):
         data = self.cleaned_data["end"]
-        
+        start = self.cleaned_data.get('start')
+        if data:
+            try:
+                int(data)
+            except ValueError:
+                raise forms.ValidationError('سال باید یک عدد باشد.')
+            if start:
+                if data > start:
+                    raise forms.ValidationError('ترتیب سال ها رعایت شود.')
+            
+            this_year = int(date.today().year)
+
+            if int(data) > (this_year - 621):
+                raise ValidationError(_("سال را اشتباه وارد کرده اید."))
+
+            if (int(data)/1000) < 1:
+                raise ValidationError(_("عدد چهار رقمی وارد کنید."))
         return data
     
     def clean_place(self):

@@ -149,8 +149,8 @@ class ExecutiveRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
 
     post = models.CharField(max_length=300, verbose_name="سمت")
-    start = models.DateField(auto_now=False, auto_now_add=False, verbose_name="از تاریخ")
-    end = models.DateField(auto_now=False, auto_now_add=False, verbose_name="تا تاریخ")
+    start = models.CharField(max_length=30, verbose_name="از تاریخ")
+    end = models.CharField(max_length=30, verbose_name="تا تاریخ")
     place = models.CharField(max_length=300, verbose_name="محل خدمت")
     city = models.CharField(max_length=300, verbose_name="شهر")
 
@@ -287,7 +287,7 @@ class RequestedProject(models.Model):
 class ResearchQuestionInstance(models.Model):
     research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,
                                            verbose_name="سوال پژوهشی")
-    researcher = models.OneToOneField(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
+    researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
                                     blank=True, null=True)
     hand_out_date = models.DateField( verbose_name="تاریخ واگذاری" ,auto_now_add=True)
     answer = models.FileField(upload_to=get_attachFile_path, verbose_name="پاسخ" ,null=True)

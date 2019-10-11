@@ -116,12 +116,12 @@ class Project(models.Model):
                                                 related_name="researchers_applied", blank=True, null=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
                                                  related_name="researchers_accepted", blank=True, null=True)
-    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
-                                            related_name="experts_applied", blank=True, null=True)
-    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
-                                           null=True)
-    industry_creator = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
+    # expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
+    #                                         related_name="experts_applied", blank=True, null=True)
+    # expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
+    #                                        verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
+    #                                        null=True)
+    industry_creator = models.OneToOneField(IndustryUser, on_delete=models.CASCADE,
                                             verbose_name="صنعت صاحب پروژه", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
@@ -143,7 +143,7 @@ class Comment(models.Model):
         (1, 'صنعت')
     )
     sender_type = models.IntegerField(choices=SENDER)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE ,null=True)
     attachment = models.FileField(upload_to='./project_{0}'.format(project))
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
@@ -161,15 +161,15 @@ class ProjectHistory(models.Model):
     project_status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت")
     project_point = models.FloatField(verbose_name='امتیاز')
     project_income = models.IntegerField(verbose_name='درآمد')
-    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
+    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE ,null=True)
 
     def __str__(self):
         return "history of " + self.project_title_english
 
 
 class ExpertEvaluateIndustry(models.Model):
-    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
-    expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE ,null=True)
+    # expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
