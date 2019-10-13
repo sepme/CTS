@@ -8,6 +8,7 @@ urlpatterns = [
     path('signup/<slug:username>', views.signup, name='signup'),
     path('messages/', views.Messages.as_view(), name="messages"),
     path('technique/', views.Technique.as_view(), name="technique"),
+    path('technique/review', views.ajax_Technique_review, name="technique-review"),
     path('question/', views.Question.as_view(), name="question-alert"),
     path('question/<uuid:question_id>', views.QuestionShow.as_view(), name="question-show"),
     path('scientific_form/' ,views.ajax_ScientificRecord ,name='scientific_form'),

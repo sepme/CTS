@@ -276,6 +276,11 @@ class TechniqueInstance(models.Model):
             return True
         return False
 
+class TechniqueReview(models.Model):
+    technique = models.ForeignKey(Technique, verbose_name="تکنیک", on_delete=models.CASCADE)
+    description = models.CharField(max_length=1000 ,verbose_name="توضیحات")
+    method = models.CharField(max_length=30)
+    result = models.CharField(max_length=1 ,null=True)
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)

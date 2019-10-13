@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse, Http404
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse, Http404 ,HttpResponse
 from django.views import generic
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-
+from django.core.mail import send_mail
+from django.conf import settings
 import os ,random ,datetime
 
 from . import models
@@ -66,7 +67,10 @@ class UserInfo(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         if (not self.request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=self.request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
-        print(request)
+        try:
+            self.request.user.researcheruser.researcherprofile
+        except:
+            return HttpResponseRedirect(reverse("researcher:index"))    
         return super().get(request, *args, **kwargs)    
 
     def get_context_data(self, **kwargs):
@@ -203,6 +207,61 @@ class Messages(generic.TemplateView):
 
 class Technique(generic.TemplateView):
     template_name = 'researcher/technique.html'
+    technique = {"Sterile Tissue Harvest" : "histology",
+                 "Diagnostic Necropsy and Tissue Harvest" : "histology",
+                 "Tissue Cryopreservation" : "histology",
+                 "Tissue Fixation" : "histology",
+                 "Microtome Sectioning" : "histology",
+                 "Cryostat Sectioning" : "histology",
+                 "H&E staining" : "histology",
+                 "Histochemistry" : "histology",
+                 "Histoflouresence" : "histology",
+
+                 "An Introduction to the Centrifuge" : "general lab",
+                 "Regulating Temperature in the Lab Preserving Sample Using Cold" : "general lab",
+                 "Introduction to the Bunsen Burner" : "general lab",
+                 "Introduction to Serological Pipettes and Pipettor" : "general lab",
+                 "An Introduction to the Micropipettor" : "general lab",
+                 "Making Solutions in the Laboratory" : "general lab",
+                 "Understanding Concentration and Measuring Volums" : "general lab",
+                 "Introduction to the Microplate Reader" : "general lab",
+                 "Regulation Temperature in the Lab Applying Heat" : "general lab",
+                 "Common Lab Glassware and Users" : "general lab",
+                 "Solutions and Concentrations" : "general lab",
+                 "Determining the Density of a Solid and Liquid" : "general lab",
+                 "Determining the Mass Percent Composition in an Aqueous Solution" : "general lab",
+                 "Determining the Empirical Formula" : "general lab",
+                 "Determining the Solubility Rules of Ionic Compounds" : "general lab",
+                 "Using a pH Meter" : "general lab",
+                 "Introduction to Titration" : "general lab",
+                 "Ideal Gas Law" : "general lab",
+                }
+
+    def post(self ,request ,*args, **kwargs):
+        print(self.request.POST)
+        technique_title = request.POST['technique-name']
+        method = request.POST['confirmation_method']
+        resume = request.FILES['resume']
+
+        subject = 'Technique Validation'
+        message ="""کاربر به نام کاربری {} و به نام {} {} ، تکنیک {} را افزوده است.
+        برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام کنید.
+        با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.fist_name ,self.request.user.researcheruser.researcherprofile.last_name,
+                            technique_title ,method ,self.request.user.username)
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER],
+                fail_silently=False
+            )
+        except TimeoutError:
+            return HttpResponse('Timeout Error!!')
+        cat_technique = self.technique_list[technique_title]
+        # technique_title = models.Technique
+        #blah blah
+        return HttpResponseRedirect(reverse("researcher:technique"))
 
 class Question(generic.TemplateView):
     template_name = 'researcher/question.html'
@@ -286,7 +345,46 @@ class QuestionShow(generic.TemplateView ):
         question.answer = request.FILES['answer']
         question.is_answered = True
         question.save()
+        subject = 'Research Question Validation'
+        message ="""با عرض سلام و خسته نباشید.
+        پژوهشگر {} به نام {} {} به سوال پژوهشی شما پاسخ داده است.
+        لطفا پاسخ پژوهشگر را ارزیابی نمایید.
+        با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.first_name,
+                          self.request.user.researcheruser.researcherprofile.last_name)
+        email = question.research_question.expert.user.username
+        try:
+            send_mail(
+                subject=subject,
+                message=message, 
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+            )
+        except TimeoutError:
+            return HttpResponse('Timeout Error!!')
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
+def ajax_Technique_review(request):
+    print(request.POST)
+    print(request.FILES)
+    discription = request.POST['request_body']
+    method = request.POST['request_confirmation_method']
+
+    if discription is not None and method is not None:
+        if method != "exam":
+            resume = request.FILES['resume']
+            if resume is None:
+                data = {
+                        'resume' : "حتما باید فایلی آپلود کنید.",
+                    }
+                return JsonResponse(data ,status=400)
+            technique_review = models.TechniqueReview(technique = blah,discription=discription,
+                                                      method=method ,resume=resume)
+        else:
+            technique_review = models.TechniqueReview(technique = blah,discription=discription,
+                                                      method=method)
+        technique_review.save()
+        data = {'success' : 'successful'}
+        return JsonResponse(data)
+
 # 7072488c-02ab-4362-9e51-7100dae78473
 #persiontools

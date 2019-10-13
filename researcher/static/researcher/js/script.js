@@ -453,3 +453,59 @@ executive_form.submit(function (event) {
         },
     })
 });
+
+var technique_review = $('#technique_review');
+technique_review.submit(function (event) {
+    event.preventDefault();
+    technique_review.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+        .attr("disabled", "true");
+    technique_review.find("button[type='reset']").attr("disabled", "true");
+    technique_review.find("label").addClass("progress-cursor");
+    technique_review.closest(".fixed-back").find(".card").addClass("wait");
+    var $thisURL = technique_review.attr('url');
+    var data = $(this).serialize();
+    technique_review.find("input").attr("disabled", "true").addClass("progress-cursor");
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+            technique_review.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            technique_review.find("button[type='reset']").prop("disabled", false);
+            technique_review.find("input").prop("disabled", false).removeClass("progress-cursor");
+            technique_review.find("label").removeClass("progress-cursor");
+            technique_review.closest(".fixed-back").find(".card").removeClass("wait");
+            
+            if (data.success === "successful") {
+                $("#technique_review").css("display", "none");
+                $(".main").removeClass("blur-div");
+                show_research_record();
+                iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت ذخیره شد!",
+                    position: 'bottomLeft'
+                });
+            }
+        },
+        error: function (data) {
+            var obj = JSON.parse(data.responseText);
+            technique_review.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            technique_review.find("button[type='reset']").prop("disabled", false);
+            technique_review.find("input").prop("disabled", false).removeClass("progress-cursor");
+            technique_review.find("label").removeClass("progress-cursor");
+            technique_review.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.resume) {
+                $("#upload-new-resume").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.resume + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+            }
+        }
+    })
+})
