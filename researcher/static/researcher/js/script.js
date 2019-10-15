@@ -197,7 +197,7 @@ scientificForm.submit(function (event) {
             scientificForm.closest(".fixed-back").find(".card").removeClass("wait");
             
             if (data.success === "successful") {
-                $("#ajax-sci-form").css("display", "none");
+                $(".scientific_form").css("display", "none");
                 $(".main").removeClass("blur-div");
                 show_research_record();
                 iziToast.success({

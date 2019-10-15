@@ -130,6 +130,7 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="education text-center w-100">                                                                    
+                                {% if scientificrecord_set %}
                                     <table class='table mtop-lg-25'>
                                             <thead>
                                                 <tr>
@@ -138,6 +139,7 @@
                                                         <td>دانشگاه</td>
                                                         <td>شهر محل تحصیل</td>
                                                         <td>سال اخذ مدرک</td>
+                                                        <td></td>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -148,11 +150,17 @@
                                                         <td>{{record.university}}</td>
                                                         <td>{{record.place}}</td>
                                                         <td>{{record.graduated_year}}</td>
+                                                        <td>
+                                                            <i class='fas fa-pen' id='edit_edu'></i>
+                                                            <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                        </td>
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
+                                        {% else %}
                                     <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {% endif %}
                                 </div>
                                 <button type="button" class="education-btn success-btn">افزودن</button>
                             </div>
@@ -163,6 +171,7 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="executive text-center w-100">
+                                {% if scientificrecord_set %}
                                         <table class='table mtop-lg-25'>
                                                 <thead>
                                                     <tr>
@@ -171,7 +180,7 @@
                                                             <td>شهر</td>
                                                             <td>از سال</td>
                                                             <td>تا سال</td>
-                                                            <!-- <td></td> -->
+                                                            <td></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -182,11 +191,17 @@
                                                             <td>{{record.city}}</td>
                                                             <td>{{record.start}}</td>
                                                             <td>{{record.end}}</td>
+                                                            <td>
+                                                                <i class='fas fa-pen' id='edit_edu'></i>
+                                                                <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                            </td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>
                                             </table>
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% else %}
+                                            <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% endif %}
                                 </div>
                                 <button type="button" class="executive-btn success-btn">افزودن</button>
                             </div>
@@ -198,6 +213,7 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="studious text-center w-100">
+                                    {% if scientificrecord_set %}
                                         <table class='table mtop-lg-25'>
                                                 <thead>
                                                     <tr>
@@ -205,6 +221,7 @@
                                                         <td>مجری</td>
                                                         <td>مسئول اجرا/ همکار</td>
                                                         <td>وضعیت طرح پژوهشی</td>
+                                                        <td></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -214,11 +231,17 @@
                                                             <td>{{record.presenter}}</td>
                                                             <td>{{record.responsible}}</td>
                                                             <td>{{record.status}}</td>
+                                                            <td>
+                                                                <i class='fas fa-pen' id='edit_edu'></i>
+                                                                <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                            </td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>
                                             </table>
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% else %}
+                                            <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% endif %}
                                 </div> 
                                 <button type="button" class="research-btn success-btn">افزودن</button>
                             </div>
