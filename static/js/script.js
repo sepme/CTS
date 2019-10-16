@@ -148,6 +148,8 @@ myForm.submit(function (event) {
         success: function (data) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
+            $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!");
+            window.location.href="http://127.0.0.1:8000/login";
         },
         error: function (data) {
             $(".loading").css('display', "none");

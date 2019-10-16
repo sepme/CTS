@@ -397,6 +397,10 @@ class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
+class View(generic.TemplateView):
+    template_name = 'registration/email_template.html'
+
+
 class RecoverPassword(generic.FormView):
     template_name = 'registration/recover_pass.html'
     form_class = forms.RecoverPasswordForm
