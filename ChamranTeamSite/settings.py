@@ -59,7 +59,6 @@ ROOT_URLCONF = 'ChamranTeamSite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-
         'DIRS': ['templates', ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -111,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'Iran'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 

@@ -1,11 +1,13 @@
-{% extends "expert/layouts/base_layout.html" %}
+{% extends account_type|add:"/layouts/base_layout.html" %}
 {% load static %}
 {% block title %}پیام ها{% endblock %}
 
 {% block name %} دکتر احسان شریف{% endblock %}
 
 {% block dialog %}
-    {% include 'expert/layouts/message_show.html' %}
+    {% with account_type|add:"/layouts/message_show.html" as dialog_template %}
+        {% include  dialog_template %}
+    {% endwith %}
 {% endblock %}
 
 {% block content %}
@@ -32,11 +34,11 @@
                                         <div class="icon">
                                             <img src="
                                             {% if  message.0.type == 0 %}
-                                                {% static 'industry/img/tick.svg' %}
+                                                {% static 'img/tick.svg' %}
                                             {% elif message.0.type == 1 %}
-                                                {% static 'industry/img/close.svg' %}
+                                                {% static 'img/close.svg' %}
                                             {% else %}
-                                                {% static 'industry/img/megaphone.png' %}
+                                                {% static 'img/megaphone.png' %}
                                             {% endif %}
                                             " alt="message-type-icon">
                                         </div>
@@ -119,9 +121,10 @@
                 data: {},
                 dataType: 'json',
                 success: function(data){
-                    var msg = JSON.parse(data);
-                    console.log(msg.title);
-
+                    console.log(data);
+                    $(".message-show-body .body").html(data.text);
+                    $(".message-show-head .title").html(data.title);
+                    $(".message-show-body .message-info .date span").html(data.date);
                 }
             });
         });

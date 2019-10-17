@@ -21,6 +21,7 @@ class IndustryUser(models.Model):
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
+    projects = models.ManyToManyField('industry.Project', verbose_name='پروژه ها', blank=True)
 
     def __str__(self):
         return self.user.get_username()
@@ -46,16 +47,16 @@ class IndustryForm(models.Model):
         (0, 'خصوصی'),
         (1, 'دولتی'),
     )
-    industry_type = models.IntegerField(choices=industry_type_choice, verbose_name="نوع شرکت")
+    industry_type = models.IntegerField(choices=industry_type_choice, blank=False, null=False, verbose_name="نوع شرکت")
     industry_address = models.TextField(verbose_name="ادرس شرکت")
     phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
-    international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
-    tax_declaration = models.FileField(null=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
-    turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
-    services_products = models.TextField(null=True, verbose_name="خدمات/محصولات")
-    awards_honors = models.TextField(null=True, verbose_name="افتخارات")
+    # international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
+    tax_declaration = models.FileField(null=True, blank=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
+    # turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
+    services_products = models.TextField(null=True, blank=True, verbose_name="خدمات/محصولات")
+    awards_honors = models.TextField(null=True, blank=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.ImageField(upload_to=unique_upload, null=True)
+    photo = models.ImageField(upload_to=unique_upload, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -63,12 +64,10 @@ class IndustryForm(models.Model):
     def save(self, *args, **kwargs):
         super().save()
         if self.photo:
-            print('before:', self.photo.name)
             if '\\' in self.photo.name:
                 self.photo.name = self.photo.name.split('\\')[-1]
             elif '/' in self.photo.name:
                 self.photo.name = self.photo.name.split('/')[-1]
-            print('after:', self.photo.name)
         super().save()
 
 
@@ -103,37 +102,40 @@ class ProjectForm(models.Model):
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
-    date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت")
-    date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد")
-    date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد")
-    date_project_started = models.DateField(verbose_name="تاریخ شروع پروژه")
-    date_phase_two_deadline = models.DateField(verbose_name="ناریخ مهلت فاز دوم")
-    date_phase_three_deadline = models.DateField(verbose_name="تاریخ مهلت فاز سوم")
-    date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول")
-    date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم")
-    date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه")
+    comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True)
+    date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
+    date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True)
+    date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True)
+    date_project_started = models.DateField(verbose_name="تاریخ شروع پروژه", null=True)
+    date_phase_two_deadline = models.DateField(verbose_name="ناریخ مهلت فاز دوم", null=True)
+    date_phase_three_deadline = models.DateField(verbose_name="تاریخ مهلت فاز سوم", null=True)
+    date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول", null=True)
+    date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم", null=True)
+    date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
                                                 related_name="researchers_applied", blank=True, null=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
                                                  related_name="researchers_accepted", blank=True, null=True)
-    # expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
-    #                                         related_name="experts_applied", blank=True, null=True)
-    # expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-    #                                        verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
-    #                                        null=True)
-    industry_creator = models.OneToOneField(IndustryUser, on_delete=models.CASCADE,
-                                            verbose_name="صنعت صاحب پروژه", blank=True, null=True)
-    cost_of_project = models.FloatField(verbose_name="هزینه پروژه")
-    maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر")
-    project_detail = models.TextField(verbose_name="جزيات پروژه")
-    project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه")
+    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
+                                            related_name="experts_applied", blank=True, null=True)
+    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
+                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
+                                           null=True)
+    cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True)
+    maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True)
+    project_detail = models.TextField(verbose_name="جزيات پروژه", null=True)
+    project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه", null=True)
 
     def __str__(self):
-        return self.project_form
+        return self.project_form.project_title_english
 
     def get_comments(self):
         project_comments = Comment.objects.all().filter(project=self)
         return project_comments
+
+
+def upload_comment(instance, file_name):
+    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
 
 
 class Comment(models.Model):
@@ -143,8 +145,8 @@ class Comment(models.Model):
         (1, 'صنعت')
     )
     sender_type = models.IntegerField(choices=SENDER)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE ,null=True)
-    attachment = models.FileField(upload_to='./project_{0}'.format(project))
+    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
 
@@ -161,15 +163,15 @@ class ProjectHistory(models.Model):
     project_status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت")
     project_point = models.FloatField(verbose_name='امتیاز')
     project_income = models.IntegerField(verbose_name='درآمد')
-    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE ,null=True)
+    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return "history of " + self.project_title_english
 
 
 class ExpertEvaluateIndustry(models.Model):
-    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE ,null=True)
-    # expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
+    expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),

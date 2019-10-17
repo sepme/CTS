@@ -87,7 +87,7 @@ class ExpertForm(models.Model):
         (3, '31-60'),
         (4, '+60'),
     )
-    number_of_researcher = models.IntegerField(max_length=10, choices=number_of_researcher_choice,
+    number_of_researcher = models.IntegerField(choices=number_of_researcher_choice,
                                                verbose_name="دانشجو تحت نظارت",
                                                blank=True, null=True)
     has_industrial_research_choice = (
@@ -111,7 +111,7 @@ class ScientificRecord(models.Model):
     university = models.CharField(max_length=128, verbose_name="دانشگاه")
     city = models.CharField(max_length=32, verbose_name="شهر")
     date_of_graduation = models.CharField(max_length=10, verbose_name="سال اخذ مدرک")
-    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد" ,null=True)
+    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
     def __str__(self):
         return '{} - {}'.format(self.expert_form.expert_user, self.pk)
@@ -123,7 +123,7 @@ class ExecutiveRecord(models.Model):
     date_end_post = models.CharField(max_length=15, verbose_name="تاریخ پایان")
     city = models.CharField(max_length=32, verbose_name="شهر")
     organization = models.CharField(max_length=32, verbose_name="مجل خدمت")
-    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد" ,null=True)
+    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
 class ResearchRecord(models.Model):
@@ -136,7 +136,7 @@ class ResearchRecord(models.Model):
     researcher = models.CharField(max_length=64, verbose_name="نام مجری")
     co_researcher = models.CharField(max_length=512, verbose_name="همکار")
     status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت")
-    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد" ,null=True)
+    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
 class PaperRecord(models.Model):
@@ -145,12 +145,12 @@ class PaperRecord(models.Model):
     published_at = models.CharField(max_length=32, verbose_name="محل انتشار")
     impact_factor = models.FloatField(verbose_name="impact factor")
     citation = models.CharField(max_length=5, verbose_name="تعداد ارجاع")
-    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد" ,null=True)
+    expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
 class ExpertProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128, verbose_name="عنوان مقاله")
-    # key_words = models.ManyToManyField('industry.Keyword', verbose_name="کلمات کلیدی")
+    key_words = models.ManyToManyField('industry.Keyword', verbose_name="کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name="اولویت پروژه")
     project_start_date = models.CharField(max_length=15, verbose_name="تاریخ شروع")
     project_end_date = models.CharField(max_length=15, verbose_name="تاریخ پایان")
@@ -162,16 +162,16 @@ class ExpertProjectHistory(models.Model):
     project_point = models.FloatField(verbose_name='امتیاز')
     project_income = models.IntegerField(verbose_name='درآمد')
     project_involveTech = models.CharField(max_length=500, verbose_name='تکنیک ها')
-    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد" ,null=True)
+    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
 
     def __str__(self):
         return "history of " + self.project_title_english
 
 
 class IndustryEvaluateExpert(models.Model):
-    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد" ,null=True)
-    # industry = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
-    #                                 verbose_name="صنعت ارزیابی کننده", blank=True, null=True)
+    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
+    industry = models.OneToOneField('industry.IndustryUser', on_delete=models.CASCADE,
+                                    verbose_name="صنعت ارزیابی کننده", blank=True, null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -209,7 +209,7 @@ class IndustryEvaluateExpert(models.Model):
 
 
 class ResearcherEvaluateExpert(models.Model):
-    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="" ,null=True)
+    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="")
     researcher = models.OneToOneField('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="",
                                       blank=True, null=True)
     INT_CHOICE = (
@@ -254,9 +254,8 @@ class ResearchGain(models.Model):
         (5, 'از قبل انجام کار پول دریافت کردم'),
     )
     researcher_evaluate_expert = models.ForeignKey(ResearcherEvaluateExpert, on_delete=models.CASCADE,
-                                                   verbose_name="استاد" ,null=True)
+                                                   verbose_name="استاد")
     research_gain = models.IntegerField(choices=GAIN_CHOICE, verbose_name="دستاورد دانشجو")
-
 
 class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=128, verbose_name="عنوان سوال")

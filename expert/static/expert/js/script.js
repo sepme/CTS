@@ -137,6 +137,7 @@ function education_record() {
             },
             error: function (data) {
                 var obj = JSON.parse(data.responseText);
+                console.log(data);
                 myForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                     .prop("disabled", false);
                 myForm.find("button[type='reset']").prop("disabled", false);
@@ -482,6 +483,30 @@ paperForm.submit(function (event) {
                 $("input#impact-factor").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
         },
+    })
+});
+
+var showInfo = $('.chamran-btn-info');
+showInfo.click(function (event) {
+    $.ajax({
+        url: $(this).attr('data-url'),
+        data: {
+            'id': $(this).attr("id")
+        },
+        dataType: 'json',
+        success: function (data) {
+            $(".showProject")
+                .find(".card-head").html();
+            $(".showProject")
+                .find(".establish-time .time-body").html(data.date);
+            $(".showProject")
+                .find(".time-left .time-body").html(data.deadline);
+            console.log(data)
+        },
+        error: function (data) {
+            console.log(data)
+        }
+
     })
 });
 
