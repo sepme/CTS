@@ -495,6 +495,10 @@ showInfo.click(function (event) {
         },
         dataType: 'json',
         success: function (data) {
+            var dialog = $(".showProject");
+            dialog.find(".card-head").html(data.title);
+            dialog.find(".establish-time .time-body").html(data.data);
+            dialog.find(".time-left .time-body").html(data.deadline);
             console.log(data)
         },
         error: function (data) {
