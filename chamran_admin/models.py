@@ -31,7 +31,7 @@ class News(models.Model):
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
     text = models.TextField(verbose_name="متن خبر")
     picture = models.ImageField(upload_to=None, verbose_name="تصویر خبر")
-    attachment = models.FileField(upload_to=None, verbose_name="ضمیمه")
+    # attachment = models.FileField(upload_to=None, verbose_name="ضمیمه")
     link = models.CharField(max_length=128, verbose_name="لینک خبر")
     writer = models.CharField(max_length=32, verbose_name="نویسنده")
     date_submitted = models.DateField(auto_now_add=True)
