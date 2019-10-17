@@ -191,7 +191,7 @@ class Comment(models.Model):
         (1, 'صنعت')
     )
     sender_type = models.IntegerField(choices=SENDER)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
+    # project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
