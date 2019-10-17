@@ -1,5 +1,9 @@
+import datetime
+
+from dateutil.relativedelta import relativedelta
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
-from django.views import generic
+from django.views import generic, View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,6 +11,8 @@ from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from persiantools.jdatetime import JalaliDate
+from chamran_admin.models import Message
 from django.http import JsonResponse
 from . import models
 from . import forms
@@ -17,6 +23,64 @@ from django.template.loader import get_template
 from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
+
+
+def jalali_date(jdate):
+    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month-1] + ' ' + str(jdate.year)
+
+
+def get_message_detail(request, message_id):
+    message = Message.objects.filter(receiver=request.user).get(id=message_id)
+    if not message.read_by.filter(username=request.user.username).exists():
+        message.read_by.add(request.user)
+    attachment = None
+    if message.attachment:
+        attachment = message.attachment.url
+    print(message.date)
+    return JsonResponse({
+        'text': message.text,
+        'date': jalali_date(JalaliDate(message.date)),
+        'title': message.title,
+        'code': message.code,
+        'type': message.type,
+        'attachment': attachment,
+    })
+
+
+class MessagesView(View):
+    jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
+                     'دی', 'بهمن', 'اسفند')
+
+    @staticmethod
+    def date_dif(jdate):
+        delta = relativedelta(datetime.datetime.now(), jdate.to_gregorian())
+        if delta.years > 0:
+            return '(' + str(delta.years) + ' سال پیش' + ')'
+        elif delta.months > 0:
+            return '(' + str(delta.months) + ' ماه پیش' + ')'
+        elif delta.days > 0:
+            return '(' + str(delta.days) + ' روز پیش' + ')'
+        else:
+            return '(امروز)'
+
+    def get(self, request):
+        all_messages = Message.get_user_messages(request.user.id)
+        top_3 = []
+        other_messages = []
+        for i, message in enumerate(all_messages):
+            jdate = JalaliDate(message.date)
+            if i < 3:
+                top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate), message.read_by.filter(
+                    username=request.user.username).exists()))
+            else:
+                other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
+                                       message.read_by.filter(
+                                           username=request.user.username).exists()))
+        return render(request, 'chamran_admin/messages.html', context={
+            'top_3': top_3,
+            'other_messages': other_messages,
+            'account_type': find_account_type(request.user),
+        })
 
 
 def find_account_type(user):
@@ -119,10 +183,10 @@ def signup_email_ajax(request):
         # account_type = form.cleaned_data['account_type']
         # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
         temp_user = models.TempUser(email=email, account_type=account_type)
-        subject = 'Welcome to Chamran Team!!!'
+        subject = 'تکمیل ثبت نام'
 
         unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
-        message = ':لینک ثبت نام' + '\n' + unique_url
+        message = unique_url
         data = {'success': 'successful'}
         try:
             # send_mail(
@@ -133,7 +197,7 @@ def signup_email_ajax(request):
             #     fail_silently=False
             # )
             html_template = get_template('registration/email_template.html')
-            email_template = html_template.render({'message': message})
+            email_template = html_template.render({'message': message, 'proper_text': 'تکمیل ثبت نام'})
             msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
                                          to=[email])
             msg.attach_alternative(email_template, 'text/html')
@@ -282,14 +346,20 @@ class ResetPassword(generic.TemplateView):
         if find_account_type(request.user):
             unique = find_user(request.user).unique
             url = LOCAL_URL + '/resetpassword/' + str(unique)
-            message = ':لینک تغییر رمز عبور' + '\n' + url
-            send_mail(
-                subject='تغییر رمز عبور',
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[request.user.username],
-                fail_silently=False
-            )
+            message = url
+            subject = 'تغییر رمز عبور'
+
+            try:
+                html_template = get_template('registration/email_template.html')
+                email_template = html_template.render({'message': message, 'proper_text': 'تغییر رمز عبور'})
+                msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                             to=[request.user.username])
+                msg.attach_alternative(email_template, 'text/html')
+                msg.send()
+                print('WTF??')
+            except TimeoutError:
+                return Http404('Timeout Error!')
+
             return HttpResponseRedirect(reverse('chamran:home'))
         else:
             return redirect(reverse('chamran:login'))
@@ -397,6 +467,10 @@ class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
+class View(generic.TemplateView):
+    template_name = 'registration/email_template.html'
+
+
 class RecoverPassword(generic.FormView):
     template_name = 'registration/recover_pass.html'
     form_class = forms.RecoverPasswordForm
@@ -410,14 +484,18 @@ class RecoverPassword(generic.FormView):
             temp = get_object_or_404(User, username=username)
             user = find_user(temp)
             url = LOCAL_URL + '/recover_password/' + str(user.unique)
-            message = ':لینک بازیابی رمز عبور' + '\n' + url
-            send_mail(
-                subject='تغییر رمز عبور',
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[username],
-                fail_silently=False
-            )
+            subject = 'بازیابی رمز عبور'
+            message = url
+            try:
+                html_template = get_template('registration/email_template.html')
+                email_template = html_template.render({'message': message, 'proper_text': 'بازیابی رمز عبور'})
+                msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                             to=[username])
+                msg.attach_alternative(email_template, 'text/html')
+                msg.send()
+                print('WTF??')
+            except TimeoutError:
+                return Http404('Timeout Error!')
 
             return HttpResponseRedirect(reverse('chamran:home'))
         return super().post(request, *args, **kwargs)
