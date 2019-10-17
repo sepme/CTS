@@ -1,9 +1,11 @@
 import os
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.core.files.base import ContentFile
+from django.forms import model_to_dict
 from django.views import generic, View
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
 # industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
@@ -11,6 +13,15 @@ from ChamranTeamSite import settings
 from industry.models import IndustryForm
 from . import models
 from . import forms
+
+
+def show_project_ajax(request):
+    project = models.Project.objects.filter(id=request.GET.get('id')).first()
+    json_response = model_to_dict(project.project_form)
+    # TODO mohlat anjam
+    del json_response['key_words']
+    print('the json response is', json_response)
+    return JsonResponse(json_response)
 
 
 class Index(generic.TemplateView):

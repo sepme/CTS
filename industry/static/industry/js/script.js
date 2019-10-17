@@ -8,14 +8,14 @@ $(window).on("load", function () {
 
 $(document).ready(function () {
     $(".chamran-btn-info").click(function () {
-        var id = (this).attr("id");
+        var id = $(this).attr("id");
         $.ajax({
             method: 'GET',
-            url: 'Set this url',
+            url: '/industry/show_project/',
             dataType: 'json',
-            data: id,
+            data: {id: id},
             success: function (data) {
-
+                console.log(data);
             },
             error: function (data) {
 
