@@ -486,6 +486,30 @@ paperForm.submit(function (event) {
     })
 });
 
+var showInfo = $('.chamran-btn-info');
+showInfo.click(function (event) {
+    $.ajax({
+        url: $(this).attr('data-url'),
+        data: {
+            'id': $(this).attr("id")
+        },
+        dataType: 'json',
+        success: function (data) {
+            $(".showProject")
+                .find(".card-head").html();
+            $(".showProject")
+                .find(".establish-time .time-body").html(data.date);
+            $(".showProject")
+                .find(".time-left .time-body").html(data.deadline);
+            console.log(data)
+        },
+        error: function (data) {
+            console.log(data)
+        }
+
+    })
+});
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
