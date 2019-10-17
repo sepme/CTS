@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from expert.forms import is_numeric
-from . import models
+from . import models,views
 
 from datetime import date
 
@@ -534,5 +534,21 @@ class StudiousRecordForm(forms.ModelForm):
     def clean_status(self):
         data = self.cleaned_data["status"]
         
+        return data
+
+class TechniqueInstance(forms.Form):
+    technique = forms.CharField(max_length=100 ,empty_value='None')
+    
+    # class Meta:
+    #     error_messages = {
+    #     'technique': {'required': "عنوان تکنیک نمی تواند خالی باشد."},
+    #     }
+    
+    def clean_technique(self):
+        data = self.cleaned_data["technique"]
+        if data == 'None':
+            raise  ValidationError("عنوان تکنیک نمی تواند خالی باشد.")
+        if data not in views.TECHNIQUES:
+            raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")
         return data
     

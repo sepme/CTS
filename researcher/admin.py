@@ -29,3 +29,11 @@ class StudiousRecordAdmin(admin.ModelAdmin):
 @admin.register(models.ResearchQuestionInstance)
 class ResearchQuestionInstanceAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(models.Technique)
+class TechniqueAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.TechniqueInstance)
+class TechniqueInstanceAdmin(admin.ModelAdmin):
+    pass

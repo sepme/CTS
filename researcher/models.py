@@ -5,17 +5,134 @@ import os
 import datetime
 import uuid
 
+faBaseNum = {
+
+    1: 'یک',
+    2: 'دو',
+    3: 'سه',
+    4: 'چهار',
+    5: 'پنج',
+    6: 'شش',
+    7: 'هفت',
+    8: 'هشت',
+    9: 'نه',
+    10: 'ده',
+    11: 'یازده',
+    12: 'دوازده',
+    13: 'سیزده',
+    14: 'چهارده',
+    15: 'پانزده',
+    16: 'شانزده',
+    17: 'هفده',
+    18: 'هجده',
+    19: 'نوزده',
+    20: 'بیست',
+    30: 'سی',
+    40: 'چهل',
+    50: 'پنجاه',
+    60: 'شصت',
+    70: 'هفتاد',
+    80: 'هشتاد',
+    90: 'نود',
+    100: 'صد',
+    200: 'دویست',
+    300: 'سیصد',
+    500: 'پانصد'
+}
+faBaseNumKeys = faBaseNum.keys()
+faBigNum = ["یک", "هزار", "میلیون", "میلیارد"]
+faBigNumSize = len(faBigNum)
+
+
+def split3(st):
+    parts = []
+    n = len(st)
+    d, m = divmod(n, 3)
+    for i in range(d):
+        parts.append(int(st[n - 3 * i - 3:n - 3 * i]))
+    if m > 0:
+        parts.append(int(st[:m]))
+    return parts
+
+
+def convert(st):
+    if isinstance(st, int):
+        st = str(st)
+    elif not isinstance(st, str):
+        raise TypeError('bad type "%s"' % type(st))
+    if len(st) > 3:
+        parts = split3(st)
+        k = len(parts)
+        wparts = []
+        for i in range(k):
+            faOrder = ''
+            p = parts[i]
+            if p == 0:
+                continue
+            if i == 0:
+                wpart = convert(p)
+            else:
+                if i < faBigNumSize:
+                    faOrder = faBigNum[i]
+                else:
+                    faOrder = ''
+                    (d, m) = divmod(i, 3)
+                    t9 = faBigNum[3]
+                    for j in range(d):
+                        if j > 0:
+                            faOrder += "‌"
+                        faOrder += t9
+                    if m != 0:
+                        if faOrder != '':
+                            faOrder = "‌" + faOrder
+                        faOrder = faBigNum[m] + faOrder
+                wpart = faOrder if i == 1 and p == 1 else convert(p) + " " + faOrder
+            wparts.append(wpart)
+        return " و ".join(reversed(wparts))
+    n = int(st)
+    if n in faBaseNumKeys:
+        return faBaseNum[n]
+    y = n % 10
+    d = int((n % 100) / 10)
+    s = int(n / 100)
+    dy = 10 * d + y
+    fa = ''
+    if s != 0:
+        if s * 100 in faBaseNumKeys:
+            fa += faBaseNum[s * 100]
+        else:
+            fa += (faBaseNum[s] + faBaseNum[100])
+        if d != 0 or y != 0:
+            fa += ' و '
+    if d != 0:
+        if dy in faBaseNumKeys:
+            fa += faBaseNum[dy]
+            return fa
+        fa += faBaseNum[d * 10]
+        if y != 0:
+            fa += ' و '
+    if y != 0:
+        fa += faBaseNum[y]
+    return fa
+
+
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format('profile', ext)
 
     return os.path.join('unique', instance.researcher_user.user.username, filename)
 
-def get_attachFile_path(instance, filename):
+def get_answerFile_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format("answer-"+instance.researcher.user.username+"-"+"-".join(filename.split('.')[:-1]), ext)
     folder_name = instance.research_question.question_title+"-"+str(instance.research_question.uniqe_id)
     return os.path.join('questions', folder_name, filename)
+
+def get_resumeFile_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format("resume-"+instance.researcher.user.username+"-"+"-".join(filename.split('.')[:-1]), ext)
+    folder_name = str(instance.researcher)
+    return os.path.join('resume', folder_name, filename)
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -255,32 +372,69 @@ class Technique(models.Model):
         ('research_methodology', 'Research Methodology'),
     )
 
-    technique_type = models.CharField(max_length=100, choices=TYPE)
+    technique_type = models.CharField(max_length=100)
     technique_title = models.CharField(max_length=300)
-    tutorial_link = models.CharField(max_length=500)
+    tutorial_link = models.CharField(max_length=500 ,null=True)
+
+    def __str__(self):
+        return self.technique_title
 
 
 class TechniqueInstance(models.Model):
     researcher = models.ForeignKey("ResearcherUser", on_delete=models.CASCADE)
-    technique = models.OneToOneField("Technique", verbose_name="مهارت", on_delete=models.CASCADE, null=True, blank=True)
+    technique = models.ForeignKey("Technique", verbose_name="مهارت", on_delete=models.CASCADE, null=True, blank=True)
     TECH_GRADE = (
         ('A', 'به صورت عملی در پروژه انجام داده است.'),
         ('B', 'به صورت عملی در کارگاه آموزش دیده است.'),
         ('C', 'به صورت تئوری آموزش دیده است.'),
     )
     level = models.CharField(max_length=1, choices=TECH_GRADE, verbose_name='سطح مهارت', blank=True)
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True)
     evaluator = models.CharField(max_length=300, verbose_name='ارزیابی کننده', blank=True)
+    evaluat_date = models.DateField(verbose_name="زمان نمره گرفتن", auto_now=False, null=True)
 
     def is_validated(self):
         if self.level == 'A' or self.level == 'B' or self.level == 'C':
             return True
         return False
+    
+    @property
+    def date_last(self):
+        days_passed = datetime.datetime.today().day - self.evaluat_date.day
+        months_passed = datetime.datetime.today().month - self.evaluat_date.month
+        years_passed = datetime.datetime.today().year - self.evaluat_date.year
+        days = ""
+        months = ""
+        years = ""
+        if years_passed != 0:
+            years = convert(str(years_passed)) + " سال "
+        if months_passed != 0:
+            if years_passed != 0:
+                months = " و " + convert(str(months_passed)) + " ماه "
+            else:
+                months = convert(str(months_passed)) + " ماه "
+        if days_passed != 0:
+            if months_passed == 0 and years_passed == 0:
+                days = convert(str(days_passed)) + " روز "
+            else:
+                days = " و " + convert(str(days_passed)) + " روز "
+        if days_passed != 0 or months_passed != 0 or years_passed != 0:            
+            return years + months + days + " پیش"
+        return "امروز"
+
+    
+    def __str__(self):
+        return str(self.researcher) + " - " + str(self.technique)
 
 class TechniqueReview(models.Model):
-    technique = models.ForeignKey(Technique, verbose_name="تکنیک", on_delete=models.CASCADE)
+    technique_instance = models.ForeignKey(TechniqueInstance, verbose_name="تکنیک", on_delete=models.CASCADE)
     description = models.CharField(max_length=1000 ,verbose_name="توضیحات")
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True)
     method = models.CharField(max_length=30)
     result = models.CharField(max_length=1 ,null=True)
+
+    def __str__(self):
+        return self.technique
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
@@ -295,7 +449,7 @@ class ResearchQuestionInstance(models.Model):
     researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
                                     blank=True, null=True)
     hand_out_date = models.DateField( verbose_name="تاریخ واگذاری" ,auto_now_add=True)
-    answer = models.FileField(upload_to=get_attachFile_path, verbose_name="پاسخ" ,null=True)
+    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ" ,null=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده" ,default=False)
     is_correct = models.BooleanField(verbose_name="تایید استاد" ,default=False)
 

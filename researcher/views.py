@@ -11,6 +11,116 @@ from . import models
 from . import forms
 from expert.models import ResearchQuestion
 
+faBaseNum = {
+
+    1: 'یک',
+    2: 'دو',
+    3: 'سه',
+    4: 'چهار',
+    5: 'پنج',
+    6: 'شش',
+    7: 'هفت',
+    8: 'هشت',
+    9: 'نه',
+    10: 'ده',
+    11: 'یازده',
+    12: 'دوازده',
+    13: 'سیزده',
+    14: 'چهارده',
+    15: 'پانزده',
+    16: 'شانزده',
+    17: 'هفده',
+    18: 'هجده',
+    19: 'نوزده',
+    20: 'بیست',
+    30: 'سی',
+    40: 'چهل',
+    50: 'پنجاه',
+    60: 'شصت',
+    70: 'هفتاد',
+    80: 'هشتاد',
+    90: 'نود',
+    100: 'صد',
+    200: 'دویست',
+    300: 'سیصد',
+    500: 'پانصد'
+}
+faBaseNumKeys = faBaseNum.keys()
+faBigNum = ["یک", "هزار", "میلیون", "میلیارد"]
+faBigNumSize = len(faBigNum)
+
+
+def split3(st):
+    parts = []
+    n = len(st)
+    d, m = divmod(n, 3)
+    for i in range(d):
+        parts.append(int(st[n - 3 * i - 3:n - 3 * i]))
+    if m > 0:
+        parts.append(int(st[:m]))
+    return parts
+
+
+def convert(st):
+    if isinstance(st, int):
+        st = str(st)
+    elif not isinstance(st, str):
+        raise TypeError('bad type "%s"' % type(st))
+    if len(st) > 3:
+        parts = split3(st)
+        k = len(parts)
+        wparts = []
+        for i in range(k):
+            faOrder = ''
+            p = parts[i]
+            if p == 0:
+                continue
+            if i == 0:
+                wpart = convert(p)
+            else:
+                if i < faBigNumSize:
+                    faOrder = faBigNum[i]
+                else:
+                    faOrder = ''
+                    (d, m) = divmod(i, 3)
+                    t9 = faBigNum[3]
+                    for j in range(d):
+                        if j > 0:
+                            faOrder += "‌"
+                        faOrder += t9
+                    if m != 0:
+                        if faOrder != '':
+                            faOrder = "‌" + faOrder
+                        faOrder = faBigNum[m] + faOrder
+                wpart = faOrder if i == 1 and p == 1 else convert(p) + " " + faOrder
+            wparts.append(wpart)
+        return " و ".join(reversed(wparts))
+    n = int(st)
+    if n in faBaseNumKeys:
+        return faBaseNum[n]
+    y = n % 10
+    d = int((n % 100) / 10)
+    s = int(n / 100)
+    dy = 10 * d + y
+    fa = ''
+    if s != 0:
+        if s * 100 in faBaseNumKeys:
+            fa += faBaseNum[s * 100]
+        else:
+            fa += (faBaseNum[s] + faBaseNum[100])
+        if d != 0 or y != 0:
+            fa += ' و '
+    if d != 0:
+        if dy in faBaseNumKeys:
+            fa += faBaseNum[dy]
+            return fa
+        fa += faBaseNum[d * 10]
+        if y != 0:
+            fa += ' و '
+    if y != 0:
+        fa += faBaseNum[y]
+    return fa
+
 
 class Index(LoginRequiredMixin, generic.FormView):
     template_name = 'researcher/index.html'
@@ -207,72 +317,89 @@ class Messages(generic.TemplateView):
 
 class Technique(generic.TemplateView):
     template_name = 'researcher/technique.html'
-    technique = {"Sterile Tissue Harvest" : "histology",
-                 "Diagnostic Necropsy and Tissue Harvest" : "histology",
-                 "Tissue Cryopreservation" : "histology",
-                 "Tissue Fixation" : "histology",
-                 "Microtome Sectioning" : "histology",
-                 "Cryostat Sectioning" : "histology",
-                 "H&E staining" : "histology",
-                 "Histochemistry" : "histology",
-                 "Histoflouresence" : "histology",
 
-                 "An Introduction to the Centrifuge" : "general lab",
-                 "Regulating Temperature in the Lab Preserving Sample Using Cold" : "general lab",
-                 "Introduction to the Bunsen Burner" : "general lab",
-                 "Introduction to Serological Pipettes and Pipettor" : "general lab",
-                 "An Introduction to the Micropipettor" : "general lab",
-                 "Making Solutions in the Laboratory" : "general lab",
-                 "Understanding Concentration and Measuring Volums" : "general lab",
-                 "Introduction to the Microplate Reader" : "general lab",
-                 "Regulation Temperature in the Lab Applying Heat" : "general lab",
-                 "Common Lab Glassware and Users" : "general lab",
-                 "Solutions and Concentrations" : "general lab",
-                 "Determining the Density of a Solid and Liquid" : "general lab",
-                 "Determining the Mass Percent Composition in an Aqueous Solution" : "general lab",
-                 "Determining the Empirical Formula" : "general lab",
-                 "Determining the Solubility Rules of Ionic Compounds" : "general lab",
-                 "Using a pH Meter" : "general lab",
-                 "Introduction to Titration" : "general lab",
-                 "Ideal Gas Law" : "general lab",
-                }
+    def get(self, request, *args, **kwargs):
+        print("----------")
+        if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
+            return HttpResponseRedirect(reverse('chamran:login'))
+        try:
+           researcher = models.ResearcherUser.objects.get(user=request.user)
+        except models.ResearcherUser.DoesNotExist:
+            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
+        return render(request ,self.template_name ,context=self.get_context_data(**kwargs))
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context['technique_list'] = self.request.user.researcheruser.techniqueinstance_set.all()
+        return context
 
     def post(self ,request ,*args, **kwargs):
         print(self.request.POST)
-        technique_title = request.POST['technique-name']
-        method = request.POST['confirmation_method']
-        resume = request.FILES['resume']
-
-        subject = 'Technique Validation'
-        message ="""کاربر به نام کاربری {} و به نام {} {} ، تکنیک {} را افزوده است.
-        برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام کنید.
-        با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.fist_name ,self.request.user.researcheruser.researcherprofile.last_name,
-                            technique_title ,method ,self.request.user.username)
-        try:
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER],
-                fail_silently=False
-            )
-        except TimeoutError:
-            return HttpResponse('Timeout Error!!')
-        cat_technique = self.technique_list[technique_title]
-        # technique_title = models.Technique
-        #blah blah
-        return HttpResponseRedirect(reverse("researcher:technique"))
+        form = forms.TechniqueInstance(request.POST)
+        if form.is_valid():
+            technique_title = form.cleaned_data['technique']
+            method = request.POST['confirmation_method']
+            if method == 'exam':
+                method_fa = "درخواست آزمون آنلاین"
+            elif method == 'certificant':
+                method_fa = "گواهی نامه"
+            else:
+                method_fa = "مقاله"
+            subject = 'Technique Validation'
+            message ="""کاربر به نام کاربری {} و به نام {} {} ، تکنیک {} را افزوده است.
+            برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام کنید.
+            با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.first_name,
+                            self.request.user.researcheruser.researcherprofile.last_name,
+                            technique_title ,method_fa ,self.request.user.username)
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[settings.EMAIL_HOST_USER ,'a.jafarzadeh1998@gmail.com',],
+                    fail_silently=False
+                )
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
+            try:
+                technique = get_object_or_404(models.Technique ,technique_title=technique_title)
+            except:
+                technique_type = TECHNIQUES[technique_title]
+                technique = models.Technique(technique_type=technique_type ,technique_title=technique_title)
+                technique.save()
+            if method == 'exam':
+                level = "C"
+                technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
+                                                        technique=technique,
+                                                        level=level,
+                                                        evaluat_date=datetime.date.today())
+                technique_instance.save()
+                print(technique_instance)
+                return HttpResponseRedirect(reverse("researcher:technique"))
+            elif method == 'certificant':
+                level = "B"
+            else:
+                level = "A"
+            resume = request.FILES['resume']
+            technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
+                                                        technique=technique,
+                                                        level=level,
+                                                        resume=resume)
+            technique_instance.save()
+            return HttpResponseRedirect(reverse("researcher:technique"))
+        print(form.errors['technique'])
+        return render(request ,self.template_name ,{"technique_error" :form.errors['technique']})
 
 class Question(generic.TemplateView):
     template_name = 'researcher/question.html'
 
     def get(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
+            return HttpResponseRedirect(reverse('chamran:login'))
         try:
            researcher = models.ResearcherUser.objects.get(user=request.user)
         except models.ResearcherUser.DoesNotExist:
             raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
-        if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
         if researcher.status.status == 'not_answered':
             if researcher.researchquestioninstance_set.all().count():
                 question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
@@ -292,6 +419,8 @@ class Question(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         question_list = ResearchQuestion.objects.filter(is_answered=False)
         print(len(question_list))
+        if len(question_list) == 0:
+            return HttpResponseRedirect(reverse('researcher:index'))
         print(random.randint(1 ,len(question_list)))
         question = question_list[random.randint(1 ,len(question_list))-1]
         question_instance = models.ResearchQuestionInstance(research_question=question,
@@ -334,33 +463,36 @@ class QuestionShow(generic.TemplateView ):
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question
         context['attach_file'] = question.research_question.attach_file
-        context['hour'] = datetime.datetime.now().hour
-        context['minute'] = datetime.datetime.now().minute
-        context['second'] = datetime.datetime.now().second
+        context['hour'] = 23 - datetime.datetime.now().hour
+        context['minute'] = 59 - datetime.datetime.now().minute
+        context['second'] = 59 - datetime.datetime.now().second
         return context
     
     def post(self ,request ,*args, **kwargs):
         question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
         uuid_id = question.research_question.uniqe_id
-        question.answer = request.FILES['answer']
-        question.is_answered = True
-        question.save()
-        subject = 'Research Question Validation'
-        message ="""با عرض سلام و خسته نباشید.
-        پژوهشگر {} به نام {} {} به سوال پژوهشی شما پاسخ داده است.
-        لطفا پاسخ پژوهشگر را ارزیابی نمایید.
-        با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.first_name,
-                          self.request.user.researcheruser.researcherprofile.last_name)
-        email = question.research_question.expert.user.username
-        try:
-            send_mail(
-                subject=subject,
-                message=message, 
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email],
-            )
-        except TimeoutError:
-            return HttpResponse('Timeout Error!!')
+        if 'answer' in request.FILES:
+            question.answer = request.FILES['answer']
+            print(question.answer)
+            question.is_answered = True
+            question.save()
+            subject = 'Research Question Validation'
+            message ="""با عرض سلام و خسته نباشید.
+            پژوهشگر {} به نام {} {} به سوال پژوهشی {} پاسخ داده است.
+            لطفا پاسخ پژوهشگر را ارزیابی نمایید.
+            با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.first_name,
+                            self.request.user.researcheruser.researcherprofile.last_name,
+                            question.research_question.question_title)
+            email = question.research_question.expert.user.username
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message, 
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[email],
+                )
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):
@@ -385,6 +517,147 @@ def ajax_Technique_review(request):
         technique_review.save()
         data = {'success' : 'successful'}
         return JsonResponse(data)
+
+
+TECHNIQUES = {
+    'Polymerase Chain Reaction' :'Molecular Biology',
+    'RNA-Seq' :'Molecular Biology',
+    'DNA Metylation Analysis' :'Molecular Biology',
+    'DNA Gel Electorphoresis' :'Molecular Biology',
+    'Two-Dimensional Gel Electorphoresis' :'Molecular Biology',
+    'Gel Purification' :'Molecular Biology',
+    'DNA Ligation Reaction' :'Molecular Biology',
+    'Restriction Enzyme Digests' :'Molecular Biology',
+    'Bacterial Culture' :'Molecular Biology',
+    'Bacterial Transformation The Heat Shock Method' :'Molecular Biology',
+    'Bacterial Transformation Electroporation' :'Molecular Biology',
+    'Plasmid Purification' :'Molecular Biology',
+    'The Western Bolt' :'Molecular Biology',
+    'The Northern Bolt' :'Molecular Biology',
+    'Co-Immunoprecipition and Pull-Down Assays' :'Molecular Biology',
+    'Expression Profiling with Microarrays' :'Molecular Biology',
+    'Cytogenetics' :'Molecular Biology',
+    'Chromatin Immunoprecipition' :'Molecular Biology',
+    'Recombineering and Gene Targeting' :'Molecular Biology',
+    'SNP Genotyping' :'Molecular Biology',
+    'Genome Editing' :'Molecular Biology',
+    'Gene Silencing' :'Molecular Biology',
+
+    'The ELISA Method' :'Immunology',
+    'Flow Cytometry' :'Immunology',
+    'Flow cell storing' :'Immunology',
+    'Magnetice Bead cell Isolation' :'Immunology',
+
+    'SEM Imaging of Biological Samples' :'Imaging',
+    'Biodistribution of Nano-drog Carriers Applications of SEM' :'Imaging',
+    'Imaging of Biological Samples with Optical and Confocal Microscopy' :'Imaging',
+    'Calcium Imaging in Neurons' :'Imaging',
+    'Animal Flourescene' :'Imaging',
+    'Animal CT' :'Imaging',
+    'Animal MRI' :'Imaging',
+    'Animal SPECT' :'Imaging',
+    'Animal PET' :'Imaging',
+    'Animal US' :'Imaging',
+
+    'Sterile Tissue Harvest' :'Histology',
+    'Diagnostic Necropsy and Tissue Harvest' :'Histology',
+    'Tissue Cryopreservation' :'Histology',
+    'Tissue Fixation' :'Histology',
+    'Microtome Sectioning' :'Histology',
+    'Cryostat Sectioning' :'Histology',
+    'H&E staining' :'Histology',
+    'Histochemistry' :'Histology',
+    'Histoflouresence' :'Histology',
+
+    'An Introduction to the Centrifuge' :'General Lab',
+    'Regulating Temperature in the Lab Preserving Samples Using Cold' :'General Lab',
+    'Introduction to the Bunsen Burner' :'General Lab',
+    'Introduction to Serological Pipettes and Pipettor' :'General Lab',
+    'An Introduction to the Micropipettor' :'General Lab',
+    'Making Solutions in the Laboratory' :'General Lab',    
+    'Understanding Concentration and Measuring Volumes' :'General Lab',
+    'Introduction to the Microplate Reader' :'General Lab',
+    'Regulation Temperature in the Lab Applying Heat' :'General Lab',
+    'Common Lab Glassware and Users' :'General Lab',
+    'Solutions and Concentrations' :'General Lab',
+    'Determining the Density of a Solid and Liquid' :'General Lab',
+    'Determining the Mass Percent Composition in an Aqueous Solution' :'General Lab',
+    'Determining the Empirical Formula' :'General Lab',
+    'Determining the Solubility Rules of Ionic Compounds' :'General Lab',
+    'Using a pH Meter' :'General Lab',
+    'Introduction to Titration' :'General Lab',
+    'Ideal Gas Law' :'General Lab',
+
+    'An Introduction to Working in Hood' :'Lab Safety',
+    'Operation of High-pressure Reactor Vessels' :'Lab Safety',
+    'Decontamination for laboratory Biosafety Proper Waste Disposal' :'Lab Safety',
+    'Fume Hoods and Laminar Flow Cabinates' :'Lab Safety',
+    'Handling Chemical Spills' :'Lab Safety',
+    'Chemical Storage Categories,Hazards and Compatibilies' :'Lab Safety',
+    'Guidelines in Case of an Laboratory Emergency' :'Lab Safety',
+    'Work with Hot and Cold Sources' :'Lab Safety',
+    'Electrical Safety' :'Lab Safety',
+    'Emergency Eyewash and Shower Stations' :'Lab Safety',
+    'Proper Personal Protective Equipment' :'Lab Safety',
+
+    'Serearching on articles resources' :'Research Methodology',
+    'Endnote' :'Research Methodology',
+    'spss/graph pad' :'Research Methodology',
+    'Essy writing' :'Research Methodology',
+    'Poster Presentation' :'Research Methodology',
+    'Microsoft Office' :'Research Methodology',
+    'Photoshop' :'Research Methodology',
+
+    'Introduction to the Spectrophotometer' :'Biochemistry',
+    'Measuring Mass in the Laboratory' :'Biochemistry',
+    'NMR' :'Biochemistry',
+    'X-ray Fluorescence(XRF)' :'Biochemistry',
+    'Gas Chromatography(GC) with Flame-lonization Detection' :'Biochemistry',
+    'High-Performance Liquid Chromatography(HPLC)' :'Biochemistry',
+    'Ion-Exchange Chromatography' :'Biochemistry',
+    'Chromatography-based Biomolecule Purification Methods' :'Biochemistry',
+    'Capillary Electrophoresis(CE)' :'Biochemistry',
+    'Introduce to Mass Spectrometry' :'Biochemistry',
+    'Scanning Electron Microscopy(SEM)' :'Biochemistry',
+    'Cyclic Voltammetry(CV)' :'Biochemistry',
+    'MALDI-TOF Mass Spectrometry' :'Biochemistry',
+    'Tandem Mass Spectrometry' :'Biochemistry',
+    'Protein Crystallization' :'Biochemistry',
+    'Electrophoretic Mobility Shift Assay(EMSA)' :'Biochemistry',
+    'Photometric Protein Determination' :'Biochemistry',
+    'Density Gradient Ultracentrifugation' :'Biochemistry',
+    'Forster Resonance Energy Transfer(FRET)' :'Biochemistry',
+    'Surface Plasmon Resonance(SPR)' :'Biochemistry',
+    'Synthetic Organic Chemestry' :'Biochemistry',
+
+    'An Introduction to the Laboratory Mouse Mos Musculus' :'Animal Lab',
+    'Rodent Handling and Restraint Techniques' :'Animal Lab',
+    'Basic Mouse Care and Maintenance' :'Animal Lab',
+    'Development and Reproduction of the Laboratory Mouse' :'Animal Lab',
+    'Basic Care Procedures' :'Animal Lab',
+    'Fundamentals of Breeding and Weaning' :'Animal Lab',
+    'Rodent Identification I' :'Animal Lab',
+    'Rodent Identification II' :'Animal Lab',
+    'Compound Administration I' :'Animal Lab',
+    'Compound Administration II' :'Animal Lab',
+    'Compound Administration III' :'Animal Lab',
+    'Compound Administration IV' :'Animal Lab',
+    'Blood Withdrawal I' :'Animal Lab',
+    'Anesthesia Introduction and Maintenance' :'Animal Lab',
+    'Rodent Stereoxtic Surgery' :'Animal Lab',
+    'Considerations for Rodent Surgery' :'Animal Lab',
+
+    'Whole-Mount in Situ Hybridization' :'Cellular Biology',
+    'Molecular Cloning' :'Cellular Biology',
+    'Yeast Transformation and Cloning' :'Cellular Biology',
+    'Embryonic Steam Cell Culture and Differentiaton' :'Cellular Biology',
+    'An Introduction to Transfection' :'Cellular Biology',
+    'Transduction' :'Cellular Biology',
+    'Introduction to Light Microscopy' :'Cellular Biology',
+    'Introduction to Fluorescence Microscopy' :'Cellular Biology',
+    'Histological Sample Preparation for Light Microscopy' :'Cellular Biology',
+    'Cell-surface Biotinylation Assay' :'Cellular Biology',
+}
 
 # 7072488c-02ab-4362-9e51-7100dae78473
 #persiontools
