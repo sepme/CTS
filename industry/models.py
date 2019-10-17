@@ -95,7 +95,7 @@ class ProjectForm(models.Model):
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
-    predict_profit = models.IntegerField()
+    predict_profit = models.IntegerField(verbose_name='سود مالی')
 
     def __str__(self):
         return self.project_title_english

@@ -238,6 +238,15 @@ def show_project_view(request):
         'equipments': project_form.required_lab_equipment,
         'approach': project_form.approach,
         'deadline': calculate_deadline(project.date_finished, project.date_submitted_by_industry),
-        'title': project_form.project_title_persian
+        'persian_title': project_form.project_title_persian,
+        'english_title': project_form.project_title_english,
+        'research_methodology': project_form.research_methodology,
+        'policies': project_form.policy,
+        'potential_problems': project_form.potential_problems,
+        'budget': project_form.required_budget,
+        'project_phase': project_form.project_phase,
+        'profit': project_form.predict_profit,
+        'required_technique': project_form.required_technique
+
     }
     return JsonResponse(data)
