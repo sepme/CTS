@@ -134,48 +134,6 @@ class Project(models.Model):
         project_comments = Comment.objects.all().filter(project=self)
         return project_comments
 
-    def calculate_date_past(self):
-        diff = JalaliDate.today() - JalaliDate(self.date_finished)
-        days = diff.days
-        if days < 0:
-            return '0 روز'
-        elif days < 7:
-            return '{} روز'.format(days)
-        elif days < 30:
-            return '{} هفته'.format(int(days / 7))
-        elif days < 365:
-            return '{} ماه'.format(int(days / 30))
-        else:
-            return '{} سال'.format(int(days / 365))
-
-    def calculate_date_remaining(self):
-        diff = JalaliDate(self.date_finished) - JalaliDate.today()
-        days = diff.days
-        if days < 0:
-            return '0 روز'
-        elif days < 7:
-            return '{} روز'.format(days)
-        elif days < 30:
-            return '{} هفته'.format(int(days / 7))
-        elif days < 365:
-            return '{} ماه'.format(int(days / 30))
-        else:
-            return '{} سال'.format(int(days / 365))
-
-    def calculate_deadline(self):
-        diff = JalaliDate(self.date_finished) - JalaliDate(self.date_submitted_by_industry)
-        days = diff.days
-        if days < 0:
-            return None
-        elif days < 7:
-            return '{} روز'.format(days)
-        elif days < 30:
-            return '{} هفته'.format(int(days / 7))
-        elif days < 365:
-            return '{} ماه'.format(int(days / 30))
-        else:
-            return '{} سال'.format(int(days / 365))
-
     class Meta:
         ordering = ['-date_submitted_by_industry']
 

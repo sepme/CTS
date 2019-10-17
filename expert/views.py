@@ -12,11 +12,11 @@ from datetime import datetime
 from django.core import serializers
 
 
-def calculate_date_remaining(first_date, second_date):
-    diff = JalaliDate(second_date) - JalaliDate(first_date)
+def calculate_deadline(finished, started):
+    diff = JalaliDate(finished) - JalaliDate(started)
     days = diff.days
     if days < 0:
-        raise ValidationError('تاریخ های وارد شده نامعتبر است.')
+        return None
     elif days < 7:
         return '{} روز'.format(days)
     elif days < 30:
@@ -237,7 +237,7 @@ def show_project_view(request):
         'progress': project_form.progress_profitability,
         'equipments': project_form.required_lab_equipment,
         'approach': project_form.approach,
-        'deadline': project.calculate_deadline(),
+        'deadline': calculate_deadline(project.date_finished, project.date_submitted_by_industry),
         'title': project_form.project_title_persian
     }
     return JsonResponse(data)
