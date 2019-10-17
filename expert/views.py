@@ -7,6 +7,24 @@ from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, QueryDict
+from persiantools.jdatetime import JalaliDate
+from datetime import datetime
+from django.core import serializers
+
+
+def calculate_date_remaining(first_date, second_date):
+    diff = JalaliDate(second_date) - JalaliDate(first_date)
+    days = diff.days
+    if days < 0:
+        raise ValidationError('تاریخ های وارد شده نامعتبر است.')
+    elif days < 7:
+        return '{} روز'.format(days)
+    elif days < 30:
+        return '{} هفته'.format(int(days / 7))
+    elif days < 365:
+        return '{} ماه'.format(int(days / 30))
+    else:
+        return '{} سال'.format(int(days / 365))
 
 
 class Index(generic.TemplateView):
@@ -205,3 +223,20 @@ def paper_record_view(request):
     else:
         print('form error occured')
         return JsonResponse(paper_form.errors, status=400)
+
+
+def show_project_view(request):
+    expert_user = request.user.expertuser
+    id = request.GET.get('id')
+    project = expert_user.experts_applied.get(id=id)
+    project_form = project.project_form
+    data = {
+        'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
+        'keywords': serializers.serialize('json', project_form.key_words.all()),
+        'main_problem': project_form.main_problem_and_importance,
+        'progress': project_form.progress_profitability,
+        'equipments': project_form.required_lab_equipment,
+        'approach': project_form.approach,
+        'deadline': project.calculate_deadline()
+    }
+    return JsonResponse(data)
