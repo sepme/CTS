@@ -1326,12 +1326,16 @@ button:hover, button:focus {
     border-radius: 0.25em;
     background-color: #89E076;
     color: #ffffff !important;
+    width: fit-content;
 }
 
 .success-btn:hover {
     background-color: #3ccd1c;
 }
 
+a.success-btn:hover {
+    text-decoration: none;
+}
 .danger-btn {
     border: none;
     outline: none;
@@ -1462,5 +1466,15 @@ button:hover, button:focus {
     }
 }
 /*
- * Input
+ * Inputs
  */
+
+/*
+ * Cards
+ */
+.success-card {
+    border-color: #3ccd1c!important;
+}
+.wait-card {
+    border-color: #fff600!important;
+}
