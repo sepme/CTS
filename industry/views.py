@@ -19,7 +19,9 @@ def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
     # TODO mohlat anjam
-    del json_response['key_words']
+    # del json_response['key_words']
+    for ind, value in enumerate(json_response['key_words']):
+        json_response['key_words'][ind] = value.__str__()
     print('the json response is', json_response)
     return JsonResponse(json_response)
 
