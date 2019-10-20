@@ -488,6 +488,9 @@ paperForm.submit(function (event) {
 
 var showInfo = $('.chamran-btn-info');
 showInfo.click(function (event) {
+    var id = "accept-project";
+    var acceptButton = $('#accept-project');
+    acceptButton.attr('id', $(this).attr('id'));
     $.ajax({
         url: $(this).attr('data-url'),
         data: {
@@ -496,9 +499,10 @@ showInfo.click(function (event) {
         dataType: 'json',
         success: function (data) {
             var dialog = $(".showProject");
-            dialog.find(".card-head").html(data.title);
-            dialog.find(".establish-time .time-body").html(data.data);
+            dialog.find(".card-head").html(data.persian_title);
+            dialog.find(".establish-time .time-body").html(data.date);
             dialog.find(".time-left .time-body").html(data.deadline);
+            dialog.find(".answer").text(data.main_problem);
             console.log(data)
         },
         error: function (data) {
@@ -537,4 +541,22 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
+});
+
+var acceptProject = $('#accept-project');
+acceptProject.click(function (event) {
+    $.ajax({
+        url: $(this).attr('data-url'),
+        data: {
+            'id': $(this).attr('id')
+        },
+        dataType: 'json',
+        method: 'GET',
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (data) {
+            console.log(data)
+        }
+    })
 });

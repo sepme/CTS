@@ -10,6 +10,7 @@ from django.http import JsonResponse, QueryDict
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
 from django.core import serializers
+from industry.models import *
 
 
 def calculate_deadline(finished, started):
@@ -77,7 +78,11 @@ def index(request):
 
     else:
         form = InitialInfoForm()
-    return render(request, 'expert/index.html', {'form': form, 'expert_user': expert_user})
+        projects = Project.objects.all()
+        print(projects)
+    return render(request, 'expert/index.html', {'form': form,
+                                                 'expert_user': expert_user,
+                                                 'projects': projects})
 
 
 class UserInfo(generic.FormView):
@@ -228,25 +233,32 @@ def paper_record_view(request):
 def show_project_view(request):
     expert_user = request.user.expertuser
     id = request.GET.get('id')
-    project = expert_user.experts_applied.get(id=id)
+    project = Project.objects.get(id=id)
     project_form = project.project_form
     data = {
         'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
-        'keywords': serializers.serialize('json', project_form.key_words.all()),
-        'main_problem': project_form.main_problem_and_importance,
-        'progress': project_form.progress_profitability,
-        'equipments': project_form.required_lab_equipment,
+        'key_words': serializers.serialize('json', project_form.key_words.all()),
+        'main_problem_and_importance': project_form.main_problem_and_importance,
+        'progress_profitability': project_form.progress_profitability,
+        'required_lab_equipment': project_form.required_lab_equipment,
         'approach': project_form.approach,
         'deadline': calculate_deadline(project.date_finished, project.date_submitted_by_industry),
-        'persian_title': project_form.project_title_persian,
-        'english_title': project_form.project_title_english,
+        'project_title_persian': project_form.project_title_persian,
+        'project_title_english': project_form.project_title_english,
         'research_methodology': project_form.research_methodology,
-        'policies': project_form.policy,
+        'policy': project_form.policy,
         'potential_problems': project_form.potential_problems,
-        'budget': project_form.required_budget,
+        'required_budget': project_form.required_budget,
         'project_phase': project_form.project_phase,
-        'profit': project_form.predict_profit,
+        'predict_profit': project_form.predict_profit,
         'required_technique': project_form.required_technique
 
     }
     return JsonResponse(data)
+
+
+def accept_project(request):
+    project = Project.objects.get(id=request.GET['id'])
+    project.expert_applied.add(request.user.expertuser)
+    project.save()
+    return JsonResponse({'success': 'successful'})
