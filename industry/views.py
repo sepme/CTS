@@ -1,4 +1,7 @@
+import datetime
 import os
+
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.files.base import ContentFile
@@ -10,19 +13,43 @@ from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
 # industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
 #                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
+from persiantools.jdatetime import JalaliDate
 from industry.models import IndustryForm
 from . import models
 from . import forms
 
 
+def gregorian_to_numeric_jalali(date):
+    j_date = JalaliDate(date)
+    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
+
+
+def date_dif(start_date, deadline_date):
+    delta = relativedelta(deadline_date, start_date)
+    if delta.years != 0:
+        return str(delta.years) + ' سال'
+    elif delta.months != 0:
+        return str(delta.months) + ' ماه'
+    elif delta.days != 0:
+        return str(delta.days) + ' روز'
+    else:
+        return 'امروز'
+
+
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
-    # TODO mohlat anjam
-    # del json_response['key_words']
+    json_response['deadline'] = 'نا مشخص'
+    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+        print('project deadline is set')
+        json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
+    else:
+        print('deadline is the whole start to ')
+        json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
+    print('deadline was set to', json_response['deadline'])
+    json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    print('the json response is', json_response)
     return JsonResponse(json_response)
 
 

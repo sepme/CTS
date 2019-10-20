@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 
+from expert.models import ExpertUser
+from researcher.models import ResearcherUser
+
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
@@ -129,6 +132,7 @@ class Project(models.Model):
         (1, 'فعال'),
         (2, 'معلق'),
         (3, 'انجام شد'),
+        (4, 'در حال انتظار')
     )
     status = models.IntegerField(choices=PROJECT_STATUS_CHOICES, verbose_name='وضعیت پروژه', default=0, blank=True)
 
@@ -147,11 +151,15 @@ def upload_comment(instance, file_name):
 class Comment(models.Model):
     description = models.TextField(verbose_name="متن")
     SENDER = (
-        (0, 'متخصص'),
-        (1, 'صنعت')
+        (0, 'استاد'),
+        (1, 'صنعت'),
+        (2, 'پژوهشگر'),
     )
     sender_type = models.IntegerField(choices=SENDER)
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING)
+    expert_user = models.ForeignKey(ExpertUser, on_delete=models.DO_NOTHING)
+    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
@@ -164,7 +172,7 @@ class ProjectHistory(models.Model):
     project_end_date = models.DateField(verbose_name="تاریخ پایان")
     STATUS_CHOICE = (
         (0, 'completed'),
-        (1, 'stoped')
+        (1, 'stopped')
     )
     project_status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت")
     project_point = models.FloatField(verbose_name='امتیاز')
