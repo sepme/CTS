@@ -1,16 +1,16 @@
-$(window).on("load",function () {
+$(window).on("load", function () {
     init_windowSize();
     load_dialog();
-}).on("resize",function () {
+}).on("resize", function () {
     init_windowSize();
     load_dialog();
 });
-$(document).ready(function(){
+$(document).ready(function () {
     // variable
     edu_count = 0;
     exe_count = 0;
     stu_count = 0;
-    init_dialog_btn(".message-body button, .message-body-sm button" , ".message-show");
+    init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".add-new-technique", ".add-technique");
     init_dialog_btn(".new-review-request", ".review-request");
     init_dialog_btn(".send-answer", ".thanks_response");
@@ -24,28 +24,28 @@ $(document).ready(function(){
     search_input(".search_message");
     question();
     $('input#upload-input').change(function (event) {
-        $("img.profile").fadeIn("fast").attr('src',URL.createObjectURL(event.target.files[0]));
+        $("img.profile").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
     });
-    if($(window).width() < 575.98){
+    if ($(window).width() < 575.98) {
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
-           if($(this).hasClass("on")){
-               $(this).removeClass("on");
-               $(".side-bar").css("right","-500px");
-               $(".content").removeClass("blur-div");
-           } else {
-               $(this).addClass("on");
-               $(".side-bar").css("right","0");
-               $(".content").addClass("blur-div");
-           }
+            if ($(this).hasClass("on")) {
+                $(this).removeClass("on");
+                $(".side-bar").css("right", "-500px");
+                $(".content").removeClass("blur-div");
+            } else {
+                $(this).addClass("on");
+                $(".side-bar").css("right", "0");
+                $(".content").addClass("blur-div");
+            }
         });
-    }else{
+    } else {
         init_windowSize();
-        init_dialog_btn(".chamran-btn-info" , ".showProject");
+        init_dialog_btn(".chamran-btn-info", ".showProject");
         $(".form-submit").click(function () {
             blur_div_toggle(".top-bar");
             blur_div_toggle(".side-bar");
-            $(".mainInfo-body").css("display","none");
+            $(".mainInfo-body").css("display", "none");
         });
 
         // education_record();
@@ -53,16 +53,16 @@ $(document).ready(function(){
         // studious_record();
 
         $(".technique-list-item").click(function () {
-        $(this).toggleClass("active");
-        $(this).children("span").children(".fa-chevron-left").toggleClass("rotate--90");
-        $(this).children(".sub-technique-list").toggleClass("display-toggle");
-      });
+            $(this).toggleClass("active");
+            $(this).children("span").children(".fa-chevron-left").toggleClass("rotate--90");
+            $(this).children(".sub-technique-list").toggleClass("display-toggle");
+        });
         $("ul#project-list li a").click(function () {
-          if(!$(this).hasClass("active")){
-              $("ul#project-list li a").removeClass("active");
-              $(this).addClass("active");
-          }
-      });
+            if (!$(this).hasClass("active")) {
+                $("ul#project-list li a").removeClass("active");
+                $(this).addClass("active");
+            }
+        });
     }
 });
 
@@ -195,11 +195,11 @@ scientificForm.submit(function (event) {
             scientificForm.find("input").prop("disabled", false).removeClass("progress-cursor");
             scientificForm.find("label").removeClass("progress-cursor");
             scientificForm.closest(".fixed-back").find(".card").removeClass("wait");
-            
+
             if (data.success === "successful") {
                 $(".scientific_form").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_research_record();
+                show_scientific_record();
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -295,7 +295,7 @@ researchForm.submit(function (event) {
             researchForm.find("label").removeClass("progress-cursor");
             researchForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".ajax-std-form").css("display", "none");
+                $(".research_form").css("display", "none");
                 $(".main").removeClass("blur-div");
                 show_research_record();
                 iziToast.success({
@@ -381,9 +381,9 @@ executive_form.submit(function (event) {
             executive_form.find("label").removeClass("progress-cursor");
             executive_form.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".ajax-exe-form").css("display", "none");
+                $(".executive_form").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_research_record();
+                show_executive_record();
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -477,7 +477,7 @@ technique_review.submit(function (event) {
             technique_review.find("input").prop("disabled", false).removeClass("progress-cursor");
             technique_review.find("label").removeClass("progress-cursor");
             technique_review.closest(".fixed-back").find(".card").removeClass("wait");
-            
+
             if (data.success === "successful") {
                 $("#technique_review").css("display", "none");
                 $(".main").removeClass("blur-div");

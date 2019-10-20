@@ -1,4 +1,4 @@
-function load_dialog(){
+function load_dialog() {
     $(".title-back").each(function () {
         var title_back_width = $(this).prev().outerWidth() + 30;
         $(this).css("width", title_back_width);
@@ -6,14 +6,15 @@ function load_dialog(){
     $(".row-header > .header").each(function () {
         var divWidth = $(this).outerWidth();
         divWidth = $(this).closest("div").innerWidth() - divWidth;
-        $(this).prev().css("width",divWidth/2 - 10);
-        $(this).next().css("width",divWidth/2 - 10);
-        $(this).css("left", (divWidth)/2 );
+        $(this).prev().css("width", divWidth / 2 - 10);
+        $(this).next().css("width", divWidth / 2 - 10);
+        $(this).css("left", (divWidth) / 2);
     });
 }
+
 function init_windowSize() {
-    if($(window).width() < 575.98){
-    }else {
+    if ($(window).width() < 575.98) {
+    } else {
         var contentWidth = $(document).innerWidth() - 250;
         var contentMargin = 0.0862 * contentWidth - 54.9655;
         $(".info-card").css({
@@ -27,6 +28,7 @@ function init_windowSize() {
         $(".side-bar").css("height", "100%");
     }
 }
+
 function loading() {
     $(".main").addClass("blur-div");
     var canvas = $("#loading-canvas");
@@ -43,126 +45,133 @@ function loading() {
         radius: 50
     });
 }
+
 function blur_div_toggle(content) {
-    if($(content).hasClass("blur-div")) {
+    if ($(content).hasClass("blur-div")) {
         $(content).removeClass("blur-div");
-    }else {
+    } else {
         $(content).addClass("blur-div");
     }
 }
+
 function init_dialog_btn(element, dialogClass) {
-    $(element).click(function (){
+    $(element).click(function () {
         blur_div_toggle(".main");
-        $(dialogClass).css("display","block");
+        $(dialogClass).css("display", "block");
         close_dialog(dialogClass);
         dialog_comment_init();
         vote_dialog_init();
         load_dialog();
     });
 }
-function input_focus(){
-    if( $("input[type='text'],input[type='email'],textarea").prop("disabled") ) {
+
+function input_focus() {
+    if ($("input[type='text'],input[type='email'],textarea").prop("disabled")) {
         $(this).each(function () {
-            var inputLabel = "label[for='"+$(this).attr("id")+"']";
+            var inputLabel = "label[for='" + $(this).attr("id") + "']";
             $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
-                "font-size":"13px",
-                "top":"12px",
-                "right":"30px",
-                "color":"#8d8d8d"
+                "font-size": "13px",
+                "top": "12px",
+                "right": "30px",
+                "color": "#8d8d8d"
             });
 
         });
     }
     $("input[type='text'],input[type='email'],textarea").each(function () {
-        var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        if($(this).val() !== ''){
+        var inputLabel = "label[for='" + $(this).attr("id") + "']";
+        if ($(this).val() !== '') {
             $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
-                    "font-size":"12px",
-                    "top":"12px",
-                    "right":"30px",
-                    "color":"#6f7285",
-                    "padding":"0 10px"
-                });
+                "font-size": "12px",
+                "top": "12px",
+                "right": "30px",
+                "color": "#6f7285",
+                "padding": "0 10px"
+            });
         }
-        if( $(this).hasClass("error") ) {
-            $(inputLabel).css("color","#ff4545");
+        if ($(this).hasClass("error")) {
+            $(inputLabel).css("color", "#ff4545");
         }
     }).on("focus", function () {
-        var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        if($(this).hasClass("solid-label")) {
+        var inputLabel = "label[for='" + $(this).attr("id") + "']";
+        if ($(this).hasClass("solid-label")) {
             return false;
-        } else if($(this).hasClass("error")) {
+        } else if ($(this).hasClass("error")) {
             var errorDiv = $(this).next(".error");
             $(this).on("change", function () {
-            if( $(this).hasClass("error") ) {
-                $(this).removeClass("error");
-                $(errorDiv).remove();
-            }
-        });
-        } else{
+                if ($(this).hasClass("error")) {
+                    $(this).removeClass("error");
+                    $(errorDiv).remove();
+                }
+            });
+        } else {
             $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
-                "font-size":"12px",
-                "top":"12px",
-                "right":"30px",
-                "color":"#3CCD1C",
-                "padding":"0 10px"
+                "font-size": "12px",
+                "top": "12px",
+                "right": "30px",
+                "color": "#3CCD1C",
+                "padding": "0 10px"
             });
-            $(this).css("color","#3ccd1c");
+            $(this).css("color", "#3ccd1c");
         }
     }).on("focusout", function () {
-        var inputLabel = "label[for='"+$(this).attr("id")+"']";
-        if($(this).hasClass("solid-label")){
+        var inputLabel = "label[for='" + $(this).attr("id") + "']";
+        if ($(this).hasClass("solid-label")) {
             return false;
-        } else if($(this).hasClass("error")) {
+        } else if ($(this).hasClass("error")) {
 
         } else {
-            $(inputLabel).css("color","#6f7285");
-            if($(this).val() === ''){
+            $(inputLabel).css("color", "#6f7285");
+            if ($(this).val() === '') {
                 $(inputLabel).css({
-                    "font-size":"13px",
-                    "top":"28px",
-                    "right":"25px",
-                    "color":"#6f7285",
-                    "padding":"0"
+                    "font-size": "13px",
+                    "top": "28px",
+                    "right": "25px",
+                    "color": "#6f7285",
+                    "padding": "0"
                 });
                 $(inputLabel).removeClass("full-focus-out");
-            }else {
-                $(this).css("color","#8d8d8d");
-                $(inputLabel).css("color","#8d8d8d");
+            } else {
+                $(this).css("color", "#8d8d8d");
+                $(inputLabel).css("color", "#8d8d8d");
             }
         }
     });
 }
-function cancel_add(className){
+
+function cancel_add(className) {
     div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
     $(".refuse-btn").click(function () {
-        $(className+ " div#" + $(this).attr("id")).remove();
-        if($(className).html() === '') {
+        $(className + " div#" + $(this).attr("id")).remove();
+        if ($(className).html() === '') {
             $(className).append(div);
         }
     });
 }
+
 function search_input(className) {
     $(className).focusin(function () {
         $(this).css("width", "50%");
     }).focusout(function () {
-        if( $(this).val() === '') {
+        if ($(this).val() === '') {
             $(this).css("width", "initial");
         }
     });
 }
-function close_dialog(className){
-    $(".close").click(function (){
-        $(className).css("display","none");
+
+function close_dialog(className) {
+    $(".close").click(function () {
+        $(className).css("display", "none");
         $(".main").removeClass("blur-div");
     });
 }
+
 function record_edit(className) {
     $(className + " .fa-pen").click(function () {
-        if( $(className + " .ch-card-item").length === 0 ) {
+        if ($(className + " .ch-card-item").length === 0) {
             if (className === '.education') {
                 var count = parseInt($(this).attr('id').replace('edit_edu_', ''));
                 $(className).append(education_data_form(count));
@@ -195,154 +204,156 @@ function record_edit(className) {
     });
     $(className + " .fa-trash-alt").click(function () {
         div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-        if( className === '.education') {
+        if (className === '.education') {
             var count = parseInt($(this).attr('id').replace('edit_edu_', ''));
             $(this).closest("tr").remove();
-        } else if( className === '.executive') {
-             var count = parseInt($(this).attr('id').replace('edit_exe_', ''));
+        } else if (className === '.executive') {
+            var count = parseInt($(this).attr('id').replace('edit_exe_', ''));
             $(this).closest("tr").remove();
-        } else if( className === '.studious') {
-             var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
+        } else if (className === '.studious') {
+            var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
             $(this).closest("tr").remove();
         }
-        if( $(className + " > table > tbody > tr").length === 0 ) {
+        if ($(className + " > table > tbody > tr").length === 0) {
             $(className).html(div);
         }
     });
 }
+
 function education_data_form(edu_count) {
     div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
-    $(div).attr("id",edu_count);
+    $(div).attr("id", edu_count);
     $(div).html("<form action='' method='post'><div class='row'>" +
-            "<div class='col-lg-6'>" +
-              "<label for=\"edu-section"+edu_count+"\">مقطع تحصیلی</label>\n" +
-              "<input type=\"text\" id=\"edu-section"+edu_count+"\" class=\"w-100\">" +
-            "</div>" +
-            "<div class='col-lg-6'>" +
-              "<label for=\"edu-subject"+edu_count+"\">رشته تحصیلی</label>\n" +
-              "<input type=\"text\" id=\"edu-subject"+edu_count+"\" class=\"w-100\">" +
-            "</div>" +
-            "</div>"+
-            "</div>" +
-            "<div class='row'>" +
-            "<div class='col-lg-4'>" +
-              "<label for=\"university"+edu_count+"\">دانشگاه</label>\n" +
-              "<input type=\"text\" id=\"university"+edu_count+"\" class=\"w-100\">" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-              "<label for=\"edu-city"+edu_count+"\">شهر محل تحصیل</label>\n" +
-              "<input type=\"text\" id=\"edu-city"+edu_count+"\" class=\"w-100\">" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-              "<label for=\"year"+edu_count+"\">سال اخذ مدرک</label>\n" +
-              "<input type=\"text\" id=\"year"+edu_count+"\" class=\"w-100\">" +
-            "</div>" +
-            "<div class='col-lg-2'></div>" +
-            "</div>" +
-            "<div class='row mtop-lg-25'>" +
-            "<div class='col-lg-9'>" +
-                "<button type='button' id='"+edu_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-                "<button type='button' id='"+edu_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
-            "</div>" +
-            "</div></form>");
+        "<div class='col-lg-6'>" +
+        "<label for=\"edu-section" + edu_count + "\">مقطع تحصیلی</label>\n" +
+        "<input type=\"text\" id=\"edu-section" + edu_count + "\" class=\"w-100\">" +
+        "</div>" +
+        "<div class='col-lg-6'>" +
+        "<label for=\"edu-subject" + edu_count + "\">رشته تحصیلی</label>\n" +
+        "<input type=\"text\" id=\"edu-subject" + edu_count + "\" class=\"w-100\">" +
+        "</div>" +
+        "</div>" +
+        "</div>" +
+        "<div class='row'>" +
+        "<div class='col-lg-4'>" +
+        "<label for=\"university" + edu_count + "\">دانشگاه</label>\n" +
+        "<input type=\"text\" id=\"university" + edu_count + "\" class=\"w-100\">" +
+        "</div>" +
+        "<div class='col-lg-3'>" +
+        "<label for=\"edu-city" + edu_count + "\">شهر محل تحصیل</label>\n" +
+        "<input type=\"text\" id=\"edu-city" + edu_count + "\" class=\"w-100\">" +
+        "</div>" +
+        "<div class='col-lg-3'>" +
+        "<label for=\"year" + edu_count + "\">سال اخذ مدرک</label>\n" +
+        "<input type=\"text\" id=\"year" + edu_count + "\" class=\"w-100\">" +
+        "</div>" +
+        "<div class='col-lg-2'></div>" +
+        "</div>" +
+        "<div class='row mtop-lg-25'>" +
+        "<div class='col-lg-9'>" +
+        "<button type='button' id='" + edu_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
+        "</div>" +
+        "<div class='col-lg-3'>" +
+        "<button type='button' id='" + edu_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
+        "</div>" +
+        "</div></form>");
     return div;
 }
+
 function education_record() {
     $(".education-btn > i.fa-plus").click(function () {
-        if( $(".education .ch-card-item").length === 0 ) {
-            if($(".education > .initial-value").hasClass("initial-value")) {
+        if ($(".education .ch-card-item").length === 0) {
+            if ($(".education > .initial-value").hasClass("initial-value")) {
                 $(".education").html(education_data_form(edu_count));
-            }else {
+            } else {
                 $('.education').append(education_data_form(edu_count));
             }
             cancel_add(".education");
             add_education_record(edu_count);
             input_focus();
-            edu_count ++;
+            edu_count++;
         }
     });
 }
-function add_education_record(edu_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".education .accept-btn").click(function () {
-        row = "<tr>" +
-                    "<td>" + $("#edu-section" + edu_count).val() + "</td>" +
-                    "<td>" + $("#edu-subject" + edu_count).val() + "</td>" +
-                    "<td>" + $("#university" + edu_count).val() + "</td>" +
-                    "<td>" + $("#edu-city" + edu_count).val() + "</td>" +
-                    "<td>" + $("#year" + edu_count).val() + "</td>" +
-                    "<td>" +
-                        "<i class='fas fa-pen' id='edit_edu_" + edu_count + "'></i>" +
-                        "<i class='fas fa-trash-alt' id='delete_edu_" + edu_count + "'></i>" +
-                    "</td>" +
-                "</tr>";
-        if(! $(".education > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                    "<thead>" +
-                        "<tr>" +
-                            "<td>مقطع تحصیلی</td>" +
-                            "<td>رشته تحصیلی</td>" +
-                            "<td>دانشگاه</td>" +
-                            "<td>شهر محل تحصیل</td>" +
-                            "<td>سال اخذ مدرک</td>" +
-                            "<td></td>" +
-                        "</tr>" +
-                    "</thead>" +
-                    "<tbody>" +
-                    "</tbody>" +
-                "</table>";
-            $(".education").html(table);
-        }
-        $(".education > table > tbody").append(row);
-        $(".education div#" + $(this).attr("id")).remove();
-        record_edit(".education");
-    });
+
+function show_scientific_record() {
+    row = "<tr>" +
+        "<td>" + $("#edu-section").val() + "</td>" +
+        "<td>" + $("#edu-subject").val() + "</td>" +
+        "<td>" + $("#university").val() + "</td>" +
+        "<td>" + $("#edu-city").val() + "</td>" +
+        "<td>" + $("#year").val() + "</td>" +
+        "<td>" +
+        "<i class='fas fa-pen' id='edit_edu'></i>" +
+        "<i class='fas fa-trash-alt' id='delete_edu'></i>" +
+        "</td>" +
+        "</tr>";
+    if (!$(".education > table").hasClass("table")) {
+        table = "<table class='table mtop-lg-25'>" +
+            "<thead>" +
+            "<tr>" +
+            "<td>مقطع تحصیلی</td>" +
+            "<td>رشته تحصیلی</td>" +
+            "<td>دانشگاه</td>" +
+            "<td>شهر محل تحصیل</td>" +
+            "<td>سال اخذ مدرک</td>" +
+            "<td></td>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>" +
+            "</table>";
+        $(".education").html(table);
+    }
+    $(".education > table > tbody").append(row);
+    $(".education div#" + $(this).attr("id")).remove();
+    record_edit(".education");
 }
+
 function executive_data_form(exe_count) {
     div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
-    $(div).attr("id",exe_count);
+    $(div).attr("id", exe_count);
     $(div).html("<form action='' method='post'><div class='row'>" +
         "<div class='col-lg-5'>" +
-        "<label for='duty"+ exe_count +"'>سمت</label>" +
-        "<input type='text' id='duty"+ exe_count +"' class='w-100'>" +
-        "</div>"+
+        "<label for='duty" + exe_count + "'>سمت</label>" +
+        "<input type='text' id='duty" + exe_count + "' class='w-100'>" +
+        "</div>" +
         "<div class='col-lg-1'>" +
         "<span class='center-vr'>زمان :</span>" +
         "</div>" +
         "<div class='col-lg-3'>" +
-        "<label for='from"+ exe_count +"'>از تاریخ</label>" +
-        "<input type='text' id='from"+ exe_count +"' class='w-100'>" +
+        "<label for='from" + exe_count + "'>از تاریخ</label>" +
+        "<input type='text' id='from" + exe_count + "' class='w-100'>" +
         "</div>" +
         "<div class='col-lg-3'>" +
-        "<label for='until"+ exe_count +"'>تا تاریخ</label>" +
-        "<input type='text' id='until"+ exe_count +"' class='w-100'>" +
+        "<label for='until" + exe_count + "'>تا تاریخ</label>" +
+        "<input type='text' id='until" + exe_count + "' class='w-100'>" +
         "</div>" +
-        "</div>"+
+        "</div>" +
         "<div class='row'>" +
         "<div class='col-lg-5'>" +
-        "<label for='workplace"+ exe_count +"'>محل خدمت</label>" +
-        "<input type='text' id='workplace"+ exe_count +"' class='w-100'>" +
-        "</div>"+
+        "<label for='workplace" + exe_count + "'>محل خدمت</label>" +
+        "<input type='text' id='workplace" + exe_count + "' class='w-100'>" +
+        "</div>" +
         "<div class='col-lg-4'>" +
-        "<label for='exe-city"+ exe_count +"'>شهر</label>" +
-        "<input type='text' id='exe-city"+ exe_count +"' class='w-100'>" +
-        "</div>"+
+        "<label for='exe-city" + exe_count + "'>شهر</label>" +
+        "<input type='text' id='exe-city" + exe_count + "' class='w-100'>" +
+        "</div>" +
         "<div class='col-lg-3'></div>" +
         "</div>" +
         "<div class='row mtop-lg-25'>" +
         "<div class='col-lg-9'>" +
-        "<button type='button' id='"+exe_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
-        "</div>"+
+        "<button type='button' id='" + exe_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
+        "</div>" +
         "<div class='col-lg-3'>" +
-        "<button type='button' id='"+exe_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
+        "<button type='button' id='" + exe_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
         "</div>" +
         "</div></form>");
     return div;
 }
+
 // function executive_record() {
 //     $(".executive-btn > i.fa-plus").click(function () {
 //         if( $(".executive .ch-card-item").length === 0 ) {
@@ -360,60 +371,58 @@ function executive_data_form(exe_count) {
 //         }
 //     });
 // }
-function add_executive_record(exe_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".executive .accept-btn").click(function () {
-        row = "<tr>" +
-                    "<td>" + $("#duty").val() + "</td>" +
-                    "<td>" + $("#from").val() + "</td>" +
-                    "<td>" + $("#until").val() + "</td>" +
-                    "<td>" + $("#workplace").val() + "</td>" +
-                    "<td>" + $("#exe-city").val() + "</td>" +
-                    "<td>" +
-                        "<i class='fas fa-pen' id='edit_exe'></i>" +
-                        "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
-                    "</td>" +
-                "</tr>";
-        if(! $(".executive > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                    "<thead>" +
-                        "<tr>" +
-                            "<td>سمت</td>" +
-                            "<td>محل خدمت</td>" +
-                            "<td>شهر</td>" +
-                            "<td>از تاریخ</td>" +
-                            "<td>تا تاریخ</td>" +
-                            "<td></td>" +
-                        "</tr>" +
-                    "</thead>" +
-                    "<tbody>" +
-                    "</tbody>" +
-                "</table>";
-            $(".executive").html(table);
-        }
-        $(".executive > table > tbody").append(row);
-        $(".executive div#" + $(this).attr("id")).remove();
-        record_edit(".executive");
-    });
+function show_executive_record() {
+    row = "<tr>" +
+        "<td>" + $("#duty").val() + "</td>" +
+        "<td>" + $("#from").val() + "</td>" +
+        "<td>" + $("#until").val() + "</td>" +
+        "<td>" + $("#workplace").val() + "</td>" +
+        "<td>" + $("#exe-city").val() + "</td>" +
+        "<td>" +
+        "<i class='fas fa-pen' id='edit_exe'></i>" +
+        "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
+        "</td>" +
+        "</tr>";
+    if (!$(".executive > table").hasClass("table")) {
+        table = "<table class='table mtop-lg-25'>" +
+            "<thead>" +
+            "<tr>" +
+            "<td>سمت</td>" +
+            "<td>محل خدمت</td>" +
+            "<td>شهر</td>" +
+            "<td>از تاریخ</td>" +
+            "<td>تا تاریخ</td>" +
+            "<td></td>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>" +
+            "</table>";
+        $(".executive").html(table);
+    }
+    $(".executive > table > tbody").append(row);
+    $(".executive div#" + $(this).attr("id")).remove();
+    record_edit(".executive");
 }
-function  studious_data_form(stu_count) {
+
+function studious_data_form(stu_count) {
     div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
-    $(div).attr("id",stu_count);
+    $(div).attr("id", stu_count);
     $(div).html("<form action='' method='post'><div class='row'>" +
         "<div class='col-lg-5'>" +
-        "<label for='subject"+ stu_count +"'>عنوان طرح پژوهشی</label>" +
-        "<input type='text' id='subject"+ stu_count +"' class='w-100'>" +
-        "</div>"+
+        "<label for='subject" + stu_count + "'>عنوان طرح پژوهشی</label>" +
+        "<input type='text' id='subject" + stu_count + "' class='w-100'>" +
+        "</div>" +
         "<div class='col-lg-3'>" +
-        "<label for='admin"+ stu_count +"'>نام مجری</label>" +
-        "<input type='text' id='admin"+ stu_count +"' class='w-100'>" +
-        "</div>"+
+        "<label for='admin" + stu_count + "'>نام مجری</label>" +
+        "<input type='text' id='admin" + stu_count + "' class='w-100'>" +
+        "</div>" +
         "<div class='col-lg-4'>" +
-        "<label for='liable"+ stu_count +"'>مسئول اجرا/همکار</label>" +
-        "<input type='text' id='liable"+ stu_count +"' class='w-100'>" +
-        "</div>"+
-        "</div>"+
+        "<label for='liable" + stu_count + "'>مسئول اجرا/همکار</label>" +
+        "<input type='text' id='liable" + stu_count + "' class='w-100'>" +
+        "</div>" +
+        "</div>" +
         "<div class='row'>" +
         "<div class='col-lg-7 rankDiv'>" +
         "<label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>" +
@@ -423,22 +432,23 @@ function  studious_data_form(stu_count) {
         "<option value='2'>خاتمه یافته</option>" +
         "<option value='3'>متوقف</option>" +
         "</select>" +
-        "</div>"+
+        "</div>" +
         "<div class='col-lg-5'></div>" +
         "</div>" +
         "<div class='row mtop-lg-25'>" +
         "<div class='col-lg-9'>" +
-        "<button type='button' id='"+stu_count+"' class='w-100 accept-btn btn'>افزودن</button>" +
-        "</div>"+
+        "<button type='button' id='" + stu_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
+        "</div>" +
         "<div class='col-lg-3'>" +
-        "<button type='button' id='"+stu_count+"' class='w-100 refuse-btn btn'>لغو</button>" +
+        "<button type='button' id='" + stu_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
         "</div>" +
         "</div></form>");
     return div;
 }
+
 function studious_record() {
     $(".studious-btn > i.fa-plus").click(function () {
-        if( $(".studious .ch-card-item").length === 0 ) {
+        if ($(".studious .ch-card-item").length === 0) {
             if ($(".studious > .initial-value").hasClass("initial-value")) {
                 $(".studious").html(studious_data_form(stu_count));
             } else {
@@ -451,44 +461,42 @@ function studious_record() {
         }
     });
 }
-function add_studious_record(stu_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".studious .accept-btn").click(function () {
-        row = "<tr>" +
-                    "<td>" + $("#subject" + stu_count).val() + "</td>" +
-                    "<td>" + $("#admin" + stu_count).val() + "</td>" +
-                    "<td>" + $("#liable" + stu_count).val() + "</td>" +
-                    "<td>" + $("#rank" + stu_count).val() + "</td>" +
-                    "<td>" +
-                        "<i class='fas fa-pen' id='edit_stu_" + stu_count + "'></i>" +
-                        "<i class='fas fa-trash-alt' id='edit_stu_" + stu_count + "'></i>" +
-                    "</td>" +
-                "</tr>";
-        if(! $(".studious > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                    "<thead>" +
-                        "<tr>" +
-                            "<td>عنوان طرح پژوهشی</td>" +
-                            "<td>مجری</td>" +
-                            "<td>مسئول اجرا/ همکار</td>" +
-                            "<td>وضعیت طرح پژوهشی</td>" +
-                            "<td></td>" +
-                        "</tr>" +
-                    "</thead>" +
-                    "<tbody>" +
-                    "</tbody>" +
-                "</table>";
-            $(".studious").html(table);
-        }
-        $(".studious > table > tbody").append(row);
-        $(".studious div#" + $(this).attr("id")).remove();
-        record_edit(".studious");
-    });
+
+function show_research_record() {
+    row = "<tr>" +
+        "<td>" + $("#subject").val() + "</td>" +
+        "<td>" + $("#admin").val() + "</td>" +
+        "<td>" + $("#liable").val() + "</td>" +
+        "<td>" + $("#rank").val() + "</td>" +
+        "<td>" +
+        "<i class='fas fa-pen' id='edit_stu'></i>" +
+        "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+        "</td>" +
+        "</tr>";
+    if (!$(".studious > table").hasClass("table")) {
+        table = "<table class='table mtop-lg-25'>" +
+            "<thead>" +
+            "<tr>" +
+            "<td>عنوان طرح پژوهشی</td>" +
+            "<td>مجری</td>" +
+            "<td>مسئول اجرا/ همکار</td>" +
+            "<td>وضعیت طرح پژوهشی</td>" +
+            "<td></td>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>" +
+            "</table>";
+        $(".studious").html(table);
+    }
+    $(".studious > table > tbody").append(row);
+    $(".studious div#" + $(this).attr("id")).remove();
+    record_edit(".studious");
 }
 
 function dialog_comment_init() {
     // add emoji to comment
-    $(".new-comment-tools > .fa-smile").click(function() {
+    $(".new-comment-tools > .fa-smile").click(function () {
         alert("Not working");
         // $('#comment').emojiPicker('toggle');
         // alert("a");
@@ -504,18 +512,18 @@ function dialog_comment_init() {
         padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
         $("textarea#comment").css("padding-bottom", padding_bottom);
 
-        if($("div.attachment > div").last().hasClass("attach")){
+        if ($("div.attachment > div").last().hasClass("attach")) {
             bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
-        }else {
+        } else {
             bottom_position = 10;
         }
 
         $("div.attachment").append("<div class='attach'>" +
             "<span>" + "نام فایل" + "</span>" +
             "<div class='progress'>" +
-                "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
+            "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
             "</div>" +
-        "</div>");
+            "</div>");
         $("div.attachment > div").last().css("bottom", bottom_position + 30);
     });
     // replay to a comment
@@ -524,36 +532,36 @@ function dialog_comment_init() {
         $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
         $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
         $(".replay-div > .fa-times").click(function () {
-           $(".replay-div").remove();
-           $("textarea#comment").css("padding-top","2px").focus().on("focusout", function () {
-                var inputLabel = "label[for='"+$(this).attr("id")+"']";
-                $(inputLabel).css("color","#6f7285");
-                if($(this).val() === ''){
+            $(".replay-div").remove();
+            $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
+                var inputLabel = "label[for='" + $(this).attr("id") + "']";
+                $(inputLabel).css("color", "#6f7285");
+                if ($(this).val() === '') {
                     $(inputLabel).css({
-                        "font-size":"14px",
-                        "top":"28px",
-                        "right":"25px",
-                        "color":"#6f7285"
+                        "font-size": "14px",
+                        "top": "28px",
+                        "right": "25px",
+                        "color": "#6f7285"
                     });
-                }else {
-                    $(this).css("color","#8d8d8d");
-                    $(inputLabel).css("color","#8d8d8d");
+                } else {
+                    $(this).css("color", "#8d8d8d");
+                    $(inputLabel).css("color", "#8d8d8d");
                 }
             });
         });
-        $("textarea#comment").css("padding-top","35px").focus().on("focusout", function () {
-            var inputLabel = "label[for='"+$(this).attr("id")+"']";
-            $(inputLabel).css("color","#6f7285");
-            if($(this).val() === ''){
+        $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
+            var inputLabel = "label[for='" + $(this).attr("id") + "']";
+            $(inputLabel).css("color", "#6f7285");
+            if ($(this).val() === '') {
                 $(inputLabel).css({
-                    "font-size":"14px",
-                    "top":"58px",
-                    "right":"25px",
-                    "color":"#6f7285"
+                    "font-size": "14px",
+                    "top": "58px",
+                    "right": "25px",
+                    "color": "#6f7285"
                 });
-            }else {
-                $(this).css("color","#8d8d8d");
-                $(inputLabel).css("color","#8d8d8d");
+            } else {
+                $(this).css("color", "#8d8d8d");
+                $(inputLabel).css("color", "#8d8d8d");
             }
         });
     });
@@ -564,31 +572,32 @@ function dialog_comment_init() {
         $("textarea#comment").focus();
     });
 }
+
 function vote_dialog_init() {
     flag = 0;
     slide_count = 9;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
             "color": "#3ccd1c",
-            "border-color":"#3ccd1c"
+            "border-color": "#3ccd1c"
         });
     }, function () {
-        if(!$(this).parent('.col-lg-12').children('.vote-question-text').hasClass('fix')) {
+        if (!$(this).parent('.col-lg-12').children('.vote-question-text').hasClass('fix')) {
             $(this).parent('.col-lg-12').children('.vote-question-text').slideUp();
         } else {
             $(this).parent('.col-lg-12').children('.vote-question-text').css({
                 "color": "#707070",
-                "border-color":"#707070"
+                "border-color": "#707070"
             })
         }
     }).click(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').toggleClass('fix');
     });
     $(".vote").click(function () {
-        if($('.vote-dialog').css('display') === 'none') {
+        if ($('.vote-dialog').css('display') === 'none') {
             $('.vote-dialog').slideDown();
             $('.vote > .dots').addClass('expand');
-        }else{
+        } else {
             $('.vote-dialog').slideUp();
             $('.vote > .dots').removeClass('expand');
         }
@@ -602,85 +611,91 @@ function vote_dialog_init() {
         $(".voting").delay('delay').slideDown('slow');
         close_dialog('.voting');
         vote_slider(14);
-        $(".progress-line").css("width","calc(100% / 14)");
+        $(".progress-line").css("width", "calc(100% / 14)");
     });
 }
+
 function vote_slider(slide_count) {
     counter = 0;
     $(".next-button").click(function () {
-        if( counter < slide_count - 1) {
-            counter ++;
+        if (counter < slide_count - 1) {
+            counter++;
             progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
             width = parseFloat($(".progress-line").css('width'));
             $(".progress-line").css('width', width + progressWidth);
 
             $(".swiper-wrapper").css({
-                "transform" : "translate3d(-" + 100 * counter +"%, 0, 0)",
-                "transition-duration" : "0.3s"
+                "transform": "translate3d(-" + 100 * counter + "%, 0, 0)",
+                "transition-duration": "0.3s"
             });
         }
-        if( counter === slide_count - 1) {
+        if (counter === slide_count - 1) {
             $(this).html("<i class='fas fa-check'></i>" +
                 "ثبت");
         }
-        if(counter > 0) {
+        if (counter > 0) {
             $(".prev-button").removeClass("disabled");
         }
     });
     $(".prev-button").click(function () {
-        if(counter > 0) {
-            counter --;
+        if (counter > 0) {
+            counter--;
             progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
             width = parseFloat($(".progress-line").css('width'));
             $(".progress-line").css('width', width - progressWidth);
 
             $(".swiper-wrapper").css({
-                "transform" : "translate3d(-" + 100 * counter +"%, 0, 0)",
-                "transition-duration" : "0.3s"
+                "transform": "translate3d(-" + 100 * counter + "%, 0, 0)",
+                "transition-duration": "0.3s"
             });
         }
-        if( counter === slide_count - 2) {
+        if (counter === slide_count - 2) {
             $(".next-button").html("<i class='fas fa-arrow-right'></i>" +
                 "بعدی");
         }
-        if(counter === 0) {
+        if (counter === 0) {
             $(this).addClass('disabled');
         }
     });
 }
+
 function select_technique(className) {
     function slide_up() {
         $(".fixed-back .all-techniques").slideUp('slow');
         return $.Deferred().resolve(false);
     }
+
     function remove_class() {
         $(".fixed-back input#technique-name").removeClass("expand");
     }
+
     function expand() {
         $(".fixed-back .all-techniques").slideDown('slow');
         $(".fixed-back input#technique-name").addClass("expand");
         $(".fixed-back .select-technique i").removeClass("fa-plus").addClass("fa-search");
         $(".fixed-back label[for='technique-name']").html("جستجو تکنیک");
     }
+
     function express() {
         slide_up().done(remove_class());
         $(".fixed-back .select-technique i").removeClass("fa-search").addClass("fa-plus");
         $(".fixed-back label[for='technique-name']").html("نام تکنیک");
     }
+
     $(className).click(function () {
-        if( $(".fixed-back input#technique-name").hasClass("expand") ) {
+        if ($(".fixed-back input#technique-name").hasClass("expand")) {
             express();
-        }else {
+        } else {
             expand();
         }
     });
     $("li[role='treeitem']").click(function () {
         var tree = $("#fancy-tree").fancytree({
-            activate: function(event, data){
-                    node = data.node;
-                    $("input#technique-name").val(node.title);
-                    express();
-                    input_focus();
+            activate: function (event, data) {
+                node = data.node;
+                $("input#technique-name").val(node.title);
+                express();
+                input_focus();
             }
         });
     });
@@ -690,29 +705,30 @@ function select_technique(className) {
         $(this).find("svg").find("path").attr("fill", "#bdbdbd");
     });
     $(".fixed-back .confirmation .upload-file").click(function () {
-        $(this).closest("form").find("input.upload-resume").next().slideDown("slow").closest("div.col-12").css("padding-bottom","15px");
+        $(this).closest("form").find("input.upload-resume").next().slideDown("slow").closest("div.col-12").css("padding-bottom", "15px");
     });
     $(".fixed-back .confirmation .close-upload").click(function () {
-        $(this).closest("form").find("input.upload-resume").next().slideUp("slow").closest("div.col-12").css("padding-bottom","0px");
+        $(this).closest("form").find("input.upload-resume").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
     });
     $(".fixed-back input.upload-resume").on("change", function () {
         $(this).next().find("svg").first().css("display", "none");
         $(this).next().find("svg").last().css("display", "block");
-        var fileName  = $(this).val().split("\\").pop();
+        var fileName = $(this).val().split("\\").pop();
         $(this).next().find(".upload-file-text").css("padding-top", "5px")
             .html(fileName);
     });
 }
+
 function question() {
     $(".show-researching-question").click(function () {
-       $(".question-initial-info").css("display","none");
-       $(".preview-question").css("display", "block");
-       $(".confirmation").css("display","none");
-       $(".main").removeClass("blur-div");
+        $(".question-initial-info").css("display", "none");
+        $(".preview-question").css("display", "block");
+        $(".confirmation").css("display", "none");
+        $(".main").removeClass("blur-div");
     });
     $(".close-thanks-response").click(function () {
-       $(".thanks_response").css("display","none");
-       $(".main").removeClass("blur-div");
+        $(".thanks_response").css("display", "none");
+        $(".main").removeClass("blur-div");
     });
     $("input.upload-answer").next().hover(function () {
         $(this).find("svg").find("path").attr("fill", "#3ccd1c");
@@ -732,9 +748,11 @@ function question() {
         $(this).next().find(".upload-file-text").css("padding-top", "5px")
             .html(fileName);
     });
+
     function counter() {
 
     }
+
     counter();
 }
 
