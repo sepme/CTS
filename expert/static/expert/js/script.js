@@ -487,6 +487,143 @@ paperForm.submit(function (event) {
 });
 
 var showInfo = $('.chamran-btn-info');
+
+function setRole(data) {
+    role = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.policy +
+        "</div></div>";
+    $(".project-info-content").html(role);
+}
+
+function setResources(data) {
+    resources = "<div>" +
+        "                                    <div class='question'>" +
+        "                                        <span class='question-mark'>" +
+        "                                            <i class='far fa-question-circle'></i>" +
+        "                                        </span>" +
+        "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
+        "                                    </div>" +
+        "                                    <div class='answer'>" +
+        data.required_lab_equipment +
+        "                                    </div>" +
+        "                                </div>" +
+        "<div>" +
+        "                                    <div class='question'>" +
+        "                                        <span class='question-mark'>" +
+        "                                            <i class='far fa-question-circle'></i>" +
+        "                                        </span>" +
+        "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
+        "                                    </div>" +
+        "                                    <div class='answer'>" +
+        data.required_technique +
+        "                                    </div>" +
+        "                                </div>" +
+        "<div>" +
+        "                                    <div class='question'>" +
+        "                                        <span class='question-mark'>" +
+        "                                            <i class='far fa-question-circle'></i>" +
+        "                                        </span>" +
+        "لطفا مراحل انجام پروژه خود را مشخص کنید." +
+        "                                    </div>" +
+        "                                    <div class='answer'>" +
+        data.project_phase +
+        "                                    </div>" +
+        "                                </div>" +
+        "<div>" +
+        "                                    <div class='question'>" +
+        "                                        <span class='question-mark'>" +
+        "                                            <i class='far fa-question-circle'></i>" +
+        "                                        </span>" +
+        "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
+        "                                    </div>" +
+        "                                    <div class='answer'>" +
+        data.required_budget +
+        "                                    </div>" +
+        "                                </div>";
+    $(".project-info-content").html(resources);
+}
+
+function setApproach(data) {
+    approach = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "طفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.approach +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "این راه حل چه مشکلاتی می‌تواند داشته باشد؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.potential_problems +
+        "</div></div>"
+    $(".project-info-content").html(approach);
+}
+
+function setMajors(data) {
+    majors = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.main_problem_and_importance +
+        "</div></div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.progress_profitability +
+        "</div></div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.predict_profit +
+        "</div></div>";
+    $(".project-info-content").html(majors);
+}
+
+function setValue(data) {
+    $("#v-pills-settings-tab").click(function () {
+        setRole(data);
+    });
+    $("#v-pills-messages-tab").click(function () {
+        setResources(data);
+    });
+    $("#v-pills-profile-tab").click(function () {
+        setApproach(data);
+    });
+    $("#v-pills-home-tab").click(function () {
+        setMajors(data);
+    });
+}
+
 showInfo.click(function (event) {
     var id = "accept-project";
     var acceptButton = $('#accept-project');
@@ -499,11 +636,18 @@ showInfo.click(function (event) {
         dataType: 'json',
         success: function (data) {
             var dialog = $(".showProject");
-            dialog.find(".card-head").html(data.persian_title);
+            dialog.find(".card-head").html(data.project_title_persian + " (" + data.project_title_english + ")");
             dialog.find(".establish-time .time-body").html(data.date);
             dialog.find(".time-left .time-body").html(data.deadline);
-            dialog.find(".answer").text(data.main_problem);
-            console.log(data)
+            for (let i = 0; i < JSON.parse(data.key_words).length; i++) {
+                dialog.find(".techniques").append(
+                    "<span class='border-span'>" +
+                    JSON.parse(data.key_words)[i].pk
+                    + "</span>"
+                );
+            }
+            setMajors(data);
+            setValue(data);
         },
         error: function (data) {
             console.log(data)
