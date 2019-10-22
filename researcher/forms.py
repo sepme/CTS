@@ -477,7 +477,7 @@ class ExecutiveRecordForm(forms.ModelForm):
             except ValueError:
                 raise forms.ValidationError('سال باید یک عدد باشد.')
             if start:
-                if data > start:
+                if data < start:
                     raise forms.ValidationError('ترتیب سال ها رعایت شود.')
             
             this_year = int(date.today().year)

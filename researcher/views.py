@@ -204,6 +204,7 @@ class UserInfo(generic.TemplateView):
         context['scientificrecord_set'] = self.request.user.researcheruser.researcherprofile.scientificrecord_set.all()
         context['executiverecord_set'] = self.request.user.researcheruser.researcherprofile.executiverecord_set.all()
         context['studiousrecord_set'] = self.request.user.researcheruser.researcherprofile.studiousrecord_set.all()
+        context['researcher_form'] = self.request.user.researcheruser.researcherprofile
         if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id 
@@ -380,7 +381,7 @@ class Technique(generic.TemplateView):
                 level = "B"
             else:
                 level = "A"
-            resume = request.FILES['resume']
+            # resume = request.FILES['resume']
             technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                         technique=technique,
                                                         level=level,
@@ -620,7 +621,6 @@ TECHNIQUES = {
     'Introduce to Mass Spectrometry' :'Biochemistry',
     'Scanning Electron Microscopy(SEM)' :'Biochemistry',
     'Cyclic Voltammetry(CV)' :'Biochemistry',
-    'MALDI-TOF Mass Spectrometry' :'Biochemistry',
     'Tandem Mass Spectrometry' :'Biochemistry',
     'Protein Crystallization' :'Biochemistry',
     'Electrophoretic Mobility Shift Assay(EMSA)' :'Biochemistry',

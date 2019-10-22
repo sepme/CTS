@@ -374,10 +374,10 @@ function executive_data_form(exe_count) {
 function show_executive_record() {
     row = "<tr>" +
         "<td>" + $("#duty").val() + "</td>" +
-        "<td>" + $("#from").val() + "</td>" +
-        "<td>" + $("#until").val() + "</td>" +
         "<td>" + $("#workplace").val() + "</td>" +
         "<td>" + $("#exe-city").val() + "</td>" +
+        "<td>" + $("#from").val() + "</td>" +
+        "<td>" + $("#until").val() + "</td>" +
         "<td>" +
         "<i class='fas fa-pen' id='edit_exe'></i>" +
         "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
@@ -463,16 +463,45 @@ function studious_record() {
 }
 
 function show_research_record() {
-    row = "<tr>" +
-        "<td>" + $("#subject").val() + "</td>" +
-        "<td>" + $("#admin").val() + "</td>" +
-        "<td>" + $("#liable").val() + "</td>" +
-        "<td>" + $("#rank").val() + "</td>" +
-        "<td>" +
-        "<i class='fas fa-pen' id='edit_stu'></i>" +
-        "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
-        "</td>" +
-        "</tr>";
+    if ($("#rank").val() == 1)
+    {
+        row = "<tr>" +
+            "<td>" + $("#subject").val() + "</td>" +
+            "<td>" + $("#admin").val() + "</td>" +
+            "<td>" + $("#liable").val() + "</td>" +
+            "<td>در دست اجرا</td>" +
+            "<td>" +
+            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+            "</td>" +
+            "</tr>";
+        }
+    else if ( $("#rank").val() == 2)
+    {
+        row = "<tr>" +
+            "<td>" + $("#subject").val() + "</td>" +
+            "<td>" + $("#admin").val() + "</td>" +
+            "<td>" + $("#liable").val() + "</td>" +
+            "<td>خاتمه یافته</td>" +
+            "<td>" +
+            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+            "</td>" +
+            "</tr>";
+        }
+    else if ( $("#rank").val() == 2)
+        {
+            row = "<tr>" +
+                "<td>" + $("#subject").val() + "</td>" +
+                "<td>" + $("#admin").val() + "</td>" +
+                "<td>" + $("#liable").val() + "</td>" +
+                "<td>متوقف</td>" +
+                "<td>" +
+                "<i class='fas fa-pen' id='edit_stu'></i>" +
+                "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+                "</td>" +
+                "</tr>";
+            }
     if (!$(".studious > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
