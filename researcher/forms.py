@@ -538,17 +538,62 @@ class StudiousRecordForm(forms.ModelForm):
 
 class TechniqueInstance(forms.Form):
     technique = forms.CharField(max_length=100 ,empty_value='None')
+    confirmation_method = forms.CharField(max_length=100 )
+    resume = forms.FileField(required=False)
     
-    # class Meta:
-    #     error_messages = {
-    #     'technique': {'required': "عنوان تکنیک نمی تواند خالی باشد."},
-    #     }
-    
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(TechniqueInstance, self).__init__(*args, **kwargs)
+
     def clean_technique(self):
         data = self.cleaned_data["technique"]
         if data == 'None':
             raise  ValidationError("عنوان تکنیک نمی تواند خالی باشد.")
         if data not in views.TECHNIQUES:
-            raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")
+            raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")        
+        if models.TechniqueInstance.objects.filter(researcher=self.user.researcheruser).filter(technique__technique_title=data).count() != 0:
+            raise ValidationError(_("این تکنیک قبلا ذخیره شده است."))
         return data
     
+    def clean_confirmation_method(self):
+        data = self.cleaned_data["confirmation_method"]
+        
+        return data
+
+    def clean_resume(self):
+        data = self.cleaned_data["resume"]
+        method = self.cleaned_data.get('confirmation_method')
+        if method == 'exam':
+            return data
+        elif data is None:
+            raise ValidationError(_('فایل مربوطه را آپلود کنید.'))
+        return data
+
+class TechniqueReviewFrom(forms.Form):
+    request_body = forms.CharField(max_length=1000 ,required=False)
+    request_confirmation_method = forms.CharField(max_length=100 ,required=False)
+    upload_new_resume = forms.FileField(required=False)
+
+    def clean_request_body(self):
+        data = self.cleaned_data["request_body"]        
+        if data == "":
+            raise ValidationError(_("توضیحات نمی تواند خالی باشد."))
+        return data
+
+    def clean_request_confirmation_method(self):
+        data = self.cleaned_data["request_confirmation_method"]
+        if data == '':
+            raise ValidationError(_("یکی از راه های ارتفا را انتخاب کنید."))
+        return data
+
+    def clean_upload_new_resume(self):
+        data = self.cleaned_data["upload_new_resume"]
+        method = self.cleaned_data.get('confirmation_method')
+        print('method in resume :' ,method)
+        if method == 'exam':
+            return data
+        if method == None:
+            return data
+        elif data is None:
+            raise ValidationError(_('فایل مربوطه را آپلود کنید.'))
+        return data

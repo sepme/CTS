@@ -389,9 +389,9 @@ class TechniqueInstance(models.Model):
         ('C', 'به صورت تئوری آموزش دیده است.'),
     )
     level = models.CharField(max_length=1, choices=TECH_GRADE, verbose_name='سطح مهارت', blank=True)
-    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True)
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True ,blank=True)
     evaluator = models.CharField(max_length=300, verbose_name='ارزیابی کننده', blank=True)
-    evaluat_date = models.DateField(verbose_name="زمان نمره گرفتن", auto_now=False, null=True)
+    evaluat_date = models.DateField(verbose_name="زمان نمره گرفتن", auto_now=True, null=True)
 
     def is_validated(self):
         if self.level == 'A' or self.level == 'B' or self.level == 'C':
@@ -434,7 +434,7 @@ class TechniqueReview(models.Model):
     result = models.CharField(max_length=1 ,null=True)
 
     def __str__(self):
-        return self.technique
+        return str(self.technique_instance)
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)

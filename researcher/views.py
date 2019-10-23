@@ -320,7 +320,6 @@ class Technique(generic.TemplateView):
     template_name = 'researcher/technique.html'
 
     def get(self, request, *args, **kwargs):
-        print("----------")
         if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
         try:
@@ -334,62 +333,66 @@ class Technique(generic.TemplateView):
         context['technique_list'] = self.request.user.researcheruser.techniqueinstance_set.all()
         return context
 
-    def post(self ,request ,*args, **kwargs):
-        print(self.request.POST)
-        form = forms.TechniqueInstance(request.POST)
-        if form.is_valid():
-            technique_title = form.cleaned_data['technique']
-            method = request.POST['confirmation_method']
-            if method == 'exam':
-                method_fa = "درخواست آزمون آنلاین"
-            elif method == 'certificant':
-                method_fa = "گواهی نامه"
-            else:
-                method_fa = "مقاله"
-            subject = 'Technique Validation'
-            message ="""کاربر به نام کاربری {} و به نام {} {} ، تکنیک {} را افزوده است.
-            برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام کنید.
-            با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.first_name,
-                            self.request.user.researcheruser.researcherprofile.last_name,
-                            technique_title ,method_fa ,self.request.user.username)
-            try:
-                send_mail(
-                    subject=subject,
-                    message=message,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[settings.EMAIL_HOST_USER ,'a.jafarzadeh1998@gmail.com',],
-                    fail_silently=False
-                )
-            except TimeoutError:
-                return HttpResponse('Timeout Error!!')
-            try:
-                technique = get_object_or_404(models.Technique ,technique_title=technique_title)
-            except:
-                technique_type = TECHNIQUES[technique_title]
-                technique = models.Technique(technique_type=technique_type ,technique_title=technique_title)
-                technique.save()
-            if method == 'exam':
-                level = "C"
-                technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
-                                                        technique=technique,
-                                                        level=level,
-                                                        evaluat_date=datetime.date.today())
-                technique_instance.save()
-                print(technique_instance)
-                return HttpResponseRedirect(reverse("researcher:technique"))
-            elif method == 'certificant':
-                level = "B"
-            else:
-                level = "A"
-            # resume = request.FILES['resume']
+def AddTechnique(request):
+    # print(request.POST)
+    form = forms.TechniqueInstance(request.user ,request.POST ,request.FILES)    
+    if form.is_valid():
+        print("Form Validated")
+        technique_title = form.cleaned_data['technique'] 
+        method = form.cleaned_data['technique']
+        resume = form.cleaned_data['resume']
+        if method == 'exam':
+            method_fa = "درخواست آزمون آنلاین"
+        elif method == 'certificant':
+            method_fa = "گواهی نامه"
+        else:
+            method_fa = "مقاله"
+        subject = 'Technique Validation'
+        message ="""کاربر به نام کاربری {} و به نام {} {} ، تکنیک {} را افزوده است.
+        برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام کنید.
+        با تشکر""".format(request.user.username ,request.user.researcheruser.researcherprofile.first_name,
+                        request.user.researcheruser.researcherprofile.last_name,
+                        technique_title ,method_fa ,request.user.username)
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER ,'a.jafarzadeh1998@gmail.com',],
+                fail_silently=False
+            )
+        except TimeoutError:
+            return HttpResponse('Timeout Error!!')
+        try:
+            technique = get_object_or_404(models.Technique ,technique_title=technique_title)
+        except:
+            technique_type = TECHNIQUES[technique_title]
+            technique = models.Technique(technique_type=technique_type ,technique_title=technique_title)
+            technique.save()
+        if method == 'exam':
+            level = "C"
             technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
-                                                        technique=technique,
-                                                        level=level,
-                                                        resume=resume)
+                                                    technique=technique,
+                                                    level=level,
+                                                    evaluat_date=datetime.date.today())
             technique_instance.save()
+            print(technique_instance)
             return HttpResponseRedirect(reverse("researcher:technique"))
-        print(form.errors['technique'])
-        return render(request ,self.template_name ,{"technique_error" :form.errors['technique']})
+            data = {'success' : 'successful'}
+            return JsonResponse(data=data)
+        elif method == 'certificant':
+            level = "B"
+        else:
+            level = "A"
+        technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
+                                                    technique=technique,
+                                                    level=level,
+                                                    resume=resume)
+        technique_instance.save()
+        data = {'success' : 'successful'}
+        return JsonResponse(data=data)
+    print(form.errors)
+    return JsonResponse(form.errors ,status=400)
 
 class Question(generic.TemplateView):
     template_name = 'researcher/question.html'
@@ -497,27 +500,41 @@ class QuestionShow(generic.TemplateView ):
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):
+    print("AJAX!!!")
     print(request.POST)
     print(request.FILES)
-    discription = request.POST['request_body']
-    method = request.POST['request_confirmation_method']
-
-    if discription is not None and method is not None:
+    form = forms.TechniqueReviewFrom(request.POST ,request.FILES)
+    if form.is_valid():
+        description = form.cleaned_data['request_body']
+        method = form.cleaned_data['request_confirmation_method']
+        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name'])[0]
         if method != "exam":
-            resume = request.FILES['resume']
-            if resume is None:
-                data = {
-                        'resume' : "حتما باید فایلی آپلود کنید.",
-                    }
-                return JsonResponse(data ,status=400)
-            technique_review = models.TechniqueReview(technique = blah,discription=discription,
+            resume = form.cleaned_data['upload_new_resume']
+            technique_review = models.TechniqueReview(technique_instance = technique,description=description,
                                                       method=method ,resume=resume)
         else:
-            technique_review = models.TechniqueReview(technique = blah,discription=discription,
+            technique_review = models.TechniqueReview(technique_instance = technique,description=description,
                                                       method=method)
         technique_review.save()
+        subject = 'Research Question Validation'
+        message ="""با عرض سلام و خسته نباشید.
+        پژوهشگر {} در خواست ارتفا سطح تکنیک {} را از طریق {} داده است.
+        لطفا درخواست وی را ارزیابی نمایید.
+        با تشکر""".format(request.user.username ,request.user.researcheruser.researcherprofile.first_name,
+                        request.user.researcheruser.researcherprofile.last_name)
+        try:
+            send_mail(
+                subject=subject,
+                message=message, 
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER,'a.jafarzadeh1998@gmail.com'],
+            )
+        except TimeoutError:
+            return HttpResponse('Timeout Error!!')
         data = {'success' : 'successful'}
         return JsonResponse(data)
+    print(form.errors)
+    return JsonResponse(form.errors ,status=400)
 
 
 TECHNIQUES = {
@@ -621,6 +638,7 @@ TECHNIQUES = {
     'Introduce to Mass Spectrometry' :'Biochemistry',
     'Scanning Electron Microscopy(SEM)' :'Biochemistry',
     'Cyclic Voltammetry(CV)' :'Biochemistry',
+    'MALDI-TOF Mass Spectrometry' :'Biochemistry',
     'Tandem Mass Spectrometry' :'Biochemistry',
     'Protein Crystallization' :'Biochemistry',
     'Electrophoretic Mobility Shift Assay(EMSA)' :'Biochemistry',

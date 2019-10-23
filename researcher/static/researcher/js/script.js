@@ -23,6 +23,9 @@ $(document).ready(function () {
     input_focus();
     search_input(".search_message");
     question();
+    $(".new-review-request").click(function(){    
+        $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
+    });
     $('input#upload-input').change(function (event) {
         $("img.profile").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
     });
@@ -371,16 +374,15 @@ technique_review.submit(function (event) {
             technique_review.find("input").prop("disabled", false).removeClass("progress-cursor");
             technique_review.find("label").removeClass("progress-cursor");
             technique_review.closest(".fixed-back").find(".card").removeClass("wait");
-
             if (data.success === "successful") {
-                $("#technique_review").css("display", "none");
+                $(".fixed-back").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_research_record();
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
                     position: 'bottomLeft'
                 });
+                technique_review[0].reset();
             }
         },
         error: function (data) {
@@ -391,15 +393,101 @@ technique_review.submit(function (event) {
             technique_review.find("input").prop("disabled", false).removeClass("progress-cursor");
             technique_review.find("label").removeClass("progress-cursor");
             technique_review.closest(".fixed-back").find(".card").removeClass("wait");
-            if (obj.resume) {
+            if (obj.request_body) {
+                $("#request-body").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.request_body + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                    $("input#request-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.request_confirmation_method) {
+                $(".review-request-method").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.request_confirmation_method + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+            }
+            if (obj.upload_new_resume) {
                 $("#upload-new-resume").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.upload_new_resume + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                    $("input#upload-new-resume").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+        }
+    })
+})
+
+var add_technique_form = $('.ajax-add-technique-form');
+add_technique_form.submit(function (event) {
+    event.preventDefault();
+    add_technique_form.find("button[type='submit']").addClass("loading-btn").attr("disabled", "true").css("color", "transparent");
+    add_technique_form.find("button[type='reset']").attr("disabled", "true");
+    add_technique_form.find("label").addClass("progress-cursor");
+    add_technique_form.closest(".fixed-back").find(".card").addClass("wait");
+    var $thisURL = add_technique_form.attr('url');
+    var data = $(this).serialize();
+    add_technique_form.find("input").attr("disabled", "true").addClass("progress-cursor");
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+            add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            add_technique_form.find("button[type='reset']").prop("disabled", false);
+            add_technique_form.find("input").prop("disabled", false).removeClass("progress-cursor");
+            add_technique_form.find("label").removeClass("progress-cursor");
+            add_technique_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if (data.success === "successful") {
+                $(".add-technique").css("display", "none");
+                $(".main").removeClass("blur-div");
+                // show_add_technique_record();
+                iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت ذخیره شد!",
+                    position: 'bottomLeft'
+                });
+                add_technique_form[0].reset();
+            }
+        },
+        error: function (data) {
+            var obj = JSON.parse(data.responseText);
+            add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            add_technique_form.find("button[type='reset']").prop("disabled", false);
+            add_technique_form.find("input").prop("disabled", false).removeClass("progress-cursor");
+            add_technique_form.find("label").removeClass("progress-cursor");
+            add_technique_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.technique) {
+                $("#technique-name").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.technique + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#technique-name").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.resume) {
+                $("#resume").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
                     "<li>" + obj.resume + "</li>" +
                     "</ul>" +
                     "</span>" +
                     "</div>");
+                $("input#resume").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
-        }
+        },
     })
-})
+});
