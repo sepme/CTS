@@ -21,9 +21,8 @@
             </div>
             <div class="row mbottom-lg-25">
                 <div class="col-lg-12 text-right">
-                    <div class="project-info custom-border-title">
-                        <span class="title">اطلاعات پروژه</span>
-                        <span class="title-back"></span>
+                    <span class="section-title">اطلاعات پروژه</span>
+                    <div class="section">
                         <div class="project-info-innerDiv">
                             <div class="project-info-tabs">
                                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
@@ -91,19 +90,14 @@
                 </div>
             </div>
             <div class="row mbottom-lg-25">
-                <div class="col-lg-9">
-                    <button class="w-100 accept-btn btn mbottom-10" id="accept-project"
-                            data-url="{% url 'expert:accept_project' %}">تایید و شروع پروژه
-                    </button>
-                </div>
-                <div class="col-lg-3">
-                    <button class="w-100 refuse-btn btn mbottom-10">رد پروژه</button>
-                </div>
-            </div>
-            <div class="row mbottom-lg-25">
                 <div class="col-lg-12 text-right">
                     {% include 'expert/layouts/comment.html' %}
                 </div>
+            </div>
+            <div class="card-footer">
+                <button class="save-btn confirm_project" id="accept-project" data-url="{% url 'expert:accept_project' %}">
+                    تایید و شروع پروژه
+                </button>
             </div>
         </div>
     </div>
