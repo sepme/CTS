@@ -536,14 +536,14 @@ class StudiousRecordForm(forms.ModelForm):
         
         return data
 
-class TechniqueInstance(forms.Form):
+class TechniqueInstanceForm(forms.Form):
     technique = forms.CharField(max_length=100 ,empty_value='None')
-    confirmation_method = forms.CharField(max_length=100 )
+    confirmation_method = forms.CharField(max_length=100 ,required=False)
     resume = forms.FileField(required=False)
     
     def __init__(self, user, *args, **kwargs):
         self.user = user
-        super(TechniqueInstance, self).__init__(*args, **kwargs)
+        super(TechniqueInstanceForm, self).__init__(*args, **kwargs)
 
     def clean_technique(self):
         data = self.cleaned_data["technique"]
@@ -557,13 +557,19 @@ class TechniqueInstance(forms.Form):
     
     def clean_confirmation_method(self):
         data = self.cleaned_data["confirmation_method"]
-        
+        print("method :" ,data)
+        if data == "":
+            raise ValidationError(_("یکی از راه ثبت را انتخاب کنید."))
         return data
 
     def clean_resume(self):
         data = self.cleaned_data["resume"]
         method = self.cleaned_data.get('confirmation_method')
+        print("method in resume :" ,method)
+        print('resume : ' ,data)
         if method == 'exam':
+            return data
+        elif method is None:
             return data
         elif data is None:
             raise ValidationError(_('فایل مربوطه را آپلود کنید.'))
@@ -572,7 +578,7 @@ class TechniqueInstance(forms.Form):
 class TechniqueReviewFrom(forms.Form):
     request_body = forms.CharField(max_length=1000 ,required=False)
     request_confirmation_method = forms.CharField(max_length=100 ,required=False)
-    upload_new_resume = forms.FileField(required=False)
+    new_resume = forms.FileField(required=False)
 
     def clean_request_body(self):
         data = self.cleaned_data["request_body"]        
@@ -586,9 +592,9 @@ class TechniqueReviewFrom(forms.Form):
             raise ValidationError(_("یکی از راه های ارتفا را انتخاب کنید."))
         return data
 
-    def clean_upload_new_resume(self):
-        data = self.cleaned_data["upload_new_resume"]
-        method = self.cleaned_data.get('confirmation_method')
+    def clean_new_resume(self):
+        data = self.cleaned_data["new_resume"]
+        method = self.cleaned_data.get('request_confirmation_method')
         print('method in resume :' ,method)
         if method == 'exam':
             return data

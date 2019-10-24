@@ -360,13 +360,17 @@ technique_review.submit(function (event) {
     technique_review.find("label").addClass("progress-cursor");
     technique_review.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = technique_review.attr('url');
-    var data = $(this).serialize();
+    // var data = $(this).serialize();
+    var data = new FormData(technique_review.get(0));
     technique_review.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
         url: $thisURL,
-        dataType: 'json',
+        // dataType: 'json',
         data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
         success: function (data) {
             technique_review.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -412,11 +416,11 @@ technique_review.submit(function (event) {
                     "</span>" +
                     "</div>");
             }
-            if (obj.upload_new_resume) {
+            if (obj.new_resume) {
                 $("#upload-new-resume").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
-                    "<li>" + obj.upload_new_resume + "</li>" +
+                    "<li>" + obj.new_resume + "</li>" +
                     "</ul>" +
                     "</span>" +
                     "</div>");
@@ -434,13 +438,17 @@ add_technique_form.submit(function (event) {
     add_technique_form.find("label").addClass("progress-cursor");
     add_technique_form.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = add_technique_form.attr('url');
-    var data = $(this).serialize();
+    // var data = $(this).serialize();
+    var data = new FormData(add_technique_form.get(0));
     add_technique_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
         url: $thisURL,
-        dataType: 'json',
+        // dataType: 'json',
         data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
         success: function (data) {
             add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -487,6 +495,15 @@ add_technique_form.submit(function (event) {
                     "</span>" +
                     "</div>");
                 $("input#resume").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.confirmation_method) {
+                $(".technique_validation").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.confirmation_method + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
             }
         },
     })

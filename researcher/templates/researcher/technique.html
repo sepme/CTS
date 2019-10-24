@@ -20,8 +20,12 @@
                         <div class="card active-question flow-root-display">
                             <div class="technique-title w-50">{{tech.technique.technique_title}}</div>
                             <div class="technique-info w-50">
-                                <div class="w-25">{{tech.evaluat_date}}</div>
-                                <div class="mark w-25"><span>{{tech.level}}</span></div>
+                                <div class="w-25"></div>{#{{tech.evaluat_date}}</div>#}
+                                <div class="mark w-25"><span> {% if tech.level %}
+                                        {{tech.level}}
+                                {% else %}
+                                        در حال بررسی...
+                                {% endif %}</span></div>
                                 <div class="date w-25"><span>{{tech.date_last}}</span></div>
                                 <div class="show w-25"><button class="default-btn show-btn new-review-request">ارتقا نمره</button></div>
                             </div>

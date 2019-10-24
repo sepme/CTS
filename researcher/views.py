@@ -11,115 +11,6 @@ from . import models
 from . import forms
 from expert.models import ResearchQuestion
 
-faBaseNum = {
-
-    1: 'یک',
-    2: 'دو',
-    3: 'سه',
-    4: 'چهار',
-    5: 'پنج',
-    6: 'شش',
-    7: 'هفت',
-    8: 'هشت',
-    9: 'نه',
-    10: 'ده',
-    11: 'یازده',
-    12: 'دوازده',
-    13: 'سیزده',
-    14: 'چهارده',
-    15: 'پانزده',
-    16: 'شانزده',
-    17: 'هفده',
-    18: 'هجده',
-    19: 'نوزده',
-    20: 'بیست',
-    30: 'سی',
-    40: 'چهل',
-    50: 'پنجاه',
-    60: 'شصت',
-    70: 'هفتاد',
-    80: 'هشتاد',
-    90: 'نود',
-    100: 'صد',
-    200: 'دویست',
-    300: 'سیصد',
-    500: 'پانصد'
-}
-faBaseNumKeys = faBaseNum.keys()
-faBigNum = ["یک", "هزار", "میلیون", "میلیارد"]
-faBigNumSize = len(faBigNum)
-
-
-def split3(st):
-    parts = []
-    n = len(st)
-    d, m = divmod(n, 3)
-    for i in range(d):
-        parts.append(int(st[n - 3 * i - 3:n - 3 * i]))
-    if m > 0:
-        parts.append(int(st[:m]))
-    return parts
-
-
-def convert(st):
-    if isinstance(st, int):
-        st = str(st)
-    elif not isinstance(st, str):
-        raise TypeError('bad type "%s"' % type(st))
-    if len(st) > 3:
-        parts = split3(st)
-        k = len(parts)
-        wparts = []
-        for i in range(k):
-            faOrder = ''
-            p = parts[i]
-            if p == 0:
-                continue
-            if i == 0:
-                wpart = convert(p)
-            else:
-                if i < faBigNumSize:
-                    faOrder = faBigNum[i]
-                else:
-                    faOrder = ''
-                    (d, m) = divmod(i, 3)
-                    t9 = faBigNum[3]
-                    for j in range(d):
-                        if j > 0:
-                            faOrder += "‌"
-                        faOrder += t9
-                    if m != 0:
-                        if faOrder != '':
-                            faOrder = "‌" + faOrder
-                        faOrder = faBigNum[m] + faOrder
-                wpart = faOrder if i == 1 and p == 1 else convert(p) + " " + faOrder
-            wparts.append(wpart)
-        return " و ".join(reversed(wparts))
-    n = int(st)
-    if n in faBaseNumKeys:
-        return faBaseNum[n]
-    y = n % 10
-    d = int((n % 100) / 10)
-    s = int(n / 100)
-    dy = 10 * d + y
-    fa = ''
-    if s != 0:
-        if s * 100 in faBaseNumKeys:
-            fa += faBaseNum[s * 100]
-        else:
-            fa += (faBaseNum[s] + faBaseNum[100])
-        if d != 0 or y != 0:
-            fa += ' و '
-    if d != 0:
-        if dy in faBaseNumKeys:
-            fa += faBaseNum[dy]
-            return fa
-        fa += faBaseNum[d * 10]
-        if y != 0:
-            fa += ' و '
-    if y != 0:
-        fa += faBaseNum[y]
-    return fa
 
 
 class Index(LoginRequiredMixin, generic.FormView):
@@ -334,12 +225,13 @@ class Technique(generic.TemplateView):
         return context
 
 def AddTechnique(request):
-    # print(request.POST)
-    form = forms.TechniqueInstance(request.user ,request.POST ,request.FILES)    
+    print("_-------------")
+    print(request.FILES)
+    print(request.POST)
+    form = forms.TechniqueInstanceForm(request.user ,request.POST ,request.FILES)    
     if form.is_valid():
-        print("Form Validated")
         technique_title = form.cleaned_data['technique'] 
-        method = form.cleaned_data['technique']
+        method = form.cleaned_data['confirmation_method']
         resume = form.cleaned_data['resume']
         if method == 'exam':
             method_fa = "درخواست آزمون آنلاین"
@@ -349,7 +241,7 @@ def AddTechnique(request):
             method_fa = "مقاله"
         subject = 'Technique Validation'
         message ="""کاربر به نام کاربری {} و به نام {} {} ، تکنیک {} را افزوده است.
-        برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام کنید.
+        برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام نمایید.
         با تشکر""".format(request.user.username ,request.user.researcheruser.researcherprofile.first_name,
                         request.user.researcheruser.researcherprofile.last_name,
                         technique_title ,method_fa ,request.user.username)
@@ -370,24 +262,23 @@ def AddTechnique(request):
             technique = models.Technique(technique_type=technique_type ,technique_title=technique_title)
             technique.save()
         if method == 'exam':
-            level = "C"
+            # level = "C"
             technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
-                                                    level=level,
                                                     evaluat_date=datetime.date.today())
+                                                    # level=level,
             technique_instance.save()
             print(technique_instance)
-            return HttpResponseRedirect(reverse("researcher:technique"))
             data = {'success' : 'successful'}
             return JsonResponse(data=data)
-        elif method == 'certificant':
-            level = "B"
-        else:
-            level = "A"
+        # elif method == 'certificant':
+        #     level = "B"
+        # else:
+        #     level = "A"
         technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
-                                                    level=level,
                                                     resume=resume)
+                                                    # ,level=level)
         technique_instance.save()
         data = {'success' : 'successful'}
         return JsonResponse(data=data)
@@ -500,16 +391,17 @@ class QuestionShow(generic.TemplateView ):
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):
-    print("AJAX!!!")
-    print(request.POST)
+    print("---------")
     print(request.FILES)
+    print(request.POST)
     form = forms.TechniqueReviewFrom(request.POST ,request.FILES)
     if form.is_valid():
         description = form.cleaned_data['request_body']
         method = form.cleaned_data['request_confirmation_method']
         technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name'])[0]
         if method != "exam":
-            resume = form.cleaned_data['upload_new_resume']
+            resume = form.cleaned_data['new_resume']
+            print(resume)
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,
                                                       method=method ,resume=resume)
         else:
