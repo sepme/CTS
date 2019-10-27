@@ -142,6 +142,10 @@ def upload_comment(instance, file_name):
     return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
 
 
+def upload_comment(instance, file_name):
+    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
+
+
 class Comment(models.Model):
     description = models.TextField(verbose_name="متن")
     SENDER = (
@@ -149,7 +153,7 @@ class Comment(models.Model):
         (1, 'صنعت')
     )
     sender_type = models.IntegerField(choices=SENDER)
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
+    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
