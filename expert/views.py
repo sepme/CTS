@@ -7,6 +7,25 @@ from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, QueryDict
+from persiantools.jdatetime import JalaliDate
+from datetime import datetime
+from django.core import serializers
+from industry.models import *
+
+
+def calculate_deadline(finished, started):
+    diff = JalaliDate(finished) - JalaliDate(started)
+    days = diff.days
+    if days < 0:
+        return None
+    elif days < 7:
+        return '{} روز'.format(days)
+    elif days < 30:
+        return '{} هفته'.format(int(days / 7))
+    elif days < 365:
+        return '{} ماه'.format(int(days / 30))
+    else:
+        return '{} سال'.format(int(days / 365))
 
 
 class Index(generic.TemplateView):
@@ -59,7 +78,11 @@ def index(request):
 
     else:
         form = InitialInfoForm()
-    return render(request, 'expert/index.html', {'form': form, 'expert_user': expert_user})
+        projects = Project.objects.all()
+        print(projects)
+    return render(request, 'expert/index.html', {'form': form,
+                                                 'expert_user': expert_user,
+                                                 'projects': projects})
 
 
 class UserInfo(generic.FormView):
@@ -205,3 +228,37 @@ def paper_record_view(request):
     else:
         print('form error occured')
         return JsonResponse(paper_form.errors, status=400)
+
+
+def show_project_view(request):
+    expert_user = request.user.expertuser
+    id = request.GET.get('id')
+    project = Project.objects.get(id=id)
+    project_form = project.project_form
+    data = {
+        'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
+        'key_words': serializers.serialize('json', project_form.key_words.all()),
+        'main_problem_and_importance': project_form.main_problem_and_importance,
+        'progress_profitability': project_form.progress_profitability,
+        'required_lab_equipment': project_form.required_lab_equipment,
+        'approach': project_form.approach,
+        'deadline': calculate_deadline(project.date_finished, project.date_submitted_by_industry),
+        'project_title_persian': project_form.project_title_persian,
+        'project_title_english': project_form.project_title_english,
+        'research_methodology': project_form.research_methodology,
+        'policy': project_form.policy,
+        'potential_problems': project_form.potential_problems,
+        'required_budget': project_form.required_budget,
+        'project_phase': project_form.project_phase,
+        'predict_profit': project_form.predict_profit,
+        'required_technique': project_form.required_technique
+
+    }
+    return JsonResponse(data)
+
+
+def accept_project(request):
+    project = Project.objects.get(id=request.GET['id'])
+    project.expert_applied.add(request.user.expertuser)
+    project.save()
+    return JsonResponse({'success': 'successful'})

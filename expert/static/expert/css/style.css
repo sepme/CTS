@@ -465,8 +465,16 @@ input#search_technique+label{
   overflow-x: hidden;
   height: 400px;
 }
-.display-toggle{
-  display: none;
+.select-technique #fancy-tree{
+    margin-top: 0;
+    border: none;
+}
+.select-technique div.tagsinput {
+    border-radius: 0.25em;
+    padding: 5px 5px 0;
+}
+.select-technique div.tagsinput div {
+    display: none;
 }
 dl, ol, ul{
     outline: none;

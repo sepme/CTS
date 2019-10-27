@@ -9,6 +9,8 @@ class IndustryAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(models.Project)
+@admin.register(models.Keyword)
 @admin.register(models.IndustryForm)
 class IndustryAdmin(admin.ModelAdmin):
     pass

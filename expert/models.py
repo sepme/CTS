@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import os
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
-
+from industry.models import Keyword
 
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -95,6 +95,7 @@ class ExpertForm(models.Model):
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
     photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
+    keywords = models.ForeignKey(Keyword, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)

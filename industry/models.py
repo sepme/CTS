@@ -1,11 +1,12 @@
 import os
 from ChamranTeamSite import settings
-from PIL import Image
+# from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
+from persiantools.jdatetime import JalaliDate
 
 
 class IndustryUser(models.Model):
@@ -94,7 +95,7 @@ class ProjectForm(models.Model):
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
-    predict_profit = models.IntegerField()
+    predict_profit = models.IntegerField(verbose_name='سود مالی')
 
     def __str__(self):
         return self.project_title_english
@@ -102,7 +103,7 @@ class ProjectForm(models.Model):
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
-    comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True)
+    comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True, blank=True)
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
     date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True)
     date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True)
@@ -121,7 +122,7 @@ class Project(models.Model):
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
                                            verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
                                            null=True)
-    cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True)
+    cost_of_project = models.IntegerField(verbose_name="هزینه پروژه", null=True)
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True)
     project_detail = models.TextField(verbose_name="جزيات پروژه", null=True)
     project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه", null=True)
@@ -132,6 +133,13 @@ class Project(models.Model):
     def get_comments(self):
         project_comments = Comment.objects.all().filter(project=self)
         return project_comments
+
+    class Meta:
+        ordering = ['-date_submitted_by_industry']
+
+
+def upload_comment(instance, file_name):
+    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
 
 
 def upload_comment(instance, file_name):

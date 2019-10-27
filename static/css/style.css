@@ -1100,10 +1100,11 @@ table {
 .education table, .executive table, .paper table, .research table {
     border: 1px solid rgba(0, 0, 0, 0.125);
 }
+
 /*
  * iziToast
  */
-.iziToast.iziToast-color-green{
+.iziToast.iziToast-color-green {
     background-color: #89E076;
 }
 
@@ -1461,6 +1462,118 @@ button:hover, button:focus {
         transform: rotate(360deg)
     }
 }
+
 /*
  * Input
  */
+
+/*
+ * Card
+ */
+.section {
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+    font-weight: 700;
+    padding: 18px 0;
+    font-size: 14px;
+}
+
+/*
+ * Tag
+ */
+
+div.tagsinput span.tag {
+    border-color: transparent;
+    background-color: #89E076;
+    color: #FFFFFF;
+    font-family: iranyekan, serif;
+    padding: 3px 5px;
+    min-width: 60px;
+    text-align: left;
+}
+
+div.tagsinput span.tag:hover {
+    background-color: #3ccd1c;
+}
+
+div.tagsinput span.tag span:hover {
+    cursor: default;
+}
+
+div.tagsinput span.tag a {
+    color: #FFFFFF;
+}
+
+div.tagsinput span.tag a:hover {
+    color: #FF0000;
+}
+
+/*
+ * fancy tree
+ */
+.fixed-back #fancy-tree {
+    border: none;
+    margin: 0;
+    height: fit-content;
+    max-height: 300px;
+}
+
+ul.fancytree-container {
+    border: none;
+    background-color: inherit;
+    font-family: iranyekan, serif;
+}
+
+ul.fancytree-container ul {
+    padding: .3em 1em 0 0;
+}
+
+img.fancytree-icon, span.fancytree-checkbox, span.fancytree-icon {
+    margin-left: 0;
+    margin-right: 3px;
+}
+
+.fancytree-folder span.fancytree-title {
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+span.fancytree-title {
+    margin-right: 5px;
+    padding: 0 5px;
+}
+
+span.fancytree-title:hover {
+    background-color: #dfdfdf;
+    border-radius: 0.25em;
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+.fancytree-treefocus span.fancytree-active span.fancytree-title {
+    background-color: #89E076;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    color: #FFFFFF;
+}
+
+span.fancytree-active span.fancytree-title {
+    border-radius: 5px;
+}
+
+span.fancytree-active span.fancytree-title {
+    outline: none;
+}
+
+.fixed-back #fancy-tree ul.fancytree-container {
+    padding-inline-start: 5px;
+}
+
+.fixed-back #fancy-tree ul {
+    list-style: none;
+}
