@@ -14,6 +14,8 @@ urlpatterns = [
     path('executive/', views.executive_record_view, name="ajax_executive"),
     path('research/', views.research_record_view, name="ajax_research"),
     path('paper/', views.paper_record_view, name="ajax_paper"),
+    path('show_project/', views.show_project_view, name="show_project"),
+    path('accept_project/', views.accept_project, name="accept_project"),
 
 ]
 

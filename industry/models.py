@@ -1,11 +1,12 @@
 import os
 from ChamranTeamSite import settings
-from PIL import Image
+# from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
+from persiantools.jdatetime import JalaliDate
 
 from expert.models import ExpertUser
 from researcher.models import ResearcherUser
@@ -100,7 +101,7 @@ class ProjectForm(models.Model):
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
-    predict_profit = models.IntegerField()
+    predict_profit = models.IntegerField(verbose_name='سود مالی')
 
     def __str__(self):
         return self.project_title_english
@@ -142,6 +143,13 @@ class Project(models.Model):
     def get_comments(self):
         project_comments = Comment.objects.all().filter(project=self)
         return project_comments
+
+    class Meta:
+        ordering = ['-date_submitted_by_industry']
+
+
+def upload_comment(instance, file_name):
+    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
 
 
 def upload_comment(instance, file_name):

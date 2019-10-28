@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from persiantools.jdatetime import JalaliDate
@@ -19,13 +19,16 @@ from . import forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser
+from django.template.loader import get_template
 from django.urls import resolve
 
 LOCAL_URL = '127.0.0.1:8000'
 
 
 def jalali_date(jdate):
-    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month-1] + ' ' + str(jdate.year)
+
+    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
+
 
 
 def get_message_detail(request, message_id):
@@ -149,13 +152,19 @@ class SignupEmail(generic.FormView):
             unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
             message = 'EmailValidation\nyour url:\n' + unique_url
             try:
-                send_mail(
-                    subject=subject,
-                    message=message,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[email],
-                    fail_silently=False
-                )
+                # send_mail(
+                #     subject=subject,
+                #     message=message,
+                #     from_email=settings.EMAIL_HOST_USER,
+                #     recipient_list=[email],
+                #     fail_silently=False
+                # )
+                email_template = get_template('registration/email_template.html')
+                msg = EmailMultiAlternatives(subject=subject, body=message, from_email=settings.EMAIL_HOST_USER,
+                                             to=[email])
+                msg.attach_alternative(email_template, "text/html")
+                msg.send()
+                print('WTF??')
                 temp_user.save()
             except TimeoutError:
                 return HttpResponse('Timeout Error!!')
@@ -172,22 +181,30 @@ def signup_email_ajax(request):
     print('is valid: ', form.is_valid())
     if form.is_valid():
         email = form.cleaned_data['email']
-        account_type = form.cleaned_data['account_type']
+        account_type = request.POST['user-type']
+        # account_type = form.cleaned_data['account_type']
         # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
         temp_user = models.TempUser(email=email, account_type=account_type)
-        subject = 'Welcome to Chamran Team!!!'
+        subject = 'تکمیل ثبت نام'
 
         unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
-        message = 'EmailValidation\nyour url:\n' + unique_url
+        message = unique_url
         data = {'success': 'successful'}
         try:
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email],
-                fail_silently=False
-            )
+            # send_mail(
+            #     subject=subject,
+            #     message=message,
+            #     from_email=settings.EMAIL_HOST_USER,
+            #     recipient_list=[email],
+            #     fail_silently=False
+            # )
+            html_template = get_template('registration/email_template.html')
+            email_template = html_template.render({'message': message, 'proper_text': 'تکمیل ثبت نام'})
+            msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                         to=[email])
+            msg.attach_alternative(email_template, 'text/html')
+            msg.send()
+            print('WTF??')
             temp_user.save()
         except TimeoutError:
             return JsonResponse({'Error': 'Timeout Error!'})
@@ -314,8 +331,6 @@ class LoginView(generic.TemplateView):
         return render(request, self.template_name, context)
 
 
-
-
 class LogoutView(generic.TemplateView):
     template_name = 'registration/base.html'
 
@@ -333,14 +348,20 @@ class ResetPassword(generic.TemplateView):
         if find_account_type(request.user):
             unique = find_user(request.user).unique
             url = LOCAL_URL + '/resetpassword/' + str(unique)
-            message = ':لینک تغییر رمز عبور' + '\n' + url
-            send_mail(
-                subject='تغییر رمز عبور',
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[request.user.username],
-                fail_silently=False
-            )
+            message = url
+            subject = 'تغییر رمز عبور'
+
+            try:
+                html_template = get_template('registration/email_template.html')
+                email_template = html_template.render({'message': message, 'proper_text': 'تغییر رمز عبور'})
+                msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                             to=[request.user.username])
+                msg.attach_alternative(email_template, 'text/html')
+                msg.send()
+                print('WTF??')
+            except TimeoutError:
+                return Http404('Timeout Error!')
+
             return HttpResponseRedirect(reverse('chamran:home'))
         else:
             return redirect(reverse('chamran:login'))
@@ -448,6 +469,10 @@ class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
+class View(generic.TemplateView):
+    template_name = 'registration/email_template.html'
+
+
 class RecoverPassword(generic.FormView):
     template_name = 'registration/recover_pass.html'
     form_class = forms.RecoverPasswordForm
@@ -461,14 +486,18 @@ class RecoverPassword(generic.FormView):
             temp = get_object_or_404(User, username=username)
             user = find_user(temp)
             url = LOCAL_URL + '/recover_password/' + str(user.unique)
-            message = ':لینک بازیابی رمز عبور' + '\n' + url
-            send_mail(
-                subject='تغییر رمز عبور',
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[username],
-                fail_silently=False
-            )
+            subject = 'بازیابی رمز عبور'
+            message = url
+            try:
+                html_template = get_template('registration/email_template.html')
+                email_template = html_template.render({'message': message, 'proper_text': 'بازیابی رمز عبور'})
+                msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                             to=[username])
+                msg.attach_alternative(email_template, 'text/html')
+                msg.send()
+                print('WTF??')
+            except TimeoutError:
+                return Http404('Timeout Error!')
 
             return HttpResponseRedirect(reverse('chamran:home'))
         return super().post(request, *args, **kwargs)

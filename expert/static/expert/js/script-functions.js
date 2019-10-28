@@ -56,6 +56,8 @@ function blur_div_toggle(content) {
 
 function init_dialog_btn(element, dialogClass) {
     $(element).click(function () {
+        $(".fixed-back").css("display","none");
+        $(".main").removeClass("blur-div");
         blur_div_toggle(".main");
         $(dialogClass).css("display", "block");
         close_dialog(dialogClass);
