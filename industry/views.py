@@ -191,7 +191,7 @@ class NewProject(View):
                                                   progress_profitability=progress_profitability,
                                                   potential_problems=potential_problems,
                                                   )
-            key_words = form.cleaned_data['key_words'].split(' ')
+            key_words = form.cleaned_data['key_words'].split(',')
             new_project_form.save()
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])

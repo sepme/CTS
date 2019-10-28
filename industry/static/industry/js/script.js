@@ -22,49 +22,49 @@ function setRole(data) {
 
 function setResources(data) {
     resources = "<div>" +
-        "                                    <div class='question'>" +
-        "                                        <span class='question-mark'>" +
-        "                                            <i class='far fa-question-circle'></i>" +
-        "                                        </span>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
         "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
-        "                                    </div>" +
-        "                                    <div class='answer'>" +
+        "</div>" +
+        "<div class='answer'>" +
         data.required_lab_equipment +
-        "                                    </div>" +
-        "                                </div>" +
+        "</div>" +
+        "</div>" +
         "<div>" +
-        "                                    <div class='question'>" +
-        "                                        <span class='question-mark'>" +
-        "                                            <i class='far fa-question-circle'></i>" +
-        "                                        </span>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
         "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
-        "                                    </div>" +
-        "                                    <div class='answer'>" +
+        "</div>" +
+        "<div class='answer'>" +
         data.required_technique +
-        "                                    </div>" +
-        "                                </div>" +
+        "</div>" +
+        "</div>" +
         "<div>" +
-        "                                    <div class='question'>" +
-        "                                        <span class='question-mark'>" +
-        "                                            <i class='far fa-question-circle'></i>" +
-        "                                        </span>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
         "لطفا مراحل انجام پروژه خود را مشخص کنید." +
-        "                                    </div>" +
-        "                                    <div class='answer'>" +
+        "</div>" +
+        "<div class='answer'>" +
         data.project_phase +
-        "                                    </div>" +
-        "                                </div>" +
+        "</div>" +
+        "</div>" +
         "<div>" +
-        "                                    <div class='question'>" +
-        "                                        <span class='question-mark'>" +
-        "                                            <i class='far fa-question-circle'></i>" +
-        "                                        </span>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
         "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
-        "                                    </div>" +
-        "                                    <div class='answer'>" +
+        "</div>" +
+        "<div class='answer'>" +
         data.required_budget +
-        "                                    </div>" +
-        "                                </div>";
+        "</div>" +
+        "</div>";
     $(".project-info-content").html(resources);
 }
 
@@ -142,8 +142,70 @@ function setValue(data) {
     });
 }
 
+function tag_input_label(tag_input) {
+    $("#" + tag_input + "_tagsinput .tags_clear").css("display", "none");
+    $("#" + tag_input + "_tagsinput span.tag a").html("<i class='fas fa-times'></i>");
+
+    if (!$(".tagsinput").find(".tag").length) {
+        $("label[for='" + tag_input + "']").removeClass("full-focus-out").css({
+            "font-size": "13px",
+            "top": "28px",
+            "right": "25px",
+            "color": "#6f7285",
+            "padding": "0"
+        });
+        $("#" + tag_input + "_tag").attr("placeholder", "");
+    }
+
+    $("#" + tag_input + "_tag").on("focus", function () {
+        $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
+            "font-size": "12px",
+            "top": "12px",
+            "right": "30px",
+            "padding": "0 10px",
+            "color": "#3ccd1c"
+        });
+        $(".tagsinput").css("border-color", "#3ccd1c");
+    }).on("focusout", function () {
+
+        $(".tagsinput").css("border-color", "#bdbdbd85");
+
+        if ($(".tagsinput").find(".tag").length) {
+            $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
+                "font-size": "12px",
+                "top": "12px",
+                "right": "30px",
+                "padding": "0 10px",
+                "color": "#6f7285"
+            });
+        } else {
+            $("label[for='" + tag_input + "']").removeClass("full-focus-out").css({
+                "font-size": "13px",
+                "top": "28px",
+                "right": "25px",
+                "color": "#6f7285",
+                "padding": "0"
+            });
+            $("#" + tag_input + "_tag").attr("placeholder", "");
+        }
+    });
+}
+
+function newItem_label() {
+    $("#id_key_words_tagsinput").find("#id_key_words_tag").attr("placeholder", "افزودن");
+    tag_input_label("id_key_words");
+}
+
 $(document).ready(function () {
     $(".chamran-btn-info").click(function () {
+        const dialog = $(".showProject");
+        /*
+         * reset All data
+         */
+        dialog.find(".techniques").html("");
+        /*
+         * end of reset
+         */
         var id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -151,7 +213,18 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                $(".showProject").find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
+                dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
+                dialog.find(".establish-time .time-body").html(data.submission_date);
+                dialog.find(".time-left .time-body").html(data.deadline);
+                const keys = data.key_words[0].split(",");
+                for (let i = 0; i < keys.length; i++) {
+                    dialog.find(".techniques").append(
+                        "<span class='border-span'>" +
+                        keys[i]
+                        + "</span>"
+                    );
+                    console.log(keys[i]);
+                }
                 console.log(data);
                 setMajors(data);
                 setValue(data);
@@ -161,6 +234,19 @@ $(document).ready(function () {
             },
         });
     });
+
+    $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
+        $(this).css("width", "fit-content");
+    });
+
+    $('#id_key_words').tagsInput({
+        'height': 'FIT-CONTENT',
+        'width': '100%',
+        'defaultText': '',
+        'onAddTag': newItem_label,
+        'onRemoveTag': newItem_label
+    });
+    tag_input_label("id_key_words");
 // variable
     edu_count = 0;
     exe_count = 0;

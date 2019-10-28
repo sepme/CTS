@@ -156,7 +156,7 @@ class Comment(models.Model):
         (2, 'پژوهشگر'),
     )
     sender_type = models.IntegerField(choices=SENDER)
-    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    # project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING)
     expert_user = models.ForeignKey(ExpertUser, on_delete=models.DO_NOTHING)
     researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING)
