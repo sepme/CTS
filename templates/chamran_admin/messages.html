@@ -115,6 +115,7 @@
         {#just for test#}
         $("button").click(function(){
             const id = $(this).attr('id');
+            console.log('id is ' + id);
             $.ajax({
                 url: '/message_detail/' + id,
                 data: {},

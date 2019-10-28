@@ -22,10 +22,9 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="card info-card text-right">
+            <div class="card info-card">
                 <form enctype="multipart/form-data" method="post">
                     {% csrf_token %}
-                    <div class="card-header">اطلاعات اولیه</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-6">
@@ -41,7 +40,7 @@
                         </div>
                         <div class="row" style="margin-top: 5px">
                             <div class="col-lg-12 text-right">
-                                <label for="id_key_words">کلیدواژه ها</label>
+                                <label for="id_key_words">کلید واژه ها</label>
                                 {% render_field form.key_words class="w-100" %}
                                 {% render_field form.key_words.erros class="w-100" %}
                             </div>
@@ -64,8 +63,12 @@
                             <div class="col-lg-4"></div>
                         </div>
                     </div>
-                    <div class="card-header">شاخص ها</div>
                     <div class="inner-card card">
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <span class="header">شاخص ها</span>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <br>
@@ -89,9 +92,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">راهکار ها</div>
-                    <div class="card-header-info">در صورت وجود پیشنهاد</div>
                     <div class="inner-card card">
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <span class="header">راهکار ها <span
+                                        class="sub-header">(در صورت وجود پیشنهاد)</span></span>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <br>
@@ -108,8 +115,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">منابع مورد نیاز</div>
                     <div class="inner-card card">
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <span class="header">منابع مورد نیاز</span>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <br>
@@ -140,8 +151,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">قوانین</div>
                     <div class="inner-card card">
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <span class="header">قوانین</span>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <br>
@@ -159,7 +174,6 @@
 {% endblock %}
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian-min.js"></script>
     <script src="{% static 'industry/js/inputTags.jquery.min.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         $('#keys').inputTags();

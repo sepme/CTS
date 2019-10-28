@@ -59,11 +59,9 @@
                                 <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
                                 <select id="id_industry_type" name="industry_type" class="w-100">
                                     <option value="0" {% if form.industr_type.value == 0 %} selected
-                                    {% endif %}>خصوصی
-                                    </option>
+                                            {% endif %}>خصوصی</option>
                                     <option value="1" {% if form.industry_type.value == 1 %} selected
-                                    {% endif %}>دولتی
-                                    </option>
+                                            {% endif %}>دولتی</option>
                                 </select>
                                 {% render_field form.industry_type.errors %}
                             </div>
