@@ -164,9 +164,9 @@ class Comment(models.Model):
     )
     sender_type = models.IntegerField(choices=SENDER)
     # project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
-    industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING)
-    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING)
-    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING)
+    industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True)
+    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True)
+    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
