@@ -451,7 +451,7 @@ a:hover, a:focus {
     margin-left: 10px;
 }
 
-input, textarea, select {
+input, textarea, select, div.tagsinput {
     background-color: #fefefe;
     border: 1px solid #bdbdbd85;
     color: #6f7285;
@@ -459,6 +459,37 @@ input, textarea, select {
     margin-top: 20px;
     direction: rtl;
     padding: 10px;
+}
+
+div.tagsinput {
+    padding: 10px 10px 0;
+}
+
+div.tagsinput input {
+    margin: 0;
+    padding: 0;
+    font-family: iranyekan, serif;
+    height: 30px;
+}
+
+div.tagsinput span.tag {
+    font-family: iranyekan, serif;
+    border-color: #3ccd1c;
+    background-color: #3ccd1c;
+    color: #fff;
+    float: right;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+}
+
+div.tagsinput div {
+    float: right;
+    margin-right: 5px;
+}
+
+div.tagsinput span.tag a {
+    color: #FFFFFF;
 }
 
 select {

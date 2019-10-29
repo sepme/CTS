@@ -8,6 +8,8 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
 
+from researcher.models import ResearcherUser
+
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
@@ -75,6 +77,9 @@ class IndustryForm(models.Model):
 class Keyword(models.Model):
     name = models.CharField(max_length=32, primary_key=True)
 
+    def __str__(self):
+        return self.name.__str__()
+
 
 class ProjectForm(models.Model):
     key_words = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
@@ -90,7 +95,7 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
+    # required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     required_technique = models.TextField(default='no technique', verbose_name='تکنیک های مورد نیاز')
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
@@ -105,27 +110,31 @@ class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
     comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True, blank=True)
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
-    date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True)
-    date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True)
-    date_project_started = models.DateField(verbose_name="تاریخ شروع پروژه", null=True)
-    date_phase_two_deadline = models.DateField(verbose_name="ناریخ مهلت فاز دوم", null=True)
-    date_phase_three_deadline = models.DateField(verbose_name="تاریخ مهلت فاز سوم", null=True)
-    date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول", null=True)
-    date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم", null=True)
-    date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True)
+    date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True, blank=True)
+    date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True, blank=True)
+    date_project_started = models.DateField(verbose_name="تاریخ شروع پروژه", null=True, blank=True)
+    date_phase_two_deadline = models.DateField(verbose_name="ناریخ مهلت فاز دوم", null=True, blank=True)
+    date_phase_three_deadline = models.DateField(verbose_name="تاریخ مهلت فاز سوم", null=True, blank=True)
+    date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول", null=True, blank=True)
+    date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم", null=True, blank=True)
+    date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
                                                 related_name="researchers_applied", blank=True, null=True)
-    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
-                                                 related_name="researchers_accepted", blank=True, null=True)
-    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
-                                            related_name="experts_applied", blank=True, null=True)
-    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE,
-                                           verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True,
-                                           null=True)
-    cost_of_project = models.IntegerField(verbose_name="هزینه پروژه", null=True)
-    maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True)
-    project_detail = models.TextField(verbose_name="جزيات پروژه", null=True)
-    project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه", null=True)
+    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده", related_name="researchers_accepted", blank=True, null=True)
+    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده", related_name="experts_applied", blank=True, null=True)
+    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
+    cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True, blank=True)
+    maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True, blank=True)
+    project_detail = models.TextField(verbose_name="جزيات پروژه", null=True, blank=True)
+    project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه", null=True, blank=True)
+    PROJECT_STATUS_CHOICES = (
+        (0, 'در حال بررسی'),
+        (1, 'فعال'),
+        (2, 'معلق'),
+        (3, 'انجام شد'),
+        (4, 'در حال انتظار')
+    )
+    status = models.IntegerField(choices=PROJECT_STATUS_CHOICES, verbose_name='وضعیت پروژه', default=0, blank=True)
 
     def __str__(self):
         return self.project_form.project_title_english
@@ -149,11 +158,15 @@ def upload_comment(instance, file_name):
 class Comment(models.Model):
     description = models.TextField(verbose_name="متن")
     SENDER = (
-        (0, 'متخصص'),
-        (1, 'صنعت')
+        (0, 'استاد'),
+        (1, 'صنعت'),
+        (2, 'پژوهشگر'),
     )
     sender_type = models.IntegerField(choices=SENDER)
-    # project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    # project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING)
+    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING)
+    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
@@ -166,7 +179,7 @@ class ProjectHistory(models.Model):
     project_end_date = models.DateField(verbose_name="تاریخ پایان")
     STATUS_CHOICE = (
         (0, 'completed'),
-        (1, 'stoped')
+        (1, 'stopped')
     )
     project_status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت")
     project_point = models.FloatField(verbose_name='امتیاز')
