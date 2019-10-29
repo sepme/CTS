@@ -8,7 +8,6 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
 
-from expert.models import ExpertUser
 from researcher.models import ResearcherUser
 
 
@@ -166,7 +165,7 @@ class Comment(models.Model):
     sender_type = models.IntegerField(choices=SENDER)
     # project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING)
-    expert_user = models.ForeignKey(ExpertUser, on_delete=models.DO_NOTHING)
+    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING)
     researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
