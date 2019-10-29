@@ -108,7 +108,7 @@ class ProjectForm(models.Model):
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
-    comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True, blank=True)
+    # comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True, blank=True)
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
     date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True, blank=True)
     date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True, blank=True)
@@ -161,14 +161,19 @@ class Comment(models.Model):
         (0, 'استاد'),
         (1, 'صنعت'),
         (2, 'پژوهشگر'),
+        (3, 'سیستم'),
     )
+    replied_text = models.CharField(max_length=150)
     sender_type = models.IntegerField(choices=SENDER)
-    # project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
-    industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True)
-    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True)
-    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True)
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
+    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
+    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     attachment = models.FileField(upload_to=upload_comment)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
+
+    def __str__(self):
+        return self.description
 
 
 class ProjectHistory(models.Model):

@@ -14,7 +14,7 @@ from ChamranTeamSite import settings
 # industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
 #                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
 from persiantools.jdatetime import JalaliDate
-from industry.models import IndustryForm
+from industry.models import IndustryForm, Comment
 from . import models
 from . import forms
 
@@ -39,18 +39,31 @@ def date_dif(start_date, deadline_date):
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
+    comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)
+    print('there are', len(comment_list), 'comments')
+    json_response['comments'] = []
+    for comment in comment_list:
+        json_response['comments'].append({
+            'id': comment.id,
+            'text': comment.description
+        })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        print('project deadline is set')
         json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
     else:
-        print('deadline is the whole start to ')
         json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-    print('deadline was set to', json_response['deadline'])
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
     return JsonResponse(json_response)
+
+
+def submit_comment(request):
+    description = request.GET.get('description')
+    project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
+    Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
+                           sender_type=1)
+    return JsonResponse({})
 
 
 class Index(generic.TemplateView):
@@ -220,7 +233,6 @@ class ProjectListView(generic.ListView):
         if self.industry.industryform:
             context['photo'] = self.industry.industryform.photo
         return context
-
 
 # class Messages(generic.TemplateView):
 #     template_name = 'industry/messages.html'
