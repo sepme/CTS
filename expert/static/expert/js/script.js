@@ -414,7 +414,7 @@ paperForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".paper_form").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_new_research_question();
+                show_paper_record();
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -514,7 +514,7 @@ ResearchQuestionForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".add-question").css("display", "none");
                 $(".main").removeClass("blur-div");
-                // show_new_research_question();
+                show_new_research_question();
                 iziToast.success({
                     rtl: true,
                     message: "سوال پژوهشی با موفیت ذخیره شد. " +
