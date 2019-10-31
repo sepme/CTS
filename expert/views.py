@@ -281,6 +281,7 @@ def add_research_question(request):
         research_question = research_question_form.save(commit=False)
         research_question.expert = request.user.expertuser
         if request.FILES.get('attachment'):
+            print("tried to upload file...")
             attachment = request.FILES.get('attachment')
             research_question.attachment.save(attachment.name, attachment)
         research_question.save()
@@ -288,3 +289,20 @@ def add_research_question(request):
     else:
         print('form error occured')
         return JsonResponse(research_question_form.errors, status=400)
+
+
+def show_research_question(request):
+    research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
+    json_response = {
+        'question_status': research_question.status,
+        'question_date': JalaliDate(research_question.submitted_date).strftime("%Y/%m/%d"),
+        'question_body': research_question.question_text,
+        'question_title': research_question.question_title,
+    }
+    if research_question.attachment:
+        attachment = research_question.attachment
+        json_response['question_attachment_path'] = attachment.path
+        json_response['question_attachment_name'] = attachment.name.split('/')[-1]
+        json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
+    print(json_response)
+    return JsonResponse(json_response)

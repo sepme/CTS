@@ -32,7 +32,7 @@
                                     <div class="date w-25"><span>{% calculate_date_past research_question.submitted_date %} قبل</span></div>
                                     <div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num">5</span></i></div>
                                     <div class="status w-25"><span>فعال</span></div>
-                                    <div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>
+                                    <div class="show w-25"><button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده</button></div>
                                 </div>
                             </div>
                             {% elif research_question.status == "waiting" %}
@@ -42,7 +42,7 @@
                                     <div class="date w-25"><span>{% calculate_date_past research_question.submitted_date %} قبل</span></div>
                                     <div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num"></span></i></div>
                                     <div class="status w-25"><span>درحال بررسی</span></div>
-                                    <div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>
+                                    <div class="show w-25"><button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده</button></div>
                                 </div>
                             </div>
                             {% elif research_question.status == "answered" %}
@@ -52,7 +52,7 @@
                                     <div class="date w-25"><span>{% calculate_date_past research_question.submitted_date %} قبل</span></div>
                                     <div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num">12</span></i></div>
                                     <div class="status w-25"><span>پاسخ داده شده</span></div>
-                                    <div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>
+                                    <div class="show w-25"><button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده</button></div>
                                 </div>
                             </div>
                             {% endif %}

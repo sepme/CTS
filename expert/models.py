@@ -5,11 +5,16 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from industry.models import Keyword
 
+
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format('profile', ext)
 
-    return os.path.join('unique', instance.expert_user.user.username, filename)
+    return os.path.join('unique', instance.expert.user.username, filename)
+
+
+def get_attachment_path(instance, filename):
+    return os.path.join('unique', instance.expert.user.username, filename)
 
 
 class ExpertUser(models.Model):
@@ -258,7 +263,7 @@ class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=128, verbose_name="عنوان سوال")
     submitted_date = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت سوال")
     question_text = models.TextField(verbose_name="سوال")
-    attachment = models.FileField(upload_to='./uploads', verbose_name="ضمیمه", null=True, blank=True)
+    attachment = models.FileField(upload_to=get_attachment_path, verbose_name="ضمیمه", null=True, blank=True)
 
     STATUS = [
         ('waiting', 'در حال بررسی'),

@@ -97,6 +97,48 @@ $(document).ready(function () {
     }
 });
 
+$(document).ready(function () {
+    $(".show-btn").click(function () {
+        const dialog = $(".show-question");
+        var id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/show_research_question/',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                if (data.question_status === "waiting") {
+                    dialog.find(".question-status").html("در حال بررسی");
+                } else if (data.question_status === "not_answered") {
+                    dialog.find(".question-status").html("فعال");
+                } else if (data.question_status === "answered") {
+                    dialog.find(".question-status").html("پاسخ داده شده");
+                }
+                dialog.find(".card-head").html(data.question_title);
+                dialog.find(".question-date").html(data.question_date);
+                dialog.find("#question-body").html(data.question_body);
+
+                if (data.question_attachment_type) {
+                    dialog.find(".attach-file").attr("href", data.question_attachment_path);
+                    dialog.find(".attach-name").html(data.question_attachment_name);
+                    if (data.question_attachment_type === 'pdf') {
+                        dialog.find(".attachment").addClass("pdf-file");
+                    } else if (data.question_attachment_type === 'doc' || data.question_attachment_type === 'docx') {
+                        dialog.find(".attachment").addClass("doc-file");
+                    } else if (data.question_attachment_type === 'jpg' || data.question_attachment_type === 'jpeg') {
+                        dialog.find(".attachment").addClass("jpg-file");
+                    } else if (data.question_attachment_type === 'png') {
+                        dialog.find(".attachment").addClass("png-file");
+                    }
+                }
+            },
+            error: function (data) {
+
+            },
+        });
+    });
+});
+
 function education_record() {
     var myForm = $('.ajax-sci-form');
     myForm.submit(function (event) {
