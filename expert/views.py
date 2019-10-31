@@ -43,6 +43,15 @@ class Messages(generic.TemplateView):
 class Questions(generic.TemplateView):
     template_name = 'expert/questions.html'
 
+    def get(self, request, *args, **kwargs):
+        expert_user = request.user.expertuser
+        research_questions = ResearchQuestion.objects.filter(expert=expert_user)
+        context = {
+            'research_question_form': ResearchQuestionForm(),
+            'research_questions': research_questions,
+        }
+        return render(request, self.template_name, context)
+
 
 @login_required(login_url='/login/')
 def index(request):
@@ -262,3 +271,20 @@ def accept_project(request):
     project.expert_applied.add(request.user.expertuser)
     project.save()
     return JsonResponse({'success': 'successful'})
+
+
+def add_research_question(request):
+    research_question_form = ResearchQuestionForm(request.POST, request.FILES)
+    if research_question_form.is_valid():
+        print(research_question_form.cleaned_data)
+        data = {'success': 'successful'}
+        research_question = research_question_form.save(commit=False)
+        research_question.expert = request.user.expertuser
+        if request.FILES.get('attachment'):
+            attachment = request.FILES.get('attachment')
+            research_question.attachment.save(attachment.name, attachment)
+        research_question.save()
+        return JsonResponse(data)
+    else:
+        print('form error occured')
+        return JsonResponse(research_question_form.errors, status=400)

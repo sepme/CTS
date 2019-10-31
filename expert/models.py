@@ -257,12 +257,20 @@ class ResearchGain(models.Model):
 class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=128, verbose_name="عنوان سوال")
     submitted_date = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت سوال")
-    question = models.TextField(verbose_name="سوال")
-    is_answered = models.BooleanField(verbose_name="پاسخ داده شده")
-    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
+    question_text = models.TextField(verbose_name="سوال")
+    attachment = models.FileField(upload_to='./uploads', verbose_name="ضمیمه", null=True, blank=True)
+
+    STATUS = [
+        ('waiting', 'در حال بررسی'),
+        ('not_answered', 'در انتظار پاسخ'),
+        ('answered', 'پاسخ داده شده'),
+    ]
+    status = models.CharField(max_length=16, choices=STATUS, verbose_name="وضعیت", default="waiting")
+
+    expert = models.ForeignKey(ExpertUser, on_delete=models.DO_NOTHING, verbose_name="استاد")
 
     def __str__(self):
-        return "title" + self.question_title
+        return self.question_title
 
 
 class ResearchQuestionInstance(models.Model):

@@ -605,6 +605,19 @@ function show_paper_record() {
     record_edit(".paper");
 }
 
+function show_new_research_question() {
+    new_question = '<div class="card check-question flow-root-display">' +
+        '<div class="question-title w-50">' + $("#question-title").val() + '</div>' +
+        '<div class="question-info w-50">' +
+        '<div class="date w-25\"><span>الان</span></div>' +
+        '<div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num"></span></i></div>' +
+        '<div class="status w-25"><span>درحال بررسی</span></div>' +
+        '<div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>' +
+        '</div>' +
+        '</div>';
+    $(".tab-content").html(new_question);
+}
+
 function dialog_comment_init() {
     // add emoji to comment
     $(".new-comment-tools > .fa-smile").click(function () {

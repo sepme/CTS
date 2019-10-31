@@ -304,3 +304,29 @@ class EQTestForm(forms.Form):
     #     self.fields['team_work'].widget = forms.RadioSelect(attrs={
     #         'id': 'group-work'
     #     })
+
+
+class ResearchQuestionForm(forms.ModelForm):
+    class Meta:
+        model = ResearchQuestion
+        exclude = ['expert', 'submitted_date', 'status']
+        error_messages = {
+            'question_title': {
+                'required': 'لطفا عنوان سوال را وارد نمایید.'
+            },
+            'question_text': {
+                'required': 'لطفا توضیحات سوال را وارد نمایید.'
+            },
+        }
+
+    def clean_question_title(self):
+        question_title = self.cleaned_data.get('question_title')
+        if completely_numeric(question_title):
+            raise forms.ValidationError('عنوان نمی تواند عدد باشد.')
+        return question_title
+
+    def clean_question_text(self):
+        question_text = self.cleaned_data.get('question_text')
+        if completely_numeric(question_text):
+            raise forms.ValidationError('توضیحات نمی تواند تنها عدد باشد.')
+        return question_text

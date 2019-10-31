@@ -414,7 +414,7 @@ paperForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".paper_form").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_paper_record();
+                show_new_research_question();
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -481,6 +481,77 @@ paperForm.submit(function (event) {
                     "</div>");
                 $("input#impact-factor").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
+        },
+    })
+});
+
+
+var ResearchQuestionForm = $('.ajax-new-rq-form');
+ResearchQuestionForm.submit(function (event) {
+    event.preventDefault();
+    ResearchQuestionForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+        .attr("disabled", "true");
+    ResearchQuestionForm.find("button[type='reset']").attr("disabled", "true");
+    ResearchQuestionForm.find("label").addClass("progress-cursor");
+    ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
+    var $thisURL = ResearchQuestionForm.attr('data-url');
+    var data = $(this).serialize();
+    ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: data,
+        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        // contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
+            ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+            ResearchQuestionForm.find("label").removeClass("progress-cursor");
+            ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
+            if (data.success === "successful") {
+                $(".add-question").css("display", "none");
+                $(".main").removeClass("blur-div");
+                // show_new_research_question();
+                iziToast.success({
+                    rtl: true,
+                    message: "سوال پژوهشی با موفیت ذخیره شد. " +
+                        "لطفا منتظر تایید آن توسط ادمین بمانید.",
+                    position: 'bottomLeft'
+                });
+                ResearchQuestionForm[0].reset();
+            }
+        },
+        error: function (data) {
+            var obj = JSON.parse(data.responseText);
+            ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
+            ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+            ResearchQuestionForm.find("label").removeClass("progress-cursor");
+            ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.question_title) {
+                    $("#question-title").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.city + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+                if (obj.question_title) {
+                    $("#question-body").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.city + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
         },
     })
 });

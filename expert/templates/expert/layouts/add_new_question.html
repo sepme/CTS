@@ -1,26 +1,30 @@
 {% load static%}
+{% load widget_tweaks %}
 <div class="fixed-back add-question">
     <div class="card text-right">
         <div class="close"></div>
         <div class="card-head">ثبت سوال جدید</div>
         <div class="container">
-            <form method="post" action="">
+            <form method="post" action="" class="ajax-new-rq-form" data-url="{% url 'expert:new_research_question' %}">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">
-                        <input id="question-title" name="question_title" value="" class="w-100">
+                        {{ research_question_form.question_title|attr:"id:question-title"|attr:"class:w-100" }}
+{#                        <input id="question-title" name="question_title" value="" class="w-100">#}
                         <label for="question-title">عنوان سوال</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="question-body">توضیح سوال</label>
-                        <textarea dir="rtl" rows="15" class="w-100" id="question-body" name="question_body"></textarea>
+                        {{ research_question_form.question_text|attr:"id:question-body"|attr:"class:w-100"|attr:"dir:rtl" |attr:"rows:15"}}
+{#                        <textarea dir="rtl" rows="15" class="w-100" id="question-body" name="question_body"></textarea>#}
 
                         <div class="question-attach text-left">
                             <ul class="inline-list">
                                 <li class="list-item">
-                                    <input type="file" name="" id="attach" hidden>
+                                    {{ research_question_form.attachment|attr:"id:attach"|attr:"hidden"}}
+{#                                    <input type="file" name="" id="attach" hidden>#}
                                     <button class="attach-btn" type="button">
                                         <label for="attach">
                                             <img src="{% static 'expert/img/attachment(2).png' %}" alt="attachment" width="15px" style="border-radius: 0">
