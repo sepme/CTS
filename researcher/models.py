@@ -5,11 +5,20 @@ import os
 import datetime
 import uuid
 
+
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format('profile', ext)
 
     return os.path.join('unique', instance.researcher_user.user.username, filename)
+
+
+def get_answerFile_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format("answer-" + instance.researcher.user.username + "-" + "-".join(filename.split('.')[:-1]),
+                              ext)
+    folder_name = instance.research_question.question_title
+    return os.path.join('questions', folder_name, filename)
 
 
 class ResearcherUser(models.Model):
@@ -269,3 +278,17 @@ class RequestedProject(models.Model):
     date_requested = models.DateField(auto_now=False, auto_now_add=False, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
+
+
+class ResearchQuestionInstance(models.Model):
+    research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,
+                                          verbose_name="سوال پژوهشی")
+    researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
+                                   blank=True, null=True)
+    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", auto_now_add=True)
+    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True)
+    is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
+    is_correct = models.BooleanField(verbose_name="تایید استاد", default=False)
+
+    def __str__(self):
+        return str(self.research_question) + ' - ' + self.researcher.user.username

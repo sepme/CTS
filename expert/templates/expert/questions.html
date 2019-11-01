@@ -24,13 +24,13 @@
                 </ul>
                 <div class="tab-content">
                     {% if research_questions %}
-                        {% for research_question in research_questions %}
+                        {% for research_question in research_questions.reverse %}
                             {% if research_question.status == "not_answered" %}
                             <div class="card active-question flow-root-display">
                                 <div class="question-title w-50">{{ research_question.question_title }}</div>
                                 <div class="question-info w-50">
                                     <div class="date w-25"><span>{% calculate_date_past research_question.submitted_date %} قبل</span></div>
-                                    <div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num">5</span></i></div>
+                                    <div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num">{{ research_question.get_answer_number }}</span></i></div>
                                     <div class="status w-25"><span>فعال</span></div>
                                     <div class="show w-25"><button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده</button></div>
                                 </div>
@@ -50,7 +50,7 @@
                                 <div class="question-title w-50">{{ research_question.question_title }}</div>
                                 <div class="question-info w-50">
                                     <div class="date w-25"><span>{% calculate_date_past research_question.submitted_date %} قبل</span></div>
-                                    <div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num">12</span></i></div>
+                                    <div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num">{{ research_question.get_answer_number }}</span></i></div>
                                     <div class="status w-25"><span>پاسخ داده شده</span></div>
                                     <div class="show w-25"><button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده</button></div>
                                 </div>

@@ -13,3 +13,4 @@ class ResearcherProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Status)
+admin.site.register(models.ResearchQuestionInstance)

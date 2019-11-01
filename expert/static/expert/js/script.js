@@ -98,6 +98,15 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+
+    /*
+    * I didn't find a better place to put this;
+    * so please move this part to a section you prefer.
+    * By the way, it has a big problem (expect those told earlier in comments),
+    * after clicking on 'show-btn' of a new research question, 'attachments' and
+    * 'answers' of the previous one is still shown (in the case the previous one had it).
+    */
+
     $(".show-btn").click(function () {
         const dialog = $(".show-question");
         var id = $(this).attr("id");
@@ -121,6 +130,7 @@ $(document).ready(function () {
                 if (data.question_attachment_type) {
                     dialog.find(".attach-file").attr("href", data.question_attachment_path);
                     dialog.find(".attach-name").html(data.question_attachment_name);
+
                     if (data.question_attachment_type === 'pdf') {
                         dialog.find(".attachment").addClass("pdf-file");
                     } else if (data.question_attachment_type === 'doc' || data.question_attachment_type === 'docx') {
@@ -129,8 +139,14 @@ $(document).ready(function () {
                         dialog.find(".attachment").addClass("jpg-file");
                     } else if (data.question_attachment_type === 'png') {
                         dialog.find(".attachment").addClass("png-file");
-                    }
+                    } /* else delete the attachments row */
                 }
+
+                var answer_list_obj = data.question_answers_list;
+                if (answer_list_obj.length != 0) {
+                    show_question_answers(answer_list_obj);
+                } /* else show a box within "there is no answers!" */
+
             },
             error: function (data) {
 

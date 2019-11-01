@@ -4,6 +4,7 @@ import os
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from industry.models import Keyword
+from researcher.models import ResearchQuestionInstance
 
 
 def get_image_path(instance, filename):
@@ -277,11 +278,10 @@ class ResearchQuestion(models.Model):
     def __str__(self):
         return self.question_title
 
+    def get_answer_number(self):
+        answers_number = ResearchQuestionInstance.objects.filter(research_question=self).count()
+        return int(answers_number)
 
-class ResearchQuestionInstance(models.Model):
-    research_question = models.ForeignKey(ResearchQuestion, on_delete=models.CASCADE, verbose_name="سوال پژوهشی")
-    hand_out_date = models.DateField(auto_now_add=True, verbose_name="تاریخ واگذاری")
-    answer = models.FileField(upload_to='./uploads', verbose_name="پاسخ")
-    is_answered = models.BooleanField(verbose_name="پاسخ داده شده")
-    researcher = models.ForeignKey('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="پژوهشگر",
-                                   blank=True, null=True)
+    def get_answers(self):
+        answers = ResearchQuestionInstance.objects.filter(research_question=self)
+        return answers

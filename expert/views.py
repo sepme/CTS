@@ -11,6 +11,7 @@ from persiantools.jdatetime import JalaliDate
 from datetime import datetime
 from django.core import serializers
 from industry.models import *
+from researcher.models import *
 
 
 def calculate_deadline(finished, started):
@@ -293,16 +294,29 @@ def add_research_question(request):
 
 def show_research_question(request):
     research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
+
+    answers_list = []
+    for answer in research_question.get_answers():
+        researcher_user = ResearcherProfile.objects.get(researcher_user=answer.researcher)
+        answer_json = {
+            'researcher_name': researcher_user.__str__(),
+            'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
+            'is_correct': answer.is_correct,
+            'answer_attachment': answer.answer.path,
+        }
+        answers_list.append(answer_json)
+    print(answers_list)
+
     json_response = {
         'question_status': research_question.status,
         'question_date': JalaliDate(research_question.submitted_date).strftime("%Y/%m/%d"),
         'question_body': research_question.question_text,
         'question_title': research_question.question_title,
+        'question_answers_list': answers_list,
     }
     if research_question.attachment:
         attachment = research_question.attachment
         json_response['question_attachment_path'] = attachment.path
         json_response['question_attachment_name'] = attachment.name.split('/')[-1]
         json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
-    print(json_response)
     return JsonResponse(json_response)

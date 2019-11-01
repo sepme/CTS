@@ -882,5 +882,32 @@ function question_dialog_init() {
             "</a></li>";
         $(this).closest('ul.inline-list').append(attach_li);
     });
+}
 
+function show_question_answers(data) {
+    var answer = '';
+    for (i=0; i<data.length; i++) {
+        console.log(data[i]);
+        answer = answer + '<div class="col-lg-12">' +
+        '<div class="answer">' +
+        '<span class="title">' + data[i].researcher_name + '</span>' +
+        '<span class="date">' + data[i].hand_out_date + '</span>' +
+        '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
+        '<div class="check">' +
+        '<div class="correct">' +
+        '<button type="button" title="صحیح">' +
+        '<i class="fas fa-check"></i>' +
+        '</button>' +
+        '</div>' +
+        '<div class="wrong">' +
+        '<button type="button" title="نادرست">' +
+        '<i class="fas fa-times"></i>' +
+        '</button>' +
+        '</div>' +
+        '<div class="status"></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }
+    $(".all-answers").html(answer);
 }
