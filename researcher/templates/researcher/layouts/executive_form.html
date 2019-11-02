@@ -1,17 +1,17 @@
 {% load static%}
 <div class="fixed-back executive_form">
-    <div class="card text-right">
+    <div class="card text-right small-card">
         <div class="close"></div>
         <div class="card-head">ثبت سابقه اجرایی</div>
         <div class="container">
-            <form method="post" action="">
+            <form method="post" url="{% url 'researcher:executive_form' %}" class="ajax-exe-form">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-6">
                         <div class='row'>
                             <div class='col-lg-12'>
                                 <label for='duty'>سمت</label>
-                                <input type='text' id='duty' class='w-100'>
+                                <input type='text' id='duty' class='w-100' name="post">
                             </div>
                         </div>
                         <div class="row">
@@ -19,24 +19,25 @@
                                 <span class='center-vr'>زمان :</span>
                             </div>
                             <div class='col-lg-5'>
-                                <label for='from'>از تاریخ</label>
-                                <input type='text' id='from' class='w-100'>
+                                <label for='from'>از سال</label>
+                                <input type='text' id='from' class='w-100' name="start">
                             </div>
                             <div class='col-lg-5'>
-                                <label for='until'>تا تاریخ</label>
-                                <input type='text' id='until' class='w-100'>
+                                <label for='until'>تا سال</label>
+                                <input type='text' id='until' class='w-100' name="end">
                             </div>
                         </div>
                         <div class='row'>
                             <div class='col-lg-12'>
                                 <label for='workplace'>محل خدمت</label>
-                                <input type='text' id='workplace' class='w-100'>
+
+                                <input type='text' id='workplace' class='w-100' name="place">
                             </div>
                         </div>
                         <div class="row">
                             <div class='col-lg-12'>
                                 <label for='exe-city'>شهر</label>
-                                <input type='text' id='exe-city' class='w-100'>
+                                <input type='text' id='exe-city' class='w-100' name="city">
                             </div>
                         </div>
                     </div>

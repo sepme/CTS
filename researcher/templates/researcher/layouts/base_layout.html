@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}{% endblock %}</title>
-        <link rel="icon" href="{% static 'researcher/img/logo.ico' %}">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-              integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
-{#        <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}">#}
-    </head>
-  <body>
-  {% block dialog %}{% endblock %}
-  <div class="main  {% if request.user.researcheruser.status.status == 'signed_up' %} blur-div {% endif %}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'researcher/img/logo.ico' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    {% block header %}{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->
+</head>
+<body>
+{% block dialog %}{% endblock %}
+<div class="main  {% if request.user.researcheruser.status.status == 'signed_up' %} blur-div {% endif %}">
     <div class="top-bar">
-      <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">
-      <div class="dropdown">
-        <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
-          {% if request.user.researcheruser.researcherprofile.photo %}
-               <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile"
+        <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">
+        <div class="dropdown">
+            <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
+                {% if request.user.researcheruser.researcherprofile.photo %}
+                    <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile"
                          class="dropdown-img profile"
                          height="45px">
-        {% else %}
-             <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="dropdown-img profile" height="45px">
-        {% endif %}
-        </button>
-        <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
-          <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
-          <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
-          <li class="divider"></li>
-          <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
-        </ul>
-      </div>
+                {% else %}
+                    <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="dropdown-img profile"
+                         height="45px">
+                {% endif %}
+            </button>
+            <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
+                <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
+                <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
+            </ul>
+        </div>
     </div>
     <div class="content">
         <div class="container">
@@ -53,7 +57,7 @@
                  height="150px">
         {% endif %}
 
-        <h5>{% block name %}{% endblock %}</h5>
+        <h5>{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}</h5>
         <h6>پژوهشگر</h6>
         <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
         <div class="progress">
@@ -64,7 +68,7 @@
         </div>
         <div class="hr"></div>
         <ul class="list-group">
-            {% url "index" as index_url %}
+            {% url "researcher:index" as index_url %}
             <li class="list-group-item text-right {% if request.get_full_path == index_url %}active{% endif %}">
                 <a href="{{ index_url }}">
                     <div>
@@ -82,24 +86,31 @@
                     </div>
                 </a>
             </li>
-            {#      TODO#}
+            {% url 'researcher:technique' as technique_url %}
             <li class="list-group-item text-right">
-                <a href="#">
+                <a href="{{ technique_url }}">
                     <div>
                         <span>تکنیک ها</span>
                         <span class="fas fa-file-medical"></span>
                     </div>
                 </a>
             </li>
+            <!-- {% url 'researcher:question-alert' as question_url %} -->
+            {% if question_instance %}
+                {% url 'researcher:question-show' question_id=uuid as question_url %}
+            {% else %}
+                <h1>{{ question_instance }}</h1>
+                {% url 'researcher:question-alert' as question_url %}
+            {% endif %}
             <li class="list-group-item text-right">
-                <a href="#">
+                <a href="{{ question_url }}">
                     <div>
                         <span>سوالات پژوهشی</span>
                         <span class="fas fa-question"></span>
                     </div>
                 </a>
             </li>
-            {% url 'userInfo' as userInfo_url %}
+            {% url 'researcher:userInfo' as userInfo_url %}
             <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
                 <a href="{{ userInfo_url }}">
                     <div>
@@ -114,6 +125,7 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 {% block script %}{% endblock %}
 <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>

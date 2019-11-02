@@ -1,11 +1,12 @@
 {% extends "researcher/layouts/base_layout.html" %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title %}تنظیمات کاربری{% endblock %}
 {% block header %}
     <link rel="stylesheet" href="{% static 'researcher/css/persian-datepicker.min.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/datepicker-style.css' %}">
 {% endblock %}
-{% block name %}رضا باسره{% endblock %}
+{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}
 {% block dialog %}
     {% include 'researcher/layouts/dialog.html' %}
     {% include 'researcher/layouts/scientific_form.html' %}
@@ -16,7 +17,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card text-right">
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="card-header">اطلاعات کاربری</div>
                     <div class="inner-card card">
@@ -25,78 +26,102 @@
                             <label for="upload-input" class="upload text-center">
                                 <i class="fas fa-pencil-alt"></i>
                             </label>
-                            <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
-                            <input type="file" id="upload-input" accept="image/png, image/jpeg">
+                            {% if user.researcheruser.researcherprofile.photo %}
+                                <img src="/media/{{ user.researcheruser.researcherprofile.photo.name }}"
+                                        alt="profile" class="profile" width="150px" height="150px">
+                            {% else %}
+                                    <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="profile" width="150px" height="150px">
+                            {% endif %}
+                            <input type="file" id="upload-input" accept="image/png, image/jpeg" name="photo">
                         </div>
                         </div>
                         <div class="row">
                           <div class="col-lg-6">
-                            <label for="FirstName">نام</label>
-                            <input type="text" id="FirstName" class="w-100">
+                            <label for="id_first_name">نام</label>
+                            <!-- <input type="text" id="FirstName" class="w-100"> -->
+                            {% render_field form.first_name class+="w-100" readonly="true" %}
                           </div>
                           <div class="col-lg-6">
-                            <label for="LastName">نام خانوادگی</label>
-                            <input type="text" id="LastName" class="w-100">
+                            <label for="id_last_name">نام خانوادگی</label>
+                            <!-- <input type="text" id="LastName" class="w-100"> -->
+                            {% render_field form.last_name class+="w-100" readonly="true" %}
                           </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <label for="Field">رشته تحصیلی</label>
-                                <input type="text" id="Field" class="w-100">
+                                <label for="id_major">رشته تحصیلی</label>
+                                <!-- <input type="text" id="Field" class="w-100"> -->
+                                {% render_field form.major class+="w-100" readonly="true" %}
                             </div>
                             <div class="col-lg-6">
-                                <label for="MelliCode">کد ملی</label>
-                                <input type="text" id="MelliCode" class="w-100">
+                                <label for="id_national_code">کد ملی</label>
+                                <!-- <input type="text" id="MelliCode" class="w-100"> -->
+                                {% render_field form.national_code class+="w-100" readonly="true" %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <label for="student-num">شماره دانشجویی</label>
-                                <input type="text" id="student-num" class="w-100">
+                                <label for="id_student_number">شماره دانشجویی</label>
+                                <!-- <input type="text" id="student-num" class="w-100"> -->
+                                {% render_field form.student_number class+="w-100" readonly="true" %}
                             </div>
                             <div class="col-lg-6">
-                                <label for="enter-date">سال ورود</label>
-                                <input type="text" id="enter-date" class="w-100">
+                                <label for="id_entry_year">سال ورود</label>
+                                <!-- <input type="text" id="enter-date" class="w-100"> -->
+                                {% render_field form.entry_year class+="w-100" readonly="true" %}
                             </div>
                         </div>
                         <div class="row">
                           <div class="col-lg-12 rankDiv">
-                              <label class="rankLabel" for="rank">آخرین مقطع تحصیلی</label>
-                                <select id="rank">
+                              <label class="rankLabel" for="id_grade">آخرین مقطع تحصیلی</label>
+                                <select id="grade" name="grade" class="w-100">
                                       <option selected dir="rtl">انتخاب کنید ...</option>
-                                      <option value="1">کارشناسی</option>
-                                      <option value="2">کارشناسی ارشد</option>
-                                      <option value="3">دکتری</option>
-                                      <option value="4">دکتری حرفه ای</option>
+                                      
+                                      {% for option in form.grade %}
+                                          {{option}}
+                                        {% endfor %}
                                 </select>
                           </div>
                       </div>
                       <div class="row">
                           <div class="col-lg-12">
-                              <label for="Uni">دانشگاه محل تحصیل</label>
-                              <input type="text" id="Uni" class="w-100">
+                              <label for="id_university">دانشگاه محل تحصیل</label>
+                              <!-- <input type="text" id="Uni" class="w-100"> -->
+                              {% render_field form.university class+="w-100" readonly="true" %}
                           </div>
                       </div>
                       <div class="row">
                             <div class="col-lg-12">
-                                <label for="Address">آدرس محل سکونت</label>
-                                <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea>
+                                <label for="id_address">آدرس محل سکونت</label>
+                                <!-- <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea> -->
+                                {% render_field form.address class+="w-100" row="3" dir="rtl"%}
                             </div>
                       </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <label for="HomeNum">تلفن منزل</label>
-                                <input type="text" id="HomeNum" class="w-100">
+                                <label for="id_home_number">تلفن منزل</label>
+                                <!-- <input type="text" id="HomeNum" class="w-100"> -->
+                                {% render_field form.home_number class+="w-100" %}
+                                <div class="error">
+                                    <!-- <span class="error-body">{% render_field form.home_number.errors %}</span> -->
+                                    {{home_number_error}}
+                                </div>
                             </div>
                             <div class="col-lg-6">
-                                <label for="PhoneNum">تلفن همراه</label>
-                                <input type="text" id="PhoneNum" class="w-100">
+                                <label for="id_phone_number">تلفن همراه</label>
+                                <!-- <input type="text" id="PhoneNum" class="w-100"> -->
+                                {% render_field form.phone_number class+="w-100" %}
+                                <div class="error">
+                                        {{phone_number_error}}
+                                    <!-- <span class="error-body">{% render_field form.phone_number.errors %}</span> -->
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <label for="Email">پست الکترونیکی</label>
-                                <input type="text" id="Email" class="w-100">
+                                <label for="id_email">پست الکترونیکی</label>
+                                <!-- <input type="text" id="Email" class="w-100"> -->
+                                {% render_field form.email class+="w-100" readonly="true" %}
                             </div>
                         </div>
                     </div>
@@ -104,8 +129,38 @@
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <div class="education text-center w-100">
+                                <div class="education text-center w-100">                                                                    
+                                {% if scientificrecord_set %}
+                                    <table class='table mtop-lg-25'>
+                                            <thead>
+                                                <tr>
+                                                        <td>مقطع تحصیلی</td>
+                                                        <td>رشته تحصیلی</td>
+                                                        <td>دانشگاه</td>
+                                                        <td>شهر محل تحصیل</td>
+                                                        <td>سال اخذ مدرک</td>
+                                                        <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for record in scientificrecord_set %}
+                                                <tr>
+                                                        <td>{{record.grade}}</td>
+                                                        <td>{{record.major}}</td>
+                                                        <td>{{record.university}}</td>
+                                                        <td>{{record.place}}</td>
+                                                        <td>{{record.graduated_year}}</td>
+                                                        <td>
+                                                            <i class='fas fa-pen' id='edit_edu'></i>
+                                                            <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        {% else %}
                                     <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                    {% endif %}
                                 </div>
                                 <button type="button" class="education-btn success-btn">افزودن</button>
                             </div>
@@ -116,7 +171,37 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="executive text-center w-100">
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                {% if executiverecord_set %}
+                                        <table class='table mtop-lg-25'>
+                                                <thead>
+                                                    <tr>
+                                                            <td>سمت</td>
+                                                            <td>محل خدمت</td>
+                                                            <td>شهر</td>
+                                                            <td>از سال</td>
+                                                            <td>تا سال</td>
+                                                            <td></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for record in executiverecord_set %}
+                                                    <tr>
+                                                            <td>{{record.post}}</td>
+                                                            <td>{{record.place}}</td>
+                                                            <td>{{record.city}}</td>
+                                                            <td>{{record.start}}</td>
+                                                            <td>{{record.end}}</td>
+                                                            <td>
+                                                                <i class='fas fa-pen' id='edit_edu'></i>
+                                                                <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% else %}
+                                            <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% endif %}
                                 </div>
                                 <button type="button" class="executive-btn success-btn">افزودن</button>
                             </div>
@@ -128,8 +213,42 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="studious text-center w-100">
-                                    <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
-                                </div>
+                                    {% if studiousrecord_set %}
+                                        <table class='table mtop-lg-25'>
+                                                <thead>
+                                                    <tr>
+                                                        <td>عنوان طرح پژوهشی</td>
+                                                        <td>مجری</td>
+                                                        <td>مسئول اجرا/ همکار</td>
+                                                        <td>وضعیت طرح پژوهشی</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for record in studiousrecord_set %}
+                                                    <tr>
+                                                            <td>{{record.title}}</td>
+                                                            <td>{{record.presenter}}</td>
+                                                            <td>{{record.responsible}}</td>
+                                                            <td> {% if record.status == 1 %}
+                                                                    در دست اجرا
+                                                                {% elif record.status == 2 %}
+                                                                    خاتمه یافته
+                                                                {% else %}
+                                                                    متوقف
+                                                                {% endif %} </td>
+                                                            <td>
+                                                                <i class='fas fa-pen' id='edit_edu'></i>
+                                                                <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% else %}
+                                            <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% endif %}
+                                </div> 
                                 <button type="button" class="research-btn success-btn">افزودن</button>
                             </div>
                         </div>
@@ -144,24 +263,39 @@
                                         <div class="col-lg-7 col-12">روحیه کار تیمی</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="group-work" id="group-work-1" value="1"><label
-                                                        for="group-work-1" class="radio-label"></label>
+                                                <input type="radio" name="team_work" id="team_work-1" value="1"
+                                                    {% if researcher_form.team_work == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                              <label for="team_work-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="group-work" id="group-work-2" value="2"><label
-                                                        for="group-work-2" class="radio-label"></label>
+                                                <input type="radio" name="team_work" id="team_work-2" value="2"
+                                                    {% if researcher_form.team_work == 2 %}
+                                                    checked='checked'
+                                                    {% endif %}>
+                                                <label for="team_work-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="group-work" id="group-work-3" value="3"><label
-                                                        for="group-work-3" class="radio-label"></label>
+                                                <input type="radio" name="team_work" id="team_work-3" value="3"
+                                                    {% if researcher_form.team_work == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="team_work-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="group-work" id="group-work-4" value="4"><label
-                                                        for="group-work-4" class="radio-label"></label>
+                                                <input type="radio" name="team_work" id="team_work-4" value="4"
+                                                    {% if researcher_form.team_work == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                              <label for="team_work-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="group-work" id="group-work-5" value="5"><label
-                                                        for="group-work-5" class="radio-label"></label>
+                                                <input type="radio" name="team_work" id="team_work-5" value="5"
+                                                    {% if researcher_form.team_work == 5 %}
+                                                            checked='checked'
+                                                        {% endif %}>
+                                                <label for="team_work-5" class="radio-label"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -169,24 +303,39 @@
                                         <div class="col-lg-7 col-12">تفکر خلاقانه</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="creative-thinking" id="creative-thinking-1" value="1">
-                                                <label for="creative-thinking-1" class="radio-label"></label>
+                                                <input type="radio" name="creative_thinking" id="creative_thinking-1" value="1"
+                                                    {% if researcher_form.creative_thinking == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="creative_thinking-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="creative-thinking" id="creative-thinking-2" value="2">
-                                                <label for="creative-thinking-2" class="radio-label"></label>
+                                                <input type="radio" name="creative_thinking" id="creative_thinking-2" value="2"
+                                                    {% if researcher_form.creative_thinking == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="creative_thinking-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="creative-thinking" id="creative-thinking-3" value="3">
-                                                <label for="creative-thinking-3" class="radio-label"></label>
+                                                <input type="radio" name="creative_thinking" id="creative_thinking-3" value="3"
+                                                    {% if researcher_form.creative_thinking == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="creative_thinking-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="creative-thinking" id="creative-thinking-4" value="4">
-                                                <label for="creative-thinking-4" class="radio-label"></label>
+                                                <input type="radio" name="creative_thinking" id="creative_thinking-4" value="4"
+                                                    {% if researcher_form.creative_thinking == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="creative_thinking-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="creative-thinking" id="creative-thinking-5" value="5">
-                                                <label for="creative-thinking-5" class="radio-label"></label>
+                                                <input type="radio" name="creative_thinking" id="creative_thinking-5" value="5"
+                                                    {% if researcher_form.creative_thinking == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="creative_thinking-5" class="radio-label"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -194,24 +343,39 @@
                                         <div class="col-lg-7 col-12">علاقه به رشته تحصیلی</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="field_love" id="field_love-1" value="1">
-                                                <label for="field_love-1" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_major" id="interest_in_major-1" value="1"
+                                                    {% if researcher_form.interest_in_major == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_major-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="field_love" id="field_love-2" value="2">
-                                                <label for="field_love-2" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_major" id="interest_in_major-2" value="2"
+                                                    {% if researcher_form.interest_in_major == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_major-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="field_love" id="field_love-3" value="3">
-                                                <label for="field_love-3" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_major" id="interest_in_major-3" value="3"
+                                                    {% if researcher_form.interest_in_major == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_major-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="field_love" id="field_love-4" value="4">
-                                                <label for="field_love-4" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_major" id="interest_in_major-4" value="4"
+                                                    {% if researcher_form.interest_in_major == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_major-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="field_love" id="field_love-5" value="5">
-                                                <label for="field_love-5" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_major" id="interest_in_major-5" value="5"
+                                                    {% if researcher_form.interest_in_major == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_major-5" class="radio-label"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -219,23 +383,38 @@
                                         <div class="col-lg-7 col-12">انگیزه داشتن برای انجام پروژه</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="motivation" id="motivation-1" value="1">
+                                                <input type="radio" name="motivation" id="motivation-1" value="1"
+                                                    {% if researcher_form.motivation == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="motivation-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="motivation" id="motivation-2" value="2">
+                                                <input type="radio" name="motivation" id="motivation-2" value="2"
+                                                    {% if researcher_form.motivation == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="motivation-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="motivation" id="motivation-3" value="3">
+                                                <input type="radio" name="motivation" id="motivation-3" value="3"
+                                                    {% if researcher_form.motivation == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="motivation-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="motivation" id="motivation-4" value="4">
+                                                <input type="radio" name="motivation" id="motivation-4" value="4"
+                                                    {% if researcher_form.motivation == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="motivation-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="motivation" id="motivation-5" value="5">
+                                                <input type="radio" name="motivation" id="motivation-5" value="5"
+                                                    {% if researcher_form.motivation == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="motivation-5" class="radio-label"></label>
                                             </div>
                                         </div>
@@ -244,23 +423,38 @@
                                         <div class="col-lg-7 col-12">تعهد داشتن و از خودگذشتگی</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="sacrifice" id="sacrifice-1" value="1">
+                                                <input type="radio" name="sacrifice" id="sacrifice-1" value="1"
+                                                    {% if researcher_form.sacrifice == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="sacrifice-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="sacrifice" id="sacrifice-2" value="2">
+                                                <input type="radio" name="sacrifice" id="sacrifice-2" value="2"
+                                                    {% if researcher_form.sacrifice == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="sacrifice-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="sacrifice" id="sacrifice-3" value="3">
+                                                <input type="radio" name="sacrifice" id="sacrifice-3" value="3"
+                                                    {% if researcher_form.sacrifice == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="sacrifice-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="sacrifice" id="sacrifice-4" value="4">
+                                                <input type="radio" name="sacrifice" id="sacrifice-4" value="4"
+                                                    {% if researcher_form.sacrifice == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="sacrifice-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="sacrifice" id="sacrifice-5" value="5">
+                                                <input type="radio" name="sacrifice" id="sacrifice-5" value="5"
+                                                    {% if researcher_form.sacrifice == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="sacrifice-5" class="radio-label"></label>
                                             </div>
                                         </div>
@@ -269,23 +463,38 @@
                                         <div class="col-lg-7 col-12">پشتکار</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="diligence" id="diligence-1" value="1">
+                                                <input type="radio" name="diligence" id="diligence-1" value="1"
+                                                    {% if researcher_form.diligence == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="diligence-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="diligence" id="diligence-2" value="2">
+                                                <input type="radio" name="diligence" id="diligence-2" value="2"
+                                                    {% if researcher_form.diligence == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="diligence-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="diligence" id="diligence-3" value="3">
+                                                <input type="radio" name="diligence" id="diligence-3" value="3"
+                                                    {% if researcher_form.diligence == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="diligence-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="diligence" id="diligence-4" value="4">
+                                                <input type="radio" name="diligence" id="diligence-4" value="4"
+                                                    {% if researcher_form.diligence == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="diligence-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="diligence" id="diligence-5" value="5">
+                                                <input type="radio" name="diligence" id="diligence-5" value="5"
+                                                    {% if researcher_form.diligence == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="diligence-5" class="radio-label"></label>
                                             </div>
                                         </div>
@@ -294,24 +503,39 @@
                                         <div class="col-lg-7 col-12">علاقه به یادگیری</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="learning_love" id="learning_love-1" value="1">
-                                                <label for="learning_love-1" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_learn" id="interest_in_learn-1" value="1"
+                                                    {% if researcher_form.interest_in_learn == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_learn-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="learning_love" id="learning_love-2" value="2">
-                                                <label for="learning_love-2" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_learn" id="interest_in_learn-2" value="2"
+                                                    {% if researcher_form.interest_in_learn == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_learn-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="learning_love" id="learning_love-3" value="3">
-                                                <label for="learning_love-3" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_learn" id="interest_in_learn-3" value="3"
+                                                    {% if researcher_form.interest_in_learn == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_learn-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="learning_love" id="learning_love-4" value="4">
-                                                <label for="learning_love-4" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_learn" id="interest_in_learn-4" value="4"
+                                                    {% if researcher_form.interest_in_learn == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_learn-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="learning_love" id="learning_love-5" value="5">
-                                                <label for="learning_love-5" class="radio-label"></label>
+                                                <input type="radio" name="interest_in_learn" id="interest_in_learn-5" value="5"
+                                                    {% if researcher_form.interest_in_learn == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="interest_in_learn-5" class="radio-label"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -319,23 +543,38 @@
                                         <div class="col-lg-7 col-12">وقت شناسی</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="punctuality" id="punctuality-1" value="1">
+                                                <input type="radio" name="punctuality" id="punctuality-1" value="1"
+                                                    {% if researcher_form.punctuality == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="punctuality-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="punctuality" id="punctuality-2" value="2">
+                                                <input type="radio" name="punctuality" id="punctuality-2" value="2"
+                                                    {% if researcher_form.punctuality == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="punctuality-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="punctuality" id="punctuality-3" value="3">
+                                                <input type="radio" name="punctuality" id="punctuality-3" value="3"
+                                                    {% if researcher_form.punctuality == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="punctuality-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="punctuality" id="punctuality-4" value="4">
+                                                <input type="radio" name="punctuality" id="punctuality-4" value="4"
+                                                    {% if researcher_form.punctuality == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="punctuality-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="punctuality" id="punctuality-5" value="5">
+                                                <input type="radio" name="punctuality" id="punctuality-5" value="5"
+                                                    {% if researcher_form.punctuality == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="punctuality-5" class="radio-label"></label>
                                             </div>
                                         </div>
@@ -344,24 +583,39 @@
                                         <div class="col-lg-7 col-12">جمع آوری داده ها</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="data-collection" id="data-collection-1" value="1">
-                                                <label for="data-collection-1" class="radio-label"></label>
+                                                <input type="radio" name="data_collection" id="data_collection-1" value="1"
+                                                    {% if researcher_form.data_collection == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="data_collection-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="data-collection" id="data-collection-2" value="2">
-                                                <label for="data-collection-2" class="radio-label"></label>
+                                                <input type="radio" name="data_collection" id="data_collection-2" value="2"
+                                                {% if researcher_form.data_collection == 2 %}
+                                                checked='checked'
+                                              {% endif %}>
+                                                <label for="data_collection-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="data-collection" id="data-collection-3" value="3">
-                                                <label for="data-collection-3" class="radio-label"></label>
+                                                <input type="radio" name="data_collection" id="data_collection-3" value="3"
+                                                    {% if researcher_form.data_collection == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="data_collection-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="data-collection" id="data-collection-4" value="4">
-                                                <label for="data-collection-4" class="radio-label"></label>
+                                                <input type="radio" name="data_collection" id="data_collection-4" value="4"
+                                                    {% if researcher_form.data_collection == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="data_collection-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="data-collection" id="data-collection-5" value="5">
-                                                <label for="data-collection-5" class="radio-label"></label>
+                                                <input type="radio" name="data_collection" id="data_collection-5" value="5"
+                                                    {% if researcher_form.data_collection == 5 %}
+                                                    checked='checked'
+                                                {% endif %}>
+                                                <label for="data_collection-5" class="radio-label"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -369,23 +623,37 @@
                                         <div class="col-lg-7 col-12">آگاهی از اصول انجام پروژه</div>
                                         <div class="col-lg-5 col-12">
                                             <div class="radio-item">
-                                                <input type="radio" name="project_knowledge" id="project_knowledge-1" value="1">
+                                                <input type="radio" name="project_knowledge" id="project_knowledge-1" value="1"
+                                                    {% if researcher_form.project_knowledge == 1 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="project_knowledge-1" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="project_knowledge" id="project_knowledge-2" value="2">
+                                                <input type="radio" name="project_knowledge" id="project_knowledge-2" value="2"
+                                                    {% if researcher_form.project_knowledge == 2 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="project_knowledge-2" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="project_knowledge" id="project_knowledge-3" value="3">
+                                                <input type="radio" name="project_knowledge" id="project_knowledge-3" value="3"
+                                                    {% if researcher_form.project_knowledge == 3 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="project_knowledge-3" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="project_knowledge" id="project_knowledge-4" value="4">
+                                                <input type="radio" name="project_knowledge" id="project_knowledge-4" value="4"
+                                                    {% if researcher_form.project_knowledge == 4 %}
+                                                    checked='checked'
+                                                {% endif %}>
                                                 <label for="project_knowledge-4" class="radio-label"></label>
                                             </div>
                                             <div class="radio-item">
-                                                <input type="radio" name="project_knowledge" id="project_knowledge-5" value="5">
+                                                <input type="radio" name="project_knowledge" id="project_knowledge-5" value="5" {% if researcher_form.project_knowledge == 5 %}
+                                                checked='checked'
+                                              {% endif %}>
                                                 <label for="project_knowledge-5" class="radio-label"></label>
                                             </div>
                                         </div>
@@ -395,24 +663,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">تکنیک ها</div>
+                    <!-- <div class="card-header">تکنیک ها</div>
                     <div class="inner-card card">
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <button class="success-btn technique" type="button">افزودن</button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="card-header"></div>
                     <div class="card inner-card">
                         <div class="row">
                             <div class="col-lg-12">
-                                <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea>
-                                <label for="introduction-method">چه ویژگی در تیم چمران شما را به عضویت در این تیم متمایل کرد؟</label>
+                                <!-- <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea> -->
+                                {% render_field form.description class+="w-100" row="3" dir="rtl"%} 
+                                <label for="id_description">چه ویژگی در تیم چمران شما را به عضویت در این تیم متمایل کرد؟</label>
+                                
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
+                    <button type="submit" class="chamran_btn" style="left: 0;bottom: -1px;">اعمال تغییرات</button>
                 </form>
             </div>
         </div>

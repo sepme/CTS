@@ -7,7 +7,6 @@
     {% include 'researcher/layouts/technique_review_request.html' %}
 {% endblock %}
 
-{% block name %}رضا باسره{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -17,15 +16,21 @@
                     <div class="w-100 text-left">
                         <div class="add-new-technique">افزودن تکنیک</div>
                     </div>
-                    <div class="card active-question flow-root-display">
-                        <div class="technique-title w-50">تکنیک شماره 1</div>
-                        <div class="technique-info w-50">
-                            <div class="w-25"></div>
-                            <div class="mark w-25"><span>A</span></div>
-                            <div class="date w-25"><span>دو روز پیش</span></div>
-                            <div class="show w-25"><button class="default-btn show-btn new-review-request">ارتقا نمره</button></div>
+                    {% for tech in technique_list %}
+                        <div class="card active-question flow-root-display">
+                            <div class="technique-title w-50">{{tech.technique.technique_title}}</div>
+                            <div class="technique-info w-50">
+                                <div class="w-25"></div>{#{{tech.evaluat_date}}</div>#}
+                                <div class="mark w-25"><span> {% if tech.level %}
+                                        {{tech.level}}
+                                {% else %}
+                                        در حال بررسی...
+                                {% endif %}</span></div>
+                                <div class="date w-25"><span>{{tech.date_last}}</span></div>
+                                <div class="show w-25"><button class="default-btn show-btn new-review-request">ارتقا نمره</button></div>
+                            </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -62,12 +67,12 @@
                   ]},
                  {"title": "general lab", "key": "2", "folder": true, "children": [
                          {"title": "An Introduction to the Centrifuge", "key": "201"},
-                         {"title": "Regulating Temperature in the Lab Preserving Sample Using Cold", "key": "202"},
+                         {"title": "Regulating Temperature in the Lab Preserving Samples Using Cold", "key": "202"},
                          {"title": "Introduction to the Bunsen Burner", "key": "203"},
                          {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
                          {"title": "An Introduction to the Micropipettor", "key": "205"},
                          {"title": "Making Solutions in the Laboratory", "key": "206"},
-                         {"title": "Understanding Concentration and Measuring Volums", "key": "207"},
+                         {"title": "Understanding Concentration and Measuring Volumes", "key": "207"},
                          {"title": "Introduction to the Microplate Reader", "key": "208"},
                          {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
                          {"title": "Common Lab Glassware and Users", "key": "210"},

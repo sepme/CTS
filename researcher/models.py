@@ -4,6 +4,7 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import os
 import datetime
 import uuid
+from . import persianNumber
 
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -11,6 +12,27 @@ def get_image_path(instance, filename):
 
     return os.path.join('unique', instance.researcher_user.user.username, filename)
 
+def get_answerFile_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format("answer-"+instance.researcher.user.username+"-"+"-".join(filename.split('.')[:-1]), ext)
+    folder_name = instance.research_question.question_title+"-"+str(instance.research_question.uniqe_id)
+    return os.path.join('questions', folder_name, filename)
+
+def get_resumeFile_path(instance, filename):
+    ext = filename.split('.')[-1]
+    try:
+        filename = '{}.{}'.format("resume-"+
+                                  instance.researcher.user.username+"-"+
+                                  instance.technique.technique_title+"-"+
+                                  "-".join(filename.split('.')[:-1]), ext)
+        folder_name = str(instance.researcher)
+    except:
+        filename = '{}.{}'.format("new-resume-"+
+                                  instance.technique_instance.researcher.user.username+"-"+
+                                  instance.technique_instance.technique.technique_title+"-"+
+                                  "-".join(filename.split('.')[:-1]), ext)
+        folder_name = str(instance.technique_instance.researcher)
+    return os.path.join('resume', folder_name, filename)
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -23,6 +45,15 @@ class ResearcherUser(models.Model):
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("researcher:index"))
 
+    def question_status(self):
+        if self.status.status == "not_answered":
+            deltatime = datetime.date.today()-self.researchquestioninstance.hand_out_date        
+            if deltatime.days > 15:
+                self.status.status = 'inactivated'
+                self.status.status.save()
+                return "inactivated"
+            return 'not_answered'
+        return 'free'
 
 class Status(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
@@ -118,25 +149,25 @@ class ResearcherProfile(models.Model):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
 
-class ResearcherScientificHistory(models.Model):
+class ScientificRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
 
     grade = models.CharField(max_length=300, verbose_name="مقطع تحصیلی")
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     university = models.CharField(max_length=300, verbose_name="دانشگاه")
     place = models.CharField(max_length=300, verbose_name="شهر محل تحصیل")
-    graduated_year = models.IntegerField(verbose_name="سال اخذ مدرک")
+    graduated_year = models.CharField(max_length = 5,verbose_name="سال اخذ مدرک")
 
     def __str__(self):
         return self.grade
 
 
-class ResearcherRecord(models.Model):
+class ExecutiveRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
 
     post = models.CharField(max_length=300, verbose_name="سمت")
-    start = models.DateField(auto_now=False, auto_now_add=False, verbose_name="از تاریخ")
-    end = models.DateField(auto_now=False, auto_now_add=False, verbose_name="تا تاریخ")
+    start = models.CharField(max_length=30, verbose_name="از تاریخ")
+    end = models.CharField(max_length=30, verbose_name="تا تاریخ")
     place = models.CharField(max_length=300, verbose_name="محل خدمت")
     city = models.CharField(max_length=300, verbose_name="شهر")
 
@@ -144,18 +175,18 @@ class ResearcherRecord(models.Model):
         return self.post
 
 
-class ResearchActivities(models.Model):
+class StudiousRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق پژوهشی", on_delete=models.CASCADE)
 
     title = models.CharField(max_length=300, verbose_name="عنوان طرح پژوهشی")
     presenter = models.CharField(max_length=50, verbose_name="نام مجری")
-    Responsible = models.CharField(max_length=50, verbose_name="مسئول اجرا / همکار")
+    responsible = models.CharField(max_length=50, verbose_name="مسئول اجرا / همکار")
     STATUS_CHOICE = (
-        ('running', 'در دست اجرا'),
-        ('finished', 'خاتمه یافته'),
-        ('stopped', 'متوقف'),
+        (1, 'در دست اجرا'),
+        (2, 'خاتمه یافته'),
+        (3, 'متوقف'),
     )
-    status = models.CharField(max_length=8, choices=STATUS_CHOICE, verbose_name="وضعیت طرح پژوهشی")
+    status = models.IntegerField( choices=STATUS_CHOICE, verbose_name="وضعیت طرح پژوهشی")
 
     def __str__(self):
         return self.title
@@ -241,27 +272,69 @@ class Technique(models.Model):
         ('research_methodology', 'Research Methodology'),
     )
 
-    technique_type = models.CharField(max_length=100, choices=TYPE)
+    technique_type = models.CharField(max_length=100)
     technique_title = models.CharField(max_length=300)
-    tutorial_link = models.CharField(max_length=500)
+    tutorial_link = models.CharField(max_length=500 ,null=True)
+
+    def __str__(self):
+        return self.technique_title
 
 
 class TechniqueInstance(models.Model):
-    researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
-    technique = models.OneToOneField("Technique", verbose_name="مهارت", on_delete=models.CASCADE, null=True, blank=True)
+    researcher = models.ForeignKey("ResearcherUser", on_delete=models.CASCADE)
+    technique = models.ForeignKey("Technique", verbose_name="مهارت", on_delete=models.CASCADE, null=True, blank=True)
     TECH_GRADE = (
         ('A', 'به صورت عملی در پروژه انجام داده است.'),
         ('B', 'به صورت عملی در کارگاه آموزش دیده است.'),
         ('C', 'به صورت تئوری آموزش دیده است.'),
     )
-    level = models.CharField(max_length=1, choices=TECH_GRADE, verbose_name='سطح مهارت', blank=True)
+    level = models.CharField(max_length=1, choices=TECH_GRADE, verbose_name='سطح مهارت', blank=True ,null=True)
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True ,blank=True)
     evaluator = models.CharField(max_length=300, verbose_name='ارزیابی کننده', blank=True)
+    evaluat_date = models.DateField(verbose_name="زمان نمره گرفتن", auto_now=True, null=True)
 
     def is_validated(self):
         if self.level == 'A' or self.level == 'B' or self.level == 'C':
             return True
         return False
+    
+    @property
+    def date_last(self):
+        days_passed = datetime.datetime.today().day - self.evaluat_date.day
+        months_passed = datetime.datetime.today().month - self.evaluat_date.month
+        years_passed = datetime.datetime.today().year - self.evaluat_date.year
+        days = ""
+        months = ""
+        years = ""
+        if years_passed != 0:
+            years = persianNumber.convert(str(years_passed)) + " سال "
+        if months_passed != 0:
+            if years_passed != 0:
+                months = " و " + persianNumber.convert(str(months_passed)) + " ماه "
+            else:
+                months = persianNumber.convert(str(months_passed)) + " ماه "
+        if days_passed != 0:
+            if months_passed == 0 and years_passed == 0:
+                days = persianNumber.convert(str(days_passed)) + " روز "
+            else:
+                days = " و " + persianNumber.convert(str(days_passed)) + " روز "
+        if days_passed != 0 or months_passed != 0 or years_passed != 0:            
+            return years + months + days + " پیش"
+        return "امروز"
 
+    
+    def __str__(self):
+        return str(self.researcher) + " - " + str(self.technique)
+
+class TechniqueReview(models.Model):
+    technique_instance = models.ForeignKey(TechniqueInstance, verbose_name="تکنیک", on_delete=models.CASCADE)
+    description = models.CharField(max_length=1000 ,verbose_name="توضیحات")
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True)
+    method = models.CharField(max_length=30)
+    result = models.CharField(max_length=1 ,null=True)
+
+    def __str__(self):
+        return str(self.technique_instance)
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
@@ -269,3 +342,16 @@ class RequestedProject(models.Model):
     date_requested = models.DateField(auto_now=False, auto_now_add=False, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
+
+class ResearchQuestionInstance(models.Model):
+    research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,
+                                           verbose_name="سوال پژوهشی")
+    researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
+                                    blank=True, null=True)
+    hand_out_date = models.DateField( verbose_name="تاریخ واگذاری" ,auto_now_add=True)
+    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ" ,null=True)
+    is_answered = models.BooleanField(verbose_name="پاسخ داده شده" ,default=False)
+    is_correct = models.BooleanField(verbose_name="تایید استاد" ,default=False)
+
+    def __str__(self):
+        return str(self.research_question) + ' - ' + self.researcher.user.username

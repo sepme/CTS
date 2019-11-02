@@ -11,6 +11,11 @@ def get_image_path(instance, filename):
 
     return os.path.join('unique', instance.expert_user.user.username, filename)
 
+def get_attachFile_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format(instance.expert.user.username+"-"+"-".join(filename.split('.')[:-1]), ext)
+
+    return os.path.join('questions', instance.question_title+"-"+str(instance.uniqe_id), filename)
 
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
@@ -253,22 +258,14 @@ class ResearchGain(models.Model):
                                                    verbose_name="استاد")
     research_gain = models.IntegerField(choices=GAIN_CHOICE, verbose_name="دستاورد دانشجو")
 
-
 class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=128, verbose_name="عنوان سوال")
     submitted_date = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت سوال")
     question = models.TextField(verbose_name="سوال")
-    is_answered = models.BooleanField(verbose_name="پاسخ داده شده")
-    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
+    is_answered = models.BooleanField(verbose_name="پاسخ داده شده" ,default=False)
+    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد" ,null=True)
+    uniqe_id = models.UUIDField(unique=True , default=uuid.uuid4)
+    attach_file = models.FileField(upload_to=get_attachFile_path, verbose_name="ضمیمه" ,null=True)
 
     def __str__(self):
-        return "title" + self.question_title
-
-
-class ResearchQuestionInstance(models.Model):
-    research_question = models.ForeignKey(ResearchQuestion, on_delete=models.CASCADE, verbose_name="سوال پژوهشی")
-    hand_out_date = models.DateField(auto_now_add=True, verbose_name="تاریخ واگذاری")
-    answer = models.FileField(upload_to='./uploads', verbose_name="پاسخ")
-    is_answered = models.BooleanField(verbose_name="پاسخ داده شده")
-    researcher = models.ForeignKey('researcher.ResearcherUser', on_delete=models.CASCADE, verbose_name="پژوهشگر",
-                                   blank=True, null=True)
+        return "title " + self.question_title
