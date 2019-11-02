@@ -26,7 +26,9 @@ LOCAL_URL = '127.0.0.1:8000'
 
 
 def jalali_date(jdate):
-    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month-1] + ' ' + str(jdate.year)
+
+    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
+
 
 
 def get_message_detail(request, message_id):

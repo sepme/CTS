@@ -7,7 +7,82 @@ $(window).on("load", function () {
     init_windowSize();
     load_dialog();
 });
+
+
+function tag_input_label(tag_input) {
+    $("#" + tag_input + "_tagsinput .tags_clear").css("display", "none");
+    $("#" + tag_input + "_tagsinput span.tag a").html("<i class='fas fa-times'></i>");
+
+    if (!$(".tagsinput").find(".tag").length) {
+        $("label[for='" + tag_input + "']").removeClass("full-focus-out").css({
+            "font-size": "13px",
+            "top": "28px",
+            "right": "25px",
+            "color": "#6f7285",
+            "padding": "0"
+        });
+        $("#" + tag_input + "_tag").attr("placeholder", "");
+    }
+
+    $("#" + tag_input + "_tag").on("focus", function () {
+        $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
+            "font-size": "12px",
+            "top": "12px",
+            "right": "30px",
+            "padding": "0 10px",
+            "color": "#3ccd1c"
+        });
+        $(".tagsinput").css("border-color", "#3ccd1c");
+    }).on("focusout", function () {
+
+        $(".tagsinput").css("border-color", "#bdbdbd85");
+
+        if ($(".tagsinput").find(".tag").length) {
+            $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
+                "font-size": "12px",
+                "top": "12px",
+                "right": "30px",
+                "padding": "0 10px",
+                "color": "#6f7285"
+            });
+        } else {
+            $("label[for='" + tag_input + "']").removeClass("full-focus-out").css({
+                "font-size": "13px",
+                "top": "28px",
+                "right": "25px",
+                "color": "#6f7285",
+                "padding": "0"
+            });
+            $("#" + tag_input + "_tag").attr("placeholder", "");
+        }
+    });
+}
+
+function newItem_label() {
+    $("#id_key_words_tagsinput").find("#id_key_words_tag").attr("placeholder", "افزودن");
+    tag_input_label("id_key_words");
+}
+
 $(document).ready(function () {
+
+
+
+
+    $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
+        $(this).css("width", "fit-content");
+    });
+
+    $('#id_key_words').tagsInput({
+        'height': 'FIT-CONTENT',
+        'width': '100%',
+        'defaultText': '',
+        'onAddTag': newItem_label,
+        'onRemoveTag': newItem_label
+    });
+    tag_input_label("id_key_words");
+
+
+
     $('*').persiaNumber();
     input_focus();
     question_dialog_init();
@@ -137,7 +212,6 @@ function education_record() {
             },
             error: function (data) {
                 var obj = JSON.parse(data.responseText);
-                console.log(data);
                 myForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                     .prop("disabled", false);
                 myForm.find("button[type='reset']").prop("disabled", false);
@@ -483,30 +557,6 @@ paperForm.submit(function (event) {
                 $("input#impact-factor").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
         },
-    })
-});
-
-var showInfo = $('.chamran-btn-info');
-showInfo.click(function (event) {
-    $.ajax({
-        url: $(this).attr('data-url'),
-        data: {
-            'id': $(this).attr("id")
-        },
-        dataType: 'json',
-        success: function (data) {
-            $(".showProject")
-                .find(".card-head").html();
-            $(".showProject")
-                .find(".establish-time .time-body").html(data.date);
-            $(".showProject")
-                .find(".time-left .time-body").html(data.deadline);
-            console.log(data)
-        },
-        error: function (data) {
-            console.log(data)
-        }
-
     })
 });
 
