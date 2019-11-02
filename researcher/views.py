@@ -221,7 +221,17 @@ class Technique(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
-        context['technique_list'] = self.request.user.researcheruser.techniqueinstance_set.all()
+        context['technique_list']       = self.request.user.researcheruser.techniqueinstance_set.all()
+        context['molecular_biology']    = models.Technique.objects.filter(technique_type='molecular_biology')
+        context['immunology']           = models.Technique.objects.filter(technique_type='immunology')
+        context['imaging']              = models.Technique.objects.filter(technique_type='imaging')
+        context['histology']            = models.Technique.objects.filter(technique_type='histology')
+        context['general_lab']          = models.Technique.objects.filter(technique_type='general_lab')
+        context['animal_lab']           = models.Technique.objects.filter(technique_type='immunology')
+        context['lab_safety']           = models.Technique.objects.filter(technique_type='lab_safety')
+        context['biochemistry']         = models.Technique.objects.filter(technique_type='biochemistry')
+        context['cellular_biology']     = models.Technique.objects.filter(technique_type='cellular_biology')
+        context['research_methodology'] = models.Technique.objects.filter(technique_type='research_methodology')
         return context
 
 def AddTechnique(request):
