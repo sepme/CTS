@@ -197,6 +197,59 @@ img {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
 }
 
+.fixed-back > .small-card.stick-footer {
+    padding-bottom: 45px !important;
+}
+
+.fixed-back .small-card.stick-footer .card-footer input {
+    margin: 0;
+    height: 30px;
+    padding-right: 35px;
+    padding-left: 30px;
+}
+
+.fixed-back .small-card.stick-footer .card-footer .send-comment {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 13px;
+    width: 24px;
+    height: 24px;
+    background-image: url("../img/send-button.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.fixed-back .small-card.stick-footer .card-footer .send-comment:hover {
+    background-image: url("../img/send-button_hover.png");
+    cursor: pointer;
+}
+
+.fixed-back .small-card.stick-footer .card-footer .attach-comment {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 13px;
+    width: 20px;
+    height: 20px;
+    background-image: url("../img/attachment.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.fixed-back .small-card.stick-footer .card-footer .attach-comment:hover {
+    background-image: url("../img/attachment_hover.png");
+    cursor: pointer;
+}
+
 @media (min-width: 1200px) {
     .fixed-back > .small-card {
         width: 550px;
@@ -271,6 +324,7 @@ img {
 
 .fixed-back .card-head {
     position: absolute;
+    direction: rtl;
     top: 10px;
     right: 10px;
     font-weight: 400;
@@ -1607,4 +1661,25 @@ span.fancytree-active span.fancytree-title {
 
 .fixed-back #fancy-tree ul {
     list-style: none;
+}
+
+/*
+ * List
+ */
+.h-scroll-list {
+
+}
+
+.h-scroll-list > .h-scroll-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 5px;
+}
+
+.h-scroll-list > .h-scroll-item:last-child {
+    border-bottom: none;
+}
+
+.h-scroll-list .h-scroll-item .h-scroll-img img {
+    width: 45px;
+    height: 45px;
 }

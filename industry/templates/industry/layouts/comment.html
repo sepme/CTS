@@ -1,69 +1,96 @@
 {% load static %}
-<div class="project-comment custom-border-title">
-                        <span class="title">نظرات</span>
-                        <span class="title-back"></span>
-                        <div class="project-comment-innerDiv">
-                            <div class="add-comment">
-                                <form action="" method="post">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label for="comment">ثبت نظر جدید</label>
-                                            <textarea dir="rtl" id="comment" class="w-100 emojiable-option" name="" rows="5"></textarea>
-                                            <button class="chamran_btn" type="button" style="left: 16px;bottom: 8px;">ثبت نظر</button>
-                                            <span class="new-comment-tools">
-                                                <input type="file" id="comment-attach" hidden>
-                                                <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
-                                            </span>
-                                            <div class="attachment"></div>
-                                        </div>
-                                    </div>
-                                </form>
-                                <hr>
-                                <div class="comments">
-                                    <div class="my-comment">
-                                        <div class="comment-profile">
-                                            <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="expert_profile">
-                                        </div>
-                                        <div class="comment-body" dir="ltr">
-                                            <span class="comment-tools">
-                                                <i class="fas fa-trash-alt"></i>
-                                                <i class="fas fa-reply"></i>
-                                                <i class="fas fa-pen"></i>
-                                            </span>
-                                            <span>
-                                                سلام علیکم
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="your-comment">
-                                        <div class="comment-profile">
-                                            <img src="{% static 'expert/img/pharmaceutical.jpg' %}" alt="expert_profile">
-                                        </div>
-                                        <div class="comment-body">
-                                            <span class="comment-tools">
-                                                <i class="fas fa-reply"></i>
-                                            </span>
-                                            <span>
-                                                علیکم سلام
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="my-comment">
-                                        <div class="comment-profile">
-                                            <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="expert_profile">
-                                        </div>
-                                        <div class="comment-body" dir="ltr">
-                                            <span class="comment-tools">
-                                                <i class="fas fa-trash-alt"></i>
-                                                <i class="fas fa-reply"></i>
-                                                <i class="fas fa-pen"></i>
-                                            </span>
-                                            <span>
-                                                حال شما خوبه الحمدلله؟
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<span class="section-title">نظرات</span>
+<div class="section">
+    <div class="comment-tabs">
+        <div class="nav nav-pills" id="v-pills-tab" role="tablist"
+             aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" role="tab"
+               aria-controls="v-pills-home" aria-selected="true">
+                <img src="{% static 'industry/img/feynman4.jpg' %}" alt="profile">
+            </a>
+            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" role="tab"
+               aria-controls="v-pills-profile" aria-selected="false">
+                <img src="{% static 'industry/img/steve-jobs---mini-biography.jpg' %}" alt="profile">
+            </a>
+        </div>
+    </div>
+    {#    <div class="multi-user-comment">#}
+    {#        <div class="h-scroll-list">#}
+    {#            <div class="h-scroll-item">#}
+    {#                <div class="h-scroll-img">#}
+    {#                    <img src="{% static 'industry/img/feynman4.jpg' %}" alt="feynman">#}
+    {#                </div>#}
+    {#            </div>#}
+    {#            <div class="h-scroll-item">#}
+    {#                <div class="h-scroll-img">#}
+    {#                    <img src="{% static 'industry/img/steve-jobs---mini-biography.jpg' %}" alt="steve jobs">#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="comment-content">#}
+    {##}
+    {#        </div>#}
+    {#    </div>#}
+    <div class="project-comment-innerDiv">
+
+        {#            <form action="" method="post">#}
+        {#                <div class="row">#}
+        {#                    <div class="col-lg-12">#}
+        {#                        <label for="comment">ثبت نظر جدید</label>#}
+        {#                        <textarea dir="rtl" id="comment" class="w-100 emojiable-option" name="" rows="5"></textarea>#}
+        {#                        <button class="chamran_btn" type="button" style="left: 16px;bottom: 8px;">ثبت نظر</button>#}
+        {#                        <span class="new-comment-tools">#}
+        {#                                                    <input type="file" id="comment-attach" hidden>#}
+        {#                                                    <label for="comment-attach"><i class="fas fa-paperclip"></i></label>#}
+        {#                                                </span>#}
+        {#                        <div class="attachment"></div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </form>#}
+        {#            <hr>#}
+        <div class="comments">
+            <div class="admin-comment text-center">
+                <div class="comment-body">
+                    <span>استاد فاینمن پروژه شما را پذیرفته است</span>
+                </div>
+            </div>
+            <div class="my-comment">
+                <div class="comment-body" dir="ltr">
+                                                <span class="comment-tools">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                    <i class="fas fa-reply"></i>
+                                                    <i class="fas fa-pen"></i>
+                                                </span>
+                    <span>
+                                                    سلام علیکم
+                                                </span>
+                </div>
+            </div>
+            <div class="your-comment">
+                <div class="comment-profile">
+                    <img src="{% static 'industry/img/feynman4.jpg' %}" alt="expert_profile">
+                </div>
+                <div class="comment-body">
+                                                <span class="comment-tools">
+                                                    <i class="fas fa-reply"></i>
+                                                </span>
+                    <span>
+                                                    علیکم سلام
+                                                </span>
+                </div>
+            </div>
+            <div class="my-comment">
+                <div class="comment-body" dir="ltr">
+                                                <span class="comment-tools">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                    <i class="fas fa-reply"></i>
+                                                    <i class="fas fa-pen"></i>
+                                                </span>
+                    <span>
+                                                    حال شما خوبه الحمدلله؟
+                                                </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

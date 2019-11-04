@@ -213,17 +213,16 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
+                dialog.find(".card-head").html(data.project_title_persian + " (" + data.project_title_english + ")");
                 dialog.find(".establish-time .time-body").html(data.submission_date);
                 dialog.find(".time-left .time-body").html(data.deadline);
-                const keys = data.key_words[0].split(",");
+                const keys = data.key_words;
                 for (let i = 0; i < keys.length; i++) {
                     dialog.find(".techniques").append(
                         "<span class='border-span'>" +
                         keys[i]
                         + "</span>"
                     );
-                    console.log(keys[i]);
                 }
                 console.log(data);
                 setMajors(data);
