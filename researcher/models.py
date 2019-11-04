@@ -14,9 +14,10 @@ def get_image_path(instance, filename):
 
 def get_answerFile_path(instance, filename):
     ext = filename.split('.')[-1]
-    filename = '{}.{}'.format("answer-"+instance.researcher.user.username+"-"+"-".join(filename.split('.')[:-1]), ext)
+    filename = "answer-"+str(instance.researcher.user.researcheruser)+"-"+"-".join(filename.split('.')[:-1])
+    full_filename =filename +'.'+ ext
     folder_name = instance.research_question.question_title+"-"+str(instance.research_question.uniqe_id)
-    return os.path.join('questions', folder_name, filename)
+    return os.path.join('questions', folder_name, full_filename)
 
 def get_resumeFile_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -156,7 +157,7 @@ class ScientificRecord(models.Model):
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     university = models.CharField(max_length=300, verbose_name="دانشگاه")
     place = models.CharField(max_length=300, verbose_name="شهر محل تحصیل")
-    graduated_year = models.CharField(max_length = 5,verbose_name="سال اخذ مدرک")
+    graduated_year = models.CharField(max_length = 15,verbose_name="سال اخذ مدرک")
 
     def __str__(self):
         return self.grade
@@ -328,7 +329,7 @@ class TechniqueInstance(models.Model):
 
 class TechniqueReview(models.Model):
     technique_instance = models.ForeignKey(TechniqueInstance, verbose_name="تکنیک", on_delete=models.CASCADE)
-    description = models.CharField(max_length=1000 ,verbose_name="توضیحات")
+    description = models.TextField(verbose_name="توضیحات")
     resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True)
     method = models.CharField(max_length=30)
     result = models.CharField(max_length=1 ,null=True)

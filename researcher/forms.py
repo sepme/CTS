@@ -417,6 +417,8 @@ class ScientificRecordForm(forms.ModelForm):
     def clean_graduated_year(self):
         data = self.cleaned_data["graduated_year"]
         print('year' ,data)
+        if len(data) > 5:
+            raise ValidationError(_("تعداد کاراکتر بیش از حد مجاز است."))
         if data:
             try :
                 int(data)

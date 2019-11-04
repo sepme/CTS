@@ -11,11 +11,9 @@ def get_image_path(instance, filename):
 
     return os.path.join('unique', instance.expert_user.user.username, filename)
 
-def get_attachFile_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{}.{}'.format(instance.expert.user.username+"-"+"-".join(filename.split('.')[:-1]), ext)
+def get_attachment_path(instance, filename):
+    return os.path.join('Research Question', instance.expert.user.username+'-'+instance.question_title, filename)
 
-    return os.path.join('questions', instance.question_title+"-"+str(instance.uniqe_id), filename)
 
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
@@ -261,11 +259,26 @@ class ResearchGain(models.Model):
 class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=128, verbose_name="عنوان سوال")
     submitted_date = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت سوال")
-    question = models.TextField(verbose_name="سوال")
-    is_answered = models.BooleanField(verbose_name="پاسخ داده شده" ,default=False)
-    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد" ,null=True)
+    question_text = models.TextField(verbose_name="سوال")
+    attachment = models.FileField(upload_to=get_attachment_path, verbose_name="ضمیمه", null=True, blank=True)
     uniqe_id = models.UUIDField(unique=True , default=uuid.uuid4)
-    attach_file = models.FileField(upload_to=get_attachFile_path, verbose_name="ضمیمه" ,null=True)
+
+    STATUS = [
+        ('waiting', 'در حال بررسی'),
+        ('not_answered', 'در انتظار پاسخ'),
+        ('answered', 'پاسخ داده شده'),
+    ]
+    status = models.CharField(max_length=16, choices=STATUS, verbose_name="وضعیت", default="waiting")
+
+    expert = models.ForeignKey(ExpertUser, on_delete=models.DO_NOTHING, verbose_name="استاد")
 
     def __str__(self):
-        return "title " + self.question_title
+        return self.question_title
+
+    def get_answer_number(self):
+        answers_number = models.ResearchQuestionInstance.objects.filter(research_question=self).count()
+        return int(answers_number)
+
+    def get_answers(self):
+        answers = models.ResearchQuestionInstance.objects.filter(research_question=self)
+        return answers

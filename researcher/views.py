@@ -18,21 +18,14 @@ class Index(LoginRequiredMixin, generic.FormView):
     form_class = forms.InitialInfoForm
     login_url = '/login/'
 
-    # def get(self, request, *args, **kwargs):
-    # #     try:
-    # #         self.researcher = get_object_or_404(models.ResearcherUser, user=request.user)
-    # #     except:
-    # #         return HttpResponseRedirect(reverse('chamran:login'))
-    # #     # print(self.researcher.status.status)
-    # #     # if self.researcher.status.status == 'signed_up':
-    # #     #     return super().get(request, *args, **kwargs)
-    #     return render(request, 'researcher/index.html', self.get_context_data())
-
     def get(self, request, *args, **kwargs):
         try:
-            models.ResearcherUser.objects.get(user=request.user)
+            researcher = models.ResearcherUser.objects.get(user=request.user)
         except models.ResearcherUser.DoesNotExist:
             raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
+        print(researcher.status.status)
+        if researcher.status.status == 'not_answered':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -59,7 +52,6 @@ class Index(LoginRequiredMixin, generic.FormView):
 
         return super().post(self, request, *args, **kwargs)
 
-
 class UserInfo(generic.TemplateView):
     template_name = 'researcher/userInfo.html'
     form_class = forms.ResearcherProfileForm
@@ -72,6 +64,8 @@ class UserInfo(generic.TemplateView):
             self.request.user.researcheruser.researcherprofile
         except:
             return HttpResponseRedirect(reverse("researcher:index"))    
+        if request.user.researcheruser.status.status == 'not_answered':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(request, *args, **kwargs)    
 
     def get_context_data(self, **kwargs):
@@ -213,10 +207,10 @@ class Technique(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
-        try:
-           researcher = models.ResearcherUser.objects.get(user=request.user)
-        except models.ResearcherUser.DoesNotExist:
-            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
+
+        if request.user.researcheruser.status.status == 'not_answered':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
+
         return render(request ,self.template_name ,context=self.get_context_data(**kwargs))
 
     def get_context_data(self, **kwargs):
@@ -301,10 +295,7 @@ class Question(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
             return HttpResponseRedirect(reverse('chamran:login'))
-        try:
-           researcher = models.ResearcherUser.objects.get(user=request.user)
-        except models.ResearcherUser.DoesNotExist:
-            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
+        researcher = models.ResearcherUser.objects.get(user=request.user)
         if researcher.status.status == 'not_answered':
             if researcher.researchquestioninstance_set.all().count():
                 question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
@@ -322,12 +313,12 @@ class Question(generic.TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        question_list = ResearchQuestion.objects.filter(is_answered=False)
-        print(len(question_list))
+        question_list = ResearchQuestion.objects.filter(status='not_answered')
+        print(question_list)
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
-        print(random.randint(1 ,len(question_list)))
         question = question_list[random.randint(1 ,len(question_list))-1]
+        print(question)
         question_instance = models.ResearchQuestionInstance(research_question=question,
                                                             researcher = request.user.researcheruser)
         question_instance.save()
@@ -345,8 +336,9 @@ class QuestionShow(generic.TemplateView ):
         deltatime = datetime.date.today() - question.hand_out_date
         if deltatime.days < 8:
             if question.is_answered:
-                print("+_+_+_+_+_+_+_+_+_+_====")
-                pass #show its in waiting for evaliator answer
+                print("+_+_+_+_+_+_+_+_+_+_====")                
+                return HttpResponseRedirect(reverse('researcher:index'))
+                #show its in waiting for evaliator answer
             if question.is_correct :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.status.save()
@@ -366,8 +358,9 @@ class QuestionShow(generic.TemplateView ):
         if deltatime.days < 8:
             context['rest_days'] = 8 - deltatime.days
         context['question_title'] = question.research_question.question_title
-        context['question'] = question.research_question.question
-        context['attach_file'] = question.research_question.attach_file
+        context['question'] = question.research_question.question_text
+        context['attachment'] = question.research_question.attachment
+        context['file_name'] = question.research_question.attachment.name.split("/")[-1]
         context['hour'] = 23 - datetime.datetime.now().hour
         context['minute'] = 59 - datetime.datetime.now().minute
         context['second'] = 59 - datetime.datetime.now().second
@@ -378,9 +371,10 @@ class QuestionShow(generic.TemplateView ):
         uuid_id = question.research_question.uniqe_id
         if 'answer' in request.FILES:
             question.answer = request.FILES['answer']
-            print(question.answer)
             question.is_answered = True
             question.save()
+            request.user.researcheruser.status.status = 'free'
+            request.user.researcheruser.status.save()
             subject = 'Research Question Validation'
             message ="""با عرض سلام و خسته نباشید.
             پژوهشگر {} به نام {} {} به سوال پژوهشی {} پاسخ داده است.
