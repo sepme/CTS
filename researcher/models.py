@@ -13,11 +13,10 @@ def get_image_path(instance, filename):
     return os.path.join('unique', instance.researcher_user.user.username, filename)
 
 def get_answerFile_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "answer-"+str(instance.researcher.user.researcheruser)+"-"+"-".join(filename.split('.')[:-1])
-    full_filename =filename +'.'+ ext
-    folder_name = instance.research_question.question_title+"-"+str(instance.research_question.uniqe_id)
-    return os.path.join('questions', folder_name, full_filename)
+    full_filename = "answer-"+instance.researcher.user.username+"-"+filename
+    folder_name = instance.research_question.expert.user.username+'-'+instance.research_question.question_title
+    path = os.path.join('Research Question', folder_name)
+    return os.path.join(path, full_filename)
 
 def get_resumeFile_path(instance, filename):
     ext = filename.split('.')[-1]

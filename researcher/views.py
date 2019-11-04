@@ -22,8 +22,7 @@ class Index(LoginRequiredMixin, generic.FormView):
         try:
             researcher = models.ResearcherUser.objects.get(user=request.user)
         except models.ResearcherUser.DoesNotExist:
-            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')
-        print(researcher.status.status)
+            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')        
         if researcher.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(self, request, *args, **kwargs)
@@ -314,11 +313,9 @@ class Question(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         question_list = ResearchQuestion.objects.filter(status='not_answered')
-        print(question_list)
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
         question = question_list[random.randint(1 ,len(question_list))-1]
-        print(question)
         question_instance = models.ResearchQuestionInstance(research_question=question,
                                                             researcher = request.user.researcheruser)
         question_instance.save()
