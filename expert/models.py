@@ -15,7 +15,7 @@ def get_image_path(instance, filename):
 
 
 def get_attachment_path(instance, filename):
-    return os.path.join('unique', instance.expert.user.username, filename)
+    return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
 
 
 class ExpertUser(models.Model):
@@ -273,6 +273,7 @@ class ResearchQuestion(models.Model):
     ]
     status = models.CharField(max_length=16, choices=STATUS, verbose_name="وضعیت", default="waiting")
 
+    uniqe_id = models.UUIDField(unique=True, default=uuid.uuid4)
     expert = models.ForeignKey(ExpertUser, on_delete=models.DO_NOTHING, verbose_name="استاد")
 
     def __str__(self):
