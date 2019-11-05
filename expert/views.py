@@ -151,6 +151,7 @@ class UserInfo(generic.FormView):
         if expert_info_form.is_valid():
             expert_form = expert_info_form.save(commit=False)
             expert_form.expert_user = request.user.expertuser
+
             if team_work and creative_thinking and sacrifice and researching and obligation and data_collection and morale and risk:
                 if instance.eq_test:
                     eq_test = instance.eq_test
@@ -166,14 +167,19 @@ class UserInfo(generic.FormView):
                 eq_test.risk_averse = risk
                 eq_test.save()
                 expert_form.eq_test = eq_test
+
             if foreign_work and student_num:
-                print('2 variables initiated')
                 expert_form.has_industrial_research = foreign_work
                 expert_form.number_of_researcher = student_num
 
             if request.FILES.get('photo'):
                 photo = request.FILES.get('photo')
                 expert_form.photo.save(photo.name, photo)
+
+            keywords = expert_info_form.cleaned_data['keywords'].split(',')
+            for word in keywords:
+                expert_form.keywords.add(Keyword.objects.get_or_create(name=word)[0])
+
             expert_form.save()
             return HttpResponseRedirect(reverse('expert:index'))
 

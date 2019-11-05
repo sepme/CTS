@@ -94,10 +94,11 @@ class InitialInfoForm(forms.Form):
 
 class ExpertInfoForm(forms.ModelForm):
     prefix = 'expert_info'
+    keywords = forms.CharField(required=False)
 
     class Meta:
         model = ExpertForm
-        exclude = ['eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
+        exclude = ['keywords', 'eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
         error_messages = {
             'special_field': {
                 'required': 'حوزه تخصصی نمی تواند خالی باشد.'
@@ -112,7 +113,6 @@ class ExpertInfoForm(forms.ModelForm):
 
     def clean_mobile_phone(self):
         home_number = self.cleaned_data.get('mobile_phone')
-        print('home_number:', home_number)
         try:
             int(home_number)
         except ValueError:
@@ -125,7 +125,6 @@ class ExpertInfoForm(forms.ModelForm):
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
-        print('phone_number:', phone_number)
         try:
             int(phone_number)
         except ValueError:
