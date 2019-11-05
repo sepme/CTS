@@ -5,6 +5,7 @@ from django.views import View
 from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
 from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
+from industry.models import Comment
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, QueryDict
 from persiantools.jdatetime import JalaliDate
@@ -279,6 +280,11 @@ def accept_project(request):
     project = Project.objects.get(id=request.GET['id'])
     project.expert_applied.add(request.user.expertuser)
     project.save()
+    Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
+    ) + "استاد",
+                           expert_user=request.user.expertuser,
+                           industry_user=project.industry_creator,
+                           sender_type=3)
     return JsonResponse({'success': 'successful'})
 
 
