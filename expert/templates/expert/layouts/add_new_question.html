@@ -5,7 +5,7 @@
         <div class="close"></div>
         <div class="card-head">ثبت سوال جدید</div>
         <div class="container">
-            <form method="post" action="" enctype="multipart/form-data" class="ajax-new-rq-form" data-url="{% url 'expert:new_research_question' %}">
+            <form method="post" enctype="multipart/form-data" class="ajax-new-rq-form" data-url="{% url 'expert:new_research_question' %}">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">

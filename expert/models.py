@@ -273,7 +273,7 @@ class ResearchQuestion(models.Model):
     ]
     status = models.CharField(max_length=16, choices=STATUS, verbose_name="وضعیت", default="waiting")
 
-    uniqe_id = models.UUIDField(unique=True, default=uuid.uuid4)
+    uniqe_id = models.UUIDField(unique=True, default=uuid.uuid4, null=True, blank=True)
     expert = models.ForeignKey(ExpertUser, on_delete=models.DO_NOTHING, verbose_name="استاد")
 
     def __str__(self):

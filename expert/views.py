@@ -288,7 +288,7 @@ def add_research_question(request):
         research_question.save()
         return JsonResponse(data)
     else:
-        print('form error occured')
+        print(research_question_form.errors)
         return JsonResponse(research_question_form.errors, status=400)
 
 
@@ -305,7 +305,6 @@ def show_research_question(request):
             'answer_attachment': answer.answer.path,
         }
         answers_list.append(answer_json)
-    print(answers_list)
 
     json_response = {
         'question_status': research_question.status,

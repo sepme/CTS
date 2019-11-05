@@ -669,17 +669,17 @@ ResearchQuestionForm.submit(function (event) {
                     $("#question-title").closest("div").append("<div class='error'>" +
                         "<span class='error-body'>" +
                         "<ul class='errorlist'>" +
-                        "<li>" + obj.city + "</li>" +
+                        "<li>" + obj.question_title + "</li>" +
                         "</ul>" +
                         "</span>" +
                         "</div>");
                     $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                 }
-                if (obj.question_title) {
+                if (obj.question_title != "undefined") {
                     $("#question-body").closest("div").append("<div class='error'>" +
                         "<span class='error-body'>" +
                         "<ul class='errorlist'>" +
-                        "<li>" + obj.city + "</li>" +
+                        "<li>" + obj.question_text + "</li>" +
                         "</ul>" +
                         "</span>" +
                         "</div>");

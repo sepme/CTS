@@ -330,3 +330,7 @@ class ResearchQuestionForm(forms.ModelForm):
         if completely_numeric(question_text):
             raise forms.ValidationError('توضیحات نمی تواند تنها عدد باشد.')
         return question_text
+
+    def clean_attachment(self):
+        attachment = self.cleaned_data.get('attachemnt')
+        return attachment
