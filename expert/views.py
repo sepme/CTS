@@ -261,9 +261,11 @@ def show_project_view(request):
         'required_budget': project_form.required_budget,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
-        'required_technique': project_form.required_technique
+        'required_technique': project_form.required_technique,
+        'success': 'successful',
 
     }
+    print(data)
     return JsonResponse(data)
 
 
