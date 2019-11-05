@@ -56,7 +56,7 @@ function blur_div_toggle(content) {
 
 function init_dialog_btn(element, dialogClass) {
     $(element).click(function () {
-        $(".fixed-back").css("display","none");
+        $(".fixed-back").css("display", "none");
         $(".main").removeClass("blur-div");
         blur_div_toggle(".main");
         $(dialogClass).css("display", "block");
@@ -876,38 +876,41 @@ function question_dialog_init() {
     $(".question-attach input[type='file']").on('change', function () {
         var fileType = $(this).val().split('.').pop().toLowerCase();
         var fileName = $(this).val().split('\\').pop();
-        attach_li = "<li class='list-item'><a href='#' class='attach-file'>" +
+        attach_li = "<li class='list-item'>" +
+            "<a href='#' class='attach-file'>" +
             "<span class='" + fileType + "-file'></span>" +
             "<span dir='ltr'>" + fileName + "</span>" +
-            "</a></li>";
+            "</a>" +
+            "<input type='text' name='attachment' value='" + $(this).val() + "' hidden>" +
+            "</li>";
         $(this).closest('ul.inline-list').append(attach_li);
     });
 }
 
 function show_question_answers(data) {
     var answer = '';
-    for (i=0; i<data.length; i++) {
+    for (i = 0; i < data.length; i++) {
         console.log(data[i]);
         answer = answer + '<div class="col-lg-12">' +
-        '<div class="answer">' +
-        '<span class="title">' + data[i].researcher_name + '</span>' +
-        '<span class="date">' + data[i].hand_out_date + '</span>' +
-        '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
-        '<div class="check">' +
-        '<div class="correct">' +
-        '<button type="button" title="صحیح">' +
-        '<i class="fas fa-check"></i>' +
-        '</button>' +
-        '</div>' +
-        '<div class="wrong">' +
-        '<button type="button" title="نادرست">' +
-        '<i class="fas fa-times"></i>' +
-        '</button>' +
-        '</div>' +
-        '<div class="status"></div>' +
-        '</div>' +
-        '</div>' +
-        '</div>';
+            '<div class="answer">' +
+            '<span class="title">' + data[i].researcher_name + '</span>' +
+            '<span class="date">' + data[i].hand_out_date + '</span>' +
+            '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
+            '<div class="check">' +
+            '<div class="correct">' +
+            '<button type="button" title="صحیح">' +
+            '<i class="fas fa-check"></i>' +
+            '</button>' +
+            '</div>' +
+            '<div class="wrong">' +
+            '<button type="button" title="نادرست">' +
+            '<i class="fas fa-times"></i>' +
+            '</button>' +
+            '</div>' +
+            '<div class="status"></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
     }
     $(".all-answers").html(answer);
 }
