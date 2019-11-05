@@ -45,7 +45,8 @@ def show_project_ajax(request):
     for comment in comment_list:
         json_response['comments'].append({
             'id': comment.id,
-            'text': comment.description
+            'text': comment.description,
+            'sender_type': comment.sender_type
         })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:

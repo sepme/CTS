@@ -121,6 +121,8 @@ class Project(models.Model):
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
                                                 related_name="researchers_applied", blank=True, null=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده", related_name="researchers_accepted", blank=True, null=True)
+    expert_messaged = models.ManyToManyField('expert.ExpertUser', verbose_name='اساتیدی که پیام داده اند',
+                                             related_name='experts_messaged')
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده", related_name="experts_applied", blank=True, null=True)
     expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True, blank=True)
@@ -151,10 +153,6 @@ def upload_comment(instance, file_name):
     return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
 
 
-def upload_comment(instance, file_name):
-    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
-
-
 class Comment(models.Model):
     description = models.TextField(verbose_name="متن")
     SENDER = (
@@ -163,13 +161,13 @@ class Comment(models.Model):
         (2, 'پژوهشگر'),
         (3, 'سیستم'),
     )
-    replied_text = models.CharField(max_length=150)
+    replied_text = models.CharField(max_length=150, blank=True, null=True)
     sender_type = models.IntegerField(choices=SENDER)
-    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)
+    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, blank=True, null=True)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
     researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True, blank=True)
-    attachment = models.FileField(upload_to=upload_comment)
+    attachment = models.FileField(upload_to=upload_comment, blank=True, null=True)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
     def __str__(self):
