@@ -230,26 +230,37 @@ $(document).ready(function () {
                     console.log(data.comments);
                     var comment_html = "";
                     const comment = data.comments;
-                    for (var i = 0; i < comment.length; i++) {
+                    for (var i = comment.length - 1; i > -1; i--) {
                         if (comment[i].sender_type) {
-                            comment_html = "<div class=\"my-comment\">\n" +
-                                "                                        <div class=\"comment-profile\">\n" +
-                                "                                            <img src=\"{% static 'expert/img/Ehsan.jpg' %}\" alt=\"expert_profile\">\n" +
-                                "                                        </div>\n" +
-                                "                                        <div class=\"comment-body\" dir=\"ltr\">\n" +
-                                "                                            <span class=\"comment-tools\">\n" +
-                                "                                                <i class=\"fas fa-trash-alt\"></i>\n" +
-                                "                                                <i class=\"fas fa-reply\"></i>\n" +
-                                "                                                <i class=\"fas fa-pen\"></i>\n" +
-                                "                                            </span>\n" +
-                                "                                            <span>\n" +
-                                "                                                سلام علیکم\n" +
-                                "                                            </span>\n" +
-                                "                                        </div>\n" +
-                                "                                    </div>";
+                            comment_html = "<div class='my-comment'>" +
+                                "<div class='comment-profile'>" +
+                                "</div>" +
+                                "<div class='comment-body' dir='ltr'>" +
+                                "<span class='comment-tools'>" +
+                                "<i class='fas fa-trash-alt'></i>" +
+                                "<i class='fas fa-reply'></i>" +
+                                "<i class='fas fa-pen'></i>" +
+                                "</span>" +
+                                "<span>" +
+                                comment[i].text +
+                                "</span>" +
+                                "</div>" +
+                                "</div>";
                         } else {
-
+                            comment_html = "<div class='your-comment'>" +
+                                "<div class='comment-profile'>" +
+                                "</div>" +
+                                "<div class='comment-body'>" +
+                                "   <span class='comment-tools'>" +
+                                "       <i class='fas fa-reply'></i>" +
+                                "   </span>" +
+                                "   <span>" +
+                                        comment[i].text +
+                                "   </span>" +
+                                "</div>" +
+                                "</div>"
                         }
+                        dialog.find(".comments").append(comment_html);
                         console.log(comment[i].text);
                     }
                     // comment_html += ""
