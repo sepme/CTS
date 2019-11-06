@@ -172,6 +172,64 @@ $(document).ready(function () {
     }
 });
 
+$(document).ready(function () {
+
+    /*
+    * I didn't find a better place to put this;
+    * so please move this part to a section you prefer.
+    * By the way, it has a big problem (expect those told earlier in comments),
+    * after clicking on 'show-btn' of a new research question, 'attachments' and
+    * 'answers' of the previous one is still shown (in the case the previous one had it).
+    */
+
+    $(".show-btn").click(function () {
+        const dialog = $(".show-question");
+        var id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/show_research_question/',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                if (data.question_status === "waiting") {
+                    dialog.find(".question-status").html("در حال بررسی");
+                } else if (data.question_status === "not_answered") {
+                    dialog.find(".question-status").html("فعال");
+                } else if (data.question_status === "answered") {
+                    dialog.find(".question-status").html("پاسخ داده شده");
+                }
+                dialog.find(".card-head").html(data.question_title);
+                dialog.find(".question-date").html(data.question_date);
+                dialog.find("#question-body").html(data.question_body);
+
+                if (data.question_attachment_type) {
+                    dialog.find(".attach-file").attr("href", data.question_attachment_path);
+                    dialog.find(".attach-name").html(data.question_attachment_name);
+
+                    if (data.question_attachment_type === 'pdf') {
+                        dialog.find(".attachment").addClass("pdf-file");
+                    } else if (data.question_attachment_type === 'doc' || data.question_attachment_type === 'docx') {
+                        dialog.find(".attachment").addClass("doc-file");
+                    } else if (data.question_attachment_type === 'jpg' || data.question_attachment_type === 'jpeg') {
+                        dialog.find(".attachment").addClass("jpg-file");
+                    } else if (data.question_attachment_type === 'png') {
+                        dialog.find(".attachment").addClass("png-file");
+                    } /* else delete the attachments row */
+                }
+
+                var answer_list_obj = data.question_answers_list;
+                if (answer_list_obj.length != 0) {
+                    show_question_answers(answer_list_obj);
+                } /* else show a box within "there is no answers!" */
+
+            },
+            error: function (data) {
+
+            },
+        });
+    });
+});
+
 function education_record() {
     var myForm = $('.ajax-sci-form');
     myForm.submit(function (event) {
@@ -559,6 +617,244 @@ paperForm.submit(function (event) {
         },
     })
 });
+
+
+var ResearchQuestionForm = $('.ajax-new-rq-form');
+ResearchQuestionForm.submit(function (event) {
+    event.preventDefault();
+    ResearchQuestionForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+        .attr("disabled", "true");
+    ResearchQuestionForm.find("button[type='reset']").attr("disabled", "true");
+    ResearchQuestionForm.find("label").addClass("progress-cursor");
+    ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
+    var $thisURL = ResearchQuestionForm.attr('data-url');
+    var data = $(this).serialize();
+    console.log(data);
+    ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: data,
+        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        // contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
+            ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+            ResearchQuestionForm.find("label").removeClass("progress-cursor");
+            ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
+            if (data.success === "successful") {
+                $(".add-question").css("display", "none");
+                $(".main").removeClass("blur-div");
+                show_new_research_question();
+                iziToast.success({
+                    rtl: true,
+                    message: "سوال پژوهشی با موفیت ذخیره شد. " +
+                        "لطفا منتظر تایید آن توسط ادمین بمانید.",
+                    position: 'bottomLeft'
+                });
+                ResearchQuestionForm[0].reset();
+            }
+        },
+        error: function (data) {
+            var obj = JSON.parse(data.responseText);
+            ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
+            ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+            ResearchQuestionForm.find("label").removeClass("progress-cursor");
+            ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.question_title) {
+                    $("#question-title").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.question_title + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+                if (obj.question_title != "undefined") {
+                    $("#question-body").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.question_text + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+        },
+    })
+});
+
+var showInfo = $('.chamran-btn-info');
+showInfo.click(function (event) {
+    $.ajax({
+        url: $(this).attr('data-url'),
+        data: {
+            'id': $(this).attr("id")
+        },
+        dataType: 'json',
+        success: function (data) {
+            $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
+            $(".showProject").find(".establish-time .time-body").html(data.date);
+            $(".showProject").find(".time-left .time-body").html(data.deadline);
+            const keys = JSON.parse(data.key_words);
+            for (let i = 0; i < keys.length; i++) {
+                $(".showProject").find(".techniques").append(
+                    "<span class='border-span'>" +
+                    keys[i].pk
+                    + "</span>"
+                );
+                setMajors(data);
+                setValue(data);
+            }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+
+    })
+});
+
+function setRole(data) {
+    role = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.policy +
+        "</div></div>";
+    $(".project-info-content").html(role);
+}
+
+function setResources(data) {
+    resources = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.required_lab_equipment +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.required_technique +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "لطفا مراحل انجام پروژه خود را مشخص کنید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.project_phase +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.required_budget +
+        "</div>" +
+        "</div>";
+    $(".project-info-content").html(resources);
+}
+
+function setApproach(data) {
+    approach = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.approach +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "این راه حل چه مشکلاتی می‌تواند داشته باشد؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.potential_problems +
+        "</div></div>"
+    $(".project-info-content").html(approach);
+}
+
+function setMajors(data) {
+    majors = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.main_problem_and_importance +
+        "</div></div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.progress_profitability +
+        "</div></div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.predict_profit +
+        "</div></div>";
+    $(".project-info-content").html(majors);
+}
+
+function setValue(data) {
+    $("#v-pills-settings-tab").click(function () {
+        setRole(data);
+    });
+    $("#v-pills-messages-tab").click(function () {
+        setResources(data);
+    });
+    $("#v-pills-profile-tab").click(function () {
+        setApproach(data);
+    });
+    $("#v-pills-home-tab").click(function () {
+        setMajors(data);
+    });
+}
 
 function getCookie(name) {
     var cookieValue = null;

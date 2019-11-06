@@ -94,10 +94,11 @@ class InitialInfoForm(forms.Form):
 
 class ExpertInfoForm(forms.ModelForm):
     prefix = 'expert_info'
+    keywords = forms.CharField(required=False)
 
     class Meta:
         model = ExpertForm
-        exclude = ['eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
+        exclude = ['keywords', 'eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
         error_messages = {
             'special_field': {
                 'required': 'حوزه تخصصی نمی تواند خالی باشد.'
@@ -112,7 +113,6 @@ class ExpertInfoForm(forms.ModelForm):
 
     def clean_mobile_phone(self):
         home_number = self.cleaned_data.get('mobile_phone')
-        print('home_number:', home_number)
         try:
             int(home_number)
         except ValueError:
@@ -125,7 +125,6 @@ class ExpertInfoForm(forms.ModelForm):
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
-        print('phone_number:', phone_number)
         try:
             int(phone_number)
         except ValueError:
@@ -304,3 +303,33 @@ class EQTestForm(forms.Form):
     #     self.fields['team_work'].widget = forms.RadioSelect(attrs={
     #         'id': 'group-work'
     #     })
+
+
+class ResearchQuestionForm(forms.ModelForm):
+    class Meta:
+        model = ResearchQuestion
+        exclude = ['expert', 'submitted_date', 'status']
+        error_messages = {
+            'question_title': {
+                'required': 'لطفا عنوان سوال را وارد نمایید.'
+            },
+            'question_text': {
+                'required': 'لطفا توضیحات سوال را وارد نمایید.'
+            },
+        }
+
+    def clean_question_title(self):
+        question_title = self.cleaned_data.get('question_title')
+        if completely_numeric(question_title):
+            raise forms.ValidationError('عنوان نمی تواند عدد باشد.')
+        return question_title
+
+    def clean_question_text(self):
+        question_text = self.cleaned_data.get('question_text')
+        if completely_numeric(question_text):
+            raise forms.ValidationError('توضیحات نمی تواند تنها عدد باشد.')
+        return question_text
+
+    def clean_attachment(self):
+        attachment = self.cleaned_data.get('attachemnt')
+        return attachment

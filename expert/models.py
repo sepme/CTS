@@ -4,12 +4,18 @@ import os
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from industry.models import Keyword
+from researcher.models import ResearchQuestionInstance
+
 
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format('profile', ext)
 
-    return os.path.join('unique', instance.expert_user.user.username, filename)
+    return os.path.join('unique', instance.expert.user.username, filename)
+
+
+def get_attachment_path(instance, filename):
+    return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
 
 def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username+'-'+instance.question_title, filename)
@@ -74,6 +80,7 @@ class ExpertForm(models.Model):
     phone_number = models.CharField(max_length=15, verbose_name="شماره منزل")
     mobile_phone = models.CharField(max_length=15, verbose_name="شماره تلفن همراه")
     email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
+    keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
     eq_test = models.OneToOneField(EqTest, on_delete=models.SET_NULL, verbose_name="تست EQ", blank=True, null=True)
     awards = models.TextField(blank=True, verbose_name="افتخارات", null=True)
     method_of_introduction = models.TextField(verbose_name="طریقه اشنایی با چمران تیم", blank=True, null=True)
@@ -98,10 +105,19 @@ class ExpertForm(models.Model):
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
     photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
-    keywords = models.ForeignKey(Keyword, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
+
+    def get_keywords(self):
+        keyword_list = self.keywords.all()
+        if keyword_list != 0:
+            keyword_string = ''
+            for keyword in keyword_list:
+                keyword_string += keyword.name + ','
+            return keyword_string
+        else:
+            return ''
 
 
 class ScientificRecord(models.Model):
@@ -276,9 +292,9 @@ class ResearchQuestion(models.Model):
         return self.question_title
 
     def get_answer_number(self):
-        answers_number = models.ResearchQuestionInstance.objects.filter(research_question=self).count()
+        answers_number = ResearchQuestionInstance.objects.filter(research_question=self).count()
         return int(answers_number)
 
     def get_answers(self):
-        answers = models.ResearchQuestionInstance.objects.filter(research_question=self)
+        answers = ResearchQuestionInstance.objects.filter(research_question=self)
         return answers

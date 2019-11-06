@@ -17,6 +17,7 @@ from persiantools.jdatetime import JalaliDate
 from industry.models import IndustryForm
 from . import models
 from . import forms
+from expert.models import ExpertUser
 
 
 def gregorian_to_numeric_jalali(date):
@@ -51,6 +52,12 @@ def show_project_ajax(request):
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
     return JsonResponse(json_response)
+
+
+def accept_project_ajax(request):
+    expert_user = ExpertUser.objects.filter(request.GET.get('expert_user_id')).first()
+    project = models.Project.objects.filter(request.GET.get('project_id')).first()
+    project.expert_accepted = expert_user
 
 
 class Index(generic.TemplateView):

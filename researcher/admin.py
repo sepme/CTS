@@ -11,7 +11,6 @@ class ResearcherAdmin(admin.ModelAdmin):
 class ResearcherProfileAdmin(admin.ModelAdmin):
     pass
 
-
 admin.site.register(models.Status)
 
 @admin.register(models.ScientificRecord)

@@ -6,6 +6,7 @@ import datetime
 import uuid
 from . import persianNumber
 
+
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format('profile', ext)
@@ -33,6 +34,14 @@ def get_resumeFile_path(instance, filename):
                                   "-".join(filename.split('.')[:-1]), ext)
         folder_name = str(instance.technique_instance.researcher)
     return os.path.join('resume', folder_name, filename)
+
+def get_answerFile_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format("answer-" + instance.researcher.user.username + "-" + "-".join(filename.split('.')[:-1]),
+                              ext)
+    folder_name = instance.research_question.question_title
+    return os.path.join('questions', folder_name, filename)
+
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -343,6 +352,7 @@ class RequestedProject(models.Model):
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
 
+    
 class ResearchQuestionInstance(models.Model):
     research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,
                                            verbose_name="سوال پژوهشی")

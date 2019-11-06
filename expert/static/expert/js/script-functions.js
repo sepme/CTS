@@ -56,7 +56,7 @@ function blur_div_toggle(content) {
 
 function init_dialog_btn(element, dialogClass) {
     $(element).click(function () {
-        $(".fixed-back").css("display","none");
+        $(".fixed-back").css("display", "none");
         $(".main").removeClass("blur-div");
         blur_div_toggle(".main");
         $(dialogClass).css("display", "block");
@@ -605,6 +605,19 @@ function show_paper_record() {
     record_edit(".paper");
 }
 
+function show_new_research_question() {
+    new_question = '<div class="card check-question flow-root-display">' +
+        '<div class="question-title w-50">' + $("#question-title").val() + '</div>' +
+        '<div class="question-info w-50">' +
+        '<div class="date w-25\"><span>الان</span></div>' +
+        '<div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num"></span></i></div>' +
+        '<div class="status w-25"><span>درحال بررسی</span></div>' +
+        '<div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>' +
+        '</div>' +
+        '</div>';
+    $(".tab-content").html(new_question);
+}
+
 function dialog_comment_init() {
     // add emoji to comment
     $(".new-comment-tools > .fa-smile").click(function () {
@@ -863,11 +876,41 @@ function question_dialog_init() {
     $(".question-attach input[type='file']").on('change', function () {
         var fileType = $(this).val().split('.').pop().toLowerCase();
         var fileName = $(this).val().split('\\').pop();
-        attach_li = "<li class='list-item'><a href='#' class='attach-file'>" +
+        attach_li = "<li class='list-item'>" +
+            "<a href='#' class='attach-file'>" +
             "<span class='" + fileType + "-file'></span>" +
             "<span dir='ltr'>" + fileName + "</span>" +
-            "</a></li>";
+            "</a>" +
+            "<input type='text' name='attachment' value='" + $(this).val() + "' hidden>" +
+            "</li>";
         $(this).closest('ul.inline-list').append(attach_li);
     });
+}
 
+function show_question_answers(data) {
+    var answer = '';
+    for (i = 0; i < data.length; i++) {
+        console.log(data[i]);
+        answer = answer + '<div class="col-lg-12">' +
+            '<div class="answer">' +
+            '<span class="title">' + data[i].researcher_name + '</span>' +
+            '<span class="date">' + data[i].hand_out_date + '</span>' +
+            '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
+            '<div class="check">' +
+            '<div class="correct">' +
+            '<button type="button" title="صحیح">' +
+            '<i class="fas fa-check"></i>' +
+            '</button>' +
+            '</div>' +
+            '<div class="wrong">' +
+            '<button type="button" title="نادرست">' +
+            '<i class="fas fa-times"></i>' +
+            '</button>' +
+            '</div>' +
+            '<div class="status"></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
+    $(".all-answers").html(answer);
 }

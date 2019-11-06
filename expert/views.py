@@ -5,12 +5,14 @@ from django.views import View
 from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
 from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
+from industry.models import Comment
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, QueryDict
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
 from django.core import serializers
 from industry.models import *
+from researcher.models import *
 
 
 def calculate_deadline(finished, started):
@@ -42,6 +44,15 @@ class Messages(generic.TemplateView):
 
 class Questions(generic.TemplateView):
     template_name = 'expert/questions.html'
+
+    def get(self, request, *args, **kwargs):
+        expert_user = request.user.expertuser
+        research_questions = ResearchQuestion.objects.filter(expert=expert_user)
+        context = {
+            'research_question_form': ResearchQuestionForm(),
+            'research_questions': research_questions,
+        }
+        return render(request, self.template_name, context)
 
 
 @login_required(login_url='/login/')
@@ -97,6 +108,7 @@ class UserInfo(generic.FormView):
         research_instance = ResearchRecord.objects.filter(expert_form=instance)
         paper_instance = PaperRecord.objects.filter(expert_form=instance)
         context = {'expert_info_form': expert_info_form,
+                   'keywords': instance.get_keywords(),
                    'scientific_instance': scientific_instance,
                    'executive_instance': executive_instance,
                    'research_instance': research_instance,
@@ -141,6 +153,7 @@ class UserInfo(generic.FormView):
         if expert_info_form.is_valid():
             expert_form = expert_info_form.save(commit=False)
             expert_form.expert_user = request.user.expertuser
+
             if team_work and creative_thinking and sacrifice and researching and obligation and data_collection and morale and risk:
                 if instance.eq_test:
                     eq_test = instance.eq_test
@@ -156,14 +169,21 @@ class UserInfo(generic.FormView):
                 eq_test.risk_averse = risk
                 eq_test.save()
                 expert_form.eq_test = eq_test
+
             if foreign_work and student_num:
-                print('2 variables initiated')
                 expert_form.has_industrial_research = foreign_work
                 expert_form.number_of_researcher = student_num
 
             if request.FILES.get('photo'):
                 photo = request.FILES.get('photo')
                 expert_form.photo.save(photo.name, photo)
+
+            keywords = expert_info_form.cleaned_data['keywords'].split(',')
+            keywords_list = []
+            for word in keywords:
+                keywords_list.append(Keyword.objects.get_or_create(name=word)[0])
+            expert_form.keywords.set(keywords_list)
+
             expert_form.save()
             return HttpResponseRedirect(reverse('expert:index'))
 
@@ -251,9 +271,11 @@ def show_project_view(request):
         'required_budget': project_form.required_budget,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
-        'required_technique': project_form.required_technique
+        'required_technique': project_form.required_technique,
+        'success': 'successful',
 
     }
+    print(data)
     return JsonResponse(data)
 
 
@@ -261,4 +283,56 @@ def accept_project(request):
     project = Project.objects.get(id=request.GET['id'])
     project.expert_applied.add(request.user.expertuser)
     project.save()
+    Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
+    ) + "استاد",
+                           expert_user=request.user.expertuser,
+                           industry_user=project.industry_creator,
+                           sender_type=3)
     return JsonResponse({'success': 'successful'})
+
+
+def add_research_question(request):
+    research_question_form = ResearchQuestionForm(request.POST, request.FILES)
+    if research_question_form.is_valid():
+        print(research_question_form.cleaned_data)
+        data = {'success': 'successful'}
+        research_question = research_question_form.save(commit=False)
+        research_question.expert = request.user.expertuser
+        if request.FILES.get('attachment'):
+            print("tried to upload file...")
+            attachment = request.FILES.get('attachment')
+            research_question.attachment.save(attachment.name, attachment)
+        research_question.save()
+        return JsonResponse(data)
+    else:
+        print(research_question_form.errors)
+        return JsonResponse(research_question_form.errors, status=400)
+
+
+def show_research_question(request):
+    research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
+
+    answers_list = []
+    for answer in research_question.get_answers():
+        researcher_user = ResearcherProfile.objects.get(researcher_user=answer.researcher)
+        answer_json = {
+            'researcher_name': researcher_user.__str__(),
+            'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
+            'is_correct': answer.is_correct,
+            'answer_attachment': answer.answer.path,
+        }
+        answers_list.append(answer_json)
+
+    json_response = {
+        'question_status': research_question.status,
+        'question_date': JalaliDate(research_question.submitted_date).strftime("%Y/%m/%d"),
+        'question_body': research_question.question_text,
+        'question_title': research_question.question_title,
+        'question_answers_list': answers_list,
+    }
+    if research_question.attachment:
+        attachment = research_question.attachment
+        json_response['question_attachment_path'] = attachment.path
+        json_response['question_attachment_name'] = attachment.name.split('/')[-1]
+        json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
+    return JsonResponse(json_response)

@@ -122,7 +122,11 @@ class Project(models.Model):
                                                 related_name="researchers_applied", blank=True, null=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده", related_name="researchers_accepted", blank=True, null=True)
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده", related_name="experts_applied", blank=True, null=True)
-    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
+    expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
+                                                                                                    "شده", related_name="expert_accepted", blank=True, null=True)
+    industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE, verbose_name='شرکت '
+                                                                                                            'صاحب '
+                                                                                                            'پروژه')
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True, blank=True)
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True, blank=True)
     project_detail = models.TextField(verbose_name="جزيات پروژه", null=True, blank=True)
@@ -161,6 +165,7 @@ class Comment(models.Model):
         (0, 'استاد'),
         (1, 'صنعت'),
         (2, 'پژوهشگر'),
+        (3, 'سیستم'),
     )
     sender_type = models.IntegerField(choices=SENDER)
     # project = models.ForeignKey(Project, on_delete=models.DO_NOTHING)

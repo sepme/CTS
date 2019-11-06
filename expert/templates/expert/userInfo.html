@@ -153,7 +153,8 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <label for="id_key_words">کلیدواژه ها</label>
-                                <input type="text" id="id_key_words" class="w-100">
+{#                                {{ expert_info_form.keywords|attr:"id:id_key_words"|attr:"class:w-100"|attr:"value:اولی,دومی," }}#}
+                                <input type="text" name="expert_info-keywords" id="id_key_words" class="w-100" value="{{ keywords }}">
                             </div>
                         </div>
                     </div>
