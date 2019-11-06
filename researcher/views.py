@@ -5,12 +5,39 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
+from django.forms import model_to_dict
 import os ,random ,datetime
 
-from . import models
-from . import forms
+from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion
+from industry.models import Project
 
+
+def date_last(date):
+    delta = abs((date - datetime.date.today()).days)
+    years_passed = int(delta / 365)
+    delta %= 365
+    months_passed = int(delta / 30)
+    delta %= 30
+    days_passed = delta
+    days = ""
+    months = ""
+    years = ""
+    if years_passed != 0:
+        years = persianNumber.convert(str(years_passed)) + " سال "
+    if months_passed != 0:
+        if years_passed != 0:
+            months = " و " + persianNumber.convert(str(months_passed)) + " ماه "
+        else:
+            months = persianNumber.convert(str(months_passed)) + " ماه "
+    if days_passed != 0:
+        if months_passed == 0 and years_passed == 0:
+            days = persianNumber.convert(str(days_passed)) + " روز "
+        else:
+            days = " و " + persianNumber.convert(str(days_passed)) + " روز "
+    if days_passed != 0 or months_passed != 0 or years_passed != 0:            
+        return years + months + days
+    return "امروز"
 
 
 class Index(LoginRequiredMixin, generic.FormView):
@@ -32,6 +59,18 @@ class Index(LoginRequiredMixin, generic.FormView):
         if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
+        projects = Project.objects.all().exclude(expert_accepted=None)
+        project_list = []
+        for project in projects:
+            temp ={
+                'PK'            : project.pk,
+                'project_title' : project.project_form.project_title_persian,
+                'keyword'       : project.project_form.key_words.all(),
+                'started'       : date_last(project.date_start),
+                'finished'      : date_last(project.date_finished),
+            }
+            project_list.append(temp)        
+        context['project_list'] = project_list
         return context
 
     def post(self, request, *args, **kwargs):
@@ -380,15 +419,15 @@ class QuestionShow(generic.TemplateView ):
                             self.request.user.researcheruser.researcherprofile.last_name,
                             question.research_question.question_title)
             email = question.research_question.expert.user.username
-            try:
-                send_mail(
-                    subject=subject,
-                    message=message, 
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[email],
-                )
-            except TimeoutError:
-                return HttpResponse('Timeout Error!!')
+            # try:
+            #     send_mail(
+            #         subject=subject,
+            #         message=message, 
+            #         from_email=settings.EMAIL_HOST_USER,
+            #         recipient_list=[email],
+            #     )
+            # except TimeoutError:
+            #     return HttpResponse('Timeout Error!!')
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):

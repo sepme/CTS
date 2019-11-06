@@ -9,7 +9,22 @@
                 <li class="nav-item"><a class="nav-link" id="done-project" href="#done-project">پروژه های انجام شده</a></li>
             </ul>
             <div class="tab-content">
-                <div class="card project-item">
+                    {% for project in project_list %}
+                    <div class="card project-item">                    
+                        <span class="header">{{project.project_title}} <span class="sub-header">( {{project.started}} قبل )</span></span>
+                        <span>
+                            
+                            {% for keyword in project.keyword %}
+                                <span class="border-span">{{keyword.name}}</span>
+                            {% endfor %}
+                        </span>
+                        <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>
+                        <span><i class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{project.finished}}</span> فرصت باقی است!</span>
+                        <button type="button" class="chamran-btn-info" id="{{project.PK}}">مشاهده</button>
+                        <button type="button" class="chamran-btn-delete">رد</button>
+                    </div>
+                    {% endfor %}
+                <!-- <div class="card project-item">
                     <div class="alert"><span>فرم نظرسنجی فعال شده است!</span></div>
                     <span class="header">محلول کشت سلولی <span class="sub-header">( 2 ماه قبل )</span></span>
                     <span>
@@ -39,7 +54,7 @@
                     <span><i class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>2 ساعت</span> فرصت باقی است!</span>
                     <button type="button" class="chamran-btn-info">مشاهده</button>
                     <button type="button" class="chamran-btn-delete">رد</button>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
