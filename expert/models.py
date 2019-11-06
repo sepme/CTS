@@ -77,7 +77,7 @@ class ExpertForm(models.Model):
     phone_number = models.CharField(max_length=15, verbose_name="شماره منزل")
     mobile_phone = models.CharField(max_length=15, verbose_name="شماره تلفن همراه")
     email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
-    keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی")
+    keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
     eq_test = models.OneToOneField(EqTest, on_delete=models.SET_NULL, verbose_name="تست EQ", blank=True, null=True)
     awards = models.TextField(blank=True, verbose_name="افتخارات", null=True)
     method_of_introduction = models.TextField(verbose_name="طریقه اشنایی با چمران تیم", blank=True, null=True)
@@ -105,6 +105,16 @@ class ExpertForm(models.Model):
 
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
+
+    def get_keywords(self):
+        keyword_list = self.keywords.all()
+        if keyword_list != 0:
+            keyword_string = ''
+            for keyword in keyword_list:
+                keyword_string += keyword.name + ','
+            return keyword_string
+        else:
+            return ''
 
 
 class ScientificRecord(models.Model):

@@ -107,6 +107,7 @@ class UserInfo(generic.FormView):
         research_instance = ResearchRecord.objects.filter(expert_form=instance)
         paper_instance = PaperRecord.objects.filter(expert_form=instance)
         context = {'expert_info_form': expert_info_form,
+                   'keywords': instance.get_keywords(),
                    'scientific_instance': scientific_instance,
                    'executive_instance': executive_instance,
                    'research_instance': research_instance,
@@ -177,8 +178,10 @@ class UserInfo(generic.FormView):
                 expert_form.photo.save(photo.name, photo)
 
             keywords = expert_info_form.cleaned_data['keywords'].split(',')
+            keywords_list = []
             for word in keywords:
-                expert_form.keywords.add(Keyword.objects.get_or_create(name=word)[0])
+                keywords_list.append(Keyword.objects.get_or_create(name=word)[0])
+            expert_form.keywords.set(keywords_list)
 
             expert_form.save()
             return HttpResponseRedirect(reverse('expert:index'))
