@@ -191,6 +191,7 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+
                 if (data.question_status === "waiting") {
                     dialog.find(".question-status").html("در حال بررسی");
                 } else if (data.question_status === "not_answered") {
@@ -201,6 +202,7 @@ $(document).ready(function () {
                 dialog.find(".card-head").html(data.question_title);
                 dialog.find(".question-date").html(data.question_date);
                 dialog.find("#question-body").html(data.question_body);
+                dialog.find(".close-answer").attr("id", id)
 
                 if (data.question_attachment_type) {
                     dialog.find(".attach-file").attr("href", data.question_attachment_path);
@@ -222,6 +224,30 @@ $(document).ready(function () {
                     show_question_answers(answer_list_obj);
                 } /* else show a box within "there is no answers!" */
 
+                question_dialog_init();
+
+            },
+            error: function (data) {
+
+            },
+        });
+    });
+
+    $(".close-answer").click(function () {
+        var id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/terminate_research_question/',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                $('.close-answer').remove();
+
+                iziToast.success({
+                    rtl: true,
+                    message: "از این به بعد پاسخی برای این سوال دریافت نخواهد شد.",
+                    position: 'topCenter'
+                });
             },
             error: function (data) {
 

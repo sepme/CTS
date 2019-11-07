@@ -17,8 +17,9 @@ def get_image_path(instance, filename):
 def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
 
+
 def get_attachment_path(instance, filename):
-    return os.path.join('Research Question', instance.expert.user.username+'-'+instance.question_title, filename)
+    return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
 
 
 class ExpertUser(models.Model):
@@ -272,12 +273,13 @@ class ResearchGain(models.Model):
                                                    verbose_name="استاد")
     research_gain = models.IntegerField(choices=GAIN_CHOICE, verbose_name="دستاورد دانشجو")
 
+
 class ResearchQuestion(models.Model):
     question_title = models.CharField(max_length=128, verbose_name="عنوان سوال")
     submitted_date = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت سوال")
     question_text = models.TextField(verbose_name="سوال")
     attachment = models.FileField(upload_to=get_attachment_path, verbose_name="ضمیمه", null=True, blank=True)
-    uniqe_id = models.UUIDField(unique=True , default=uuid.uuid4)
+    uniqe_id = models.UUIDField(unique=True, default=uuid.uuid4)
 
     STATUS = [
         ('waiting', 'در حال بررسی'),

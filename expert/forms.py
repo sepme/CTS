@@ -308,7 +308,7 @@ class EQTestForm(forms.Form):
 class ResearchQuestionForm(forms.ModelForm):
     class Meta:
         model = ResearchQuestion
-        exclude = ['expert', 'submitted_date', 'status']
+        exclude = ['expert', 'submitted_date', 'status', 'uniqe_id']
         error_messages = {
             'question_title': {
                 'required': 'لطفا عنوان سوال را وارد نمایید.'

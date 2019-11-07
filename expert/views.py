@@ -294,10 +294,10 @@ def accept_project(request):
 def add_research_question(request):
     research_question_form = ResearchQuestionForm(request.POST, request.FILES)
     if research_question_form.is_valid():
-        print(research_question_form.cleaned_data)
         data = {'success': 'successful'}
         research_question = research_question_form.save(commit=False)
         research_question.expert = request.user.expertuser
+        print(request.POST)
         if request.FILES.get('attachment'):
             print("tried to upload file...")
             attachment = request.FILES.get('attachment')
@@ -336,3 +336,13 @@ def show_research_question(request):
         json_response['question_attachment_name'] = attachment.name.split('/')[-1]
         json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
     return JsonResponse(json_response)
+
+
+def terminate_research_question(request):
+    research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
+    research_question.status = 'answered'
+    research_question.save(update_fields=['status'])
+    return JsonResponse({
+        'success': 'successful'
+    })
+
