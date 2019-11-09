@@ -16,4 +16,5 @@ urlpatterns = [
     path('scientific_form/' ,views.ajax_ScientificRecord ,name='scientific_form'),
     path('executive_form/' ,views.ajax_ExecutiveRecord ,name='executive_form'),
     path('studious_form/' ,views.ajax_StudiousRecord ,name='studious_form'),
+    path('show_project/' ,views.show_project_ajax ,name='show_project'),
 ]

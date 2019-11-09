@@ -7,19 +7,22 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.forms import model_to_dict
 import os ,random ,datetime
+from persiantools.jdatetime import JalaliDate
+from dateutil.relativedelta import relativedelta
 
 from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion
 from industry.models import Project
 
+def gregorian_to_numeric_jalali(date):
+    j_date = JalaliDate(date)
+    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
-def date_last(date):
-    delta = abs((date - datetime.date.today()).days)
-    years_passed = int(delta / 365)
-    delta %= 365
-    months_passed = int(delta / 30)
-    delta %= 30
-    days_passed = delta
+def date_last(date1 ,date2):
+    delta = relativedelta(date1 ,date2)
+    days_passed = abs(delta.days)
+    months_passed = abs(delta.months)
+    years_passed = abs(delta.years)
     days = ""
     months = ""
     years = ""
@@ -59,15 +62,26 @@ class Index(LoginRequiredMixin, generic.FormView):
         if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
-        projects = Project.objects.all().exclude(expert_accepted=None)
+        all_projects = Project.objects.all().exclude(expert_accepted=None)
+        technique_id = [item.id for item in self.request.user.researcheruser.techniqueinstance_set.all()]
+        technique = models.Technique.objects.filter(id__in=technique_id)
+        projects = []
+        for project in all_projects:
+            try:
+                for tech in project.project_form.required_technique.all():                    
+                    if tech not in technique:
+                        raise Exception("TECHNIQUE_NOT_EXIST")
+                projects.append(project)
+            except Exception:
+                continue
         project_list = []
         for project in projects:
             temp ={
                 'PK'            : project.pk,
                 'project_title' : project.project_form.project_title_persian,
                 'keyword'       : project.project_form.key_words.all(),
-                'started'       : date_last(project.date_start),
-                'finished'      : date_last(project.date_finished),
+                'started'       : date_last(datetime.date.today() ,project.date_start),
+                'finished'      : date_last(datetime.date.today() ,project.date_finished),
             }
             project_list.append(temp)        
         context['project_list'] = project_list
@@ -467,6 +481,25 @@ def ajax_Technique_review(request):
         return JsonResponse(data)
     print(form.errors)
     return JsonResponse(form.errors ,status=400)
+
+def show_project_ajax(request):
+    project = Project.objects.filter(id=request.GET.get('id')).first()
+    json_response = model_to_dict(project.project_form)
+    json_response['deadline'] = 'نا مشخص'
+    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+        print('project deadline is set')
+        json_response['deadline'] = date_last(datetime.date.today() ,project.date_phase_three_deadline)
+    else:
+        print('deadline is the whole start to ')
+        json_response['deadline'] = date_last(project.date_project_started, project.date_phase_three_deadline)
+    print('deadline was set to', json_response['deadline'])
+    json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    for ind, value in enumerate(json_response['key_words']):
+        json_response['key_words'][ind] = value.__str__()
+    for ind, value in enumerate(json_response['required_technique']):
+        print(ind ,value)
+        json_response['required_technique'][ind] = value.__str__()
+    return JsonResponse(json_response)
 
 
 TECHNIQUES = {

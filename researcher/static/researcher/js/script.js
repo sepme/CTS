@@ -18,7 +18,7 @@ $(".chamran-btn-info").click(function () {
     var id = $(this).attr("id");
     $.ajax({
         method: 'GET',
-        url: '/industry/show_project/',
+        url: '/researcher/show_project/',
         dataType: 'json',
         data: {'id': id},
         success: function (data) {
@@ -75,9 +75,7 @@ function setResources(data) {
         "</span>" +
         "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
         "</div>" +
-        "<div class='answer'>" +
-        data.required_technique +
-        "</div>" +
+        "<div class='answer required_technique'></div>"+
         "</div>" +
         "<div>" +
         "<div class='question'>" +
@@ -101,6 +99,15 @@ function setResources(data) {
         data.required_budget +
         "</div>" +
         "</div>";
+        const tech = data.required_technique;
+        for (let i = 0; i < tech.length; i++) {
+            $(".required_technique").append(
+                "<span class='border-span'>" +
+                tech[i]
+                + "</span>"
+            );
+            console.log(tech[i]);
+        }
     $(".project-info-content").html(resources);
 }
 
