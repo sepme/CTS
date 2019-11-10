@@ -11,17 +11,32 @@ hr {
 .project-card {
     padding: 5px 10px 42px 5px;
     color: #707070;
-    height: 215px;
     z-index: 0;
 }
 
 .project-card > h6 {
+    min-height: 40px;
     font-weight: 600;
     color: #262626;
-    min-height: 100px;
     margin-top: 5px;
     margin-bottom: 5px;
     z-index: 3;
+}
+
+.project-card .project-progress .bars {
+    display: block;
+    width: 100%;
+}
+
+.project-card .project-progress .bars span {
+    display: inline-block;
+    width: calc(25% - 4px);
+    min-height: 5px;
+    border: 1px solid #89E076;
+    background-color: #f8fdf7;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
 }
 
 .project-card > svg {
@@ -73,13 +88,13 @@ hr {
 }
 
 .chamran-btn-info {
-    border-radius: 0.25em;
-    border: 1px solid #FFD700;
-    color: #FFD700;
-    background-color: #fff;
-    padding: 5px 10px;
-    outline: none;
-    box-shadow: 0 0 5px 1px #e3e3e3;
+    /*border-radius: 0.25em;*/
+    /*border: 1px solid #FFD700;*/
+    /*color: #FFD700;*/
+    /*background-color: #fff;*/
+    /*padding: 5px 10px;*/
+    /*outline: none;*/
+    /*box-shadow: 0 0 5px 1px #e3e3e3;*/
     position: absolute;
     left: 5px;
     bottom: 5px;
@@ -87,21 +102,21 @@ hr {
 }
 
 .chamran-btn-info:hover {
-    background-color: #FFD700;
-    color: #fff;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+    /*background-color: #FFD700;*/
+    /*color: #fff;*/
+    /*-webkit-box-shadow: none;*/
+    /*-moz-box-shadow: none;*/
+    /*box-shadow: none;*/
 }
 
 .chamran-btn-info:focus {
-    outline-color: #FFD700;
+    /*outline-color: #FFD700;*/
 }
 
 .timetable {
     position: absolute;
-    bottom: 12px;
-    right: 40px;
+    top: 7px;
+    left: 10px;
     z-index: 3;
 }
 
@@ -136,8 +151,8 @@ hr {
 
 .check-circle {
     position: absolute;
-    bottom: 15px;
-    right: 10px;
+    top: 10px;
+    left: 95px;
     height: 15px;
     width: 15px;
     color: #ffa534;
@@ -257,7 +272,7 @@ span.title-back {
 
 .nav-pills > .nav-link {
     position: relative;
-    background-color: #707070;
+    background-color: #f8fdf7;
     color: #fff;
     padding: 5px 2px;
     margin: 1px 2px 1px 0;
@@ -268,7 +283,7 @@ span.title-back {
 
 .nav-pills > .nav-link.active, .nav-pills > .nav-link:hover {
     background-color: #3CCD1C;
-    color: #fff;
+    color: #fff !important;
     cursor: pointer;
 }
 
@@ -299,6 +314,7 @@ span.title-back {
 
 .question-mark {
     height: 100%;
+    padding-left: 5px;
 }
 
 .question {

@@ -981,6 +981,43 @@ hr {
     outline: none;
 }
 
+.chamran_btn.ch-form-submit {
+    position: relative;
+    left: 15px;
+    bottom: 15px;
+    padding: 10px 50px;
+    -webkit-border-radius: 0.25rem;
+    -moz-border-radius: 0.25rem;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: #89E076;
+    color: #fff;
+    box-shadow:none;
+    outline: none;
+}
+
+.chamran_btn.ch-form-submit:hover, .chamran_btn.ch-form-submit:focus {
+    box-shadow: none;
+    background-color: #3CCD1C;
+    outline: none;
+}
+.default-btn{
+    background: #e0e1e2;
+    color: #000;
+    font-weight: 400;
+    border:none;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    padding: 5px 10px;
+    outline: none;
+    color: rgba(0, 0, 0, 0.6);
+}
+.default-btn:hover, .default-btn:focus{
+    background: #cacbcd;
+    color: #000;
+    outline: none;
+}
 .card-header {
     padding: 0;
     font-weight: 800;
@@ -1067,7 +1104,7 @@ hr {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
