@@ -320,6 +320,7 @@ def show_research_question(request):
             'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
             'is_correct': answer.is_correct,
             'answer_attachment': answer.answer.path,
+            'answer_id': str(answer.id),
         }
         answers_list.append(answer_json)
 
@@ -342,6 +343,17 @@ def terminate_research_question(request):
     research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
     research_question.status = 'answered'
     research_question.save(update_fields=['status'])
+    return JsonResponse({
+        'success': 'successful'
+    })
+
+def set_answer_situation(request):
+    answer = ResearchQuestionInstance.objects.filter(id=request.GET.get('id')).first()
+    if request.GET.get('type') == 'true':
+        answer.is_correct = True
+    else:
+        answer.is_correct = False
+    answer.save(update_fields=['is_correct'])
     return JsonResponse({
         'success': 'successful'
     })

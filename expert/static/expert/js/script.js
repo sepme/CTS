@@ -202,7 +202,7 @@ $(document).ready(function () {
                 dialog.find(".card-head").html(data.question_title);
                 dialog.find(".question-date").html(data.question_date);
                 dialog.find("#question-body").html(data.question_body);
-                dialog.find(".close-answer").attr("id", id)
+                dialog.find(".close-answer").attr("id", id);
 
                 if (data.question_attachment_type) {
                     dialog.find(".attach-file").attr("href", data.question_attachment_path);
