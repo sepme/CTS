@@ -23,11 +23,12 @@
                         <div class="question-attach text-left">
                             <ul class="inline-list">
                                 <li class="list-item">
-                                    {{ research_question_form.attachment|attr:"id:attach"|attr:"hidden"}}
-{#                                    <input type="file" name="" id="attach" hidden>#}
+{#                                    {{ research_question_form.attachment|attr:"id:attach"|attr:"hidden"}}#}
+                                    <input type="file" name="attachment" id="attach" hidden>
                                     <button class="attach-btn" type="button">
                                         <label for="attach">
-                                            <img src="{% static 'expert/img/attachment(2).png' %}" alt="attachment" width="15px" style="border-radius: 0">
+                                            <span class="attach-icon"></span>
+{#                                            <img src="{% static 'expert/img/attachment(2).png' %}" alt="attachment" width="15px" style="border-radius: 0">#}
                                             <span>ضمیمه</span>
                                         </label>
                                     </button>

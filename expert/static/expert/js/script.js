@@ -655,8 +655,9 @@ ResearchQuestionForm.submit(function (event) {
     ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = ResearchQuestionForm.attr('data-url');
     var data = $(this).serialize();
-    console.log(data);
     ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+    console.log(data);
+    console.log($(this).find("input[type='file']").get(0).files.item(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -740,7 +741,6 @@ showInfo.click(function (event) {
             }
         },
         error: function (data) {
-            console.log(data);
         }
 
     })

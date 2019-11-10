@@ -18,7 +18,7 @@
     color: #707070;
     transition: 300ms all ease;
     font-weight: 300;
-    padding: 5px 15px;
+    padding: 5px 25px 5px 15px;
 }
 .fixed-back .question-attach .attach-btn label:hover,
 .fixed-back .question-attach .attach-btn label:focus{
@@ -45,7 +45,21 @@
     background-color: #CDCDCD;
     text-decoration: none;
 }
-.fixed-back .question-attach .attach-file .pdf-file{
+.fixed-back .question-attach .attach-icon{
+    background-image: url("../img/attachment(2).png");
+    background-size: cover;
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+}
+.fixed-back .question-attach .pdf-file{
     background-image: url("../img/pdf.png");
     background-size: cover;
     position: absolute;
@@ -59,7 +73,7 @@
     width: 15px;
     height: 15px;
 }
-.fixed-back .question-attach .attach-file .png-file{
+.fixed-back .question-attach .png-file{
     background-image: url("../img/png.png");
     background-size: cover;
     position: absolute;
@@ -73,7 +87,7 @@
     width: 15px;
     height: 15px;
 }
-.fixed-back .question-attach .attach-file .jpg-file{
+.fixed-back .question-attach .jpg-file{
     background-image: url("../img/jpg.png");
     background-size: cover;
     position: absolute;

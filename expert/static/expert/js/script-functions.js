@@ -884,14 +884,15 @@ function question_dialog_init() {
     $(".question-attach input[type='file']").on('change', function () {
         var fileType = $(this).val().split('.').pop().toLowerCase();
         var fileName = $(this).val().split('\\').pop();
-        attach_li = "<li class='list-item'>" +
-            "<a href='#' class='attach-file'>" +
-            "<span class='" + fileType + "-file'></span>" +
-            "<span dir='ltr'>" + fileName + "</span>" +
-            "</a>" +
-            "<input type='text' name='attachment' value='" + $(this).val() + "' hidden>" +
-            "</li>";
-        $(this).closest('ul.inline-list').append(attach_li);
+        $(this).closest(".list-item").find(".attach-btn label span:last-child").html(fileName);
+        $(this).closest(".list-item").find(".attach-btn label span.attach-icon").removeClass("attach-icon").addClass(fileType + "-file");
+        // attach_li = "<li class='list-item'>" +
+        //     "<a href='#' class='attach-file'>" +
+        //     "<span class='" + fileType + "-file'></span>" +
+        //     "<span dir='ltr'>" + fileName + "</span>" +
+        //     "</a>" +
+        //     "</li>";
+        // $(this).closest('ul.inline-list').append(attach_li);
     });
 }
 

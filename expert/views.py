@@ -92,8 +92,9 @@ def index(request):
         projects = Project.objects.all()
         print(projects)
     return render(request, 'expert/index.html', {'form': form,
-                                                 'expert_user': expert_user,
-                                                 'projects': projects})
+                                                 'expert_user': expert_user}
+                                                 # 'projects': projects}
+                  )
 
 
 class UserInfo(generic.FormView):
