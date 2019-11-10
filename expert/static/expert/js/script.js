@@ -202,7 +202,7 @@ $(document).ready(function () {
                 dialog.find(".card-head").html(data.question_title);
                 dialog.find(".question-date").html(data.question_date);
                 dialog.find("#question-body").html(data.question_body);
-                dialog.find(".close-answer").attr("id", id)
+                dialog.find(".close-answer").attr("id", id);
 
                 if (data.question_attachment_type) {
                     dialog.find(".attach-file").attr("href", data.question_attachment_path);
@@ -655,8 +655,9 @@ ResearchQuestionForm.submit(function (event) {
     ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = ResearchQuestionForm.attr('data-url');
     var data = $(this).serialize();
-    console.log(data);
     ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+    console.log(data);
+    console.log($(this).find("input[type='file']").get(0).files.item(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -740,7 +741,6 @@ showInfo.click(function (event) {
             }
         },
         error: function (data) {
-            console.log(data);
         }
 
     })
