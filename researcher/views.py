@@ -267,18 +267,23 @@ class Technique(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
-        context['technique_list']       = self.request.user.researcheruser.techniqueinstance_set.all()
-        context['molecular_biology']    = models.Technique.objects.filter(technique_type='molecular_biology')
-        context['immunology']           = models.Technique.objects.filter(technique_type='immunology')
-        context['imaging']              = models.Technique.objects.filter(technique_type='imaging')
-        context['histology']            = models.Technique.objects.filter(technique_type='histology')
-        context['general_lab']          = models.Technique.objects.filter(technique_type='general_lab')
-        context['animal_lab']           = models.Technique.objects.filter(technique_type='immunology')
-        context['lab_safety']           = models.Technique.objects.filter(technique_type='lab_safety')
-        context['biochemistry']         = models.Technique.objects.filter(technique_type='biochemistry')
-        context['cellular_biology']     = models.Technique.objects.filter(technique_type='cellular_biology')
-        context['research_methodology'] = models.Technique.objects.filter(technique_type='research_methodology')
+        context['technique_list'] = self.request.user.researcheruser.techniqueinstance_set.all()
         return context
+
+def ShowTechnique(request):
+    data = {
+        'molecular_biology'    : list(models.Technique.objects.filter(technique_type='Molecular Biology').values_list('technique_title' ,flat=True)),
+        'immunology'           : list(models.Technique.objects.filter(technique_type='Immunology').values_list('technique_title' ,flat=True)),
+        'imaging'              : list(models.Technique.objects.filter(technique_type='Imaging').values_list('technique_title' ,flat=True)),
+        'histology'            : list(models.Technique.objects.filter(technique_type='Histology').values_list('technique_title' ,flat=True)),
+        'general_lab'          : list(models.Technique.objects.filter(technique_type='General Lab').values_list('technique_title' ,flat=True)),
+        'animal_lab'           : list(models.Technique.objects.filter(technique_type='Animal Lab').values_list('technique_title' ,flat=True)),
+        'lab_safety'           : list(models.Technique.objects.filter(technique_type='Lab Safety').values_list('technique_title' ,flat=True)),
+        'biochemistry'         : list(models.Technique.objects.filter(technique_type='Biochemistry').values_list('technique_title' ,flat=True)),
+        'cellular_biology'     : list(models.Technique.objects.filter(technique_type='Cellular Biology').values_list('technique_title' ,flat=True)),
+        'research_methodology' : list(models.Technique.objects.filter(technique_type='Research Methodology').values_list('technique_title' ,flat=True)),
+    }
+    return JsonResponse(data=data)
 
 def AddTechnique(request):
     print("_-------------")
@@ -505,17 +510,17 @@ def AddComment(request):
     print(request.POST)
     project = Project.objects.filter(id=request.POST['project_id'])
     print(project)
-    comments1 = project[0].comments.filter(sender_type=0)
-    comments2 = project[0].comments.filter(sender_type=2)
-    comments= list(chain(comments1, comments2))
-    print(comments)
+    # comments1 = project[0].comments.filter(sender_type=0)
+    # comments2 = project[0].comments.filter(sender_type=2)
+    # comments= list(chain(comments1, comments2))
+    # print(comments)
     if form.is_valid():
         print("form validated!")
         print(form.cleaned_data)
         description = form.cleaned_data['description']
-        attachment = form.cleaned_data['attachment']
+        attachment = form.cleaned_data['attachment']        
         comment = Comment(description=description
-                         ,attachment=attachment 
+                         ,attachment=attachment
                          ,researcher_user=request.user.researcheruser
                          ,sender_type=2)
         comment.save()

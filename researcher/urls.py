@@ -9,6 +9,7 @@ urlpatterns = [
     path('signup/<slug:username>', views.signup, name='signup'),
     path('messages/', chamran_admin_views.MessagesView.as_view(), name="messages"),
     path('technique/', views.Technique.as_view(), name="technique"),
+    path('show_technique/' ,views.ShowTechnique ,name="show_technique"),
     path('add_technique/' ,views.AddTechnique ,name="add_technique"),
     path('technique_review/', views.ajax_Technique_review, name="technique-review"),
     path('question/', views.Question.as_view(), name="question-alert"),

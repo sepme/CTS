@@ -723,17 +723,27 @@ comment_form.submit(function(event){
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
             if (obj.description) {
-                $("#project_id").closest("div").append("<div class='error'>" +
+                $("#description").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
                     "<li>" + obj.description + "</li>" +
                     "</ul>" +
                     "</span>" +
                     "</div>");
-                $("input#project_id").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
         },
     });
 });
 
-$("")
+$(".add-new-technique").click(function(event) {
+    console.log("add-new-technique clicked!!!");
+    $.ajax({
+        method: 'GET',
+        url: '/researcher/show_technique/',
+        dataType: 'json',
+        success: function (data){
+            console.log(data);
+        },
+    });
+});
