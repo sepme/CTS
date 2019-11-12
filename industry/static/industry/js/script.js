@@ -521,7 +521,8 @@ $(document).ready(function () {
             $(".chamran_btn").click(function () {
                 var comment_obj = $("#comment");
                 var comment_description = comment_obj.val();
-                console.log("submitting " + comment_description);
+                addComment(comment_description);
+                console.log(comment_description);
                 $.ajax({
                     method: 'GET',
                     url: '/industry/submit_comment/',
