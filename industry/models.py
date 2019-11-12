@@ -120,11 +120,19 @@ class Project(models.Model):
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
                                                 related_name="researchers_applied", blank=True, null=True)
-    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده", related_name="researchers_accepted", blank=True, null=True)
-    expert_messaged = models.ManyToManyField('expert.ExpertUser', verbose_name='اساتیدی که پیام داده اند',
-                                             related_name='experts_messaged')
-    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده", related_name="experts_applied", blank=True, null=True)
-    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True, null=True)
+    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
+                                                 related_name="researchers_accepted", blank=True, null=True)
+    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
+                                            related_name="experts_applied", blank=True, null=True)
+    expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
+                                                                                                    "شده",
+                                        related_name="expert_accepted", blank=True, null=True)
+    expert_messaged = models.ManyToManyField('expert.ExpertUser', null=True, blank=True,
+                                             verbose_name='اساتیدی که پیام داده اند')
+    industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
+                                         null=True, blank=True, verbose_name='شرکت '
+                                                                             'صاحب '
+                                                                             'پروژه')
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True, blank=True)
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True, blank=True)
     project_detail = models.TextField(verbose_name="جزيات پروژه", null=True, blank=True)
