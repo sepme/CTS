@@ -352,9 +352,9 @@ def terminate_research_question(request):
 def set_answer_situation(request):
     answer = ResearchQuestionInstance.objects.filter(id=request.GET.get('id')).first()
     if request.GET.get('type') == 'true':
-        answer.is_correct = True
+        answer.is_correct = 'correct'
     else:
-        answer.is_correct = False
+        answer.is_correct = 'wrong'
     answer.save(update_fields=['is_correct'])
     return JsonResponse({
         'success': 'successful'

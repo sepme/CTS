@@ -366,7 +366,11 @@ class ResearchQuestionInstance(models.Model):
     hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", auto_now_add=True)
     answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
-    is_correct = models.BooleanField(verbose_name="تایید استاد", default=False)
+    is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={
+        ('not_seen', 'بررسی نشده'),
+        ('correct', 'صحیح'),
+        ('wrong', 'غلط'),
+    }, default='not_seen')
 
     def __str__(self):
         return str(self.research_question) + ' - ' + self.researcher.user.username

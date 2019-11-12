@@ -185,6 +185,18 @@ function close_dialog(className) {
     $(".close").click(function () {
         $(className).css("display", "none");
         $(".main").removeClass("blur-div");
+        if($(this).closest(".fixed-back").hasClass("show-question")){
+            $(this).find(".all-answers").html("");
+            $(this).find(".question-attach").html('<ul class="inline-list">' +
+                '<li class="list-item">' +
+                '<a href="#" class="attach-file" dideo-checked="true">' +
+                '<span class="attachment"></span>' +
+                '<span class="attach-name">ضمیمه ای وجود ندارد</span>' +
+                '</a>' +
+                '</li>' +
+                '</ul>')
+
+        }
     });
 }
 
@@ -920,7 +932,7 @@ function show_question_answers(data) {
     var answer = '';
     for (i = 0; i < data.length; i++) {
         answer = answer + '<div class="col-lg-12">' +
-            '<div class="answer">' +
+            '<div class="answer" is-correct="'+ data[i].is_correct +'">' +
             '<span class="title">' + data[i].researcher_name + '</span>' +
             '<span class="date">' + data[i].hand_out_date + '</span>' +
             '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
@@ -941,4 +953,12 @@ function show_question_answers(data) {
             '</div>';
     }
     $(".all-answers").html(answer);
+    $(".answer").each(function () {
+        var is_correct = $(this).attr("is-correct");
+        if (is_correct==='correct') {
+            set_answer_true($(this).find(".check").find(".correct").find("button"))
+        } else if (is_correct==='wrong') {
+            set_answer_wrong($(this).find(".check").find(".correct").find("button"))
+        }
+    })
 }
