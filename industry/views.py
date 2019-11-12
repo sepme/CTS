@@ -15,6 +15,7 @@ from ChamranTeamSite import settings
 #                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
 from persiantools.jdatetime import JalaliDate
 from industry.models import IndustryForm, Comment
+from expert import models as expert_models
 from . import models
 from . import forms
 
@@ -36,10 +37,25 @@ def date_dif(start_date, deadline_date):
         return 'امروز'
 
 
+def get_comments_with_expert(request):
+    comment_list = Comment.objects.filter(project_id=request.GET.get('project_id'),
+                                          industry_user=request.user.industryuser,
+                                          expert_user_id=request.GET.get('expert_id'))
+    json_response = {'comments': []}
+    for comment in comment_list:
+        json_response['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type
+        })
+
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
-    comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)
+    comment_list = []
+    if project.expert_messaged.exists():
+        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser,
+                                                        expert_user=project.expert_messaged.first())
     print('there are', len(comment_list), 'comments')
     json_response['comments'] = []
     for comment in comment_list:
@@ -47,6 +63,12 @@ def show_project_ajax(request):
             'id': comment.id,
             'text': comment.description,
             'sender_type': comment.sender_type
+        })
+    json_response['expert_messaged'] = []
+    for expert in project.expert_messaged:
+        json_response['expert_messaged'].append({
+            'id': expert.id,
+            'name': expert.expertform
         })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
@@ -62,6 +84,8 @@ def show_project_ajax(request):
 def submit_comment(request):
     description = request.GET.get('description')
     project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
+    if not project.expert_messaged.objects.filter(id=request.GET.get('expert_id')).exists():
+        project.expert_messaged.add(expert_models.ExpertUser.objects.filter(id=request.GET.get('expert_id')))
     Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
                            sender_type=1)
     return JsonResponse({})
