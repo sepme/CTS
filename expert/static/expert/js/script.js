@@ -65,8 +65,33 @@ function newItem_label() {
 
 $(document).ready(function () {
 
-
-
+    const questions = $(".tab-content div.card").toArray();
+    $(".nav-tabs .nav-item .nav-link").click(function () {
+        if ($(this).attr("id") === "active-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("active-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "check-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("check-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "answered-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("close-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "all-questions") {
+            $(".tab-content").html(questions);
+        }
+    });
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
         $(this).css("width", "fit-content");
@@ -80,7 +105,6 @@ $(document).ready(function () {
         'onRemoveTag': newItem_label
     });
     tag_input_label("id_key_words");
-
 
 
     $('*').persiaNumber();
@@ -694,25 +718,25 @@ ResearchQuestionForm.submit(function (event) {
             ResearchQuestionForm.find("label").removeClass("progress-cursor");
             ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (obj.question_title) {
-                    $("#question-title").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.question_title + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-                if (obj.question_title != "undefined") {
-                    $("#question-body").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.question_text + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
+                $("#question-title").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.question_title + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.question_title != "undefined") {
+                $("#question-body").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.question_text + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
         },
     })
 });
