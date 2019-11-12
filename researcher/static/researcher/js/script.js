@@ -8,6 +8,7 @@ $(window).on("load", function () {
 
 $(".chamran-btn-info").click(function () {    
     const dialog = $(".showProject");
+    $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
     /*
      * reset All data
      */
@@ -186,45 +187,6 @@ function setValue(data) {
 }
 
 $(document).ready(function () {
-    // $(".chamran-btn-info").click(function () {
-    //     console.log("ready is called!!");
-    //     const dialog = $(".showProject");
-    //     /*
-    //      * reset All data
-    //      */
-    //     dialog.find(".techniques").html("");
-    //     /*
-    //      * end of reset
-    //      */
-    //     var id = $(this).attr("id");
-    //     console.log(id);
-    //     $.ajax({
-    //         method: 'POST',
-    //         url: '/researcher/show_project/',
-    //         dataType: 'json',
-    //         data: {id: id},
-    //         success: function (data) {
-    //             dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
-    //             dialog.find(".establish-time .time-body").html(data.submission_date);
-    //             dialog.find(".time-left .time-body").html(data.deadline);
-    //             const keys = data.key_words[0].split(",");
-    //             for (let i = 0; i < keys.length; i++) {
-    //                 dialog.find(".techniques").append(
-    //                     "<span class='border-span'>" +
-    //                     keys[i]
-    //                     + "</span>"
-    //                 );
-    //                 console.log(keys[i]);
-    //             }
-    //             console.log(data);
-    //             setMajors(data);
-    //             setValue(data);
-    //         },
-    //         error: function (data) {
-
-    //         },
-    //     });
-    // });
     // variable
     edu_count = 0;
     exe_count = 0;
@@ -727,3 +689,51 @@ add_technique_form.submit(function (event) {
         },
     })
 });
+
+var comment_form = $('#comment-form');
+comment_form.submit(function(event){
+    event.preventDefault();
+    comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+    comment_form.find("label").addClass("progress-cursor");
+    var $thisURL = comment_form.attr('url');    
+    var data = new FormData(comment_form.get(0));
+    $.ajax({
+        method: 'POST',        
+        url: $thisURL,
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);            
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت ارسال شد!",
+                position: 'bottomLeft'
+            });
+            comment_form[0].reset();
+        },
+        error: function (data) {
+            var obj = JSON.parse(data.responseText);
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);            
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.description) {
+                $("#project_id").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.description + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#project_id").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+        },
+    });
+});
+
+$("")

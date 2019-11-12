@@ -578,7 +578,7 @@ class TechniqueInstanceForm(forms.Form):
         return data
 
 class TechniqueReviewFrom(forms.Form):
-    request_body = forms.CharField(max_length=1000 ,required=False)
+    request_body = forms.CharField(widget=forms.Textarea)
     request_confirmation_method = forms.CharField(max_length=100 ,required=False)
     new_resume = forms.FileField(required=False)
 
@@ -604,4 +604,19 @@ class TechniqueReviewFrom(forms.Form):
             return data
         elif data is None:
             raise ValidationError(_('فایل مربوطه را آپلود کنید.'))
+        return data
+
+class Comment(forms.Form):
+    description = forms.CharField(widget=forms.Textarea ,empty_value="None")
+    attachment = forms.FileField(required=False)
+
+    def clean_description(self):
+        data = self.cleaned_data["description"]
+        if data == "None":
+            raise ValidationError(_("نظر خود را لطفا بنوبسید."))
+        return data
+    
+    def clean_attachment(self):
+        data = self.cleaned_data["attachment"]
+        print("attachment",data)
         return data

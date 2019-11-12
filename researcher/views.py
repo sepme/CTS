@@ -12,7 +12,7 @@ from dateutil.relativedelta import relativedelta
 
 from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion
-from industry.models import Project
+from industry.models import Project ,Comment
 
 def gregorian_to_numeric_jalali(date):
     j_date = JalaliDate(date)
@@ -497,9 +497,35 @@ def show_project_ajax(request):
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
     for ind, value in enumerate(json_response['required_technique']):
-        print(ind ,value)
         json_response['required_technique'][ind] = value.__str__()
     return JsonResponse(json_response)
+from itertools import chain
+def AddComment(request):    
+    form = forms.Comment(request.POST ,request.FILES)
+    print(request.POST)
+    project = Project.objects.filter(id=request.POST['project_id'])
+    print(project)
+    comments1 = project[0].comments.filter(sender_type=0)
+    comments2 = project[0].comments.filter(sender_type=2)
+    comments= list(chain(comments1, comments2))
+    print(comments)
+    if form.is_valid():
+        print("form validated!")
+        print(form.cleaned_data)
+        description = form.cleaned_data['description']
+        attachment = form.cleaned_data['attachment']
+        comment = Comment(description=description
+                         ,attachment=attachment 
+                         ,researcher_user=request.user.researcheruser
+                         ,sender_type=2)
+        comment.save()
+        print(Project.objects.filter(id=request.POST['project_id']))
+        data = {
+            'success' : 'successful',
+        }
+        return JsonResponse(data)
+    print("form doesn't validated!")
+    return JsonResponse(form.errors ,status=400)
 
 
 TECHNIQUES = {
