@@ -24,7 +24,7 @@
                 </ul>
                 <div class="tab-content">
                     {% if research_questions %}
-                        {% for research_question in research_questions.reverse %}
+                        {% for research_question in research_questions %}
                             {% if research_question.status == "not_answered" %}
                             <div class="card active-question flow-root-display">
                                 <div class="question-title w-50">{{ research_question.question_title }}</div>

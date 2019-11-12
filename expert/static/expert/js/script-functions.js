@@ -854,22 +854,30 @@ function question_dialog_init() {
         }
     });
     $(".answer .check .correct button").click(function () {
-        var div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
-        $(this).closest('.check').find('.correct').css('display', 'none');
-        $(this).closest('.check').find('.wrong').css('display', 'none');
-        $(this).closest('.check').find('button').addClass('answered');
-        $(this).closest('.check').find('.status').addClass('correct-answer');
-        $(this).closest('.check').children('.status').append(div);
-        $(this).closest('.check').find('.status').fadeIn('slow');
+        set_answer_true($(this));
+
+        let id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/set_answer_situation/',
+            dataType: 'json',
+            data: {id: id, type:true},
+            success: function (data) {},
+            error: function (data) {},
+        });
     });
     $(".answer .check .wrong button").click(function () {
-        var div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
-        $(this).closest('.check').find('.correct').css('display', 'none');
-        $(this).closest('.check').find('.wrong').css('display', 'none');
-        $(this).closest('.check').find('button').addClass('answered');
-        $(this).closest('.check').find('.status').addClass('wrong-answer');
-        $(this).closest('.check').children('.status').append(div);
-        $(this).closest('.check').find('.status').fadeIn('slow');
+        set_answer_wrong($(this));
+
+        let id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/set_answer_situation/',
+            dataType: 'json',
+            data: {id: id, type:false},
+            success: function (data) {},
+            error: function (data) {},
+        });
     });
 
 
@@ -888,10 +896,29 @@ function question_dialog_init() {
     });
 }
 
+function set_answer_wrong(item) {
+    var div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
+    item.closest('.check').find('.correct').css('display', 'none');
+    item.closest('.check').find('.wrong').css('display', 'none');
+    item.closest('.check').find('button').addClass('answered');
+    item.closest('.check').find('.status').addClass('wrong-answer');
+    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').fadeIn('slow');
+}
+
+function set_answer_true(item) {
+    var div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
+    item.closest('.check').find('.correct').css('display', 'none');
+    item.closest('.check').find('.wrong').css('display', 'none');
+    item.closest('.check').find('button').addClass('answered');
+    item.closest('.check').find('.status').addClass('correct-answer');
+    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').fadeIn('slow');
+}
+
 function show_question_answers(data) {
     var answer = '';
     for (i = 0; i < data.length; i++) {
-        console.log(data[i]);
         answer = answer + '<div class="col-lg-12">' +
             '<div class="answer">' +
             '<span class="title">' + data[i].researcher_name + '</span>' +
@@ -899,12 +926,12 @@ function show_question_answers(data) {
             '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
             '<div class="check">' +
             '<div class="correct">' +
-            '<button type="button" title="صحیح">' +
+            '<button type="button" title="صحیح" id="' + data[i].answer_id +'">' +
             '<i class="fas fa-check"></i>' +
             '</button>' +
             '</div>' +
             '<div class="wrong">' +
-            '<button type="button" title="نادرست">' +
+            '<button type="button" title="نادرست" id="' + data[i].answer_id +'">' +
             '<i class="fas fa-times"></i>' +
             '</button>' +
             '</div>' +

@@ -112,6 +112,7 @@ $(document).ready(function () {
     question_dialog_init();
     question_page_init();
     init_dialog_btn(".chamran-btn-info", ".showProject");
+    init_dialog_btn(".confirm_project", ".select-technique");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".show-btn", ".show-question");
     init_dialog_btn(".add-new-question", ".add-question");

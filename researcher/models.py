@@ -13,27 +13,30 @@ def get_image_path(instance, filename):
 
     return os.path.join('unique', instance.researcher_user.user.username, filename)
 
+
 def get_answerFile_path(instance, filename):
-    full_filename = "answer-"+instance.researcher.user.username+"-"+filename
-    folder_name = instance.research_question.expert.user.username+'-'+instance.research_question.question_title
+    full_filename = "answer-" + instance.researcher.user.username + "-" + filename
+    folder_name = instance.research_question.expert.user.username + '-' + instance.research_question.question_title
     path = os.path.join('Research Question', folder_name)
     return os.path.join(path, full_filename)
+
 
 def get_resumeFile_path(instance, filename):
     ext = filename.split('.')[-1]
     try:
-        filename = '{}.{}'.format("resume-"+
-                                  instance.researcher.user.username+"-"+
-                                  instance.technique.technique_title+"-"+
+        filename = '{}.{}'.format("resume-" +
+                                  instance.researcher.user.username + "-" +
+                                  instance.technique.technique_title + "-" +
                                   "-".join(filename.split('.')[:-1]), ext)
         folder_name = str(instance.researcher)
     except:
-        filename = '{}.{}'.format("new-resume-"+
-                                  instance.technique_instance.researcher.user.username+"-"+
-                                  instance.technique_instance.technique.technique_title+"-"+
+        filename = '{}.{}'.format("new-resume-" +
+                                  instance.technique_instance.researcher.user.username + "-" +
+                                  instance.technique_instance.technique.technique_title + "-" +
                                   "-".join(filename.split('.')[:-1]), ext)
         folder_name = str(instance.technique_instance.researcher)
     return os.path.join('resume', folder_name, filename)
+
 
 def get_answerFile_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -56,13 +59,14 @@ class ResearcherUser(models.Model):
 
     def question_status(self):
         if self.status.status == "not_answered":
-            deltatime = datetime.date.today()-self.researchquestioninstance.hand_out_date        
+            deltatime = datetime.date.today() - self.researchquestioninstance.hand_out_date
             if deltatime.days > 15:
                 self.status.status = 'inactivated'
                 self.status.status.save()
                 return "inactivated"
             return 'not_answered'
         return 'free'
+
 
 class Status(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
@@ -165,7 +169,7 @@ class ScientificRecord(models.Model):
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     university = models.CharField(max_length=300, verbose_name="دانشگاه")
     place = models.CharField(max_length=300, verbose_name="شهر محل تحصیل")
-    graduated_year = models.CharField(max_length = 15,verbose_name="سال اخذ مدرک")
+    graduated_year = models.CharField(max_length=15, verbose_name="سال اخذ مدرک")
 
     def __str__(self):
         return self.grade
@@ -195,7 +199,7 @@ class StudiousRecord(models.Model):
         (2, 'خاتمه یافته'),
         (3, 'متوقف'),
     )
-    status = models.IntegerField( choices=STATUS_CHOICE, verbose_name="وضعیت طرح پژوهشی")
+    status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت طرح پژوهشی")
 
     def __str__(self):
         return self.title
@@ -283,7 +287,7 @@ class Technique(models.Model):
 
     technique_type = models.CharField(max_length=100)
     technique_title = models.CharField(max_length=300)
-    tutorial_link = models.CharField(max_length=500 ,null=True)
+    tutorial_link = models.CharField(max_length=500, null=True)
 
     def __str__(self):
         return self.technique_title
@@ -297,8 +301,8 @@ class TechniqueInstance(models.Model):
         ('B', 'به صورت عملی در کارگاه آموزش دیده است.'),
         ('C', 'به صورت تئوری آموزش دیده است.'),
     )
-    level = models.CharField(max_length=1, choices=TECH_GRADE, verbose_name='سطح مهارت', blank=True ,null=True)
-    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True ,blank=True)
+    level = models.CharField(max_length=1, choices=TECH_GRADE, verbose_name='سطح مهارت', blank=True, null=True)
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100, null=True, blank=True)
     evaluator = models.CharField(max_length=300, verbose_name='ارزیابی کننده', blank=True)
     evaluat_date = models.DateField(verbose_name="زمان نمره گرفتن", auto_now=True, null=True)
 
@@ -306,7 +310,7 @@ class TechniqueInstance(models.Model):
         if self.level == 'A' or self.level == 'B' or self.level == 'C':
             return True
         return False
-    
+
     @property
     def date_last(self):
         days_passed = datetime.datetime.today().day - self.evaluat_date.day
@@ -327,23 +331,24 @@ class TechniqueInstance(models.Model):
                 days = persianNumber.convert(str(days_passed)) + " روز "
             else:
                 days = " و " + persianNumber.convert(str(days_passed)) + " روز "
-        if days_passed != 0 or months_passed != 0 or years_passed != 0:            
+        if days_passed != 0 or months_passed != 0 or years_passed != 0:
             return years + months + days + " پیش"
         return "امروز"
 
-    
     def __str__(self):
         return str(self.researcher) + " - " + str(self.technique)
+
 
 class TechniqueReview(models.Model):
     technique_instance = models.ForeignKey(TechniqueInstance, verbose_name="تکنیک", on_delete=models.CASCADE)
     description = models.TextField(verbose_name="توضیحات")
-    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True)
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100, null=True)
     method = models.CharField(max_length=30)
-    result = models.CharField(max_length=1 ,null=True)
+    result = models.CharField(max_length=1, null=True)
 
     def __str__(self):
         return str(self.technique_instance)
+
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
@@ -352,16 +357,16 @@ class RequestedProject(models.Model):
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
 
-    
+
 class ResearchQuestionInstance(models.Model):
     research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,
-                                           verbose_name="سوال پژوهشی")
+                                          verbose_name="سوال پژوهشی")
     researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
-                                    blank=True, null=True)
-    hand_out_date = models.DateField( verbose_name="تاریخ واگذاری" ,auto_now_add=True)
-    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ" ,null=True)
-    is_answered = models.BooleanField(verbose_name="پاسخ داده شده" ,default=False)
-    is_correct = models.BooleanField(verbose_name="تایید استاد" ,default=False)
+                                   blank=True, null=True)
+    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", auto_now_add=True)
+    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True)
+    is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
+    is_correct = models.BooleanField(verbose_name="تایید استاد", default=False)
 
     def __str__(self):
         return str(self.research_question) + ' - ' + self.researcher.user.username
