@@ -18,10 +18,6 @@ def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
 
 
-def get_attachment_path(instance, filename):
-    return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
-
-
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
     expert_point = models.IntegerField(verbose_name="امتیاز استاد", default=0.0)
