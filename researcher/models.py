@@ -272,12 +272,42 @@ class Technique(models.Model):
         ('research_methodology', 'Research Methodology'),
     )
 
-    technique_type = models.CharField(max_length=100)
+    technique_type = models.CharField(max_length=30, choices=TYPE)
     technique_title = models.CharField(max_length=300)
-    tutorial_link = models.CharField(max_length=500 ,null=True)
+    tutorial_link = models.CharField(max_length=500, null=True)
 
     def __str__(self):
         return self.technique_title
+
+    @staticmethod
+    def get_technique_list():
+        molecular_biology = [technique.technique_title for technique in
+                             Technique.objects.filter(technique_type='molecular_biology')]
+        immunology = [technique.technique_title for technique in Technique.objects.filter(technique_type='immunology')]
+        imaging = [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')]
+        histology = [technique.technique_title for technique in Technique.objects.filter(technique_type='histology')]
+        general_lab = [technique.technique_title for technique in
+                       Technique.objects.filter(technique_type='general_lab')]
+        animal_lab = [technique.technique_title for technique in Technique.objects.filter(technique_type='animal_lab')]
+        lab_safety = [technique.technique_title for technique in Technique.objects.filter(technique_type='lab_safety')]
+        biochemistry = [technique.technique_title for technique in
+                        Technique.objects.filter(technique_type='biochemistry')]
+        cellular_biology = [technique.technique_title for technique in
+                            Technique.objects.filter(technique_type='cellular_biology')]
+        research_methodology = [technique.technique_title for technique in
+                                Technique.objects.filter(technique_type='research_methodology')]
+        return {
+            'molecular_biology': molecular_biology,
+            'immunology': immunology,
+            'imaging': imaging,
+            'histology': histology,
+            'general_lab': general_lab,
+            'animal_lab': animal_lab,
+            'lab_safety': lab_safety,
+            'biochemistry': biochemistry,
+            'cellular_biology': cellular_biology,
+            'research_methodology': research_methodology,
+        }
 
 
 class TechniqueInstance(models.Model):
