@@ -38,14 +38,6 @@ def get_resumeFile_path(instance, filename):
     return os.path.join('resume', folder_name, filename)
 
 
-def get_answerFile_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{}.{}'.format("answer-" + instance.researcher.user.username + "-" + "-".join(filename.split('.')[:-1]),
-                              ext)
-    folder_name = instance.research_question.question_title
-    return os.path.join('questions', folder_name, filename)
-
-
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
@@ -383,7 +375,7 @@ class TechniqueReview(models.Model):
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
     project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
-    date_requested = models.DateField(auto_now=False, auto_now_add=False, verbose_name='تاریخ درخواست')
+    date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
 

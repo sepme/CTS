@@ -36,6 +36,20 @@ def calculate_deadline(finished, started):
 class Index(generic.TemplateView):
     template_name = 'expert/index.html'
 
+    def get(self, request, *args, **kwargs):
+        expert_user = get_object_or_404(ExpertUser, user=request.user)
+        projects_list = Project.objects.filter(expert_accepted=expert_user)
+
+        requests = {}
+        for project in projects_list:
+            requests += {
+                'project': project.name,
+                'researchers_requested': project.researcher_applied,
+            }
+        print(requests)
+
+        return render(request, self.template_name, requests)
+
 
 class ResearcherRequest(generic.TemplateView):
     template_name = 'expert/researcherRequest.html'
