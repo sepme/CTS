@@ -11,6 +11,7 @@ from django.http import JsonResponse, QueryDict
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
 from django.core import serializers
+import json
 from industry.models import *
 from researcher.models import *
 
@@ -36,23 +37,26 @@ def calculate_deadline(finished, started):
 class Index(generic.TemplateView):
     template_name = 'expert/index.html'
 
-    def get(self, request, *args, **kwargs):
-        expert_user = get_object_or_404(ExpertUser, user=request.user)
-        projects_list = Project.objects.filter(expert_accepted=expert_user)
-
-        requests = {}
-        for project in projects_list:
-            requests += {
-                'project': project.name,
-                'researchers_requested': project.researcher_applied,
-            }
-        print(requests)
-
-        return render(request, self.template_name, requests)
-
 
 class ResearcherRequest(generic.TemplateView):
     template_name = 'expert/researcherRequest.html'
+
+    def get(self, request, *args, **kwargs):
+        expert_user = get_object_or_404(ExpertUser, user=request.user)
+        projects_list = Project.objects.filter(expert_accepted=expert_user).only('project_form__project_title_persian')
+
+        applications_list = []
+        for project in projects_list:
+            researchers_form = [ResearcherProfile.objects.get(researcher_user=researcher_user) for researcher_user in project.researcher_applied.all()]
+            project_applications = {
+                'project': project.project_form.project_title_persian,
+                'researchers_requested': serializers.serialize('json', researchers_form),
+            }
+            applications_list.append(project_applications)
+        context = {'applications': applications_list}
+        print(context)
+
+        return render(request, self.template_name, context)
 
 
 class Messages(generic.TemplateView):

@@ -12,6 +12,7 @@ class ResearcherProfileAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(models.Status)
+admin.site.register(models.RequestedProject)
 
 @admin.register(models.ScientificRecord)
 class ScientificRecordAdmin(admin.ModelAdmin):
