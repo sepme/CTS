@@ -18,5 +18,6 @@ urlpatterns = [
     path('executive_form/' ,views.ajax_ExecutiveRecord ,name='executive_form'),
     path('studious_form/' ,views.ajax_StudiousRecord ,name='studious_form'),
     path('show_project/' ,views.show_project_ajax ,name='show_project'),
+    path('applyProject/' ,views.ApplyProject, name="apply_project"),
     path('comment/' ,views.AddComment ,name='comment'),
 ]

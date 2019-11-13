@@ -339,7 +339,7 @@ class TechniqueReview(models.Model):
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
     project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
-    date_requested = models.DateField(auto_now=False, auto_now_add=False, verbose_name='تاریخ درخواست')
+    date_requested = models.DateField(auto_now=True, auto_now_add=False, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
 

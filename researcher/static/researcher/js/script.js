@@ -9,6 +9,7 @@ $(window).on("load", function () {
 $(".chamran-btn-info").click(function () {    
     const dialog = $(".showProject");
     $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
+    $("#apply_project_id").attr('value', $(".chamran-btn-info").attr("id"));
     /*
      * reset All data
      */
@@ -734,6 +735,46 @@ comment_form.submit(function(event){
             }
         },
     });
+});
+
+var apply_form = $(".apply_Project");
+apply_form.submit(function (event){
+    event.preventDefault();
+    var url = apply_form.attr('url');
+    var data = $(this).serialize();
+    $.ajax({
+        method : "POST",
+        dataType : "json",
+        data : data,
+        url : url,
+        success : function(data){
+            $("input#most_hours").removeClass("error");
+            $("input#least_hours").removeClass("error");
+        },
+        error: function(data) {
+            var obj = JSON.parse(data.responseText);
+            if (obj.least_hours){
+                $("#least_hours").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.least_hours + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#least_hours").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.most_hours){
+                $("#most_hours").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.most_hours + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#most_hours").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+        }
+    })
 });
 
 $(".add-new-technique").click(function(event) {

@@ -76,6 +76,8 @@ class Index(LoginRequiredMixin, generic.FormView):
                 continue
         project_list = []
         for project in projects:
+            if self.request.user.researcheruser in project.researcher_applied.all():
+                continue
             temp ={
                 'PK'            : project.pk,
                 'project_title' : project.project_form.project_title_persian,
@@ -504,9 +506,29 @@ def show_project_ajax(request):
     for ind, value in enumerate(json_response['required_technique']):
         json_response['required_technique'][ind] = value.__str__()
     return JsonResponse(json_response)
+
+def ApplyProject(request):
+    print(request)
+    form = forms.ApplyForm(request.POST)
+    if form.is_valid():
+        project=get_object_or_404(Project ,id=request.POST['id'])
+        least_hour = form.cleaned_data['least_hours']
+        most_hour = form.cleaned_data['most_hours']
+        print(least_hour)
+        print(most_hour)
+        apply_project = models.RequestedProject(researcher=request.user.researcheruser,
+                                                project=project,
+                                                least_hours_offered=least_hour,
+                                                most_hours_offered=most_hour)
+        apply_project.save()
+        project.researcher_applied.add(request.user.researcheruser)
+        return JsonResponse(data={'success' : "success"})
+    print(form.errors)
+    return JsonResponse(form.errors ,status=400)
+
 from itertools import chain
 def AddComment(request):    
-    form = forms.Comment(request.POST ,request.FILES)
+    form = forms.CommentForm(request.POST ,request.FILES)
     print(request.POST)
     project = Project.objects.filter(id=request.POST['project_id'])
     print(project)

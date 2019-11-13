@@ -17,7 +17,7 @@ def is_numeric(string):
 def completely_numeric(string):
     check = True
     for ch in string:
-        if ch in '0123456789':
+        if ch not in '0123456789':
             check = False
     return check
 
@@ -606,7 +606,7 @@ class TechniqueReviewFrom(forms.Form):
             raise ValidationError(_('فایل مربوطه را آپلود کنید.'))
         return data
 
-class Comment(forms.Form):
+class CommentForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea ,empty_value="None")
     attachment = forms.FileField(required=False)
 
@@ -620,3 +620,26 @@ class Comment(forms.Form):
         data = self.cleaned_data["attachment"]
         print("attachment",data)
         return data
+
+class ApplyForm(forms.Form):
+    least_hours = forms.CharField(max_length=10, required=False)
+    most_hours = forms.CharField(max_length=10, required=False)
+
+    def clean_least_hours(self):
+        data = self.cleaned_data["least_hours"]
+        if data == '':
+            raise ValidationError(_("لطفا حداقل ساعت را وارد کنید."))
+        if not completely_numeric(data):
+            print("لطفا فقط عدد وارد کنید.")
+            raise ValidationError(_("لطفا فقط عدد وارد کنید."))
+        return data
+    
+    def clean_most_hours(self):
+        data = self.cleaned_data["most_hours"]
+        if data == '':
+            raise ValidationError(_("لطفا حداکثر ساعت را وارد کنید."))
+        if not completely_numeric(data):
+            print("لطفا فقط عدد وارد کنید.")
+            raise ValidationError(_("لطفا فقط عدد وارد کنید."))
+        return data
+    

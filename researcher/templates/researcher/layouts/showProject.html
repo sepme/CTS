@@ -51,12 +51,22 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                    <div class="row mbottom-lg-25">
-                            <div class="col-lg-9">
-                                <button class="w-100 accept-btn btn">ارسال  درخواست انجام پروژه</button>
-                                </div>
-                    </div>            
+                <form method="POST" url="{% url 'researcher:apply_project' %}" class="apply_Project">
+                    {% csrf_token %}
+                <div class="row">
+                    <input type="text" id="apply_project_id" name="id" hidden>
+                    <div class="col-lg-6">
+                        حداقل ساعت:  <input type="text" name="least_hours" id="least_hours" >
+                    </div>
+                    <div class="col-lg-6">
+                        حداکثر ساعت: <input type="text" name="most_hours" id="most_hours">
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-lg-12">
+                        <button class="w-100 accept-btn btn">ارسال  درخواست انجام پروژه</button>
+                    </div>
+                </form>
                 <div class="col-lg-12 text-right">
                     {% include 'researcher/layouts/comment.html' %}
                 </div>
