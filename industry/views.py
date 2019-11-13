@@ -14,7 +14,8 @@ from ChamranTeamSite import settings
 # industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
 #                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
 from persiantools.jdatetime import JalaliDate
-from industry.models import IndustryForm
+from industry.models import IndustryForm, Comment
+from expert import models as expert_models
 from . import models
 from . import forms
 from expert.models import ExpertUser
@@ -37,17 +38,44 @@ def date_dif(start_date, deadline_date):
         return 'امروز'
 
 
+def get_comments_with_expert(request):
+    comment_list = Comment.objects.filter(project_id=request.GET.get('project_id'),
+                                          industry_user=request.user.industryuser,
+                                          expert_user_id=request.GET.get('expert_id'))
+    json_response = {'comments': []}
+    for comment in comment_list:
+        json_response['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type
+        })
+
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
+    comment_list = []
+    if project.expert_messaged.exists():
+        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser,
+                                                        expert_user=project.expert_messaged.first())
+    print('there are', len(comment_list), 'comments')
+    json_response['comments'] = []
+    for comment in comment_list:
+        json_response['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type
+        })
+    json_response['expert_messaged'] = []
+    for expert in project.expert_messaged:
+        json_response['expert_messaged'].append({
+            'id': expert.id,
+            'name': expert.expertform
+        })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        print('project deadline is set')
         json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
     else:
-        print('deadline is the whole start to ')
         json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-    print('deadline was set to', json_response['deadline'])
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
@@ -58,6 +86,16 @@ def accept_project_ajax(request):
     expert_user = ExpertUser.objects.filter(request.GET.get('expert_user_id')).first()
     project = models.Project.objects.filter(request.GET.get('project_id')).first()
     project.expert_accepted = expert_user
+
+
+def submit_comment(request):
+    description = request.GET.get('description')
+    project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
+    if not project.expert_messaged.objects.filter(id=request.GET.get('expert_id')).exists():
+        project.expert_messaged.add(expert_models.ExpertUser.objects.filter(id=request.GET.get('expert_id')))
+    Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
+                           sender_type=1)
+    return JsonResponse({})
 
 
 class Index(generic.TemplateView):
@@ -227,7 +265,6 @@ class ProjectListView(generic.ListView):
         if self.industry.industryform:
             context['photo'] = self.industry.industryform.photo
         return context
-
 
 # class Messages(generic.TemplateView):
 #     template_name = 'industry/messages.html'
