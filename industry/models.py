@@ -8,7 +8,7 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
 
-from researcher.models import ResearcherUser
+from researcher.models import ResearcherUser ,RequestedProject
 
 
 class IndustryUser(models.Model):
@@ -118,12 +118,12 @@ class Project(models.Model):
     date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم", null=True, blank=True)
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
-                                                related_name="researchers_applied", blank=True)
+                                                related_name="researchers_applied", blank=True ,through=RequestedProject)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده", related_name="researchers_accepted", blank=True)
     expert_messaged = models.ManyToManyField('expert.ExpertUser', verbose_name='اساتیدی که پیام داده اند',
-                                             related_name='experts_messaged')
+                                             related_name='experts_messaged' ,blank=True)
     expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده", related_name="experts_applied", blank=True)
-    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True)
+    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True ,null=True)
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True, blank=True)
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True, blank=True)
     project_detail = models.TextField(verbose_name="جزيات پروژه", null=True, blank=True)

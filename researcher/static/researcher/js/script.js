@@ -28,7 +28,7 @@ $(".chamran-btn-info").click(function () {
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;//[0].split(",");
-            for (let i = 0; i < keys.length; i++) {
+            for (let i = 0; i < keys.length; i++) {0
                 dialog.find(".techniques").append(
                     "<span class='border-span'>" +
                     keys[i]
@@ -77,7 +77,9 @@ function setResources(data) {
         "</span>" +
         "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
         "</div>" +
-        "<div class='answer required_technique'></div>"+
+        "<div class='answer'>"+
+        data.required_technique +
+        "</div>"+
         "</div>" +
         "<div>" +
         "<div class='question'>" +
@@ -101,15 +103,6 @@ function setResources(data) {
         data.required_budget +
         "</div>" +
         "</div>";
-        const tech = data.required_technique;
-        for (let i = 0; i < tech.length; i++) {
-            $(".required_technique").append(
-                "<span class='border-span'>" +
-                tech[i]
-                + "</span>"
-            );
-            console.log(tech[i]);
-        }
     $(".project-info-content").html(resources);
 }
 
@@ -783,8 +776,94 @@ $(".add-new-technique").click(function(event) {
         method: 'GET',
         url: '/researcher/show_technique/',
         dataType: 'json',
+        data: {'id' : "fuckU"},
         success: function (data){
             console.log(data);
         },
     });
+});
+
+function ShowPreviousProject(project) {
+    show_project = "<div class='card project-item'>"+
+                        "<span class='header'>"+
+                        project.project_title+
+                        "<span class='sub-header'>("+
+                        project.started+
+                        " قبل )</span></span>"+
+                        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>"+
+                        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>"+project.finished+"</span> فرصت باقی است!</span>"+
+                        "<span><i class='fas fa-hourglass-end'></i>درأمد : <span>"+project.income+"</span> کسب کرده اید.</span>"+
+                        "<span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده : <span>"+project.technique+"</span></span>"+
+                        "<button type='button' class='chamran-btn-info' id='"+project.PK+"'>مشاهده</button>"+
+                    "</div>";
+    return show_project;
+}
+
+$("#done-project").click(function (event) {
+    console.log("done-project clicked!!")
+    $(".new-projects").attr("style" ,"display :none");
+    $(".your-project").attr("style" ,"display :none");
+    $(".done-project").attr("style" ,"display :block");
+    $.ajax({
+        method: 'GET',
+        url: '/researcher/doneProject/',
+        dataType: 'json',
+        success : function(data){
+            console.log(data);
+            var adding = "";            
+            for (var key in data.project_list) {
+                const element = data.project_list[key];
+                adding = adding + ShowPreviousProject(element);
+            }
+            console.log(adding);
+            $(".done-project").html(adding);
+        },
+        error :function(data){
+            console.log('You don\'t have any project.');
+        },
+    });
+});
+
+function ShowMyProject(project) {
+    show_project = "<div class='card project-item'>"+
+                        "<span class='header'>"+
+                        project.project_title+
+                        "<span class='sub-header'>("+
+                        project.started+
+                        " قبل )</span></span>"+
+                        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>"+
+                        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>"+project.finished+"</span> فرصت باقی است!</span>"+
+                        "<button type='button' class='chamran-btn-info' id='"+project.PK+"'>مشاهده</button>"+
+                    "</div>";
+    return show_project;
+}
+$("#your-project").click(function (event) {
+    console.log("your-project clicked!!")
+    $(".new-projects").attr("style" ,"display :none");
+    $(".done-project").attr("style" ,"display :none");
+    $(".your-project").attr("style" ,"display :block");
+    $.ajax({
+        method: 'GET',
+        url: '/researcher/myProject/',
+        dataType: 'json',
+        success : function(data){
+            console.log(data);
+            var adding = "";
+            for (var key in data.project_list) {
+                const element = data.project_list[key];
+                adding = adding + ShowMyProject(element);
+            }
+            console.log(adding);
+            $(".your-project").html(adding);
+        },
+        error :function(data){
+            console.log('You don\'t have any project.');
+        },
+    });
+});
+
+$("#new-projects").click(function (event) {    
+    $(".new-projects").attr("style" ,"display :block");
+    $(".done-project").attr("style" ,"display :none");
+    $(".your-project").attr("style" ,"display :none");
 });

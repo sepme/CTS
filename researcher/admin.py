@@ -40,3 +40,7 @@ class TechniqueInstanceAdmin(admin.ModelAdmin):
 @admin.register(models.TechniqueReview)
 class TechniqueReviewAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(models.ResearcherHistory)
+class ResearcherHistoryAdmin(admin.ModelAdmin):
+    pass

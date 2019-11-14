@@ -74,7 +74,6 @@ class Status(models.Model):
     def __str__(self):
         return '{user}- {status}'.format(user=self.researcher_user, status=self.status)
 
-
 class MembershipFee(models.Model):
     researcher_user = models.OneToOneField('ResearcherUser', verbose_name="حق عضویت", on_delete=models.CASCADE,
                                            blank=True, null=True)
@@ -84,7 +83,6 @@ class MembershipFee(models.Model):
 
     def __str__(self):
         return str(self.fee)
-
 
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
@@ -148,7 +146,6 @@ class ResearcherProfile(models.Model):
     def __str__(self):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
-
 class ScientificRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
 
@@ -161,7 +158,6 @@ class ScientificRecord(models.Model):
     def __str__(self):
         return self.grade
 
-
 class ExecutiveRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
 
@@ -173,7 +169,6 @@ class ExecutiveRecord(models.Model):
 
     def __str__(self):
         return self.post
-
 
 class StudiousRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق پژوهشی", on_delete=models.CASCADE)
@@ -190,7 +185,6 @@ class StudiousRecord(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class ResearcherHistory(models.Model):
     researcher_profile = models.ForeignKey("ResearcherProfile", verbose_name="تاریخچه", on_delete=models.CASCADE)
@@ -209,7 +203,6 @@ class ResearcherHistory(models.Model):
 
     def __str__(self):
         return "history of " + self.researcher_profile.first_name
-
 
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
@@ -257,7 +250,6 @@ class ResearcherEvaluation(models.Model):
         ava = float(sum / 10)
         return ava
 
-
 class Technique(models.Model):
     TYPE = (
         ('molecular_biology', 'Molecular Biology'),
@@ -281,34 +273,29 @@ class Technique(models.Model):
 
     @staticmethod
     def get_technique_list():
-        molecular_biology = [technique.technique_title for technique in
-                             Technique.objects.filter(technique_type='molecular_biology')]
-        immunology = [technique.technique_title for technique in Technique.objects.filter(technique_type='immunology')]
-        imaging = [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')]
-        histology = [technique.technique_title for technique in Technique.objects.filter(technique_type='histology')]
-        general_lab = [technique.technique_title for technique in
-                       Technique.objects.filter(technique_type='general_lab')]
-        animal_lab = [technique.technique_title for technique in Technique.objects.filter(technique_type='animal_lab')]
-        lab_safety = [technique.technique_title for technique in Technique.objects.filter(technique_type='lab_safety')]
-        biochemistry = [technique.technique_title for technique in
-                        Technique.objects.filter(technique_type='biochemistry')]
-        cellular_biology = [technique.technique_title for technique in
-                            Technique.objects.filter(technique_type='cellular_biology')]
-        research_methodology = [technique.technique_title for technique in
-                                Technique.objects.filter(technique_type='research_methodology')]
-        return {
-            'molecular_biology': molecular_biology,
-            'immunology': immunology,
-            'imaging': imaging,
-            'histology': histology,
-            'general_lab': general_lab,
-            'animal_lab': animal_lab,
-            'lab_safety': lab_safety,
-            'biochemistry': biochemistry,
-            'cellular_biology': cellular_biology,
-            'research_methodology': research_methodology,
-        }
+        technique_list = {
+            "molecular_biology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='molecular_biology')],
 
+            "immunology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='immunology')],
+
+            "imaging" : [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')],
+            
+            "histology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='histology')],
+            
+            "general_lab" : [technique.technique_title for technique in Technique.objects.filter(technique_type='general_lab')],
+            
+            "animal_lab" : [technique.technique_title for technique in Technique.objects.filter(technique_type='animal_lab')],
+            
+            "lab_safety" : [technique.technique_title for technique in Technique.objects.filter(technique_type='lab_safety')],
+            
+            "biochemistry" : [technique.technique_title for technique in Technique.objects.filter(technique_type='biochemistry')],
+            
+            "cellular_biology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='cellular_biology')],
+            
+            "research_methodology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='research_methodology')],
+        }
+        
+        return technique_list
 
 class TechniqueInstance(models.Model):
     researcher = models.ForeignKey("ResearcherUser", on_delete=models.CASCADE)
@@ -319,7 +306,7 @@ class TechniqueInstance(models.Model):
         ('C', 'به صورت تئوری آموزش دیده است.'),
     )
     level = models.CharField(max_length=1, choices=TECH_GRADE, verbose_name='سطح مهارت', blank=True ,null=True)
-    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100 ,null=True ,blank=True)
+    resume = models.FileField(upload_to=get_resumeFile_path, max_length=100, null=True, blank=True)
     evaluator = models.CharField(max_length=300, verbose_name='ارزیابی کننده', blank=True)
     evaluat_date = models.DateField(verbose_name="زمان نمره گرفتن", auto_now=True, null=True)
 
@@ -368,7 +355,7 @@ class TechniqueReview(models.Model):
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
-    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
+    project = models.ForeignKey("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
     date_requested = models.DateField(auto_now=True, auto_now_add=False, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')

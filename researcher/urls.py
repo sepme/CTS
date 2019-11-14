@@ -20,4 +20,6 @@ urlpatterns = [
     path('show_project/' ,views.show_project_ajax ,name='show_project'),
     path('applyProject/' ,views.ApplyProject, name="apply_project"),
     path('comment/' ,views.AddComment ,name='comment'),
+    path('myProject/' ,views.MyProject ,name="my_project"),
+    path('doneProject/' ,views.DoneProjects ,name="done_project"),
 ]

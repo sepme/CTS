@@ -491,15 +491,14 @@ def ajax_Technique_review(request):
 
 def show_project_ajax(request):
     project = Project.objects.filter(id=request.GET.get('id')).first()
+    print("---------------")
+    print(project.researcher_applied.all())
     json_response = model_to_dict(project.project_form)
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        print('project deadline is set')
         json_response['deadline'] = date_last(datetime.date.today() ,project.date_phase_three_deadline)
     else:
-        print('deadline is the whole start to ')
         json_response['deadline'] = date_last(project.date_project_started, project.date_phase_three_deadline)
-    print('deadline was set to', json_response['deadline'])
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
@@ -525,6 +524,44 @@ def ApplyProject(request):
         return JsonResponse(data={'success' : "success"})
     print(form.errors)
     return JsonResponse(form.errors ,status=400)
+
+def MyProject(request):    
+    projects = Project.objects.all().filter(researcher_applied__in=[request.user.researcheruser])
+    if projects is not None:
+        print("---------")    
+        project_list = {}
+        for project in projects:
+            project_list[project.project_form.project_title_english] = {
+                'PK'            : project.pk,
+                'project_title' : project.project_form.project_title_persian,
+                'started'       : date_last(datetime.date.today() ,project.date_start),
+                'finished'      : date_last(datetime.date.today() ,project.date_finished),
+            }
+        print(project_list)
+        return JsonResponse(data={"project_list" : project_list})
+    else:
+        return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})
+
+def DoneProjects(request):
+    projects = models.ResearcherHistory.objects.all()
+    print("---------")
+    project_list = {}
+    print(projects)
+    for project in projects:
+        tech_temp = [tech.technique_title for tech in project.involve_tech.all()]
+        print(tech_temp)
+        project_list[project.title] = {
+            'project_title' : project.title,
+            'started'       : date_last(datetime.date.today(), project.start),
+            'finished'      : date_last(datetime.date.today(), project.end),
+            'status'        : project.status,
+            'point'         : project.point,
+            'income'        : project.income,
+            'technique'     : tech_temp,
+        }
+        print("+++++++")
+    print(project_list)
+    return JsonResponse(data={"project_list" : project_list})
 
 from itertools import chain
 def AddComment(request):    
