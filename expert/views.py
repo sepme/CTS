@@ -260,5 +260,16 @@ def show_project_view(request):
 def accept_project(request):
     project = Project.objects.get(id=request.GET['id'])
     project.expert_applied.add(request.user.expertuser)
+    if not project.expert_messaged.objects.filter(id=request.user.expertuser.id).exists():
+        project.expert_messaged.add(ExpertUser.objects.filter(id=request.user.expertuser.id))
     project.save()
     return JsonResponse({'success': 'successful'})
+
+
+def submit_comment(request):
+    project = Project.objects.get(id=request.GET['id'])
+    if not project.expert_messaged.objects.filter(id=request.user.expertuser.id).exists():
+        project.expert_messaged.add(ExpertUser.objects.filter(id=request.user.expertuser.id))
+    project.save()
+    #TODO
+

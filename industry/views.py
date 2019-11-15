@@ -49,14 +49,14 @@ def get_comments_with_expert(request):
             'sender_type': comment.sender_type
         })
 
+
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
     comment_list = []
     if project.expert_messaged.exists():
-        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser,
-                                                        expert_user=project.expert_messaged.first())
-    print('there are', len(comment_list), 'comments')
+        comment_list = project.comment_set.filter(industry_user=request.user.industryuser,
+                                                  expert_user=project.expert_messaged.first())
     json_response['comments'] = []
     for comment in comment_list:
         json_response['comments'].append({
@@ -65,11 +65,12 @@ def show_project_ajax(request):
             'sender_type': comment.sender_type
         })
     json_response['expert_messaged'] = []
-    for expert in project.expert_messaged:
+    for expert in project.expert_messaged.all():
         json_response['expert_messaged'].append({
             'id': expert.id,
-            'name': expert.expertform
+            'name': expert.user.username
         })
+
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
         json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
@@ -84,10 +85,10 @@ def show_project_ajax(request):
 def submit_comment(request):
     description = request.GET.get('description')
     project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
-    if not project.expert_messaged.objects.filter(id=request.GET.get('expert_id')).exists():
-        project.expert_messaged.add(expert_models.ExpertUser.objects.filter(id=request.GET.get('expert_id')))
+
     Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
-                           sender_type=1)
+                           sender_type=1, replied_text=request.GET.get('replied_text'), expert_user=
+                           request.GET.get('expert_id'))
     return JsonResponse({})
 
 
@@ -108,10 +109,6 @@ class Index(generic.TemplateView):
             context['form'] = forms.IndustryBasicInfoForm(self.request.user)
         else:
             industry_user = self.request.user.industryuser
-            # print('he\'s got {} projects'.format(industry_user.projects.count()))
-            print('his projects are:')
-            for project in industry_user.projects.all():
-                print(project.project_form.project_title_persian)
         return context
 
     def post(self, request, *args, **kwargs):
