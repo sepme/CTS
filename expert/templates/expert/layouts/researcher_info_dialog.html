@@ -9,15 +9,15 @@
                        <div class="col-lg-12">
                            <div class="researcher-personal-info">
                                <div class="researcher-profile">
-                                    <img src="{% static 'expert/img/photo.jpg' %}" alt="profile-img">
+                                    <img src="" alt="profile-img" id="researcher_photo">
                                </div>
                                <div class="information">
-                                   <h6>علی جعفرزاده</h6>
-                                   <div>رشته تحصیلی: <span>مهندسی کامپیوتر-نرم افزار</span></div>
-                                   <div>مقطع: <span>کارشناسی</span></div>
-                                   <div>محل تحصیل: <span>دانشگاه تهران</span></div>
-                                   <div>سال ورود: <span>1395</span></div>
-                                   <div>
+                                   <h6 id="researcher_name">علی جعفرزاده</h6>
+                                   <div>رشته تحصیلی: <span id="researcher_major">مهندسی کامپیوتر-نرم افزار</span></div>
+                                   <div>مقطع: <span id="researcher_grade">کارشناسی</span></div>
+                                   <div>محل تحصیل: <span id="researcher_university">دانشگاه تهران</span></div>
+                                   <div>سال ورود: <span id="researcher_entry_year">1395</span></div>
+                                   <div id="researcher_techniques">
                                        <span class="border-span">برنامه نویس Django </span>
                                        <span class="border-span">python</span>
                                        <span class="border-span">برنامه نویس BackEnd</span>
@@ -28,7 +28,7 @@
                            </div>
                        </div>
                    </div>
-                   <div class="row mbottom-lg-25">
+                   <div class="row mbottom-lg-25" id="whole-education-info">
                        <div class="col-lg-12 text-right">
                            <div class="education-info custom-border-title">
                                <span class="title">سوابق علمی<i class="fas fa-chevron-down1"></i></span>
@@ -44,7 +44,7 @@
                                                 <td scope="col">سال ورود</td>
                                             </tr>
                                        </thead>
-                                       <tbody>
+                                       <tbody id="researcher_scientific_record">
                                             <tr>
                                                 <td>مهندسی کامپیوتر - نرم افزار</td>
                                                 <td>کارشناسی</td>
@@ -58,7 +58,7 @@
                            </div>
                        </div>
                    </div>
-                   <div class="row mbottom-lg-25">
+                   <div class="row mbottom-lg-25" id="whole-project-info">
                        <div class="col-lg-12 text-right">
                            <div class="project-info custom-border-title">
                                <span class="title">سوابق اجرایی <i class="fas fa-chevron-down1"></i></span>
@@ -77,7 +77,7 @@
                                                 <td scope="col">اتمام</td>
                                             </tr>
                                        </thead>
-                                       <tbody>
+                                       <tbody id="researcher_executive_record">
                                             <tr>
                                                 <td>برنامه نویس</td>
                                                 <td>چمران تیم</td>
@@ -91,7 +91,7 @@
                            </div>
                        </div>
                    </div>
-                   <div class="row mbottom-lg-25">
+                   <div class="row mbottom-lg-25" id="whole-executive-info">
                        <div class="col-lg-12 text-right">
                            <div class="project-info custom-border-title">
                                <span class="title">سوابق پژوهشی <i class="fas fa-chevron-down1"></i></span>
@@ -106,7 +106,7 @@
                                                 <td scope="col">وضعیت طرح پژوهشی</td>
                                             </tr>
                                        </thead>
-                                       <tbody>
+                                       <tbody id="researcher_research_record">
                                             <tr>
                                                 <td>-</td>
                                                 <td>-</td>

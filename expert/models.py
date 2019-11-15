@@ -36,6 +36,9 @@ class ExpertUser(models.Model):
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("expert:index"))
 
+    def get_profile_photo_url(self):
+        return self.user.email
+
 
 class EqTest(models.Model):
     INT_CHOICE = (

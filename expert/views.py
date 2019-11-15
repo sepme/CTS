@@ -13,7 +13,9 @@ from datetime import datetime
 from django.core import serializers
 import json
 from industry.models import *
-from researcher.models import *
+from researcher.models import ScientificRecord as ResearcherScientificRecord
+from researcher.models import ExecutiveRecord as ReseacherExecutiveRecord
+from researcher.models import ResearcherProfile, Technique, StudiousRecord
 
 
 def calculate_deadline(finished, started):
@@ -48,12 +50,16 @@ class ResearcherRequest(generic.TemplateView):
         applications_list = []
         for project in projects_list:
             researchers_form = [ResearcherProfile.objects.get(researcher_user=researcher_user) for researcher_user in project.researcher_applied.all()]
-            project_applications = {
-                'project': project.project_form.project_title_persian,
-                'researchers_requested': serializers.serialize('json', researchers_form),
-            }
-            applications_list.append(project_applications)
-        context = {'applications': applications_list}
+            if len(researchers_form) != 0:
+                project_applications = {
+                    'project': project.project_form.project_title_persian,
+                    'researchers_requested': researchers_form,
+                }
+                applications_list.append(project_applications)
+
+        context = {}
+        if len(applications_list) != 0:
+            context = {'applications': applications_list}
         print(context)
 
         return render(request, self.template_name, context)
@@ -378,3 +384,21 @@ def set_answer_situation(request):
     return JsonResponse({
         'success': 'successful'
     })
+
+
+def show_researcher_preview(request):
+    researcher = ResearcherProfile.objects.filter(id=request.GET.get('id')).first()
+    researcher_information = {
+        'photo': researcher.photo.url,
+        'name': researcher.__str__(),
+        'major': researcher.major,
+        'grade': researcher.grade,
+        'university': researcher.university,
+        'entry_year': researcher.entry_year,
+        # 'techniques': serializers.serialize('json', researcher.techniques),
+        'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(researcherProfile=researcher)),
+        'executive_record': serializers.serialize('json', ReseacherExecutiveRecord.objects.filter(researcherProfile=researcher)),
+        'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcher)),
+    }
+    print(researcher_information)
+    return JsonResponse(researcher_information)

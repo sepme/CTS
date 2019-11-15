@@ -279,6 +279,102 @@ $(document).ready(function () {
             },
         });
     });
+
+    /*
+    Show researchers information for expert
+     */
+    $(".researcher-card-button-show").click(function () {
+        var id = $(this).attr("id");
+        var url = $(this).attr("data-url")
+        $.ajax({
+            method: 'GET',
+            url: url,
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                $('#researcher_photo').attr("src", data.photo);
+                $('#researcher_name').html(data.name);
+                $('#researcher_major').html(data.major);
+                switch (data.grade) {
+                    case 1:
+                        $('#researcher_grade').html('کارشناسی');
+                        break;
+                    case 2:
+                        $('#researcher_grade').html('کارشناسی ارشد');
+                        break;
+                    case 3:
+                        $('#researcher_grade').html('دکتری');
+                        break;
+                    case 4:
+                        $('#researcher_grade').html('دکتری عمومی');
+                        break;
+                }
+                $('#researcher_university').html(data.university);
+                $('#researcher_entry_year').html(data.entry_year);
+
+                var scientific_record = JSON.parse(data.scientific_record);
+                if (scientific_record.length !== 0) {
+                    var table_row = "";
+                    for(i=0; i<scientific_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + scientific_record[i].fields.major + "</td>" +
+                            "<td>" + scientific_record[i].fields.grade + "</td>" +
+                            "<td>" + scientific_record[i].fields.university + "</td>" +
+                            "<td>" + scientific_record[i].fields.place + "</td>" +
+                            "<td>" + scientific_record[i].fields.graduated_year + "</td>" +
+                            "</tr>"
+                    $('#researcher_scientific_record').html(table_row)
+                    }
+                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+
+                var executive_record = JSON.parse(data.executive_record);
+                if (executive_record.length !== 0) {
+                    var table_row = "";
+                    for(i=0; i<executive_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + executive_record[i].fields.post + "</td>" +
+                            "<td>" + executive_record[i].fields.place + "</td>" +
+                            "<td>" + executive_record[i].fields.city + "</td>" +
+                            "<td>" + executive_record[i].fields.start + "</td>" +
+                            "<td>" + executive_record[i].fields.end + "</td>" +
+                            "</tr>"
+                    $('#researcher_executive_record').html(table_row)
+                    }
+                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+
+                var research_record = JSON.parse(data.research_record);
+                if (research_record.length !== 0) {
+                    var table_row = "";
+                    var status = "";
+                    for(i=0; i<research_record.length; i++) {
+                        switch (research_record[i].fields.status) {
+                            case 1:
+                                status = "در دست اجرا";
+                                break;
+                            case 2:
+                                status = "خاتمه یافته";
+                                break;
+                            case 3:
+                                status = "متوقف";
+                                break;
+                        }
+                        table_row = table_row + "<tr>" +
+                            "<td>" + research_record[i].fields.title + "</td>" +
+                            "<td>" + research_record[i].fields.presenter + "</td>" +
+                            "<td>" + research_record[i].fields.responsible + "</td>" +
+                            "<td>" + status + "</td>" +
+                            "</tr>"
+                    $('#researcher_research_record').html(table_row)
+                    }
+                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+
+                //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
+            },
+            error: function (data) {
+
+            },
+        });
+    });
 });
 
 function education_record() {
