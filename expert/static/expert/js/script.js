@@ -63,6 +63,59 @@ function newItem_label() {
     tag_input_label("id_key_words");
 }
 
+function showQuestion() {
+    $(".show-btn").click(function () {
+        const dialog = $(".show-question");
+        let id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/show_research_question/',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+
+                if (data.question_status === "waiting") {
+                    dialog.find(".question-status").html("در حال بررسی");
+                } else if (data.question_status === "not_answered") {
+                    dialog.find(".question-status").html("فعال");
+                } else if (data.question_status === "answered") {
+                    dialog.find(".question-status").html("پاسخ داده شده");
+                }
+                dialog.find(".card-head").html(data.question_title);
+                dialog.find(".question-date").html(data.question_date);
+                dialog.find("#question-body").html(data.question_body);
+                dialog.find(".close-answer").attr("id", id);
+
+                if (data.question_attachment_type) {
+                    dialog.find(".attach-file").attr("href", data.question_attachment_path);
+                    dialog.find(".attach-name").html(data.question_attachment_name);
+
+                    if (data.question_attachment_type === 'pdf') {
+                        dialog.find(".attachment").addClass("pdf-file");
+                    } else if (data.question_attachment_type === 'doc' || data.question_attachment_type === 'docx') {
+                        dialog.find(".attachment").addClass("doc-file");
+                    } else if (data.question_attachment_type === 'jpg' || data.question_attachment_type === 'jpeg') {
+                        dialog.find(".attachment").addClass("jpg-file");
+                    } else if (data.question_attachment_type === 'png') {
+                        dialog.find(".attachment").addClass("png-file");
+                    } /* else delete the attachments row */
+                }
+
+                var answer_list_obj = data.question_answers_list;
+                if (answer_list_obj.length != 0) {
+                    show_question_answers(answer_list_obj);
+                } /* else show a box within "there is no answers!" */
+
+                question_dialog_init();
+
+            },
+            error: function (data) {
+
+            },
+        });
+    });
+}
+
 $(document).ready(function () {
 
     const questions = $(".tab-content div.card").toArray();
@@ -91,6 +144,8 @@ $(document).ready(function () {
         } else if ($(this).attr("id") === "all-questions") {
             $(".tab-content").html(questions);
         }
+        init_dialog_btn(".show-btn", ".show-question");
+        showQuestion();
     });
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
@@ -206,57 +261,7 @@ $(document).ready(function () {
     * after clicking on 'show-btn' of a new research question, 'attachments' and
     * 'answers' of the previous one is still shown (in the case the previous one had it).
     */
-
-    $(".show-btn").click(function () {
-        const dialog = $(".show-question");
-        let id = $(this).attr("id");
-        $.ajax({
-            method: 'GET',
-            url: '/expert/show_research_question/',
-            dataType: 'json',
-            data: {id: id},
-            success: function (data) {
-
-                if (data.question_status === "waiting") {
-                    dialog.find(".question-status").html("در حال بررسی");
-                } else if (data.question_status === "not_answered") {
-                    dialog.find(".question-status").html("فعال");
-                } else if (data.question_status === "answered") {
-                    dialog.find(".question-status").html("پاسخ داده شده");
-                }
-                dialog.find(".card-head").html(data.question_title);
-                dialog.find(".question-date").html(data.question_date);
-                dialog.find("#question-body").html(data.question_body);
-                dialog.find(".close-answer").attr("id", id);
-
-                if (data.question_attachment_type) {
-                    dialog.find(".attach-file").attr("href", data.question_attachment_path);
-                    dialog.find(".attach-name").html(data.question_attachment_name);
-
-                    if (data.question_attachment_type === 'pdf') {
-                        dialog.find(".attachment").addClass("pdf-file");
-                    } else if (data.question_attachment_type === 'doc' || data.question_attachment_type === 'docx') {
-                        dialog.find(".attachment").addClass("doc-file");
-                    } else if (data.question_attachment_type === 'jpg' || data.question_attachment_type === 'jpeg') {
-                        dialog.find(".attachment").addClass("jpg-file");
-                    } else if (data.question_attachment_type === 'png') {
-                        dialog.find(".attachment").addClass("png-file");
-                    } /* else delete the attachments row */
-                }
-
-                var answer_list_obj = data.question_answers_list;
-                if (answer_list_obj.length != 0) {
-                    show_question_answers(answer_list_obj);
-                } /* else show a box within "there is no answers!" */
-
-                question_dialog_init();
-
-            },
-            error: function (data) {
-
-            },
-        });
-    });
+    showQuestion();
 
     $(".close-answer").click(function () {
         var id = $(this).attr("id");
