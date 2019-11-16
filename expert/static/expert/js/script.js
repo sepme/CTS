@@ -209,7 +209,7 @@ $(document).ready(function () {
 
     $(".show-btn").click(function () {
         const dialog = $(".show-question");
-        var id = $(this).attr("id");
+        let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
             url: '/expert/show_research_question/',
