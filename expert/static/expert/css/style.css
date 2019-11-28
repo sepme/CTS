@@ -692,18 +692,21 @@ span.border-span{
   left: 0;
 }
 /* show Project style*/
-.establish-time , .time-left{
+.establish-time, .time-left {
     width: fit-content;
     position: absolute;
     top: -20px;
 }
-.establish-time{
+
+.establish-time {
     left: 180px;
 }
-.time-left{
+
+.time-left {
     left: 50px;
 }
-.establish-time > .time-head , .time-left > .time-head {
+
+.establish-time > .time-head, .time-left > .time-head {
     background-color: #3CCD1C;
     color: #fff;
     border-top-left-radius: 0.25em;
@@ -713,7 +716,8 @@ span.border-span{
     padding: 0 5px;
     text-align: center;
 }
-.establish-time > .time-body , .time-left > .time-body{
+
+.establish-time > .time-body, .time-left > .time-body {
     background-color: #F8FDF7;
     color: #707070;
     border: 1px solid #bdbdbd;
