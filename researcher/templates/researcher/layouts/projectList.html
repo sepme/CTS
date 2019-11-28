@@ -31,5 +31,19 @@
         </div>
     </div>
 </div>
+    {% for com in comments %}
+        <div class="your-comment">
+                <div class="comment-body">
+                    <span class="comment-tools">
+                        <i class="fas fa-reply"></i>
+                    </span>
+                    <span>
+                            {{com.description}}
+                            ,{{com.sender}},
+                            asdfasdfasf
+                    </span>
+                </div>
+            </div>
+    {% endfor %}
     </div>
 </div>

@@ -4,11 +4,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from django.core.serializers import serialize
 from django.conf import settings
 from django.forms import model_to_dict
 import os ,random ,datetime
 from persiantools.jdatetime import JalaliDate
 from dateutil.relativedelta import relativedelta
+from itertools import chain
+from operator import attrgetter
 
 from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion
@@ -78,12 +81,22 @@ class Index(LoginRequiredMixin, generic.FormView):
         for project in projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
+            all_comments = project.get_comments()
+            expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
+            researcher_comment = all_comments.filter(sender_type=2)
+            comments= sorted(
+                    chain(researcher_comment, expert_comment),
+                    key=attrgetter('date_submitted'))
+            print(comments)
             temp ={
-                'PK'            : project.pk,
-                'project_title' : project.project_form.project_title_persian,
-                'keyword'       : project.project_form.key_words.all(),
-                'started'       : date_last(datetime.date.today() ,project.date_start),
-                'finished'      : date_last(datetime.date.today() ,project.date_finished),
+                'PK'                 : project.pk,
+                'project_title'      : project.project_form.project_title_persian,
+                'keyword'            : project.project_form.key_words.all(),
+                'started'            : date_last(datetime.date.today() ,project.date_start),
+                'finished'           : date_last(datetime.date.today() ,project.date_finished),
+                'expert_comment'     : expert_comment,
+                'researcher_comment' : researcher_comment,
+                'comments'          : comments,
             }
             project_list.append(temp)        
         context['project_list'] = project_list
@@ -325,23 +338,16 @@ def AddTechnique(request):
             technique = models.Technique(technique_type=technique_type ,technique_title=technique_title)
             technique.save()
         if method == 'exam':
-            # level = "C"
             technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
                                                     evaluat_date=datetime.date.today())
-                                                    # level=level,
             technique_instance.save()
             print(technique_instance)
             data = {'success' : 'successful'}
             return JsonResponse(data=data)
-        # elif method == 'certificant':
-        #     level = "B"
-        # else:
-        #     level = "A"
         technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
                                                     resume=resume)
-                                                    # ,level=level)
         technique_instance.save()
         data = {'success' : 'successful'}
         return JsonResponse(data=data)
@@ -393,13 +399,11 @@ class QuestionShow(generic.TemplateView ):
         deltatime = datetime.date.today() - question.hand_out_date
         if deltatime.days < 8:
             if question.is_answered:
-                print("+_+_+_+_+_+_+_+_+_+_====")                
+                print("+_+_+_+_+_+_+_+_+_+_====")
                 return HttpResponseRedirect(reverse('researcher:index'))
-                #show its in waiting for evaliator answer
             if question.is_correct :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.status.save()
-                #show massage that u have answered
         else:
             status = request.user.researcheruser.status
             status.status = 'inactivated'
@@ -489,10 +493,8 @@ def ajax_Technique_review(request):
     print(form.errors)
     return JsonResponse(form.errors ,status=400)
 
-def show_project_ajax(request):
+def ShowProject(request):
     project = Project.objects.filter(id=request.GET.get('id')).first()
-    print("---------------")
-    print(project.researcher_applied.all())
     json_response = model_to_dict(project.project_form)
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
@@ -504,6 +506,18 @@ def show_project_ajax(request):
         json_response['key_words'][ind] = value.__str__()
     for ind, value in enumerate(json_response['required_technique']):
         json_response['required_technique'][ind] = value.__str__()
+    all_comments = project.get_comments().exclude(researcher_user=None)
+    json_response['comments'] = []
+    for com in all_comments:
+        url = com.attachment.url[com.attachment.url.find('media' ,2):]
+        temp = {
+            'pk'           : com.pk,
+            'description'  : com.description,
+            'replied_text' : com.replied_text,
+            'sender_type'  : com.sender_type,
+            'attachment'   : url
+        }
+        json_response['comments'].append(temp)
     return JsonResponse(json_response)
 
 def ApplyProject(request):
@@ -527,8 +541,9 @@ def ApplyProject(request):
 
 def MyProject(request):    
     projects = Project.objects.all().filter(researcher_applied__in=[request.user.researcheruser])
+    print(projects)
+    evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=projects[0].project_form.project_title_english)
     if projects is not None:
-        print("---------")    
         project_list = {}
         for project in projects:
             project_list[project.project_form.project_title_english] = {
@@ -537,6 +552,16 @@ def MyProject(request):
                 'started'       : date_last(datetime.date.today() ,project.date_start),
                 'finished'      : date_last(datetime.date.today() ,project.date_finished),
             }
+            json_response['vote'] = "false"
+            if datetime.date.today() > project.date_finished:
+                if evaluation_history.objects.filter(phase=3).count() == 0:
+                    json_response['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_two_finished:
+                if evaluation_history.objects.filter(phase=2).count() == 0:
+                    json_response['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_one_finished:
+                if evaluation_history.objects.filter(phase=1).count() == 0:
+                    json_response['vote'] = "true"
         print(project_list)
         return JsonResponse(data={"project_list" : project_list})
     else:
@@ -548,8 +573,7 @@ def DoneProjects(request):
     project_list = {}
     print(projects)
     for project in projects:
-        tech_temp = [tech.technique_title for tech in project.involve_tech.all()]
-        print(tech_temp)
+        tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
         project_list[project.title] = {
             'project_title' : project.title,
             'started'       : date_last(datetime.date.today(), project.start),
@@ -558,29 +582,22 @@ def DoneProjects(request):
             'point'         : project.point,
             'income'        : project.income,
             'technique'     : tech_temp,
-        }
-        print("+++++++")
+        }        
     print(project_list)
     return JsonResponse(data={"project_list" : project_list})
 
-from itertools import chain
-def AddComment(request):    
+def AddComment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
     print(request.POST)
-    project = Project.objects.filter(id=request.POST['project_id'])
-    print(project)
-    # comments1 = project[0].comments.filter(sender_type=0)
-    # comments2 = project[0].comments.filter(sender_type=2)
-    # comments= list(chain(comments1, comments2))
-    # print(comments)
+    project = Project.objects.filter(id=request.POST['project_id'])[0]
     if form.is_valid():
-        print("form validated!")
-        print(form.cleaned_data)
         description = form.cleaned_data['description']
         attachment = form.cleaned_data['attachment']        
         comment = Comment(description=description
                          ,attachment=attachment
+                         ,project=project
                          ,researcher_user=request.user.researcheruser
+                         ,expert_user=project.expert_accepted
                          ,sender_type=2)
         comment.save()
         print(Project.objects.filter(id=request.POST['project_id']))

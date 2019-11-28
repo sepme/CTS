@@ -44,3 +44,7 @@ class TechniqueReviewAdmin(admin.ModelAdmin):
 @admin.register(models.ResearcherHistory)
 class ResearcherHistoryAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(models.RequestedProject)
+class RequestedProjectAdmin(admin.ModelAdmin):
+    pass

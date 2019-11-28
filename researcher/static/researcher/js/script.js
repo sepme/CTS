@@ -28,15 +28,16 @@ $(".chamran-btn-info").click(function () {
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;//[0].split(",");
-            for (let i = 0; i < keys.length; i++) {0
-                dialog.find(".techniques").append(
+            for (let i = 0; i < keys.length; i++) {                
+                dialog.find(".keywords").append(
                     "<span class='border-span'>" +
                     keys[i]
                     + "</span>"
                 );
-            }            
+            }
             setMajors(data);
             setValue(data);
+            setComment(data.comments);
         },
         error: function (data) {
             console.log("error");
@@ -179,6 +180,67 @@ function setValue(data) {
         setMajors(data);
     });
 }
+
+function setComment(data) {
+    var comments_code = "";
+    var profile = $("#profile").attr('src');
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].sender_type == '0'){ //expert
+            console.log("sender type is 0");
+            comments_code += "<div class='your-comment'>"+
+                                "<div class='comment-profile'>"+                                
+                                "</div>"+
+                                "<div class='comment-body'>"+
+                                    "<span class='comment-tools'>"+
+                                    "<i class='fas fa-pen'>"+
+                                        "<a href='/"+
+                                        data[i].attachment+
+                                        "'>attachment</a>"+
+                                        "</i>"+
+                                        "<i class='fas fa-reply'><div class='reply'></div>"+
+                                        // data[i].replied_text+
+                                        "</i>"+
+                                    "</span>"+
+                                    "<span>"+
+                                        data[i].description+
+                                    "</span>"+
+                                "</div>"+
+                            "</div>";
+        }
+        else{ //researcher
+            console.log("sender type isn't 0");
+            comments_code += "<div class='my-comment'>"+
+                                "<div class='comment-profile'>"+
+                                    "<img src="+
+                                    profile+
+                                    " >"+
+                                "</div>"+
+                                "<div class='comment-body' dir='ltr'>"+
+                                    "<span class='comment-tools'>"+
+                                        "<i class='fas fa-trash-alt'></i>"+
+                                        "<i class='fas fa-reply' value="+
+                                        data[i].pk+
+                                        "></i>"+
+                                        "<i class='fas fa-pen'>"+
+                                        "<a href='/"+
+                                        data[i].attachment+
+                                        "'>attachment</a>"+
+                                        "</i>"+
+                                    "</span>"+
+                                    "<span>"+
+                                        data[i].description+
+                                    "</span>"+
+                                    "</div>"+
+                                "</div>";
+        }
+    }
+    $('.comments').html(comments_code);
+}
+
+$(".reply").click(function (event){
+    console.log("repliiiiiiiiiinnnnnnnqqq!!!!!!!");
+    console.log($("#reply").val());
+});
 
 $(document).ready(function () {
     // variable

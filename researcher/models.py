@@ -207,6 +207,8 @@ class ResearcherHistory(models.Model):
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
     evaluator = models.OneToOneField("expert.ExpertUser", on_delete=models.CASCADE, null=True, blank=True)
+    project_title = models.CharField(max_length=128, verbose_name="عنوان پروژه")
+    phase = models.IntegerField(verbose_name="فاز شماره : ")
 
     one = 1
     two = 2
@@ -359,6 +361,9 @@ class RequestedProject(models.Model):
     date_requested = models.DateField(auto_now=True, auto_now_add=False, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
+
+    def __str__(self):
+        return str(self.project) + " - " + str(self.date_requested)
 
 class ResearchQuestionInstance(models.Model):
     research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,

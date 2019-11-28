@@ -51,7 +51,7 @@
         <div class="researcher-icon"></div>
         {% if request.user.researcheruser.researcherprofile.photo %}
             <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile" class="profile"
-                 width="150px" height="150px">
+                 width="150px" height="150px" id="profile">
         {% else %}
             <img src="{% static 'researcher/img/profile.jpg' %}" alt="Ehsan" class="profile" width="150px"
                  height="150px">
