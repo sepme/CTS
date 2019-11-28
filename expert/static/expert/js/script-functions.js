@@ -183,20 +183,19 @@ function search_input(className) {
 
 function close_dialog(className) {
     $(".close").click(function () {
-        $(className).css("display", "none");
-        $(".main").removeClass("blur-div");
-        if($(this).closest(".fixed-back").hasClass("show-question")){
-            $(this).find(".all-answers").html("");
-            $(this).find(".question-attach").html('<ul class="inline-list">' +
+        if($(className).closest(".fixed-back").hasClass("show-question")){
+            $(className).find(".all-answers").html("");
+            $(className).find(".question-attach").html('<ul class="inline-list">' +
                 '<li class="list-item">' +
                 '<a href="#" class="attach-file" dideo-checked="true">' +
                 '<span class="attachment"></span>' +
                 '<span class="attach-name">ضمیمه ای وجود ندارد</span>' +
                 '</a>' +
                 '</li>' +
-                '</ul>')
-
+                '</ul>');
         }
+        $(className).css("display", "none");
+        $(".main").removeClass("blur-div");
     });
 }
 
