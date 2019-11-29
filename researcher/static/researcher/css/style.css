@@ -882,7 +882,6 @@ hr{
 /*  color: #6f7285;*/
 /*  cursor: pointer;*/
 /*}*/
-}
 .inner-card{
     padding: 20px;
     margin-top: 10px;
@@ -2240,7 +2239,7 @@ span.title-back{
     border: 1px solid #3ccd1c;
 }
 .fixed-back .confirmation .radio-group {
-
+    margin-bottom: 25px;
 }
 .question-attach{
     margin-bottom: 10px;

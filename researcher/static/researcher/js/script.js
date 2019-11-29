@@ -1,12 +1,16 @@
 $(window).on("load", function () {
     init_windowSize();
     load_dialog();
+    $(".fa-reply").click(function (event) {
+        console.log("repliiiiiiiiiinnnnnnnqqq!!!!!!!");
+        console.log($("#reply").val());
+    });
 }).on("resize", function () {
     init_windowSize();
     load_dialog();
 });
 
-$(".chamran-btn-info").click(function () {    
+$(".chamran-btn-info").click(function () {
     const dialog = $(".showProject");
     $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
     $("#apply_project_id").attr('value', $(".chamran-btn-info").attr("id"));
@@ -28,7 +32,7 @@ $(".chamran-btn-info").click(function () {
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;//[0].split(",");
-            for (let i = 0; i < keys.length; i++) {                
+            for (let i = 0; i < keys.length; i++) {
                 dialog.find(".keywords").append(
                     "<span class='border-span'>" +
                     keys[i]
@@ -78,9 +82,9 @@ function setResources(data) {
         "</span>" +
         "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
         "</div>" +
-        "<div class='answer'>"+
+        "<div class='answer'>" +
         data.required_technique +
-        "</div>"+
+        "</div>" +
         "</div>" +
         "<div>" +
         "<div class='question'>" +
@@ -182,65 +186,59 @@ function setValue(data) {
 }
 
 function setComment(data) {
-    var comments_code = "";
-    var profile = $("#profile").attr('src');
+    let comments_code = "";
+    let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type == '0'){ //expert
+        if (data[i].sender_type == '0') { //expert
             console.log("sender type is 0");
-            comments_code += "<div class='your-comment'>"+
-                                "<div class='comment-profile'>"+                                
-                                "</div>"+
-                                "<div class='comment-body'>"+
-                                    "<span class='comment-tools'>"+
-                                    "<i class='fas fa-pen'>"+
-                                        "<a href='/"+
-                                        data[i].attachment+
-                                        "'>attachment</a>"+
-                                        "</i>"+
-                                        "<i class='fas fa-reply'><div class='reply'></div>"+
-                                        // data[i].replied_text+
-                                        "</i>"+
-                                    "</span>"+
-                                    "<span>"+
-                                        data[i].description+
-                                    "</span>"+
-                                "</div>"+
-                            "</div>";
-        }
-        else{ //researcher
+            comments_code += "<div class='your-comment'>" +
+                "<div class='comment-profile'>" +
+                "</div>" +
+                "<div class='comment-body'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-pen'>" +
+                "<a href='/" +
+                data[i].attachment +
+                "'>attachment</a>" +
+                "</i>" +
+                "<i class='fas fa-reply'><div class='reply'></div>" +
+                // data[i].replied_text+
+                "</i>" +
+                "</span>" +
+                "<span>" +
+                data[i].description +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        } else { //researcher
             console.log("sender type isn't 0");
-            comments_code += "<div class='my-comment'>"+
-                                "<div class='comment-profile'>"+
-                                    "<img src="+
-                                    profile+
-                                    " >"+
-                                "</div>"+
-                                "<div class='comment-body' dir='ltr'>"+
-                                    "<span class='comment-tools'>"+
-                                        "<i class='fas fa-trash-alt'></i>"+
-                                        "<i class='fas fa-reply' value="+
-                                        data[i].pk+
-                                        "></i>"+
-                                        "<i class='fas fa-pen'>"+
-                                        "<a href='/"+
-                                        data[i].attachment+
-                                        "'>attachment</a>"+
-                                        "</i>"+
-                                    "</span>"+
-                                    "<span>"+
-                                        data[i].description+
-                                    "</span>"+
-                                    "</div>"+
-                                "</div>";
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-profile'>" +
+                "<img src=" +
+                profile +
+                " >" +
+                "</div>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-trash-alt'></i>" +
+                "<i class='fas fa-reply' value=" +
+                data[i].pk +
+                "></i>" +
+                "<i class='fas fa-pen'>" +
+                "<a href='/" +
+                data[i].attachment +
+                "'>attachment</a>" +
+                "</i>" +
+                "</span>" +
+                "<span>" +
+                data[i].description +
+                "</span>" +
+                "</div>" +
+                "</div>";
         }
     }
     $('.comments').html(comments_code);
 }
-
-$(".reply").click(function (event){
-    console.log("repliiiiiiiiiinnnnnnnqqq!!!!!!!");
-    console.log($("#reply").val());
-});
 
 $(document).ready(function () {
     // variable
@@ -252,7 +250,6 @@ $(document).ready(function () {
     init_dialog_btn(".new-review-request", ".review-request");
     init_dialog_btn(".send-answer", ".thanks_response");
     init_dialog_btn(".start-question", ".confirmation");
-    select_technique(".select-technique");
     init_dialog_btn(".education-btn", ".scientific_form");
     init_dialog_btn(".executive-btn", ".executive_form");
     init_dialog_btn(".research-btn", ".research_form");
@@ -260,7 +257,7 @@ $(document).ready(function () {
     input_focus();
     search_input(".search_message");
     question();
-    $(".new-review-request").click(function(){    
+    $(".new-review-request").click(function () {
         $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
     });
     $('input#upload-input').change(function (event) {
@@ -642,7 +639,7 @@ technique_review.submit(function (event) {
                     "</ul>" +
                     "</span>" +
                     "</div>");
-                    $("input#request-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#request-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
             if (obj.request_confirmation_method) {
                 $(".review-request-method").closest("div").append("<div class='error'>" +
@@ -661,7 +658,7 @@ technique_review.submit(function (event) {
                     "</ul>" +
                     "</span>" +
                     "</div>");
-                    $("input#upload-new-resume").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#upload-new-resume").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
         }
     })
@@ -747,14 +744,14 @@ add_technique_form.submit(function (event) {
 });
 
 var comment_form = $('#comment-form');
-comment_form.submit(function(event){
+comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
-    var $thisURL = comment_form.attr('url');    
+    var $thisURL = comment_form.attr('url');
     var data = new FormData(comment_form.get(0));
     $.ajax({
-        method: 'POST',        
+        method: 'POST',
         url: $thisURL,
         data: data,
         cache: false,
@@ -762,7 +759,7 @@ comment_form.submit(function(event){
         contentType: false,
         success: function (data) {
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);            
+                .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
             iziToast.success({
@@ -775,7 +772,7 @@ comment_form.submit(function(event){
         error: function (data) {
             var obj = JSON.parse(data.responseText);
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);            
+                .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
             if (obj.description) {
@@ -793,22 +790,22 @@ comment_form.submit(function(event){
 });
 
 var apply_form = $(".apply_Project");
-apply_form.submit(function (event){
+apply_form.submit(function (event) {
     event.preventDefault();
     var url = apply_form.attr('url');
     var data = $(this).serialize();
     $.ajax({
-        method : "POST",
-        dataType : "json",
-        data : data,
-        url : url,
-        success : function(data){
+        method: "POST",
+        dataType: "json",
+        data: data,
+        url: url,
+        success: function (data) {
             $("input#most_hours").removeClass("error");
             $("input#least_hours").removeClass("error");
         },
-        error: function(data) {
+        error: function (data) {
             var obj = JSON.parse(data.responseText);
-            if (obj.least_hours){
+            if (obj.least_hours) {
                 $("#least_hours").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
@@ -818,7 +815,7 @@ apply_form.submit(function (event){
                     "</div>");
                 $("input#least_hours").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
-            if (obj.most_hours){
+            if (obj.most_hours) {
                 $("#most_hours").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
@@ -832,47 +829,107 @@ apply_form.submit(function (event){
     })
 });
 
-$(".add-new-technique").click(function(event) {
+$(".add-new-technique").click(function (event) {
     console.log("add-new-technique clicked!!!");
     $.ajax({
         method: 'GET',
         url: '/researcher/show_technique/',
         dataType: 'json',
-        data: {'id' : "fuckU"},
-        success: function (data){
+        data: {'id': "fuckU"},
+        success: function (data) {
             console.log(data);
+            let source = [];
+            for (let i = 0; i <= Object.keys(data).length - 1; i++) {
+                let item = {};
+                item["title"] = Object.keys(data)[i];
+                item["key"] = i + 1;
+                if (Object.values(data)[i].length) {
+                    item["folder"] = true;
+                    let children = [];
+                    for (let j = 0; j < Object.values(data)[i].length; j++) {
+                        let child_item = {};
+                        child_item["title"] = Object.values(data)[i][j];
+                        child_item["key"] = i + "." + j;
+                        children.push(child_item);
+                    }
+                    item["children"] = children;
+                }
+                source.push(item);
+            }
+            $("#fancy-tree").fancytree({
+                extensions: ["glyph"],
+                checkbox: false,
+                selectMode: 1,
+                checkboxAutoHide: true,
+                clickFolderMode: 2,
+                lazyLoad: function (event, data) {
+                    data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                },
+                select: function (event, data) {
+
+                },
+                source: source,
+                glyph: {
+                    preset: "awesome5",
+                    map: {
+                        _addClass: "",
+                        checkbox: "fas fa-square",
+                        checkboxSelected: "fas fa-check-square",
+                        checkboxUnknown: "fas fa-square",
+                        radio: "fas fa-circle",
+                        radioSelected: "fas fa-circle",
+                        radioUnknown: "fas fa-dot-circle",
+                        dragHelper: "fas fa-arrow-right",
+                        dropMarker: "fas fa-long-arrow-right",
+                        error: "fas fa-exclamation-triangle",
+                        expanderClosed: "fas fa-chevron-left",
+                        expanderLazy: "fas fa-angle-right",
+                        expanderOpen: "fas fa-chevron-down",
+                        loading: "fas fa-spinner fa-pulse",
+                        nodata: "fas fa-meh",
+                        noExpander: "",
+                        // Default node icons.
+                        // (Use tree.options.icon callback to define custom icons based on node data)
+                        doc: "fas fa-screwdriver",
+                        docOpen: "fas fa-screwdriver",
+                        folder: "fas fa-folder",
+                        folderOpen: "fas fa-folder-open"
+                    }
+                },
+            });
+            select_technique(".select-technique");
         },
     });
 });
 
 function ShowPreviousProject(project) {
-    show_project = "<div class='card project-item'>"+
-                        "<span class='header'>"+
-                        project.project_title+
-                        "<span class='sub-header'>("+
-                        project.started+
-                        " قبل )</span></span>"+
-                        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>"+
-                        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>"+project.finished+"</span> فرصت باقی است!</span>"+
-                        "<span><i class='fas fa-hourglass-end'></i>درأمد : <span>"+project.income+"</span> کسب کرده اید.</span>"+
-                        "<span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده : <span>"+project.technique+"</span></span>"+
-                        "<button type='button' class='chamran-btn-info' id='"+project.PK+"'>مشاهده</button>"+
-                    "</div>";
+    show_project = "<div class='card project-item'>" +
+        "<span class='header'>" +
+        project.project_title +
+        "<span class='sub-header'>(" +
+        project.started +
+        " قبل )</span></span>" +
+        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>" + project.finished + "</span> فرصت باقی است!</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>درأمد : <span>" + project.income + "</span> کسب کرده اید.</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده : <span>" + project.technique + "</span></span>" +
+        "<button type='button' class='chamran-btn-info' id='" + project.PK + "'>مشاهده</button>" +
+        "</div>";
     return show_project;
 }
 
 $("#done-project").click(function (event) {
     console.log("done-project clicked!!")
-    $(".new-projects").attr("style" ,"display :none");
-    $(".your-project").attr("style" ,"display :none");
-    $(".done-project").attr("style" ,"display :block");
+    $(".new-projects").attr("style", "display :none");
+    $(".your-project").attr("style", "display :none");
+    $(".done-project").attr("style", "display :block");
     $.ajax({
         method: 'GET',
         url: '/researcher/doneProject/',
         dataType: 'json',
-        success : function(data){
+        success: function (data) {
             console.log(data);
-            var adding = "";            
+            var adding = "";
             for (var key in data.project_list) {
                 const element = data.project_list[key];
                 adding = adding + ShowPreviousProject(element);
@@ -880,35 +937,36 @@ $("#done-project").click(function (event) {
             console.log(adding);
             $(".done-project").html(adding);
         },
-        error :function(data){
+        error: function (data) {
             console.log('You don\'t have any project.');
         },
     });
 });
 
 function ShowMyProject(project) {
-    show_project = "<div class='card project-item'>"+
-                        "<span class='header'>"+
-                        project.project_title+
-                        "<span class='sub-header'>("+
-                        project.started+
-                        " قبل )</span></span>"+
-                        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>"+
-                        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>"+project.finished+"</span> فرصت باقی است!</span>"+
-                        "<button type='button' class='chamran-btn-info' id='"+project.PK+"'>مشاهده</button>"+
-                    "</div>";
+    show_project = "<div class='card project-item'>" +
+        "<span class='header'>" +
+        project.project_title +
+        "<span class='sub-header'>(" +
+        project.started +
+        " قبل )</span></span>" +
+        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>" + project.finished + "</span> فرصت باقی است!</span>" +
+        "<button type='button' class='chamran-btn-info' id='" + project.PK + "'>مشاهده</button>" +
+        "</div>";
     return show_project;
 }
+
 $("#your-project").click(function (event) {
     console.log("your-project clicked!!")
-    $(".new-projects").attr("style" ,"display :none");
-    $(".done-project").attr("style" ,"display :none");
-    $(".your-project").attr("style" ,"display :block");
+    $(".new-projects").attr("style", "display :none");
+    $(".done-project").attr("style", "display :none");
+    $(".your-project").attr("style", "display :block");
     $.ajax({
         method: 'GET',
         url: '/researcher/myProject/',
         dataType: 'json',
-        success : function(data){
+        success: function (data) {
             console.log(data);
             var adding = "";
             for (var key in data.project_list) {
@@ -918,14 +976,14 @@ $("#your-project").click(function (event) {
             console.log(adding);
             $(".your-project").html(adding);
         },
-        error :function(data){
+        error: function (data) {
             console.log('You don\'t have any project.');
         },
     });
 });
 
-$("#new-projects").click(function (event) {    
-    $(".new-projects").attr("style" ,"display :block");
-    $(".done-project").attr("style" ,"display :none");
-    $(".your-project").attr("style" ,"display :none");
+$("#new-projects").click(function (event) {
+    $(".new-projects").attr("style", "display :block");
+    $(".done-project").attr("style", "display :none");
+    $(".your-project").attr("style", "display :none");
 });

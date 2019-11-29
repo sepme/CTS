@@ -166,6 +166,8 @@ function close_dialog(className) {
     $(".close").click(function () {
         $(className).css("display", "none");
         $(".main").removeClass("blur-div");
+        $(className).find("input").val("");
+        $(className).find("input:checked").prop("checked", false);
     });
 }
 
@@ -689,6 +691,7 @@ function vote_slider(slide_count) {
 }
 
 function select_technique(className) {
+
     function slide_up() {
         $(".fixed-back .all-techniques").slideUp('slow');
         return $.Deferred().resolve(false);
@@ -703,6 +706,7 @@ function select_technique(className) {
         $(".fixed-back input#technique-name").addClass("expand");
         $(".fixed-back .select-technique i").removeClass("fa-plus").addClass("fa-search");
         $(".fixed-back label[for='technique-name']").html("جستجو تکنیک");
+
     }
 
     function express() {

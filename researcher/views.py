@@ -68,17 +68,17 @@ class Index(LoginRequiredMixin, generic.FormView):
         all_projects = Project.objects.all().exclude(expert_accepted=None)
         technique_id = [item.id for item in self.request.user.researcheruser.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(id__in=technique_id)
-        projects = []
-        for project in all_projects:
-            try:
-                for tech in project.project_form.required_technique.all():                    
-                    if tech not in technique:
-                        raise Exception("TECHNIQUE_NOT_EXIST")
-                projects.append(project)
-            except Exception:
-                continue
+        # projects = []
+        # for project in all_projects:
+        #     try:
+        #         for tech in project.project_form.required_technique.all():
+        #             if tech not in technique:
+        #                 raise Exception("TECHNIQUE_NOT_EXIST")
+        #         projects.append(project)
+        #     except Exception:
+        #         continue
         project_list = []
-        for project in projects:
+        for project in all_projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
             all_comments = project.get_comments()
@@ -509,13 +509,13 @@ def ShowProject(request):
     all_comments = project.get_comments().exclude(researcher_user=None)
     json_response['comments'] = []
     for com in all_comments:
-        url = com.attachment.url[com.attachment.url.find('media' ,2):]
+        # url = com.attachment.url[com.attachment.url.find('media' ,2):]
         temp = {
             'pk'           : com.pk,
             'description'  : com.description,
             'replied_text' : com.replied_text,
             'sender_type'  : com.sender_type,
-            'attachment'   : url
+            # 'attachment'   : url
         }
         json_response['comments'].append(temp)
     return JsonResponse(json_response)
