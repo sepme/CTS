@@ -933,15 +933,13 @@ showInfo.click(function (event) {
             $(".showProject").find(".establish-time .time-body").html(data.date);
             $(".showProject").find(".time-left .time-body").html(data.deadline);
             const keys = JSON.parse(data.key_words);
+            var keys_code = '';
             for (let i = 0; i < keys.length; i++) {
-                $(".showProject").find(".techniques").append(
-                    "<span class='border-span'>" +
-                    keys[i].pk
-                    + "</span>"
-                );
-                setMajors(data);
-                setValue(data);
+                keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
             }
+            $(".showProject").find(".techniques").html(keys_code);
+            setMajors(data);
+            setValue(data);
         },
         error: function (data) {
         }
