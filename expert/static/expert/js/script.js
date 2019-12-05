@@ -169,7 +169,7 @@ $(document).ready(function () {
     init_dialog_btn(".preview-project", ".showProject");
     init_dialog_btn(".confirm_project", ".select-technique");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    // init_dialog_btn(".question-info .show-btn", ".show-question");
+    init_dialog_btn(".question-info .show-btn", ".show-question");
     init_dialog_btn(".add-new-question", ".add-question");
     init_dialog_btn(".education-btn", ".scientific_form");
     init_dialog_btn(".executive-btn", ".executive_form");
