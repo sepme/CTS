@@ -953,11 +953,83 @@ function show_question_answers(data) {
     }
     $(".all-answers").html(answer);
     $(".answer").each(function () {
-        var is_correct = $(this).attr("is-correct");
+        let is_correct = $(this).attr("is-correct");
         if (is_correct==='correct') {
             set_answer_true($(this).find(".check").find(".correct").find("button"))
         } else if (is_correct==='wrong') {
             set_answer_wrong($(this).find(".check").find(".correct").find("button"))
         }
     })
+}
+function select_technique() {
+    $("li[role='treeitem']").click(function () {
+        let tree = $("#fancy-tree").fancytree({
+            activate: function (event, data) {
+                node = data.node;
+                $('#tags').addTag(node.title);
+            }
+        });
+    });
+    $("#add-new-technique").keyup(function (e) {
+       if(e.keyCode === 13) {
+           if($(this).val() !== "") {
+               $('#tags').addTag($(this).val());
+               $(this).val("");
+           }
+       }
+    });
+}
+
+function tag_input_label(tag_input) {
+    $("#" + tag_input + "_tagsinput .tags_clear").css("display", "none");
+    $("#" + tag_input + "_tagsinput span.tag a").html("<i class='fas fa-times'></i>");
+
+    if (!$(".tagsinput").find(".tag").length) {
+        $("label[for='" + tag_input + "']").removeClass("full-focus-out").css({
+            "font-size": "13px",
+            "top": "28px",
+            "right": "25px",
+            "color": "#6f7285",
+            "padding": "0"
+        });
+        $("#" + tag_input + "_tag").attr("placeholder", "");
+    }
+
+    $("#" + tag_input + "_tag").on("focus", function () {
+        $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
+            "font-size": "12px",
+            "top": "12px",
+            "right": "30px",
+            "padding": "0 10px",
+            "color": "#3ccd1c"
+        });
+        $(".tagsinput").css("border-color", "#3ccd1c");
+    }).on("focusout", function () {
+
+        $(".tagsinput").css("border-color", "#bdbdbd85");
+
+        if ($(".tagsinput").find(".tag").length) {
+            $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
+                "font-size": "12px",
+                "top": "12px",
+                "right": "30px",
+                "padding": "0 10px",
+                "color": "#6f7285"
+            });
+        } else {
+            $("label[for='" + tag_input + "']").removeClass("full-focus-out").css({
+                "font-size": "13px",
+                "top": "28px",
+                "right": "25px",
+                "color": "#6f7285",
+                "padding": "0"
+            });
+            $("#" + tag_input + "_tag").attr("placeholder", "");
+        }
+    });
+}
+
+function newItem_label() {
+    $("#tags_tagsinput").find("#tags_tag").attr("placeholder", "افزودن");
+    tag_input_label("tags");
 }

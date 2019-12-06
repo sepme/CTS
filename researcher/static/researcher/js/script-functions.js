@@ -463,7 +463,7 @@ function studious_record() {
 }
 
 function show_research_record() {
-    if ($("#rank").val() == 1)
+    if ($("#rank").val() === 1)
     {
         row = "<tr>" +
             "<td>" + $("#subject").val() + "</td>" +
@@ -476,7 +476,7 @@ function show_research_record() {
             "</td>" +
             "</tr>";
         }
-    else if ( $("#rank").val() == 2)
+    else if ( $("#rank").val() === 2)
     {
         row = "<tr>" +
             "<td>" + $("#subject").val() + "</td>" +
@@ -489,7 +489,7 @@ function show_research_record() {
             "</td>" +
             "</tr>";
         }
-    else if ( $("#rank").val() == 2)
+    else if ( $("#rank").val() === 2)
         {
             row = "<tr>" +
                 "<td>" + $("#subject").val() + "</td>" +

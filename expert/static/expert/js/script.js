@@ -184,75 +184,94 @@ $(document).ready(function () {
             selectMode: 1,
             checkboxAutoHide: true,
             clickFolderMode: 2,
-            lazyLoad: function(event, data) {
-                  data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+            lazyLoad: function (event, data) {
+                data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
             },
-            select: function(event, data) {
+            select: function (event, data) {
 
             },
-          source: [
-                 {"title": "histology", "key": "1", "folder": true, "children": [
-                         {"title": "Sterile Tissue Harvest", "key": "101", "folder": true, "children":[
-                             {"title": "Sterile Tissue Harvest", "key": "10101"},
-                             {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
-                         ]},
-                         {"title": "Tissue Cryopreservation", "key": "102"},
-                         {"title": "Tissue Fixation", "key": "103"},
-                         {"title": "Microtome Sectioning", "key": "104"},
-                         {"title": "Cryostat Sectioning", "key": "105"},
-                         {"title": "H&E staining", "key": "106"},
-                         {"title": "Histochemistry", "key": "107"},
-                         {"title": "Histoflouresence", "key": "108"}
-                  ]},
-                 {"title": "general lab", "key": "2", "folder": true, "children": [
-                         {"title": "An Introduction to the Centrifuge", "key": "201"},
-                         {"title": "Regulating Temperature in the Lab Preserving Samples Using Cold", "key": "202"},
-                         {"title": "Introduction to the Bunsen Burner", "key": "203"},
-                         {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
-                         {"title": "An Introduction to the Micropipettor", "key": "205"},
-                         {"title": "Making Solutions in the Laboratory", "key": "206"},
-                         {"title": "Understanding Concentration and Measuring Volumes", "key": "207"},
-                         {"title": "Introduction to the Microplate Reader", "key": "208"},
-                         {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
-                         {"title": "Common Lab Glassware and Users", "key": "210"},
-                         {"title": "Solutions and Concentrations", "key": "211"},
-                         {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
-                         {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
-                         {"title": "Determining the Empirical Formula", "key": "214"},
-                         {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
-                         {"title": "Using a pH Meter", "key": "216"},
-                         {"title": "Introduction to Titration", "key": "217"},
-                         {"title": "Ideal Gas Law", "key": "218"}
-                  ]}
-                  ],
-          glyph: {
-              preset: "awesome5",
-              map: {
-                  _addClass: "",
-                  checkbox: "fas fa-square",
-                  checkboxSelected: "fas fa-check-square",
-                  checkboxUnknown: "fas fa-square",
-                  radio: "fas fa-circle",
-                  radioSelected: "fas fa-circle",
-                  radioUnknown: "fas fa-dot-circle",
-                  dragHelper: "fas fa-arrow-right",
-                  dropMarker: "fas fa-long-arrow-right",
-                  error: "fas fa-exclamation-triangle",
-                  expanderClosed: "fas fa-chevron-left",
-                  expanderLazy: "fas fa-angle-right",
-                  expanderOpen: "fas fa-chevron-down",
-                  loading: "fas fa-spinner fa-pulse",
-                  nodata: "fas fa-meh",
-                  noExpander: "",
-                  // Default node icons.
-                  // (Use tree.options.icon callback to define custom icons based on node data)
-                  doc: "fas fa-screwdriver",
-                  docOpen: "fas fa-screwdriver",
-                  folder: "fas fa-folder",
-                  folderOpen: "fas fa-folder-open"
-              }
-          },
-      });
+            source: [
+                {
+                    "title": "histology", "key": "1", "folder": true, "children": [
+                        {
+                            "title": "Sterile Tissue Harvest", "key": "101", "folder": true, "children": [
+                                {"title": "Sterile Tissue Harvest", "key": "10101"},
+                                {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
+                            ]
+                        },
+                        {"title": "Tissue Cryopreservation", "key": "102"},
+                        {"title": "Tissue Fixation", "key": "103"},
+                        {"title": "Microtome Sectioning", "key": "104"},
+                        {"title": "Cryostat Sectioning", "key": "105"},
+                        {"title": "H&E staining", "key": "106"},
+                        {"title": "Histochemistry", "key": "107"},
+                        {"title": "Histoflouresence", "key": "108"}
+                    ]
+                },
+                {
+                    "title": "general lab", "key": "2", "folder": true, "children": [
+                        {"title": "An Introduction to the Centrifuge", "key": "201"},
+                        {"title": "Regulating Temperature in the Lab Preserving Samples Using Cold", "key": "202"},
+                        {"title": "Introduction to the Bunsen Burner", "key": "203"},
+                        {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
+                        {"title": "An Introduction to the Micropipettor", "key": "205"},
+                        {"title": "Making Solutions in the Laboratory", "key": "206"},
+                        {"title": "Understanding Concentration and Measuring Volumes", "key": "207"},
+                        {"title": "Introduction to the Microplate Reader", "key": "208"},
+                        {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
+                        {"title": "Common Lab Glassware and Users", "key": "210"},
+                        {"title": "Solutions and Concentrations", "key": "211"},
+                        {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
+                        {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
+                        {"title": "Determining the Empirical Formula", "key": "214"},
+                        {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
+                        {"title": "Using a pH Meter", "key": "216"},
+                        {"title": "Introduction to Titration", "key": "217"},
+                        {"title": "Ideal Gas Law", "key": "218"}
+                    ]
+                }
+            ],
+            glyph: {
+                preset: "awesome5",
+                map: {
+                    _addClass: "",
+                    checkbox: "fas fa-square",
+                    checkboxSelected: "fas fa-check-square",
+                    checkboxUnknown: "fas fa-square",
+                    radio: "fas fa-circle",
+                    radioSelected: "fas fa-circle",
+                    radioUnknown: "fas fa-dot-circle",
+                    dragHelper: "fas fa-arrow-right",
+                    dropMarker: "fas fa-long-arrow-right",
+                    error: "fas fa-exclamation-triangle",
+                    expanderClosed: "fas fa-chevron-left",
+                    expanderLazy: "fas fa-angle-right",
+                    expanderOpen: "fas fa-chevron-down",
+                    loading: "fas fa-spinner fa-pulse",
+                    nodata: "fas fa-meh",
+                    noExpander: "",
+                    // Default node icons.
+                    // (Use tree.options.icon callback to define custom icons based on node data)
+                    doc: "fas fa-screwdriver",
+                    docOpen: "fas fa-screwdriver",
+                    folder: "fas fa-folder",
+                    folderOpen: "fas fa-folder-open"
+                }
+            },
+        });
+        $('#tags').tagsInput({
+            'height': 'FIT-CONTENT',
+            'width': '100%',
+            'defaultText': '',
+            'onAddTag': newItem_label,
+            'onRemoveTag': newItem_label
+        });
+        $("#tags_tagsinput").css("border","none");
+        $("#tags_tagsinput").find("#tags_tag").on("focus", function () {
+            $(this).css("width", "fit-content");
+        });
+        tag_input_label("tags");
+        select_technique();
     });
     if ($(window).width() < 575.98) {
         // toggle slide-bar => all views
@@ -397,7 +416,7 @@ $(document).ready(function () {
                 var scientific_record = JSON.parse(data.scientific_record);
                 if (scientific_record.length !== 0) {
                     var table_row = "";
-                    for(i=0; i<scientific_record.length; i++) {
+                    for (i = 0; i < scientific_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + scientific_record[i].fields.major + "</td>" +
                             "<td>" + scientific_record[i].fields.grade + "</td>" +
@@ -405,14 +424,14 @@ $(document).ready(function () {
                             "<td>" + scientific_record[i].fields.place + "</td>" +
                             "<td>" + scientific_record[i].fields.graduated_year + "</td>" +
                             "</tr>"
-                    $('#researcher_scientific_record').html(table_row)
+                        $('#researcher_scientific_record').html(table_row)
                     }
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
 
                 var executive_record = JSON.parse(data.executive_record);
                 if (executive_record.length !== 0) {
                     var table_row = "";
-                    for(i=0; i<executive_record.length; i++) {
+                    for (i = 0; i < executive_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + executive_record[i].fields.post + "</td>" +
                             "<td>" + executive_record[i].fields.place + "</td>" +
@@ -420,7 +439,7 @@ $(document).ready(function () {
                             "<td>" + executive_record[i].fields.start + "</td>" +
                             "<td>" + executive_record[i].fields.end + "</td>" +
                             "</tr>"
-                    $('#researcher_executive_record').html(table_row)
+                        $('#researcher_executive_record').html(table_row)
                     }
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
 
@@ -428,7 +447,7 @@ $(document).ready(function () {
                 if (research_record.length !== 0) {
                     var table_row = "";
                     var status = "";
-                    for(i=0; i<research_record.length; i++) {
+                    for (i = 0; i < research_record.length; i++) {
                         switch (research_record[i].fields.status) {
                             case 1:
                                 status = "در دست اجرا";
@@ -446,7 +465,7 @@ $(document).ready(function () {
                             "<td>" + research_record[i].fields.responsible + "</td>" +
                             "<td>" + status + "</td>" +
                             "</tr>"
-                    $('#researcher_research_record').html(table_row)
+                        $('#researcher_research_record').html(table_row)
                     }
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
 
