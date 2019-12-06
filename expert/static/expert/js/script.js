@@ -266,12 +266,30 @@ $(document).ready(function () {
             'onAddTag': newItem_label,
             'onRemoveTag': newItem_label
         });
-        $("#tags_tagsinput").css("border","none");
+        $("#tags_tagsinput").css("border", "none");
         $("#tags_tagsinput").find("#tags_tag").on("focus", function () {
             $(this).css("width", "fit-content");
         });
         tag_input_label("tags");
         select_technique();
+        let techniquesForm = $('.ajax-select-techniques');
+        techniquesForm.submit(function (event) {
+            let data = [];
+            $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
+                data[index] = $(this).find("span").text();
+            });
+            // please set ajax url in select_techniques.html
+            $.ajax({
+                url: $(this).attr('data-url'),
+                data: data,
+                dataType: 'json',
+                success: function (data) {
+
+                },
+                error: function (data) {
+                }
+            });
+        });
     });
     if ($(window).width() < 575.98) {
         // toggle slide-bar => all views
@@ -346,7 +364,8 @@ $(document).ready(function () {
             }
         });
     }
-});
+})
+;
 
 $(document).ready(function () {
 
@@ -1115,20 +1134,5 @@ function getCookie(name) {
             }
         }
     }
-    return cookieValue;
 }
-
-var csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-$.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
+    

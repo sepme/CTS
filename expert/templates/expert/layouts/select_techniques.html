@@ -4,43 +4,49 @@
         <div class="close"></div>
         <div class="card-head">انتخاب تکنیک</div>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-right">
-                    پیش از ارسال در خواستتان برای صاحب پروژه و تایید نهایی آن،
-                    در این قسمت می بایست تکنیک هایی که به نظرتان برای انجام پروژه به آنها نیاز خواهید داشت را انتخاب
-                    کنید.
-                </div>
-            </div>
-            <br>
-            <hr>
-            <br>
-            <div class="row mbottom-lg-25">
-                <div class="col-8 text-right">
-                    <span class="section-title">لیست تکنیک ها</span>
-                    <div class="section">
-                        <div id="fancy-tree"></div>
-                    </div>
-                    <div dir="rtl" class="sub-header">
-                        در صورتی که تکنیک مورد نطر خود را در لیست بالا نیافتید، آن را اینجا وارد کنید و کلید Enter را
-                        فشار دهید.
-                    </div>
-                    <div style="position: relative">
-                        <input  style="margin: 0" type="text" class="w-100" name="" id="add-new-technique" placeholder="نام تکنیک">
+            <form method="post" enctype="multipart/form-data" class="ajax-select-techniques"
+                  data-url="">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        پیش از ارسال در خواستتان برای صاحب پروژه و تایید نهایی آن،
+                        در این قسمت می بایست تکنیک هایی که به نظرتان برای انجام پروژه به آنها نیاز خواهید داشت را انتخاب
+                        کنید.
                     </div>
                 </div>
-                <div class="col-4 text-right">
-                    <span class="section-title">تکنیک های انتخاب شده</span>
-                    <div class="section">
-                        <label for="tags"></label>
-                        <input name="techniques" id="tags" value="" class="w-100"/>
+                <br>
+                <hr>
+                <br>
+                <div class="row mbottom-lg-25">
+                    <div class="col-8 text-right">
+                        <span class="section-title">لیست تکنیک ها</span>
+                        <div class="section">
+                            <div id="fancy-tree"></div>
+                        </div>
+                        <div dir="rtl" class="sub-header">
+                            در صورتی که تکنیک مورد نطر خود را در لیست بالا نیافتید، آن را اینجا وارد کنید و کلید Enter
+                            را
+                            فشار دهید.
+                        </div>
+                        <div style="position: relative">
+                            <input style="margin: 0" type="text" class="w-100" name="" id="add-new-technique"
+                                   placeholder="نام تکنیک">
+                        </div>
+                    </div>
+                    <div class="col-4 text-right">
+                        <span class="section-title">تکنیک های انتخاب شده</span>
+                        <div class="section">
+                            <label for="tags"></label>
+                            <input name="techniques" id="tags" value="" class="w-100"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer">
-                <button class="save-btn" id="accept-techniques" data-url="{% url 'expert:accept_project' %}">
-                    ثبت و ارسال درخواست
-                </button>
-            </div>
+                <div class="card-footer">
+                    <button class="save-btn" id="accept-techniques" type="button">
+                        ثبت و ارسال درخواست
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
