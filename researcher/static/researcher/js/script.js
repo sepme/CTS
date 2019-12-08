@@ -300,6 +300,26 @@ $(document).ready(function () {
     }
 });
 
+
+$(".submit-button").click(function (event) {
+    event.preventDefault();
+    let voteForm = $(this).closest("form");
+    let data =  voteForm.serialize();
+    console.log(data);
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+
+        },
+        error: function (data) {
+
+        },
+    })
+});
+
 var scientificForm = $('#ajax-sci-form');
 scientificForm.submit(function (event) {
     event.preventDefault();
@@ -659,7 +679,7 @@ technique_review.submit(function (event) {
             }
         }
     })
-})
+});
 
 var add_technique_form = $('.ajax-add-technique-form');
 add_technique_form.submit(function (event) {

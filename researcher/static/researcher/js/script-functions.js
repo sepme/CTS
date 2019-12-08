@@ -465,8 +465,7 @@ function studious_record() {
 }
 
 function show_research_record() {
-    if ($("#rank").val() == 1)
-    {
+    if ($("#rank").val() == 1) {
         row = "<tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
@@ -477,9 +476,7 @@ function show_research_record() {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr>";
-        }
-    else if ( $("#rank").val() == 2)
-    {
+    } else if ($("#rank").val() == 2) {
         row = "<tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
@@ -490,20 +487,18 @@ function show_research_record() {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr>";
-        }
-    else if ( $("#rank").val() == 2)
-        {
-            row = "<tr>" +
-                "<td>" + $("#subject").val() + "</td>" +
-                "<td>" + $("#admin").val() + "</td>" +
-                "<td>" + $("#liable").val() + "</td>" +
-                "<td>متوقف</td>" +
-                "<td>" +
-                "<i class='fas fa-pen' id='edit_stu'></i>" +
-                "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
-                "</td>" +
-                "</tr>";
-            }
+    } else if ($("#rank").val() == 2) {
+        row = "<tr>" +
+            "<td>" + $("#subject").val() + "</td>" +
+            "<td>" + $("#admin").val() + "</td>" +
+            "<td>" + $("#liable").val() + "</td>" +
+            "<td>متوقف</td>" +
+            "<td>" +
+            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+            "</td>" +
+            "</tr>";
+    }
     if (!$(".studious > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -648,26 +643,33 @@ function vote_dialog_init() {
 
 function vote_slider(slide_count) {
     counter = 0;
-    $(".next-button").click(function () {
-        if (counter < slide_count - 1) {
-            counter++;
-            progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
-            width = parseFloat($(".progress-line").css('width'));
-            $(".progress-line").css('width', width + progressWidth);
 
-            $(".swiper-wrapper").css({
-                "transform": "translate3d(-" + 100 * counter + "%, 0, 0)",
-                "transition-duration": "0.3s"
-            });
-        }
-        if (counter === slide_count - 1) {
-            $(this).html("<i class='fas fa-check'></i>" +
-                "ثبت");
-        }
-        if (counter > 0) {
-            $(".prev-button").removeClass("disabled");
-        }
-    });
+    function next_button_init() {
+        $(".next-button").click(function () {
+            if (counter < slide_count - 1) {
+                counter++;
+                progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
+                width = parseFloat($(".progress-line").css('width'));
+                $(".progress-line").css('width', width + progressWidth);
+
+                $(".swiper-wrapper").css({
+                    "transform": "translate3d(-" + 100 * counter + "%, 0, 0)",
+                    "transition-duration": "0.3s"
+                });
+            }
+            if (counter === slide_count - 1) {
+                $(this).closest("div").prepend("<span class='submit-button'>" +
+                    "<i class='fas fa-check'></i>" +
+                    "ثبت" +
+                    "</span>");
+                $(this).remove();
+            }
+            if (counter > 0) {
+                $(".prev-button").removeClass("disabled");
+            }
+        });
+    }
+    next_button_init();
     $(".prev-button").click(function () {
         if (counter > 0) {
             counter--;
@@ -681,8 +683,12 @@ function vote_slider(slide_count) {
             });
         }
         if (counter === slide_count - 2) {
-            $(".next-button").html("<i class='fas fa-arrow-right'></i>" +
-                "بعدی");
+            $(this).closest("div").prepend("<span class='next-button'>" +
+                "<i class='fas fa-arrow-right'></i>" +
+                "بعدی" +
+                "</span>");
+            $(this).closest("div").find(".submit-button").remove();
+            next_button_init();
         }
         if (counter === 0) {
             $(this).addClass('disabled');
