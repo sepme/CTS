@@ -276,15 +276,16 @@ $(document).ready(function () {
         techniquesForm.submit(function (event) {
             event.preventDefault();
             let data = [];
+            let id = $(this).attr("id");
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            console.log(data);
+            console.log(id);
             $.ajax({
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('data-url'),
-                data: {technique: data},
+                data: {technique: data, id: id},
                 dataType: 'json',
                 success: function (data) {
 
