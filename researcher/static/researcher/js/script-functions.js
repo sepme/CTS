@@ -60,7 +60,6 @@ function init_dialog_btn(element, dialogClass) {
         $(dialogClass).css("display", "block");
         close_dialog(dialogClass);
         dialog_comment_init();
-        vote_dialog_init();
         load_dialog();
     });
 }
@@ -168,6 +167,7 @@ function close_dialog(className) {
         $(".main").removeClass("blur-div");
         $(className).find("input").val("");
         $(className).find("input:checked").prop("checked", false);
+        $(className).find(".keywords").html("");
     });
 }
 

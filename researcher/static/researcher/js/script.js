@@ -186,10 +186,11 @@ function setValue(data) {
 }
 
 function setComment(data) {
+    console.log(data);
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type == '0') { //expert
+        if (data[i].sender_type === 0) { //expert
             console.log("sender type is 0");
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-profile'>" +
@@ -197,27 +198,22 @@ function setComment(data) {
                 "<div class='comment-body'>" +
                 "<span class='comment-tools'>" +
                 "<i class='fas fa-pen'>" +
-                "<a href='/" +
-                data[i].attachment +
-                "'>attachment</a>" +
                 "</i>" +
                 "<i class='fas fa-reply'><div class='reply'></div>" +
                 // data[i].replied_text+
                 "</i>" +
+                "<a href='/" +
+                data[i].attachment +
+                "'><i class='fas fa-paperclip'></i></a>" +
                 "</span>" +
                 "<span>" +
                 data[i].description +
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else { //researcher
+        } else if (data[i].sender_type === 2) { //researcher
             console.log("sender type isn't 0");
             comments_code += "<div class='my-comment'>" +
-                "<div class='comment-profile'>" +
-                "<img src=" +
-                profile +
-                " >" +
-                "</div>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
                 "<i class='fas fa-trash-alt'></i>" +
@@ -225,10 +221,10 @@ function setComment(data) {
                 data[i].pk +
                 "></i>" +
                 "<i class='fas fa-pen'>" +
+                "</i>" +
                 "<a href='/" +
                 data[i].attachment +
-                "'>attachment</a>" +
-                "</i>" +
+                "'><i class='fas fa-paperclip'></i></a>" +
                 "</span>" +
                 "<span>" +
                 data[i].description +
@@ -257,6 +253,7 @@ $(document).ready(function () {
     input_focus();
     search_input(".search_message");
     question();
+    vote_dialog_init();
     $(".new-review-request").click(function () {
         $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
     });
