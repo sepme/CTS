@@ -306,14 +306,15 @@ def show_project_view(request):
 
 
 def accept_project(request):
-    project = Project.objects.get(id=request.GET['id'])
-    project.expert_applied.add(request.user.expertuser)
-    project.save()
-    Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
-    ) + "استاد",
-                           expert_user=request.user.expertuser,
-                           industry_user=project.industry_creator,
-                           sender_type=3)
+    print(request.POST['technique'])
+    # project = Project.objects.get(id=request.GET['id'])
+    # project.expert_applied.add(request.user.expertuser)
+    # project.save()
+    # Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
+    # ) + "استاد",
+    #                        expert_user=request.user.expertuser,
+    #                        industry_user=project.industry_creator,
+    #                        sender_type=3)
     return JsonResponse({'success': 'successful'})
 
 

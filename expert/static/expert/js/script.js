@@ -274,14 +274,17 @@ $(document).ready(function () {
         select_technique();
         let techniquesForm = $('.ajax-select-techniques');
         techniquesForm.submit(function (event) {
+            event.preventDefault();
             let data = [];
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            // please set ajax url in select_techniques.html
+            console.log(data);
             $.ajax({
+                traditional: true,
+                method: 'POST',
                 url: $(this).attr('data-url'),
-                data: data,
+                data: {technique: data},
                 dataType: 'json',
                 success: function (data) {
 
@@ -1133,6 +1136,21 @@ function getCookie(name) {
                 break;
             }
         }
+        return cookieValue;
     }
 }
-    
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
