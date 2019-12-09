@@ -2,7 +2,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
-from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404, Http404
 from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
 from industry.models import Comment
@@ -297,7 +297,7 @@ def show_project_view(request):
         'required_budget': project_form.required_budget,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
-        'required_technique': project_form.required_technique,
+        'required_technique': serializers.serialize('json', project_form.required_technique.all()),
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
@@ -306,10 +306,29 @@ def show_project_view(request):
 
 
 def accept_project(request):
-    print(request.POST['technique'])
-    # project = Project.objects.get(id=request.GET['id'])
-    # project.expert_applied.add(request.user.expertuser)
-    # project.save()
+    expert_user = get_object_or_404(ExpertUser, user=request.user)
+    project = Project.objects.get(id=request.POST.get('id'))
+    project_form = project.project_form
+    if expert_user in project.expert_applied.all():
+        return JsonResponse({
+            'success': 'درخواست شما قبلا هم ارسال شده است'
+        })
+    else:
+        technique_list = request.POST.getlist('technique')
+        if len(technique_list) == 0:
+            return JsonResponse({
+                'success': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.'
+            })
+        for technique in technique_list:
+            project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
+            project_form.required_technique.add(project_technique[0].id)
+        project_form.save()
+        project.expert_applied.add(expert_user.id)
+        project.save()
+        return JsonResponse({
+            'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
+        })
+
     # Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
     # ) + "استاد",
     #                        expert_user=request.user.expertuser,

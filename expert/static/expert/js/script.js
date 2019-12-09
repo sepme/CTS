@@ -288,7 +288,11 @@ $(document).ready(function () {
                 data: {technique: data, id: id},
                 dataType: 'json',
                 success: function (data) {
-
+                    iziToast.success({
+                        rtl: true,
+                        message: data.success,
+                        position: 'topCenter'
+                    });
                 },
                 error: function (data) {
 
