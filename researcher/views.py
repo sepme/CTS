@@ -68,19 +68,19 @@ class Index(LoginRequiredMixin, generic.FormView):
         all_projects = Project.objects.all().exclude(expert_accepted=None)
         technique_id = [item.id for item in self.request.user.researcheruser.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(id__in=technique_id)
-        # projects = []
-        # for project in all_projects:
-        #     try:
-        #         for tech in project.project_form.required_technique.all():
-        #             if tech not in technique:
-        #                 raise Exception("TECHNIQUE_NOT_EXIST")
-        #         projects.append(project)
-        #     except Exception:
-        #         continue
+        projects = []
+        for project in all_projects:
+            try:
+                for tech in project.project_form.required_technique.all():
+                    if tech not in technique:
+                        raise Exception("TECHNIQUE_NOT_EXIST")
+                projects.append(project)
+            except Exception:
+                continue
         project_list = []
         for project in all_projects:
-            if self.request.user.researcheruser in project.researcher_applied.all():
-                continue
+            # if self.request.user.researcheruser in project.researcher_applied.all():
+            #     continue
             all_comments = project.get_comments()
             expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
             researcher_comment = all_comments.filter(sender_type=2)
@@ -444,15 +444,15 @@ class QuestionShow(generic.TemplateView ):
                             self.request.user.researcheruser.researcherprofile.last_name,
                             question.research_question.question_title)
             email = question.research_question.expert.user.username
-            # try:
-            #     send_mail(
-            #         subject=subject,
-            #         message=message, 
-            #         from_email=settings.EMAIL_HOST_USER,
-            #         recipient_list=[email],
-            #     )
-            # except TimeoutError:
-            #     return HttpResponse('Timeout Error!!')
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message, 
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[email],
+                )
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):
@@ -509,13 +509,16 @@ def ShowProject(request):
     all_comments = project.get_comments().exclude(researcher_user=None)
     json_response['comments'] = []
     for com in all_comments:
-        # url = com.attachment.url[com.attachment.url.find('media' ,2):]
+        try:
+            url = com.attachment.url[com.attachment.url.find('media' ,2):]
+        except:
+            url = "None"
         temp = {
             'pk'           : com.pk,
             'description'  : com.description,
             'replied_text' : com.replied_text,
             'sender_type'  : com.sender_type,
-            # 'attachment'   : url
+            'attachment'   : url
         }
         json_response['comments'].append(temp)
     return JsonResponse(json_response)
@@ -534,6 +537,11 @@ def ApplyProject(request):
                                                 least_hours_offered=least_hour,
                                                 most_hours_offered=most_hour)
         apply_project.save()
+        comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
+                          sender_type=3,
+                          project=project,
+                          researcher_user=request.user.researcheruser)
+        comment.save()
         project.researcher_applied.add(request.user.researcheruser)
         return JsonResponse(data={'success' : "success"})
     print(form.errors)
@@ -552,16 +560,16 @@ def MyProject(request):
                 'started'       : date_last(datetime.date.today() ,project.date_start),
                 'finished'      : date_last(datetime.date.today() ,project.date_finished),
             }
-            json_response['vote'] = "false"
+            project_list['vote'] = "false"
             if datetime.date.today() > project.date_finished:
                 if evaluation_history.objects.filter(phase=3).count() == 0:
-                    json_response['vote'] = "true"
+                    project_list['vote'] = "true"
             elif datetime.date.today() > project.date_phase_two_finished:
                 if evaluation_history.objects.filter(phase=2).count() == 0:
-                    json_response['vote'] = "true"
+                    project_list['vote'] = "true"
             elif datetime.date.today() > project.date_phase_one_finished:
                 if evaluation_history.objects.filter(phase=1).count() == 0:
-                    json_response['vote'] = "true"
+                    project_list['vote'] = "true"
         print(project_list)
         return JsonResponse(data={"project_list" : project_list})
     else:

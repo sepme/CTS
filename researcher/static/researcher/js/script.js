@@ -2,8 +2,10 @@ $(window).on("load", function () {
     init_windowSize();
     load_dialog();
     $(".fa-reply").click(function (event) {
-        console.log("repliiiiiiiiiinnnnnnnqqq!!!!!!!");
         console.log($("#reply").val());
+    });
+    $(".fuckingButton").click(function(){
+        console.log("==========");
     });
 }).on("resize", function () {
     init_windowSize();
@@ -11,6 +13,7 @@ $(window).on("load", function () {
 });
 
 $(".chamran-btn-info").click(function () {
+    console.log("----------------")
     const dialog = $(".showProject");
     $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
     $("#apply_project_id").attr('value', $(".chamran-btn-info").attr("id"));
@@ -199,13 +202,14 @@ function setComment(data) {
                 "<span class='comment-tools'>" +
                 "<i class='fas fa-pen'>" +
                 "</i>" +
-                "<i class='fas fa-reply'><div class='reply'></div>" +
-                // data[i].replied_text+
-                "</i>" +
-                "<a href='/" +
-                data[i].attachment +
-                "'><i class='fas fa-paperclip'></i></a>" +
-                "</span>" +
+                "<i class='fas fa-reply'><div class='reply'></div>"+
+                "</i>" ;
+                if (data[i].attachment !== "None") {
+                    comments_code += "<a href='/" +
+                                     data[i].attachment +
+                                     "'><i class='fas fa-paperclip'></i></a>" ;   
+                }
+            comments_code += "</span>" +
                 "<span>" +
                 data[i].description +
                 "</span>" +
@@ -213,6 +217,7 @@ function setComment(data) {
                 "</div>";
         } else if (data[i].sender_type === 2) { //researcher
             console.log("sender type isn't 0");
+            console.log(data[i].attachment);
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -221,11 +226,23 @@ function setComment(data) {
                 data[i].pk +
                 "></i>" +
                 "<i class='fas fa-pen'>" +
-                "</i>" +
-                "<a href='/" +
-                data[i].attachment +
-                "'><i class='fas fa-paperclip'></i></a>" +
+                "</i>" ;
+                if (data[i].attachment !== "None") {
+                    comments_code += "<a href='/" +
+                                     data[i].attachment +
+                                     "'><i class='fas fa-paperclip'></i></a>" ;   
+                }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].description +
                 "</span>" +
+                "</div>" +
+                "</div>";
+        }
+        else { //system
+            console.log("sender type isn't 0 and 2");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
                 data[i].description +
                 "</span>" +
@@ -969,7 +986,7 @@ function ShowMyProject(project) {
         " قبل )</span></span>" +
         "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>" +
         "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>" + project.finished + "</span> فرصت باقی است!</span>" +
-        "<button type='button' class='chamran-btn-info' id='" + project.PK + "'>مشاهده</button>" +
+        "<button type='button' class='chamran-btn-info  fuckingButton' id='" + project.PK + "'>مشاهده</button>" +
         "</div>";
     return show_project;
 }
@@ -990,8 +1007,8 @@ $("#your-project").click(function (event) {
                 const element = data.project_list[key];
                 adding = adding + ShowMyProject(element);
             }
-            console.log(adding);
             $(".your-project").html(adding);
+            // $(".your-project").append(adding);
         },
         error: function (data) {
             console.log('You don\'t have any project.');
