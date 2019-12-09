@@ -161,19 +161,19 @@
 .fixed-back #question-body::-webkit-scrollbar-track{
     background-color: #FDFDFD;
 }
-.fixed-back .answer{
-    position: relative;
-    border: 1px solid #CDCDCD;
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: 0.25em;
-    margin-top: 10px;
-    padding: 5px 20px 5px 5px;
-}
-.fixed-back .answer:hover{
-    background-color: rgba(0, 0, 0, 0.05);
-    cursor: default;
-}
+/*.fixed-back .answer{*/
+/*    position: relative;*/
+/*    border: 1px solid #CDCDCD;*/
+/*    -webkit-border-radius: 0.25em;*/
+/*    -moz-border-radius: 0.25em;*/
+/*    border-radius: 0.25em;*/
+/*    margin-top: 10px;*/
+/*    padding: 5px 20px 5px 5px;*/
+/*}*/
+/*.fixed-back .answer:hover{*/
+/*    background-color: rgba(0, 0, 0, 0.05);*/
+/*    cursor: default;*/
+/*}*/
 .fixed-back .answer .title{
     font-weight: 400;
     position: relative;
@@ -691,142 +691,7 @@ span.border-span{
 .next-line{
   left: 0;
 }
-/* show Project style*/
-.establish-time, .time-left {
-    width: fit-content;
-    position: absolute;
-    top: -20px;
-}
 
-.establish-time {
-    left: 180px;
-}
-
-.time-left {
-    left: 50px;
-}
-
-.establish-time > .time-head, .time-left > .time-head {
-    background-color: #3CCD1C;
-    color: #fff;
-    border-top-left-radius: 0.25em;
-    border-top-right-radius: 0.25em;
-    border: 1px solid #bdbdbd;
-    border-bottom: none;
-    padding: 0 5px;
-    text-align: center;
-}
-
-.establish-time > .time-body, .time-left > .time-body {
-    background-color: #F8FDF7;
-    color: #707070;
-    border: 1px solid #bdbdbd;
-    padding: 0 5px;
-    text-align: center;
-}
-.custom-border-title{
-    border: 1px solid #bdbdbd;
-    border-radius: 0.25em;
-    background-color: #f8fdf7;
-    padding: 45px 10px 25px 10px;
-}
-span.title{
-    position: absolute;
-    top: -11px;
-    right: 35px;
-    padding: 1px 5px;
-    color: #707070;
-    z-index: 2;
-}
-span.title-back{
-    position: absolute;
-    top: -20px;
-    right: 20px;
-    height: 36px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    border-radius: 30px;
-    background-color: #fff;
-}
-.shadow-back{
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 0 5px 0 #ffffff00;
-}
-.project-info-innerDiv, .education-info-innerDiv, .message-innerDiv{
-    border: 1px solid #bdbdbd;
-    background-color: #fff;
-    border-radius: 0.25em;
-    position: relative;
-}
-.education-btn > i, .executive-btn > i, .research-btn > i, .paper-btn > i{
-  position: absolute;
-  top: 5px;
-  left: 15px;
-}
-.education-btn > i:hover, .executive-btn > i:hover, .research-btn > i:hover, .paper-btn > i:hover{
-  color: #3ccd1c;
-  cursor: pointer;
-}
-.education-btn, .executive-btn, .research-btn, .paper-btn, .technique{
-    position: absolute;
-    top: -55px;
-    left: 5px;
-}
-.project-info-innerDiv{
-  padding-right: 44px;
-}
-.project-info-tabs{
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-top-right-radius: 0.25em;
-    border-bottom-right-radius: 0.25em;
-    padding: 2px;
-    width: 43px;
-}
-.project-info-content{
-    width: 100%;
-    height: 100%;
-    min-height: 370px;
-    padding: 5px;
-    position: relative;
-    border-right: 1px solid #bdbdbd;
-
-}
-.nav-pills > .nav-link{
-    position: relative;
-    background-color: #707070;
-    color: #fff;
-    padding: 5px 2px;
-    margin: 1px 2px 1px 0;
-    border-radius: 0 0.25em 0.25em 0;
-    width: 40px;
-    height: 90px;
-}
-.nav-pills > .nav-link.active , .nav-pills > .nav-link:hover{
-    background-color: #3CCD1C;
-    color: #fff;
-    cursor: pointer;
-}
-.nav-pills > .nav-link::after {
-	content: 'شاخص ها';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: max-content;
-	transform: translate(-50%,-50%) rotate(90deg);
-}
-.nav-pills > .nav-link:first-child::after{
-  content: 'شاخص ها';
-}
-.nav-pills > .nav-link:nth-child(2)::after{
-  content: 'راهکارها';
-}
-.nav-pills > .nav-link:nth-child(3)::after{
-  content: 'منابع مورد نیاز';
-}
-.nav-pills > .nav-link:nth-child(4)::after{
-  content: 'قوانین';
-}
 .add-researcher-row{
   margin-top: 60px;
   margin-bottom: 35px;
@@ -897,35 +762,7 @@ span.add-researcher.hover > span{
   transform: translate(-50%, 90%);
   color: #3ccd1c;
 }
-.question-mark{
-    height: 100%;
-}
-.question{
-    font-weight: bold;
-    color: #3CCD1C;
-    padding-right: 2px;
-}
-.answer{
-    font-weight: 300;
-    padding-right: 20px;
-}
-.accept-btn , .refuse-btn{
-    padding: 10px 5px;
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: 0.25em;
-    color: #fff;
-    /*box-shadow: 5px 5px 5px 20px #000;*/
-}
-.accept-btn:hover , .refuse-btn:hover {
-    box-shadow: none;
-}
-.accept-btn{
-    background-color: #3CCD1C;
-}
-.refuse-btn {
-    background-color: #ff4545;
-}
+
 /* project details style*/
 .save-input{
   margin-top: 20px;
