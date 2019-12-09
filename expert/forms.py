@@ -333,3 +333,18 @@ class ResearchQuestionForm(forms.ModelForm):
     def clean_attachment(self):
         attachment = self.cleaned_data.get('attachemnt')
         return attachment
+
+class CommentForm(forms.Form):
+    description = forms.CharField(widget=forms.Textarea ,empty_value="None")
+    attachment = forms.FileField(required=False)
+
+    def clean_description(self):
+        data = self.cleaned_data["description"]
+        if data == "None":
+            raise ValidationError(_("نظر خود را لطفا بنوبسید."))
+        return data
+    
+    def clean_attachment(self):
+        data = self.cleaned_data["attachment"]
+        print("attachment",data)
+        return data
