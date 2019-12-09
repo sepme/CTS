@@ -434,6 +434,10 @@ $(document).ready(function () {
                         $('#researcher_grade').html('دکتری عمومی');
                         break;
                 }
+                let tech = ""
+                for (let index = 0; index < data.techniques.length; index++)
+                    tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
+                $("#researcher_techniques").html(tech)
                 $('#researcher_university').html(data.university);
                 $('#researcher_entry_year').html(data.entry_year);
 
@@ -1155,4 +1159,59 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
+});
+
+var comment_form = $('#comment-form');
+comment_form.submit(function (event) {
+    event.preventDefault();
+    comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+    comment_form.find("label").addClass("progress-cursor");    
+    var data = new FormData(comment_form.get(0));
+    let $thisurl = "";
+    let status = $(".status").attr("status");
+    if( status === "researcher" ){
+        $thisurl = "/expert/researcher_comment/";
+    }
+    else{
+        $thisurl = "/expert/industry_comment/";
+    }
+    console.log(data);
+    $.ajax({
+        method: 'POST',
+        url: $thisurl,
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت ارسال شد!",
+                position: 'bottomLeft'
+            });
+            comment_form[0].reset();
+        },
+        error: function (data) {
+            console.log(data);
+            var obj = JSON.parse(data.responseText);
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.description) {
+                $("#description").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.description + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+        },
+    });
 });

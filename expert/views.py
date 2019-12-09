@@ -14,8 +14,8 @@ from django.core import serializers
 import json
 from industry.models import *
 from researcher.models import ScientificRecord as ResearcherScientificRecord
-from researcher.models import ExecutiveRecord as ReseacherExecutiveRecord
-from researcher.models import ResearcherProfile, Technique, StudiousRecord
+from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
+from researcher.models import ResearcherProfile, Technique, StudiousRecord ,TechniqueInstance
 
 
 def calculate_deadline(finished, started):
@@ -46,20 +46,34 @@ class ResearcherRequest(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         expert_user = get_object_or_404(ExpertUser, user=request.user)
         projects_list = Project.objects.filter(expert_accepted=expert_user).only('project_form__project_title_persian')
-
-        applications_list = []
+        projects_data = []
         for project in projects_list:
-            researchers_form = [ResearcherProfile.objects.get(researcher_user=researcher_user) for researcher_user in project.researcher_applied.all()]
-            if len(researchers_form) != 0:
-                project_applications = {
+            try:
+                researchers_applied = []
+                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user)[0] for researcher_user in project.researcher_applied.all()]
+                if len(researchers_form) == 0:
+                    continue
+                for research in researchers_form:
+                    try:
+                        techniques = [tech.technique.technique_title for tech in TechniqueInstance.objects.filter(researcher=research.researcher_user)]
+                        researcher_applied = {
+                            'profile': research,
+                            'techniques' : techniques,
+                        }
+                        researchers_applied.append(researcher_applied)
+                    except:
+                        continue
+                appending = {
                     'project': project.project_form.project_title_persian,
-                    'researchers_requested': researchers_form,
+                    "researchers_applied" : researchers_applied
                 }
-                applications_list.append(project_applications)
+                projects_data.append(appending)
+            except:
+                continue                
 
         context = {}
-        if len(applications_list) != 0:
-            context = {'applications': applications_list}
+        if len(projects_data) != 0:
+            context = {'applications': projects_data}
         print(context)
 
         return render(request, self.template_name, context)
@@ -389,6 +403,7 @@ def set_answer_situation(request):
 
 def show_researcher_preview(request):
     researcher = ResearcherProfile.objects.filter(id=request.GET.get('id')).first()
+    print(TechniqueInstance.objects.filter(researcher=researcher.researcher_user))
     researcher_information = {
         'photo': researcher.photo.url,
         'name': researcher.__str__(),
@@ -396,10 +411,38 @@ def show_researcher_preview(request):
         'grade': researcher.grade,
         'university': researcher.university,
         'entry_year': researcher.entry_year,
-        # 'techniques': serializers.serialize('json', researcher.techniques),
+        'techniques': [],
         'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(researcherProfile=researcher)),
-        'executive_record': serializers.serialize('json', ReseacherExecutiveRecord.objects.filter(researcherProfile=researcher)),
+        'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(researcherProfile=researcher)),
         'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcher)),
     }
+    for tech in TechniqueInstance.objects.filter(researcher=researcher.researcher_user):
+        researcher_information['techniques'].append(tech.technique.technique_title)
     print(researcher_information)
     return JsonResponse(researcher_information)
+
+def CommentForResearcher(request):
+    print(request)
+    form = CommentForm(request.POST ,request.FILES)
+    project = Project.objects.filter(id=request.POST['project_id'])[0]
+    researcher = ResearcherUser.objects.filter(id=request.POST['researcher_id'])[0]
+    if form.is_valid():
+        description = form.cleaned_data['description']
+        attachment = form.cleaned_data['attachment']        
+        comment = Comment(description=description
+                         ,attachment=attachment
+                         ,project=project
+                         ,researcher_user=researcher
+                         ,expert_user=request.user.expertuser
+                         ,sender_type=0)
+        comment.save()
+        print(Project.objects.filter(id=request.POST['project_id']))
+        data = {
+            'success' : 'successful',
+        }
+        return JsonResponse(data)
+    print("form doesn't validated!")
+    return JsonResponse(form.errors ,status=400)
+
+def CommentForIndustry(request):
+    pass
