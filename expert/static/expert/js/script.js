@@ -909,17 +909,18 @@ ResearchQuestionForm.submit(function (event) {
     ResearchQuestionForm.find("label").addClass("progress-cursor");
     ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = ResearchQuestionForm.attr('data-url');
-    var data = $(this).serialize();
+    var data = new FormData(ResearchQuestionForm.get(0));
     ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     console.log(data);
     console.log($(this).find("input[type='file']").get(0).files.item(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
-        dataType: 'json',
+        // dataType: 'json',
         data: data,
-        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        // contentType: 'application/json; charset=utf-8',
+        cache: false,
+        processData: false,
+        contentType: false,
         success: function (data) {
             ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
