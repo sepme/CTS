@@ -306,6 +306,7 @@ def show_project_view(request):
             'sender_type': comment.sender_type
         })
     data = {
+        'comments': comments,
         'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
         'key_words': serializers.serialize('json', project_form.key_words.all()),
         'main_problem_and_importance': project_form.main_problem_and_importance,
