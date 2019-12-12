@@ -326,7 +326,6 @@ def accept_project(request):
     # project.save()
     expert_user = get_object_or_404(ExpertUser, user=request.user)
     project = Project.objects.get(id=request.POST.get('id'))
-    project_form = project.project_form
     if expert_user in project.expert_applied.all():
         return JsonResponse({
             'success': 'درخواست شما قبلا هم ارسال شده است'
@@ -337,12 +336,11 @@ def accept_project(request):
             return JsonResponse({
                 'success': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.'
             })
+        expert_request = ExpertRequestedProject.objects.create(expert=expert_user, project=project)
         for technique in technique_list:
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
-            project_form.required_technique.add(project_technique[0].id)
-        project_form.save()
-        project.expert_applied.add(expert_user.id)
-        project.save()
+            expert_request.required_technique.add(project_technique[0])
+        expert_request.save()
         return JsonResponse({
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
@@ -351,7 +349,6 @@ def accept_project(request):
     #                        expert_user=request.user.expertuser,
     #                        industry_user=project.industry_creator,
     #                        sender_type=3)
-    return JsonResponse({'success': 'successful'})
 
 
 def add_research_question(request):
