@@ -299,3 +299,14 @@ class ResearchQuestion(models.Model):
     def get_answers(self):
         answers = ResearchQuestionInstance.objects.filter(research_question=self)
         return answers
+
+
+class ExpertRequestedProject(models.Model):
+    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
+    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
+    date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
+    required_technique = models.ManyToManyField('researcher.Technique', verbose_name='تکنیک های مورد نیاز استاد',
+                                                blank=True, null=True)
+
+    def __str__(self):
+        return "{}'s request for '{}' project".format(self.expert.expertform, self.project)

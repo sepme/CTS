@@ -96,7 +96,6 @@ class ProjectForm(models.Model):
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
     required_technique = models.TextField(verbose_name="تکنیک های مورد نیاز", default='no technique')
-    # required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
@@ -118,11 +117,13 @@ class Project(models.Model):
     date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول", null=True, blank=True)
     date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم", null=True, blank=True)
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
-    researcher_applied = models.ManyToManyField('researcher.ResearcherUser', through='researcher.RequestedProject', verbose_name="پژوهشگران درخواست داده",
+    researcher_applied = models.ManyToManyField('researcher.ResearcherUser', through='researcher.RequestedProject',
+                                                verbose_name="پژوهشگران درخواست داده",
                                                 related_name="researchers_applied", blank=True, null=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
                                                  related_name="researchers_accepted", blank=True, null=True)
-    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده",
+    expert_applied = models.ManyToManyField('expert.ExpertUser', through='expert.ExpertRequestedProject',
+                                            verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied", blank=True, null=True)
     expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
                                                                                                     "شده",
@@ -238,4 +239,3 @@ class ExpertEvaluateIndustry(models.Model):
 
         ava = float(sum / 9)
         return ava
-
