@@ -66,7 +66,7 @@ def show_project_ajax(request):
             'sender_type': comment.sender_type
         })
     json_response['expert_messaged'] = []
-    for expert in project.expert_messaged:
+    for expert in project.expert_messaged.all():
         json_response['expert_messaged'].append({
             'id': expert.id,
             'name': expert.expertform

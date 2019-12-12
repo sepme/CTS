@@ -468,9 +468,10 @@ def CommentForResearcher(request):
 
 
 def CommentForIndustry(request):
-    project = Project.objects.get(id=request.GET['id'])
+    project = Project.objects.get(id=request.GET.get('id'))
     if not project.expert_messaged.objects.filter(id=request.user.expertuser.id).exists():
         project.expert_messaged.add(ExpertUser.objects.filter(id=request.user.expertuser.id))
         project.save()
-    # Comment.objects.create(project=)
+    Comment.objects.create(project=project, expert_user=request.user.expertuser,
+                           industry_user=project.industry_creator, description=request.GET.get('description'))
 

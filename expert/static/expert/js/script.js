@@ -410,12 +410,13 @@ $(document).ready(function () {
     });
     let commentForm  = $(".comment-form");
     commentForm.submit(function () {
-        var id = $(this).closest(".showProject").attr("id");
+        let id = $(this).closest(".showProject").attr("id");
+        let description = $(this).closest(".col-lg-12").find("#description").val();
         $.ajax({
             method: 'GET',
             url: '/expert/industry_comment',
             dataType: 'json',
-            data: {id: id},
+            data: {id: id, description: description},
             success: function (data) {
 
             },
