@@ -219,7 +219,7 @@ class NewProject(View):
             policy = form.cleaned_data['policy']
             required_budget = form.cleaned_data['required_budget']
             project_phase = form.cleaned_data['project_phase']
-            required_technique = form.cleaned_data['required_technique']
+            # required_technique = form.cleaned_data['required_technique']
             progress_profitability = form.cleaned_data['progress_profitability']
             potential_problems = form.cleaned_data['potential_problems']
             new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
@@ -228,7 +228,7 @@ class NewProject(View):
                                                   main_problem_and_importance=main_problem_and_importance,
                                                   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
-                                                  required_technique=required_technique,
+                                                  # required_technique=required_technique,
                                                   approach=approach,
                                                   policy=policy,
                                                   required_budget=required_budget,

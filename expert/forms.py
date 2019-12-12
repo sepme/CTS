@@ -45,6 +45,7 @@ class InitialInfoForm(forms.Form):
 
     def clean_email_address(self):
         current_email = self.cleaned_data.get('email_address')
+        print('the email is', current_email)
         try:
             ExpertUser.objects.get(user__username=current_email)
         except ExpertUser.DoesNotExist:
