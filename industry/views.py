@@ -59,6 +59,7 @@ def show_project_ajax(request):
                                                   expert_user=project.expert_messaged.first())
     json_response['comments'] = []
     for comment in comment_list:
+        print(comment.description, "\n")
         json_response['comments'].append({
             'id': comment.id,
             'text': comment.description,
@@ -85,10 +86,11 @@ def show_project_ajax(request):
 def submit_comment(request):
     description = request.GET.get('description')
     project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
-
+    print('the expert user is', User.objects.filter(username="expert").first().expertuser)
     Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
                            sender_type=1, replied_text=request.GET.get('replied_text'), expert_user=
-                           request.GET.get('expert_id'))
+                           User.objects.filter(username="expert").first().expertuser)
+                           # request.GET.get('expert_id'))
     return JsonResponse({})
 
 
