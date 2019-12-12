@@ -311,7 +311,7 @@ def show_project_view(request):
         'required_budget': project_form.required_budget,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
-        'required_technique': serializers.serialize('json', project_form.required_technique.all()),
+        # 'required_technique': serializers.serialize('json', project_form.required_technique.all()),
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }

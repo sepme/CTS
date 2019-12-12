@@ -408,6 +408,22 @@ $(document).ready(function () {
             },
         });
     });
+    let commentForm  = $(".comment-form");
+    commentForm.submit(function () {
+        var id = $(this).closest(".showProject").attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/industry_comment',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+
+            },
+            error: function (data) {
+
+            },
+        });
+    });
 
     /*
     Show researchers information for expert
