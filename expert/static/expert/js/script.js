@@ -1179,10 +1179,8 @@ comment_form.submit(function (event) {
     $.ajax({
         method: 'GET',
         url: $thisurl,
-        data: {id: id,data:data},
-        cache: false,
-        processData: false,
-        contentType: false,
+        data: {project_id: id,data:data},
+        type: "json",
         success: function (data) {
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
