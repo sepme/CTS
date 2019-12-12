@@ -296,6 +296,15 @@ def show_project_view(request):
     id = request.GET.get('id')
     project = Project.objects.get(id=id)
     project_form = project.project_form
+    comments = []
+    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser)
+    for comment in comment_list:
+        print('id=', comment.id, '. text=', comment.description)
+        comments.append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type
+        })
     data = {
         'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
         'key_words': serializers.serialize('json', project_form.key_words.all()),
@@ -464,9 +473,13 @@ def CommentForResearcher(request):
 
 
 def CommentForIndustry(request):
-    project = Project.objects.get(id=request.GET.get('id'))
-    if not project.expert_messaged.objects.filter(id=request.user.expertuser.id).exists():
-        project.expert_messaged.add(ExpertUser.objects.filter(id=request.user.expertuser.id))
+    print('the dic is', request.GET)
+    print('\n\n\n\nid=', request.GET.get('project_id'))
+    print('description=', request.GET.get('description'), '\n\n\n\n')
+    project = Project.objects.get(id=request.GET.get('project_id'))
+    if not project.expert_messaged.filter(id=request.user.expertuser.id).exists():
+        project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
         project.save()
-    Comment.objects.create(project=project, expert_user=request.user.expertuser,
+    Comment.objects.create(sender_type=0, project=project, expert_user=request.user.expertuser,
                            industry_user=project.industry_creator, description=request.GET.get('description'))
+    return JsonResponse({})
