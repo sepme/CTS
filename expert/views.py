@@ -127,10 +127,10 @@ def index(request):
             expert_user.save()
             expert_form.save()
             return HttpResponseRedirect(reverse('expert:index'))
-
-    else:
-        form = InitialInfoForm()
-        projects = Project.objects.all()
+        else:
+            print(form.errors)
+    form = InitialInfoForm()
+    projects = Project.objects.all()
     return render(request, 'expert/index.html', {'form': form,
                                                  'expert_user': expert_user,
                                                  'projects': projects})
@@ -466,5 +466,11 @@ def CommentForResearcher(request):
     print("form doesn't validated!")
     return JsonResponse(form.errors ,status=400)
 
+
 def CommentForIndustry(request):
-    pass
+    project = Project.objects.get(id=request.GET['id'])
+    if not project.expert_messaged.objects.filter(id=request.user.expertuser.id).exists():
+        project.expert_messaged.add(ExpertUser.objects.filter(id=request.user.expertuser.id))
+        project.save()
+    # Comment.objects.create(project=)
+
