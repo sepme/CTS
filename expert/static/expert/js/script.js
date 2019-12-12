@@ -993,6 +993,8 @@ showInfo.click(function (event) {
             $(".showProject").find(".techniques").html(keys_code);
             setMajors(data);
             setValue(data);
+            setComment(data.comments);
+            console.log(data);
         },
         error: function (data) {
         }
@@ -1136,6 +1138,71 @@ function setValue(data) {
     });
 }
 
+function setComment(data) {
+    console.log(data);
+    let comments_code = "";
+    let profile = $("#profile").attr('src');
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].sender_type === 0) { //expert
+            console.log("sender type is 0");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-profile'>" +
+                "</div>" +
+                "<div class='comment-body'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-pen'>" +
+                "</i>" +
+                "<i class='fas fa-reply'><div class='reply'></div>"+
+                "</i>" ;
+                if (data[i].attachment !== "None") {
+                    comments_code += "<a href='/" +
+                                     data[i].attachment +
+                                     "'><i class='fas fa-paperclip'></i></a>" ;
+                }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        } else if (data[i].sender_type === 2) { //researcher
+            console.log("sender type isn't 0");
+            console.log(data[i].attachment);
+            comments_code += "<div class='your-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-trash-alt'></i>" +
+                "<i class='fas fa-reply' value=" +
+                data[i].pk +
+                "></i>" +
+                "<i class='fas fa-pen'>" +
+                "</i>" ;
+                if (data[i].attachment !== "None") {
+                    comments_code += "<a href='/" +
+                                     data[i].attachment +
+                                     "'><i class='fas fa-paperclip'></i></a>" ;
+                }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        }
+        else { //system
+            console.log("sender type isn't 0 and 2");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        }
+    }
+    $('.comments').html(comments_code);
+}
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -1180,10 +1247,8 @@ comment_form.submit(function (event) {
     $.ajax({
         method: 'GET',
         url: $thisurl,
-        data: {id: id,data:data},
-        cache: false,
-        processData: false,
-        contentType: false,
+        data: {project_id: id,description:data},
+        type: "ajax",
         success: function (data) {
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
