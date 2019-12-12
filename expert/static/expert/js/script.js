@@ -408,22 +408,6 @@ $(document).ready(function () {
             },
         });
     });
-    let commentForm  = $(".comment-form");
-    commentForm.submit(function () {
-        var id = $(this).closest(".showProject").attr("id");
-        $.ajax({
-            method: 'GET',
-            url: '/expert/industry_comment',
-            dataType: 'json',
-            data: {id: id},
-            success: function (data) {
-
-            },
-            error: function (data) {
-
-            },
-        });
-    });
 
     /*
     Show researchers information for expert
@@ -1185,21 +1169,16 @@ var comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
-    comment_form.find("label").addClass("progress-cursor");    
-    var data = new FormData(comment_form.get(0));
-    let $thisurl = "";
-    let status = $(".status").attr("status");
-    if( status === "researcher" ){
-        $thisurl = "/expert/researcher_comment/";
-    }
-    else{
-        $thisurl = "/expert/industry_comment/";
-    }
+    comment_form.find("label").addClass("progress-cursor");
+    let data = $(this).closest(".col-lg-12").find("#description").val();
+    let id = $(this).closest(".showProject").attr("id");
+    let $thisurl = "/expert/industry_comment/";
     console.log(data);
+    console.log(id);
     $.ajax({
-        method: 'POST',
+        method: 'GET',
         url: $thisurl,
-        data: data,
+        data: {id: id,data:data},
         cache: false,
         processData: false,
         contentType: false,
