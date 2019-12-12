@@ -474,10 +474,8 @@ def CommentForResearcher(request):
 
 
 def CommentForIndustry(request):
-    print('the dic is', request.GET)
-    print('\n\n\n\nid=', request.GET.get('project_id'))
-    print('description=', request.GET.get('description'), '\n\n\n\n')
     project = Project.objects.get(id=request.GET.get('project_id'))
+    print('the indsutry user is', project.industry_creator)
     if not project.expert_messaged.filter(id=request.user.expertuser.id).exists():
         project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
         project.save()
