@@ -1,4 +1,3 @@
-@import "comments.css";
 @media screen {
     .mbottom-lg-25{
         margin-bottom: 25px;
@@ -882,7 +881,6 @@ hr{
 /*  color: #6f7285;*/
 /*  cursor: pointer;*/
 /*}*/
-}
 .inner-card{
     padding: 20px;
     margin-top: 10px;
