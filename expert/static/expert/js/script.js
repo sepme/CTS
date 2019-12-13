@@ -288,7 +288,11 @@ $(document).ready(function () {
                 data: {technique: data, id: id},
                 dataType: 'json',
                 success: function (data) {
-
+                    iziToast.success({
+                        rtl: true,
+                        message: data.success,
+                        position: 'topCenter'
+                    });
                 },
                 error: function (data) {
 
@@ -410,13 +414,16 @@ $(document).ready(function () {
      */
     $(".researcher-card-button-show").click(function () {
         var id = $(this).attr("id");
-        var url = $(this).attr("data-url")
+        var url = $(this).attr("data-url");
+        var project_id = $(this).attr("value");
         $.ajax({
             method: 'GET',
             url: url,
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                $(".researcher_id").attr("value" ,id);
+                $(".project_id").attr("value" ,project_id);
                 $('#researcher_photo').attr("src", data.photo);
                 $('#researcher_name').html(data.name);
                 $('#researcher_major').html(data.major);
@@ -442,6 +449,7 @@ $(document).ready(function () {
                 $('#researcher_entry_year').html(data.entry_year);
 
                 var scientific_record = JSON.parse(data.scientific_record);
+                console.log(scientific_record);
                 if (scientific_record.length !== 0) {
                     var table_row = "";
                     for (i = 0; i < scientific_record.length; i++) {
@@ -1161,12 +1169,20 @@ $.ajaxSetup({
     }
 });
 
-var comment_form = $('#comment-form');
+var comment_form = $('.comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");    
-    var data = new FormData(comment_form.get(0));
+    console.log(comment_form);
+    var temp_data = {researcher_id  : $(".researcher_id").val(),
+                     project_id     : $(".project_id").val(),
+                     description    : $("#description").val(),
+                     comment_attach : $('#comment-attach').val()}
+    console.log(temp_data);
+    // var data = new FormData(temp_data);
+    var Json_data = JSON.stringify(temp_data);
+    console.log(Json_data);
     let $thisurl = "";
     let status = $(".status").attr("status");
     if( status === "researcher" ){
@@ -1174,15 +1190,14 @@ comment_form.submit(function (event) {
     }
     else{
         $thisurl = "/expert/industry_comment/";
-    }
-    console.log(data);
+    }    
     $.ajax({
         method: 'POST',
         url: $thisurl,
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
+        data: {data : Json_data},
+        // cache: false,
+        // processData: false,
+        // contentType: false,
         success: function (data) {
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -1197,21 +1212,21 @@ comment_form.submit(function (event) {
         },
         error: function (data) {
             console.log(data);
-            var obj = JSON.parse(data.responseText);
-            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            comment_form.find("label").removeClass("progress-cursor");
-            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-            if (obj.description) {
-                $("#description").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.description + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
+            // var obj = JSON.parse(data.responseText);
+            // comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+            //     .prop("disabled", false);
+            // comment_form.find("label").removeClass("progress-cursor");
+            // comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            // if (obj.description) {
+            //     $("#description").closest("div").append("<div class='error'>" +
+            //         "<span class='error-body'>" +
+            //         "<ul class='errorlist'>" +
+            //         "<li>" + obj.description + "</li>" +
+            //         "</ul>" +
+            //         "</span>" +
+            //         "</div>");
+            //     $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            // }
         },
     });
 });

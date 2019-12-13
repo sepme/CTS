@@ -2,7 +2,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
-from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404, Http404
 from .models import ExpertForm, EqTest, ExpertUser
 from .forms import *
 from industry.models import Comment
@@ -65,6 +65,7 @@ class ResearcherRequest(generic.TemplateView):
                         continue
                 appending = {
                     'project': project.project_form.project_title_persian,
+                    'id' : project.pk,
                     "researchers_applied" : researchers_applied
                 }
                 projects_data.append(appending)
@@ -311,7 +312,7 @@ def show_project_view(request):
         'required_budget': project_form.required_budget,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
-        'required_technique': project_form.required_technique,
+        'required_technique': serializers.serialize('json', project_form.required_technique.all()),
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
@@ -324,6 +325,28 @@ def accept_project(request):
     # project = Project.objects.get(id=request.GET['id'])
     # project.expert_applied.add(request.user.expertuser)
     # project.save()
+    expert_user = get_object_or_404(ExpertUser, user=request.user)
+    project = Project.objects.get(id=request.POST.get('id'))
+    project_form = project.project_form
+    if expert_user in project.expert_applied.all():
+        return JsonResponse({
+            'success': 'درخواست شما قبلا هم ارسال شده است'
+        })
+    else:
+        technique_list = request.POST.getlist('technique')
+        if len(technique_list) == 0:
+            return JsonResponse({
+                'success': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.'
+            })
+        for technique in technique_list:
+            project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
+            project_form.required_technique.add(project_technique[0].id)
+        project_form.save()
+        project.expert_applied.add(expert_user.id)
+        project.save()
+        return JsonResponse({
+            'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
+        })
     # Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
     # ) + "استاد",
     #                        expert_user=request.user.expertuser,
@@ -422,7 +445,6 @@ def show_researcher_preview(request):
     return JsonResponse(researcher_information)
 
 def CommentForResearcher(request):
-    print(request)
     form = CommentForm(request.POST ,request.FILES)
     project = Project.objects.filter(id=request.POST['project_id'])[0]
     researcher = ResearcherUser.objects.filter(id=request.POST['researcher_id'])[0]
@@ -445,4 +467,23 @@ def CommentForResearcher(request):
     return JsonResponse(form.errors ,status=400)
 
 def CommentForIndustry(request):
-    pass
+    form = CommentForm(request.POST ,request.FILES)
+    project = Project.objects.filter(id=request.POST['project_id'])[0]
+    industry = IndustryUser.objects.filter(id=request.POST['industry_id'])[0]
+    if form.is_valid():
+        description = form.cleaned_data['description']
+        attachment = form.cleaned_data['attachment']        
+        comment = Comment(description=description
+                         ,attachment=attachment
+                         ,project=project
+                         ,industry_user=industry
+                         ,expert_user=request.user.expertuser
+                         ,sender_type=0)
+        comment.save()
+        print(Project.objects.filter(id=request.POST['project_id']))
+        data = {
+            'success' : 'successful',
+        }
+        return JsonResponse(data)
+    print("form doesn't validated!")
+    return JsonResponse(form.errors ,status=400)

@@ -4,12 +4,12 @@
     <div class="project-comment-innerDiv">
         <div class="comments"></div>
         <div class="add-comment">
-            <form action="" method="post" enctype="multipart/form-data" id="comment-form">
+            <form method="POST" enctype="multipart/form-data" class="comment-form">
                 {% csrf_token %}
-                <input type="text" name="project_id" id="project_id" hidden>
-                <input type="text" name="researcher_id" id="" hidden>
-                <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
                 <div class="row">
+                    <input type="text" class="project_id" value="" hidden>
+                    <input type="text" class="researcher_id" name="researcher_id" value="" hidden>
+                    <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
                     <div class="col-lg-12">
                         <label for="description">ثبت نظر جدید</label>
                         <textarea dir="rtl" id="description" class="w-100 emojiable-option" name="description"

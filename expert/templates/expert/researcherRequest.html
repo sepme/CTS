@@ -21,6 +21,7 @@
                 {% if applications %}
                     {% for project in applications %}
                     <div class="card-header">{{ project.project }}</div>
+                    <div class="div_project_id" id="{{project.id}}" hidden></div>
                     <div class="inner-card card" style="margin-bottom: 0;">
                         {% for researcher in project.researchers_applied %}
                             <div class="researcher-request-info-innerDiv">
@@ -54,7 +55,7 @@
     {#                                                   <button class="show-researcher">مشاهده</button>#}
     {#                                                   <button class="accept-researcher">تایید</button>#}
     {#                                                   <button class="refuse-researcher">رد</button>#}
-                                            <button class="researcher-card-button-show" id="{{ researcher.profile.id }}" data-url="{% url 'expert:show_researcher_preview' %}">مشاهده</button>
+                                            <button class="researcher-card-button-show"  value="{{project.id}}" id="{{ researcher.profile.id }}" data-url="{% url 'expert:show_researcher_preview' %}">مشاهده</button>
                                             <button class="researcher-card-button-check" id="{{ researcher.profile.id }}">تایید</button>
                                             <div class="close"></div>
                                         </div>
