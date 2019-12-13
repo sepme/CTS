@@ -1241,12 +1241,13 @@ comment_form.submit(function (event) {
     let description = $(this).closest(".col-lg-12").find("#description").val();
     let id = $(this).closest(".showProject").attr("id");
     let thisUrl = "/expert/industry_comment/";
+    let attachment = "";
     console.log(description);
     console.log(id);
     $.ajax({
         method: 'GET',
         url: thisUrl,
-        data: {project_id: id, description: description},
+        data: {project_id: id, description: description, attachment: attachment},
         type: "ajax",
         success: function (data) {
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
