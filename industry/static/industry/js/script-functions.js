@@ -62,6 +62,10 @@ function init_dialog_btn(element, dialogClass) {
         dialog_comment_init();
         vote_dialog_init();
         load_dialog();
+        if (dialogClass === ".showProject") {
+            $(dialogClass).removeAttr("id");
+            $(dialogClass).attr("id", $(this).attr("id"));
+        }
     });
 }
 

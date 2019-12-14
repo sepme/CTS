@@ -66,7 +66,8 @@ function init_dialog_btn(element, dialogClass) {
         // $(".project-info-innerDiv").height($(".project-info-content").outerHeight());
         if (dialogClass === ".showProject") {
             accept_project();
-            $(dialogClass).attr("id", $(element).attr("id"));
+            $(dialogClass).removeAttr("id");
+            $(dialogClass).attr("id", $(this).attr("id"));
         } else if (dialogClass === ".select-technique") {
             $(dialogClass).find("form").attr("id", $(element).closest(".fixed-back").attr("id"));
         }

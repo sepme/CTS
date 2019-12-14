@@ -142,6 +142,70 @@ function setValue(data) {
     });
 }
 
+function setComment(data) {
+    console.log(data);
+    let comments_code = "";
+    let profile = $("#profile").attr('src');
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].sender_type === 1) { //industry
+            console.log("sender type is 0");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-profile'>" +
+                "</div>" +
+                "<div class='comment-body'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-pen'>" +
+                "</i>" +
+                "<i class='fas fa-reply'><div class='reply'></div>" +
+                "</i>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" +
+                    data[i].attachment +
+                    "'><i class='fas fa-paperclip'></i></a>";
+            }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        } else if (data[i].sender_type === 0) { //expert
+            console.log("sender type isn't 0");
+            console.log(data[i].attachment);
+            comments_code += "<div class='your-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-trash-alt'></i>" +
+                "<i class='fas fa-reply' value=" +
+                data[i].pk +
+                "></i>" +
+                "<i class='fas fa-pen'>" +
+                "</i>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" +
+                    data[i].attachment +
+                    "'><i class='fas fa-paperclip'></i></a>";
+            }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        } else { //system
+            console.log("sender type isn't 0 and 2");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        }
+    }
+    $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+}
+
 function tag_input_label(tag_input) {
     $("#" + tag_input + "_tagsinput .tags_clear").css("display", "none");
     $("#" + tag_input + "_tagsinput span.tag a").html("<i class='fas fa-times'></i>");
@@ -255,7 +319,7 @@ $(document).ready(function () {
                                 "       <i class='fas fa-reply'></i>" +
                                 "   </span>" +
                                 "   <span>" +
-                                        comment[i].text +
+                                comment[i].text +
                                 "   </span>" +
                                 "</div>" +
                                 "</div>"
@@ -267,6 +331,7 @@ $(document).ready(function () {
                     console.log(data);
                     setMajors(data);
                     setValue(data);
+                    setComment(data.comments);
                 },
                 error: function (data) {
 
@@ -518,27 +583,97 @@ $(document).ready(function () {
                 $(".dialog-main").css("display", "block");
                 close_dialog();
             });
-            $(".chamran_btn").click(function () {
-                var comment_obj = $("#comment");
-                var comment_description = comment_obj.val();
-                addComment(comment_description);
-                console.log(comment_description);
+            let comment_form = $('#comment-form');
+            comment_form.submit(function (event) {
+                event.preventDefault();
+                comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+                comment_form.find("label").addClass("progress-cursor");
+                let description = $(this).closest(".col-lg-12").find("#description").val();
+                let id = $(this).closest(".showProject").attr("id");
+                let thisUrl = "/industry/submit_comment/";
+                let attachment = "";
+                console.log(description);
+                console.log(id);
                 $.ajax({
                     method: 'GET',
-                    url: '/industry/submit_comment/',
-                    dataType: 'json',
-                    data: {
-                        description: comment_description,
-                        project_id: localStorage.getItem("project_id"),
-                    },
+                    url: thisUrl,
+                    data: {project_id: id, description: description, attachment: attachment},
+                    type: "ajax",
                     success: function (data) {
-                        localStorage.setItem("replied_text", null);
-                        // display the comment
-
+                        comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                            .prop("disabled", false);
+                        comment_form.find("label").removeClass("progress-cursor");
+                        comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                        let comment_code = "<div class='my-comment'>" +
+                            "<div class='comment-profile'>" +
+                            "</div>" +
+                            "<div class='comment-body'>" +
+                            "<span class='comment-tools'>" +
+                            "<i class='fas fa-pen'>" +
+                            "</i>" +
+                            "<i class='fas fa-reply'><div class='reply'></div>" +
+                            "</i>";
+                        // if (data[i].attachment !== "None") {
+                        //     comment_code += "<a href='/" +
+                        //                      data[i].attachment +
+                        //                      "'><i class='fas fa-paperclip'></i></a>" ;
+                        // }
+                        comment_code += "</span>" +
+                            "<span>" +
+                            description +
+                            "</span>" +
+                            "</div>" +
+                            "</div>";
+                        $(".project-comment-innerDiv").find(".comments").append(comment_code);
+                        iziToast.success({
+                            rtl: true,
+                            message: "پیام با موفقیت ارسال شد!",
+                            position: 'bottomLeft'
+                        });
+                        comment_form[0].reset();
+                        $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        var obj = JSON.parse(data.responseText);
+                        comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                            .prop("disabled", false);
+                        comment_form.find("label").removeClass("progress-cursor");
+                        comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                        if (obj.description) {
+                            $("#description").closest("div").append("<div class='error'>" +
+                                "<span class='error-body'>" +
+                                "<ul class='errorlist'>" +
+                                "<li>" + obj.description + "</li>" +
+                                "</ul>" +
+                                "</span>" +
+                                "</div>");
+                            $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                        }
                     },
                 });
-                comment_obj.val("");
             });
+            // $(".chamran_btn").click(function () {
+            //     var comment_obj = $("#comment");
+            //     var comment_description = comment_obj.val();
+            //     addComment(comment_description);
+            //     console.log(comment_description);
+            //     $.ajax({
+            //         method: 'GET',
+            //         url: '/industry/submit_comment/',
+            //         dataType: 'json',
+            //         data: {
+            //             description: comment_description,
+            //             project_id: localStorage.getItem("project_id"),
+            //         },
+            //         success: function (data) {
+            //             localStorage.setItem("replied_text", null);
+            //             // display the comment
+            //
+            //         },
+            //     });
+            //     comment_obj.val("");
+            // });
             $(".technique-list-item").click(function () {
                 $(this).toggleClass("active");
                 $(this).children("span").children(".fa-chevron-left").toggleClass("rotate--90");

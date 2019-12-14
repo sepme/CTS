@@ -277,7 +277,7 @@ class Technique(models.Model):
         ('research_methodology', 'Research Methodology'),
     )
 
-    technique_type = models.CharField(max_length=30, choices=TYPE)
+    technique_type = models.CharField(max_length=30, choices=TYPE, blank=True)
     technique_title = models.CharField(max_length=300)
     tutorial_link = models.CharField(max_length=500, null=True)
 

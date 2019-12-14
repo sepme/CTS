@@ -15,7 +15,7 @@ import json
 from industry.models import *
 from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
-from researcher.models import ResearcherProfile, Technique, StudiousRecord ,TechniqueInstance
+from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance
 
 
 def calculate_deadline(finished, started):
@@ -50,15 +50,17 @@ class ResearcherRequest(generic.TemplateView):
         for project in projects_list:
             try:
                 researchers_applied = []
-                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user)[0] for researcher_user in project.researcher_applied.all()]
+                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user)[0] for
+                                    researcher_user in project.researcher_applied.all()]
                 if len(researchers_form) == 0:
                     continue
                 for research in researchers_form:
                     try:
-                        techniques = [tech.technique.technique_title for tech in TechniqueInstance.objects.filter(researcher=research.researcher_user)]
+                        techniques = [tech.technique.technique_title for tech in
+                                      TechniqueInstance.objects.filter(researcher=research.researcher_user)]
                         researcher_applied = {
                             'profile': research,
-                            'techniques' : techniques,
+                            'techniques': techniques,
                         }
                         researchers_applied.append(researcher_applied)
                     except:
@@ -70,7 +72,7 @@ class ResearcherRequest(generic.TemplateView):
                 }
                 projects_data.append(appending)
             except:
-                continue                
+                continue
 
         context = {}
         if len(projects_data) != 0:
@@ -128,10 +130,10 @@ def index(request):
             expert_user.save()
             expert_form.save()
             return HttpResponseRedirect(reverse('expert:index'))
-
-    else:
-        form = InitialInfoForm()
-        projects = Project.objects.all()
+        else:
+            print(form.errors)
+    form = InitialInfoForm()
+    projects = Project.objects.all()
     return render(request, 'expert/index.html', {'form': form,
                                                  'expert_user': expert_user,
                                                  'projects': projects})
@@ -292,11 +294,20 @@ def paper_record_view(request):
 
 
 def show_project_view(request):
-    expert_user = request.user.expertuser
     id = request.GET.get('id')
     project = Project.objects.get(id=id)
     project_form = project.project_form
+    comments = []
+    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser)
+    for comment in comment_list:
+        print('id=', comment.id, '. text=', comment.description)
+        comments.append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type
+        })
     data = {
+        'comments': comments,
         'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
         'key_words': serializers.serialize('json', project_form.key_words.all()),
         'main_problem_and_importance': project_form.main_problem_and_importance,
@@ -316,15 +327,10 @@ def show_project_view(request):
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
-    print(data)
     return JsonResponse(data)
 
 
 def accept_project(request):
-    print(request.POST['technique'])
-    # project = Project.objects.get(id=request.GET['id'])
-    # project.expert_applied.add(request.user.expertuser)
-    # project.save()
     expert_user = get_object_or_404(ExpertUser, user=request.user)
     project = Project.objects.get(id=request.POST.get('id'))
     project_form = project.project_form
@@ -338,12 +344,17 @@ def accept_project(request):
             return JsonResponse({
                 'success': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.'
             })
+        # for technique in technique_list:
+        #     project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
+        #     project_form.required_technique.add(project_technique[0].id)
+        # project_form.save()
+        # project.expert_applied.add(expert_user.id)
+        # project.save()
+        expert_request = ExpertRequestedProject.objects.create(expert=expert_user, project=project)
         for technique in technique_list:
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
-            project_form.required_technique.add(project_technique[0].id)
-        project_form.save()
-        project.expert_applied.add(expert_user.id)
-        project.save()
+            expert_request.required_technique.add(project_technique[0])
+        expert_request.save()
         return JsonResponse({
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
@@ -352,7 +363,6 @@ def accept_project(request):
     #                        expert_user=request.user.expertuser,
     #                        industry_user=project.industry_creator,
     #                        sender_type=3)
-    return JsonResponse({'success': 'successful'})
 
 
 def add_research_question(request):
@@ -435,8 +445,10 @@ def show_researcher_preview(request):
         'university': researcher.university,
         'entry_year': researcher.entry_year,
         'techniques': [],
-        'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(researcherProfile=researcher)),
-        'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(researcherProfile=researcher)),
+        'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(
+            researcherProfile=researcher)),
+        'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(
+            researcherProfile=researcher)),
         'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcher)),
     }
     for tech in TechniqueInstance.objects.filter(researcher=researcher.researcher_user):
@@ -445,7 +457,8 @@ def show_researcher_preview(request):
     return JsonResponse(researcher_information)
 
 def CommentForResearcher(request):
-    form = CommentForm(request.POST ,request.FILES)
+    print(request)
+    form = CommentForm(request.POST, request.FILES)
     project = Project.objects.filter(id=request.POST['project_id'])[0]
     researcher = ResearcherUser.objects.filter(id=request.POST['researcher_id'])[0]
     if form.is_valid():
@@ -466,24 +479,50 @@ def CommentForResearcher(request):
     print("form doesn't validated!")
     return JsonResponse(form.errors ,status=400)
 
+# def CommentForIndustry(request):
+#     form = CommentForm(request.POST ,request.FILES)
+#     project = Project.objects.filter(id=request.POST['project_id'])[0]
+#     industry = IndustryUser.objects.filter(id=request.POST['industry_id'])[0]
+#     if form.is_valid():
+#         description = form.cleaned_data['description']
+#         attachment = form.cleaned_data['attachment']        
+#         comment = Comment(description=description
+#                          ,attachment=attachment
+#                          ,project=project
+#                          ,industry_user=industry
+#                          ,expert_user=request.user.expertuser
+#                          ,sender_type=0)
+#         comment.save()
+#         print(Project.objects.filter(id=request.POST['project_id']))
+#         data = {
+#             'success' : 'successful',
+#         }
+#         return JsonResponse(data)
+#     print("form doesn't validated!")
+#     return JsonResponse(form.errors ,status=400)
+    #     attachment = form.cleaned_data['attachment']
+    #     comment = Comment(description=description
+    #                       , attachment=attachment
+    #                       , project=project
+    #                       , researcher_user=researcher
+    #                       , expert_user=request.user.expertuser
+    #                       , sender_type=0)
+    #     comment.save()
+    #     print(Project.objects.filter(id=request.POST['project_id']))
+    #     data = {
+    #         'success': 'successful',
+    #     }
+    #     return JsonResponse(data)
+    # print("form doesn't validated!")
+    # return JsonResponse(form.errors, status=400)
+
+
 def CommentForIndustry(request):
-    form = CommentForm(request.POST ,request.FILES)
-    project = Project.objects.filter(id=request.POST['project_id'])[0]
-    industry = IndustryUser.objects.filter(id=request.POST['industry_id'])[0]
-    if form.is_valid():
-        description = form.cleaned_data['description']
-        attachment = form.cleaned_data['attachment']        
-        comment = Comment(description=description
-                         ,attachment=attachment
-                         ,project=project
-                         ,industry_user=industry
-                         ,expert_user=request.user.expertuser
-                         ,sender_type=0)
-        comment.save()
-        print(Project.objects.filter(id=request.POST['project_id']))
-        data = {
-            'success' : 'successful',
-        }
-        return JsonResponse(data)
-    print("form doesn't validated!")
-    return JsonResponse(form.errors ,status=400)
+    project = Project.objects.get(id=request.GET.get('project_id'))
+    print('the indsutry user is', project.industry_creator)
+    if not project.expert_messaged.filter(id=request.user.expertuser.id).exists():
+        project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
+        project.save()
+    Comment.objects.create(sender_type=0, project=project, expert_user=request.user.expertuser,
+                           industry_user=project.industry_creator, description=request.GET.get('description'))
+    return JsonResponse({})

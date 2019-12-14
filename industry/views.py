@@ -60,16 +60,17 @@ def show_project_ajax(request):
     print('there are', len(comment_list), 'comments')
     json_response['comments'] = []
     for comment in comment_list:
+        print('sending', comment.description)
         json_response['comments'].append({
             'id': comment.id,
             'text': comment.description,
             'sender_type': comment.sender_type
         })
     json_response['expert_messaged'] = []
-    for expert in project.expert_messaged:
+    for expert in project.expert_messaged.all():
         json_response['expert_messaged'].append({
             'id': expert.id,
-            'name': expert.expertform
+            'name': expert.__str__()
         })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
@@ -91,10 +92,12 @@ def accept_project_ajax(request):
 def submit_comment(request):
     description = request.GET.get('description')
     project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
-    if not project.expert_messaged.objects.filter(id=request.GET.get('expert_id')).exists():
-        project.expert_messaged.add(expert_models.ExpertUser.objects.filter(id=request.GET.get('expert_id')))
+    # expert_user = expert_models.ExpertUser.objects.all().filter(id=request.GET.get('expert_id')).first()
+    expert_user = expert_models.ExpertUser.objects.all().first()
+    if not project.expert_messaged.filter(id=request.GET.get('expert_id')).exists():
+        project.expert_messaged.add(expert_user )
     Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
-                           sender_type=1)
+                           sender_type=1, expert_user=expert_user)
     return JsonResponse({})
 
 
@@ -219,7 +222,7 @@ class NewProject(View):
             policy = form.cleaned_data['policy']
             required_budget = form.cleaned_data['required_budget']
             project_phase = form.cleaned_data['project_phase']
-            required_technique = form.cleaned_data['required_technique']
+            # required_technique = form.cleaned_data['required_technique']
             progress_profitability = form.cleaned_data['progress_profitability']
             potential_problems = form.cleaned_data['potential_problems']
             new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
@@ -228,7 +231,7 @@ class NewProject(View):
                                                   main_problem_and_importance=main_problem_and_importance,
                                                   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
-                                                  required_technique=required_technique,
+                                                  # required_technique=required_technique,
                                                   approach=approach,
                                                   policy=policy,
                                                   required_budget=required_budget,
@@ -240,8 +243,9 @@ class NewProject(View):
             new_project_form.save()
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
-            new_project = models.Project(project_form=new_project_form)
+            new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
+            print('the creator is', new_project.industry_creator)
             request.user.industryuser.projects.add(new_project)
             # models.IndustryUser.objects.filter(user=request.user).update()
             return HttpResponseRedirect(reverse('industry:index'))
