@@ -547,22 +547,23 @@ def MyProject(request):
         evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=projects[0].project_form.project_title_english)
         project_list = {}
         for project in projects:
-            project_list[project.project_form.project_title_english] = {
+            title = project.project_form.project_title_english
+            project_list[title] = {
                 'PK'            : project.pk,
                 'project_title' : project.project_form.project_title_persian,
                 'started'       : date_last(datetime.date.today() ,project.date_start),
                 'finished'      : date_last(datetime.date.today() ,project.date_finished),
             }
-            project_list['vote'] = "false"
+            project_list[title]['vote'] = "false"
             if datetime.date.today() > project.date_finished:
                 if evaluation_history.objects.filter(phase=3).count() == 0:
-                    project_list['vote'] = "true"
+                    project_list[title]['vote'] = "true"
             elif datetime.date.today() > project.date_phase_two_finished:
                 if evaluation_history.objects.filter(phase=2).count() == 0:
-                    project_list['vote'] = "true"
+                    project_list[title]['vote'] = "true"
             elif datetime.date.today() > project.date_phase_one_finished:
                 if evaluation_history.objects.filter(phase=1).count() == 0:
-                    project_list['vote'] = "true"
+                    project_list[title]['vote'] = "true"
         return JsonResponse(data={"project_list" : project_list})
     else:
         return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})

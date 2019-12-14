@@ -454,7 +454,6 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_start(self):
         data = self.cleaned_data["start"]
-        print('start : ' ,data)
         if data:
             try:
                 int(data)
@@ -630,16 +629,17 @@ class ApplyForm(forms.Form):
         if data == '':
             raise ValidationError(_("لطفا حداقل ساعت را وارد کنید."))
         if not completely_numeric(data):
-            print("لطفا فقط عدد وارد کنید.")
             raise ValidationError(_("لطفا فقط عدد وارد کنید."))
         return data
     
     def clean_most_hours(self):
         data = self.cleaned_data["most_hours"]
+        least_hour = self.cleaned_data.get('least_hours')
         if data == '':
             raise ValidationError(_("لطفا حداکثر ساعت را وارد کنید."))
-        if not completely_numeric(data):
-            print("لطفا فقط عدد وارد کنید.")
+        if not completely_numeric(data):            
             raise ValidationError(_("لطفا فقط عدد وارد کنید."))
+        if least_hour > data:
+            raise ValidationError(_("حداقل ساعت از حداکثر ساعت بیشتر است."))
         return data
     

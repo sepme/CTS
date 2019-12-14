@@ -4,9 +4,6 @@ $(window).on("load", function () {
     $(".fa-reply").click(function (event) {
         console.log($("#reply").val());
     });
-    $(".fuckingButton").click(function(){
-        console.log("==========");
-    });
 }).on("resize", function () {
     init_windowSize();
     load_dialog();
@@ -880,6 +877,7 @@ apply_form.submit(function (event) {
         success: function (data) {
             $("input#most_hours").removeClass("error");
             $("input#least_hours").removeClass("error");
+            $(".apply").hide();
         },
         error: function (data) {
             var obj = JSON.parse(data.responseText);
@@ -1030,13 +1028,12 @@ function ShowMyProject(project) {
         " قبل )</span></span>" +
         "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>" +
         "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>" + project.finished + "</span> فرصت باقی است!</span>" +
-        "<button type='button' class='chamran-btn-info  fuckingButton' id='" + project.PK + "'>مشاهده</button>" +
+        "<button type='button' class='chamran-btn-info' id='" + project.PK + "'>مشاهده</button>" +
         "</div>";
     return show_project;
 }
 
 $("#your-project").click(function (event) {
-    console.log("your-project clicked!!")
     $(".new-projects").attr("style", "display :none");
     $(".done-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :block");
