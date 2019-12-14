@@ -71,7 +71,6 @@ class Index(LoginRequiredMixin, generic.FormView):
         projects = []
         for project in all_projects:
             try:
-                print(project.project_form.required_technique.all())
                 for tech in project.project_form.required_technique.all():
                     if tech not in technique:
                         raise Exception("TECHNIQUE_NOT_EXIST")
@@ -82,22 +81,20 @@ class Index(LoginRequiredMixin, generic.FormView):
         for project in projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
-            all_comments = project.get_comments()
-            expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
-            researcher_comment = all_comments.filter(sender_type=2)
-            comments= sorted(
-                    chain(researcher_comment, expert_comment),
-                    key=attrgetter('date_submitted'))
+            # all_comments = project.get_comments()
+            # expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
+            # researcher_comment = all_comments.filter(sender_type=2)
+            # comments= sorted(
+            #         chain(researcher_comment, expert_comment),
+            #         key=attrgetter('date_submitted'))
             temp ={
                 'PK'                 : project.pk,
                 'project_title'      : project.project_form.project_title_persian,
                 'keyword'            : project.project_form.key_words.all(),
                 'started'            : date_last(datetime.date.today() ,project.date_start),
                 'finished'           : date_last(datetime.date.today() ,project.date_finished),
-                'expert_comment'     : expert_comment,
-                'researcher_comment' : researcher_comment,
-                'comments'          : comments,
             }
+            project_list.append(temp)
         context['project_list'] = project_list
         return context
 
@@ -515,14 +512,21 @@ def ShowProject(request):
         json_response['comments'].append(temp)
     return JsonResponse(json_response)
 
+def DeleteComment(request):
+    print(request.POST)
+    try:
+        comment = get_object_or_404(Comment ,pk=request.POST['comment_id'])
+        comment.delete()
+    except:
+        return JsonResponse({} ,400)
+    return JsonResponse({'seccessful' :"seccessful"} ,200)
+
 def ApplyProject(request):
     form = forms.ApplyForm(request.POST)
     if form.is_valid():
         project=get_object_or_404(Project ,id=request.POST['id'])
         least_hour = form.cleaned_data['least_hours']
         most_hour = form.cleaned_data['most_hours']
-        print(least_hour)
-        print(most_hour)
         apply_project = models.RequestedProject(researcher=request.user.researcheruser,
                                                 project=project,
                                                 least_hours_offered=least_hour,
@@ -581,7 +585,6 @@ def DoneProjects(request):
 
 def AddComment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
-    print(request.POST)
     project = Project.objects.filter(id=request.POST['project_id'])[0]
     if form.is_valid():
         description = form.cleaned_data['description']
@@ -593,10 +596,18 @@ def AddComment(request):
                          ,expert_user=project.expert_accepted
                          ,sender_type=2)
         comment.save()
-        print(Project.objects.filter(id=request.POST['project_id']))
-        data = {
-            'success' : 'successful',
-        }
+        if attachment is not None:
+            data = {
+                'success' : 'successful',
+                'attachment' : comment.attachment.url[comment.attachment.url.find('media' ,2):],
+                'description':description,
+            }
+        else:
+            data = {
+                'success' : 'successful',
+                'attachment' : "None",
+                'description': description,
+            }
         return JsonResponse(data)
     print("form doesn't validated!")
     return JsonResponse(form.errors ,status=400)

@@ -194,15 +194,11 @@ function setComment(data) {
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === 0) { //expert
             console.log("sender type is 0");
-            comments_code += "<div class='your-comment'>" +
-                "<div class='comment-profile'>" +
-                "</div>" +
+            comments_code += "<div class='expert-comment' dir='ltr' >" +
                 "<div class='comment-body'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-pen'>" +
-                "</i>" +
-                "<i class='fas fa-reply'><div class='reply'></div>"+
-                "</i>" ;
+                "<span class='comment-tools'>" ;
+                // "<i class='fas fa-reply'><div class='reply'></div>"+
+                // "</i>" ;
                 if (data[i].attachment !== "None") {
                     comments_code += "<a href='/" +
                                      data[i].attachment +
@@ -219,13 +215,7 @@ function setComment(data) {
             console.log(data[i].attachment);
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-trash-alt'></i>" +
-                "<i class='fas fa-reply' value=" +
-                data[i].pk +
-                "></i>" +
-                "<i class='fas fa-pen'>" +
-                "</i>" ;
+                "<span class='comment-tools'>";
                 if (data[i].attachment !== "None") {
                     comments_code += "<a href='/" +
                                      data[i].attachment +
@@ -251,6 +241,24 @@ function setComment(data) {
     }
     $('.comments').html(comments_code);
 }
+
+$(".trash").click(function(event){
+    console.log("----------------");
+    let comment_id = $(this).attr('id');
+    console.log(comment_id);
+    $.ajax({
+        method: 'POST',
+        url: "/researcher/delete_comment",
+        dataType: 'json',
+        data: {comment_id: comment_id},
+        success: function (data) {
+            console.log("seccessful");
+        },
+        error: function (data) {
+            console.log("fucked up");
+        }
+    });
+});
 
 $(document).ready(function () {
     // variable
@@ -794,6 +802,24 @@ add_technique_form.submit(function (event) {
     })
 });
 
+function addComment(data){
+    new_comment = "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span class='comment-tools'>";
+                if (data.attachment !== "None") {
+                    new_comment += "<a href='/" +
+                                    data.attachment +
+                                    "'><i class='fas fa-paperclip'></i></a>" ;   
+                }
+            new_comment += "</span>" +
+                "<span>" +
+                data.description +
+                "</span>" +
+                "</div>" +
+                "</div>";
+    $(".comments").append(new_comment);
+}
+
 var comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
@@ -813,6 +839,7 @@ comment_form.submit(function (event) {
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            addComment(data);
             iziToast.success({
                 rtl: true,
                 message: "پیام با موفقیت ارسال شد!",

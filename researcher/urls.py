@@ -20,6 +20,7 @@ urlpatterns = [
     path('show_project/' ,views.ShowProject ,name='show_project'),
     path('applyProject/' ,views.ApplyProject, name="apply_project"),
     path('comment/' ,views.AddComment ,name='comment'),
+    path('delete_comment/' ,views.DeleteComment ,name='delete_comment'),
     path('myProject/' ,views.MyProject ,name="my_project"),
     path('doneProject/' ,views.DoneProjects ,name="done_project"),
 ]
