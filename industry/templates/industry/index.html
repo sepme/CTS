@@ -10,7 +10,7 @@
     {% include 'industry/layouts/vote_dialog.html' %}
 {% endblock %}
 
-{% block name %}رضا باسره{% endblock %}
+{% block name %}{{request.user.industryuser.industryform}}{% endblock %}
 
 {% block content %}
     <div class="row mtop-lg-25">

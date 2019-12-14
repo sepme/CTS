@@ -32,7 +32,9 @@ class IndustryUser(models.Model):
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("industry:index"))
 
-
+    @property
+    def score(self):
+        return self.industry_points*23
 # def upload_and_rename_profile(instance, file_name):
 #     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
 

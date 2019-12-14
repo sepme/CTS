@@ -59,6 +59,9 @@ class ResearcherUser(models.Model):
             return 'not_answered'
         return 'free'
 
+    @property
+    def score(self):
+        return self.points*23
 
 class Status(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
