@@ -333,6 +333,9 @@ def show_project_view(request):
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
+    for ind, value in enumerate(project_form.required_technique.all()):
+        data['required_technique'].append(value.technique_title)
+
     return JsonResponse(data)
 
 

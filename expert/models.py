@@ -12,7 +12,7 @@ def get_image_path(instance, filename):
     filename = '{}.{}'.format('profile', ext)
 
     return os.path.join('unique', instance.expert_user.user.username, filename)
-
+    
 
 def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)

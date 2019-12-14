@@ -4,13 +4,46 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from django.core.serializers import serialize
 from django.conf import settings
+from django.forms import model_to_dict
 import os ,random ,datetime
+from persiantools.jdatetime import JalaliDate
+from dateutil.relativedelta import relativedelta
+from itertools import chain
+from operator import attrgetter
 
-from . import models
-from . import forms
+from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion
+from industry.models import Project ,Comment
 
+def gregorian_to_numeric_jalali(date):
+    j_date = JalaliDate(date)
+    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
+
+def date_last(date1 ,date2):
+    delta = relativedelta(date1 ,date2)
+    days_passed = abs(delta.days)
+    months_passed = abs(delta.months)
+    years_passed = abs(delta.years)
+    days = ""
+    months = ""
+    years = ""
+    if years_passed != 0:
+        years = persianNumber.convert(str(years_passed)) + " سال "
+    if months_passed != 0:
+        if years_passed != 0:
+            months = " و " + persianNumber.convert(str(months_passed)) + " ماه "
+        else:
+            months = persianNumber.convert(str(months_passed)) + " ماه "
+    if days_passed != 0:
+        if months_passed == 0 and years_passed == 0:
+            days = persianNumber.convert(str(days_passed)) + " روز "
+        else:
+            days = " و " + persianNumber.convert(str(days_passed)) + " روز "
+    if days_passed != 0 or months_passed != 0 or years_passed != 0:            
+        return years + months + days
+    return "امروز"
 
 
 class Index(LoginRequiredMixin, generic.FormView):
@@ -32,6 +65,37 @@ class Index(LoginRequiredMixin, generic.FormView):
         if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
+        all_projects = Project.objects.all().exclude(expert_accepted=None)
+        technique_id = [item.id for item in self.request.user.researcheruser.techniqueinstance_set.all()]
+        technique = models.Technique.objects.filter(id__in=technique_id)
+        projects = []
+        for project in all_projects:
+            try:
+                for tech in project.project_form.required_technique.all():
+                    if tech not in technique:
+                        raise Exception("TECHNIQUE_NOT_EXIST")
+                projects.append(project)
+            except Exception:
+                continue
+        project_list = []
+        for project in projects:
+            if self.request.user.researcheruser in project.researcher_applied.all():
+                continue
+            # all_comments = project.get_comments()
+            # expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
+            # researcher_comment = all_comments.filter(sender_type=2)
+            # comments= sorted(
+            #         chain(researcher_comment, expert_comment),
+            #         key=attrgetter('date_submitted'))
+            temp ={
+                'PK'                 : project.pk,
+                'project_title'      : project.project_form.project_title_persian,
+                'keyword'            : project.project_form.key_words.all(),
+                'started'            : date_last(datetime.date.today() ,project.date_start),
+                'finished'           : date_last(datetime.date.today() ,project.date_finished),
+            }
+            project_list.append(temp)
+        context['project_list'] = project_list
         return context
 
     def post(self, request, *args, **kwargs):
@@ -214,23 +278,25 @@ class Technique(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
-        context['technique_list']       = self.request.user.researcheruser.techniqueinstance_set.all()
-        context['molecular_biology']    = models.Technique.objects.filter(technique_type='molecular_biology')
-        context['immunology']           = models.Technique.objects.filter(technique_type='immunology')
-        context['imaging']              = models.Technique.objects.filter(technique_type='imaging')
-        context['histology']            = models.Technique.objects.filter(technique_type='histology')
-        context['general_lab']          = models.Technique.objects.filter(technique_type='general_lab')
-        context['animal_lab']           = models.Technique.objects.filter(technique_type='immunology')
-        context['lab_safety']           = models.Technique.objects.filter(technique_type='lab_safety')
-        context['biochemistry']         = models.Technique.objects.filter(technique_type='biochemistry')
-        context['cellular_biology']     = models.Technique.objects.filter(technique_type='cellular_biology')
-        context['research_methodology'] = models.Technique.objects.filter(technique_type='research_methodology')
+        context['technique_list'] = self.request.user.researcheruser.techniqueinstance_set.all()
         return context
 
+def ShowTechnique(request):
+    data = {
+        'molecular_biology'    : list(models.Technique.objects.filter(technique_type='molecular_biology').values_list('technique_title' ,flat=True)),
+        'immunology'           : list(models.Technique.objects.filter(technique_type='immunology').values_list('technique_title' ,flat=True)),
+        'imaging'              : list(models.Technique.objects.filter(technique_type='imaging').values_list('technique_title' ,flat=True)),
+        'histology'            : list(models.Technique.objects.filter(technique_type='histology').values_list('technique_title' ,flat=True)),
+        'general_lab'          : list(models.Technique.objects.filter(technique_type='general_lab').values_list('technique_title' ,flat=True)),
+        'animal_lab'           : list(models.Technique.objects.filter(technique_type='animal_lab').values_list('technique_title' ,flat=True)),
+        'lab_safety'           : list(models.Technique.objects.filter(technique_type='lab_safety').values_list('technique_title' ,flat=True)),
+        'biochemistry'         : list(models.Technique.objects.filter(technique_type='biochemistry').values_list('technique_title' ,flat=True)),
+        'cellular_biology'     : list(models.Technique.objects.filter(technique_type='cellular_biology').values_list('technique_title' ,flat=True)),
+        'research_methodology' : list(models.Technique.objects.filter(technique_type='research_methodology').values_list('technique_title' ,flat=True)),
+    }
+    return JsonResponse(data=data)
+
 def AddTechnique(request):
-    print("_-------------")
-    print(request.FILES)
-    print(request.POST)
     form = forms.TechniqueInstanceForm(request.user ,request.POST ,request.FILES)    
     if form.is_valid():
         technique_title = form.cleaned_data['technique'] 
@@ -253,7 +319,7 @@ def AddTechnique(request):
                 subject=subject,
                 message=message,
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER ,'a.jafarzadeh1998@gmail.com',],
+                recipient_list=[settings.EMAIL_HOST_USER,],
                 fail_silently=False
             )
         except TimeoutError:
@@ -265,25 +331,19 @@ def AddTechnique(request):
             technique = models.Technique(technique_type=technique_type ,technique_title=technique_title)
             technique.save()
         if method == 'exam':
-            # level = "C"
             technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
                                                     evaluat_date=datetime.date.today())
-                                                    # level=level,
             technique_instance.save()
-            print(technique_instance)
-            data = {'success' : 'successful'}
+            data = {'success' : 'successful',
+                    'title'   : technique_title}
             return JsonResponse(data=data)
-        # elif method == 'certificant':
-        #     level = "B"
-        # else:
-        #     level = "A"
         technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
                                                     resume=resume)
-                                                    # ,level=level)
         technique_instance.save()
-        data = {'success' : 'successful'}
+        data = {'success' : 'successful',
+                'title'   : technique_title}
         return JsonResponse(data=data)
     print(form.errors)
     return JsonResponse(form.errors ,status=400)
@@ -316,8 +376,8 @@ class Question(generic.TemplateView):
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
         question = question_list[random.randint(1 ,len(question_list))-1]
-        question_instance = models.ResearchQuestionInstance(research_question=question,
-                                                            researcher = request.user.researcheruser)
+        question_instance = models.ResearchQuestionInstance(research_question=question
+                                                            ,researcher = request.user.researcheruser)
         question_instance.save()
         return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={"question_id" :question.uniqe_id}))
 
@@ -333,13 +393,11 @@ class QuestionShow(generic.TemplateView ):
         deltatime = datetime.date.today() - question.hand_out_date
         if deltatime.days < 8:
             if question.is_answered:
-                print("+_+_+_+_+_+_+_+_+_+_====")                
+                print("+_+_+_+_+_+_+_+_+_+_====")
                 return HttpResponseRedirect(reverse('researcher:index'))
-                #show its in waiting for evaliator answer
-            if question.is_correct :
+            if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.status.save()
-                #show massage that u have answered
         else:
             status = request.user.researcheruser.status
             status.status = 'inactivated'
@@ -392,9 +450,6 @@ class QuestionShow(generic.TemplateView ):
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):
-    print("---------")
-    print(request.FILES)
-    print(request.POST)
     form = forms.TechniqueReviewFrom(request.POST ,request.FILES)
     if form.is_valid():
         description = form.cleaned_data['request_body']
@@ -402,7 +457,6 @@ def ajax_Technique_review(request):
         technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name'])[0]
         if method != "exam":
             resume = form.cleaned_data['new_resume']
-            print(resume)
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,
                                                       method=method ,resume=resume)
         else:
@@ -420,13 +474,143 @@ def ajax_Technique_review(request):
                 subject=subject,
                 message=message, 
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER,'a.jafarzadeh1998@gmail.com'],
+                recipient_list=[settings.EMAIL_HOST_USER],
             )
         except TimeoutError:
             return HttpResponse('Timeout Error!!')
         data = {'success' : 'successful'}
         return JsonResponse(data)
-    print(form.errors)
+    return JsonResponse(form.errors ,status=400)
+
+def ShowProject(request):
+    project = Project.objects.filter(id=request.GET.get('id')).first()
+    json_response = model_to_dict(project.project_form)
+    json_response['deadline'] = 'نا مشخص'
+    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+        json_response['deadline'] = date_last(datetime.date.today() ,project.date_phase_three_deadline)
+    else:
+        json_response['deadline'] = date_last(project.date_project_started, project.date_phase_three_deadline)
+    json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    for ind, value in enumerate(json_response['key_words']):
+        json_response['key_words'][ind] = value.__str__()
+    for ind, value in enumerate(json_response['required_technique']):
+        json_response['required_technique'][ind] = value.__str__()
+    all_comments = project.get_comments().exclude(researcher_user=None)
+    json_response['comments'] = []
+    for com in all_comments:
+        try:
+            url = com.attachment.url[com.attachment.url.find('media' ,2):]
+        except:
+            url = "None"
+        temp = {
+            'pk'           : com.pk,
+            'description'  : com.description,
+            'replied_text' : com.replied_text,
+            'sender_type'  : com.sender_type,
+            'attachment'   : url
+        }
+        json_response['comments'].append(temp)
+    return JsonResponse(json_response)
+
+def DeleteComment(request):
+    print(request.POST)
+    try:
+        comment = get_object_or_404(Comment ,pk=request.POST['comment_id'])
+        comment.delete()
+    except:
+        return JsonResponse({} ,400)
+    return JsonResponse({'seccessful' :"seccessful"} ,200)
+
+def ApplyProject(request):
+    form = forms.ApplyForm(request.POST)
+    if form.is_valid():
+        project=get_object_or_404(Project ,id=request.POST['id'])
+        least_hour = form.cleaned_data['least_hours']
+        most_hour = form.cleaned_data['most_hours']
+        apply_project = models.RequestedProject(researcher=request.user.researcheruser,
+                                                project=project,
+                                                least_hours_offered=least_hour,
+                                                most_hours_offered=most_hour)
+        apply_project.save()
+        comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
+                          sender_type=3,
+                          project=project,
+                          researcher_user=request.user.researcheruser)
+        comment.save()
+        project.researcher_applied.add(request.user.researcheruser)
+        return JsonResponse(data={'success' : "success"})
+    return JsonResponse(form.errors ,status=400)
+
+def MyProject(request):    
+    projects = Project.objects.all().filter(researcher_applied__in=[request.user.researcheruser])
+    if len(projects) != 0:
+        evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=projects[0].project_form.project_title_english)
+        project_list = {}
+        for project in projects:
+            title = project.project_form.project_title_english
+            project_list[title] = {
+                'PK'            : project.pk,
+                'project_title' : project.project_form.project_title_persian,
+                'started'       : date_last(datetime.date.today() ,project.date_start),
+                'finished'      : date_last(datetime.date.today() ,project.date_finished),
+            }
+            project_list[title]['vote'] = "false"
+            if datetime.date.today() > project.date_finished:
+                if evaluation_history.objects.filter(phase=3).count() == 0:
+                    project_list[title]['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_two_finished:
+                if evaluation_history.objects.filter(phase=2).count() == 0:
+                    project_list[title]['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_one_finished:
+                if evaluation_history.objects.filter(phase=1).count() == 0:
+                    project_list[title]['vote'] = "true"
+        return JsonResponse(data={"project_list" : project_list})
+    else:
+        return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})
+
+def DoneProjects(request):
+    projects = models.ResearcherHistory.objects.all()
+    project_list = {}    
+    for project in projects:
+        tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
+        project_list[project.title] = {
+            'project_title' : project.title,
+            'started'       : date_last(datetime.date.today(), project.start),
+            'finished'      : date_last(datetime.date.today(), project.end),
+            'status'        : project.status,
+            'point'         : project.point,
+            'income'        : project.income,
+            'technique'     : tech_temp,
+        }
+    return JsonResponse(data={"project_list" : project_list})
+
+def AddComment(request):
+    form = forms.CommentForm(request.POST ,request.FILES)
+    project = Project.objects.filter(id=request.POST['project_id'])[0]
+    if form.is_valid():
+        description = form.cleaned_data['description']
+        attachment = form.cleaned_data['attachment']        
+        comment = Comment(description=description
+                         ,attachment=attachment
+                         ,project=project
+                         ,researcher_user=request.user.researcheruser
+                         ,expert_user=project.expert_accepted
+                         ,sender_type=2)
+        comment.save()
+        if attachment is not None:
+            data = {
+                'success' : 'successful',
+                'attachment' : comment.attachment.url[comment.attachment.url.find('media' ,2):],
+                'description':description,
+            }
+        else:
+            data = {
+                'success' : 'successful',
+                'attachment' : "None",
+                'description': description,
+            }
+        return JsonResponse(data)
+    print("form doesn't validated!")
     return JsonResponse(form.errors ,status=400)
 
 

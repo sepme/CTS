@@ -1,7 +1,8 @@
-{% load static%}
-<div class="dialog-main showProject">
-    <div class="card text-right dialog">
+{% load static %}
+<div class="fixed-back showProject">
+    <div class="card small-card text-right stick-footer">
         <div class="close"></div>
+        <div class="card-head">عنوان پروژه</div>
         <div class="vote">
             <span class="dots"></span>
         </div>
@@ -10,96 +11,93 @@
         </div>
         <div class="container">
             <div class="row">
-               <div class="col-lg-12">
-                   <h6 class="project-title"> محلول کشت سلولی ( FBS )</h6>
-               </div>
+                <div class="col-lg-12 keywords"></div>
             </div>
-            <div class="row mbottom-lg-30">
-                <div class="col-lg-6">
-                    <span class="border-span">محیط کشت سلولی </span>
-                    <span class="border-span">PCR</span>
-                    <span class="border-span">فلوسایتومتری</span>
-                    <span class="border-span">فلوسایتومتری</span>
-                    <span class="border-span">PCR</span>
-                    <span class="border-span">PCR</span>
-                </div>
-                <div class="col-lg-6">
-                    <div class="establish-time">
-                        <div class="time-head">زمان ثبت</div>
-                        <div class="time-body">22/12/1398</div>
-                    </div>
-                    <div class="time-left">
-                        <div class="time-head">مهلت انجام</div>
-                        <div class="time-body">2 ماه</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row mbottom-lg-25">
-                <div class="col-lg-12 text-right">
-                    <div class="project-info custom-border-title">
-                        <span class="title">اطلاعات پروژه</span>
-                        <span class="title-back"></span>
-                        <div class="project-info-innerDiv">
-                            <div class="project-info-tabs">
-                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" role="tab" aria-controls="v-pills-home" aria-selected="true"></a>
-                                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" role="tab" aria-controls="v-pills-profile" aria-selected="false"></a>
-                                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" role="tab" aria-controls="v-pills-messages" aria-selected="false"></a>
-                                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" role="tab" aria-controls="v-pills-settings" aria-selected="false"></a>
-                                </div>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6 text-left">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="establish-time">
+                                <div class="time-head">ثبت</div>
+                                <div class="time-body">تاریخ ثبت</div>
                             </div>
-                            <div class="project-info-content">
-                                <div>
-                                    <div class="question">
-                                        <span class="question-mark">
-                                            <i class="far fa-question-circle"></i>
-                                        </span>
-                                        لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.
-                                    </div>
-                                    <div class="answer">
-                                        نمونه های موجود در بازار همه از خارج از کشور وارد میشوند و ادعا میشود که از خون جنین گاو در تولید آن ها استفاده میشود ولی این کار بسیار هزینه بر است.
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="question">
-                                        <span class="question-mark">
-                                            <i class="far fa-question-circle"></i>
-                                        </span>
-                                        در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟
-                                    </div>
-                                    <div class="answer">
-                                        مصرف کننده های این محصول ، داروسازی ها و مراکز پژوهشی میباشد که در حال حاضر تولیدکننده این محصول شرکت THERMO FISHER میباشد. اگر کیفیت محصول تولیدی خوب باشد میتواند جایگزین نمونه خارجی شود.
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="question">
-                                        <span class="question-mark">
-                                            <i class="far fa-question-circle"></i>
-                                        </span>
-                                        برآورد شما از سود مالی این پروژه چگونه است؟
-                                    </div>
-                                    <div class="answer">
-                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="time-left">
+                                <div class="time-head">مهلت</div>
+                                <div class="time-body">مهلت</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row mbottom-lg-25">
-                <div class="col-lg-9">
-                    <button class="w-100 accept-btn btn">ارسال  درخواست انجام پروژه</button>
-                </div>
-                <div class="col-lg-3">
-                    <button class="w-100 refuse-btn btn">رد پروژه</button>
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">اطلاعات پروژه</span>
+                    <div class="project-info-tabs">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                             aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-home"
+                               aria-selected="true">
+                                شاخص ها
+                            </a>
+                            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-profile"
+                               aria-selected="false">
+                                راهکار ها
+                            </a>
+                            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-messages"
+                               aria-selected="false">
+                                منابع مورد نیاز
+                            </a>
+                            <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-settings"
+                               aria-selected="false">
+                                قوانین
+                            </a>
+                        </div>
+                    </div>
+                    <div class="section" style="border: none">
+                        <div class="project-info-innerDiv">
+                            <div class="project-info-content">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row mbottom-lg-25">
+            <div class="apply">
+                <form method="POST" url="{% url 'researcher:apply_project' %}" class="apply_Project">
+                    {% csrf_token %}
+                    <div class="row">
+                        <input type="text" id="apply_project_id" name="id" hidden>
+                        <div class="col-lg-6">
+                            حداقل ساعت: <input type="text" name="least_hours" id="least_hours">
+                        </div>
+                        <div class="col-lg-6">
+                            حداکثر ساعت: <input type="text" name="most_hours" id="most_hours">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button type="submit" class="w-100 accept-btn btn">ارسال درخواست انجام پروژه</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
                 <div class="col-lg-12 text-right">
                     {% include 'researcher/layouts/comment.html' %}
                 </div>
             </div>
+            {# <div class="card-footer">#}
+            {#    <button class="save-btn confirm_project" id="accept-project">#}
+            {#        ارسال درخواست انجام پروژه#}
+            {#    </button>#}
+            {#</div> -->#}
         </div>
     </div>
 </div>

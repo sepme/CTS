@@ -52,7 +52,7 @@
         <div class="researcher-icon"></div>
         {% if request.user.researcheruser.researcherprofile.photo %}
             <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile" class="profile"
-                 width="150px" height="150px">
+                 width="150px" height="150px" id="profile">
         {% else %}
             <img src="{% static 'researcher/img/profile.jpg' %}" alt="Ehsan" class="profile" width="150px"
                  height="150px">
@@ -128,6 +128,7 @@
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 {% block script %}{% endblock %}
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>
 </body>

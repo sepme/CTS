@@ -8,7 +8,7 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
 
-from researcher.models import ResearcherUser
+from researcher.models import ResearcherUser ,RequestedProject
 
 
 class IndustryUser(models.Model):
@@ -97,7 +97,6 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    # required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
@@ -110,7 +109,6 @@ class ProjectForm(models.Model):
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
-    # comments = models.ManyToManyField('industry.Comment', verbose_name='کامنت ها', null=True, blank=True)
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
     date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True, blank=True)
     date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True, blank=True)
@@ -184,7 +182,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.description
-
+    
+    def __str__(self):
+        return self.SENDER[self.sender_type][1]
 
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128)

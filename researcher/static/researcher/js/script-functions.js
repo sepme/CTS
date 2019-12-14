@@ -60,7 +60,6 @@ function init_dialog_btn(element, dialogClass) {
         $(dialogClass).css("display", "block");
         close_dialog(dialogClass);
         dialog_comment_init();
-        vote_dialog_init();
         load_dialog();
     });
 }
@@ -166,6 +165,9 @@ function close_dialog(className) {
     $(".close").click(function () {
         $(className).css("display", "none");
         $(".main").removeClass("blur-div");
+        $(className).find("input").val("");
+        $(className).find("input:checked").prop("checked", false);
+        $(className).find(".keywords").html("");
     });
 }
 
@@ -463,8 +465,7 @@ function studious_record() {
 }
 
 function show_research_record() {
-    if ($("#rank").val() === 1)
-    {
+    if ($("#rank").val() == 1) {
         row = "<tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
@@ -475,9 +476,8 @@ function show_research_record() {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr>";
-        }
-    else if ( $("#rank").val() === 2)
-    {
+    }
+     else if ($("#rank").val() == 2) {
         row = "<tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
@@ -489,8 +489,7 @@ function show_research_record() {
             "</td>" +
             "</tr>";
         }
-    else if ( $("#rank").val() === 2)
-        {
+    else if ( $("#rank").val() === 2) {
             row = "<tr>" +
                 "<td>" + $("#subject").val() + "</td>" +
                 "<td>" + $("#admin").val() + "</td>" +
@@ -544,16 +543,16 @@ function dialog_comment_init() {
         if ($("div.attachment > div").last().hasClass("attach")) {
             bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
         } else {
-            bottom_position = 10;
+            bottom_position = 20;
         }
 
-        $("div.attachment").append("<div class='attach'>" +
-            "<span>" + "نام فایل" + "</span>" +
-            "<div class='progress'>" +
-            "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
-            "</div>" +
-            "</div>");
-        $("div.attachment > div").last().css("bottom", bottom_position + 30);
+        // $("div.attachment").append("<div class='attach'>" +
+        //     "<span>" + "نام فایل" + "</span>" +
+        //     "<div class='progress'>" +
+        //     "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
+        //     "</div>" +
+        //     "</div>");
+        $("div.attachment > div").last().css("bottom", bottom_position + 15);
     });
     // replay to a comment
     $(".comment-tools > .fa-reply").click(function () {
@@ -646,26 +645,33 @@ function vote_dialog_init() {
 
 function vote_slider(slide_count) {
     counter = 0;
-    $(".next-button").click(function () {
-        if (counter < slide_count - 1) {
-            counter++;
-            progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
-            width = parseFloat($(".progress-line").css('width'));
-            $(".progress-line").css('width', width + progressWidth);
 
-            $(".swiper-wrapper").css({
-                "transform": "translate3d(-" + 100 * counter + "%, 0, 0)",
-                "transition-duration": "0.3s"
-            });
-        }
-        if (counter === slide_count - 1) {
-            $(this).html("<i class='fas fa-check'></i>" +
-                "ثبت");
-        }
-        if (counter > 0) {
-            $(".prev-button").removeClass("disabled");
-        }
-    });
+    function next_button_init() {
+        $(".next-button").click(function () {
+            if (counter < slide_count - 1) {
+                counter++;
+                progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
+                width = parseFloat($(".progress-line").css('width'));
+                $(".progress-line").css('width', width + progressWidth);
+
+                $(".swiper-wrapper").css({
+                    "transform": "translate3d(-" + 100 * counter + "%, 0, 0)",
+                    "transition-duration": "0.3s"
+                });
+            }
+            if (counter === slide_count - 1) {
+                $(this).closest("div").prepend("<span class='submit-button'>" +
+                    "<i class='fas fa-check'></i>" +
+                    "ثبت" +
+                    "</span>");
+                $(this).remove();
+            }
+            if (counter > 0) {
+                $(".prev-button").removeClass("disabled");
+            }
+        });
+    }
+    next_button_init();
     $(".prev-button").click(function () {
         if (counter > 0) {
             counter--;
@@ -679,8 +685,12 @@ function vote_slider(slide_count) {
             });
         }
         if (counter === slide_count - 2) {
-            $(".next-button").html("<i class='fas fa-arrow-right'></i>" +
-                "بعدی");
+            $(this).closest("div").prepend("<span class='next-button'>" +
+                "<i class='fas fa-arrow-right'></i>" +
+                "بعدی" +
+                "</span>");
+            $(this).closest("div").find(".submit-button").remove();
+            next_button_init();
         }
         if (counter === 0) {
             $(this).addClass('disabled');
@@ -689,6 +699,7 @@ function vote_slider(slide_count) {
 }
 
 function select_technique(className) {
+
     function slide_up() {
         $(".fixed-back .all-techniques").slideUp('slow');
         return $.Deferred().resolve(false);
@@ -703,6 +714,7 @@ function select_technique(className) {
         $(".fixed-back input#technique-name").addClass("expand");
         $(".fixed-back .select-technique i").removeClass("fa-plus").addClass("fa-search");
         $(".fixed-back label[for='technique-name']").html("جستجو تکنیک");
+
     }
 
     function express() {
