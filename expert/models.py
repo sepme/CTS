@@ -11,7 +11,7 @@ def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format('profile', ext)
 
-    return os.path.join('unique', instance.expert.user.username, filename)
+    return os.path.join('unique', instance.expert_user.user.username, filename)
 
 
 def get_attachment_path(instance, filename):

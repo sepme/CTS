@@ -3,7 +3,7 @@
 {% block content %}
     <div class="preview-question">
         <div class="card info-card text-right">
-            <div class="card-header">سوال پژوهشی</div>
+            <div class="card-header"> سوال پژوهشی{{ question_title }}</div>
             <div class="inner-card">
                 {#                    <div class="row">#}
                 {#                        <div class="col-12">#}
@@ -17,7 +17,7 @@
                         <div class="textarea-text">
                             <span class="title"><a href="{{ attachment.url }}"></a>متن سوال</span>
                             <div class="body">
-                                {{ question }}                                
+                                {{ question }}
                             </div>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                                 <li class="list-item">
                                     <a href="{{ attachment.url }}" class="attach-file">
                                         <span class="doc-file"></span>
-                                        <span>{{file_name}}</span>
+                                        <span>{{ file_name }}</span>
                                     </a>
                                 </li>
                                 <!-- <li class="list-item">
@@ -55,8 +55,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card info-card text-right">
             <div class="card-header">ارسال پاسخ</div>
             <div class="inner-card">
                 <div class="row">

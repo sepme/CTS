@@ -11,8 +11,6 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
-# industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
-#                                      verbose_name="صنعت صاحب پروژه", blank=True, null=True)
 from persiantools.jdatetime import JalaliDate
 from industry.models import IndustryForm
 from . import models
@@ -51,6 +49,8 @@ def show_project_ajax(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
+    for ind, value in enumerate(json_response['required_technique']):
+        json_response['required_technique'][ind] = value.__str__()
     return JsonResponse(json_response)
 
 

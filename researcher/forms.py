@@ -17,7 +17,7 @@ def is_numeric(string):
 def completely_numeric(string):
     check = True
     for ch in string:
-        if ch in '0123456789':
+        if ch not in '0123456789':
             check = False
     return check
 
@@ -454,7 +454,6 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_start(self):
         data = self.cleaned_data["start"]
-        print('start : ' ,data)
         if data:
             try:
                 int(data)
@@ -551,8 +550,8 @@ class TechniqueInstanceForm(forms.Form):
         data = self.cleaned_data["technique"]
         if data == 'None':
             raise  ValidationError("عنوان تکنیک نمی تواند خالی باشد.")
-        if data not in views.TECHNIQUES:
-            raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")        
+        # if data not in views.TECHNIQUES:
+        #     raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")        
         if models.TechniqueInstance.objects.filter(researcher=self.user.researcheruser).filter(technique__technique_title=data).count() != 0:
             raise ValidationError(_("این تکنیک قبلا ذخیره شده است."))
         return data
@@ -578,7 +577,7 @@ class TechniqueInstanceForm(forms.Form):
         return data
 
 class TechniqueReviewFrom(forms.Form):
-    request_body = forms.CharField(max_length=1000 ,required=False)
+    request_body = forms.CharField(widget=forms.Textarea)
     request_confirmation_method = forms.CharField(max_length=100 ,required=False)
     new_resume = forms.FileField(required=False)
 
@@ -605,3 +604,42 @@ class TechniqueReviewFrom(forms.Form):
         elif data is None:
             raise ValidationError(_('فایل مربوطه را آپلود کنید.'))
         return data
+
+class CommentForm(forms.Form):
+    description = forms.CharField(widget=forms.Textarea ,empty_value="None")
+    attachment = forms.FileField(required=False)
+
+    def clean_description(self):
+        data = self.cleaned_data["description"]
+        if data == "None":
+            raise ValidationError(_("نظر خود را لطفا بنوبسید."))
+        return data
+    
+    def clean_attachment(self):
+        data = self.cleaned_data["attachment"]
+        print("attachment",data)
+        return data
+
+class ApplyForm(forms.Form):
+    least_hours = forms.CharField(max_length=10, required=False)
+    most_hours = forms.CharField(max_length=10, required=False)
+
+    def clean_least_hours(self):
+        data = self.cleaned_data["least_hours"]
+        if data == '':
+            raise ValidationError(_("لطفا حداقل ساعت را وارد کنید."))
+        if not completely_numeric(data):
+            raise ValidationError(_("لطفا فقط عدد وارد کنید."))
+        return data
+    
+    def clean_most_hours(self):
+        data = self.cleaned_data["most_hours"]
+        least_hour = self.cleaned_data.get('least_hours')
+        if data == '':
+            raise ValidationError(_("لطفا حداکثر ساعت را وارد کنید."))
+        if not completely_numeric(data):            
+            raise ValidationError(_("لطفا فقط عدد وارد کنید."))
+        if least_hour > data:
+            raise ValidationError(_("حداقل ساعت از حداکثر ساعت بیشتر است."))
+        return data
+    

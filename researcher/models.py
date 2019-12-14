@@ -6,7 +6,6 @@ import datetime
 import uuid
 from . import persianNumber
 
-
 def get_image_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format('profile', ext)
@@ -37,15 +36,6 @@ def get_resumeFile_path(instance, filename):
         folder_name = str(instance.technique_instance.researcher)
     return os.path.join('resume', folder_name, filename)
 
-
-def get_answerFile_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{}.{}'.format("answer-" + instance.researcher.user.username + "-" + "-".join(filename.split('.')[:-1]),
-                              ext)
-    folder_name = instance.research_question.question_title
-    return os.path.join('questions', folder_name, filename)
-
-
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
@@ -56,6 +46,9 @@ class ResearcherUser(models.Model):
 
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("researcher:index"))
+    @property
+    def score(self):
+        return self.points*23
 
     def question_status(self):
         if self.status.status == "not_answered":
@@ -87,7 +80,6 @@ class Status(models.Model):
     def __str__(self):
         return '{user}- {status}'.format(user=self.researcher_user, status=self.status)
 
-
 class MembershipFee(models.Model):
     researcher_user = models.OneToOneField('ResearcherUser', verbose_name="حق عضویت", on_delete=models.CASCADE,
                                            blank=True, null=True)
@@ -97,7 +89,6 @@ class MembershipFee(models.Model):
 
     def __str__(self):
         return str(self.fee)
-
 
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
@@ -161,7 +152,6 @@ class ResearcherProfile(models.Model):
     def __str__(self):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
-
 class ScientificRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
 
@@ -174,7 +164,6 @@ class ScientificRecord(models.Model):
     def __str__(self):
         return self.grade
 
-
 class ExecutiveRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
 
@@ -186,7 +175,6 @@ class ExecutiveRecord(models.Model):
 
     def __str__(self):
         return self.post
-
 
 class StudiousRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق پژوهشی", on_delete=models.CASCADE)
@@ -203,7 +191,6 @@ class StudiousRecord(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class ResearcherHistory(models.Model):
     researcher_profile = models.ForeignKey("ResearcherProfile", verbose_name="تاریخچه", on_delete=models.CASCADE)
@@ -223,10 +210,11 @@ class ResearcherHistory(models.Model):
     def __str__(self):
         return "history of " + self.researcher_profile.first_name
 
-
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
     evaluator = models.OneToOneField("expert.ExpertUser", on_delete=models.CASCADE, null=True, blank=True)
+    project_title = models.CharField(max_length=128, verbose_name="عنوان پروژه")
+    phase = models.IntegerField(verbose_name="فاز شماره : ")
 
     one = 1
     two = 2
@@ -270,7 +258,6 @@ class ResearcherEvaluation(models.Model):
         ava = float(sum / 10)
         return ava
 
-
 class Technique(models.Model):
     TYPE = (
         ('molecular_biology', 'Molecular Biology'),
@@ -285,13 +272,27 @@ class Technique(models.Model):
         ('research_methodology', 'Research Methodology'),
     )
 
-    technique_type = models.CharField(max_length=100)
+    technique_type = models.CharField(max_length=30, choices=TYPE)
     technique_title = models.CharField(max_length=300)
     tutorial_link = models.CharField(max_length=500, null=True)
 
     def __str__(self):
         return self.technique_title
 
+    @staticmethod
+    def get_technique_list():
+        technique_list = {
+            "molecular_biology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='molecular_biology')],
+            "immunology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='immunology')],
+            "imaging" : [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')],
+            "histology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='histology')],
+            "general_lab" : [technique.technique_title for technique in Technique.objects.filter(technique_type='general_lab')],
+            "animal_lab" : [technique.technique_title for technique in Technique.objects.filter(technique_type='animal_lab')],"lab_safety" : [technique.technique_title for technique in Technique.objects.filter(technique_type='lab_safety')],
+            "biochemistry" : [technique.technique_title for technique in Technique.objects.filter(technique_type='biochemistry')],
+            "cellular_biology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='cellular_biology')],
+            "research_methodology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='research_methodology')],
+            }
+        return technique_list
 
 class TechniqueInstance(models.Model):
     researcher = models.ForeignKey("ResearcherUser", on_delete=models.CASCADE)
@@ -353,10 +354,11 @@ class TechniqueReview(models.Model):
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
     project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
-    date_requested = models.DateField(auto_now=False, auto_now_add=False, verbose_name='تاریخ درخواست')
+    date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
-
+    def __str__(self):
+        return str(self.project) + " - " + str(self.date_requested)
 
 class ResearchQuestionInstance(models.Model):
     research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,

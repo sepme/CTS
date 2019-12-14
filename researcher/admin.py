@@ -12,6 +12,7 @@ class ResearcherProfileAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(models.Status)
+# admin.site.register(models.RequestedProject)
 
 @admin.register(models.ScientificRecord)
 class ScientificRecordAdmin(admin.ModelAdmin):
@@ -39,4 +40,12 @@ class TechniqueInstanceAdmin(admin.ModelAdmin):
 
 @admin.register(models.TechniqueReview)
 class TechniqueReviewAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.ResearcherHistory)
+class ResearcherHistoryAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.RequestedProject)
+class RequestedProjectAdmin(admin.ModelAdmin):
     pass

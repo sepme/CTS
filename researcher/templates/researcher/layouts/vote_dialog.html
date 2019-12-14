@@ -1,320 +1,541 @@
-{% load static%}
+{% load static %}
 <div class="dialog-main voting">
     <div class="card text-right center-dialog">
         <div class="close"></div>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="vote-progress">
-                        <div class="progress-line"></div>
-                        <ul class="vote-list">
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                            <li class="vote-item"></li>
-                        </ul>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="vote-progress">
+                            <div class="progress-line"></div>
+                            <ul class="vote-list">
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                                <li class="vote-item"></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="custom-border-title">
-                        <div class="row mbottom-10">
-                            <div class="col-lg-12">
-                                <div class="vote-question"><span>?</span></div>
-                                <div class="vote-question-text">
-                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                                </div>
-                                <div class="card p-2 btl-4">
-                                    <div class="swiper-container w-100">
-                                        <div class="swiper-wrapper">
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="custom-border-title">
+                            <div class="row mbottom-10">
+                                <div class="col-lg-12">
+                                    <div class="vote-question"><span>?</span></div>
+                                    <div class="vote-question-text">
+                                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان
+                                        گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و
+                                        برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای
+                                        کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان
+                                        جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه
+                                        ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می
+                                        توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به
+                                        پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته
+                                        اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                                    </div>
+                                    <div class="card p-2 btl-4">
+                                        <div class="swiper-container w-100">
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         1
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         آیا اطلاعات لازم درباره نحوه کار با تکنیک های مورد نیازطرح ، به شما داده شده است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-1"
+                                                                   name="vote-researcher-question1" value="0"
+                                                                   hidden><label for="vote0-1"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-1"
+                                                                   name="vote-researcher-question1" value="1"
+                                                                   hidden><label for="vote1-1"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-1"
+                                                                   name="vote-researcher-question1" value="2"
+                                                                   hidden><label for="vote2-1"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-1"
+                                                                   name="vote-researcher-question1" value="3"
+                                                                   hidden><label for="vote3-1"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-1"
+                                                                   name="vote-researcher-question1" value="4"
+                                                                   hidden><label for="vote4-1"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         2
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         میزان صحت تکنیک های مورد نیاز چقدر کامل بوده است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-2"
+                                                                   name="vote-researcher-question2" value="0"
+                                                                   hidden><label for="vote0-2"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-2"
+                                                                   name="vote-researcher-question2" value="1"
+                                                                   hidden><label for="vote1-2"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-2"
+                                                                   name="vote-researcher-question2" value="2"
+                                                                   hidden><label for="vote2-2"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-2"
+                                                                   name="vote-researcher-question2" value="3"
+                                                                   hidden><label for="vote3-2"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-2"
+                                                                   name="vote-researcher-question2" value="4"
+                                                                   hidden><label for="vote4-2"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         3
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         آیا همراهی با استاد در پروژه به یادگیری توانمندی ها و دانش جدید توسط شما کمک کرده است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-3"
+                                                                   name="vote-researcher-question3" value="0"
+                                                                   hidden><label for="vote0-3"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-3"
+                                                                   name="vote-researcher-question3" value="1"
+                                                                   hidden><label for="vote1-3"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-3"
+                                                                   name="vote-researcher-question3" value="2"
+                                                                   hidden><label for="vote2-3"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-3"
+                                                                   name="vote-researcher-question3" value="3"
+                                                                   hidden><label for="vote3-3"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-3"
+                                                                   name="vote-researcher-question3" value="4"
+                                                                   hidden><label for="vote4-3"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         4
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         سطح علمی استاد در پاسخگویی به نیاز های علمی و سوالات خود را ، پیرامون طرح را چه مقدار ارزیابی می کنید؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-4"
+                                                                   name="vote-researcher-question4" value="0"
+                                                                   hidden><label for="vote0-4"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-4"
+                                                                   name="vote-researcher-question4" value="1"
+                                                                   hidden><label for="vote1-4"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-4"
+                                                                   name="vote-researcher-question4" value="2"
+                                                                   hidden><label for="vote2-4"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-4"
+                                                                   name="vote-researcher-question4" value="3"
+                                                                   hidden><label for="vote3-4"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-4"
+                                                                   name="vote-researcher-question4" value="4"
+                                                                   hidden><label for="vote4-4"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         5
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         در دسترس بودن و پاسخگویی استاد در زمان های از پیش معین شده برای ارائه نتایج و پایبندی استاد به زمان را چگونه ارزیابی می کنید؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-5"
+                                                                   name="vote-researcher-question5" value="0"
+                                                                   hidden><label for="vote0-5"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-5"
+                                                                   name="vote-researcher-question5" value="1"
+                                                                   hidden><label for="vote1-5"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-5"
+                                                                   name="vote-researcher-question5" value="2"
+                                                                   hidden><label for="vote2-5"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-5"
+                                                                   name="vote-researcher-question5" value="3"
+                                                                   hidden><label for="vote3-5"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-5"
+                                                                   name="vote-researcher-question5" value="4"
+                                                                   hidden><label for="vote4-5"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         6
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         آیا وظایف محوله به شما  متناسب با برنامه و زمان  شما بوده است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-6"
+                                                                   name="vote-researcher-question6" value="0"
+                                                                   hidden><label for="vote0-6"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-6"
+                                                                   name="vote-researcher-question6" value="1"
+                                                                   hidden><label for="vote1-6"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-6"
+                                                                   name="vote-researcher-question6" value="2"
+                                                                   hidden><label for="vote2-6"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-6"
+                                                                   name="vote-researcher-question6" value="3"
+                                                                   hidden><label for="vote3-6"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-6"
+                                                                   name="vote-researcher-question6" value="4"
+                                                                   hidden><label for="vote4-6"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         7
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         میزان انعطاف برنامه استاد متناسب با برنامه های شما، چگونه بوده است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-7"
+                                                                   name="vote-researcher-question7" value="0"
+                                                                   hidden><label for="vote0-7"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-7"
+                                                                   name="vote-researcher-question7" value="1"
+                                                                   hidden><label for="vote1-7"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-7"
+                                                                   name="vote-researcher-question7" value="2"
+                                                                   hidden><label for="vote2-7"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-7"
+                                                                   name="vote-researcher-question7" value="3"
+                                                                   hidden><label for="vote3-7"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-7"
+                                                                   name="vote-researcher-question7" value="4"
+                                                                   hidden><label for="vote4-7"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         8
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         آیا برخورد استاد با دانشجو بصورت محترمانه و در چهارچوب اصول تعریف شده (توسط چمران تیم)بوده است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-8"
+                                                                   name="vote-researcher-question8" value="0"
+                                                                   hidden><label for="vote0-8"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-8"
+                                                                   name="vote-researcher-question8" value="1"
+                                                                   hidden><label for="vote1-8"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-8"
+                                                                   name="vote-researcher-question8" value="2"
+                                                                   hidden><label for="vote2-8"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-8"
+                                                                   name="vote-researcher-question8" value="3"
+                                                                   hidden><label for="vote3-8"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-8"
+                                                                   name="vote-researcher-question8" value="4"
+                                                                   hidden><label for="vote4-8"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         9
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         بکارگیری متعادل دانشجویان و تنظیم همکاری میان آنها توسط استاد را چگونه ارزیابی می کنید؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-9"
+                                                                   name="vote-researcher-question9" value="0"
+                                                                   hidden><label for="vote0-9"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-9"
+                                                                   name="vote-researcher-question9" value="1"
+                                                                   hidden><label for="vote1-9"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-9"
+                                                                   name="vote-researcher-question9" value="2"
+                                                                   hidden><label for="vote2-9"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-9"
+                                                                   name="vote-researcher-question9" value="3"
+                                                                   hidden><label for="vote3-9"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-9"
+                                                                   name="vote-researcher-question9" value="4"
+                                                                   hidden><label for="vote4-9"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         10
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         آیا استاد از لحاظ تامین به موقع مالی و آزمایشگاهی پروژه عملکرد قابل قبولی داشته است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-10"
+                                                                   name="vote-researcher-question10" value="0"
+                                                                   hidden><label for="vote0-10"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-10"
+                                                                   name="vote-researcher-question10" value="1"
+                                                                   hidden><label for="vote1-10"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-10"
+                                                                   name="vote-researcher-question10" value="2"
+                                                                   hidden><label for="vote2-10"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-10"
+                                                                   name="vote-researcher-question10" value="3"
+                                                                   hidden><label for="vote3-10"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-10"
+                                                                   name="vote-researcher-question10" value="4"
+                                                                   hidden><label for="vote4-10"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         11
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         میزان رضایت کلی شما از استاد چقدر است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-11"
+                                                                   name="vote-researcher-question11" value="0"
+                                                                   hidden><label for="vote0-11"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-11"
+                                                                   name="vote-researcher-question11" value="1"
+                                                                   hidden><label for="vote1-11"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-11"
+                                                                   name="vote-researcher-question11" value="2"
+                                                                   hidden><label for="vote2-11"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-11"
+                                                                   name="vote-researcher-question11" value="3"
+                                                                   hidden><label for="vote3-11"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-11"
+                                                                   name="vote-researcher-question11" value="4"
+                                                                   hidden><label for="vote4-11"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         12
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         میزان تمایل شما برای انجام پروژه های بعدی با استاد چقدر است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-12"
+                                                                   name="vote-researcher-question12" value="0"
+                                                                   hidden><label for="vote0-12"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-12"
+                                                                   name="vote-researcher-question12" value="1"
+                                                                   hidden><label for="vote1-12"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-12"
+                                                                   name="vote-researcher-question12" value="2"
+                                                                   hidden><label for="vote2-12"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-12"
+                                                                   name="vote-researcher-question12" value="3"
+                                                                   hidden><label for="vote3-12"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-12"
+                                                                   name="vote-researcher-question12" value="4"
+                                                                   hidden><label for="vote4-12"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         13
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         میزان رضایت شما از عملکرد چمران تیم چقدر است؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-13"
+                                                                   name="vote-researcher-question13" value="0"
+                                                                   hidden><label for="vote0-13"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-13"
+                                                                   name="vote-researcher-question13" value="1"
+                                                                   hidden><label for="vote1-13"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-13"
+                                                                   name="vote-researcher-question13" value="2"
+                                                                   hidden><label for="vote2-13"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-13"
+                                                                   name="vote-researcher-question13" value="3"
+                                                                   hidden><label for="vote3-13"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-13"
+                                                                   name="vote-researcher-question13" value="4"
+                                                                   hidden><label for="vote4-13"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="swiper-slide">
-                                                <div class="vote-content">
+                                                <div class="swiper-slide">
+                                                    <div class="vote-content">
                                                     <span class="number">
                                                         14
                                                         -
                                                     </span>
-                                                    <span>
+                                                        <span>
                                                         شما به عنوان دانشجو/محقق چه دستاوردی از این طرح داشته اید؟
                                                     </span>
-                                                </div>
-                                                <div class="text-center vote-select-parent pt-20 pb-40">
-                                                    <div>
-                                                        <input type="radio" class="vote-select xxl" id="vote0" name="vote-researcher-question1" value="0" hidden><label for="vote0" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote1" name="vote-researcher-question1" value="1" hidden><label for="vote1" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select l" id="vote2" name="vote-researcher-question1" value="2" hidden><label for="vote2" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xl" id="vote3" name="vote-researcher-question1" value="3" hidden><label for="vote3" class="vote-select-label"></label>
-                                                        <input type="radio" class="vote-select xxl" id="vote4" name="vote-researcher-question1" value="4" hidden><label for="vote4" class="vote-select-label"></label>
+                                                    </div>
+                                                    <div class="text-center vote-select-parent pt-20 pb-40">
+                                                        <div>
+                                                            <input type="radio" class="vote-select xxl" id="vote0-14"
+                                                                   name="vote-researcher-question14" value="0"
+                                                                   hidden><label for="vote0-14"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote1-14"
+                                                                   name="vote-researcher-question14" value="1"
+                                                                   hidden><label for="vote1-14"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select l" id="vote2-14"
+                                                                   name="vote-researcher-question14" value="2"
+                                                                   hidden><label for="vote2-14"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xl" id="vote3-14"
+                                                                   name="vote-researcher-question14" value="3"
+                                                                   hidden><label for="vote3-14"
+                                                                                 class="vote-select-label"></label>
+                                                            <input type="radio" class="vote-select xxl" id="vote4-14"
+                                                                   name="vote-researcher-question14" value="4"
+                                                                   hidden><label for="vote4-14"
+                                                                                 class="vote-select-label"></label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -322,22 +543,22 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
                                 <span class="next-button">
                                     <i class="fas fa-arrow-right"></i>
                                     بعدی
                                 </span>
-                                <span class="prev-button">
+                                    <span class="prev-button">
                                     قبلی
                                     <i class="fas fa-arrow-left"></i>
                                 </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

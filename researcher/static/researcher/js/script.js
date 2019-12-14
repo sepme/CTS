@@ -1,10 +1,262 @@
 $(window).on("load", function () {
     init_windowSize();
     load_dialog();
+    $(".fa-reply").click(function (event) {
+        console.log($("#reply").val());
+    });
 }).on("resize", function () {
     init_windowSize();
     load_dialog();
 });
+
+$(".chamran-btn-info").click(function () {
+    const dialog = $(".showProject");
+    $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
+    $("#apply_project_id").attr('value', $(".chamran-btn-info").attr("id"));
+    /*
+     * reset All data
+     */
+    dialog.find(".techniques").html("");
+    /*
+     * end of reset
+     */
+    var id = $(this).attr("id");
+    $.ajax({
+        method: 'GET',
+        url: '/researcher/show_project/',
+        dataType: 'json',
+        data: {'id': id},
+        success: function (data) {
+            dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
+            dialog.find(".establish-time .time-body").html(data.submission_date);
+            dialog.find(".time-left .time-body").html(data.deadline);
+            const keys = data.key_words;//[0].split(",");
+            for (let i = 0; i < keys.length; i++) {
+                dialog.find(".keywords").append(
+                    "<span class='border-span'>" +
+                    keys[i]
+                    + "</span>"
+                );
+            }
+            setMajors(data);
+            setValue(data);
+            setComment(data.comments);
+        },
+        error: function (data) {
+            console.log("error");
+        },
+    });
+});
+
+function setRole(data) {
+    role = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.policy +
+        "</div></div>";
+    $(".project-info-content").html(role);
+}
+
+function setResources(data) {
+    resources = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.required_lab_equipment +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.required_technique +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "لطفا مراحل انجام پروژه خود را مشخص کنید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.project_phase +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.required_budget +
+        "</div>" +
+        "</div>";
+    $(".project-info-content").html(resources);
+}
+
+function setApproach(data) {
+    approach = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "طفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.approach +
+        "</div>" +
+        "</div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "این راه حل چه مشکلاتی می‌تواند داشته باشد؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.potential_problems +
+        "</div></div>"
+    $(".project-info-content").html(approach);
+}
+
+function setMajors(data) {
+    majors = "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید." +
+        "</div>" +
+        "<div class='answer'>" +
+        data.main_problem_and_importance +
+        "</div></div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.progress_profitability +
+        "</div></div>" +
+        "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.predict_profit +
+        "</div></div>";
+    $(".project-info-content").html(majors);
+}
+
+function setValue(data) {
+    $("#v-pills-settings-tab").click(function () {
+        setRole(data);
+    });
+    $("#v-pills-messages-tab").click(function () {
+        setResources(data);
+    });
+    $("#v-pills-profile-tab").click(function () {
+        setApproach(data);
+    });
+    $("#v-pills-home-tab").click(function () {
+        setMajors(data);
+    });
+}
+
+function setComment(data) {
+    console.log(data);
+    let comments_code = "";
+    let profile = $("#profile").attr('src');
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].sender_type === 0) { //expert
+            console.log("sender type is 0");
+            comments_code += "<div class='expert-comment' dir='ltr' >" +
+                "<div class='comment-body'>" +
+                "<span class='comment-tools'>" ;
+                // "<i class='fas fa-reply'><div class='reply'></div>"+
+                // "</i>" ;
+                if (data[i].attachment !== "None") {
+                    comments_code += "<a href='/" +
+                                     data[i].attachment +
+                                     "'><i class='fas fa-paperclip'></i></a>" ;   
+                }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].description +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        } else if (data[i].sender_type === 2) { //researcher
+            console.log("sender type isn't 0");
+            console.log(data[i].attachment);
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span class='comment-tools'>";
+                if (data[i].attachment !== "None") {
+                    comments_code += "<a href='/" +
+                                     data[i].attachment +
+                                     "'><i class='fas fa-paperclip'></i></a>" ;   
+                }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].description +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        }
+        else { //system
+            console.log("sender type isn't 0 and 2");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span>" +
+                data[i].description +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        }
+    }
+    $('.comments').html(comments_code);
+}
+
+$(".trash").click(function(event){
+    console.log("----------------");
+    let comment_id = $(this).attr('id');
+    console.log(comment_id);
+    $.ajax({
+        method: 'POST',
+        url: "/researcher/delete_comment",
+        dataType: 'json',
+        data: {comment_id: comment_id},
+        success: function (data) {
+            console.log("seccessful");
+        },
+        error: function (data) {
+            console.log("fucked up");
+        }
+    });
+});
+
 $(document).ready(function () {
     // variable
     edu_count = 0;
@@ -15,7 +267,6 @@ $(document).ready(function () {
     init_dialog_btn(".new-review-request", ".review-request");
     init_dialog_btn(".send-answer", ".thanks_response");
     init_dialog_btn(".start-question", ".confirmation");
-    select_technique(".select-technique");
     init_dialog_btn(".education-btn", ".scientific_form");
     init_dialog_btn(".executive-btn", ".executive_form");
     init_dialog_btn(".research-btn", ".research_form");
@@ -23,7 +274,8 @@ $(document).ready(function () {
     input_focus();
     search_input(".search_message");
     question();
-    $(".new-review-request").click(function(){    
+    vote_dialog_init();
+    $(".new-review-request").click(function () {
         $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
     });
     $('input#upload-input').change(function (event) {
@@ -67,6 +319,26 @@ $(document).ready(function () {
             }
         });
     }
+});
+
+
+$(".submit-button").click(function (event) {
+    event.preventDefault();
+    let voteForm = $(this).closest("form");
+    let data =  voteForm.serialize();
+    console.log(data);
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+
+        },
+        error: function (data) {
+
+        },
+    })
 });
 
 var scientificForm = $('#ajax-sci-form');
@@ -405,7 +677,7 @@ technique_review.submit(function (event) {
                     "</ul>" +
                     "</span>" +
                     "</div>");
-                    $("input#request-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#request-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
             if (obj.request_confirmation_method) {
                 $(".review-request-method").closest("div").append("<div class='error'>" +
@@ -424,11 +696,29 @@ technique_review.submit(function (event) {
                     "</ul>" +
                     "</span>" +
                     "</div>");
-                    $("input#upload-new-resume").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#upload-new-resume").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
         }
     })
-})
+});
+
+function show_add_technique_record(title) {
+    new_tech = "<div class='card active-question flow-root-display'>"+
+            "<div class='technique-title w-50'>"+
+            title+
+            "</div>"+
+            "<div class='technique-info w-50'>"+
+                "<div class='w-25'></div>"+
+                "<div class='mark w-25'><span>"+
+                        "در حال بررسی..."+
+                "<span></div>"+
+                "<div class='date w-25'><span>"+
+                "امروز"+
+                "</span></div>"+
+                "<div class='show w-25'><button class='default-btn show-btn new-review-request'>ارتقا نمره</button></div>"+
+            "</div></div>";
+    $(".techniques-list").append(new_tech);
+}
 
 var add_technique_form = $('.ajax-add-technique-form');
 add_technique_form.submit(function (event) {
@@ -459,7 +749,7 @@ add_technique_form.submit(function (event) {
             if (data.success === "successful") {
                 $(".add-technique").css("display", "none");
                 $(".main").removeClass("blur-div");
-                // show_add_technique_record();
+                show_add_technique_record(data.title);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -507,4 +797,268 @@ add_technique_form.submit(function (event) {
             }
         },
     })
+});
+
+function addComment(data){
+    new_comment = "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span class='comment-tools'>";
+                if (data.attachment !== "None") {
+                    new_comment += "<a href='/" +
+                                    data.attachment +
+                                    "'><i class='fas fa-paperclip'></i></a>" ;   
+                }
+            new_comment += "</span>" +
+                "<span>" +
+                data.description +
+                "</span>" +
+                "</div>" +
+                "</div>";
+    $(".comments").append(new_comment);
+}
+
+var comment_form = $('#comment-form');
+comment_form.submit(function (event) {
+    event.preventDefault();
+    comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+    comment_form.find("label").addClass("progress-cursor");
+    var $thisURL = comment_form.attr('url');
+    var data = new FormData(comment_form.get(0));
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            addComment(data);
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت ارسال شد!",
+                position: 'bottomLeft'
+            });
+            comment_form[0].reset();
+        },
+        error: function (data) {
+            var obj = JSON.parse(data.responseText);
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.description) {
+                $("#description").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.description + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+        },
+    });
+});
+
+var apply_form = $(".apply_Project");
+apply_form.submit(function (event) {
+    event.preventDefault();
+    var url = apply_form.attr('url');
+    var data = $(this).serialize();
+    $.ajax({
+        method: "POST",
+        dataType: "json",
+        data: data,
+        url: url,
+        success: function (data) {
+            $("input#most_hours").removeClass("error");
+            $("input#least_hours").removeClass("error");
+            $(".apply").hide();
+        },
+        error: function (data) {
+            var obj = JSON.parse(data.responseText);
+            if (obj.least_hours) {
+                $("#least_hours").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.least_hours + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#least_hours").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.most_hours) {
+                $("#most_hours").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.most_hours + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#most_hours").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+        }
+    })
+});
+
+$(".add-new-technique").click(function (event) {
+    console.log("add-new-technique clicked!!!");
+    $.ajax({
+        method: 'GET',
+        url: '/researcher/show_technique/',
+        dataType: 'json',
+        data: {'id': "fuckU"},
+        success: function (data) {
+            console.log(data);
+            let source = [];
+            for (let i = 0; i <= Object.keys(data).length - 1; i++) {
+                let item = {};
+                item["title"] = Object.keys(data)[i];
+                item["key"] = i + 1;
+                if (Object.values(data)[i].length) {
+                    item["folder"] = true;
+                    let children = [];
+                    for (let j = 0; j < Object.values(data)[i].length; j++) {
+                        let child_item = {};
+                        child_item["title"] = Object.values(data)[i][j];
+                        child_item["key"] = i + "." + j;
+                        children.push(child_item);
+                    }
+                    item["children"] = children;
+                }
+                source.push(item);
+            }
+            $("#fancy-tree").fancytree({
+                extensions: ["glyph"],
+                checkbox: false,
+                selectMode: 1,
+                checkboxAutoHide: true,
+                clickFolderMode: 2,
+                lazyLoad: function (event, data) {
+                    data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                },
+                select: function (event, data) {
+
+                },
+                source: source,
+                glyph: {
+                    preset: "awesome5",
+                    map: {
+                        _addClass: "",
+                        checkbox: "fas fa-square",
+                        checkboxSelected: "fas fa-check-square",
+                        checkboxUnknown: "fas fa-square",
+                        radio: "fas fa-circle",
+                        radioSelected: "fas fa-circle",
+                        radioUnknown: "fas fa-dot-circle",
+                        dragHelper: "fas fa-arrow-right",
+                        dropMarker: "fas fa-long-arrow-right",
+                        error: "fas fa-exclamation-triangle",
+                        expanderClosed: "fas fa-chevron-left",
+                        expanderLazy: "fas fa-angle-right",
+                        expanderOpen: "fas fa-chevron-down",
+                        loading: "fas fa-spinner fa-pulse",
+                        nodata: "fas fa-meh",
+                        noExpander: "",
+                        // Default node icons.
+                        // (Use tree.options.icon callback to define custom icons based on node data)
+                        doc: "fas fa-screwdriver",
+                        docOpen: "fas fa-screwdriver",
+                        folder: "fas fa-folder",
+                        folderOpen: "fas fa-folder-open"
+                    }
+                },
+            });
+            select_technique(".select-technique");
+        },
+    });
+});
+
+function ShowPreviousProject(project) {
+    show_project = "<div class='card project-item'>" +
+        "<span class='header'>" +
+        project.project_title +
+        "<span class='sub-header'>(" +
+        project.started +
+        " قبل )</span></span>" +
+        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>" + project.finished + "</span> فرصت باقی است!</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>درأمد : <span>" + project.income + "</span> کسب کرده اید.</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده : <span>" + project.technique + "</span></span>" +
+        "<button type='button' class='chamran-btn-info' id='" + project.PK + "'>مشاهده</button>" +
+        "</div>";
+    return show_project;
+}
+
+$("#done-project").click(function (event) {
+    console.log("done-project clicked!!")
+    $(".new-projects").attr("style", "display :none");
+    $(".your-project").attr("style", "display :none");
+    $(".done-project").attr("style", "display :block");
+    $.ajax({
+        method: 'GET',
+        url: '/researcher/doneProject/',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var adding = "";
+            for (var key in data.project_list) {
+                const element = data.project_list[key];
+                adding = adding + ShowPreviousProject(element);
+            }
+            console.log(adding);
+            $(".done-project").html(adding);
+        },
+        error: function (data) {
+            console.log('You don\'t have any project.');
+        },
+    });
+});
+
+function ShowMyProject(project) {
+    show_project = "<div class='card project-item'>" +
+        "<span class='header'>" +
+        project.project_title +
+        "<span class='sub-header'>(" +
+        project.started +
+        " قبل )</span></span>" +
+        "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>" +
+        "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>" + project.finished + "</span> فرصت باقی است!</span>" +
+        "<button type='button' class='chamran-btn-info' id='" + project.PK + "'>مشاهده</button>" +
+        "</div>";
+    return show_project;
+}
+
+$("#your-project").click(function (event) {
+    $(".new-projects").attr("style", "display :none");
+    $(".done-project").attr("style", "display :none");
+    $(".your-project").attr("style", "display :block");
+    $.ajax({
+        method: 'GET',
+        url: '/researcher/myProject/',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var adding = "";
+            for (var key in data.project_list) {
+                const element = data.project_list[key];
+                adding = adding + ShowMyProject(element);
+            }
+            $(".your-project").html(adding);
+            // $(".your-project").append(adding);
+        },
+        error: function (data) {
+            console.log('You don\'t have any project.');
+        },
+    });
+});
+
+$("#new-projects").click(function (event) {
+    $(".new-projects").attr("style", "display :block");
+    $(".done-project").attr("style", "display :none");
+    $(".your-project").attr("style", "display :none");
 });

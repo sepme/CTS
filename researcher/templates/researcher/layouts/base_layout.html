@@ -51,7 +51,7 @@
         <div class="researcher-icon"></div>
         {% if request.user.researcheruser.researcherprofile.photo %}
             <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile" class="profile"
-                 width="150px" height="150px">
+                 width="150px" height="150px" id="profile">
         {% else %}
             <img src="{% static 'researcher/img/profile.jpg' %}" alt="Ehsan" class="profile" width="150px"
                  height="150px">
@@ -59,11 +59,11 @@
 
         <h5>{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}</h5>
         <h6>پژوهشگر</h6>
-        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
+        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ request.user.researcheruser.points|default:0 }}</span>/10</p>
         <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0"
-                 aria-valuemax="100" style="width: 70px">
-                <span class="sr-only">{{ score|default:0 }}% completed</span>
+            <div class="progress-bar" role="progressbar" aria-valuenow="5.7" aria-valuemin="0"
+                 aria-valuemax="10" style="width: {{ request.user.researcheruser.score|default:0 }}px">
+                <!-- <span class="sr-only">57% completed</span> -->
             </div>
         </div>
         <div class="hr"></div>
@@ -127,6 +127,7 @@
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 {% block script %}{% endblock %}
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>
 </body>
