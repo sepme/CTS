@@ -63,10 +63,90 @@ function newItem_label() {
     tag_input_label("id_key_words");
 }
 
+function showQuestion() {
+    $(".show-btn").click(function () {
+        const dialog = $(".show-question");
+        let id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/show_research_question/',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+
+                if (data.question_status === "waiting") {
+                    dialog.find(".question-status").html("در حال بررسی");
+                } else if (data.question_status === "not_answered") {
+                    dialog.find(".question-status").html("فعال");
+                } else if (data.question_status === "answered") {
+                    dialog.find(".question-status").html("پاسخ داده شده");
+                }
+                dialog.find(".card-head").html(data.question_title);
+                dialog.find(".question-date").html(data.question_date);
+                dialog.find("#question-body").html(data.question_body);
+                dialog.find(".close-answer").attr("id", id);
+
+                if (data.question_attachment_type) {
+                    dialog.find(".attach-file").attr("href", data.question_attachment_path);
+                    dialog.find(".attach-name").html(data.question_attachment_name);
+
+                    if (data.question_attachment_type === 'pdf') {
+                        dialog.find(".attachment").addClass("pdf-file");
+                    } else if (data.question_attachment_type === 'doc' || data.question_attachment_type === 'docx') {
+                        dialog.find(".attachment").addClass("doc-file");
+                    } else if (data.question_attachment_type === 'jpg' || data.question_attachment_type === 'jpeg') {
+                        dialog.find(".attachment").addClass("jpg-file");
+                    } else if (data.question_attachment_type === 'png') {
+                        dialog.find(".attachment").addClass("png-file");
+                    } /* else delete the attachments row */
+                }
+
+                var answer_list_obj = data.question_answers_list;
+                if (answer_list_obj.length != 0) {
+                    show_question_answers(answer_list_obj);
+                } /* else show a box within "there is no answers!" */
+
+                question_dialog_init();
+
+            },
+            error: function (data) {
+
+            },
+        });
+    });
+}
+
 $(document).ready(function () {
 
-
-
+    const questions = $(".tab-content div.card").toArray();
+    $(".nav-tabs .nav-item .nav-link").click(function () {
+        if ($(this).attr("id") === "active-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("active-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "check-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("check-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "answered-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("close-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "all-questions") {
+            $(".tab-content").html(questions);
+        }
+        init_dialog_btn(".show-btn", ".show-question");
+        showQuestion();
+    });
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
         $(this).css("width", "fit-content");
@@ -82,12 +162,12 @@ $(document).ready(function () {
     tag_input_label("id_key_words");
 
 
-
     $('*').persiaNumber();
     input_focus();
     question_dialog_init();
     question_page_init();
     init_dialog_btn(".chamran-btn-info", ".showProject");
+    init_dialog_btn(".confirm_project", ".select-technique");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".show-btn", ".show-question");
     init_dialog_btn(".add-new-question", ".add-question");
@@ -181,47 +261,23 @@ $(document).ready(function () {
     * after clicking on 'show-btn' of a new research question, 'attachments' and
     * 'answers' of the previous one is still shown (in the case the previous one had it).
     */
+    showQuestion();
 
-    $(".show-btn").click(function () {
-        const dialog = $(".show-question");
+    $(".close-answer").click(function () {
         var id = $(this).attr("id");
         $.ajax({
             method: 'GET',
-            url: '/expert/show_research_question/',
+            url: '/expert/terminate_research_question/',
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                if (data.question_status === "waiting") {
-                    dialog.find(".question-status").html("در حال بررسی");
-                } else if (data.question_status === "not_answered") {
-                    dialog.find(".question-status").html("فعال");
-                } else if (data.question_status === "answered") {
-                    dialog.find(".question-status").html("پاسخ داده شده");
-                }
-                dialog.find(".card-head").html(data.question_title);
-                dialog.find(".question-date").html(data.question_date);
-                dialog.find("#question-body").html(data.question_body);
+                $('.close-answer').remove();
 
-                if (data.question_attachment_type) {
-                    dialog.find(".attach-file").attr("href", data.question_attachment_path);
-                    dialog.find(".attach-name").html(data.question_attachment_name);
-
-                    if (data.question_attachment_type === 'pdf') {
-                        dialog.find(".attachment").addClass("pdf-file");
-                    } else if (data.question_attachment_type === 'doc' || data.question_attachment_type === 'docx') {
-                        dialog.find(".attachment").addClass("doc-file");
-                    } else if (data.question_attachment_type === 'jpg' || data.question_attachment_type === 'jpeg') {
-                        dialog.find(".attachment").addClass("jpg-file");
-                    } else if (data.question_attachment_type === 'png') {
-                        dialog.find(".attachment").addClass("png-file");
-                    } /* else delete the attachments row */
-                }
-
-                var answer_list_obj = data.question_answers_list;
-                if (answer_list_obj.length != 0) {
-                    show_question_answers(answer_list_obj);
-                } /* else show a box within "there is no answers!" */
-
+                iziToast.success({
+                    rtl: true,
+                    message: "از این به بعد پاسخی برای این سوال دریافت نخواهد شد.",
+                    position: 'topCenter'
+                });
             },
             error: function (data) {
 
@@ -629,8 +685,9 @@ ResearchQuestionForm.submit(function (event) {
     ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = ResearchQuestionForm.attr('data-url');
     var data = $(this).serialize();
-    console.log(data);
     ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+    console.log(data);
+    console.log($(this).find("input[type='file']").get(0).files.item(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -667,25 +724,25 @@ ResearchQuestionForm.submit(function (event) {
             ResearchQuestionForm.find("label").removeClass("progress-cursor");
             ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (obj.question_title) {
-                    $("#question-title").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.question_title + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-                if (obj.question_title != "undefined") {
-                    $("#question-body").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.question_text + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
+                $("#question-title").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.question_title + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.question_title != "undefined") {
+                $("#question-body").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.question_text + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
         },
     })
 });
@@ -714,7 +771,6 @@ showInfo.click(function (event) {
             }
         },
         error: function (data) {
-            console.log(data);
         }
 
     })

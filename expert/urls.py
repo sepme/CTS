@@ -18,6 +18,8 @@ urlpatterns = [
     path('accept_project/', views.accept_project, name="accept_project"),
     path('new_research_question/', views.add_research_question, name="new_research_question"),
     path('show_research_question/', views.show_research_question, name="show_research_question"),
+    path('terminate_research_question/', views.terminate_research_question, name="terminate_research_question"),
+    path('set_answer_situation/', views.set_answer_situation, name="set_answer_situation"),
 
 ]
 

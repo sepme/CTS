@@ -369,7 +369,7 @@ class ResearchQuestionInstance(models.Model):
     answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
     is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={
-        ('enot_seen', 'بررسی نشده'),
+        ('not_seen', 'بررسی نشده'),
         ('correct', 'صحیح'),
         ('wrong', 'غلط'),
     }, default='not_seen')

@@ -16,18 +16,21 @@ from researcher.models import *
 
 
 def calculate_deadline(finished, started):
-    diff = JalaliDate(finished) - JalaliDate(started)
-    days = diff.days
-    if days < 0:
-        return None
-    elif days < 7:
-        return '{} روز'.format(days)
-    elif days < 30:
-        return '{} هفته'.format(int(days / 7))
-    elif days < 365:
-        return '{} ماه'.format(int(days / 30))
-    else:
-        return '{} سال'.format(int(days / 365))
+    try:
+        diff = JalaliDate(finished) - JalaliDate(started)
+        days = diff.days
+        if days < 0:
+            return None
+        elif days < 7:
+            return '{} روز'.format(days)
+        elif days < 30:
+            return '{} هفته'.format(int(days / 7))
+        elif days < 365:
+            return '{} ماه'.format(int(days / 30))
+        else:
+            return '{} سال'.format(int(days / 365))
+    except:
+        return 'تاریخ نامشخص'
 
 
 class Index(generic.TemplateView):
@@ -90,7 +93,6 @@ def index(request):
     else:
         form = InitialInfoForm()
         projects = Project.objects.all()
-        print(projects)
     return render(request, 'expert/index.html', {'form': form,
                                                  'expert_user': expert_user,
                                                  'projects': projects})
@@ -295,10 +297,10 @@ def accept_project(request):
 def add_research_question(request):
     research_question_form = ResearchQuestionForm(request.POST, request.FILES)
     if research_question_form.is_valid():
-        print(research_question_form.cleaned_data)
         data = {'success': 'successful'}
         research_question = research_question_form.save(commit=False)
         research_question.expert = request.user.expertuser
+        print(request.POST)
         if request.FILES.get('attachment'):
             print("tried to upload file...")
             attachment = request.FILES.get('attachment')
@@ -321,6 +323,7 @@ def show_research_question(request):
             'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
             'is_correct': answer.is_correct,
             'answer_attachment': answer.answer.path,
+            'answer_id': str(answer.id),
         }
         answers_list.append(answer_json)
 
@@ -337,3 +340,24 @@ def show_research_question(request):
         json_response['question_attachment_name'] = attachment.name.split('/')[-1]
         json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
     return JsonResponse(json_response)
+
+
+def terminate_research_question(request):
+    research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
+    research_question.status = 'answered'
+    research_question.save(update_fields=['status'])
+    return JsonResponse({
+        'success': 'successful'
+    })
+
+def set_answer_situation(request):
+    answer = ResearchQuestionInstance.objects.filter(id=request.GET.get('id')).first()
+    if request.GET.get('type') == 'true':
+        answer.is_correct = 'correct'
+    else:
+        answer.is_correct = 'wrong'
+    answer.save(update_fields=['is_correct'])
+    return JsonResponse({
+        'success': 'successful'
+    })
+
