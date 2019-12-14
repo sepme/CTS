@@ -71,6 +71,7 @@ class Index(LoginRequiredMixin, generic.FormView):
         projects = []
         for project in all_projects:
             try:
+                print(project.project_form.required_technique.all())
                 for tech in project.project_form.required_technique.all():
                     if tech not in technique:
                         raise Exception("TECHNIQUE_NOT_EXIST")
@@ -78,16 +79,15 @@ class Index(LoginRequiredMixin, generic.FormView):
             except Exception:
                 continue
         project_list = []
-        for project in all_projects:
-            # if self.request.user.researcheruser in project.researcher_applied.all():
-            #     continue
+        for project in projects:
+            if self.request.user.researcheruser in project.researcher_applied.all():
+                continue
             all_comments = project.get_comments()
             expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
             researcher_comment = all_comments.filter(sender_type=2)
             comments= sorted(
                     chain(researcher_comment, expert_comment),
                     key=attrgetter('date_submitted'))
-            print(comments)
             temp ={
                 'PK'                 : project.pk,
                 'project_title'      : project.project_form.project_title_persian,
@@ -98,7 +98,6 @@ class Index(LoginRequiredMixin, generic.FormView):
                 'researcher_comment' : researcher_comment,
                 'comments'          : comments,
             }
-            project_list.append(temp)        
         context['project_list'] = project_list
         return context
 
@@ -287,23 +286,20 @@ class Technique(generic.TemplateView):
 
 def ShowTechnique(request):
     data = {
-        'molecular_biology'    : list(models.Technique.objects.filter(technique_type='Molecular Biology').values_list('technique_title' ,flat=True)),
-        'immunology'           : list(models.Technique.objects.filter(technique_type='Immunology').values_list('technique_title' ,flat=True)),
-        'imaging'              : list(models.Technique.objects.filter(technique_type='Imaging').values_list('technique_title' ,flat=True)),
-        'histology'            : list(models.Technique.objects.filter(technique_type='Histology').values_list('technique_title' ,flat=True)),
-        'general_lab'          : list(models.Technique.objects.filter(technique_type='General Lab').values_list('technique_title' ,flat=True)),
-        'animal_lab'           : list(models.Technique.objects.filter(technique_type='Animal Lab').values_list('technique_title' ,flat=True)),
-        'lab_safety'           : list(models.Technique.objects.filter(technique_type='Lab Safety').values_list('technique_title' ,flat=True)),
-        'biochemistry'         : list(models.Technique.objects.filter(technique_type='Biochemistry').values_list('technique_title' ,flat=True)),
-        'cellular_biology'     : list(models.Technique.objects.filter(technique_type='Cellular Biology').values_list('technique_title' ,flat=True)),
-        'research_methodology' : list(models.Technique.objects.filter(technique_type='Research Methodology').values_list('technique_title' ,flat=True)),
+        'molecular_biology'    : list(models.Technique.objects.filter(technique_type='molecular_biology').values_list('technique_title' ,flat=True)),
+        'immunology'           : list(models.Technique.objects.filter(technique_type='immunology').values_list('technique_title' ,flat=True)),
+        'imaging'              : list(models.Technique.objects.filter(technique_type='imaging').values_list('technique_title' ,flat=True)),
+        'histology'            : list(models.Technique.objects.filter(technique_type='histology').values_list('technique_title' ,flat=True)),
+        'general_lab'          : list(models.Technique.objects.filter(technique_type='general_lab').values_list('technique_title' ,flat=True)),
+        'animal_lab'           : list(models.Technique.objects.filter(technique_type='animal_lab').values_list('technique_title' ,flat=True)),
+        'lab_safety'           : list(models.Technique.objects.filter(technique_type='lab_safety').values_list('technique_title' ,flat=True)),
+        'biochemistry'         : list(models.Technique.objects.filter(technique_type='biochemistry').values_list('technique_title' ,flat=True)),
+        'cellular_biology'     : list(models.Technique.objects.filter(technique_type='cellular_biology').values_list('technique_title' ,flat=True)),
+        'research_methodology' : list(models.Technique.objects.filter(technique_type='research_methodology').values_list('technique_title' ,flat=True)),
     }
     return JsonResponse(data=data)
 
 def AddTechnique(request):
-    print("_-------------")
-    print(request.FILES)
-    print(request.POST)
     form = forms.TechniqueInstanceForm(request.user ,request.POST ,request.FILES)    
     if form.is_valid():
         technique_title = form.cleaned_data['technique'] 
@@ -326,7 +322,7 @@ def AddTechnique(request):
                 subject=subject,
                 message=message,
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER ,'a.jafarzadeh1998@gmail.com',],
+                recipient_list=[settings.EMAIL_HOST_USER,],
                 fail_silently=False
             )
         except TimeoutError:
@@ -342,14 +338,15 @@ def AddTechnique(request):
                                                     technique=technique,
                                                     evaluat_date=datetime.date.today())
             technique_instance.save()
-            print(technique_instance)
-            data = {'success' : 'successful'}
+            data = {'success' : 'successful',
+                    'title'   : technique_title}
             return JsonResponse(data=data)
         technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
                                                     resume=resume)
         technique_instance.save()
-        data = {'success' : 'successful'}
+        data = {'success' : 'successful',
+                'title'   : technique_title}
         return JsonResponse(data=data)
     print(form.errors)
     return JsonResponse(form.errors ,status=400)
@@ -382,8 +379,8 @@ class Question(generic.TemplateView):
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
         question = question_list[random.randint(1 ,len(question_list))-1]
-        question_instance = models.ResearchQuestionInstance(research_question=question,
-                                                            researcher = request.user.researcheruser)
+        question_instance = models.ResearchQuestionInstance(research_question=question
+                                                            ,researcher = request.user.researcheruser)
         question_instance.save()
         return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={"question_id" :question.uniqe_id}))
 
@@ -401,7 +398,7 @@ class QuestionShow(generic.TemplateView ):
             if question.is_answered:
                 print("+_+_+_+_+_+_+_+_+_+_====")
                 return HttpResponseRedirect(reverse('researcher:index'))
-            if question.is_correct :
+            if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.status.save()
         else:
@@ -456,9 +453,6 @@ class QuestionShow(generic.TemplateView ):
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):
-    print("---------")
-    print(request.FILES)
-    print(request.POST)
     form = forms.TechniqueReviewFrom(request.POST ,request.FILES)
     if form.is_valid():
         description = form.cleaned_data['request_body']
@@ -466,7 +460,6 @@ def ajax_Technique_review(request):
         technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name'])[0]
         if method != "exam":
             resume = form.cleaned_data['new_resume']
-            print(resume)
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,
                                                       method=method ,resume=resume)
         else:
@@ -484,13 +477,12 @@ def ajax_Technique_review(request):
                 subject=subject,
                 message=message, 
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER,'a.jafarzadeh1998@gmail.com'],
+                recipient_list=[settings.EMAIL_HOST_USER],
             )
         except TimeoutError:
             return HttpResponse('Timeout Error!!')
         data = {'success' : 'successful'}
         return JsonResponse(data)
-    print(form.errors)
     return JsonResponse(form.errors ,status=400)
 
 def ShowProject(request):
@@ -524,7 +516,6 @@ def ShowProject(request):
     return JsonResponse(json_response)
 
 def ApplyProject(request):
-    print(request)
     form = forms.ApplyForm(request.POST)
     if form.is_valid():
         project=get_object_or_404(Project ,id=request.POST['id'])
@@ -544,14 +535,12 @@ def ApplyProject(request):
         comment.save()
         project.researcher_applied.add(request.user.researcheruser)
         return JsonResponse(data={'success' : "success"})
-    print(form.errors)
     return JsonResponse(form.errors ,status=400)
 
 def MyProject(request):    
     projects = Project.objects.all().filter(researcher_applied__in=[request.user.researcheruser])
-    print(projects)
-    evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=projects[0].project_form.project_title_english)
-    if projects is not None:
+    if len(projects) != 0:
+        evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=projects[0].project_form.project_title_english)
         project_list = {}
         for project in projects:
             project_list[project.project_form.project_title_english] = {
@@ -570,16 +559,13 @@ def MyProject(request):
             elif datetime.date.today() > project.date_phase_one_finished:
                 if evaluation_history.objects.filter(phase=1).count() == 0:
                     project_list['vote'] = "true"
-        print(project_list)
         return JsonResponse(data={"project_list" : project_list})
     else:
         return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})
 
 def DoneProjects(request):
     projects = models.ResearcherHistory.objects.all()
-    print("---------")
-    project_list = {}
-    print(projects)
+    project_list = {}    
     for project in projects:
         tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
         project_list[project.title] = {
@@ -590,8 +576,7 @@ def DoneProjects(request):
             'point'         : project.point,
             'income'        : project.income,
             'technique'     : tech_temp,
-        }        
-    print(project_list)
+        }
     return JsonResponse(data={"project_list" : project_list})
 
 def AddComment(request):

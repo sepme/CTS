@@ -46,6 +46,9 @@ class ResearcherUser(models.Model):
 
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("researcher:index"))
+    @property
+    def score(self):
+        return self.points*23
 
     def question_status(self):
         if self.status.status == "not_answered":
@@ -366,7 +369,7 @@ class ResearchQuestionInstance(models.Model):
     answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
     is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={
-        ('not_seen', 'بررسی نشده'),
+        ('enot_seen', 'بررسی نشده'),
         ('correct', 'صحیح'),
         ('wrong', 'غلط'),
     }, default='not_seen')

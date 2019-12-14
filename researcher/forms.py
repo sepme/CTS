@@ -551,8 +551,8 @@ class TechniqueInstanceForm(forms.Form):
         data = self.cleaned_data["technique"]
         if data == 'None':
             raise  ValidationError("عنوان تکنیک نمی تواند خالی باشد.")
-        if data not in views.TECHNIQUES:
-            raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")        
+        # if data not in views.TECHNIQUES:
+        #     raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")        
         if models.TechniqueInstance.objects.filter(researcher=self.user.researcheruser).filter(technique__technique_title=data).count() != 0:
             raise ValidationError(_("این تکنیک قبلا ذخیره شده است."))
         return data

@@ -13,7 +13,6 @@ $(window).on("load", function () {
 });
 
 $(".chamran-btn-info").click(function () {
-    console.log("----------------")
     const dialog = $(".showProject");
     $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
     $("#apply_project_id").attr('value', $(".chamran-btn-info").attr("id"));
@@ -698,6 +697,24 @@ technique_review.submit(function (event) {
     })
 });
 
+function show_add_technique_record(title) {
+    new_tech = "<div class='card active-question flow-root-display'>"+
+            "<div class='technique-title w-50'>"+
+            title+
+            "</div>"+
+            "<div class='technique-info w-50'>"+
+                "<div class='w-25'></div>"+
+                "<div class='mark w-25'><span>"+
+                        "در حال بررسی..."+
+                "<span></div>"+
+                "<div class='date w-25'><span>"+
+                "امروز"+
+                "</span></div>"+
+                "<div class='show w-25'><button class='default-btn show-btn new-review-request'>ارتقا نمره</button></div>"+
+            "</div></div>";
+    $(".techniques-list").append(new_tech);
+}
+
 var add_technique_form = $('.ajax-add-technique-form');
 add_technique_form.submit(function (event) {
     event.preventDefault();
@@ -727,7 +744,7 @@ add_technique_form.submit(function (event) {
             if (data.success === "successful") {
                 $(".add-technique").css("display", "none");
                 $(".main").removeClass("blur-div");
-                // show_add_technique_record();
+                show_add_technique_record(data.title);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
