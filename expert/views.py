@@ -300,11 +300,17 @@ def show_project_view(request):
     comments = []
     comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser)
     for comment in comment_list:
-        print('id=', comment.id, '. text=', comment.description)
+        # print(comment.attachment.url)
+        try:
+            url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
+            print(url)
+        except:
+            url = "None"
         comments.append({
             'id': comment.id,
             'text': comment.description,
-            'sender_type': comment.sender_type
+            'sender_type': comment.sender_type,
+            'attachment' : url,
         })
     data = {
         'comments': comments,

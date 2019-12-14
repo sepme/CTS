@@ -998,7 +998,6 @@ showInfo.click(function (event) {
             setMajors(data);
             setValue(data);
             setComment(data.comments);
-            console.log(data);
         },
         error: function (data) {
         }
@@ -1245,14 +1244,19 @@ comment_form.submit(function (event) {
     let description = $(this).closest(".col-lg-12").find("#description").val();
     let id = $(this).closest(".showProject").attr("id");
     let thisUrl = "/expert/industry_comment/";
-    let attachment = "";
+    let attachment = $('#comment-attach').val();
+    console.log(attachment);
+    data = {project_id: id, description: description, attachment: attachment}
+    var form = new FormData()
     console.log(description);
     console.log(id);
     $.ajax({
-        method: 'GET',
+        method: 'POST',
         url: thisUrl,
-        data: {project_id: id, description: description, attachment: attachment},
-        type: "ajax",
+        data: form,
+        // dataType: 'json',
+        processData: false,
+        contentType: false,
         success: function (data) {
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);

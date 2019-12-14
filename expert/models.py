@@ -20,7 +20,7 @@ def get_attachment_path(instance, filename):
 
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
-    expert_point = models.IntegerField(verbose_name="امتیاز استاد", default=0.0)
+    expert_point = models.FloatField(verbose_name="امتیاز استاد", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('free', "فعال - بدون پروژه"),
@@ -39,6 +39,9 @@ class ExpertUser(models.Model):
     def get_profile_photo_url(self):
         return self.user.email
 
+    @property
+    def score(self):
+        return self.expert_point*23
 
 class EqTest(models.Model):
     INT_CHOICE = (
