@@ -20,6 +20,9 @@ urlpatterns = [
     path('show_research_question/', views.show_research_question, name="show_research_question"),
     path('terminate_research_question/', views.terminate_research_question, name="terminate_research_question"),
     path('set_answer_situation/', views.set_answer_situation, name="set_answer_situation"),
+    path('show_researcher_preview/', views.show_researcher_preview, name="show_researcher_preview"),
+    path('researcher_comment/', views.CommentForResearcher, name="researcher_comment"),
+    path('industry_comment/', views.CommentForIndustry, name="industry_comment"),
 
 ]
 

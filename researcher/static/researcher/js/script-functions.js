@@ -476,7 +476,8 @@ function show_research_record() {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr>";
-    } else if ($("#rank").val() == 2) {
+    }
+     else if ($("#rank").val() == 2) {
         row = "<tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
@@ -487,18 +488,19 @@ function show_research_record() {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr>";
-    } else if ($("#rank").val() == 2) {
-        row = "<tr>" +
-            "<td>" + $("#subject").val() + "</td>" +
-            "<td>" + $("#admin").val() + "</td>" +
-            "<td>" + $("#liable").val() + "</td>" +
-            "<td>متوقف</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_stu'></i>" +
-            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
-            "</td>" +
-            "</tr>";
-    }
+        }
+    else if ( $("#rank").val() === 2) {
+            row = "<tr>" +
+                "<td>" + $("#subject").val() + "</td>" +
+                "<td>" + $("#admin").val() + "</td>" +
+                "<td>" + $("#liable").val() + "</td>" +
+                "<td>متوقف</td>" +
+                "<td>" +
+                "<i class='fas fa-pen' id='edit_stu'></i>" +
+                "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+                "</td>" +
+                "</tr>";
+            }
     if (!$(".studious > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +

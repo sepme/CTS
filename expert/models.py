@@ -12,11 +12,7 @@ def get_image_path(instance, filename):
     filename = '{}.{}'.format('profile', ext)
 
     return os.path.join('unique', instance.expert_user.user.username, filename)
-
-
-def get_attachment_path(instance, filename):
-    return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
-
+    
 
 def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
@@ -24,7 +20,7 @@ def get_attachment_path(instance, filename):
 
 class ExpertUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
-    expert_point = models.IntegerField(verbose_name="امتیاز استاد", default=0.0)
+    expert_point = models.FloatField(verbose_name="امتیاز استاد", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('free', "فعال - بدون پروژه"),
@@ -40,6 +36,12 @@ class ExpertUser(models.Model):
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("expert:index"))
 
+    def get_profile_photo_url(self):
+        return self.user.email
+
+    @property
+    def score(self):
+        return self.expert_point*23
 
 class EqTest(models.Model):
     INT_CHOICE = (
@@ -300,3 +302,14 @@ class ResearchQuestion(models.Model):
     def get_answers(self):
         answers = ResearchQuestionInstance.objects.filter(research_question=self)
         return answers
+
+
+class ExpertRequestedProject(models.Model):
+    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
+    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
+    date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
+    required_technique = models.ManyToManyField('researcher.Technique', verbose_name='تکنیک های مورد نیاز استاد',
+                                                blank=True, null=True)
+
+    def __str__(self):
+        return "{}'s request for '{}' project".format(self.expert.expertform, self.project)

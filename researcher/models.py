@@ -36,6 +36,10 @@ def get_resumeFile_path(instance, filename):
         folder_name = str(instance.technique_instance.researcher)
     return os.path.join('resume', folder_name, filename)
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> b01d184e4d5746d33839519bbe66a4219e7b5024
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
@@ -60,6 +64,9 @@ class ResearcherUser(models.Model):
             return 'not_answered'
         return 'free'
 
+    @property
+    def score(self):
+        return self.points*23
 
 class Status(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
@@ -272,7 +279,7 @@ class Technique(models.Model):
         ('research_methodology', 'Research Methodology'),
     )
 
-    technique_type = models.CharField(max_length=30, choices=TYPE)
+    technique_type = models.CharField(max_length=30, choices=TYPE, blank=True)
     technique_title = models.CharField(max_length=300)
     tutorial_link = models.CharField(max_length=500, null=True)
 
@@ -293,6 +300,7 @@ class Technique(models.Model):
             "research_methodology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='research_methodology')],
             }
         return technique_list
+
 
 class TechniqueInstance(models.Model):
     researcher = models.ForeignKey("ResearcherUser", on_delete=models.CASCADE)

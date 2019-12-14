@@ -32,7 +32,9 @@ class IndustryUser(models.Model):
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("industry:index"))
 
-
+    @property
+    def score(self):
+        return self.industry_points*23
 # def upload_and_rename_profile(instance, file_name):
 #     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
 
@@ -96,7 +98,6 @@ class ProjectForm(models.Model):
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
     required_technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک های مورد نیاز")
-    # required_technique = models.TextField(default='no technique', verbose_name='تکنیک های مورد نیاز')
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
@@ -117,13 +118,23 @@ class Project(models.Model):
     date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول", null=True, blank=True)
     date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم", null=True, blank=True)
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
-    researcher_applied = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران درخواست داده",
-                                                related_name="researchers_applied", blank=True ,through=RequestedProject)
-    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده", related_name="researchers_accepted", blank=True)
-    expert_messaged = models.ManyToManyField('expert.ExpertUser', verbose_name='اساتیدی که پیام داده اند',
-                                             related_name='experts_messaged' ,blank=True)
-    expert_applied = models.ManyToManyField('expert.ExpertUser', verbose_name="اساتید درخواست داده", related_name="experts_applied", blank=True)
-    expert_accepted = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته شده", related_name="expert_accepted", blank=True ,null=True)
+    researcher_applied = models.ManyToManyField('researcher.ResearcherUser', through='researcher.RequestedProject',
+                                                verbose_name="پژوهشگران درخواست داده",
+                                                related_name="researchers_applied", blank=True, null=True)
+    researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
+                                                 related_name="researchers_accepted", blank=True, null=True)
+    expert_applied = models.ManyToManyField('expert.ExpertUser', through='expert.ExpertRequestedProject',
+                                            verbose_name="اساتید درخواست داده",
+                                            related_name="experts_applied", blank=True, null=True)
+    expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
+                                                                                                    "شده",
+                                        related_name="expert_accepted", blank=True, null=True)
+    expert_messaged = models.ManyToManyField('expert.ExpertUser', null=True, blank=True,
+                                             verbose_name='اساتیدی که پیام داده اند')
+    industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
+                                         null=True, blank=True, verbose_name='شرکت '
+                                                                             'صاحب '
+                                                                             'پروژه')
     cost_of_project = models.FloatField(verbose_name="هزینه پروژه", null=True, blank=True)
     maximum_researcher = models.IntegerField(verbose_name="حداکثر تعداد پژوهشگر", null=True, blank=True)
     project_detail = models.TextField(verbose_name="جزيات پروژه", null=True, blank=True)
@@ -160,7 +171,7 @@ class Comment(models.Model):
         (2, 'پژوهشگر'),
         (3, 'سیستم'),
     )
-    replied_text = models.CharField(max_length=100, blank=True, null=True)
+    replied_text = models.CharField(max_length=150, blank=True, null=True)
     sender_type = models.IntegerField(choices=SENDER)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, blank=True, null=True)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
@@ -171,10 +182,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.description
-
+    
     def __str__(self):
         return self.SENDER[self.sender_type][1]
-
 
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128)

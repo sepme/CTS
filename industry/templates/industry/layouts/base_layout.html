@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css">
+    <link rel="stylesheet" href="{% static 'css/comments.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
 </head>
@@ -56,11 +58,11 @@
                     alt="profile" class="profile" width="150px" height="150px">
         <h5>{% block name %}{% endblock %}</h5>
         <h6>صنعت</h6>
-        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ score|default:0 }}</span>/100</p>
+        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ user.industryuser.industry_points|default:0 }}</span>/100</p>
         <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0"
-                 aria-valuemax="100" style="width: 70px">
-                <span class="sr-only">{{ score|default:0 }}% completed</span>
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ user.industryuser.score|default:0 }}" aria-valuemin="0"
+                 aria-valuemax="100" style="width: {{user.industryuser.score}} px">
+                <span class="sr-only">{{ user.industryuser.score|default:0 }}% completed</span>
             </div>
         </div>
         <div class="hr"></div>
@@ -74,7 +76,7 @@
                     </div>
                 </li>
             </a>
-            {% url "industry:messages" as messages %}
+            <!-- {% url "industry:messages" as messages %}
             <a href="{{ messages }}">
                 <li class="list-group-item text-right {% if request.get_full_path == messages %}active{% endif %}">
                     <div>
@@ -82,7 +84,7 @@
                         <span class="fas fa-envelope"></span>
                     </div>
                 </li>
-            </a>
+            </a> -->
             {% url "industry:newProject" as newProject %}
             <a href='{{ newProject }}'>
                 <li class="list-group-item text-right {% if request.get_full_path == newProject %}active{% endif %}">
@@ -93,14 +95,14 @@
                 </li>
             </a>
             {#            TODO#}
-            <li class="list-group-item text-right">
+            <!-- <li class="list-group-item text-right">
                 <a href="#">
                     <div>
                         <span>درخواست ها</span>
                         <span class="fas fa-sticky-note"></span>
                     </div>
                 </a>
-            </li>
+            </li> -->
             {% url 'industry:userInfo' as userInfo %}
             <li class="list-group-item text-right {% if request.get_full_path == userInfo %}active{% endif %}">
                 <a href="{{ userInfo }}">
@@ -116,6 +118,8 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
 {% block script %}{% endblock %}

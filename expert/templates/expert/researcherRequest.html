@@ -8,7 +8,7 @@
 
 {% endblock %}
 
-{% block name %}دکتر احسان شریف{% endblock %}
+{% block name %}{{ request.user.expertuser.expertform }}{% endblock %}
 
 {% block dialog %}
     {% include 'expert/layouts/researcher_info_dialog.html' %}
@@ -18,41 +18,54 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card info-card user-info text-right">
-                <div class="card-header">محلول کشت سلولی</div>
+                {% if applications %}
+                    {% for project in applications %}
+                    <div class="card-header">{{ project.project }}</div>
+                    <div class="div_project_id" id="{{project.id}}" hidden></div>
                     <div class="inner-card card" style="margin-bottom: 0;">
-                        <div class="researcher-request-info-innerDiv">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card researcher-info">
-                                        <img src="{% static 'expert/img/photo.jpg' %}" alt="researcher-profile">
-                                        <div class="researcher-info-innerDiv text-right">
-                                            <h6>علی جعفرزاده</h6>
-                                            <div>مهندسی کامپیوتر - نرم افزار</div>
-                                            <div>مقطع: <span> کارشناسی</span></div>
-                                            <div class="">
-                                                <span class="border-span">برنامه نویس Django </span>
-                                                <span class="border-span">python</span>
-                                                <span class="border-span">برنامه نویس BackEnd</span>
-                                                <span class="border-span">مسلط به Git</span>
-                                                <span class="border-span">مسلط به Finglish</span>
+                        {% for researcher in project.researchers_applied %}
+                            <div class="researcher-request-info-innerDiv">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card researcher-info">
+                                            <img src="{{ researcher.profile.photo.url }}" alt="researcher-profile">
+                                            <div class="researcher-info-innerDiv text-right">
+                                                <h6>{{ researcher.profile }}</h6>
+                                                <div>{{ researcher.profile.major }} - {{ researcher.profile.university }}</div>
+                                                <div>مقطع: <span> {% if researcher.profile.grade == 1 %}
+                                                                    کارشناسی
+                                                                {% elif researcher.profile.grade == 2 %}
+                                                                    کارشناسی ارشد
+                                                                {% elif researcher.profile.grade == 3 %}
+                                                                    دکتری
+                                                                {% elif researcher.profile.grade == 4 %}
+                                                                    دکتری عمومی
+                                                                {% endif %}</span></div>
+                                                <div class="">
+                                                {% for tech in researcher.techniques %}
+                                                    <span class="border-span">{{tech}}</span>
+                                                {% endfor %}
+                                                </div>
                                             </div>
+                                            <div class="researcher-score">
+                                                <span>امتیاز: </span>
+                                                <span>10/</span>
+                                                <span>{{researcher.profile.researcher_user.points}}</span>
+                                            </div>
+    {#                                                   <button class="show-researcher">مشاهده</button>#}
+    {#                                                   <button class="accept-researcher">تایید</button>#}
+    {#                                                   <button class="refuse-researcher">رد</button>#}
+                                            <button class="researcher-card-button-show"  value="{{project.id}}" id="{{ researcher.profile.id }}" data-url="{% url 'expert:show_researcher_preview' %}">مشاهده</button>
+                                            <button class="researcher-card-button-check" id="{{ researcher.profile.id }}">تایید</button>
+                                            <div class="close"></div>
                                         </div>
-                                        <div class="researcher-score">
-                                            <span>امتیاز: </span>
-                                            <span>10/</span>
-                                            <span>4</span>
-                                        </div>
-{#                                                   <button class="show-researcher">مشاهده</button>#}
-{#                                                   <button class="accept-researcher">تایید</button>#}
-{#                                                   <button class="refuse-researcher">رد</button>#}
-                                        <button class="researcher-card-button-show">مشاهده</button>
-                                        <button class="researcher-card-button-check">تایید</button>
-                                        <div class="close"></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </div>

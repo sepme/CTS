@@ -2,63 +2,26 @@
 <span class="section-title">نظرات</span>
 <div class="section">
     <div class="project-comment-innerDiv">
+        <div class="comments"></div>
         <div class="add-comment">
-            <div class="comments">
-                <div class="my-comment">
-                    <div class="comment-profile">
-                        <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="expert_profile">
-                    </div>
-                    <div class="comment-body" dir="ltr">
-                                            <span class="comment-tools">
-                                                <i class="fas fa-trash-alt"></i>
-                                                <i class="fas fa-reply"></i>
-                                                <i class="fas fa-pen"></i>
-                                            </span>
-                        <span>
-                                                سلام علیکم
-                                            </span>
-                    </div>
-                </div>
-                <div class="your-comment">
-                    <div class="comment-profile">
-                        <img src="{% static 'expert/img/pharmaceutical.jpg' %}" alt="expert_profile">
-                    </div>
-                    <div class="comment-body">
-                                            <span class="comment-tools">
-                                                <i class="fas fa-reply"></i>
-                                            </span>
-                        <span>
-                                                علیکم سلام
-                                            </span>
-                    </div>
-                </div>
-                <div class="my-comment">
-                    <div class="comment-profile">
-                        <img src="{% static 'expert/img/Ehsan.jpg' %}" alt="expert_profile">
-                    </div>
-                    <div class="comment-body" dir="ltr">
-                                            <span class="comment-tools">
-                                                <i class="fas fa-trash-alt"></i>
-                                                <i class="fas fa-reply"></i>
-                                                <i class="fas fa-pen"></i>
-                                            </span>
-                        <span>
-                                                حال شما خوبه الحمدلله؟
-                                            </span>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <form action="" method="post">
+            <form action="" method="POST" enctype="multipart/form-data" id="comment-form">
+                {% csrf_token %}
+                <input type="text" name="project_id" id="project_id" hidden>
+                <input type="text" name="researcher_id" id="" hidden>
+                <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
                 <div class="row">
+                    <input type="text" class="project_id" value="" hidden>
+                    <input type="text" class="researcher_id" name="researcher_id" value="" hidden>
+                    <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
                     <div class="col-lg-12">
-                        <label for="comment">ثبت نظر جدید</label>
-                        <textarea dir="rtl" id="comment" class="w-100 emojiable-option" name="" rows="5"></textarea>
-                        <button class="chamran_btn" type="button" style="left: 16px;bottom: 8px;">ثبت نظر</button>
+                        <label for="description">ثبت نظر جدید</label>
+                        <textarea dir="rtl" id="description" class="w-100 emojiable-option" name="description"
+                                  rows="5"></textarea>
+                        <button class="chamran_btn" type="submit" style="left: 16px;bottom: 8px;">ثبت نظر</button>
                         <span class="new-comment-tools">
-                                                <input type="file" id="comment-attach" hidden>
-                                                <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
-                                            </span>
+                            <input type="file" id="comment-attach" name="attachment" hidden>
+                            <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
+                        </span>
                         <div class="attachment"></div>
                     </div>
                 </div>

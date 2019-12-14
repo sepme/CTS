@@ -166,10 +166,10 @@ $(document).ready(function () {
     input_focus();
     question_dialog_init();
     question_page_init();
-    init_dialog_btn(".chamran-btn-info", ".showProject");
+    init_dialog_btn(".preview-project", ".showProject");
     init_dialog_btn(".confirm_project", ".select-technique");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".show-btn", ".show-question");
+    init_dialog_btn(".question-info .show-btn", ".show-question");
     init_dialog_btn(".add-new-question", ".add-question");
     init_dialog_btn(".education-btn", ".scientific_form");
     init_dialog_btn(".executive-btn", ".executive_form");
@@ -177,6 +177,129 @@ $(document).ready(function () {
     init_dialog_btn(".paper-btn", ".paper_form");
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
+    $(".confirm_project").click(function () {
+        $(".select-technique").find("#fancy-tree").fancytree({
+            extensions: ["glyph"],
+            checkbox: false,
+            selectMode: 1,
+            checkboxAutoHide: true,
+            clickFolderMode: 2,
+            lazyLoad: function (event, data) {
+                data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+            },
+            select: function (event, data) {
+
+            },
+            source: [
+                {
+                    "title": "histology", "key": "1", "folder": true, "children": [
+                        {
+                            "title": "Sterile Tissue Harvest", "key": "101", "folder": true, "children": [
+                                {"title": "Sterile Tissue Harvest", "key": "10101"},
+                                {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
+                            ]
+                        },
+                        {"title": "Tissue Cryopreservation", "key": "102"},
+                        {"title": "Tissue Fixation", "key": "103"},
+                        {"title": "Microtome Sectioning", "key": "104"},
+                        {"title": "Cryostat Sectioning", "key": "105"},
+                        {"title": "H&E staining", "key": "106"},
+                        {"title": "Histochemistry", "key": "107"},
+                        {"title": "Histoflouresence", "key": "108"}
+                    ]
+                },
+                {
+                    "title": "general lab", "key": "2", "folder": true, "children": [
+                        {"title": "An Introduction to the Centrifuge", "key": "201"},
+                        {"title": "Regulating Temperature in the Lab Preserving Samples Using Cold", "key": "202"},
+                        {"title": "Introduction to the Bunsen Burner", "key": "203"},
+                        {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
+                        {"title": "An Introduction to the Micropipettor", "key": "205"},
+                        {"title": "Making Solutions in the Laboratory", "key": "206"},
+                        {"title": "Understanding Concentration and Measuring Volumes", "key": "207"},
+                        {"title": "Introduction to the Microplate Reader", "key": "208"},
+                        {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
+                        {"title": "Common Lab Glassware and Users", "key": "210"},
+                        {"title": "Solutions and Concentrations", "key": "211"},
+                        {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
+                        {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
+                        {"title": "Determining the Empirical Formula", "key": "214"},
+                        {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
+                        {"title": "Using a pH Meter", "key": "216"},
+                        {"title": "Introduction to Titration", "key": "217"},
+                        {"title": "Ideal Gas Law", "key": "218"}
+                    ]
+                }
+            ],
+            glyph: {
+                preset: "awesome5",
+                map: {
+                    _addClass: "",
+                    checkbox: "fas fa-square",
+                    checkboxSelected: "fas fa-check-square",
+                    checkboxUnknown: "fas fa-square",
+                    radio: "fas fa-circle",
+                    radioSelected: "fas fa-circle",
+                    radioUnknown: "fas fa-dot-circle",
+                    dragHelper: "fas fa-arrow-right",
+                    dropMarker: "fas fa-long-arrow-right",
+                    error: "fas fa-exclamation-triangle",
+                    expanderClosed: "fas fa-chevron-left",
+                    expanderLazy: "fas fa-angle-right",
+                    expanderOpen: "fas fa-chevron-down",
+                    loading: "fas fa-spinner fa-pulse",
+                    nodata: "fas fa-meh",
+                    noExpander: "",
+                    // Default node icons.
+                    // (Use tree.options.icon callback to define custom icons based on node data)
+                    doc: "fas fa-screwdriver",
+                    docOpen: "fas fa-screwdriver",
+                    folder: "fas fa-folder",
+                    folderOpen: "fas fa-folder-open"
+                }
+            },
+        });
+        $('#tags').tagsInput({
+            'height': 'FIT-CONTENT',
+            'width': '100%',
+            'defaultText': '',
+            'onAddTag': newItem_label,
+            'onRemoveTag': newItem_label
+        });
+        $("#tags_tagsinput").css("border", "none");
+        $("#tags_tagsinput").find("#tags_tag").on("focus", function () {
+            $(this).css("width", "fit-content");
+        });
+        tag_input_label("tags");
+        select_technique();
+        let techniquesForm = $('.ajax-select-techniques');
+        techniquesForm.submit(function (event) {
+            event.preventDefault();
+            let data = [];
+            let id = $(this).attr("id");
+            $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
+                data[index] = $(this).find("span").text();
+            });
+            console.log(id);
+            $.ajax({
+                traditional: true,
+                method: 'POST',
+                url: $(this).attr('data-url'),
+                data: {technique: data, id: id},
+                dataType: 'json',
+                success: function (data) {
+                    iziToast.success({
+                        rtl: true,
+                        message: data.success,
+                        position: 'topCenter'
+                    });
+                },
+                error: function (data) {
+
+                }
+            });
+        });
+    });
     if ($(window).width() < 575.98) {
         // toggle slide-bar => all views
         $(".main").removeClass("blur-div");
@@ -250,7 +373,8 @@ $(document).ready(function () {
             }
         });
     }
-});
+})
+;
 
 $(document).ready(function () {
 
@@ -278,6 +402,111 @@ $(document).ready(function () {
                     message: "از این به بعد پاسخی برای این سوال دریافت نخواهد شد.",
                     position: 'topCenter'
                 });
+            },
+            error: function (data) {
+
+            },
+        });
+    });
+
+
+    /*
+    Show researchers information for expert
+     */
+    $(".researcher-card-button-show").click(function () {
+        var id = $(this).attr("id");
+        var url = $(this).attr("data-url");
+        var project_id = $(this).attr("value");
+        $.ajax({
+            method: 'GET',
+            url: url,
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                $(".researcher_id").attr("value" ,id);
+                $(".project_id").attr("value" ,project_id);
+                $('#researcher_photo').attr("src", data.photo);
+                $('#researcher_name').html(data.name);
+                $('#researcher_major').html(data.major);
+                switch (data.grade) {
+                    case 1:
+                        $('#researcher_grade').html('کارشناسی');
+                        break;
+                    case 2:
+                        $('#researcher_grade').html('کارشناسی ارشد');
+                        break;
+                    case 3:
+                        $('#researcher_grade').html('دکتری');
+                        break;
+                    case 4:
+                        $('#researcher_grade').html('دکتری عمومی');
+                        break;
+                }
+                let tech = ""
+                for (let index = 0; index < data.techniques.length; index++)
+                    tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
+                $("#researcher_techniques").html(tech)
+                $('#researcher_university').html(data.university);
+                $('#researcher_entry_year').html(data.entry_year);
+
+                var scientific_record = JSON.parse(data.scientific_record);
+                console.log(scientific_record);
+                if (scientific_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < scientific_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + scientific_record[i].fields.major + "</td>" +
+                            "<td>" + scientific_record[i].fields.grade + "</td>" +
+                            "<td>" + scientific_record[i].fields.university + "</td>" +
+                            "<td>" + scientific_record[i].fields.place + "</td>" +
+                            "<td>" + scientific_record[i].fields.graduated_year + "</td>" +
+                            "</tr>"
+                        $('#researcher_scientific_record').html(table_row)
+                    }
+                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+
+                var executive_record = JSON.parse(data.executive_record);
+                if (executive_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < executive_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + executive_record[i].fields.post + "</td>" +
+                            "<td>" + executive_record[i].fields.place + "</td>" +
+                            "<td>" + executive_record[i].fields.city + "</td>" +
+                            "<td>" + executive_record[i].fields.start + "</td>" +
+                            "<td>" + executive_record[i].fields.end + "</td>" +
+                            "</tr>"
+                        $('#researcher_executive_record').html(table_row)
+                    }
+                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+
+                var research_record = JSON.parse(data.research_record);
+                if (research_record.length !== 0) {
+                    var table_row = "";
+                    var status = "";
+                    for (i = 0; i < research_record.length; i++) {
+                        switch (research_record[i].fields.status) {
+                            case 1:
+                                status = "در دست اجرا";
+                                break;
+                            case 2:
+                                status = "خاتمه یافته";
+                                break;
+                            case 3:
+                                status = "متوقف";
+                                break;
+                        }
+                        table_row = table_row + "<tr>" +
+                            "<td>" + research_record[i].fields.title + "</td>" +
+                            "<td>" + research_record[i].fields.presenter + "</td>" +
+                            "<td>" + research_record[i].fields.responsible + "</td>" +
+                            "<td>" + status + "</td>" +
+                            "</tr>"
+                        $('#researcher_research_record').html(table_row)
+                    }
+                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+
+                //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
             error: function (data) {
 
@@ -684,17 +913,18 @@ ResearchQuestionForm.submit(function (event) {
     ResearchQuestionForm.find("label").addClass("progress-cursor");
     ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = ResearchQuestionForm.attr('data-url');
-    var data = $(this).serialize();
+    var data = new FormData(ResearchQuestionForm.get(0));
     ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     console.log(data);
     console.log($(this).find("input[type='file']").get(0).files.item(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
-        dataType: 'json',
+        // dataType: 'json',
         data: data,
-        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        // contentType: 'application/json; charset=utf-8',
+        cache: false,
+        processData: false,
+        contentType: false,
         success: function (data) {
             ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -747,7 +977,7 @@ ResearchQuestionForm.submit(function (event) {
     })
 });
 
-var showInfo = $('.chamran-btn-info');
+var showInfo = $('.preview-project');
 showInfo.click(function (event) {
     $.ajax({
         url: $(this).attr('data-url'),
@@ -760,15 +990,14 @@ showInfo.click(function (event) {
             $(".showProject").find(".establish-time .time-body").html(data.date);
             $(".showProject").find(".time-left .time-body").html(data.deadline);
             const keys = JSON.parse(data.key_words);
+            var keys_code = '';
             for (let i = 0; i < keys.length; i++) {
-                $(".showProject").find(".techniques").append(
-                    "<span class='border-span'>" +
-                    keys[i].pk
-                    + "</span>"
-                );
-                setMajors(data);
-                setValue(data);
+                keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
             }
+            $(".showProject").find(".techniques").html(keys_code);
+            setMajors(data);
+            setValue(data);
+            setComment(data.comments);
         },
         error: function (data) {
         }
@@ -912,6 +1141,70 @@ function setValue(data) {
     });
 }
 
+function setComment(data) {
+    console.log(data);
+    let comments_code = "";
+    let profile = $("#profile").attr('src');
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].sender_type === 0) { //expert
+            console.log("sender type is 0");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-profile'>" +
+                "</div>" +
+                "<div class='comment-body'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-pen'>" +
+                "</i>" +
+                "<i class='fas fa-reply'><div class='reply'></div>" +
+                "</i>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" +
+                    data[i].attachment +
+                    "'><i class='fas fa-paperclip'></i></a>";
+            }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        } else if (data[i].sender_type === 2 || data[i].sender_type === 1) { //researcher or industry
+            console.log("sender type isn't 0");
+            console.log(data[i].attachment);
+            comments_code += "<div class='your-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-trash-alt'></i>" +
+                "<i class='fas fa-reply' value=" +
+                data[i].pk +
+                "></i>" +
+                "<i class='fas fa-pen'>" +
+                "</i>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" +
+                    data[i].attachment +
+                    "'><i class='fas fa-paperclip'></i></a>";
+            }
+            comments_code += "</span>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        } else { //system
+            console.log("sender type isn't 0 and 2");
+            comments_code += "<div class='my-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<span>" +
+                data[i].text +
+                "</span>" +
+                "</div>" +
+                "</div>";
+        }
+    }
+    $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+}
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -924,8 +1217,8 @@ function getCookie(name) {
                 break;
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
 }
 
 var csrftoken = getCookie('csrftoken');
@@ -941,4 +1234,81 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
+});
+
+let comment_form = $('#comment-form');
+comment_form.submit(function (event) {
+    event.preventDefault();
+    comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+    comment_form.find("label").addClass("progress-cursor");
+    let description = $(this).closest(".col-lg-12").find("#description").val();
+    let id = $(this).closest(".showProject").attr("id");
+    let thisUrl = "/expert/industry_comment/";
+    let attachment = $('#comment-attach').val();
+    console.log(attachment);
+    data = {project_id: id, description: description, attachment: attachment}
+    var form = new FormData()
+    console.log(description);
+    console.log(id);
+    $.ajax({
+        method: 'POST',
+        url: thisUrl,
+        data: form,
+        // dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            let comment_code = "<div class='my-comment'>" +
+                "<div class='comment-profile'>" +
+                "</div>" +
+                "<div class='comment-body'>" +
+                "<span class='comment-tools'>" +
+                "<i class='fas fa-pen'>" +
+                "</i>" +
+                "<i class='fas fa-reply'><div class='reply'></div>" +
+                "</i>";
+            // if (data[i].attachment !== "None") {
+            //     comment_code += "<a href='/" +
+            //                      data[i].attachment +
+            //                      "'><i class='fas fa-paperclip'></i></a>" ;
+            // }
+            comment_code += "</span>" +
+                "<span>" +
+                description +
+                "</span>" +
+                "</div>" +
+                "</div>";
+            $(".project-comment-innerDiv").find(".comments").append(comment_code);
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت ارسال شد!",
+                position: 'bottomLeft'
+            });
+            comment_form[0].reset();
+            $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+
+        },
+        error: function (data) {
+            console.log(data);
+            var obj = JSON.parse(data.responseText);
+            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                .prop("disabled", false);
+            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if (obj.description) {
+                $("#description").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.description + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+        },
+    });
 });

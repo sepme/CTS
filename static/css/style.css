@@ -982,6 +982,46 @@ hr {
     outline: none;
 }
 
+.chamran_btn.ch-form-submit {
+    position: relative;
+    left: 15px;
+    bottom: 15px;
+    padding: 10px 50px;
+    -webkit-border-radius: 0.25rem;
+    -moz-border-radius: 0.25rem;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: #89E076;
+    color: #fff;
+    box-shadow: none;
+    outline: none;
+}
+
+.chamran_btn.ch-form-submit:hover, .chamran_btn.ch-form-submit:focus {
+    box-shadow: none;
+    background-color: #3CCD1C;
+    outline: none;
+}
+
+.default-btn {
+    background: #e0e1e2;
+    color: #000;
+    font-weight: 400;
+    border: none;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    padding: 5px 10px;
+    outline: none;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.default-btn:hover, .default-btn:focus {
+    background: #cacbcd;
+    color: #000;
+    outline: none;
+}
+
 .card-header {
     padding: 0;
     font-weight: 800;
@@ -1068,7 +1108,7 @@ hr {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -1503,7 +1543,7 @@ button:hover, button:focus {
  * Card
  */
 .section {
-    margin-top: 5px;
+    margin-top: 0;
     padding-top: 5px;
     border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
@@ -1608,4 +1648,196 @@ span.fancytree-active span.fancytree-title {
 
 .fixed-back #fancy-tree ul {
     list-style: none;
+}
+
+/* show Project style*/
+.establish-time, .time-left {
+    width: fit-content;
+    position: relative;
+}
+
+.establish-time > .time-head, .time-left > .time-head {
+    /*background-color: #3CCD1C;*/
+    color: #3ccd1c;
+    /*border-top-left-radius: 0.25em;*/
+    /*border-top-right-radius: 0.25em;*/
+    /*border: 1px solid #bdbdbd;*/
+    /*border-bottom: none;*/
+    /*padding: 0 5px;*/
+    text-align: center;
+    display: inline-block;
+}
+
+.establish-time > .time-body, .time-left > .time-body {
+    /*background-color: transparent;*/
+    color: #707070;
+    font-weight: 400;
+    /*border: 1px solid #bdbdbd;*/
+    /*padding: 0 5px;*/
+    text-align: center;
+    display: inline-block;
+}
+
+.custom-border-title {
+    border: 1px solid #bdbdbd;
+    border-radius: 0.25em;
+    background-color: #f8fdf7;
+    padding: 45px 10px 25px 10px;
+}
+
+span.title {
+    position: absolute;
+    top: -11px;
+    right: 35px;
+    padding: 1px 5px;
+    color: #707070;
+    z-index: 2;
+}
+
+span.title-back {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    height: 36px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #fff;
+}
+
+.shadow-back {
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 0 0 5px 0 #ffffff00;
+}
+
+.project-info-innerDiv, .education-info-innerDiv, .message-innerDiv {
+    /*border: 1px solid #bdbdbd;*/
+    background-color: #fff;
+    border-radius: 0.25em;
+    position: relative;
+}
+
+.education-btn > i, .executive-btn > i, .research-btn > i, .paper-btn > i {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+}
+
+.education-btn > i:hover, .executive-btn > i:hover, .research-btn > i:hover, .paper-btn > i:hover {
+    color: #3ccd1c;
+    cursor: pointer;
+}
+
+.education-btn, .executive-btn, .research-btn, .paper-btn, .technique {
+    position: absolute;
+    top: -55px;
+    left: 5px;
+}
+
+/*showProject dialog style*/
+.project-info-innerDiv {
+    background-color: #fff;
+    border-radius: 0.25em;
+    position: relative;
+}
+
+.project-info-tabs {
+    border-top-right-radius: 0.25em;
+    /* border-bottom-right-radius: 0.25em; */
+    /* padding: 2px; */
+    width: 100%;
+    /* margin-bottom: 11px; */
+    border-bottom: 1px solid #00000033;
+}
+
+.project-info-content {
+    width: calc(100% - 43px);
+    /* height: 100%; */
+    position: relative;
+    /* top: 0; */
+    /* left: 0; */
+    /* border-right: 1px solid #bdbdbd;*/
+
+}
+
+.nav-pills {
+    display: block !important;
+}
+
+.nav-pills > .nav-link {
+    position: relative;
+    display: inline-block;
+    background-color: transparent;
+    color: #737373 !important;
+    font-weight: 600;
+    padding: 5px 2px;
+    margin: 0 2px -2px 0;
+    border-radius: 0;
+    /* border-bottom: 2px solid #737373; */
+    min-width: 75px;
+    text-align: center;
+}
+
+.nav-pills > .nav-link.active, .nav-pills > .nav-link:hover {
+    background-color: transparent;
+    font-weight: 800;
+    color: #3ccd1c !important;
+    cursor: pointer;
+    border-bottom: 2px solid #3ccd1c;
+}
+
+/*.nav-pills > .nav-link::after {*/
+/*	content: 'شاخص ها';*/
+/*	position: absolute;*/
+/*	top: 50%;*/
+/*	left: 50%;*/
+/*	width: max-content;*/
+/*	transform: translate(-50%,-50%) rotate(90deg);*/
+/*}*/
+/*.nav-pills > .nav-link:first-child::after{*/
+/*  content: 'شاخص ها';*/
+/*}*/
+/*.nav-pills > .nav-link:nth-child(2)::after{*/
+/*  content: 'راهکارها';*/
+/*}*/
+/*.nav-pills > .nav-link:nth-child(3)::after{*/
+/*  content: 'منابع مورد نیاز';*/
+/*}*/
+/*.nav-pills > .nav-link:nth-child(4)::after{*/
+/*  content: 'قوانین';*/
+/*}*/
+.question-mark {
+    height: 100%;
+    padding-left: 5px;
+}
+
+.question {
+    font-weight: bold;
+    color: #3CCD1C;
+    padding-right: 2px;
+}
+
+.answer {
+    font-weight: 300;
+    padding-right: 20px;
+}
+
+.accept-btn, .refuse-btn {
+    padding: 10px 5px;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    color: #fff;
+    /*box-shadow: 5px 5px 5px 20px #000;*/
+}
+
+.accept-btn:hover, .refuse-btn:hover {
+    box-shadow: none;
+}
+
+.accept-btn {
+    background-color: #3CCD1C;
+}
+
+.refuse-btn {
+    background-color: #ff4545;
 }

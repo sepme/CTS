@@ -12,7 +12,8 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
 from persiantools.jdatetime import JalaliDate
-from industry.models import IndustryForm
+from industry.models import IndustryForm, Comment
+from expert import models as expert_models
 from . import models
 from . import forms
 from expert.models import ExpertUser
@@ -35,17 +36,45 @@ def date_dif(start_date, deadline_date):
         return 'امروز'
 
 
+def get_comments_with_expert(request):
+    comment_list = Comment.objects.filter(project_id=request.GET.get('project_id'),
+                                          industry_user=request.user.industryuser,
+                                          expert_user_id=request.GET.get('expert_id'))
+    json_response = {'comments': []}
+    for comment in comment_list:
+        json_response['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type
+        })
+
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
+    comment_list = []
+    if project.expert_messaged.exists():
+        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser,
+                                                        expert_user=project.expert_messaged.first())
+    print('there are', len(comment_list), 'comments')
+    json_response['comments'] = []
+    for comment in comment_list:
+        print('sending', comment.description)
+        json_response['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type
+        })
+    json_response['expert_messaged'] = []
+    for expert in project.expert_messaged.all():
+        json_response['expert_messaged'].append({
+            'id': expert.id,
+            'name': expert.__str__()
+        })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        print('project deadline is set')
         json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
     else:
-        print('deadline is the whole start to ')
         json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-    print('deadline was set to', json_response['deadline'])
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
@@ -58,6 +87,18 @@ def accept_project_ajax(request):
     expert_user = ExpertUser.objects.filter(request.GET.get('expert_user_id')).first()
     project = models.Project.objects.filter(request.GET.get('project_id')).first()
     project.expert_accepted = expert_user
+
+
+def submit_comment(request):
+    description = request.GET.get('description')
+    project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
+    # expert_user = expert_models.ExpertUser.objects.all().filter(id=request.GET.get('expert_id')).first()
+    expert_user = expert_models.ExpertUser.objects.all().first()
+    if not project.expert_messaged.filter(id=request.GET.get('expert_id')).exists():
+        project.expert_messaged.add(expert_user )
+    Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
+                           sender_type=1, expert_user=expert_user)
+    return JsonResponse({})
 
 
 class Index(generic.TemplateView):
@@ -181,7 +222,7 @@ class NewProject(View):
             policy = form.cleaned_data['policy']
             required_budget = form.cleaned_data['required_budget']
             project_phase = form.cleaned_data['project_phase']
-            required_technique = form.cleaned_data['required_technique']
+            # required_technique = form.cleaned_data['required_technique']
             progress_profitability = form.cleaned_data['progress_profitability']
             potential_problems = form.cleaned_data['potential_problems']
             new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
@@ -190,7 +231,7 @@ class NewProject(View):
                                                   main_problem_and_importance=main_problem_and_importance,
                                                   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
-                                                  required_technique=required_technique,
+                                                  # required_technique=required_technique,
                                                   approach=approach,
                                                   policy=policy,
                                                   required_budget=required_budget,
@@ -202,8 +243,9 @@ class NewProject(View):
             new_project_form.save()
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
-            new_project = models.Project(project_form=new_project_form)
+            new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
+            print('the creator is', new_project.industry_creator)
             request.user.industryuser.projects.add(new_project)
             # models.IndustryUser.objects.filter(user=request.user).update()
             return HttpResponseRedirect(reverse('industry:index'))
@@ -227,7 +269,6 @@ class ProjectListView(generic.ListView):
         if self.industry.industryform:
             context['photo'] = self.industry.industryform.photo
         return context
-
 
 # class Messages(generic.TemplateView):
 #     template_name = 'industry/messages.html'

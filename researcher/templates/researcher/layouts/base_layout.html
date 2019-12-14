@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
     {% block header %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/comments.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->
@@ -59,11 +60,11 @@
 
         <h5>{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}</h5>
         <h6>پژوهشگر</h6>
-        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ request.user.researcheruser.points|default:0 }}</span>/10</p>
+        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ request.user.researcheruser.points|default:0 }}</span>/100</p>
         <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="5.7" aria-valuemin="0"
-                 aria-valuemax="10" style="width: {{ request.user.researcheruser.score|default:0 }}px">
-                <!-- <span class="sr-only">57% completed</span> -->
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ request.user.researcheruser.score|default:0 }}" aria-valuemin="0"
+                 aria-valuemax="100" style="width: {{request.user.researcheruser.score}}px">
+                <span class="sr-only">{{ request.user.researcheruser.score|default:0 }}% completed</span>
             </div>
         </div>
         <div class="hr"></div>
@@ -77,7 +78,7 @@
                     </div>
                 </a>
             </li>
-            {% url 'researcher:messages' as messages_url %}
+            <!-- {% url 'researcher:messages' as messages_url %}
             <li class="list-group-item text-right {% if messages_url == request.get_full_path %}active{% endif %}">
                 <a href="{{ messages_url }}">
                     <div>
@@ -85,7 +86,7 @@
                         <span class="fas fa-envelope"></span>
                     </div>
                 </a>
-            </li>
+            </li> -->
             {% url 'researcher:technique' as technique_url %}
             <li class="list-group-item text-right">
                 <a href="{{ technique_url }}">
