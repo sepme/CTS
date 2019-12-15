@@ -36,10 +36,7 @@ def get_resumeFile_path(instance, filename):
         folder_name = str(instance.technique_instance.researcher)
     return os.path.join('resume', folder_name, filename)
 
-<<<<<<< HEAD
 
-=======
->>>>>>> b01d184e4d5746d33839519bbe66a4219e7b5024
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
