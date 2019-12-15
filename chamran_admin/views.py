@@ -22,7 +22,7 @@ from industry.models import IndustryUser
 from django.template.loader import get_template
 from django.urls import resolve
 
-LOCAL_URL = '127.0.0.1:8000'
+LOCAL_URL = 'chamranteambot.pythonanywhere.com'
 
 
 def jalali_date(jdate):
