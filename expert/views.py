@@ -67,8 +67,8 @@ class ResearcherRequest(generic.TemplateView):
                         continue
                 appending = {
                     'project': project.project_form.project_title_persian,
-                    'id' : project.pk,
-                    "researchers_applied" : researchers_applied
+                    'id': project.pk,
+                    "researchers_applied": researchers_applied
                 }
                 projects_data.append(appending)
             except:
@@ -302,7 +302,7 @@ def show_project_view(request):
     for comment in comment_list:
         # print(comment.attachment.url)
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
             print(url)
         except:
             url = "None"
@@ -310,7 +310,7 @@ def show_project_view(request):
             'id': comment.id,
             'text': comment.description,
             'sender_type': comment.sender_type,
-            'attachment' : url,
+            'attachment': url,
         })
     data = {
         'comments': comments,
@@ -329,12 +329,10 @@ def show_project_view(request):
         'required_budget': project_form.required_budget,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
-        'required_technique': serializers.serialize('json', project_form.required_technique.all()),
+        'required_technique': project_form.required_technique,
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
-    for ind, value in enumerate(project_form.required_technique.all()):
-        data['required_technique'].append(value.technique_title)
 
     return JsonResponse(data)
 
@@ -353,12 +351,6 @@ def accept_project(request):
             return JsonResponse({
                 'success': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.'
             })
-        # for technique in technique_list:
-        #     project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
-        #     project_form.required_technique.add(project_technique[0].id)
-        # project_form.save()
-        # project.expert_applied.add(expert_user.id)
-        # project.save()
         expert_request = ExpertRequestedProject.objects.create(expert=expert_user, project=project)
         for technique in technique_list:
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
@@ -465,6 +457,7 @@ def show_researcher_preview(request):
     print(researcher_information)
     return JsonResponse(researcher_information)
 
+
 def CommentForResearcher(request):
     print(request)
     form = CommentForm(request.POST, request.FILES)
@@ -472,21 +465,22 @@ def CommentForResearcher(request):
     researcher = ResearcherUser.objects.filter(id=request.POST['researcher_id'])[0]
     if form.is_valid():
         description = form.cleaned_data['description']
-        attachment = form.cleaned_data['attachment']        
+        attachment = form.cleaned_data['attachment']
         comment = Comment(description=description
-                         ,attachment=attachment
-                         ,project=project
-                         ,researcher_user=researcher
-                         ,expert_user=request.user.expertuser
-                         ,sender_type=0)
+                          , attachment=attachment
+                          , project=project
+                          , researcher_user=researcher
+                          , expert_user=request.user.expertuser
+                          , sender_type=0)
         comment.save()
         print(Project.objects.filter(id=request.POST['project_id']))
         data = {
-            'success' : 'successful',
+            'success': 'successful',
         }
         return JsonResponse(data)
     print("form doesn't validated!")
-    return JsonResponse(form.errors ,status=400)
+    return JsonResponse(form.errors, status=400)
+
 
 # def CommentForIndustry(request):
 #     form = CommentForm(request.POST ,request.FILES)
@@ -509,21 +503,21 @@ def CommentForResearcher(request):
 #         return JsonResponse(data)
 #     print("form doesn't validated!")
 #     return JsonResponse(form.errors ,status=400)
-    #     attachment = form.cleaned_data['attachment']
-    #     comment = Comment(description=description
-    #                       , attachment=attachment
-    #                       , project=project
-    #                       , researcher_user=researcher
-    #                       , expert_user=request.user.expertuser
-    #                       , sender_type=0)
-    #     comment.save()
-    #     print(Project.objects.filter(id=request.POST['project_id']))
-    #     data = {
-    #         'success': 'successful',
-    #     }
-    #     return JsonResponse(data)
-    # print("form doesn't validated!")
-    # return JsonResponse(form.errors, status=400)
+#     attachment = form.cleaned_data['attachment']
+#     comment = Comment(description=description
+#                       , attachment=attachment
+#                       , project=project
+#                       , researcher_user=researcher
+#                       , expert_user=request.user.expertuser
+#                       , sender_type=0)
+#     comment.save()
+#     print(Project.objects.filter(id=request.POST['project_id']))
+#     data = {
+#         'success': 'successful',
+#     }
+#     return JsonResponse(data)
+# print("form doesn't validated!")
+# return JsonResponse(form.errors, status=400)
 
 
 def CommentForIndustry(request):
