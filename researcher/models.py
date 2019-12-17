@@ -36,11 +36,12 @@ def get_resumeFile_path(instance, filename):
         folder_name = str(instance.technique_instance.researcher)
     return os.path.join('resume', folder_name, filename)
 
+
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
-
+    
     def __str__(self):
         return self.user.get_username()
 

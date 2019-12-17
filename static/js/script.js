@@ -131,7 +131,7 @@ myForm.submit(function (event) {
     $(".loading").css('display', "block");
     $(".registration").css('display', "none");
     event.preventDefault();
-    // var formData = $(this).serialize();
+    // var formData = $(this).serialize().toString();
     // var major = $("#edu-subject").val();
     // var degree = $("#edu-section").val();
     // var university = $("#university").val();
@@ -142,14 +142,13 @@ myForm.submit(function (event) {
         method: 'POST',
         url: $thisURL,
         dataType: 'json',
-        data: $(this).serialize(),
+        data: $(this).serialize().toString(),
         // headers: {'X-CSRFToken': '{{ csrf_token }}'},
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
             $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!");
-            window.location.href="http://chamranteambot.pythonanywhere.com/login";
         },
         error: function (data) {
             $(".loading").css('display', "none");
@@ -172,7 +171,7 @@ loginForm.submit(function (event) {
     $(".loading").css('display', "block");
     $(".registration").css('display', "none");
     event.preventDefault();
-    // var formData = $(this).serialize();
+    // var formData = $(this).serialize().toString();
     // var major = $("#edu-subject").val();
     // var degree = $("#edu-section").val();
     // var university = $("#university").val();
@@ -183,13 +182,14 @@ loginForm.submit(function (event) {
         method: 'POST',
         url: $thisURL,
         dataType: 'json',
-        data: $(this).serialize(),
+        data: $(this).serialize().toString(),
         // headers: {'X-CSRFToken': '{{ csrf_token }}'},
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
             console.log(data)
             if (data.success === 'successful') {
-                window.location.href = "http://chamranteambot.pythonanywhere.com/" + data.type;
+                // window.location.href = "http://chamranteambot.pythonanywhere.com/" + data.type;
+                window.location.href = data.type;
             } else {
                 $(".loading").css('display', "none");
                 $(".registration").css('display', "block");

@@ -625,7 +625,7 @@ executiveForm.submit(function (event) {
     executiveForm.find("label").addClass("progress-cursor");
     executiveForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = executiveForm.attr('data-url');
-    var data = $(this).serialize();
+    var data = $(this).serialize().toString();
     executiveForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -724,7 +724,7 @@ researchForm.submit(function (event) {
     researchForm.find("label").addClass("progress-cursor");
     researchForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = researchForm.attr('data-url');
-    var data = $(this).serialize();
+    var data = $(this).serialize().toString();
     researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -813,7 +813,7 @@ paperForm.submit(function (event) {
     paperForm.find("label").addClass("progress-cursor");
     paperForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = paperForm.attr('data-url');
-    var data = $(this).serialize();
+    var data = $(this).serialize().toString();
     paperForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
