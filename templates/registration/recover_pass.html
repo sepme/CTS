@@ -4,11 +4,11 @@
     بازیابی رمز عبور
 {% endblock %}
 {% block content %}
-    <form method="post" action="" novalidate>
+    <form method="post" action="" novalidate class="recover-pass">
         {% csrf_token %}
-            <div class="username">
-                <label for="username">نام کاربری</label>
-                {{ form.username|attr:"id:username" }}
+            <div class="email">
+                <label for="email">پست الکترونیکی</label>
+                {{ form.username|attr:"id:email" }}
                 {{ form.username.errors }}
                 <i class="fas fa-user-alt fa-lg"></i>
             </div>

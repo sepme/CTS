@@ -126,7 +126,9 @@ def get_user_by_unique_id(unique):
 
 class Home(generic.TemplateView):
     template_name = "base.html"
-
+    
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('chamran:login'))
 
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
@@ -475,6 +477,10 @@ class UserPass(generic.TemplateView):
 
 class View(generic.TemplateView):
     template_name = 'registration/email_template.html'
+
+
+class notFound(generic.TemplateView):
+    template_name = '404Template.html'
 
 
 class RecoverPassword(generic.FormView):

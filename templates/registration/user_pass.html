@@ -17,7 +17,7 @@
 <div class="card registration">
     <img class="registration-card-icon" src="{% static 'img/logo.png' %}" alt="ChamranLogo">
     <p class="ChamranTeam">ثبت نام کاربری و رمز عبور</p>
-    <form method="post">
+    <form method="post" id="user-pass-form">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="username">

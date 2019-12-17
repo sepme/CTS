@@ -132,11 +132,6 @@ myForm.submit(function (event) {
     $(".registration").css('display', "none");
     event.preventDefault();
     // var formData = $(this).serialize().toString();
-    // var major = $("#edu-subject").val();
-    // var degree = $("#edu-section").val();
-    // var university = $("#university").val();
-    // var city = $("#edu-city").val();
-    // var date_of_graduation = $("#edu-year").val();
     var $thisURL = myForm.attr('data-url');
     $.ajax({
         method: 'POST',
@@ -148,7 +143,7 @@ myForm.submit(function (event) {
         success: function (data) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
-            $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!");
+            $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!\nجهت تکمیل ثبت نام ایمیل خود را بررسی کنید!");
         },
         error: function (data) {
             $(".loading").css('display', "none");
@@ -226,6 +221,40 @@ loginForm.submit(function (event) {
                     "</div>");
                 $("input#password").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
+        },
+    })
+});
+
+var recoverPassForm = $('.recover-pass');
+recoverPassForm.submit(function (event) {
+    $(".loading").css('display', "block");
+    $(".registration").css('display', "none");
+    event.preventDefault();
+    var $thisURL = recoverPassForm.attr('data-url');
+    $.ajax({
+        method: 'POST',
+        url: $thisURL,
+        dataType: 'json',
+        data: $(this).serialize().toString(),
+        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        // contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            $('.circle-loader').toggleClass('load-complete');
+            $('.checkmark').toggle();
+            $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!\nجهت بازیابی رمزعبور ایمیل خود را بررسی کنید!");
+        },
+        error: function (data) {
+            $(".loading").css('display', "none");
+            $(".registration").css('display', "block");
+            var obj = JSON.parse(data.responseText);
+            $(".email").append("<div class='error'>" +
+                "<span class='error-body'>" +
+                "<ul class='errorlist'>" +
+                "<li>" + obj.email + "</li>" +
+                "</ul>" +
+                "</span>" +
+                "</div>");
+            $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
         },
     })
 });
