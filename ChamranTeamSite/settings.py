@@ -129,9 +129,13 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-EMAIL_HOST = 'mail.chamranteam.ir'
-EMAIL_HOST_USER = 'noreply@chamranteam.ir'
-EMAIL_HOST_PASSWORD = 'chamranteam97'
+# EMAIL_HOST = 'mail.chamranteam.ir'
+# EMAIL_HOST_USER = 'noreply@chamranteam.ir'
+# EMAIL_HOST_PASSWORD = 'chamranteam97'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chamranteam.info@gmail.com'
+EMAIL_HOST_PASSWORD = 'chamranteam98'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
