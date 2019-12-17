@@ -222,6 +222,7 @@ def login_ajax(request):
         password = form.cleaned_data['password']
         entry_user = authenticate(request, username=username, password=password)
         print(entry_user)
+        print("----------------")
         data = {'success': 'successful'}
         if entry_user is not None:
             login(request, entry_user)
@@ -237,18 +238,20 @@ def login_ajax(request):
                     try:
                         user = IndustryUser.objects.get(user=entry_user)
                         data['type'] = 'industry'
-                        return user.get_absolute_url()
                     except IndustryUser.DoesNotExist:
                         raise ValidationError('کابر مربوطه وجود ندارد.')
             return JsonResponse(data)
+            # return HttpResponseRedirect(reverse)
         else:
             # context = {'form': form,
             #            'error': 'گذرواژه اشتباه است'}
+            print("+++++++++++++=")
             return JsonResponse({
                 'error': 'گذرواژه اشتباه است'
-            })
+            } ,400)
     else:
         print('form error')
+        print(form.errors)
         return JsonResponse(form.errors, status=400)
 
 
@@ -320,16 +323,15 @@ class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            if request.user.is_superuser:
-                return HttpResponseRedirect(reverse('chamran:home'))
-            return find_user(request.user).get_absolute_url()
-
-        else:
-            login_form = forms.LoginForm()
-            register_form = forms.RegisterEmailForm()
-            context = {'form': login_form,
-                       'register_form': register_form}
+        if not request.user.is_superuser:
+            if request.user.is_authenticated:
+                # if request.user.is_superuser:
+                #     return HttpResponseRedirect(reverse('chamran:home'))
+                return find_user(request.user).get_absolute_url()
+        login_form = forms.LoginForm()
+        register_form = forms.RegisterEmailForm()
+        context = {'form': login_form,
+                    'register_form': register_form}
         return render(request, self.template_name, context)
 
 

@@ -188,8 +188,7 @@ loginForm.submit(function (event) {
         success: function (data) {
             console.log(data)
             if (data.success === 'successful') {
-                // window.location.href = "http://chamranteambot.pythonanywhere.com/" + data.type;
-                window.location.href = data.type;
+                window.location.href = "/" + data.type;
             } else {
                 $(".loading").css('display', "none");
                 $(".registration").css('display', "block");
@@ -208,6 +207,7 @@ loginForm.submit(function (event) {
             $(".registration").css('display', "block");
             console.log(data);
             var obj = JSON.parse(data.responseText);
+            console.log(obj);
             $(".username").append("<div class='error'>" +
                 "<span class='error-body'>" +
                 "<ul class='errorlist'>" +
@@ -216,15 +216,16 @@ loginForm.submit(function (event) {
                 "</span>" +
                 "</div>");
             $("input#username").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-
-            $(".password").append("<div class='error'>" +
-                "<span class='error-body'>" +
-                "<ul class='errorlist'>" +
-                "<li>" + obj.password + "</li>" +
-                "</ul>" +
-                "</span>" +
-                "</div>");
-            $("input#password").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            if (obj.password != undefined) {
+                $(".password").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.password + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#password").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
         },
     })
 });
