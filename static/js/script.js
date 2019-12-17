@@ -149,7 +149,6 @@ myForm.submit(function (event) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
             $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!");
-            window.location.href="http://chamranteambot.pythonanywhere.com/login";
         },
         error: function (data) {
             $(".loading").css('display', "none");
