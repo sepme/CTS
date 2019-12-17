@@ -838,7 +838,7 @@ $.ajaxSetup({
 //             method: 'POST',
 //             url: form.attr('url'),
 //             dataType: 'json',
-//             data: form.serialize(),
+//             data: form.serialize().toString(),
 //             success: function (data) {
 //                 console.log(data)
 //             },
@@ -865,7 +865,7 @@ $.ajaxSetup({
 //             method: 'POST',
 //             url: form.attr('url'),
 //             dataType: 'json',
-//             data: form.serialize(),
+//             data: form.serialize().toString(),
 //             success: function (data) {
 //                 console.log("++++++++")
 //                 console.log(data)
@@ -971,7 +971,7 @@ $.ajaxSetup({
 //             method: 'POST',
 //             url: form.attr('url'),
 //             dataType: 'json',
-//             data: form.serialize(),
+//             data: form.serialize().toString(),
 //             success: function (data) {
 //                 console.log(data)
 //             },
@@ -990,7 +990,7 @@ $.ajaxSetup({
 //             method: 'POST',
 //             url: form.attr('url'),
 //             dataType: 'json',
-//             data: form.serialize(),
+//             data: form.serialize().toString(),
 //             success: function (data) {
 //                 console.log(data)
 //             },

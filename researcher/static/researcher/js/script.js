@@ -350,7 +350,7 @@ scientificForm.submit(function (event) {
     scientificForm.find("label").addClass("progress-cursor");
     scientificForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = scientificForm.attr('url');
-    var data = $(this).serialize();
+    var data = $(this).serialize().toString();
     scientificForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -449,7 +449,7 @@ researchForm.submit(function (event) {
     researchForm.find("label").addClass("progress-cursor");
     researchForm.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = researchForm.attr('url');
-    var data = $(this).serialize();
+    var data = $(this).serialize().toString();
     researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -535,7 +535,7 @@ executive_form.submit(function (event) {
     executive_form.find("label").addClass("progress-cursor");
     executive_form.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = executive_form.attr('url');
-    var data = $(this).serialize();
+    var data = $(this).serialize().toString();
     executive_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -632,7 +632,7 @@ technique_review.submit(function (event) {
     technique_review.find("label").addClass("progress-cursor");
     technique_review.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = technique_review.attr('url');
-    // var data = $(this).serialize();
+    // var data = $(this).serialize().toString();
     var data = new FormData(technique_review.get(0));
     technique_review.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
@@ -728,7 +728,7 @@ add_technique_form.submit(function (event) {
     add_technique_form.find("label").addClass("progress-cursor");
     add_technique_form.closest(".fixed-back").find(".card").addClass("wait");
     var $thisURL = add_technique_form.attr('url');
-    // var data = $(this).serialize();
+    // var data = $(this).serialize().toString();
     var data = new FormData(add_technique_form.get(0));
     add_technique_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
@@ -868,7 +868,7 @@ var apply_form = $(".apply_Project");
 apply_form.submit(function (event) {
     event.preventDefault();
     var url = apply_form.attr('url');
-    var data = $(this).serialize();
+    var data = $(this).serialize().toString();
     $.ajax({
         method: "POST",
         dataType: "json",

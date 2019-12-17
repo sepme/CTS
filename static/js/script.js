@@ -131,7 +131,7 @@ myForm.submit(function (event) {
     $(".loading").css('display', "block");
     $(".registration").css('display', "none");
     event.preventDefault();
-    // var formData = $(this).serialize();
+    // var formData = $(this).serialize().toString();
     // var major = $("#edu-subject").val();
     // var degree = $("#edu-section").val();
     // var university = $("#university").val();
@@ -142,7 +142,7 @@ myForm.submit(function (event) {
         method: 'POST',
         url: $thisURL,
         dataType: 'json',
-        data: $(this).serialize(),
+        data: $(this).serialize().toString(),
         // headers: {'X-CSRFToken': '{{ csrf_token }}'},
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
@@ -172,7 +172,7 @@ loginForm.submit(function (event) {
     $(".loading").css('display', "block");
     $(".registration").css('display', "none");
     event.preventDefault();
-    // var formData = $(this).serialize();
+    // var formData = $(this).serialize().toString();
     // var major = $("#edu-subject").val();
     // var degree = $("#edu-section").val();
     // var university = $("#university").val();
@@ -183,7 +183,7 @@ loginForm.submit(function (event) {
         method: 'POST',
         url: $thisURL,
         dataType: 'json',
-        data: $(this).serialize(),
+        data: $(this).serialize().toString(),
         // headers: {'X-CSRFToken': '{{ csrf_token }}'},
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
