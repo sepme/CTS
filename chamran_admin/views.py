@@ -475,6 +475,10 @@ class View(generic.TemplateView):
     template_name = 'registration/email_template.html'
 
 
+class notFound(generic.TemplateView):
+    template_name = '404Template.html'
+
+
 class RecoverPassword(generic.FormView):
     template_name = 'registration/recover_pass.html'
     form_class = forms.RecoverPasswordForm
