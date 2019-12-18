@@ -483,31 +483,34 @@ class notFound(generic.TemplateView):
     template_name = '404Template.html'
 
 
-class RecoverPassword(generic.FormView):
+class RecoverPassword(generic.TemplateView):
     template_name = 'registration/recover_pass.html'
-    form_class = forms.RecoverPasswordForm
 
-    # def get(self, request, *args, **kwargs):
-    #     return super().get(request, *args, **kwargs)
-    def post(self, request, *args, **kwargs):
-        form = forms.RecoverPasswordForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            temp = get_object_or_404(User, username=username)
-            user = find_user(temp)
-            url = LOCAL_URL + '/recover_password/' + str(user.unique)
-            subject = 'بازیابی رمز عبور'
-            message = url
-            try:
-                html_template = get_template('registration/email_template.html')
-                email_template = html_template.render({'message': message, 'proper_text': 'بازیابی رمز عبور'})
-                msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                             to=[username])
-                msg.attach_alternative(email_template, 'text/html')
-                msg.send()
-                print('WTF??')
-            except TimeoutError:
-                return Http404('Timeout Error!')
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = forms.RecoverPasswordForm
+    #     return context
 
-            return HttpResponseRedirect(reverse('chamran:home'))
-        return super().post(request, *args, **kwargs)
+def RecoverPassword_ajax(request):
+    form = forms.RecoverPasswordForm(request.POST)
+    if form.is_valid():
+        print("form is validated.")
+        username = form.cleaned_data['username']
+        temp = get_object_or_404(User, username=username)
+        user = find_user(temp)
+        url = LOCAL_URL + '/recover_password/' + str(user.unique)
+        subject = 'بازیابی رمز عبور'
+        message = url
+        try:
+            html_template = get_template('registration/email_template.html')
+            email_template = html_template.render({'message': message, 'proper_text': 'بازیابی رمز عبور'})
+            msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                            to=[username])
+            msg.attach_alternative(email_template, 'text/html')
+            msg.send()            
+        except TimeoutError:
+            print("Timeout Occure.")
+            return JsonResponse({"error" : "couldn't send email"} ,status=400)
+        response = {"seccessful" :"seccessful"}
+        return JsonResponse(response)
+    return JsonResponse(form.errors ,status=400)

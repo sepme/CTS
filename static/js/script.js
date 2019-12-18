@@ -181,7 +181,6 @@ loginForm.submit(function (event) {
         // headers: {'X-CSRFToken': '{{ csrf_token }}'},
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            console.log(data)
             if (data.success === 'successful') {
                 window.location.href = "/" + data.type;
             } else {
@@ -200,9 +199,7 @@ loginForm.submit(function (event) {
         error: function (data) {
             $(".loading").css('display', "none");
             $(".registration").css('display', "block");
-            console.log(data);
             var obj = JSON.parse(data.responseText);
-            console.log(obj);
             $(".username").append("<div class='error'>" +
                 "<span class='error-body'>" +
                 "<ul class='errorlist'>" +
@@ -250,7 +247,7 @@ recoverPassForm.submit(function (event) {
             $(".email").append("<div class='error'>" +
                 "<span class='error-body'>" +
                 "<ul class='errorlist'>" +
-                "<li>" + obj.email + "</li>" +
+                "<li>" + obj.username + "</li>" +
                 "</ul>" +
                 "</span>" +
                 "</div>");

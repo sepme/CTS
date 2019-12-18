@@ -17,6 +17,7 @@ urlpatterns = [
     path('resetpassword/', views.ResetPassword.as_view(), name='send_reset_email'),
     path('resetpassword/<uuid:unique_id>/', views.ResetPasswordConfirm.as_view(), name='reset_password'),
     path('recover_password/', views.RecoverPassword.as_view(), name='recover_password'),
+    path('recover_password_ajax/', views.RecoverPassword_ajax, name="recovery_ajax"),
     path('recover_password/<uuid:unique_id>/', views.RecoverPasswordConfirm.as_view(), name='recover_password_confirm'),
     path('message_detail/<int:message_id>/', views.get_message_detail, name='message_detail')
 
