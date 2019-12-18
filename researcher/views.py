@@ -375,7 +375,7 @@ class Question(generic.TemplateView):
         question_list = ResearchQuestion.objects.filter(status='not_answered')
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
-        question = question_list[random.randint(1 ,len(question_list))-1]
+        question = question_list[random.randint(0 ,len(question_list))-1]
         question_instance = models.ResearchQuestionInstance(research_question=question
                                                             ,researcher = request.user.researcheruser)
         question_instance.save()
