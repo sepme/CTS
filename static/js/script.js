@@ -200,14 +200,16 @@ loginForm.submit(function (event) {
             $(".loading").css('display', "none");
             $(".registration").css('display', "block");
             var obj = JSON.parse(data.responseText);
-            $(".username").append("<div class='error'>" +
-                "<span class='error-body'>" +
-                "<ul class='errorlist'>" +
-                "<li>" + obj.username + "</li>" +
-                "</ul>" +
-                "</span>" +
-                "</div>");
-            $("input#username").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            if (obj.username != undefined) {
+                $(".username").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.username + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#username").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
             if (obj.password != undefined) {
                 $(".password").append("<div class='error'>" +
                     "<span class='error-body'>" +
