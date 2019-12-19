@@ -204,22 +204,22 @@ function record_edit(className) {
             input_focus();
         }
     });
-    $(className + " .fa-trash-alt").click(function () {
-        div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-        if (className === '.education') {
-            var count = parseInt($(this).attr('id').replace('edit_edu_', ''));
-            $(this).closest("tr").remove();
-        } else if (className === '.executive') {
-            var count = parseInt($(this).attr('id').replace('edit_exe_', ''));
-            $(this).closest("tr").remove();
-        } else if (className === '.studious') {
-            var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
-            $(this).closest("tr").remove();
-        }
-        if ($(className + " > table > tbody > tr").length === 0) {
-            $(className).html(div);
-        }
-    });
+    // $(className + " .fa-trash-alt").click(function () {
+    //     div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
+    //     if (className === '.education') {
+    //         var count = parseInt($(this).attr('id').replace('edit_edu_', ''));
+    //         $(this).closest("tr").remove();
+    //     } else if (className === '.executive') {
+    //         var count = parseInt($(this).attr('id').replace('edit_exe_', ''));
+    //         $(this).closest("tr").remove();
+    //     } else if (className === '.studious') {
+    //         var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
+    //         $(this).closest("tr").remove();
+    //     }
+    //     if ($(className + " > table > tbody > tr").length === 0) {
+    //         $(className).html(div);
+    //     }
+    // });
 }
 
 function education_data_form(edu_count) {
@@ -279,8 +279,8 @@ function education_record() {
     });
 }
 
-function show_scientific_record() {
-    row = "<tr>" +
+function show_scientific_record(pk) {
+    row = "<tbody class='row-sci-" + pk + "'><tr>" +
         "<td>" + $("#edu-section").val() + "</td>" +
         "<td>" + $("#edu-subject").val() + "</td>" +
         "<td>" + $("#university").val() + "</td>" +
@@ -288,9 +288,9 @@ function show_scientific_record() {
         "<td>" + $("#year").val() + "</td>" +
         "<td>" +
         "<i class='fas fa-pen' id='edit_edu'></i>" +
-        "<i class='fas fa-trash-alt' id='delete_edu'></i>" +
+        "<i class='fas fa-trash-alt delete_edu' value=" + pk + "></i>" +
         "</td>" +
-        "</tr>";
+        "</tr></tbody>";
     if (!$(".education > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -308,7 +308,7 @@ function show_scientific_record() {
             "</table>";
         $(".education").html(table);
     }
-    $(".education > table > tbody").append(row);
+    $(".education > table").append(row);
     $(".education div#" + $(this).attr("id")).remove();
     record_edit(".education");
 }
@@ -373,8 +373,8 @@ function executive_data_form(exe_count) {
 //         }
 //     });
 // }
-function show_executive_record() {
-    row = "<tr>" +
+function show_executive_record(pk) {
+    row = "<tbody class='row-exe-" + pk + "'><tr>" +
         "<td>" + $("#duty").val() + "</td>" +
         "<td>" + $("#workplace").val() + "</td>" +
         "<td>" + $("#exe-city").val() + "</td>" +
@@ -382,9 +382,9 @@ function show_executive_record() {
         "<td>" + $("#until").val() + "</td>" +
         "<td>" +
         "<i class='fas fa-pen' id='edit_exe'></i>" +
-        "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
+        "<i class='fas fa-trash-alt delete_exe' value=" + pk + "></i>" +
         "</td>" +
-        "</tr>";
+        "</tr></tbody>";
     if (!$(".executive > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -402,7 +402,7 @@ function show_executive_record() {
             "</table>";
         $(".executive").html(table);
     }
-    $(".executive > table > tbody").append(row);
+    $(".executive > table").append(row);
     $(".executive div#" + $(this).attr("id")).remove();
     record_edit(".executive");
 }
@@ -464,21 +464,22 @@ function studious_record() {
     });
 }
 
-function show_research_record() {
+function show_research_record(pk) {
+    console.log($("#rank").val());
     if ($("#rank").val() == 1) {
-        row = "<tr>" +
+        row = "<tbody class='row-stu-" + pk + "'><tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
             "<td>" + $("#liable").val() + "</td>" +
             "<td>در دست اجرا</td>" +
             "<td>" +
             "<i class='fas fa-pen' id='edit_stu'></i>" +
-            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+            "<i class='fas fa-trash-alt delete_stu' value=" + pk + "></i>" +
             "</td>" +
-            "</tr>";
+            "</tr></tbody>";
     }
      else if ($("#rank").val() == 2) {
-        row = "<tr>" +
+        row = "<tbody class='row-stu-" + pk + "'><tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
             "<td>" + $("#liable").val() + "</td>" +
@@ -487,10 +488,10 @@ function show_research_record() {
             "<i class='fas fa-pen' id='edit_stu'></i>" +
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
-            "</tr>";
+            "</tr></tbody>";
         }
-    else if ( $("#rank").val() === 2) {
-            row = "<tr>" +
+    else if ( $("#rank").val() == 3) {
+            row = "<tbody class='row-stu-" + pk + "'><tr>" +
                 "<td>" + $("#subject").val() + "</td>" +
                 "<td>" + $("#admin").val() + "</td>" +
                 "<td>" + $("#liable").val() + "</td>" +
@@ -499,7 +500,7 @@ function show_research_record() {
                 "<i class='fas fa-pen' id='edit_stu'></i>" +
                 "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
                 "</td>" +
-                "</tr>";
+                "</tr></tbody>";
             }
     if (!$(".studious > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
@@ -517,7 +518,7 @@ function show_research_record() {
             "</table>";
         $(".studious").html(table);
     }
-    $(".studious > table > tbody").append(row);
+    $(".studious > table ").append(row);
     $(".studious div#" + $(this).attr("id")).remove();
     record_edit(".studious");
 }
@@ -828,175 +829,58 @@ $.ajaxSetup({
     }
 });
 
-// function scientific_record() {  
-//     console.log("asdfadfadfdasf")
-//     var form = $('#ajax-sci-form');
-//     form.submit(function (event) {        
-//         event.preventDefault();
-//         // form.$("#submit_button").cancel_add(education-btn);  
-//         $.ajax({
-//             method: 'POST',
-//             url: form.attr('url'),
-//             dataType: 'json',
-//             data: form.serialize().toString(),
-//             success: function (data) {
-//                 console.log(data)
-//             },
-//             error: function (data) {
-//                 console.log(data)
-//             },
-//         })
-//     })
-// }
+$(".delete_edu").click(function(){
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/researcher/delete_scientific/",
+        dataType: 'json',
+        data: {pk : pk},
+        success: function (data) {
+            $(".row-sci-"+pk).remove();
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
 
-// function executive_record() {
-//     console.log("exe call!!!")
-//     var form = $('.ajax-exe-form');
-//     form.submit(function (event) {
-//         event.preventDefault();        
-//         form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
-//             .attr("disabled", "true");
-//         form.find("button[type='reset']").attr("disabled", "true");
-//         form.find("label").addClass("progress-cursor");
-//         form.closest(".fixed-back").find(".card").addClass("wait");
-//         form.find("input").attr("disabled", "true").addClass("progress-cursor");
+$(".delete_stu").click(function(){
+    let pk = $(this).attr("value");
+    console.log("delete_stu");
+    console.log(pk);
+    $.ajax({
+        method: 'POST',
+        url: "/researcher/delete_studious/",
+        dataType: 'json',
+        data: {pk : pk},
+        success: function (data) {
+            console.log(pk);
+            $(".row-stu-"+pk).remove();
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
 
-//         $.ajax({
-//             method: 'POST',
-//             url: form.attr('url'),
-//             dataType: 'json',
-//             data: form.serialize().toString(),
-//             success: function (data) {
-//                 console.log("++++++++")
-//                 console.log(data)
-//                 form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-//                     .prop("disabled", false);
-//                 form.find("button[type='reset']").prop("disabled", false);
-//                 form.find("input").prop("disabled", false).removeClass("progress-cursor");
-//                 form.find("label").removeClass("progress-cursor");
-//                 form.closest(".fixed-back").find(".card").removeClass("wait");
-//                 if (data.success === "successful") {
-//                     $(".ajax-exe-form").css("display", "none");
-//                     $(".main").removeClass("blur-div");
-//                     // show_scientific_record();
-//                     iziToast.success({
-//                         rtl: true,
-//                         message: "اطلاعات با موفقیت ذخیره شد!",
-//                         position: 'bottomLeft'
-//                     });
-//                     form[0].reset();
-//                 }
-//             },
-//             error: function (data) {
-//                 console.log("-----------")
-//                 console.log(data)
-//                 var obj = JSON.parse(data.responseText);
-//                 form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-//                     .prop("disabled", false);
-//                 form.find("button[type='reset']").prop("disabled", false);
-//                 form.find("input").prop("disabled", false).removeClass("progress-cursor");
-//                 form.find("label").removeClass("progress-cursor");
-//                 form.closest(".fixed-back").find(".card").removeClass("wait");
-//                 if (obj.post) {
-//                     console.log(obj.post)
-//                     $("#duty").closest("div").append("<div class='error'>" +
-//                         "<span class='error-body'>" +
-//                         "<ul class='errorlist'>" +
-//                         "<li>" + obj.post + "</li>" +
-//                         "</ul>" +
-//                         "</span>" +
-//                         "</div>");
-//                     $("input#duty").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-//                 }
-//                 if (obj.start) {
-//                     console.log(obj.start)
-//                     $("#from").closest("div").append("<div class='error'>" +
-//                         "<span class='error-body'>" +
-//                         "<ul class='errorlist'>" +
-//                         "<li>" + obj.start + "</li>" +
-//                         "</ul>" +
-//                         "</span>" +
-//                         "</div>");
-//                     $("input#from").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-//                 }
-//                 if (obj.end) {
-//                     console.log(obj.end)
-//                     $("#until").closest("div").append("<div class='error'>" +
-//                         "<span class='error-body'>" +
-//                         "<ul class='errorlist'>" +
-//                         "<li>" + obj.end + "</li>" +
-//                         "</ul>" +
-//                         "</span>" +
-//                         "</div>");
-//                     $("input#until").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-//                 }
-//                 if (obj.place) {
-//                     console.log(obj.place)
-//                     $("#workplace").closest("div").append("<div class='error'>" +
-//                         "<span class='error-body'>" +
-//                         "<ul class='errorlist'>" +
-//                         "<li>" + obj.place + "</li>" +
-//                         "</ul>" +
-//                         "</span>" +
-//                         "</div>");
-//                     $("input#workplace").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-//                 }
-//                 if (obj.city) {
-//                     $("#exe-city").closest("div").append("<div class='error'>" +
-//                         "<span class='error-body'>" +
-//                         "<ul class='errorlist'>" +
-//                         "<li>" + obj.city + "</li>" +
-//                         "</ul>" +
-//                         "</span>" +
-//                         "</div>");
-//                     $("input#exe-city").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-//                 }
-//             },
-//         })
-//     })
-// }
-
-// function executive_record() {
-//     console.log("adsf12312312312")
-//     var form = $('.ajax-exe-form');
-//     form.submit(function (event) {
-//         event.preventDefault();        
-//         form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
-//             .attr("disabled", "true");
-//         form.find("button[type='reset']").attr("disabled", "true");
-//         form.find("label").addClass("progress-cursor");
-//         form.closest(".fixed-back").find(".card").addClass("wait");
-//         form.find("input").attr("disabled", "true").addClass("progress-cursor");
-//         $.ajax({
-//             method: 'POST',
-//             url: form.attr('url'),
-//             dataType: 'json',
-//             data: form.serialize().toString(),
-//             success: function (data) {
-//                 console.log(data)
-//             },
-//             error: function (data) {
-//                 console.log(data)
-//             },
-//         })
-//     })
-// }
-// function studious_record() {
-//     console.log("asdfadfadfdasf");
-//     var form = $('.ajax-std-form');
-//     form.submit(function (event) {
-//         event.preventDefault();        
-//         $.ajax({
-//             method: 'POST',
-//             url: form.attr('url'),
-//             dataType: 'json',
-//             data: form.serialize().toString(),
-//             success: function (data) {
-//                 console.log(data)
-//             },
-//             error: function (data) {
-//                 console.log(data)
-//             },
-//         })
-//     })
-// }
+$(".delete_exe").click(function(){
+    let pk = $(this).attr("value");
+    console.log("delete_exe");
+    console.log(pk);
+    $.ajax({
+        method: 'POST',
+        url: "/researcher/delete_executive/",
+        dataType: 'json',
+        data: {pk : pk},
+        success: function (data) {
+            $(".row-exe-"+pk).remove();
+            if (!$(".executive > table").hasClass("tbody")) 
+                console.log("doesnt have tbody");
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
+    

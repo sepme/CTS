@@ -221,7 +221,9 @@ def ajax_ScientificRecord(request):
         scientific_record.save()
         data = {
             'success' : 'successful',
+            'pk' : scientific_record.pk,
         }
+        print(data)
         return JsonResponse(data)
     else:
         print("error happened")
@@ -235,6 +237,7 @@ def ajax_ExecutiveRecord(request):
         executive_record.save()
         data = {
             'success' : 'successful',
+            'pk' : executive_record.pk,
         }
         return JsonResponse(data)
     else:
@@ -249,6 +252,7 @@ def ajax_StudiousRecord(request):
         studious_record.save()
         data = {
             'success' : 'successful',
+            'pk' : studious_record.pk,
         }
         return JsonResponse(data)
     else:
@@ -519,7 +523,7 @@ def DeleteComment(request):
         comment.delete()
     except:
         return JsonResponse({} ,400)
-    return JsonResponse({'seccessful' :"seccessful"} ,200)
+    return JsonResponse({'successful' :"successful"} ,200)
 
 def ApplyProject(request):
     form = forms.ApplyForm(request.POST)
@@ -613,6 +617,29 @@ def AddComment(request):
     print("form doesn't validated!")
     return JsonResponse(form.errors ,status=400)
 
+def DeleteScientificRecord(request):
+    try:
+        sci_rec = get_object_or_404(models.ScientificRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Scientific record isn't found"} ,status=400)
+    sci_rec.delete()
+    return JsonResponse({"successfull" :"Scientific record is deleted"})
+
+def DeleteExecutiveRecord(request):
+    try:
+        exe_rec = get_object_or_404(models.ExecutiveRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Executive record isn't found"} ,status=400)
+    exe_rec.delete()
+    return JsonResponse({"successfull" :"Executive record is deleted"})
+
+def DeleteStudiousRecord(request):
+    try:
+        stu_rec = get_object_or_404(models.StudiousRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Studious record isn't found"} ,status=400)
+    stu_rec.delete()
+    return JsonResponse({"successfull" :"Studious record is deleted"})
 
 TECHNIQUES = {
     'Polymerase Chain Reaction' :'Molecular Biology',

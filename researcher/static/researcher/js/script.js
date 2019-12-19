@@ -368,7 +368,8 @@ scientificForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".scientific_form").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_scientific_record();
+                console.log(data.pk);
+                show_scientific_record(data.pk);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -466,7 +467,7 @@ researchForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".research_form").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_research_record();
+                show_research_record(data.pk);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
