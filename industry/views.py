@@ -18,12 +18,12 @@ from . import models
 from . import forms
 from expert.models import ExpertUser
 
-
+# function name says it all :)
 def gregorian_to_numeric_jalali(date):
     j_date = JalaliDate(date)
     return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
-
+# returns the difference between the two dates. e.g. 3 ruz, 5 sal, ...
 def date_dif(start_date, deadline_date):
     delta = relativedelta(deadline_date, start_date)
     if delta.years != 0:
@@ -35,7 +35,7 @@ def date_dif(start_date, deadline_date):
     else:
         return 'امروز'
 
-
+# is called through an ajax request. returns the comments on a particular project with a particular expert
 def get_comments_with_expert(request):
     comment_list = Comment.objects.filter(project_id=request.GET.get('project_id'),
                                           industry_user=request.user.industryuser,
@@ -47,7 +47,7 @@ def get_comments_with_expert(request):
             'text': comment.description,
             'sender_type': comment.sender_type
         })
-
+# is called by an ajax request and returns the necessary information to display the project on the front-end
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
@@ -88,7 +88,7 @@ def accept_project_ajax(request):
     project = models.Project.objects.filter(request.GET.get('project_id')).first()
     project.expert_accepted = expert_user
 
-
+# this function is called when the industry user comments on a project
 def submit_comment(request):
     description = request.GET.get('description')
     project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
@@ -100,7 +100,7 @@ def submit_comment(request):
                            sender_type=1, expert_user=expert_user)
     return JsonResponse({})
 
-
+# main page for an industry user
 class Index(generic.TemplateView):
     template_name = 'industry/index.html'
 
@@ -123,7 +123,7 @@ class Index(generic.TemplateView):
             for project in industry_user.projects.all():
                 print(project.project_form.project_title_persian)
         return context
-
+    # submitting the initial info form
     def post(self, request, *args, **kwargs):
         form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
         if form.is_valid():

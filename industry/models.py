@@ -10,7 +10,16 @@ from persiantools.jdatetime import JalaliDate
 
 from researcher.models import ResearcherUser ,RequestedProject
 
-
+'''
+Each IndustryUser object has a one-to-one field to django's User model, an industryform contaning his information,
+and projects.
+Each Project object has a projectform field containing the information about the project like the required budget,
+skills, etc. The other fields of Project indicate who is going to do it and when they are going to do it. 
+For comments it's simple: we create a record for every comment and when we need to display the comments on a project
+with just search through the Comments for the ones sent by the the users we're looking for and on the project we want.
+ProjectHistory objects are the summary of a project that's been done and we don't need all its details anymore, so we 
+delete the Project object and only keep its main information in a ProjectHistory object.
+'''
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
