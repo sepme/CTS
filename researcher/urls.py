@@ -25,5 +25,5 @@ urlpatterns = [
     path('comment/' ,views.AddComment ,name='comment'),
     path('delete_comment/' ,views.DeleteComment ,name='delete_comment'),
     path('myProject/' ,views.MyProject ,name="my_project"),
-    path('doneProject/' ,views.DoneProjects ,name="done_project"),
+    # path('doneProject/' ,views.DoneProjects ,name="done_project"),
 ]

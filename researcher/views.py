@@ -66,10 +66,12 @@ class Index(LoginRequiredMixin, generic.FormView):
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
         all_projects = Project.objects.all().exclude(expert_accepted=None)
+        my_projects  = all_projects.filter(researcher_applied__in=[self.request.user.researcheruser])
+        new_projects = all_projects.exclude(researcher_applied__in=[self.request.user.researcheruser])
         technique_id = [item.id for item in self.request.user.researcheruser.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(id__in=technique_id)
         projects = []
-        for project in all_projects:
+        for project in new_projects:
             try:
                 for tech in project.project_form.required_technique.all():
                     if tech not in technique:
@@ -77,8 +79,8 @@ class Index(LoginRequiredMixin, generic.FormView):
                 projects.append(project)
             except Exception:
                 continue
-        project_list = []
-        for project in projects:
+        new_project_list = []
+        for project in new_projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
             # all_comments = project.get_comments()
@@ -94,8 +96,42 @@ class Index(LoginRequiredMixin, generic.FormView):
                 'started'            : date_last(datetime.date.today() ,project.date_start),
                 'finished'           : date_last(datetime.date.today() ,project.date_finished),
             }
-            project_list.append(temp)
-        context['project_list'] = project_list
+            new_project_list.append(temp)
+        context['new_project_list'] = new_project_list
+
+        done_projects = models.ResearcherHistory.objects.all()
+        done_project_list = []
+        for project in done_projects:
+            tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
+            temp = {
+                'project_title' : project.title,
+                'started'       : date_last(datetime.date.today(), project.start),
+                'finished'      : date_last(datetime.date.today(), project.end),
+                'status'        : project.status,
+                'point'         : project.point,
+                'income'        : project.income,
+                'technique'     : tech_temp,
+            }
+            done_project_list.append(temp)
+        context['done_project_list'] = done_project_list
+
+        if len(my_projects) != 0:
+            evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=my_projects[0].project_form.project_title_english)
+            my_project_list = []
+            for project in my_projects:
+                title = project.project_form.project_title_english
+                temp = {
+                    'PK'            : project.pk,
+                    'project_title' : project.project_form.project_title_persian,
+                    'keyword'       : project.project_form.key_words.all(),
+                    'started'       : date_last(datetime.date.today() ,project.date_start),
+                    'finished'      : date_last(datetime.date.today() ,project.date_finished),
+                }
+                my_project_list.append(temp)
+            context["my_project_list"] = my_project_list
+        else:
+            context["my_project_list"] = "پروژه فعالی برای شما ثبت نشده است."
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -164,7 +200,6 @@ class UserInfo(generic.TemplateView):
                                         #        'grade':
                                         #            self.request.user.researcheruser.researcherprofile.grade})
         )
-        print(self.request.POST)
         if form.is_valid():
             profile = request.user.researcheruser.researcherprofile
             if form.cleaned_data['photo'] is not None:
@@ -223,7 +258,6 @@ def ajax_ScientificRecord(request):
             'success' : 'successful',
             'pk' : scientific_record.pk,
         }
-        print(data)
         return JsonResponse(data)
     else:
         print("error happened")
@@ -497,8 +531,9 @@ def ShowProject(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    for ind, value in enumerate(json_response['required_technique']):
-        json_response['required_technique'][ind] = value.__str__()
+    json_response['required_technique']=[]
+    for tech in project.project_form.required_technique:
+        json_response['required_technique'].append(tech.__str__())
     all_comments = project.get_comments().exclude(researcher_user=None)
     json_response['comments'] = []
     for com in all_comments:
@@ -517,7 +552,6 @@ def ShowProject(request):
     return JsonResponse(json_response)
 
 def DeleteComment(request):
-    print(request.POST)
     try:
         comment = get_object_or_404(Comment ,pk=request.POST['comment_id'])
         comment.delete()
@@ -546,47 +580,65 @@ def ApplyProject(request):
     return JsonResponse(form.errors ,status=400)
 
 def MyProject(request):    
-    projects = Project.objects.all().filter(researcher_applied__in=[request.user.researcheruser])
-    if len(projects) != 0:
-        evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=projects[0].project_form.project_title_english)
-        project_list = {}
-        for project in projects:
-            title = project.project_form.project_title_english
-            project_list[title] = {
-                'PK'            : project.pk,
-                'project_title' : project.project_form.project_title_persian,
-                'started'       : date_last(datetime.date.today() ,project.date_start),
-                'finished'      : date_last(datetime.date.today() ,project.date_finished),
-            }
-            project_list[title]['vote'] = "false"
-            if datetime.date.today() > project.date_finished:
-                if evaluation_history.objects.filter(phase=3).count() == 0:
-                    project_list[title]['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_two_finished:
-                if evaluation_history.objects.filter(phase=2).count() == 0:
-                    project_list[title]['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_one_finished:
-                if evaluation_history.objects.filter(phase=1).count() == 0:
-                    project_list[title]['vote'] = "true"
-        return JsonResponse(data={"project_list" : project_list})
+    project = Project.objects.filter(id=request.GET.get('id')).first()
+    json_response = model_to_dict(project.project_form)
+    json_response['deadline'] = 'نا مشخص'
+    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+        json_response['deadline'] = date_last(datetime.date.today() ,project.date_phase_three_deadline)
     else:
-        return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})
-
-def DoneProjects(request):
-    projects = models.ResearcherHistory.objects.all()
-    project_list = {}    
-    for project in projects:
-        tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
-        project_list[project.title] = {
-            'project_title' : project.title,
-            'started'       : date_last(datetime.date.today(), project.start),
-            'finished'      : date_last(datetime.date.today(), project.end),
-            'status'        : project.status,
-            'point'         : project.point,
-            'income'        : project.income,
-            'technique'     : tech_temp,
+        json_response['deadline'] = date_last(project.date_project_started, project.date_phase_three_deadline)
+    json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    for ind, value in enumerate(json_response['key_words']):
+        json_response['key_words'][ind] = value.__str__()
+    json_response['required_technique']=[]
+    for tech in project.project_form.required_technique:
+        json_response['required_technique'].append(tech.__str__())
+    all_comments = project.get_comments().exclude(researcher_user=None)
+    json_response['comments'] = []
+    for com in all_comments:
+        try:
+            url = com.attachment.url[com.attachment.url.find('media' ,2):]
+        except:
+            url = "None"
+        temp = {
+            'pk'           : com.pk,
+            'description'  : com.description,
+            'replied_text' : com.replied_text,
+            'sender_type'  : com.sender_type,
+            'attachment'   : url
         }
-    return JsonResponse(data={"project_list" : project_list})
+        json_response['comments'].append(temp)
+    title = project.project_form.project_title_english
+    evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=title)
+    json_response['vote'] = "false"
+    if datetime.date.today() > project.date_finished:
+        if len(evaluation_history.filter(phase=3)) == 0:
+            json_response['vote'] = "true"
+    elif datetime.date.today() > project.date_phase_two_finished:
+        if len(evaluation_history.filter(phase=2)) == 0:
+            json_response['vote'] = "true"
+    elif datetime.date.today() > project.date_phase_one_finished:
+        if len(evaluation_history.filter(phase=1)) == 0:
+            json_response['vote'] = "true"
+    return JsonResponse(json_response)
+#     else:
+#         return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})
+
+# def DoneProjects(request):
+#     projects = models.ResearcherHistory.objects.all()
+#     project_list = {}    
+#     for project in projects:
+#         tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
+#         project_list[project.title] = {
+#             'project_title' : project.title,
+#             'started'       : date_last(datetime.date.today(), project.start),
+#             'finished'      : date_last(datetime.date.today(), project.end),
+#             'status'        : project.status,
+#             'point'         : project.point,
+#             'income'        : project.income,
+#             'technique'     : tech_temp,
+#         }
+#     return JsonResponse(data={"project_list" : project_list})
 
 def AddComment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
