@@ -8,7 +8,8 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
 
-from researcher.models import ResearcherUser ,RequestedProject
+from researcher.models import ResearcherUser ,RequestedProject ,Technique
+from expert import models as expertModels
 
 '''
 Each IndustryUser object has a one-to-one field to django's User model, an industryform contaning his information,
@@ -106,7 +107,6 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_technique = models.TextField(default='no technique', verbose_name="تکنیک های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
@@ -115,6 +115,10 @@ class ProjectForm(models.Model):
     def __str__(self):
         return self.project_title_english
 
+    @property
+    def required_technique(self):
+        expert_requested = expertModels.ExpertRequestedProject.objects.all().filter(project=self.project).filter(expert=self.project.expert_accepted).first()
+        return expert_requested.required_technique.all()
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")

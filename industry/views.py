@@ -78,8 +78,9 @@ def show_project_ajax(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    for ind, value in enumerate(json_response['required_technique']):
-        json_response['required_technique'][ind] = value.__str__()
+    json_response['required_technique']=[]
+    for tech in project.project_form.required_technique:
+        json_response['required_technique'].append(tech.__str__())
     return JsonResponse(json_response)
 
 
