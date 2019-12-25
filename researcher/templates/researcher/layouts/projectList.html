@@ -26,6 +26,10 @@
                     {% endfor %}
             </div>
             <div class="tab-content your-project" style="display: none;">
+            
+            {% if my_project_list == "None" %}
+                <p>پروژه فعالی برای شما ثبت نشده است.</p>
+            {% else %}
                 {% for project in my_project_list %}
                     <div class="card project-item">                    
                         <span class="header">{{project.project_title}} <span class="sub-header">( {{project.started}} قبل )</span></span>
@@ -39,15 +43,21 @@
                         <button type="button" class="chamran-btn-info my-project" value="myproject" id="{{project.PK}}">مشاهده</button>
                     </div>
                     {% endfor %}
+            {% endif %}
             </div>
             <div class="tab-content done-project" style="display: none;">
                 {% for project in done_project_list %}
                 <div class='card project-item'>
-                    <span class='header'>{{project.project_title}}<span class='sub-header'>{{project.started}} قبل )</span></span>
-                    <span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>
-                    <span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span> {{project.finished}} </span> فرصت باقی است!</span>
+                    <span class='header'>{{project.project_title}}<span class='sub-header'> ({{project.started}} قبل )</span></span>
+                    <span><i class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{project.date_started}}</span> شروع شده است.</span>
+                    <span><i class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{project.date_finished}}</span> به پایان رسیده است.</span>
+                    <span><i class='fas fa-hourglass-end'></i>مدت زمان پروژه : <span> {{project.delta_date}} </span></span>
                     <span><i class='fas fa-hourglass-end'></i>درأمد : <span> {{project.income}} </span> کسب کرده اید.</span>
-                    <span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده : <span> {{project.technique}} </span></span>
+                    <span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده : 
+                        {% for technique in project.technique %}
+                        <span> {{technique}} , </span>      
+                        {% endfor %}
+                    </span>
                 </div>
                 {% endfor %}
             </div>

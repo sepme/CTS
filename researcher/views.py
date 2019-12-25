@@ -106,7 +106,10 @@ class Index(LoginRequiredMixin, generic.FormView):
             temp = {
                 'project_title' : project.title,
                 'started'       : date_last(datetime.date.today(), project.start),
-                'finished'      : date_last(datetime.date.today(), project.end),
+                'date_started'  : gregorian_to_numeric_jalali(project.start),
+                # 'finished'      : date_last(datetime.date.today(), project.end),
+                'date_finished' : gregorian_to_numeric_jalali(project.end),
+                'delta_date'    : date_last(project.start ,project.end),
                 'status'        : project.status,
                 'point'         : project.point,
                 'income'        : project.income,
@@ -130,8 +133,8 @@ class Index(LoginRequiredMixin, generic.FormView):
                 my_project_list.append(temp)
             context["my_project_list"] = my_project_list
         else:
-            context["my_project_list"] = "پروژه فعالی برای شما ثبت نشده است."
-
+            context["my_project_list"] = "None"
+        print(context["my_project_list"])
         return context
 
     def post(self, request, *args, **kwargs):
@@ -413,7 +416,7 @@ class Question(generic.TemplateView):
         question_list = ResearchQuestion.objects.filter(status='not_answered')
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
-        question = question_list[random.randint(0 ,len(question_list))-1]
+        question = question_list[random.randint(0 ,len(question_list)-1)]
         question_instance = models.ResearchQuestionInstance(research_question=question
                                                             ,researcher = request.user.researcheruser)
         question_instance.save()
