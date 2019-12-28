@@ -8,9 +8,19 @@ from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
 
-from researcher.models import ResearcherUser ,RequestedProject
+from researcher.models import ResearcherUser ,RequestedProject ,Technique
+from expert import models as expertModels
 
-
+'''
+Each IndustryUser object has a one-to-one field to django's User model, an industryform contaning his information,
+and projects.
+Each Project object has a projectform field containing the information about the project like the required budget,
+skills, etc. The other fields of Project indicate who is going to do it and when they are going to do it. 
+For comments it's simple: we create a record for every comment and when we need to display the comments on a project
+with just search through the Comments for the ones sent by the the users we're looking for and on the project we want.
+ProjectHistory objects are the summary of a project that's been done and we don't need all its details anymore, so we 
+delete the Project object and only keep its main information in a ProjectHistory object.
+'''
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
@@ -97,7 +107,6 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_technique = models.TextField(default='no technique', verbose_name="تکنیک های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
@@ -106,6 +115,10 @@ class ProjectForm(models.Model):
     def __str__(self):
         return self.project_title_english
 
+    @property
+    def required_technique(self):
+        expert_requested = expertModels.ExpertRequestedProject.objects.all().filter(project=self.project).filter(expert=self.project.expert_accepted).first()
+        return expert_requested.required_technique.all()
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")

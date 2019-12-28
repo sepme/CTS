@@ -83,7 +83,7 @@
                     </div>
                 </li>
             </a>
-            <!-- {% url 'expert:messages' as messages_url %}
+            {% url 'expert:messages' as messages_url %}
             <a href="{{ messages_url }}">
                 <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
                     <div>
@@ -92,7 +92,7 @@
                     </div>
 
                 </li>
-            </a> -->
+            </a>
             {% url 'expert:questions' as questions_url %}
             <a href="{{ questions_url }}">
                 <li class="list-group-item text-right {% if request.get_full_path == questions_url %}active{% endif %}">

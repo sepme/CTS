@@ -494,7 +494,6 @@ class RecoverPassword(generic.TemplateView):
 def RecoverPassword_ajax(request):
     form = forms.RecoverPasswordForm(request.POST)
     if form.is_valid():
-        print("form is validated.")
         username = form.cleaned_data['username']
         temp = get_object_or_404(User, username=username)
         user = find_user(temp)

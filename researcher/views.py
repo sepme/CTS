@@ -66,10 +66,12 @@ class Index(LoginRequiredMixin, generic.FormView):
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
         all_projects = Project.objects.all().exclude(expert_accepted=None)
+        my_projects  = all_projects.filter(researcher_applied__in=[self.request.user.researcheruser])
+        new_projects = all_projects.exclude(researcher_applied__in=[self.request.user.researcheruser])
         technique_id = [item.id for item in self.request.user.researcheruser.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(id__in=technique_id)
         projects = []
-        for project in all_projects:
+        for project in new_projects:
             try:
                 for tech in project.project_form.required_technique.all():
                     if tech not in technique:
@@ -77,7 +79,7 @@ class Index(LoginRequiredMixin, generic.FormView):
                 projects.append(project)
             except Exception:
                 continue
-        project_list = []
+        new_project_list = []
         for project in projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
@@ -94,8 +96,44 @@ class Index(LoginRequiredMixin, generic.FormView):
                 'started'            : date_last(datetime.date.today() ,project.date_start),
                 'finished'           : date_last(datetime.date.today() ,project.date_finished),
             }
-            project_list.append(temp)
-        context['project_list'] = project_list
+            new_project_list.append(temp)
+        context['new_project_list'] = new_project_list
+
+        done_projects = models.ResearcherHistory.objects.all()
+        done_project_list = []
+        for project in done_projects:
+            tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
+            temp = {
+                'project_title' : project.title,
+                'started'       : date_last(datetime.date.today(), project.start),
+                'date_started'  : gregorian_to_numeric_jalali(project.start),
+                # 'finished'      : date_last(datetime.date.today(), project.end),
+                'date_finished' : gregorian_to_numeric_jalali(project.end),
+                'delta_date'    : date_last(project.start ,project.end),
+                'status'        : project.status,
+                'point'         : project.point,
+                'income'        : project.income,
+                'technique'     : tech_temp,
+            }
+            done_project_list.append(temp)
+        context['done_project_list'] = done_project_list
+
+        if len(my_projects) != 0:
+            evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=my_projects[0].project_form.project_title_english)
+            my_project_list = []
+            for project in my_projects:
+                title = project.project_form.project_title_english
+                temp = {
+                    'PK'            : project.pk,
+                    'project_title' : project.project_form.project_title_persian,
+                    'keyword'       : project.project_form.key_words.all(),
+                    'started'       : date_last(datetime.date.today() ,project.date_start),
+                    'finished'      : date_last(datetime.date.today() ,project.date_finished),
+                }
+                my_project_list.append(temp)
+            context["my_project_list"] = my_project_list
+        else:
+            context["my_project_list"] = "None"
         return context
 
     def post(self, request, *args, **kwargs):
@@ -164,7 +202,6 @@ class UserInfo(generic.TemplateView):
                                         #        'grade':
                                         #            self.request.user.researcheruser.researcherprofile.grade})
         )
-        print(self.request.POST)
         if form.is_valid():
             profile = request.user.researcheruser.researcherprofile
             if form.cleaned_data['photo'] is not None:
@@ -221,6 +258,7 @@ def ajax_ScientificRecord(request):
         scientific_record.save()
         data = {
             'success' : 'successful',
+            'pk' : scientific_record.pk,
         }
         return JsonResponse(data)
     else:
@@ -235,6 +273,7 @@ def ajax_ExecutiveRecord(request):
         executive_record.save()
         data = {
             'success' : 'successful',
+            'pk' : executive_record.pk,
         }
         return JsonResponse(data)
     else:
@@ -249,6 +288,7 @@ def ajax_StudiousRecord(request):
         studious_record.save()
         data = {
             'success' : 'successful',
+            'pk' : studious_record.pk,
         }
         return JsonResponse(data)
     else:
@@ -345,7 +385,6 @@ def AddTechnique(request):
         data = {'success' : 'successful',
                 'title'   : technique_title}
         return JsonResponse(data=data)
-    print(form.errors)
     return JsonResponse(form.errors ,status=400)
 
 class Question(generic.TemplateView):
@@ -375,7 +414,7 @@ class Question(generic.TemplateView):
         question_list = ResearchQuestion.objects.filter(status='not_answered')
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
-        question = question_list[random.randint(1 ,len(question_list))-1]
+        question = question_list[random.randint(0 ,len(question_list)-1)]
         question_instance = models.ResearchQuestionInstance(research_question=question
                                                             ,researcher = request.user.researcheruser)
         question_instance.save()
@@ -493,8 +532,9 @@ def ShowProject(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    for ind, value in enumerate(json_response['required_technique']):
-        json_response['required_technique'][ind] = value.__str__()
+    json_response['required_technique']=[]
+    for tech in project.project_form.required_technique:
+        json_response['required_technique'].append(tech.__str__())
     all_comments = project.get_comments().exclude(researcher_user=None)
     json_response['comments'] = []
     for com in all_comments:
@@ -513,13 +553,12 @@ def ShowProject(request):
     return JsonResponse(json_response)
 
 def DeleteComment(request):
-    print(request.POST)
     try:
         comment = get_object_or_404(Comment ,pk=request.POST['comment_id'])
         comment.delete()
     except:
         return JsonResponse({} ,400)
-    return JsonResponse({'seccessful' :"seccessful"} ,200)
+    return JsonResponse({'successful' :"successful"} ,200)
 
 def ApplyProject(request):
     form = forms.ApplyForm(request.POST)
@@ -542,47 +581,65 @@ def ApplyProject(request):
     return JsonResponse(form.errors ,status=400)
 
 def MyProject(request):    
-    projects = Project.objects.all().filter(researcher_applied__in=[request.user.researcheruser])
-    if len(projects) != 0:
-        evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=projects[0].project_form.project_title_english)
-        project_list = {}
-        for project in projects:
-            title = project.project_form.project_title_english
-            project_list[title] = {
-                'PK'            : project.pk,
-                'project_title' : project.project_form.project_title_persian,
-                'started'       : date_last(datetime.date.today() ,project.date_start),
-                'finished'      : date_last(datetime.date.today() ,project.date_finished),
-            }
-            project_list[title]['vote'] = "false"
-            if datetime.date.today() > project.date_finished:
-                if evaluation_history.objects.filter(phase=3).count() == 0:
-                    project_list[title]['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_two_finished:
-                if evaluation_history.objects.filter(phase=2).count() == 0:
-                    project_list[title]['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_one_finished:
-                if evaluation_history.objects.filter(phase=1).count() == 0:
-                    project_list[title]['vote'] = "true"
-        return JsonResponse(data={"project_list" : project_list})
+    project = Project.objects.filter(id=request.GET.get('id')).first()
+    json_response = model_to_dict(project.project_form)
+    json_response['deadline'] = 'نا مشخص'
+    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+        json_response['deadline'] = date_last(datetime.date.today() ,project.date_phase_three_deadline)
     else:
-        return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})
-
-def DoneProjects(request):
-    projects = models.ResearcherHistory.objects.all()
-    project_list = {}    
-    for project in projects:
-        tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
-        project_list[project.title] = {
-            'project_title' : project.title,
-            'started'       : date_last(datetime.date.today(), project.start),
-            'finished'      : date_last(datetime.date.today(), project.end),
-            'status'        : project.status,
-            'point'         : project.point,
-            'income'        : project.income,
-            'technique'     : tech_temp,
+        json_response['deadline'] = date_last(project.date_project_started, project.date_phase_three_deadline)
+    json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    for ind, value in enumerate(json_response['key_words']):
+        json_response['key_words'][ind] = value.__str__()
+    json_response['required_technique']=[]
+    for tech in project.project_form.required_technique:
+        json_response['required_technique'].append(tech.__str__())
+    all_comments = project.get_comments().exclude(researcher_user=None)
+    json_response['comments'] = []
+    for com in all_comments:
+        try:
+            url = com.attachment.url[com.attachment.url.find('media' ,2):]
+        except:
+            url = "None"
+        temp = {
+            'pk'           : com.pk,
+            'description'  : com.description,
+            'replied_text' : com.replied_text,
+            'sender_type'  : com.sender_type,
+            'attachment'   : url
         }
-    return JsonResponse(data={"project_list" : project_list})
+        json_response['comments'].append(temp)
+    title = project.project_form.project_title_english
+    evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=title)
+    json_response['vote'] = "false"
+    if datetime.date.today() > project.date_finished:
+        if len(evaluation_history.filter(phase=3)) == 0:
+            json_response['vote'] = "true"
+    elif datetime.date.today() > project.date_phase_two_finished:
+        if len(evaluation_history.filter(phase=2)) == 0:
+            json_response['vote'] = "true"
+    elif datetime.date.today() > project.date_phase_one_finished:
+        if len(evaluation_history.filter(phase=1)) == 0:
+            json_response['vote'] = "true"
+    return JsonResponse(json_response)
+#     else:
+#         return JsonResponse(data={'error' :'پروژه فعالی برای شما ثبت نشده است.'})
+
+# def DoneProjects(request):
+#     projects = models.ResearcherHistory.objects.all()
+#     project_list = {}    
+#     for project in projects:
+#         tech_temp = [tech.technique_title for tech in project.involve_tech.all()]        
+#         project_list[project.title] = {
+#             'project_title' : project.title,
+#             'started'       : date_last(datetime.date.today(), project.start),
+#             'finished'      : date_last(datetime.date.today(), project.end),
+#             'status'        : project.status,
+#             'point'         : project.point,
+#             'income'        : project.income,
+#             'technique'     : tech_temp,
+#         }
+#     return JsonResponse(data={"project_list" : project_list})
 
 def AddComment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
@@ -610,9 +667,31 @@ def AddComment(request):
                 'description': description,
             }
         return JsonResponse(data)
-    print("form doesn't validated!")
     return JsonResponse(form.errors ,status=400)
 
+def DeleteScientificRecord(request):
+    try:
+        sci_rec = get_object_or_404(models.ScientificRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Scientific record isn't found"} ,status=400)
+    sci_rec.delete()
+    return JsonResponse({"successfull" :"Scientific record is deleted"})
+
+def DeleteExecutiveRecord(request):
+    try:
+        exe_rec = get_object_or_404(models.ExecutiveRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Executive record isn't found"} ,status=400)
+    exe_rec.delete()
+    return JsonResponse({"successfull" :"Executive record is deleted"})
+
+def DeleteStudiousRecord(request):
+    try:
+        stu_rec = get_object_or_404(models.StudiousRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Studious record isn't found"} ,status=400)
+    stu_rec.delete()
+    return JsonResponse({"successfull" :"Studious record is deleted"})
 
 TECHNIQUES = {
     'Polymerase Chain Reaction' :'Molecular Biology',

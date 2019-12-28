@@ -142,9 +142,10 @@
                                                         <td></td>
                                                 </tr>
                                             </thead>
-                                            <tbody>
                                                 {% for record in scientificrecord_set %}
+                                                <tbody class="row-sci-{{record.pk}}">
                                                 <tr>
+                                                    <div class="sci-row">
                                                         <td>{{record.grade}}</td>
                                                         <td>{{record.major}}</td>
                                                         <td>{{record.university}}</td>
@@ -152,11 +153,11 @@
                                                         <td>{{record.graduated_year}}</td>
                                                         <td>
                                                             <i class='fas fa-pen' id='edit_edu'></i>
-                                                            <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                            <i class='fas fa-trash-alt delete_edu' value={{record.pk}}></i>
                                                         </td>
                                                     </tr>
+                                                </tbody>
                                                 {% endfor %}
-                                            </tbody>
                                         </table>
                                         {% else %}
                                     <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
@@ -183,8 +184,8 @@
                                                             <td></td>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
                                                     {% for record in executiverecord_set %}
+                                                    <tbody class="row-exe-{{record.pk}}">
                                                     <tr>
                                                             <td>{{record.post}}</td>
                                                             <td>{{record.place}}</td>
@@ -192,12 +193,12 @@
                                                             <td>{{record.start}}</td>
                                                             <td>{{record.end}}</td>
                                                             <td>
-                                                                <i class='fas fa-pen' id='edit_edu'></i>
-                                                                <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                                <i class='fas fa-pen' id='edit_exe'></i>
+                                                                <i class='fas fa-trash-alt delete_exe' value="{{record.pk}}"></i>
                                                             </td>
                                                         </tr>
+                                                    </tbody>
                                                     {% endfor %}
-                                                </tbody>
                                             </table>
                                             {% else %}
                                             <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
@@ -224,8 +225,8 @@
                                                         <td></td>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
                                                     {% for record in studiousrecord_set %}
+                                                    <tbody class="row-stu-{{record.pk}}">
                                                     <tr>
                                                             <td>{{record.title}}</td>
                                                             <td>{{record.presenter}}</td>
@@ -238,12 +239,12 @@
                                                                     متوقف
                                                                 {% endif %} </td>
                                                             <td>
-                                                                <i class='fas fa-pen' id='edit_edu'></i>
-                                                                <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                                <i class='fas fa-pen' id='edit_stu'></i>
+                                                                <i class='fas fa-trash-alt delete_stu' value={{record.pk}}></i>
                                                             </td>
                                                         </tr>
+                                                    </tbody>
                                                     {% endfor %}
-                                                </tbody>
                                             </table>
                                             {% else %}
                                             <span class="initial-value" style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i class="fas fa-plus"></i>  کلیک کنید!  </span>
