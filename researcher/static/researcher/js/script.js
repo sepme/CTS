@@ -187,8 +187,7 @@ function setComment(data) {
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === 0) { //expert
-            console.log("sender type is 0");
+        if (data[i].sender_type === 0) { //expert            
             comments_code += "<div class='expert-comment' dir='ltr' >" +
                 "<div class='comment-body'>" +
                 "<span class='comment-tools'>" ;
@@ -206,8 +205,6 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === 2) { //researcher
-            console.log("sender type isn't 0");
-            console.log(data[i].attachment);
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>";
@@ -224,7 +221,6 @@ function setComment(data) {
                 "</div>";
         }
         else { //system
-            console.log("sender type isn't 0 and 2");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -817,6 +813,7 @@ function addComment(data){
 var comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
+    $("#project_id").attr('value', $('.my-project').attr("id"));
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
     var $thisURL = comment_form.attr('url');

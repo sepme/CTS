@@ -80,7 +80,7 @@ class Index(LoginRequiredMixin, generic.FormView):
             except Exception:
                 continue
         new_project_list = []
-        for project in new_projects:
+        for project in projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
             # all_comments = project.get_comments()
@@ -134,7 +134,6 @@ class Index(LoginRequiredMixin, generic.FormView):
             context["my_project_list"] = my_project_list
         else:
             context["my_project_list"] = "None"
-        print(context["my_project_list"])
         return context
 
     def post(self, request, *args, **kwargs):
@@ -386,7 +385,6 @@ def AddTechnique(request):
         data = {'success' : 'successful',
                 'title'   : technique_title}
         return JsonResponse(data=data)
-    print(form.errors)
     return JsonResponse(form.errors ,status=400)
 
 class Question(generic.TemplateView):
@@ -669,7 +667,6 @@ def AddComment(request):
                 'description': description,
             }
         return JsonResponse(data)
-    print("form doesn't validated!")
     return JsonResponse(form.errors ,status=400)
 
 def DeleteScientificRecord(request):
