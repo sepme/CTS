@@ -78,9 +78,12 @@ def show_project_ajax(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    json_response['required_technique']=[]
-    for tech in project.project_form.required_technique:
-        json_response['required_technique'].append(tech.__str__())
+    try:
+        json_response['required_technique']=[]
+        for tech in project.project_form.required_technique:
+            json_response['required_technique'].append(tech.__str__())
+    except:
+        pass
     return JsonResponse(json_response)
 
 
@@ -120,9 +123,7 @@ class Index(generic.TemplateView):
         else:
             industry_user = self.request.user.industryuser
             # print('he\'s got {} projects'.format(industry_user.projects.count()))
-            print('his projects are:')
-            for project in industry_user.projects.all():
-                print(project.project_form.project_title_persian)
+            context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
         return context
     # submitting the initial info form
     def post(self, request, *args, **kwargs):
@@ -247,7 +248,7 @@ class NewProject(View):
             new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
             print('the creator is', new_project.industry_creator)
-            request.user.industryuser.projects.add(new_project)
+            # request.user.industryuser.projects.add(new_project)
             # models.IndustryUser.objects.filter(user=request.user).update()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/newProject.html', context={'form': form})

@@ -34,7 +34,6 @@ class IndustryUser(models.Model):
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
-    projects = models.ManyToManyField('industry.Project', verbose_name='پروژه ها', blank=True)
 
     def __str__(self):
         return self.user.get_username()

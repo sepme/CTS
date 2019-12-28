@@ -31,19 +31,21 @@ function setResources(data) {
         "<div class='answer'>" +
         data.required_lab_equipment +
         "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.required_technique +
-        "</div>" +
-        "</div>" +
-        "<div>" +
+        "</div>";
+        if (data.required_technique.length != 0) {
+            resources += "<div>" +
+            "<div class='question'>" +
+            "<span class='question-mark'>" +
+            "<i class='far fa-question-circle'></i>" +
+            "</span>" +
+            "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
+            "</div>" +
+            "<div class='answer'>" +
+            data.required_technique +
+            "</div>" +
+            "</div>";            
+        }
+        resources += "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +

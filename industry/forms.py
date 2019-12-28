@@ -194,7 +194,6 @@ class ProjectForm(forms.Form):
     progress_profitability = forms.CharField()
     predict_profit = forms.IntegerField()
     required_lab_equipment = forms.CharField()
-    required_technique = forms.CharField()
     project_phase = forms.CharField()
     required_budget = forms.IntegerField()
     policy = forms.CharField()
