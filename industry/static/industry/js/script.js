@@ -32,8 +32,8 @@ function setResources(data) {
         data.required_lab_equipment +
         "</div>" +
         "</div>";
-        if (data.required_technique.length != 0) {
-            resources += "<div>" +
+    if (data.required_technique.length != 0) {
+        resources += "<div>" +
             "<div class='question'>" +
             "<span class='question-mark'>" +
             "<i class='far fa-question-circle'></i>" +
@@ -43,9 +43,9 @@ function setResources(data) {
             "<div class='answer'>" +
             data.required_technique +
             "</div>" +
-            "</div>";            
-        }
-        resources += "<div>" +
+            "</div>";
+    }
+    resources += "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -144,8 +144,18 @@ function setValue(data) {
     });
 }
 
+function setTab(data) {
+    let tab = "<a class='nav-link active' id='v-pills-home-tab' data-toggle='pill'" +
+        "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
+        "" +
+        "نام_استاد" +
+        "</a>";
+}
+
 function setComment(data) {
+    console.log("comment start");
     console.log(data);
+    console.log("comment end");
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
@@ -161,7 +171,7 @@ function setComment(data) {
                 "<i class='fas fa-reply'><div class='reply'></div>" +
                 "</i>";
             if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" +
+                datas_code += "<a href='/" +
                     data[i].attachment +
                     "'><i class='fas fa-paperclip'></i></a>";
             }
@@ -262,6 +272,24 @@ function newItem_label() {
     tag_input_label("id_key_words");
 }
 
+function getComments(expert_id, project_id) {
+    $.ajax({
+        method: 'GET',
+        url: '',
+        dataType: 'json',
+        data: {
+            expert_id: expert_id,
+            project_id: project_id
+        },
+        success: function (data) {
+            setComment(data);
+        },
+        error: function (data) {
+
+        },
+    });
+}
+
 $(document).ready(function () {
         $(".chamran-btn-info").click(function () {
             const dialog = $(".showProject");
@@ -333,7 +361,8 @@ $(document).ready(function () {
                     console.log(data);
                     setMajors(data);
                     setValue(data);
-                    setComment(data.comments);
+                    setTab(data);
+                    getComments(data.expert_messaged[0], data.id);
                 },
                 error: function (data) {
 
