@@ -309,7 +309,7 @@ class ExpertRequestedProject(models.Model):
     project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
     date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
     required_technique = models.ManyToManyField('researcher.Technique', verbose_name='تکنیک های مورد نیاز استاد',
-                                                blank=True, null=True)
+                                                blank=True)
 
     def __str__(self):
         return "{}'s request for '{}' project".format(self.expert.expertform, self.project)

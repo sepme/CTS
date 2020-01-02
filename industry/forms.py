@@ -15,7 +15,7 @@ class IndustryBasicInfoForm(forms.Form):
     research_field = forms.CharField(max_length=300, required=True,
                                      error_messages={'required': 'حوزه فعالیت را وارد کنید'})
     industry_type = forms.IntegerField(error_messages={'invalid': 'لطفا نوع شرکت را انتخاب کنید.'})
-    industry_address = forms.CharField(max_length=3000)
+    industry_address = forms.CharField(max_length=3000 ,widget=forms.Textarea())
     phone_number = forms.CharField(max_length=15)
     email_address = forms.EmailField()
 
@@ -180,7 +180,7 @@ class IndustryInfoForm(forms.ModelForm):
 
 class ProjectForm(forms.Form):
     key_words = forms.CharField(required=False)
-    potential_problems = forms.CharField(required=False)
+    potential_problems = forms.CharField(required=False ,widget=forms.Textarea)
     project_title_persian = forms.CharField()
     project_title_english = forms.CharField()
     research_methodology_choice = (
@@ -189,20 +189,21 @@ class ProjectForm(forms.Form):
     )
     research_methodology = forms.IntegerField(widget=forms.RadioSelect(choices=research_methodology_choice),
                                               error_messages={'required': 'روش تحقیق را انتخاب نمایید'})
-    main_problem_and_importance = forms.CharField()
-    approach = forms.CharField(required=False)
-    progress_profitability = forms.CharField()
+    main_problem_and_importance = forms.CharField(widget=forms.Textarea)
+    approach = forms.CharField(required=False ,widget=forms.Textarea)
+    progress_profitability = forms.CharField(widget=forms.Textarea)
     predict_profit = forms.IntegerField()
-    required_lab_equipment = forms.CharField()
-    project_phase = forms.CharField()
+    required_lab_equipment = forms.CharField(widget=forms.Textarea)
+    required_method = forms.CharField(widget=forms.Textarea)
+    project_phase = forms.CharField(widget=forms.Textarea)
     required_budget = forms.IntegerField()
-    policy = forms.CharField()
+    policy = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         fields = [
             'project_title_persian', 'project_title_english', 'key_words', 'research_methodology',
             'main_problem_and_importance', 'progress_profitability', 'required_lab_equipment',
-            'predict_profit', 'approach', 'policy', 'project_phase', 'required_budget', 'required_technique',
+            'predict_profit', 'approach', 'policy', 'project_phase', 'required_budget', 'required_method',
             'potential_problems',
         ]
 
@@ -220,4 +221,9 @@ class ProjectForm(forms.Form):
         for item in data:
             if 1750 > ord(item) > 1560:
                 raise ValidationError(_("به انگلیسی تایپ شود لطفا"))
+        return data
+
+    def clean_required_method(self):
+        data = self.cleaned_data["required_method"]
+        print(data)
         return data

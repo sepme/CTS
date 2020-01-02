@@ -2,7 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block title %}تنظیمات کاربری{% endblock %}
-{% block name %}رضا باسره{% endblock %}
+{% block name %}{{request.user.industryuser.industryform}}{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">

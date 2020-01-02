@@ -106,6 +106,7 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
+    required_method = models.TextField(verbose_name="روش های مورد نیاز")
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
@@ -132,16 +133,16 @@ class Project(models.Model):
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', through='researcher.RequestedProject',
                                                 verbose_name="پژوهشگران درخواست داده",
-                                                related_name="researchers_applied", blank=True, null=True)
+                                                related_name="researchers_applied", blank=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
-                                                 related_name="researchers_accepted", blank=True, null=True)
+                                                 related_name="researchers_accepted", blank=True)
     expert_applied = models.ManyToManyField('expert.ExpertUser', through='expert.ExpertRequestedProject',
                                             verbose_name="اساتید درخواست داده",
-                                            related_name="experts_applied", blank=True, null=True)
+                                            related_name="experts_applied", blank=True)
     expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
                                                                                                     "شده",
                                         related_name="expert_accepted", blank=True, null=True)
-    expert_messaged = models.ManyToManyField('expert.ExpertUser', null=True, blank=True,
+    expert_messaged = models.ManyToManyField('expert.ExpertUser', blank=True,
                                              verbose_name='اساتیدی که پیام داده اند')
     industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
                                          null=True, blank=True, verbose_name='شرکت '

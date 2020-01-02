@@ -32,7 +32,7 @@ function setResources(data) {
         data.required_lab_equipment +
         "</div>" +
         "</div>";
-    if (data.required_technique.length != 0) {
+    // if (data.required_technique.length != 0) {
         resources += "<div>" +
             "<div class='question'>" +
             "<span class='question-mark'>" +
@@ -41,10 +41,10 @@ function setResources(data) {
             "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
             "</div>" +
             "<div class='answer'>" +
-            data.required_technique +
+            data.required_method +
             "</div>" +
             "</div>";
-    }
+    // }
     resources += "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
@@ -153,14 +153,11 @@ function setTab(data) {
 }
 
 function setComment(data) {
-    console.log("comment start");
-    console.log(data);
-    console.log("comment end");
+    data = data['comment'];
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === 1) { //industry
-            console.log("sender type is 0");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
@@ -182,8 +179,6 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === 0) { //expert
-            console.log("sender type isn't 0");
-            console.log(data[i].attachment);
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -204,8 +199,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else { //system
-            console.log("sender type isn't 0 and 2");
+        } else { //system            
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -272,13 +266,13 @@ function newItem_label() {
     tag_input_label("id_key_words");
 }
 
-function getComments(expert_id, project_id) {
+function getComments(expert, project_id) {
     $.ajax({
         method: 'GET',
-        url: '',
+        url: 'get_comment/',
         dataType: 'json',
         data: {
-            expert_id: expert_id,
+            expert_id: expert.id,
             project_id: project_id
         },
         success: function (data) {
@@ -312,6 +306,7 @@ $(document).ready(function () {
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
                     dialog.find(".establish-time .time-body").html(data.submission_date);
                     dialog.find(".time-left .time-body").html(data.deadline);
+                    console.log(data);
                     const keys = data.key_words[0].split(",");
                     for (let i = 0; i < keys.length; i++) {
                         dialog.find(".techniques").append(
@@ -321,48 +316,60 @@ $(document).ready(function () {
                         );
                         console.log(keys[i]);
                     }
-                    console.log(data.comments);
-                    var comment_html = "";
-                    const comment = data.comments;
-                    for (var i = comment.length - 1; i > -1; i--) {
-                        if (comment[i].sender_type) {
-                            comment_html = "<div class='my-comment'>" +
-                                "<div class='comment-profile'>" +
-                                "</div>" +
-                                "<div class='comment-body' dir='ltr'>" +
-                                "<span class='comment-tools'>" +
-                                "<i class='fas fa-trash-alt'></i>" +
-                                "<i class='fas fa-reply'></i>" +
-                                "<i class='fas fa-pen'></i>" +
-                                "</span>" +
-                                "<span>" +
-                                comment[i].text +
-                                "</span>" +
-                                "</div>" +
-                                "</div>";
-                        } else {
-                            comment_html = "<div class='your-comment'>" +
-                                "<div class='comment-profile'>" +
-                                "</div>" +
-                                "<div class='comment-body'>" +
-                                "   <span class='comment-tools'>" +
-                                "       <i class='fas fa-reply'></i>" +
-                                "   </span>" +
-                                "   <span>" +
-                                comment[i].text +
-                                "   </span>" +
-                                "</div>" +
-                                "</div>"
-                        }
-                        dialog.find(".comments").append(comment_html);
-                        console.log(comment[i].text);
-                    }
-                    // comment_html += ""
-                    console.log(data);
                     setMajors(data);
                     setValue(data);
                     setTab(data);
-                    getComments(data.expert_messaged[0], data.id);
+                    if (data.status != 0) {
+                        // console.log(data.comments);
+                        // var comment_html = "";
+                        // const comment = data.comments;
+                        // for (var i = comment.length - 1; i > -1; i--) {
+                        //     if (comment[i].sender_type) {
+                        //         comment_html = "<div class='my-comment'>" +
+                        //             "<div class='comment-profile'>" +
+                        //             "</div>" +
+                        //             "<div class='comment-body' dir='ltr'>" +
+                        //             "<span class='comment-tools'>" +
+                        //             "<i class='fas fa-trash-alt'></i>" +
+                        //             "<i class='fas fa-reply'></i>" +
+                        //             "<i class='fas fa-pen'></i>" +
+                        //             "</span>" +
+                        //             "<span>" +
+                        //             comment[i].text +
+                        //             "</span>" +
+                        //             "</div>" +
+                        //             "</div>";
+                        //     } else {
+                        //         comment_html = "<div class='your-comment'>" +
+                        //             "<div class='comment-profile'>" +
+                        //             "</div>" +
+                        //             "<div class='comment-body'>" +
+                        //             "   <span class='comment-tools'>" +
+                        //             "       <i class='fas fa-reply'></i>" +
+                        //             "   </span>" +
+                        //             "   <span>" +
+                        //             comment[i].text +
+                        //             "   </span>" +
+                        //             "</div>" +
+                        //             "</div>"
+                        //     }
+                        //     dialog.find(".comments").append(comment_html);
+                        //     console.log(comment[i].text);
+                        // }
+                        // comment_html += ""
+                        // console.log(data);
+                        console.log("------------");
+                        console.log(data.expert_messaged);
+                        for (let index = 0; index < data.expert_messaged.length; index++) {
+                            const element = data.expert_messaged[index];
+                            getComments(element, data.id);
+                        }
+                        
+                    }
+                    else{
+                        $('.vote').remove();
+                        $('.add-comment').remove();
+                    }
                 },
                 error: function (data) {
 

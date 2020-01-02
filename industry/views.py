@@ -47,29 +47,36 @@ def get_comments_with_expert(request):
             'text': comment.description,
             'sender_type': comment.sender_type
         })
+
 # is called by an ajax request and returns the necessary information to display the project on the front-end
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
+    print(project.pk ,project.project_form)
+    print(project.project_form.required_method)
     json_response = model_to_dict(project.project_form)
     comment_list = []
     if project.expert_messaged.exists():
-        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser,
-                                                        expert_user=project.expert_messaged.first())
-    print('there are', len(comment_list), 'comments')
+        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)
+    print(comment_list)
+    # print('there are', len(comment_list), 'comments')
     json_response['comments'] = []
+    json_response['expert_messaged'] = []
     for comment in comment_list:
-        print('sending', comment.description)
+        expert_temp = {'id': comment.expert_user.id,
+                       'name': comment.expert_user.__str__()
+                    }
+        if expert_temp not in json_response['expert_messaged']:
+            json_response['expert_messaged'].append(expert_temp)
         json_response['comments'].append({
             'id': comment.id,
             'text': comment.description,
             'sender_type': comment.sender_type
         })
-    json_response['expert_messaged'] = []
-    for expert in project.expert_messaged.all():
-        json_response['expert_messaged'].append({
-            'id': expert.id,
-            'name': expert.__str__()
-        })
+    # for expert in project.expert_messaged.all():
+    #     json_response['expert_messaged'].append({
+    #         'id': expert.id,
+    #         'name': expert.__str__()
+    #     })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
         json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
@@ -84,7 +91,32 @@ def show_project_ajax(request):
             json_response['required_technique'].append(tech.__str__())
     except:
         pass
+    json_response['status'] = project.status
     return JsonResponse(json_response)
+
+def GetComment(request):
+    expert_id  = request.GET.get('expert_id')
+    project_id = request.GET.get('project_id')
+    print(expert_id ,project_id)
+    project = get_object_or_404(models.Project ,pk=project_id)
+    expert_comments = models.Comment.objects.filter(sender_type=0)
+    comments = expert_comments.filter(project=project).exclude(industry_user=None)
+    response = []
+    for comment in comments:
+        try:
+            url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
+        except:
+            url = "None"
+        temp = {
+            'pk'           : comment.pk,
+            'text'  : comment.description,
+            'replied_text' : comment.replied_text,
+            'sender_type'  : comment.sender_type,
+            'attachment'   : url
+        }
+        response.append(temp)    
+    data = {'comment' : response}
+    return JsonResponse(data=data)
 
 
 def accept_project_ajax(request):
@@ -212,8 +244,10 @@ class NewProject(View):
         return render(request, 'industry/newProject.html', context={'form': forms.ProjectForm()})
 
     def post(self, request):
+        print(request.POST)
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
+            print(form.cleaned_data)
             project_title_persian = form.cleaned_data['project_title_persian']
             project_title_english = form.cleaned_data['project_title_english']
             research_methodology = form.cleaned_data['research_methodology']
@@ -225,6 +259,7 @@ class NewProject(View):
             required_budget = form.cleaned_data['required_budget']
             project_phase = form.cleaned_data['project_phase']
             # required_technique = form.cleaned_data['required_technique']
+            required_method = form.cleaned_data['required_method']
             progress_profitability = form.cleaned_data['progress_profitability']
             potential_problems = form.cleaned_data['potential_problems']
             new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
@@ -233,7 +268,7 @@ class NewProject(View):
                                                   main_problem_and_importance=main_problem_and_importance,
                                                   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
-                                                  # required_technique=required_technique,
+                                                  required_method=required_method,
                                                   approach=approach,
                                                   policy=policy,
                                                   required_budget=required_budget,
@@ -242,6 +277,8 @@ class NewProject(View):
                                                   potential_problems=potential_problems,
                                                   )
             key_words = form.cleaned_data['key_words'].split(',')
+            print("------------")
+            print(new_project_form.required_method)
             new_project_form.save()
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
