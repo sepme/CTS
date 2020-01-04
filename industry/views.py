@@ -51,15 +51,15 @@ def get_comments_with_expert(request):
 # is called by an ajax request and returns the necessary information to display the project on the front-end
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
-    print(project.pk ,project.project_form)
-    print(project.project_form.required_method)
     json_response = model_to_dict(project.project_form)
     comment_list = []
-    if project.expert_messaged.exists():
-        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)
-    print(comment_list)
+    all_comment = models.Comment.objects.filter(project=project)
+    comment_list = all_comment.exclude(industry_user=None)
+    # if project.expert_messaged.exists():
+    #     comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)
     # print('there are', len(comment_list), 'comments')
     json_response['comments'] = []
+    json_response['industry_comment'] = []
     json_response['expert_messaged'] = []
     for comment in comment_list:
         expert_temp = {'id': comment.expert_user.id,
@@ -67,11 +67,25 @@ def show_project_ajax(request):
                     }
         if expert_temp not in json_response['expert_messaged']:
             json_response['expert_messaged'].append(expert_temp)
+        if comment.sender_type == 1:
+            try:
+                url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
+            except:
+                url = "None"
+            temp = {
+                'pk'           : comment.pk,
+                'description'  : comment.description,
+                'replied_text' : comment.replied_text,
+                'sender_type'  : comment.sender_type,
+                'attachment'   : url
+            }
+            json_response['industry_comment'].append(temp)
         json_response['comments'].append({
             'id': comment.id,
             'text': comment.description,
             'sender_type': comment.sender_type
         })
+    print(json_response['industry_comment'])
     # for expert in project.expert_messaged.all():
     #     json_response['expert_messaged'].append({
     #         'id': expert.id,
@@ -97,7 +111,6 @@ def show_project_ajax(request):
 def GetComment(request):
     expert_id  = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
-    print(expert_id ,project_id)
     project = get_object_or_404(models.Project ,pk=project_id)
     expert_comments = models.Comment.objects.filter(sender_type=0)
     comments = expert_comments.filter(project=project).exclude(industry_user=None)
@@ -126,15 +139,24 @@ def accept_project_ajax(request):
 
 # this function is called when the industry user comments on a project
 def submit_comment(request):
-    description = request.GET.get('description')
-    project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
-    # expert_user = expert_models.ExpertUser.objects.all().filter(id=request.GET.get('expert_id')).first()
-    expert_user = expert_models.ExpertUser.objects.all().first()
-    if not project.expert_messaged.filter(id=request.GET.get('expert_id')).exists():
-        project.expert_messaged.add(expert_user )
-    Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
-                           sender_type=1, expert_user=expert_user)
-    return JsonResponse({})
+    form = forms.CommentForm(request.POST ,request.FILES)
+    if form.is_valid():
+        # expert_user = expert_models.ExpertUser.objects.all().filter(id=request.GET.get('expert_id')).first()
+        # if not project.expert_messaged.filter(id=request.POST['expert_id']).exists():
+        #     project.expert_messaged.add(expert_user )    
+        project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
+        expert_user = expert_models.ExpertUser.objects.all().first()
+        description = form.cleaned_data['description']
+        attachment = form.cleaned_data['attachment']
+        new_comment = Comment.objects.create(project=project,
+                                             industry_user=request.user.industryuser,
+                                             sender_type=1,
+                                             expert_user=expert_user,
+                                             description=description,
+                                             attachment=attachment)
+        new_comment.save()
+        return JsonResponse({})
+    return JsonResponse(data=form.errors ,status=400)
 
 # main page for an industry user
 class Index(generic.TemplateView):
@@ -244,10 +266,8 @@ class NewProject(View):
         return render(request, 'industry/newProject.html', context={'form': forms.ProjectForm()})
 
     def post(self, request):
-        print(request.POST)
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
             project_title_persian = form.cleaned_data['project_title_persian']
             project_title_english = form.cleaned_data['project_title_english']
             research_methodology = form.cleaned_data['research_methodology']
@@ -277,8 +297,6 @@ class NewProject(View):
                                                   potential_problems=potential_problems,
                                                   )
             key_words = form.cleaned_data['key_words'].split(',')
-            print("------------")
-            print(new_project_form.required_method)
             new_project_form.save()
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])

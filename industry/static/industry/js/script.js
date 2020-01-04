@@ -152,6 +152,33 @@ function setTab(data) {
         "</a>";
 }
 
+function setIndustryComment(data){    
+    let comments_code = "";
+    for (let i = 0; i < data.length; i++) {
+        comments_code += "<div class='my-comment'>" +
+                         "<div class='comment-profile'>" +
+                         "</div>" +
+                         "<div class='comment-body'>" +
+                         "<span class='comment-tools'>" +
+                         "<i class='fas fa-pen'>" +
+                         "</i>" +
+                         "<i class='fas fa-reply'><div class='reply'></div>" +
+                         "</i>";
+        if (data[i].attachment !== "None") {
+            comments_code += "<a href='/" +
+                data[i].attachment +
+                "'><i class='fas fa-paperclip'></i></a>";
+        }
+        comments_code += "</span>" +
+                         "<span>" +
+                         data[i].description +
+                         "</span>" +
+                         "</div>" +
+                         "</div>";
+    }
+    $('.comments').html(comments_code);
+}
+
 function setComment(data) {
     data = data['comment'];
     let comments_code = "";
@@ -314,7 +341,6 @@ $(document).ready(function () {
                             keys[i]
                             + "</span>"
                         );
-                        console.log(keys[i]);
                     }
                     setMajors(data);
                     setValue(data);
@@ -358,13 +384,15 @@ $(document).ready(function () {
                         // }
                         // comment_html += ""
                         // console.log(data);
-                        console.log("------------");
-                        console.log(data.expert_messaged);
-                        for (let index = 0; index < data.expert_messaged.length; index++) {
-                            const element = data.expert_messaged[index];
-                            getComments(element, data.id);
-                        }
-                        
+                        // for (let index = 0; index < data.expert_messaged.length; index++) {
+                        //     const element = data.expert_messaged[index];
+                        //     getComments(element, data.id);
+                        // }
+                        setIndustryComment(data.industry_comment);
+                        // for (let index = 0; index < data.industry_comment.length; index++) {
+                        //     const element = data.industry_comment[index];
+                        //     getComments(element, data.id);
+                        // }
                     }
                     else{
                         $('.vote').remove();
@@ -626,17 +654,16 @@ $(document).ready(function () {
                 event.preventDefault();
                 comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
                 comment_form.find("label").addClass("progress-cursor");
-                let description = $(this).closest(".col-lg-12").find("#description").val();
-                let id = $(this).closest(".showProject").attr("id");
+                $("#project_id").attr('value', $(".show-project").attr("id"));
                 let thisUrl = "/industry/submit_comment/";
-                let attachment = "";
-                console.log(description);
-                console.log(id);
+                var data = new FormData(comment_form.get(0));                
                 $.ajax({
-                    method: 'GET',
+                    method: 'POST',
                     url: thisUrl,
-                    data: {project_id: id, description: description, attachment: attachment},
+                    data: data,
                     type: "ajax",
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                             .prop("disabled", false);

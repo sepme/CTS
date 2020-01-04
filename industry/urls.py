@@ -13,5 +13,5 @@ urlpatterns = [
     path('newProject/', views.NewProject.as_view(), name="newProject"),
     path('project_list/', views.ProjectListView.as_view(), name='project_list'),
     path('messages/', chamran_admin_views.MessagesView.as_view(), name="messages"),
-    path('get_comment/', views.GetComment, name="messages"),
+    path('get_comment/', views.GetComment),
 ]

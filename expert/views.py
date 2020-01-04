@@ -327,14 +327,15 @@ def show_project_view(request):
         'policy': project_form.policy,
         'potential_problems': project_form.potential_problems,
         'required_budget': project_form.required_budget,
+        'required_method': project_form.required_method,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
-    data['required_technique']=[]
-    for tech in project.project_form.required_technique:
-        data['required_technique'].append(tech.__str__())
+    # data['required_technique']=[]
+    # for tech in project.project_form.required_technique:
+    #     data['required_technique'].append(tech.__str__())
     return JsonResponse(data)
 
 

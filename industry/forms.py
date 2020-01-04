@@ -227,3 +227,17 @@ class ProjectForm(forms.Form):
         data = self.cleaned_data["required_method"]
         print(data)
         return data
+    
+class CommentForm(forms.Form):
+    description = forms.CharField(widget=forms.Textarea ,empty_value="None")
+    attachment = forms.FileField(required=False)
+
+    def clean_description(self):
+        data = self.cleaned_data["description"]
+        if data == "None":
+            raise ValidationError(_("نظر خود را لطفا بنوبسید."))
+        return data
+    
+    def clean_attachment(self):
+        data = self.cleaned_data["attachment"]
+        return data

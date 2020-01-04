@@ -617,7 +617,6 @@ class CommentForm(forms.Form):
     
     def clean_attachment(self):
         data = self.cleaned_data["attachment"]
-        print("attachment",data)
         return data
 
 class ApplyForm(forms.Form):
