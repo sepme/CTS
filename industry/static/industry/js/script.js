@@ -145,11 +145,18 @@ function setValue(data) {
 }
 
 function setTab(data) {
-    let tab = "<a class='nav-link active' id='v-pills-home-tab' data-toggle='pill'" +
+    for(let i = 0;i<data.expert_messaged.length;i++) {
+        let tab = "<a class='nav-link' data-toggle='pill'" +
         "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
         "" +
-        "نام_استاد" +
+        data.expert_messaged[i].name +
         "</a>";
+        $(".comment-tabs div").append(tab);
+        $(".comment-tabs .nav-link").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
+        if( i === 0) {
+            $(".comment-tabs div .nav-link").addClass("active");
+        }
+    }
 }
 
 function setIndustryComment(data){    
@@ -180,7 +187,7 @@ function setIndustryComment(data){
 }
 
 function setComment(data) {
-    data = data['comment'];
+    let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
@@ -195,7 +202,7 @@ function setComment(data) {
                 "<i class='fas fa-reply'><div class='reply'></div>" +
                 "</i>";
             if (data[i].attachment !== "None") {
-                datas_code += "<a href='/" +
+                comments_code += "<a href='/" +
                     data[i].attachment +
                     "'><i class='fas fa-paperclip'></i></a>";
             }
@@ -205,7 +212,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else if (data[i].sender_type === 0) { //expert
+        } else if (data[i].sender_type === 0  && data[i].id === id) { //expert
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -226,7 +233,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else { //system            
+        } else if (0) { //system
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -345,7 +352,7 @@ $(document).ready(function () {
                     setMajors(data);
                     setValue(data);
                     setTab(data);
-                    if (data.status != 0) {
+                    if (data.status !== 0) {
                         // console.log(data.comments);
                         // var comment_html = "";
                         // const comment = data.comments;
@@ -388,7 +395,7 @@ $(document).ready(function () {
                         //     const element = data.expert_messaged[index];
                         //     getComments(element, data.id);
                         // }
-                        setIndustryComment(data.industry_comment);
+                        setComment(data.comments);
                         // for (let index = 0; index < data.industry_comment.length; index++) {
                         //     const element = data.industry_comment[index];
                         //     getComments(element, data.id);
