@@ -220,7 +220,9 @@ class ProjectHistory(models.Model):
 
 class ExpertEvaluateIndustry(models.Model):
     industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
-    expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    project  = models.ForeignKey(Project ,on_delete=models.CASCADE)
+    expert = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    phase = models.IntegerField(verbose_name="فاز شماره : ")
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -255,3 +257,6 @@ class ExpertEvaluateIndustry(models.Model):
 
         ava = float(sum / 9)
         return ava
+
+    def __str__(self):
+        return str(self.industry) + " evaluate " + str(self.expert.expertform)

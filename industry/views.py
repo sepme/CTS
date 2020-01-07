@@ -55,42 +55,14 @@ def show_project_ajax(request):
     comment_list = []
     all_comment = models.Comment.objects.filter(project=project)
     comment_list = all_comment.exclude(industry_user=None)
-    # if project.expert_messaged.exists():
-    #     comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)
-    # print('there are', len(comment_list), 'comments')
-    json_response['comments'] = []
-    json_response['industry_comment'] = []
+    if project.expert_messaged.exists():
+        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)    
     json_response['expert_messaged'] = []
-    for comment in comment_list:
-        expert_temp = {'id': comment.expert_user.id,
-                       'name': comment.expert_user.__str__()
-                    }
-        if expert_temp not in json_response['expert_messaged']:
-            json_response['expert_messaged'].append(expert_temp)
-        if comment.sender_type == 1:
-            try:
-                url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
-            except:
-                url = "None"
-            temp = {
-                'pk'           : comment.pk,
-                'description'  : comment.description,
-                'replied_text' : comment.replied_text,
-                'sender_type'  : comment.sender_type,
-                'attachment'   : url
-            }
-            json_response['industry_comment'].append(temp)
-        json_response['comments'].append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type
+    for expert in project.expert_messaged.all():
+        json_response['expert_messaged'].append({
+            'id': expert.id,
+            'name': expert.expertform.__str__()
         })
-    print(json_response['industry_comment'])
-    # for expert in project.expert_messaged.all():
-    #     json_response['expert_messaged'].append({
-    #         'id': expert.id,
-    #         'name': expert.__str__()
-    #     })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
         json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
@@ -105,7 +77,18 @@ def show_project_ajax(request):
             json_response['required_technique'].append(tech.__str__())
     except:
         pass
+    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
     json_response['status'] = project.status
+    print(evaluation_history)
+    if datetime.date.today() > project.date_finished:
+        if len(evaluation_history.filter(phase=3)) == 0:
+            json_response['vote'] = "true"
+    elif datetime.date.today() > project.date_phase_two_finished:
+        if len(evaluation_history.filter(phase=2)) == 0:
+            json_response['vote'] = "true"
+    elif datetime.date.today() > project.date_phase_one_finished:
+        if len(evaluation_history.filter(phase=1)) == 0:
+            json_response['vote'] = "true"
     return JsonResponse(json_response)
 
 def GetComment(request):

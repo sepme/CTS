@@ -216,7 +216,7 @@ class ResearcherHistory(models.Model):
 
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
-    evaluator = models.OneToOneField("expert.ExpertUser", on_delete=models.CASCADE, null=True, blank=True)
+    evaluator = models.ForeignKey("expert.ExpertUser", on_delete=models.CASCADE, null=True, blank=True)
     project_title = models.CharField(max_length=128, verbose_name="عنوان پروژه")
     phase = models.IntegerField(verbose_name="فاز شماره : ")
 

@@ -340,19 +340,21 @@ $(document).ready(function () {
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
                     dialog.find(".establish-time .time-body").html(data.submission_date);
                     dialog.find(".time-left .time-body").html(data.deadline);
-                    console.log(data);
-                    const keys = data.key_words[0].split(",");
-                    for (let i = 0; i < keys.length; i++) {
+                    for (let i = 0; i < data.key_words.length; i++) {
                         dialog.find(".techniques").append(
                             "<span class='border-span'>" +
-                            keys[i]
+                            data.key_words[i]
                             + "</span>"
                         );
                     }
+                    $('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
                     setTab(data);
                     if (data.status !== 0) {
+                        if (data.vote === "false") {
+                            $(".vote").remove();
+                        }
                         // console.log(data.comments);
                         // var comment_html = "";
                         // const comment = data.comments;
@@ -395,13 +397,13 @@ $(document).ready(function () {
                         //     const element = data.expert_messaged[index];
                         //     getComments(element, data.id);
                         // }
-                        setComment(data.comments);
+                        // setComment(data.comments);
                         // for (let index = 0; index < data.industry_comment.length; index++) {
                         //     const element = data.industry_comment[index];
                         //     getComments(element, data.id);
                         // }
                     }
-                    else{
+                    else{                        
                         $('.vote').remove();
                         $('.add-comment').remove();
                     }

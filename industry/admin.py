@@ -9,5 +9,6 @@ from . import models
 @admin.register(models.Keyword)
 @admin.register(models.IndustryForm)
 @admin.register(models.IndustryUser)
+@admin.register(models.ExpertEvaluateIndustry)
 class IndustryAdmin(admin.ModelAdmin):
     pass
