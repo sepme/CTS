@@ -572,7 +572,7 @@ def ApplyProject(request):
                                                 most_hours_offered=most_hour)
         apply_project.save()
         comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
-                          sender_type=3,
+                          sender_type="system",
                           project=project,
                           researcher_user=request.user.researcheruser)
         comment.save()
@@ -652,7 +652,7 @@ def AddComment(request):
                          ,project=project
                          ,researcher_user=request.user.researcheruser
                          ,expert_user=project.expert_accepted
-                         ,sender_type=2)
+                         ,sender_type="researcher")
         comment.save()
         if attachment is not None:
             data = {

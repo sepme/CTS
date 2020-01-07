@@ -473,7 +473,7 @@ def CommentForResearcher(request):
                           , project=project
                           , researcher_user=researcher
                           , expert_user=request.user.expertuser
-                          , sender_type=0)
+                          , sender_type="expert")
         comment.save()
         print(Project.objects.filter(id=request.POST['project_id']))
         data = {
@@ -528,6 +528,6 @@ def CommentForIndustry(request):
     if not project.expert_messaged.filter(id=request.user.expertuser.id).exists():
         project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
         project.save()
-    Comment.objects.create(sender_type=0, project=project, expert_user=request.user.expertuser,
+    Comment.objects.create(sender_type="expert", project=project, expert_user=request.user.expertuser,
                            industry_user=project.industry_creator, description=request.GET.get('description'))
     return JsonResponse({})

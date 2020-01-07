@@ -33,17 +33,17 @@ function setResources(data) {
         "</div>" +
         "</div>";
     // if (data.required_technique.length != 0) {
-        resources += "<div>" +
-            "<div class='question'>" +
-            "<span class='question-mark'>" +
-            "<i class='far fa-question-circle'></i>" +
-            "</span>" +
-            "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
-            "</div>" +
-            "<div class='answer'>" +
-            data.required_method +
-            "</div>" +
-            "</div>";
+    resources += "<div>" +
+        "<div class='question'>" +
+        "<span class='question-mark'>" +
+        "<i class='far fa-question-circle'></i>" +
+        "</span>" +
+        "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
+        "</div>" +
+        "<div class='answer'>" +
+        data.required_method +
+        "</div>" +
+        "</div>";
     // }
     resources += "<div>" +
         "<div class='question'>" +
@@ -145,53 +145,58 @@ function setValue(data) {
 }
 
 function setTab(data) {
-    for(let i = 0;i<data.expert_messaged.length;i++) {
+    for (let i = 0; i < data.expert_messaged.length; i++) {
         let tab = "<a class='nav-link' data-toggle='pill'" +
-        "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
-        "" +
-        data.expert_messaged[i].name +
-        "</a>";
+            "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
+            "" +
+            data.expert_messaged[i].name +
+            "</a>";
         $(".comment-tabs div").append(tab);
-        $(".comment-tabs .nav-link").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
-        if( i === 0) {
+        $(".comment-tabs .nav-link:last-child").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
+        if (i === 0) {
             $(".comment-tabs div .nav-link").addClass("active");
         }
     }
+    getComments($(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""), data.id);
+    $(".comment-tabs .nav-link").click(function () {
+        getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
+    });
 }
 
-function setIndustryComment(data){    
+function setIndustryComment(data) {
     let comments_code = "";
     for (let i = 0; i < data.length; i++) {
         comments_code += "<div class='my-comment'>" +
-                         "<div class='comment-profile'>" +
-                         "</div>" +
-                         "<div class='comment-body'>" +
-                         "<span class='comment-tools'>" +
-                         "<i class='fas fa-pen'>" +
-                         "</i>" +
-                         "<i class='fas fa-reply'><div class='reply'></div>" +
-                         "</i>";
+            "<div class='comment-profile'>" +
+            "</div>" +
+            "<div class='comment-body'>" +
+            "<span class='comment-tools'>" +
+            "<i class='fas fa-pen'>" +
+            "</i>" +
+            "<i class='fas fa-reply'><div class='reply'></div>" +
+            "</i>";
         if (data[i].attachment !== "None") {
             comments_code += "<a href='/" +
                 data[i].attachment +
                 "'><i class='fas fa-paperclip'></i></a>";
         }
         comments_code += "</span>" +
-                         "<span>" +
-                         data[i].description +
-                         "</span>" +
-                         "</div>" +
-                         "</div>";
+            "<span>" +
+            data[i].description +
+            "</span>" +
+            "</div>" +
+            "</div>";
     }
     $('.comments').html(comments_code);
 }
 
 function setComment(data) {
     let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    data = data.comment;
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === 1) { //industry
+        if (data[i].sender_type === "industry") { //industry
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
@@ -212,7 +217,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else if (data[i].sender_type === 0  && data[i].id === id) { //expert
+        } else if (data[i].sender_type === "expert") { //expert
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -233,7 +238,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else if (0) { //system
+        } else { //system
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -300,16 +305,18 @@ function newItem_label() {
     tag_input_label("id_key_words");
 }
 
-function getComments(expert, project_id) {
+function getComments(expert_id, project_id) {
     $.ajax({
         method: 'GET',
         url: 'get_comment/',
         dataType: 'json',
         data: {
-            expert_id: expert.id,
+            expert_id: expert_id,
             project_id: project_id
         },
         success: function (data) {
+            console.log("getComment successful\nid: " + expert_id + "\nproject: " + project_id + "\n");
+            console.log(data);
             setComment(data);
         },
         error: function (data) {
@@ -350,60 +357,12 @@ $(document).ready(function () {
                     $('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
-                    setTab(data);
                     if (data.status !== 0) {
                         if (data.vote === "false") {
                             $(".vote").remove();
                         }
-                        // console.log(data.comments);
-                        // var comment_html = "";
-                        // const comment = data.comments;
-                        // for (var i = comment.length - 1; i > -1; i--) {
-                        //     if (comment[i].sender_type) {
-                        //         comment_html = "<div class='my-comment'>" +
-                        //             "<div class='comment-profile'>" +
-                        //             "</div>" +
-                        //             "<div class='comment-body' dir='ltr'>" +
-                        //             "<span class='comment-tools'>" +
-                        //             "<i class='fas fa-trash-alt'></i>" +
-                        //             "<i class='fas fa-reply'></i>" +
-                        //             "<i class='fas fa-pen'></i>" +
-                        //             "</span>" +
-                        //             "<span>" +
-                        //             comment[i].text +
-                        //             "</span>" +
-                        //             "</div>" +
-                        //             "</div>";
-                        //     } else {
-                        //         comment_html = "<div class='your-comment'>" +
-                        //             "<div class='comment-profile'>" +
-                        //             "</div>" +
-                        //             "<div class='comment-body'>" +
-                        //             "   <span class='comment-tools'>" +
-                        //             "       <i class='fas fa-reply'></i>" +
-                        //             "   </span>" +
-                        //             "   <span>" +
-                        //             comment[i].text +
-                        //             "   </span>" +
-                        //             "</div>" +
-                        //             "</div>"
-                        //     }
-                        //     dialog.find(".comments").append(comment_html);
-                        //     console.log(comment[i].text);
-                        // }
-                        // comment_html += ""
-                        // console.log(data);
-                        // for (let index = 0; index < data.expert_messaged.length; index++) {
-                        //     const element = data.expert_messaged[index];
-                        //     getComments(element, data.id);
-                        // }
-                        // setComment(data.comments);
-                        // for (let index = 0; index < data.industry_comment.length; index++) {
-                        //     const element = data.industry_comment[index];
-                        //     getComments(element, data.id);
-                        // }
-                    }
-                    else{                        
+                        setTab(data);
+                    } else {
                         $('.vote').remove();
                         $('.add-comment').remove();
                     }
@@ -664,8 +623,9 @@ $(document).ready(function () {
                 comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
                 comment_form.find("label").addClass("progress-cursor");
                 $("#project_id").attr('value', $(".show-project").attr("id"));
+                $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
                 let thisUrl = "/industry/submit_comment/";
-                var data = new FormData(comment_form.get(0));                
+                let data = new FormData(comment_form.get(0));
                 $.ajax({
                     method: 'POST',
                     url: thisUrl,

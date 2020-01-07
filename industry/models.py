@@ -179,13 +179,13 @@ def upload_comment(instance, file_name):
 class Comment(models.Model):
     description = models.TextField(verbose_name="متن")
     SENDER = (
-        (0, 'استاد'),
-        (1, 'صنعت'),
-        (2, 'پژوهشگر'),
-        (3, 'سیستم'),
+        ("expert", 'استاد'),
+        ("industry", 'صنعت'),
+        ("researcher", 'پژوهشگر'),
+        ("system", 'سیستم'),
     )
     replied_text = models.CharField(max_length=150, blank=True, null=True)
-    sender_type = models.IntegerField(choices=SENDER)
+    sender_type = models.CharField(max_length=10 ,choices=SENDER)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, blank=True, null=True)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
@@ -197,7 +197,7 @@ class Comment(models.Model):
         return self.description
     
     def __str__(self):
-        return self.SENDER[self.sender_type][1]
+        return self.sender_type
 
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128)

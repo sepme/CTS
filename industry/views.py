@@ -52,11 +52,6 @@ def get_comments_with_expert(request):
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
-    comment_list = []
-    all_comment = models.Comment.objects.filter(project=project)
-    comment_list = all_comment.exclude(industry_user=None)
-    if project.expert_messaged.exists():
-        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser)    
     json_response['expert_messaged'] = []
     for expert in project.expert_messaged.all():
         json_response['expert_messaged'].append({
@@ -79,7 +74,6 @@ def show_project_ajax(request):
         pass
     evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
     json_response['status'] = project.status
-    print(evaluation_history)
     if datetime.date.today() > project.date_finished:
         if len(evaluation_history.filter(phase=3)) == 0:
             json_response['vote'] = "true"
@@ -95,8 +89,9 @@ def GetComment(request):
     expert_id  = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
     project = get_object_or_404(models.Project ,pk=project_id)
-    expert_comments = models.Comment.objects.filter(sender_type=0)
-    comments = expert_comments.filter(project=project).exclude(industry_user=None)
+    expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    all_comments = models.Comment.objects.filter(project=project)
+    comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)    
     response = []
     for comment in comments:
         try:
@@ -133,7 +128,7 @@ def submit_comment(request):
         attachment = form.cleaned_data['attachment']
         new_comment = Comment.objects.create(project=project,
                                              industry_user=request.user.industryuser,
-                                             sender_type=1,
+                                             sender_type="industry",
                                              expert_user=expert_user,
                                              description=description,
                                              attachment=attachment)
