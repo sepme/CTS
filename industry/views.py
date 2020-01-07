@@ -119,11 +119,8 @@ def accept_project_ajax(request):
 def submit_comment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
     if form.is_valid():
-        # expert_user = expert_models.ExpertUser.objects.all().filter(id=request.GET.get('expert_id')).first()
-        # if not project.expert_messaged.filter(id=request.POST['expert_id']).exists():
-        #     project.expert_messaged.add(expert_user )    
         project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
-        expert_user = expert_models.ExpertUser.objects.all().first()
+        expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
         description = form.cleaned_data['description']
         attachment = form.cleaned_data['attachment']
         new_comment = Comment.objects.create(project=project,
@@ -133,7 +130,19 @@ def submit_comment(request):
                                              description=description,
                                              attachment=attachment)
         new_comment.save()
-        return JsonResponse({})
+        if attachment is not None:
+            data = {
+                'success' : 'successful',
+                'attachment' : new_comment.attachment.url[new_comment.attachment.url.find('media' ,2):],
+                'description':description,
+            }
+        else:
+            data = {
+                'success' : 'successful',
+                'attachment' : "None",
+                'description': description,
+            }
+        return JsonResponse(data=data)
     return JsonResponse(data=form.errors ,status=400)
 
 # main page for an industry user

@@ -446,10 +446,10 @@ function dialog_comment_init() {
 
         $("div.attachment").append("<div class='attach'>" +
             "<span>" + "نام فایل" + "</span>" +
-            "<div class='progress'>" +
-            "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
-            "</div>" +
             "</div>");
+            // "<div class='progress'>" +
+            // "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
+            // "</div>" +
         $("div.attachment > div").last().css("bottom", bottom_position + 30);
     });
     // replay to a comment

@@ -315,14 +315,51 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            console.log("getComment successful\nid: " + expert_id + "\nproject: " + project_id + "\n");
-            console.log(data);
             setComment(data);
         },
         error: function (data) {
 
         },
     });
+}
+
+function addComment(data){
+    let new_comment = "<div class='my-comment'>" +
+                        "<div class='comment-profile'>" +
+                        "</div>" +
+                        "<div class='comment-body'>" +
+                        "<span class='comment-tools'>" +
+                        "<i class='fas fa-pen'>" +
+                        "</i>" +
+                        "<i class='fas fa-reply'><div class='reply'></div>" +
+                        "</i>";
+                        if (data.attachment !== "None") {
+                            new_comment += "<a href='/" +
+                                             data.attachment +
+                                             "'><i class='fas fa-paperclip'></i></a>" ;
+                        }
+                        new_comment += "</span>" +
+                            "<span>" +
+                            data.description +
+                            "</span>" +
+                            "</div>" +
+                            "</div>";
+    // let new_comment = "<div class='my-comment'>" +
+    //             "<div class='comment-body' dir='ltr'>" +
+    //             "<span class='comment-tools'>";
+    //             if (data.attachment !== "None") {
+    //                 new_comment += "<a href='/" +
+    //                                 data.attachment +
+    //                                 "'><i class='fas fa-paperclip'></i></a>" ;   
+    //             }
+    //         new_comment += "</span>" +
+    //             "<span>" +
+    //             data.description +
+    //             "</span>" +
+    //             "</div>" +
+    //             "</div>";
+    console.log(new_comment);
+    return new_comment;
 }
 
 $(document).ready(function () {
@@ -634,30 +671,12 @@ $(document).ready(function () {
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        console.log(data);
                         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                             .prop("disabled", false);
                         comment_form.find("label").removeClass("progress-cursor");
                         comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                        let comment_code = "<div class='my-comment'>" +
-                            "<div class='comment-profile'>" +
-                            "</div>" +
-                            "<div class='comment-body'>" +
-                            "<span class='comment-tools'>" +
-                            "<i class='fas fa-pen'>" +
-                            "</i>" +
-                            "<i class='fas fa-reply'><div class='reply'></div>" +
-                            "</i>";
-                        // if (data[i].attachment !== "None") {
-                        //     comment_code += "<a href='/" +
-                        //                      data[i].attachment +
-                        //                      "'><i class='fas fa-paperclip'></i></a>" ;
-                        // }
-                        comment_code += "</span>" +
-                            "<span>" +
-                            description +
-                            "</span>" +
-                            "</div>" +
-                            "</div>";
+                        comment_code = addComment(data);
                         $(".project-comment-innerDiv").find(".comments").append(comment_code);
                         iziToast.success({
                             rtl: true,
