@@ -662,8 +662,9 @@ $(document).ready(function () {
                 comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
                 comment_form.find("label").addClass("progress-cursor");
                 $("#project_id").attr('value', $(".show-project").attr("id"));
+                $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
                 let thisUrl = "/industry/submit_comment/";
-                var data = new FormData(comment_form.get(0));                
+                let data = new FormData(comment_form.get(0));
                 $.ajax({
                     method: 'POST',
                     url: thisUrl,
