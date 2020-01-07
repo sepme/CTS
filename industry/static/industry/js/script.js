@@ -152,11 +152,15 @@ function setTab(data) {
         data.expert_messaged[i].name +
         "</a>";
         $(".comment-tabs div").append(tab);
-        $(".comment-tabs .nav-link").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
+        $(".comment-tabs .nav-link:last-child").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
         if( i === 0) {
             $(".comment-tabs div .nav-link").addClass("active");
         }
     }
+    getComments($(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""), data.id);
+    $(".comment-tabs .nav-link").click(function () {
+        getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
+    });
 }
 
 function setIndustryComment(data){    
@@ -300,16 +304,17 @@ function newItem_label() {
     tag_input_label("id_key_words");
 }
 
-function getComments(expert, project_id) {
+function getComments(expert_id, project_id) {
     $.ajax({
         method: 'GET',
         url: 'get_comment/',
         dataType: 'json',
         data: {
-            expert_id: expert.id,
+            expert_id: expert_id,
             project_id: project_id
         },
         success: function (data) {
+            console.log("getComment successful\nid: " + expert_id +"\nproject: "+ project_id);
             setComment(data);
         },
         error: function (data) {
@@ -351,7 +356,6 @@ $(document).ready(function () {
                     }
                     setMajors(data);
                     setValue(data);
-                    setTab(data);
                     if (data.status !== 0) {
                         // console.log(data.comments);
                         // var comment_html = "";
@@ -395,7 +399,7 @@ $(document).ready(function () {
                         //     const element = data.expert_messaged[index];
                         //     getComments(element, data.id);
                         // }
-                        setComment(data.comments);
+                        setTab(data);
                         // for (let index = 0; index < data.industry_comment.length; index++) {
                         //     const element = data.industry_comment[index];
                         //     getComments(element, data.id);

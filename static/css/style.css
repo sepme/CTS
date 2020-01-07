@@ -45,6 +45,12 @@ body {
     overflow-y: hidden;
 }
 
+body.notFound {
+    background-color: #FFFFFF;
+    color: #0e1e2b;
+    text-align: center;
+}
+
 #loading {
     position: absolute;
     top: 50%;
@@ -1841,7 +1847,20 @@ span.title-back {
 .refuse-btn {
     background-color: #ff4545;
 }
+
 .div-info {
     font-size: 11px;
     color: #ff4545;
+}
+
+.logo-404 {
+    width: 100%;
+    text-align: center;
+}
+
+.logo-404 img {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    height: 70vh;
 }
