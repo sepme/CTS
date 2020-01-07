@@ -220,9 +220,9 @@ class ProjectHistory(models.Model):
 
 class ExpertEvaluateIndustry(models.Model):
     industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
-    project  = models.ForeignKey(Project ,on_delete=models.CASCADE)
+    project  = models.ForeignKey(Project ,on_delete=models.CASCADE ,null=True)
     expert = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
-    phase = models.IntegerField(verbose_name="فاز شماره : ")
+    phase = models.IntegerField(verbose_name="فاز شماره : " ,null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
