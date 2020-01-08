@@ -322,18 +322,26 @@ class Technique(generic.TemplateView):
         return context
 
 def ShowTechnique(request):
-    data = {
-        'molecular_biology'    : list(models.Technique.objects.filter(technique_type='molecular_biology').values_list('technique_title' ,flat=True)),
-        'immunology'           : list(models.Technique.objects.filter(technique_type='immunology').values_list('technique_title' ,flat=True)),
-        'imaging'              : list(models.Technique.objects.filter(technique_type='imaging').values_list('technique_title' ,flat=True)),
-        'histology'            : list(models.Technique.objects.filter(technique_type='histology').values_list('technique_title' ,flat=True)),
-        'general_lab'          : list(models.Technique.objects.filter(technique_type='general_lab').values_list('technique_title' ,flat=True)),
-        'animal_lab'           : list(models.Technique.objects.filter(technique_type='animal_lab').values_list('technique_title' ,flat=True)),
-        'lab_safety'           : list(models.Technique.objects.filter(technique_type='lab_safety').values_list('technique_title' ,flat=True)),
-        'biochemistry'         : list(models.Technique.objects.filter(technique_type='biochemistry').values_list('technique_title' ,flat=True)),
-        'cellular_biology'     : list(models.Technique.objects.filter(technique_type='cellular_biology').values_list('technique_title' ,flat=True)),
-        'research_methodology' : list(models.Technique.objects.filter(technique_type='research_methodology').values_list('technique_title' ,flat=True)),
-    }
+    TYPE = (
+        'molecular_biology',
+        'immunology',
+        'imaging', 
+        'histology', 
+        'general_lab',
+        'animal_lab',
+        'lab_safety',
+        'biochemistry', 
+        'cellular_biology',
+        'research_methodology',
+    )
+    query = []
+    for tp in TYPE:
+        query.append(list(models.Technique.objects.filter(technique_type=tp).values_list('technique_title' ,flat=True)))
+        query[-1].append(tp)
+    data = {}
+    for q in query:
+        if len(q) > 1:
+            data[q[-1]] = q[:-1]
     return JsonResponse(data=data)
 
 def AddTechnique(request):
