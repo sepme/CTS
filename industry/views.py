@@ -74,6 +74,7 @@ def show_project_ajax(request):
         pass
     evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
     json_response['status'] = project.status
+    json_response['vote'] = "false"
     if datetime.date.today() > project.date_finished:
         if len(evaluation_history.filter(phase=3)) == 0:
             json_response['vote'] = "true"

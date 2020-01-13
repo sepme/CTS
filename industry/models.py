@@ -1,4 +1,7 @@
 import os
+import datetime
+from dateutil.relativedelta import relativedelta
+
 from ChamranTeamSite import settings
 # from PIL import Image
 from django.db import models
@@ -167,6 +170,18 @@ class Project(models.Model):
     def get_comments(self):
         project_comments = Comment.objects.all().filter(project=self)
         return project_comments
+
+    @property
+    def time_left(self):
+        delta = relativedelta(self.date_finished, datetime.date.today())
+        if delta.years != 0:
+            return str(delta.years) + ' سال'
+        elif delta.months != 0:
+            return str(delta.months) + ' ماه'
+        elif delta.days != 0:
+            return str(delta.days) + ' روز'
+        else:
+            return 'امروز'
 
     class Meta:
         ordering = ['-date_submitted_by_industry']
