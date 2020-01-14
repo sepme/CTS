@@ -356,6 +356,18 @@ img {
     color: #3ccd1c;
 }
 
+.fixed-back .no-comment {
+    width: fit-content;
+    text-align: center;
+    background: #f8fdf7;
+    border: 1px dashed #bdbdbd;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    padding: 5px 10px;
+    margin: 0 auto;
+}
+
 a {
     color: #5cb85c;
 }
