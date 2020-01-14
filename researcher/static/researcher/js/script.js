@@ -187,7 +187,7 @@ function setComment(data) {
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === 0) { //expert            
+        if (data[i].sender_type === "expert") { //expert            
             comments_code += "<div class='expert-comment' dir='ltr' >" +
                 "<div class='comment-body'>" +
                 "<span class='comment-tools'>" ;
@@ -204,7 +204,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else if (data[i].sender_type === 2) { //researcher
+        } else if (data[i].sender_type === "researcher") { //researcher
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>";

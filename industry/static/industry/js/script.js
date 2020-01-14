@@ -197,7 +197,7 @@ function setComment(data) {
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === 1) { //industry
+        if (data[i].sender_type === "industry") { //industry
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
@@ -218,7 +218,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else if (data[i].sender_type === 0) { //expert
+        } else if (data[i].sender_type === "expert") { //expert
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -316,14 +316,51 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            console.log("getComment successful\nid: " + expert_id + "\nproject: " + project_id + "\n");
-            console.log(data);
             setComment(data);
         },
         error: function (data) {
 
         },
     });
+}
+
+function addComment(data){
+    let new_comment = "<div class='my-comment'>" +
+                        "<div class='comment-profile'>" +
+                        "</div>" +
+                        "<div class='comment-body'>" +
+                        "<span class='comment-tools'>" +
+                        "<i class='fas fa-pen'>" +
+                        "</i>" +
+                        "<i class='fas fa-reply'><div class='reply'></div>" +
+                        "</i>";
+                        if (data.attachment !== "None") {
+                            new_comment += "<a href='/" +
+                                             data.attachment +
+                                             "'><i class='fas fa-paperclip'></i></a>" ;
+                        }
+                        new_comment += "</span>" +
+                            "<span>" +
+                            data.description +
+                            "</span>" +
+                            "</div>" +
+                            "</div>";
+    // let new_comment = "<div class='my-comment'>" +
+    //             "<div class='comment-body' dir='ltr'>" +
+    //             "<span class='comment-tools'>";
+    //             if (data.attachment !== "None") {
+    //                 new_comment += "<a href='/" +
+    //                                 data.attachment +
+    //                                 "'><i class='fas fa-paperclip'></i></a>" ;   
+    //             }
+    //         new_comment += "</span>" +
+    //             "<span>" +
+    //             data.description +
+    //             "</span>" +
+    //             "</div>" +
+    //             "</div>";
+    console.log(new_comment);
+    return new_comment;
 }
 
 $(document).ready(function () {
@@ -348,65 +385,21 @@ $(document).ready(function () {
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
                     dialog.find(".establish-time .time-body").html(data.submission_date);
                     dialog.find(".time-left .time-body").html(data.deadline);
-                    console.log(data);
-                    const keys = data.key_words[0].split(",");
-                    for (let i = 0; i < keys.length; i++) {
+                    for (let i = 0; i < data.key_words.length; i++) {
                         dialog.find(".techniques").append(
                             "<span class='border-span'>" +
-                            keys[i]
+                            data.key_words[i]
                             + "</span>"
                         );
                     }
+                    $('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
                     if (data.status !== 0) {
-                        // console.log(data.comments);
-                        // var comment_html = "";
-                        // const comment = data.comments;
-                        // for (var i = comment.length - 1; i > -1; i--) {
-                        //     if (comment[i].sender_type) {
-                        //         comment_html = "<div class='my-comment'>" +
-                        //             "<div class='comment-profile'>" +
-                        //             "</div>" +
-                        //             "<div class='comment-body' dir='ltr'>" +
-                        //             "<span class='comment-tools'>" +
-                        //             "<i class='fas fa-trash-alt'></i>" +
-                        //             "<i class='fas fa-reply'></i>" +
-                        //             "<i class='fas fa-pen'></i>" +
-                        //             "</span>" +
-                        //             "<span>" +
-                        //             comment[i].text +
-                        //             "</span>" +
-                        //             "</div>" +
-                        //             "</div>";
-                        //     } else {
-                        //         comment_html = "<div class='your-comment'>" +
-                        //             "<div class='comment-profile'>" +
-                        //             "</div>" +
-                        //             "<div class='comment-body'>" +
-                        //             "   <span class='comment-tools'>" +
-                        //             "       <i class='fas fa-reply'></i>" +
-                        //             "   </span>" +
-                        //             "   <span>" +
-                        //             comment[i].text +
-                        //             "   </span>" +
-                        //             "</div>" +
-                        //             "</div>"
-                        //     }
-                        //     dialog.find(".comments").append(comment_html);
-                        //     console.log(comment[i].text);
-                        // }
-                        // comment_html += ""
-                        // console.log(data);
-                        // for (let index = 0; index < data.expert_messaged.length; index++) {
-                        //     const element = data.expert_messaged[index];
-                        //     getComments(element, data.id);
-                        // }
+                        if (data.vote === "false") {
+                            $(".vote").remove();
+                        }
                         setTab(data);
-                        // for (let index = 0; index < data.industry_comment.length; index++) {
-                        //     const element = data.industry_comment[index];
-                        //     getComments(element, data.id);
-                        // }
                     } else {
                         $('.vote').remove();
                         $('.add-comment').remove();
@@ -679,30 +672,12 @@ $(document).ready(function () {
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        console.log(data);
                         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                             .prop("disabled", false);
                         comment_form.find("label").removeClass("progress-cursor");
                         comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                        let comment_code = "<div class='my-comment'>" +
-                            "<div class='comment-profile'>" +
-                            "</div>" +
-                            "<div class='comment-body'>" +
-                            "<span class='comment-tools'>" +
-                            "<i class='fas fa-pen'>" +
-                            "</i>" +
-                            "<i class='fas fa-reply'><div class='reply'></div>" +
-                            "</i>";
-                        // if (data[i].attachment !== "None") {
-                        //     comment_code += "<a href='/" +
-                        //                      data[i].attachment +
-                        //                      "'><i class='fas fa-paperclip'></i></a>" ;
-                        // }
-                        comment_code += "</span>" +
-                            "<span>" +
-                            description +
-                            "</span>" +
-                            "</div>" +
-                            "</div>";
+                        comment_code = addComment(data);
                         $(".project-comment-innerDiv").find(".comments").append(comment_code);
                         iziToast.success({
                             rtl: true,

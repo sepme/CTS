@@ -1,4 +1,7 @@
 import os
+import datetime
+from dateutil.relativedelta import relativedelta
+
 from ChamranTeamSite import settings
 # from PIL import Image
 from django.db import models
@@ -106,7 +109,7 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
-    required_method = models.TextField(verbose_name="روش های مورد نیاز")
+    required_method = models.TextField(verbose_name="روش های مورد نیاز" ,null=True)
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
@@ -168,6 +171,18 @@ class Project(models.Model):
         project_comments = Comment.objects.all().filter(project=self)
         return project_comments
 
+    @property
+    def time_left(self):
+        delta = relativedelta(self.date_finished, datetime.date.today())
+        if delta.years != 0:
+            return str(delta.years) + ' سال'
+        elif delta.months != 0:
+            return str(delta.months) + ' ماه'
+        elif delta.days != 0:
+            return str(delta.days) + ' روز'
+        else:
+            return 'امروز'
+
     class Meta:
         ordering = ['-date_submitted_by_industry']
 
@@ -179,13 +194,13 @@ def upload_comment(instance, file_name):
 class Comment(models.Model):
     description = models.TextField(verbose_name="متن")
     SENDER = (
-        (0, 'استاد'),
-        (1, 'صنعت'),
-        (2, 'پژوهشگر'),
-        (3, 'سیستم'),
+        ("expert", 'استاد'),
+        ("industry", 'صنعت'),
+        ("researcher", 'پژوهشگر'),
+        ("system", 'سیستم'),
     )
     replied_text = models.CharField(max_length=150, blank=True, null=True)
-    sender_type = models.IntegerField(choices=SENDER)
+    sender_type = models.CharField(max_length=10 ,choices=SENDER)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, blank=True, null=True)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
@@ -197,7 +212,7 @@ class Comment(models.Model):
         return self.description
     
     def __str__(self):
-        return self.SENDER[self.sender_type][1]
+        return self.sender_type
 
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128)
@@ -220,7 +235,9 @@ class ProjectHistory(models.Model):
 
 class ExpertEvaluateIndustry(models.Model):
     industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
-    expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    project  = models.ForeignKey(Project ,on_delete=models.CASCADE ,null=True)
+    expert = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    phase = models.IntegerField(verbose_name="فاز شماره : " ,null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -255,3 +272,6 @@ class ExpertEvaluateIndustry(models.Model):
 
         ava = float(sum / 9)
         return ava
+
+    def __str__(self):
+        return str(self.industry) + " evaluate " + str(self.expert.expertform)
