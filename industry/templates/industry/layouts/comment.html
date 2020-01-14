@@ -9,26 +9,5 @@
     <div class="industry-comment"></div>
     <div class="project-comment-innerDiv">
         <div class="comments"></div>
-        <div class="add-comment">
-            <form action="" method="post" enctype="multipart/form-data" id="comment-form">
-                {% csrf_token %}
-                <input type="text" name="project_id" id="project_id" hidden>
-                <input type="text" name="expert_id" id="expert_id" hidden>
-                <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <label for="description">ثبت نظر جدید</label>
-                        <textarea dir="rtl" id="description" class="w-100 emojiable-option" name="description"
-                                  rows="5"></textarea>
-                        <button class="chamran_btn" type="submit" style="left: 16px;bottom: 8px;">ثبت نظر</button>
-                        <span class="new-comment-tools">
-                            <input type="file" id="comment-attach" name="attachment" hidden>
-                            <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
-                        </span>
-                        <div class="attachment"></div>
-                    </div>
-                </div>
-            </form>
-        </div>
     </div>
 </div>
