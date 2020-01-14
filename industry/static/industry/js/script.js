@@ -149,30 +149,10 @@ function setValue(data) {
 
 function setTab(data) {
     if (data.expert_messaged.length === 0) {
-        let no_comment = "<div>متاسفانه، هنوز پروژه شما توسط استادی  بررسی نشده است.</div>"
+        $(".project-comment-innerDiv .add-comment").css("display", "none");
+        let no_comment = "<div class='no-comment'>متاسفانه، هنوز پروژه شما توسط استادی  بررسی نشده است.</div>";
         $(".project-comment-innerDiv").append(no_comment);
     } else {
-        let add_new_comment = "<div class=\"add-comment\">\n" +
-            "            <form action=\"\" method=\"post\" enctype=\"multipart/form-data\" id=\"comment-form\">\n" +
-            "                <input type=\"text\" name=\"project_id\" id=\"project_id\" hidden>\n" +
-            "                <input type=\"text\" name=\"expert_id\" id=\"expert_id\" hidden>\n" +
-            "                <input type=\"text\" name=\"comment_replyed\" id=\"comment_replyed\" value=\"None\" hidden>\n" +
-            "                <div class=\"row\">\n" +
-            "                    <div class=\"col-lg-12\">\n" +
-            "                        <label for=\"description\">ثبت نظر جدید</label>\n" +
-            "                        <textarea dir=\"rtl\" id=\"description\" class=\"w-100 emojiable-option\" name=\"description\"\n" +
-            "                                  rows=\"5\"></textarea>\n" +
-            "                        <button class=\"chamran_btn\" type=\"submit\" style=\"left: 16px;bottom: 8px;\">ثبت نظر</button>\n" +
-            "                        <span class=\"new-comment-tools\">\n" +
-            "                            <input type=\"file\" id=\"comment-attach\" name=\"attachment\" hidden>\n" +
-            "                            <label for=\"comment-attach\"><i class=\"fas fa-paperclip\"></i></label>\n" +
-            "                        </span>\n" +
-            "                        <div class=\"attachment\"></div>\n" +
-            "                    </div>\n" +
-            "                </div>\n" +
-            "            </form>\n" +
-            "        </div>";
-        $(".project-comment-innerDiv").append(add_new_comment);
         for (let i = 0; i < data.expert_messaged.length; i++) {
             let tab = "<a class='nav-link' data-toggle='pill'" +
                 "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
