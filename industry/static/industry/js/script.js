@@ -5,7 +5,10 @@ $(window).on("load", function () {
     init_windowSize();
     load_dialog();
 });
-
+function numbersComma(num) {
+    let newNum = num.toString();
+    return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+}
 function setRole(data) {
     role = "<div>" +
         "<div class='question'>" +
@@ -64,7 +67,7 @@ function setResources(data) {
         "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.required_budget +
+        numbersComma(data.required_budget) +
         "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
@@ -124,7 +127,7 @@ function setMajors(data) {
         "برآورد شما از سود مالی این پروژه چگونه است؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.predict_profit +
+        numbersComma(data.predict_profit) +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
