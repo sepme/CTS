@@ -75,15 +75,18 @@ def show_project_ajax(request):
     evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
     json_response['status'] = project.status
     json_response['vote'] = "false"
-    if datetime.date.today() > project.date_finished:
-        if len(evaluation_history.filter(phase=3)) == 0:
-            json_response['vote'] = "true"
-    elif datetime.date.today() > project.date_phase_two_finished:
-        if len(evaluation_history.filter(phase=2)) == 0:
-            json_response['vote'] = "true"
-    elif datetime.date.today() > project.date_phase_one_finished:
-        if len(evaluation_history.filter(phase=1)) == 0:
-            json_response['vote'] = "true"
+    try:
+        if datetime.date.today() > project.date_finished:
+            if len(evaluation_history.filter(phase=3)) == 0:
+                json_response['vote'] = "true"
+        elif datetime.date.today() > project.date_phase_two_finished:
+            if len(evaluation_history.filter(phase=2)) == 0:
+                json_response['vote'] = "true"
+        elif datetime.date.today() > project.date_phase_one_finished:
+            if len(evaluation_history.filter(phase=1)) == 0:
+                json_response['vote'] = "true"
+    except:
+        pass
     return JsonResponse(json_response)
 
 def GetComment(request):

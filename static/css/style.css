@@ -46,6 +46,7 @@ body {
 }
 
 body.notFound {
+    padding-top: 50px;
     background-color: #FFFFFF;
     color: #0e1e2b;
     text-align: center;
@@ -1862,7 +1863,7 @@ span.title-back {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
-    height: 70vh;
+    width: 45%;
 }
 
 .notFound button {

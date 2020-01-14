@@ -145,22 +145,48 @@ function setValue(data) {
 }
 
 function setTab(data) {
-    for (let i = 0; i < data.expert_messaged.length; i++) {
-        let tab = "<a class='nav-link' data-toggle='pill'" +
-            "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
-            "" +
-            data.expert_messaged[i].name +
-            "</a>";
-        $(".comment-tabs div").append(tab);
-        $(".comment-tabs .nav-link:last-child").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
-        if (i === 0) {
-            $(".comment-tabs div .nav-link").addClass("active");
+    if (data.expert_messaged.length === 0) {
+        let no_comment = "<div>متاسفانه، هنوز پروژه شما توسط استادی  بررسی نشده است.</div>"
+        $(".project-comment-innerDiv").append(no_comment);
+    } else {
+        let add_new_comment = "<div class=\"add-comment\">\n" +
+            "            <form action=\"\" method=\"post\" enctype=\"multipart/form-data\" id=\"comment-form\">\n" +
+            "                <input type=\"text\" name=\"project_id\" id=\"project_id\" hidden>\n" +
+            "                <input type=\"text\" name=\"expert_id\" id=\"expert_id\" hidden>\n" +
+            "                <input type=\"text\" name=\"comment_replyed\" id=\"comment_replyed\" value=\"None\" hidden>\n" +
+            "                <div class=\"row\">\n" +
+            "                    <div class=\"col-lg-12\">\n" +
+            "                        <label for=\"description\">ثبت نظر جدید</label>\n" +
+            "                        <textarea dir=\"rtl\" id=\"description\" class=\"w-100 emojiable-option\" name=\"description\"\n" +
+            "                                  rows=\"5\"></textarea>\n" +
+            "                        <button class=\"chamran_btn\" type=\"submit\" style=\"left: 16px;bottom: 8px;\">ثبت نظر</button>\n" +
+            "                        <span class=\"new-comment-tools\">\n" +
+            "                            <input type=\"file\" id=\"comment-attach\" name=\"attachment\" hidden>\n" +
+            "                            <label for=\"comment-attach\"><i class=\"fas fa-paperclip\"></i></label>\n" +
+            "                        </span>\n" +
+            "                        <div class=\"attachment\"></div>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "            </form>\n" +
+            "        </div>";
+        $(".project-comment-innerDiv").append(add_new_comment);
+        for (let i = 0; i < data.expert_messaged.length; i++) {
+            let tab = "<a class='nav-link' data-toggle='pill'" +
+                "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
+                "" +
+                data.expert_messaged[i].name +
+                "</a>";
+            $(".comment-tabs div").append(tab);
+            $(".comment-tabs .nav-link:last-child").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
+            if (i === 0) {
+                $(".comment-tabs div .nav-link").addClass("active");
+            }
         }
+        getComments($(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""), data.id);
+        $(".comment-tabs .nav-link").click(function () {
+            getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
+        });
     }
-    getComments($(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""), data.id);
-    $(".comment-tabs .nav-link").click(function () {
-        getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
-    });
 }
 
 function setIndustryComment(data) {
@@ -324,27 +350,27 @@ function getComments(expert_id, project_id) {
     });
 }
 
-function addComment(data){
+function addComment(data) {
     let new_comment = "<div class='my-comment'>" +
-                        "<div class='comment-profile'>" +
-                        "</div>" +
-                        "<div class='comment-body'>" +
-                        "<span class='comment-tools'>" +
-                        "<i class='fas fa-pen'>" +
-                        "</i>" +
-                        "<i class='fas fa-reply'><div class='reply'></div>" +
-                        "</i>";
-                        if (data.attachment !== "None") {
-                            new_comment += "<a href='/" +
-                                             data.attachment +
-                                             "'><i class='fas fa-paperclip'></i></a>" ;
-                        }
-                        new_comment += "</span>" +
-                            "<span>" +
-                            data.description +
-                            "</span>" +
-                            "</div>" +
-                            "</div>";
+        "<div class='comment-profile'>" +
+        "</div>" +
+        "<div class='comment-body'>" +
+        "<span class='comment-tools'>" +
+        "<i class='fas fa-pen'>" +
+        "</i>" +
+        "<i class='fas fa-reply'><div class='reply'></div>" +
+        "</i>";
+    if (data.attachment !== "None") {
+        new_comment += "<a href='/" +
+            data.attachment +
+            "'><i class='fas fa-paperclip'></i></a>";
+    }
+    new_comment += "</span>" +
+        "<span>" +
+        data.description +
+        "</span>" +
+        "</div>" +
+        "</div>";
     // let new_comment = "<div class='my-comment'>" +
     //             "<div class='comment-body' dir='ltr'>" +
     //             "<span class='comment-tools'>";
@@ -380,6 +406,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: {id: id},
                 success: function (data) {
+                    console.log(data);
                     localStorage.setItem("project_id", "" + id);
                     localStorage.setItem("replied_text", null);
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
