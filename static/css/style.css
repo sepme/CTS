@@ -1864,3 +1864,18 @@ span.title-back {
     border-radius: 0;
     height: 70vh;
 }
+
+.notFound button {
+    background-color: #89E076;
+    color: #FFFFFF;
+    padding: 10px 25px;
+    border: none;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.notFound button:hover, .notFound button:focus {
+    background-color: #3ccd1c;
+    outline: none;
+}

@@ -191,6 +191,7 @@ function setIndustryComment(data) {
 }
 
 function setComment(data) {
+
     let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
     data = data.comment;
     let comments_code = "";
