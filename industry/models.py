@@ -205,9 +205,12 @@ class Comment(models.Model):
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
     researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True, blank=True)
-    attachment = models.FileField(upload_to=upload_comment, blank=True, null=True, max_length=255)
+    attachment = models.FileField(upload_to=upload_comment, blank=True, null=True)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
+    def __str__(self):
+        return self.description
+    
     def __str__(self):
         return self.sender_type
 

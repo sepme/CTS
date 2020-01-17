@@ -1,17 +1,17 @@
 from django.views import generic
-from django.views.generic.edit import CreateView
-from django.views.generic.detail import SingleObjectMixin
-from django.views import View
-from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404, Http404
-from .models import ExpertForm, EqTest, ExpertUser
-from .forms import *
-from industry.models import Comment
+# from django.views import View
+from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, QueryDict
+from django.http import JsonResponse
+from django.core import serializers
+
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
-from django.core import serializers
 import json
+
+from . import forms
+from .models import *
+
 from industry.models import *
 from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
@@ -103,7 +103,7 @@ class Questions(generic.TemplateView):
 def index(request):
     expert_user = get_object_or_404(ExpertUser, user=request.user)
     if request.method == 'POST':
-        form = InitialInfoForm(request.POST, request.FILES)
+        form = forms.InitialInfoForm(request.POST, request.FILES)
         print(form.is_valid())
 
         if form.is_valid():
@@ -121,7 +121,7 @@ def index(request):
                                                     special_field=special_field, national_code=melli_code,
                                                     scientific_rank=scientific_rank, university=university,
                                                     phone_number=home_number, home_address=address,
-                                                    mobile_phone=phone_number, email_address=email)
+                                                    mobile_phone=phone_number, email_address=expert_user.user)
             expert_form.expert_user = expert_user
             if request.FILES.get('photo'):
                 photo = request.FILES.get('photo')
@@ -131,21 +131,23 @@ def index(request):
             expert_form.save()
             return HttpResponseRedirect(reverse('expert:index'))
         else:
-            print(form.errors)
-    form = InitialInfoForm()
-    projects = Project.objects.all()
-    return render(request, 'expert/index.html', {'form': form,
-                                                 'expert_user': expert_user,
-                                                 'projects': projects})
-
+            return render(request, 'expert/index.html', {'form': form,
+                                                 'expert_user': expert_user,})
+    if expert_user.status == "signed_up":
+        form = forms.InitialInfoForm()
+        return render(request, 'expert/index.html', {'form': form,
+                                                    'expert_user': expert_user})    
+    projects = Project.objects.filter(status=1)
+    return render(request, 'expert/index.html', {'expert_user': expert_user,
+                                                    'projects': projects})
 
 class UserInfo(generic.FormView):
     template_name = 'expert/userInfo.html'
-    form_class = ExpertInfoForm
+    form_class = forms.ExpertInfoForm
 
     def get(self, request, *args, **kwargs):
         instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-        expert_info_form = ExpertInfoForm(instance=instance)
+        expert_info_form = forms.ExpertInfoForm(instance=instance)
         scientific_instance = ScientificRecord.objects.filter(expert_form=instance)
         executive_instance = ExecutiveRecord.objects.filter(expert_form=instance)
         research_instance = ResearchRecord.objects.filter(expert_form=instance)
@@ -157,17 +159,17 @@ class UserInfo(generic.FormView):
                    'research_instance': research_instance,
                    'paper_instance': paper_instance,
                    'expert_form': instance,
-                   'scientific_form': ScientificRecordForm(),
-                   'executive_form': ExecutiveRecordForm(),
-                   'research_form': ResearchRecordForm(),
-                   'paper_form': PaperRecordForm()
+                   'scientific_form': forms.ScientificRecordForm(),
+                   'executive_form': forms.ExecutiveRecordForm(),
+                   'research_form': forms.ResearchRecordForm(),
+                   'paper_form': forms.PaperRecordForm()
                    }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         print(request.POST)
         instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-        expert_info_form = ExpertInfoForm(request.POST, request.FILES, instance=instance)
+        expert_info_form = forms.ExpertInfoForm(request.POST, request.FILES, instance=instance)
         team_work = request.POST.get('team_work', False)
         creative_thinking = request.POST.get('creative-thinking', False)
         sacrifice = request.POST.get('sacrifice', False)
@@ -188,10 +190,10 @@ class UserInfo(generic.FormView):
                    'research_instance': research_instance,
                    'paper_instance': paper_instance,
                    'expert_form': instance,
-                   'scientific_form': ScientificRecordForm(),
-                   'executive_form': ExecutiveRecordForm(),
-                   'research_form': ResearchRecordForm(),
-                   'paper_form': PaperRecordForm()
+                   'scientific_form': forms.ScientificRecordForm(),
+                   'executive_form': forms.ExecutiveRecordForm(),
+                   'research_form': forms.ResearchRecordForm(),
+                   'paper_form': forms.PaperRecordForm()
                    }
         if expert_info_form.is_valid():
             expert_form = expert_info_form.save(commit=False)
@@ -238,7 +240,7 @@ def scienfic_record_view(request):
     # form = request.GET.get('formData', None)
     # print(form)
     print(request.POST)
-    scientific_form = ScientificRecordForm(request.POST)
+    scientific_form = forms.ScientificRecordForm(request.POST)
     if scientific_form.is_valid():
         print(scientific_form.cleaned_data)
         data = {'success': 'successful'}
@@ -252,7 +254,7 @@ def scienfic_record_view(request):
 
 
 def executive_record_view(request):
-    executive_form = ExecutiveRecordForm(request.POST)
+    executive_form = forms.ExecutiveRecordForm(request.POST)
     if executive_form.is_valid():
         print(executive_form.cleaned_data)
         data = {'success': 'successful'}
@@ -266,7 +268,7 @@ def executive_record_view(request):
 
 
 def research_record_view(request):
-    research_form = ResearchRecordForm(request.POST)
+    research_form = forms.ResearchRecordForm(request.POST)
     if research_form.is_valid():
         print(research_form.cleaned_data)
         data = {'success': 'successful'}
@@ -280,7 +282,7 @@ def research_record_view(request):
 
 
 def paper_record_view(request):
-    paper_form = PaperRecordForm(request.POST)
+    paper_form = forms.PaperRecordForm(request.POST)
     if paper_form.is_valid():
         print(paper_form.cleaned_data)
         data = {'success': 'successful'}
@@ -333,6 +335,7 @@ def show_project_view(request):
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
+    print(data['required_method'])
     # data['required_technique']=[]
     # for tech in project.project_form.required_technique:
     #     data['required_technique'].append(tech.__str__())
@@ -369,7 +372,7 @@ def accept_project(request):
 
 
 def add_research_question(request):
-    research_question_form = ResearchQuestionForm(request.POST, request.FILES)
+    research_question_form = forms.ResearchQuestionForm(request.POST, request.FILES)
     if research_question_form.is_valid():
         data = {'success': 'successful'}
         research_question = research_question_form.save(commit=False)
@@ -462,7 +465,7 @@ def show_researcher_preview(request):
 
 def CommentForResearcher(request):
     print(request)
-    form = CommentForm(request.POST, request.FILES)
+    form = forms.CommentForm(request.POST, request.FILES)
     project = Project.objects.filter(id=request.POST['project_id'])[0]
     researcher = ResearcherUser.objects.filter(id=request.POST['researcher_id'])[0]
     if form.is_valid():
@@ -523,11 +526,33 @@ def CommentForResearcher(request):
 
 
 def CommentForIndustry(request):
-    project = Project.objects.get(id=request.GET.get('project_id'))
-    print('the indsutry user is', project.industry_creator)
-    if not project.expert_messaged.filter(id=request.user.expertuser.id).exists():
-        project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
-        project.save()
-    Comment.objects.create(sender_type="expert", project=project, expert_user=request.user.expertuser,
-                           industry_user=project.industry_creator, description=request.GET.get('description'))
-    return JsonResponse({})
+    project = Project.objects.get(id=request.POST['project_id'])
+    form = forms.CommentForm(request.POST ,request.FILES)
+    if form.is_valid():
+        if not project.expert_messaged.filter(id=request.user.expertuser.id).exists():
+            project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
+            project.save()
+        new_comment = Comment.objects.create(sender_type="expert",
+                                         project=project,
+                                         expert_user=request.user.expertuser,
+                                         industry_user=project.industry_creator,
+                                         description=form.cleaned_data["description"],
+                                         attachment =form.cleaned_data["attachment"])
+        new_comment.save()
+        if form.cleaned_data["attachment"] is not None:
+            data = {
+                'success'    : 'successful',
+                'pk'         : new_comment.pk,
+                'attachment' : new_comment.attachment.url[new_comment.attachment.url.find('media' ,2):],
+                'description': new_comment.description,
+            }
+        else:
+            data = {
+                'success' : 'successful',
+                'pk'         : new_comment.pk,
+                'description': new_comment.description,
+                'attachment' : "None",
+            }
+        return JsonResponse(data=data)
+    else:
+        return JsonResponse(form.errors, status=400)

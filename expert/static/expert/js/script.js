@@ -280,7 +280,7 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            console.log(id);
+            // console.log(id);
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -450,7 +450,6 @@ $(document).ready(function () {
                 $('#researcher_entry_year').html(data.entry_year);
 
                 var scientific_record = JSON.parse(data.scientific_record);
-                console.log(scientific_record);
                 if (scientific_record.length !== 0) {
                     var table_row = "";
                     for (i = 0; i < scientific_record.length; i++) {
@@ -915,8 +914,8 @@ ResearchQuestionForm.submit(function (event) {
     var $thisURL = ResearchQuestionForm.attr('data-url');
     var data = new FormData(ResearchQuestionForm.get(0));
     ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-    console.log(data);
-    console.log($(this).find("input[type='file']").get(0).files.item(0));
+    // console.log(data);
+    // console.log($(this).find("input[type='file']").get(0).files.item(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -1039,7 +1038,7 @@ function setResources(data) {
         "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.required_technique +
+        data.required_method +
         "</div>" +
         "</div>" +
         "<div>" +
@@ -1142,12 +1141,9 @@ function setValue(data) {
 }
 
 function setComment(data) {
-    console.log(data);
     let comments_code = "";
-    let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert
-            console.log("sender type is 0");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
@@ -1169,8 +1165,6 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
-            console.log("sender type isn't 0");
-            console.log(data[i].attachment);
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -1192,7 +1186,6 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else { //system
-            console.log("sender type isn't 0 and 2");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -1236,25 +1229,42 @@ $.ajaxSetup({
     }
 });
 
+function addComment(data){
+    let comment_code = "<div class='my-comment'>" +
+                        "<div class='comment-body' dir='ltr'>" +
+                        "<span class='comment-tools'>" +
+                        "<i class='fas fa-trash-alt'></i>" +
+                        "<i class='fas fa-reply' value=" +
+                        data.pk +
+                        "></i>" +
+                        "<i class='fas fa-pen'>" +
+                        "</i>";
+                    if (data.attachment !== "None") {
+                        comment_code += "<a href='/" +
+                            data.attachment +
+                            "'><i class='fas fa-paperclip'></i></a>";
+                    }
+                    comment_code += "</span>" +
+                        "<span>" +
+                        data.description +
+                        "</span>" +
+                        "</div>" +
+                        "</div>";
+    return comment_code;
+}
+
 let comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
-    let description = $(this).closest(".col-lg-12").find("#description").val();
-    let id = $(this).closest(".showProject").attr("id");
-    let thisUrl = "/expert/industry_comment/";
-    let attachment = $('#comment-attach').val();
-    console.log(attachment);
-    data = {project_id: id, description: description, attachment: attachment}
-    var form = new FormData()
-    console.log(description);
-    console.log(id);
+    $("#project_id").attr('value', $('.preview-project').attr("id"));
+    let thisUrl = "/expert/industry_comment/";    
+    let form = new FormData(comment_form.get(0));    
     $.ajax({
         method: 'POST',
         url: thisUrl,
         data: form,
-        // dataType: 'json',
         processData: false,
         contentType: false,
         success: function (data) {
@@ -1262,26 +1272,27 @@ comment_form.submit(function (event) {
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-            let comment_code = "<div class='my-comment'>" +
-                "<div class='comment-profile'>" +
-                "</div>" +
-                "<div class='comment-body'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-pen'>" +
-                "</i>" +
-                "<i class='fas fa-reply'><div class='reply'></div>" +
-                "</i>";
+            let comment_code = addComment(data);
+            // let comment_code = "<div class='my-comment'>" +
+            //     "<div class='comment-profile'>" +
+            //     "</div>" +
+            //     "<div class='comment-body'>" +
+            //     "<span class='comment-tools'>" +
+            //     "<i class='fas fa-pen'>" +
+            //     "</i>" +
+            //     "<i class='fas fa-reply'><div class='reply'></div>" +
+            //     "</i>";
             // if (data[i].attachment !== "None") {
             //     comment_code += "<a href='/" +
             //                      data[i].attachment +
             //                      "'><i class='fas fa-paperclip'></i></a>" ;
             // }
-            comment_code += "</span>" +
-                "<span>" +
-                description +
-                "</span>" +
-                "</div>" +
-                "</div>";
+            // comment_code += "</span>" +
+            //     "<span>" +
+            //     description +
+            //     "</span>" +
+            //     "</div>" +
+            //     "</div>";
             $(".project-comment-innerDiv").find(".comments").append(comment_code);
             iziToast.success({
                 rtl: true,
@@ -1293,7 +1304,6 @@ comment_form.submit(function (event) {
 
         },
         error: function (data) {
-            console.log(data);
             var obj = JSON.parse(data.responseText);
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -1309,6 +1319,7 @@ comment_form.submit(function (event) {
                     "</div>");
                 $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
+            comment_form[0].reset();
         },
     });
 });
