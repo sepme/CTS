@@ -1146,7 +1146,7 @@ function setComment(data) {
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === 0) { //expert
+        if (data[i].sender_type === "expert") { //expert
             console.log("sender type is 0");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
@@ -1168,7 +1168,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else if (data[i].sender_type === 2 || data[i].sender_type === 1) { //researcher or industry
+        } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
             console.log("sender type isn't 0");
             console.log(data[i].attachment);
             comments_code += "<div class='your-comment'>" +

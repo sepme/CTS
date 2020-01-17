@@ -47,28 +47,16 @@ def get_comments_with_expert(request):
             'text': comment.description,
             'sender_type': comment.sender_type
         })
+
 # is called by an ajax request and returns the necessary information to display the project on the front-end
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
-    comment_list = []
-    if project.expert_messaged.exists():
-        comment_list = project.comment_set.all().filter(industry_user=request.user.industryuser,
-                                                        expert_user=project.expert_messaged.first())
-    print('there are', len(comment_list), 'comments')
-    json_response['comments'] = []
-    for comment in comment_list:
-        print('sending', comment.description)
-        json_response['comments'].append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type
-        })
     json_response['expert_messaged'] = []
     for expert in project.expert_messaged.all():
         json_response['expert_messaged'].append({
             'id': expert.id,
-            'name': expert.__str__()
+            'name': expert.expertform.__str__()
         })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
@@ -78,10 +66,52 @@ def show_project_ajax(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    json_response['required_technique']=[]
-    for tech in project.project_form.required_technique:
-        json_response['required_technique'].append(tech.__str__())
+    try:
+        json_response['required_technique']=[]
+        for tech in project.project_form.required_technique:
+            json_response['required_technique'].append(tech.__str__())
+    except:
+        pass
+    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+    json_response['status'] = project.status
+    json_response['vote'] = "false"
+    try:
+        if datetime.date.today() > project.date_finished:
+            if len(evaluation_history.filter(phase=3)) == 0:
+                json_response['vote'] = "true"
+        elif datetime.date.today() > project.date_phase_two_finished:
+            if len(evaluation_history.filter(phase=2)) == 0:
+                json_response['vote'] = "true"
+        elif datetime.date.today() > project.date_phase_one_finished:
+            if len(evaluation_history.filter(phase=1)) == 0:
+                json_response['vote'] = "true"
+    except:
+        pass
     return JsonResponse(json_response)
+
+def GetComment(request):
+    expert_id  = request.GET.get('expert_id')
+    project_id = request.GET.get('project_id')
+    project = get_object_or_404(models.Project ,pk=project_id)
+    expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    all_comments = models.Comment.objects.filter(project=project)
+    comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)    
+    response = []
+    for comment in comments:
+        try:
+            url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
+        except:
+            url = "None"
+        temp = {
+            'pk'           : comment.pk,
+            'text'  : comment.description,
+            'replied_text' : comment.replied_text,
+            'sender_type'  : comment.sender_type,
+            'attachment'   : url
+        }
+        response.append(temp)    
+    data = {'comment' : response}
+    return JsonResponse(data=data)
 
 
 def accept_project_ajax(request):
@@ -91,15 +121,33 @@ def accept_project_ajax(request):
 
 # this function is called when the industry user comments on a project
 def submit_comment(request):
-    description = request.GET.get('description')
-    project = models.Project.objects.filter(id=request.GET.get('project_id')).first()
-    # expert_user = expert_models.ExpertUser.objects.all().filter(id=request.GET.get('expert_id')).first()
-    expert_user = expert_models.ExpertUser.objects.all().first()
-    if not project.expert_messaged.filter(id=request.GET.get('expert_id')).exists():
-        project.expert_messaged.add(expert_user )
-    Comment.objects.create(description=description, project=project, industry_user=request.user.industryuser,
-                           sender_type=1, expert_user=expert_user)
-    return JsonResponse({})
+    form = forms.CommentForm(request.POST ,request.FILES)
+    if form.is_valid():
+        project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
+        expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
+        description = form.cleaned_data['description']
+        attachment = form.cleaned_data['attachment']
+        new_comment = Comment.objects.create(project=project,
+                                             industry_user=request.user.industryuser,
+                                             sender_type="industry",
+                                             expert_user=expert_user,
+                                             description=description,
+                                             attachment=attachment)
+        new_comment.save()
+        if attachment is not None:
+            data = {
+                'success' : 'successful',
+                'attachment' : new_comment.attachment.url[new_comment.attachment.url.find('media' ,2):],
+                'description':description,
+            }
+        else:
+            data = {
+                'success' : 'successful',
+                'attachment' : "None",
+                'description': description,
+            }
+        return JsonResponse(data=data)
+    return JsonResponse(data=form.errors ,status=400)
 
 # main page for an industry user
 class Index(generic.TemplateView):
@@ -120,9 +168,7 @@ class Index(generic.TemplateView):
         else:
             industry_user = self.request.user.industryuser
             # print('he\'s got {} projects'.format(industry_user.projects.count()))
-            print('his projects are:')
-            for project in industry_user.projects.all():
-                print(project.project_form.project_title_persian)
+            context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
         return context
     # submitting the initial info form
     def post(self, request, *args, **kwargs):
@@ -224,6 +270,7 @@ class NewProject(View):
             required_budget = form.cleaned_data['required_budget']
             project_phase = form.cleaned_data['project_phase']
             # required_technique = form.cleaned_data['required_technique']
+            required_method = form.cleaned_data['required_method']
             progress_profitability = form.cleaned_data['progress_profitability']
             potential_problems = form.cleaned_data['potential_problems']
             new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
@@ -232,7 +279,7 @@ class NewProject(View):
                                                   main_problem_and_importance=main_problem_and_importance,
                                                   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
-                                                  # required_technique=required_technique,
+                                                  required_method=required_method,
                                                   approach=approach,
                                                   policy=policy,
                                                   required_budget=required_budget,
@@ -247,7 +294,7 @@ class NewProject(View):
             new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
             print('the creator is', new_project.industry_creator)
-            request.user.industryuser.projects.add(new_project)
+            # request.user.industryuser.projects.add(new_project)
             # models.IndustryUser.objects.filter(user=request.user).update()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/newProject.html', context={'form': form})

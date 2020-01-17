@@ -31,8 +31,9 @@ function setResources(data) {
         "<div class='answer'>" +
         data.required_lab_equipment +
         "</div>" +
-        "</div>" +
-        "<div>" +
+        "</div>";
+    // if (data.required_technique.length != 0) {
+    resources += "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -40,10 +41,11 @@ function setResources(data) {
         "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.required_technique +
+        data.required_method +
         "</div>" +
-        "</div>" +
-        "<div>" +
+        "</div>";
+    // }
+    resources += "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -142,13 +144,60 @@ function setValue(data) {
     });
 }
 
+function setTab(data) {
+    for (let i = 0; i < data.expert_messaged.length; i++) {
+        let tab = "<a class='nav-link' data-toggle='pill'" +
+            "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
+            "" +
+            data.expert_messaged[i].name +
+            "</a>";
+        $(".comment-tabs div").append(tab);
+        $(".comment-tabs .nav-link:last-child").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
+        if (i === 0) {
+            $(".comment-tabs div .nav-link").addClass("active");
+        }
+    }
+    getComments($(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""), data.id);
+    $(".comment-tabs .nav-link").click(function () {
+        getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
+    });
+}
+
+function setIndustryComment(data) {
+    let comments_code = "";
+    for (let i = 0; i < data.length; i++) {
+        comments_code += "<div class='my-comment'>" +
+            "<div class='comment-profile'>" +
+            "</div>" +
+            "<div class='comment-body'>" +
+            "<span class='comment-tools'>" +
+            "<i class='fas fa-pen'>" +
+            "</i>" +
+            "<i class='fas fa-reply'><div class='reply'></div>" +
+            "</i>";
+        if (data[i].attachment !== "None") {
+            comments_code += "<a href='/" +
+                data[i].attachment +
+                "'><i class='fas fa-paperclip'></i></a>";
+        }
+        comments_code += "</span>" +
+            "<span>" +
+            data[i].description +
+            "</span>" +
+            "</div>" +
+            "</div>";
+    }
+    $('.comments').html(comments_code);
+}
+
 function setComment(data) {
-    console.log(data);
+
+    let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    data = data.comment;
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === 1) { //industry
-            console.log("sender type is 0");
+        if (data[i].sender_type === "industry") { //industry
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
@@ -169,9 +218,7 @@ function setComment(data) {
                 "</span>" +
                 "</div>" +
                 "</div>";
-        } else if (data[i].sender_type === 0) { //expert
-            console.log("sender type isn't 0");
-            console.log(data[i].attachment);
+        } else if (data[i].sender_type === "expert") { //expert
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -193,7 +240,6 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else { //system
-            console.log("sender type isn't 0 and 2");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -260,6 +306,63 @@ function newItem_label() {
     tag_input_label("id_key_words");
 }
 
+function getComments(expert_id, project_id) {
+    $.ajax({
+        method: 'GET',
+        url: 'get_comment/',
+        dataType: 'json',
+        data: {
+            expert_id: expert_id,
+            project_id: project_id
+        },
+        success: function (data) {
+            setComment(data);
+        },
+        error: function (data) {
+
+        },
+    });
+}
+
+function addComment(data){
+    let new_comment = "<div class='my-comment'>" +
+                        "<div class='comment-profile'>" +
+                        "</div>" +
+                        "<div class='comment-body'>" +
+                        "<span class='comment-tools'>" +
+                        "<i class='fas fa-pen'>" +
+                        "</i>" +
+                        "<i class='fas fa-reply'><div class='reply'></div>" +
+                        "</i>";
+                        if (data.attachment !== "None") {
+                            new_comment += "<a href='/" +
+                                             data.attachment +
+                                             "'><i class='fas fa-paperclip'></i></a>" ;
+                        }
+                        new_comment += "</span>" +
+                            "<span>" +
+                            data.description +
+                            "</span>" +
+                            "</div>" +
+                            "</div>";
+    // let new_comment = "<div class='my-comment'>" +
+    //             "<div class='comment-body' dir='ltr'>" +
+    //             "<span class='comment-tools'>";
+    //             if (data.attachment !== "None") {
+    //                 new_comment += "<a href='/" +
+    //                                 data.attachment +
+    //                                 "'><i class='fas fa-paperclip'></i></a>" ;   
+    //             }
+    //         new_comment += "</span>" +
+    //             "<span>" +
+    //             data.description +
+    //             "</span>" +
+    //             "</div>" +
+    //             "</div>";
+    console.log(new_comment);
+    return new_comment;
+}
+
 $(document).ready(function () {
         $(".chamran-btn-info").click(function () {
             const dialog = $(".showProject");
@@ -282,56 +385,25 @@ $(document).ready(function () {
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
                     dialog.find(".establish-time .time-body").html(data.submission_date);
                     dialog.find(".time-left .time-body").html(data.deadline);
-                    const keys = data.key_words[0].split(",");
-                    for (let i = 0; i < keys.length; i++) {
+                    for (let i = 0; i < data.key_words.length; i++) {
                         dialog.find(".techniques").append(
                             "<span class='border-span'>" +
-                            keys[i]
+                            data.key_words[i]
                             + "</span>"
                         );
-                        console.log(keys[i]);
                     }
-                    console.log(data.comments);
-                    var comment_html = "";
-                    const comment = data.comments;
-                    for (var i = comment.length - 1; i > -1; i--) {
-                        if (comment[i].sender_type) {
-                            comment_html = "<div class='my-comment'>" +
-                                "<div class='comment-profile'>" +
-                                "</div>" +
-                                "<div class='comment-body' dir='ltr'>" +
-                                "<span class='comment-tools'>" +
-                                "<i class='fas fa-trash-alt'></i>" +
-                                "<i class='fas fa-reply'></i>" +
-                                "<i class='fas fa-pen'></i>" +
-                                "</span>" +
-                                "<span>" +
-                                comment[i].text +
-                                "</span>" +
-                                "</div>" +
-                                "</div>";
-                        } else {
-                            comment_html = "<div class='your-comment'>" +
-                                "<div class='comment-profile'>" +
-                                "</div>" +
-                                "<div class='comment-body'>" +
-                                "   <span class='comment-tools'>" +
-                                "       <i class='fas fa-reply'></i>" +
-                                "   </span>" +
-                                "   <span>" +
-                                comment[i].text +
-                                "   </span>" +
-                                "</div>" +
-                                "</div>"
-                        }
-                        dialog.find(".comments").append(comment_html);
-                        console.log(comment[i].text);
-                    }
-                    // comment_html += ""
-                    console.log(data);
+                    $('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
-                    setComment(data.comments);
+                    if (data.status !== 0) {
+                        if (data.vote === "false") {
+                            $(".vote").remove();
+                        }
+                        setTab(data);
+                    } else {
+                        $('.vote').remove();
+                        $('.add-comment').remove();
+                    }
                 },
                 error: function (data) {
 
@@ -588,42 +660,24 @@ $(document).ready(function () {
                 event.preventDefault();
                 comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
                 comment_form.find("label").addClass("progress-cursor");
-                let description = $(this).closest(".col-lg-12").find("#description").val();
-                let id = $(this).closest(".showProject").attr("id");
+                $("#project_id").attr('value', $(".show-project").attr("id"));
+                $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
                 let thisUrl = "/industry/submit_comment/";
-                let attachment = "";
-                console.log(description);
-                console.log(id);
+                let data = new FormData(comment_form.get(0));
                 $.ajax({
-                    method: 'GET',
+                    method: 'POST',
                     url: thisUrl,
-                    data: {project_id: id, description: description, attachment: attachment},
+                    data: data,
                     type: "ajax",
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
+                        console.log(data);
                         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                             .prop("disabled", false);
                         comment_form.find("label").removeClass("progress-cursor");
                         comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                        let comment_code = "<div class='my-comment'>" +
-                            "<div class='comment-profile'>" +
-                            "</div>" +
-                            "<div class='comment-body'>" +
-                            "<span class='comment-tools'>" +
-                            "<i class='fas fa-pen'>" +
-                            "</i>" +
-                            "<i class='fas fa-reply'><div class='reply'></div>" +
-                            "</i>";
-                        // if (data[i].attachment !== "None") {
-                        //     comment_code += "<a href='/" +
-                        //                      data[i].attachment +
-                        //                      "'><i class='fas fa-paperclip'></i></a>" ;
-                        // }
-                        comment_code += "</span>" +
-                            "<span>" +
-                            description +
-                            "</span>" +
-                            "</div>" +
-                            "</div>";
+                        comment_code = addComment(data);
                         $(".project-comment-innerDiv").find(".comments").append(comment_code);
                         iziToast.success({
                             rtl: true,

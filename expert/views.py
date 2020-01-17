@@ -327,14 +327,15 @@ def show_project_view(request):
         'policy': project_form.policy,
         'potential_problems': project_form.potential_problems,
         'required_budget': project_form.required_budget,
+        'required_method': project_form.required_method,
         'project_phase': project_form.project_phase,
         'predict_profit': project_form.predict_profit,
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
-    data['required_technique']=[]
-    for tech in project.project_form.required_technique:
-        data['required_technique'].append(tech.__str__())
+    # data['required_technique']=[]
+    # for tech in project.project_form.required_technique:
+    #     data['required_technique'].append(tech.__str__())
     return JsonResponse(data)
 
 
@@ -472,7 +473,7 @@ def CommentForResearcher(request):
                           , project=project
                           , researcher_user=researcher
                           , expert_user=request.user.expertuser
-                          , sender_type=0)
+                          , sender_type="expert")
         comment.save()
         print(Project.objects.filter(id=request.POST['project_id']))
         data = {
@@ -527,6 +528,6 @@ def CommentForIndustry(request):
     if not project.expert_messaged.filter(id=request.user.expertuser.id).exists():
         project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
         project.save()
-    Comment.objects.create(sender_type=0, project=project, expert_user=request.user.expertuser,
+    Comment.objects.create(sender_type="expert", project=project, expert_user=request.user.expertuser,
                            industry_user=project.industry_creator, description=request.GET.get('description'))
     return JsonResponse({})

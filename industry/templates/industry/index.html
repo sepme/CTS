@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="row">
-                {% for project in user.industryuser.projects.all %}
+                {% for project in projects %}
                     {% if project.status == 0 %}
                         <div class="col-lg-6 col-md-6">
                             <div class="card project-card text-right">
@@ -38,8 +38,7 @@
 {#                                    </div>#}
 {#                                </div>#}
                                 <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
-                                <div class="employer"><i class="fas fa-user-tie"></i> استاد احسان شریف</div>
-                                <button class="chamran-btn-info default-btn show-btn" type="button" id="{{ project.id }}">مشاهده</button>
+                                <button class="chamran-btn-info default-btn show-btn show-project" type="button" id="{{ project.id }}">مشاهده</button>
                                 <div class="timetable"><i></i> در حال بررسی!</div>
                                 <div class="check-circle"><i class="fas fa-spinner fa-pulse fa-lg"></i></div>
 {#                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 496">#}
@@ -126,9 +125,11 @@
                             <div class="card project-card text-right">
                                 <h6> {{ project.project_form.project_title_persian }}</h6>
                                 <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
-                                <div class="employer"><i class="fas fa-user-tie"></i> استاد احسان شریف</div>
-                                <button class="chamran-btn-info default-btn show-btn" type="button" id="{{ project.id }}">مشاهده</button>
-                                <div class="timetable"><i class="fas fa-hourglass-half"></i> 2 ماه</div>
+                                {% if project.expert_accepted %}
+                                <div class="employer"><i class="fas fa-user-tie"></i> استاد {{project.expert_accepted.expertform}}</div>
+                                {% endif %}
+                                <button class="chamran-btn-info default-btn show-btn show-project" type="button" id="{{ project.id }}">مشاهده</button>
+                                <div class="timetable"><i class="fas fa-hourglass-half"></i> {{project.time_left}}</div>
                                 <div class="active-circle"></div>
                             </div>
                         </div>
@@ -184,8 +185,10 @@
                                 <h6><i class="fas fa-file-alt"></i>
                                     {{ project.project_form.project_title_persian }}</h6>
                                 <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
-                                <div class="employer"><i class="fas fa-user-tie"></i> استاد احسان شریف</div>
-                                <button class="chamran-btn-info" type="button" id="{{ project.id }}">نمایش</button>
+                                {% if project.expert_accepted %}
+                                <div class="employer"><i class="fas fa-user-tie"></i> استاد {{project.expert_accepted.expertform}}</div>
+                                {% endif %}
+                                <button class="chamran-btn-info show-btn show-project" type="button" id="{{ project.id }}">نمایش</button>
                                 <div class="timetable"><i></i> معلق!</div>
                                 <div class="refuse-circle">
                                     <i class="fas fa-ban fa-lg"></i>
@@ -207,9 +210,11 @@
                                 <h6><i class="fas fa-file-alt"></i>
                                     {{ project.project_form.project_title_persian }}</h6>
                                 <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
-                                <div class="employer"><i class="fas fa-user-tie"></i> استاد احسان شریف</div>
+                                {% if project.expert_accepted %}
+                                <div class="employer"><i class="fas fa-user-tie"></i> استاد {{project.expert_accepted.expertform}}</div>
+                                {% endif %}
                                 <button class="chamran-btn-info" type="button" id="{{ project.id }}">نمایش</button>
-                                <div class="timetable"><i class="fas fa-check-double"></i> تکمیل شد!</div>
+                                <div class="timetable"><i class="fas fa-check-double"></i> تکمیل شد</div>
                                 <div class="default-circle"><i class="fas fa-check-circle fa-lg"></i></div>
 {#                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 496">#}
 {#                                    <g>#}

@@ -1,4 +1,7 @@
 import os
+import datetime
+from dateutil.relativedelta import relativedelta
+
 from ChamranTeamSite import settings
 # from PIL import Image
 from django.db import models
@@ -34,7 +37,6 @@ class IndustryUser(models.Model):
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
-    projects = models.ManyToManyField('industry.Project', verbose_name='پروژه ها', blank=True)
 
     def __str__(self):
         return self.user.get_username()
@@ -107,6 +109,7 @@ class ProjectForm(models.Model):
     approach = models.TextField(verbose_name="راه کار ها")
     potential_problems = models.TextField(verbose_name='مشکلات احتمالی')
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
+    required_method = models.TextField(verbose_name="روش های مورد نیاز" ,null=True)
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
     required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
@@ -133,16 +136,16 @@ class Project(models.Model):
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', through='researcher.RequestedProject',
                                                 verbose_name="پژوهشگران درخواست داده",
-                                                related_name="researchers_applied", blank=True, null=True)
+                                                related_name="researchers_applied", blank=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
-                                                 related_name="researchers_accepted", blank=True, null=True)
+                                                 related_name="researchers_accepted", blank=True)
     expert_applied = models.ManyToManyField('expert.ExpertUser', through='expert.ExpertRequestedProject',
                                             verbose_name="اساتید درخواست داده",
-                                            related_name="experts_applied", blank=True, null=True)
+                                            related_name="experts_applied", blank=True)
     expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
                                                                                                     "شده",
                                         related_name="expert_accepted", blank=True, null=True)
-    expert_messaged = models.ManyToManyField('expert.ExpertUser', null=True, blank=True,
+    expert_messaged = models.ManyToManyField('expert.ExpertUser', blank=True,
                                              verbose_name='اساتیدی که پیام داده اند')
     industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
                                          null=True, blank=True, verbose_name='شرکت '
@@ -168,6 +171,18 @@ class Project(models.Model):
         project_comments = Comment.objects.all().filter(project=self)
         return project_comments
 
+    @property
+    def time_left(self):
+        delta = relativedelta(self.date_finished, datetime.date.today())
+        if delta.years != 0:
+            return str(delta.years) + ' سال'
+        elif delta.months != 0:
+            return str(delta.months) + ' ماه'
+        elif delta.days != 0:
+            return str(delta.days) + ' روز'
+        else:
+            return 'امروز'
+
     class Meta:
         ordering = ['-date_submitted_by_industry']
 
@@ -179,25 +194,22 @@ def upload_comment(instance, file_name):
 class Comment(models.Model):
     description = models.TextField(verbose_name="متن")
     SENDER = (
-        (0, 'استاد'),
-        (1, 'صنعت'),
-        (2, 'پژوهشگر'),
-        (3, 'سیستم'),
+        ("expert", 'استاد'),
+        ("industry", 'صنعت'),
+        ("researcher", 'پژوهشگر'),
+        ("system", 'سیستم'),
     )
     replied_text = models.CharField(max_length=150, blank=True, null=True)
-    sender_type = models.IntegerField(choices=SENDER)
+    sender_type = models.CharField(max_length=10 ,choices=SENDER)
     project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, blank=True, null=True)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
     researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True, blank=True)
-    attachment = models.FileField(upload_to=upload_comment, blank=True, null=True)
+    attachment = models.FileField(upload_to=upload_comment, blank=True, null=True, max_length=255)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
     def __str__(self):
-        return self.description
-    
-    def __str__(self):
-        return self.SENDER[self.sender_type][1]
+        return self.sender_type
 
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128)
@@ -220,7 +232,9 @@ class ProjectHistory(models.Model):
 
 class ExpertEvaluateIndustry(models.Model):
     industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
-    expert = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    project  = models.ForeignKey(Project ,on_delete=models.CASCADE ,null=True)
+    expert = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, blank=True, null=True)
+    phase = models.IntegerField(verbose_name="فاز شماره : " ,null=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -255,3 +269,6 @@ class ExpertEvaluateIndustry(models.Model):
 
         ava = float(sum / 9)
         return ava
+
+    def __str__(self):
+        return str(self.industry) + " evaluate " + str(self.expert.expertform)
