@@ -93,7 +93,7 @@ class Questions(generic.TemplateView):
         expert_user = request.user.expertuser
         research_questions = ResearchQuestion.objects.filter(expert=expert_user)
         context = {
-            'research_question_form': ResearchQuestionForm(),
+            'research_question_form': forms.ResearchQuestionForm(),
             'research_questions': research_questions,
         }
         return render(request, self.template_name, context)
@@ -107,6 +107,7 @@ def index(request):
         print(form.is_valid())
 
         if form.is_valid():
+            photo = form.cleaned_data['photo']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             special_field = form.cleaned_data['special_field']
@@ -117,15 +118,12 @@ def index(request):
             home_number = form.cleaned_data['home_number']
             phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email_address']
-            expert_form = ExpertForm.objects.create(expert_firstname=first_name, expert_lastname=last_name,
+            expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
+                                                    expert_firstname=first_name, expert_lastname=last_name,
                                                     special_field=special_field, national_code=melli_code,
                                                     scientific_rank=scientific_rank, university=university,
                                                     phone_number=home_number, home_address=address,
-                                                    mobile_phone=phone_number, email_address=expert_user.user)
-            expert_form.expert_user = expert_user
-            if request.FILES.get('photo'):
-                photo = request.FILES.get('photo')
-                expert_form.photo.save(photo.name, photo)
+                                                    mobile_phone=phone_number, email_address=expert_user.user.get_username())
             expert_user.status = 'free'
             expert_user.save()
             expert_form.save()
@@ -199,21 +197,20 @@ class UserInfo(generic.FormView):
             expert_form = expert_info_form.save(commit=False)
             expert_form.expert_user = request.user.expertuser
 
-            if team_work and creative_thinking and sacrifice and researching and obligation and data_collection and morale and risk:
-                if instance.eq_test:
-                    eq_test = instance.eq_test
-                else:
-                    eq_test = EqTest()
-                eq_test.team_work = team_work
-                eq_test.innovation = creative_thinking
-                eq_test.devotion = sacrifice
-                eq_test.productive_research = researching
-                eq_test.national_commitment = obligation
-                eq_test.collecting_information = data_collection
-                eq_test.business_thinking = morale
-                eq_test.risk_averse = risk
-                eq_test.save()
-                expert_form.eq_test = eq_test
+            if instance.eq_test:
+                eq_test = instance.eq_test
+            else:
+                eq_test = EqTest()
+            eq_test.team_work = team_work
+            eq_test.innovation = creative_thinking
+            eq_test.devotion = sacrifice
+            eq_test.productive_research = researching
+            eq_test.national_commitment = obligation
+            eq_test.collecting_information = data_collection
+            eq_test.business_thinking = morale
+            eq_test.risk_averse = risk
+            eq_test.save()
+            expert_form.eq_test = eq_test
 
             if foreign_work and student_num:
                 expert_form.has_industrial_research = foreign_work
@@ -236,10 +233,6 @@ class UserInfo(generic.FormView):
 
 
 def scienfic_record_view(request):
-    print(request.is_ajax())
-    # form = request.GET.get('formData', None)
-    # print(form)
-    print(request.POST)
     scientific_form = forms.ScientificRecordForm(request.POST)
     if scientific_form.is_valid():
         print(scientific_form.cleaned_data)
@@ -556,3 +549,28 @@ def CommentForIndustry(request):
         return JsonResponse(data=data)
     else:
         return JsonResponse(form.errors, status=400)
+
+def ShowTechnique(request):
+    print(request)
+    print(request.GET)
+    TYPE = (
+        'molecular_biology',
+        'immunology',
+        'imaging', 
+        'histology', 
+        'general_lab',
+        'animal_lab',
+        'lab_safety',
+        'biochemistry', 
+        'cellular_biology',
+        'research_methodology',
+    )
+    query = []
+    for tp in TYPE:
+        query.append(list(Technique.objects.filter(technique_type=tp).values_list('technique_title' ,flat=True)))
+        query[-1].append(tp)
+    data = {}
+    for q in query:
+        if len(q) > 1:
+            data[q[-1]] = q[:-1]
+    return JsonResponse(data=data)

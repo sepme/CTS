@@ -904,7 +904,7 @@ $(".add-new-technique").click(function (event) {
         method: 'GET',
         url: '/researcher/show_technique/',
         dataType: 'json',
-        data: {'id': "fuckU"},
+        data: {'id': "None"},
         success: function (data) {            
             let source = [];
             for (let i = 0; i <= Object.keys(data).length - 1; i++) {

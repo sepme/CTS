@@ -178,86 +178,72 @@ $(document).ready(function () {
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
     $(".confirm_project").click(function () {
-        $(".select-technique").find("#fancy-tree").fancytree({
-            extensions: ["glyph"],
-            checkbox: false,
-            selectMode: 1,
-            checkboxAutoHide: true,
-            clickFolderMode: 2,
-            lazyLoad: function (event, data) {
-                data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
-            },
-            select: function (event, data) {
+        $.ajax({
+            method: 'GET',
+            url: '/expert/show_technique/',
+            dataType: 'json',
+            data: {'id': "None"},
+            success: function (data) {
+                    console.log(data);
+                let source = [];
+                for (let i = 0; i <= Object.keys(data).length - 1; i++) {
+                    let item = {};
+                    item["title"] = Object.keys(data)[i];
+                    item["key"] = i + 1;
+                    if (Object.values(data)[i].length) {
+                        item["folder"] = true;
+                        let children = [];
+                        for (let j = 0; j < Object.values(data)[i].length; j++) {
+                            let child_item = {};
+                            child_item["title"] = Object.values(data)[i][j];
+                            child_item["key"] = i + "." + j;
+                            children.push(child_item);
+                        }
+                        item["children"] = children;
+                    }
+                    source.push(item);
+                }
+                $(".select-technique").find("#fancy-tree").fancytree({
+                    extensions: ["glyph"],
+                    checkbox: false,
+                    selectMode: 1,
+                    checkboxAutoHide: true,
+                    clickFolderMode: 2,
+                    lazyLoad: function (event, data) {
+                        data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                    },
+                    select: function (event, data) {
 
-            },
-            source: [
-                {
-                    "title": "histology", "key": "1", "folder": true, "children": [
-                        {
-                            "title": "Sterile Tissue Harvest", "key": "101", "folder": true, "children": [
-                                {"title": "Sterile Tissue Harvest", "key": "10101"},
-                                {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
-                            ]
-                        },
-                        {"title": "Tissue Cryopreservation", "key": "102"},
-                        {"title": "Tissue Fixation", "key": "103"},
-                        {"title": "Microtome Sectioning", "key": "104"},
-                        {"title": "Cryostat Sectioning", "key": "105"},
-                        {"title": "H&E staining", "key": "106"},
-                        {"title": "Histochemistry", "key": "107"},
-                        {"title": "Histoflouresence", "key": "108"}
-                    ]
+                    },
+                    source: source,
+                    glyph: {
+                        preset: "awesome5",
+                        map: {
+                            _addClass: "",
+                            checkbox: "fas fa-square",
+                            checkboxSelected: "fas fa-check-square",
+                            checkboxUnknown: "fas fa-square",
+                            radio: "fas fa-circle",
+                            radioSelected: "fas fa-circle",
+                            radioUnknown: "fas fa-dot-circle",
+                            dragHelper: "fas fa-arrow-right",
+                            dropMarker: "fas fa-long-arrow-right",
+                            error: "fas fa-exclamation-triangle",
+                            expanderClosed: "fas fa-chevron-left",
+                            expanderLazy: "fas fa-angle-right",
+                            expanderOpen: "fas fa-chevron-down",
+                            loading: "fas fa-spinner fa-pulse",
+                            nodata: "fas fa-meh",
+                            noExpander: "",
+                            // Default node icons.
+                            // (Use tree.options.icon callback to define custom icons based on node data)
+                            doc: "fas fa-screwdriver",
+                            docOpen: "fas fa-screwdriver",
+                            folder: "fas fa-folder",
+                            folderOpen: "fas fa-folder-open"
+                        }
+                    },});
                 },
-                {
-                    "title": "general lab", "key": "2", "folder": true, "children": [
-                        {"title": "An Introduction to the Centrifuge", "key": "201"},
-                        {"title": "Regulating Temperature in the Lab Preserving Samples Using Cold", "key": "202"},
-                        {"title": "Introduction to the Bunsen Burner", "key": "203"},
-                        {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
-                        {"title": "An Introduction to the Micropipettor", "key": "205"},
-                        {"title": "Making Solutions in the Laboratory", "key": "206"},
-                        {"title": "Understanding Concentration and Measuring Volumes", "key": "207"},
-                        {"title": "Introduction to the Microplate Reader", "key": "208"},
-                        {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
-                        {"title": "Common Lab Glassware and Users", "key": "210"},
-                        {"title": "Solutions and Concentrations", "key": "211"},
-                        {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
-                        {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
-                        {"title": "Determining the Empirical Formula", "key": "214"},
-                        {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
-                        {"title": "Using a pH Meter", "key": "216"},
-                        {"title": "Introduction to Titration", "key": "217"},
-                        {"title": "Ideal Gas Law", "key": "218"}
-                    ]
-                }
-            ],
-            glyph: {
-                preset: "awesome5",
-                map: {
-                    _addClass: "",
-                    checkbox: "fas fa-square",
-                    checkboxSelected: "fas fa-check-square",
-                    checkboxUnknown: "fas fa-square",
-                    radio: "fas fa-circle",
-                    radioSelected: "fas fa-circle",
-                    radioUnknown: "fas fa-dot-circle",
-                    dragHelper: "fas fa-arrow-right",
-                    dropMarker: "fas fa-long-arrow-right",
-                    error: "fas fa-exclamation-triangle",
-                    expanderClosed: "fas fa-chevron-left",
-                    expanderLazy: "fas fa-angle-right",
-                    expanderOpen: "fas fa-chevron-down",
-                    loading: "fas fa-spinner fa-pulse",
-                    nodata: "fas fa-meh",
-                    noExpander: "",
-                    // Default node icons.
-                    // (Use tree.options.icon callback to define custom icons based on node data)
-                    doc: "fas fa-screwdriver",
-                    docOpen: "fas fa-screwdriver",
-                    folder: "fas fa-folder",
-                    folderOpen: "fas fa-folder-open"
-                }
-            },
         });
         $('#tags').tagsInput({
             'height': 'FIT-CONTENT',
