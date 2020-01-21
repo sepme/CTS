@@ -293,9 +293,8 @@ def show_project_view(request):
     project = Project.objects.get(id=id)
     project_form = project.project_form
     comments = []
-    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser)
+    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
     for comment in comment_list:
-        # print(comment.attachment.url)
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
             print(url)
@@ -378,7 +377,6 @@ def add_research_question(request):
         research_question.save()
         return JsonResponse(data)
     else:
-        print(research_question_form.errors)
         return JsonResponse(research_question_form.errors, status=400)
 
 
@@ -452,12 +450,26 @@ def show_researcher_preview(request):
     }
     for tech in TechniqueInstance.objects.filter(researcher=researcher.researcher_user):
         researcher_information['techniques'].append(tech.technique.technique_title)
-    print(researcher_information)
+    project = get_object_or_404(Project ,pk=request.GET["project_id"])
+    comments = []
+    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(researcher_user=None)
+    for comment in comment_list:
+        try:
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            print(url)
+        except:
+            url = "None"
+        comments.append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment': url,
+        })
+    researcher_information['comments'] = comments
     return JsonResponse(researcher_information)
 
 
 def CommentForResearcher(request):
-    print(request)
     form = forms.CommentForm(request.POST, request.FILES)
     project = Project.objects.filter(id=request.POST['project_id'])[0]
     researcher = ResearcherUser.objects.filter(id=request.POST['researcher_id'])[0]
@@ -471,52 +483,22 @@ def CommentForResearcher(request):
                           , expert_user=request.user.expertuser
                           , sender_type="expert")
         comment.save()
-        print(Project.objects.filter(id=request.POST['project_id']))
-        data = {
-            'success': 'successful',
-        }
+        if form.cleaned_data["attachment"] is not None:
+            data = {
+                'success'    : 'successful',
+                'pk'         : comment.pk,
+                'attachment' : comment.attachment.url[comment.attachment.url.find('media' ,2):],
+                'description': comment.description,
+            }
+        else:
+            data = {
+                'success' : 'successful',
+                'pk'         : comment.pk,
+                'description': comment.description,
+                'attachment' : "None",
+            }
         return JsonResponse(data)
-    print("form doesn't validated!")
     return JsonResponse(form.errors, status=400)
-
-
-# def CommentForIndustry(request):
-#     form = CommentForm(request.POST ,request.FILES)
-#     project = Project.objects.filter(id=request.POST['project_id'])[0]
-#     industry = IndustryUser.objects.filter(id=request.POST['industry_id'])[0]
-#     if form.is_valid():
-#         description = form.cleaned_data['description']
-#         attachment = form.cleaned_data['attachment']        
-#         comment = Comment(description=description
-#                          ,attachment=attachment
-#                          ,project=project
-#                          ,industry_user=industry
-#                          ,expert_user=request.user.expertuser
-#                          ,sender_type=0)
-#         comment.save()
-#         print(Project.objects.filter(id=request.POST['project_id']))
-#         data = {
-#             'success' : 'successful',
-#         }
-#         return JsonResponse(data)
-#     print("form doesn't validated!")
-#     return JsonResponse(form.errors ,status=400)
-#     attachment = form.cleaned_data['attachment']
-#     comment = Comment(description=description
-#                       , attachment=attachment
-#                       , project=project
-#                       , researcher_user=researcher
-#                       , expert_user=request.user.expertuser
-#                       , sender_type=0)
-#     comment.save()
-#     print(Project.objects.filter(id=request.POST['project_id']))
-#     data = {
-#         'success': 'successful',
-#     }
-#     return JsonResponse(data)
-# print("form doesn't validated!")
-# return JsonResponse(form.errors, status=400)
-
 
 def CommentForIndustry(request):
     project = Project.objects.get(id=request.POST['project_id'])
@@ -551,8 +533,6 @@ def CommentForIndustry(request):
         return JsonResponse(form.errors, status=400)
 
 def ShowTechnique(request):
-    print(request)
-    print(request.GET)
     TYPE = (
         'molecular_biology',
         'immunology',

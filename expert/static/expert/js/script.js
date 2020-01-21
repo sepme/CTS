@@ -257,7 +257,7 @@ $(document).ready(function () {
             $(this).css("width", "fit-content");
         });
         tag_input_label("tags");
-        select_technique();
+        select_technique(".select-technique");
         let techniquesForm = $('.ajax-select-techniques');
         techniquesForm.submit(function (event) {
             event.preventDefault();
@@ -407,7 +407,7 @@ $(document).ready(function () {
             method: 'GET',
             url: url,
             dataType: 'json',
-            data: {id: id},
+            data: {id: id ,project_id :project_id},
             success: function (data) {
                 $(".researcher_id").attr("value" ,id);
                 $(".project_id").attr("value" ,project_id);
@@ -490,7 +490,7 @@ $(document).ready(function () {
                         $('#researcher_research_record').html(table_row)
                     }
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
-
+                setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
             error: function (data) {
@@ -1244,8 +1244,13 @@ comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
-    $("#project_id").attr('value', $('.preview-project').attr("id"));
-    let thisUrl = "/expert/industry_comment/";    
+    let thisUrl = "";
+    if (comment_form.find(".researcher_id").val() == null)
+        thisUrl = "/expert/industry_comment/";
+    else
+        thisUrl = "/expert/researcher_comment/";
+    $(".project_id").attr('value', $('.preview-project').attr("id"));
+    
     let form = new FormData(comment_form.get(0));    
     $.ajax({
         method: 'POST',
@@ -1259,26 +1264,6 @@ comment_form.submit(function (event) {
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
             let comment_code = addComment(data);
-            // let comment_code = "<div class='my-comment'>" +
-            //     "<div class='comment-profile'>" +
-            //     "</div>" +
-            //     "<div class='comment-body'>" +
-            //     "<span class='comment-tools'>" +
-            //     "<i class='fas fa-pen'>" +
-            //     "</i>" +
-            //     "<i class='fas fa-reply'><div class='reply'></div>" +
-            //     "</i>";
-            // if (data[i].attachment !== "None") {
-            //     comment_code += "<a href='/" +
-            //                      data[i].attachment +
-            //                      "'><i class='fas fa-paperclip'></i></a>" ;
-            // }
-            // comment_code += "</span>" +
-            //     "<span>" +
-            //     description +
-            //     "</span>" +
-            //     "</div>" +
-            //     "</div>";
             $(".project-comment-innerDiv").find(".comments").append(comment_code);
             iziToast.success({
                 rtl: true,

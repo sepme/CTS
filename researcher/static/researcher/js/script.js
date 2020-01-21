@@ -185,7 +185,6 @@ function setValue(data) {
 
 function setComment(data) {
     let comments_code = "";
-    let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert            
             comments_code += "<div class='expert-comment' dir='ltr' >" +
