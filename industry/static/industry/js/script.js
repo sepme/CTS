@@ -1,13 +1,14 @@
 $(window).on("load", function () {
     init_windowSize();
     load_dialog();
+    $('*').persiaNumber();
 }).on("resize", function () {
     init_windowSize();
     load_dialog();
 });
 function numbersComma(num) {
     let newNum = num.toString();
-    return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+    return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 }
 function setRole(data) {
     role = "<div>" +
@@ -135,15 +136,19 @@ function setMajors(data) {
 function setValue(data) {
     $("#v-pills-settings-tab").click(function () {
         setRole(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-messages-tab").click(function () {
         setResources(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-profile-tab").click(function () {
         setApproach(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-home-tab").click(function () {
         setMajors(data);
+        $('*').persiaNumber();
     });
 }
 
