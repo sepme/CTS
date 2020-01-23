@@ -973,16 +973,14 @@ function select_technique(className) {
     //             $("input#technique-name").val(node.title);
     //             express();
     //             input_focus();
-    //         }
+    //     }
+    //});
+    // $("li[role='treeitem']").click(function () {
+    //     console.log("click");
+    //     let tree = $("#fancy-tree").fancytree({
+    //
     //     });
-    $("li[role='treeitem']").click(function () {
-        let tree = $("#fancy-tree").fancytree({
-            activate: function (event, data) {
-                node = data.node;
-                $('#tags').addTag(node.title);
-            }
-        });
-    });
+    // });
     $("#add-new-technique").keyup(function (e) {
         console.log("FUCK");
         console.log($(this).val());
