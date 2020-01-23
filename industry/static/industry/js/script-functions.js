@@ -171,6 +171,7 @@ function close_dialog(className) {
     $(".close").click(function () {
         $(className).css("display", "none");
         $(".main").removeClass("blur-div");
+        $(className).find(".no-comment").remove();
     });
 }
 
