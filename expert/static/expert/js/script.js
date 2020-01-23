@@ -122,6 +122,7 @@ function showQuestion() {
 
 $(document).ready(function () {
 
+    $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
     const questions = $(".tab-content div.card").toArray();
     $(".nav-tabs .nav-item .nav-link").click(function () {
         if ($(this).attr("id") === "active-questions") {
@@ -188,7 +189,7 @@ $(document).ready(function () {
             dataType: 'json',
             data: {'id': "None"},
             success: function (data) {
-                    console.log(data);
+                console.log(data);
                 let source = [];
                 for (let i = 0; i <= Object.keys(data).length - 1; i++) {
                     let item = {};
@@ -215,6 +216,9 @@ $(document).ready(function () {
                     clickFolderMode: 2,
                     lazyLoad: function (event, data) {
                         data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                    },
+                    activate: function (event, data) {
+                        $('#tags').addTag(data.node.title);
                     },
                     select: function (event, data) {
 
@@ -246,8 +250,10 @@ $(document).ready(function () {
                             folder: "fas fa-folder",
                             folderOpen: "fas fa-folder-open"
                         }
-                    },});
-                },
+                    },
+                });
+                select_technique(".select-technique");
+            },
         });
         $('#tags').tagsInput({
             'height': 'FIT-CONTENT',
@@ -261,7 +267,6 @@ $(document).ready(function () {
             $(this).css("width", "fit-content");
         });
         tag_input_label("tags");
-        select_technique(".select-technique");
         let techniquesForm = $('.ajax-select-techniques');
         techniquesForm.submit(function (event) {
             event.preventDefault();
@@ -411,10 +416,10 @@ $(document).ready(function () {
             method: 'GET',
             url: url,
             dataType: 'json',
-            data: {id: id ,project_id :project_id},
+            data: {id: id, project_id: project_id},
             success: function (data) {
-                $(".researcher_id").attr("value" ,id);
-                $(".project_id").attr("value" ,project_id);
+                $(".researcher_id").attr("value", id);
+                $(".project_id").attr("value", project_id);
                 $('#researcher_photo').attr("src", data.photo);
                 $('#researcher_name').html(data.name);
                 $('#researcher_major').html(data.major);
@@ -1050,7 +1055,7 @@ function setResources(data) {
         "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
         "</div>" +
         "<div class='answer'>" +
-        numbersComma(data.required_budget) +
+        numbersComma(data.required_budget) + " ریال" +
         "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
@@ -1110,7 +1115,7 @@ function setMajors(data) {
         "برآورد شما از سود مالی این پروژه چگونه است؟" +
         "</div>" +
         "<div class='answer'>" +
-        numbersComma(data.predict_profit) +
+        numbersComma(data.predict_profit) + " ریال" +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
@@ -1223,27 +1228,27 @@ $.ajaxSetup({
     }
 });
 
-function addComment(data){
+function addComment(data) {
     let comment_code = "<div class='my-comment'>" +
-                        "<div class='comment-body' dir='ltr'>" +
-                        "<span class='comment-tools'>" +
-                        "<i class='fas fa-trash-alt'></i>" +
-                        "<i class='fas fa-reply' value=" +
-                        data.pk +
-                        "></i>" +
-                        "<i class='fas fa-pen'>" +
-                        "</i>";
-                    if (data.attachment !== "None") {
-                        comment_code += "<a href='/" +
-                            data.attachment +
-                            "'><i class='fas fa-paperclip'></i></a>";
-                    }
-                    comment_code += "</span>" +
-                        "<span>" +
-                        data.description +
-                        "</span>" +
-                        "</div>" +
-                        "</div>";
+        "<div class='comment-body' dir='ltr'>" +
+        "<span class='comment-tools'>" +
+        "<i class='fas fa-trash-alt'></i>" +
+        "<i class='fas fa-reply' value=" +
+        data.pk +
+        "></i>" +
+        "<i class='fas fa-pen'>" +
+        "</i>";
+    if (data.attachment !== "None") {
+        comment_code += "<a href='/" +
+            data.attachment +
+            "'><i class='fas fa-paperclip'></i></a>";
+    }
+    comment_code += "</span>" +
+        "<span>" +
+        data.description +
+        "</span>" +
+        "</div>" +
+        "</div>";
     return comment_code;
 }
 
@@ -1259,8 +1264,8 @@ comment_form.submit(function (event) {
     else
         thisUrl = "/expert/researcher_comment/";
     $(".project_id").attr('value', $('.preview-project').attr("id"));
-    
-    let form = new FormData(comment_form.get(0));    
+
+    let form = new FormData(comment_form.get(0));
     $.ajax({
         method: 'POST',
         url: thisUrl,
