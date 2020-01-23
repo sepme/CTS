@@ -111,7 +111,7 @@ class ProjectForm(models.Model):
     required_lab_equipment = models.TextField(verbose_name="منابع مورد نیاز")
     required_method = models.TextField(verbose_name="روش های مورد نیاز" ,null=True)
     project_phase = models.TextField(verbose_name="مراحل انجام پروژه")
-    required_budget = models.FloatField(verbose_name="بودجه مورد نیاز")
+    required_budget = models.IntegerField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
     predict_profit = models.IntegerField(verbose_name='سود مالی')
 

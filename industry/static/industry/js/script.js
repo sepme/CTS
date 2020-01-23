@@ -409,6 +409,7 @@ $(document).ready(function () {
                     $('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
+                    console.log(data.expert_messaged);
                     if (data.status !== 0) {
                         if (data.vote === "false") {
                             $(".vote").remove();

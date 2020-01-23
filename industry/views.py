@@ -56,8 +56,16 @@ def show_project_ajax(request):
     for expert in project.expert_messaged.all():
         json_response['expert_messaged'].append({
             'id': expert.id,
-            'name': expert.expertform.__str__()
+            'name': expert.expertform.__str__(),
+            'applied' : expert in project.expert_applied.all(),
         })
+    for expert in project.expert_applied.all():
+        if expert not in project.expert_messaged.all():
+            json_response['expert_messaged'].append({
+                'id': expert.id,
+                'name': expert.expertform.__str__(),
+                'applied' : expert in project.expert_applied.all(),
+            })
     json_response['deadline'] = 'نا مشخص'
     if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
         json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
