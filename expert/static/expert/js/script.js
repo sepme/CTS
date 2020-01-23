@@ -1258,7 +1258,8 @@ comment_form.submit(function (event) {
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
     let thisUrl = "";
-    if (comment_form.find(".researcher_id").val() == null)
+    console.log(comment_form.find(".researcher_id").val()=="");
+    if (comment_form.find(".researcher_id").val() == "")
         thisUrl = "/expert/industry_comment/";
     else
         thisUrl = "/expert/researcher_comment/";

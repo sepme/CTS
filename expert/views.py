@@ -77,7 +77,6 @@ class ResearcherRequest(generic.TemplateView):
         context = {}
         if len(projects_data) != 0:
             context = {'applications': projects_data}
-        print(context)
 
         return render(request, self.template_name, context)
 
@@ -104,7 +103,6 @@ def index(request):
     expert_user = get_object_or_404(ExpertUser, user=request.user)
     if request.method == 'POST':
         form = forms.InitialInfoForm(request.POST, request.FILES)
-        print(form.is_valid())
 
         if form.is_valid():
             photo = form.cleaned_data['photo']
@@ -165,7 +163,6 @@ class UserInfo(generic.FormView):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
         expert_info_form = forms.ExpertInfoForm(request.POST, request.FILES, instance=instance)
         team_work = request.POST.get('team_work', False)
@@ -235,7 +232,6 @@ class UserInfo(generic.FormView):
 def scienfic_record_view(request):
     scientific_form = forms.ScientificRecordForm(request.POST)
     if scientific_form.is_valid():
-        print(scientific_form.cleaned_data)
         data = {'success': 'successful'}
         scientific_record = scientific_form.save(commit=False)
         scientific_record.expert_form = request.user.expertuser.expertform
@@ -249,7 +245,6 @@ def scienfic_record_view(request):
 def executive_record_view(request):
     executive_form = forms.ExecutiveRecordForm(request.POST)
     if executive_form.is_valid():
-        print(executive_form.cleaned_data)
         data = {'success': 'successful'}
         executive_record = executive_form.save(commit=False)
         executive_record.expert_form = request.user.expertuser.expertform
@@ -263,7 +258,6 @@ def executive_record_view(request):
 def research_record_view(request):
     research_form = forms.ResearchRecordForm(request.POST)
     if research_form.is_valid():
-        print(research_form.cleaned_data)
         data = {'success': 'successful'}
         research_record = research_form.save(commit=False)
         research_record.expert_form = request.user.expertuser.expertform
@@ -277,7 +271,6 @@ def research_record_view(request):
 def paper_record_view(request):
     paper_form = forms.PaperRecordForm(request.POST)
     if paper_form.is_valid():
-        print(paper_form.cleaned_data)
         data = {'success': 'successful'}
         paper_record = paper_form.save(commit=False)
         paper_record.expert_form = request.user.expertuser.expertform
@@ -297,7 +290,6 @@ def show_project_view(request):
     for comment in comment_list:
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
-            print(url)
         except:
             url = "None"
         comments.append({
@@ -327,7 +319,6 @@ def show_project_view(request):
         'techniques_list': Technique.get_technique_list(),
         'success': 'successful',
     }
-    print(data['required_method'])
     # data['required_technique']=[]
     # for tech in project.project_form.required_technique:
     #     data['required_technique'].append(tech.__str__())
@@ -369,9 +360,7 @@ def add_research_question(request):
         data = {'success': 'successful'}
         research_question = research_question_form.save(commit=False)
         research_question.expert = request.user.expertuser
-        print(request.POST)
         if request.FILES.get('attachment'):
-            print("tried to upload file...")
             attachment = request.FILES.get('attachment')
             research_question.attachment.save(attachment.name, attachment)
         research_question.save()
@@ -433,7 +422,6 @@ def set_answer_situation(request):
 
 def show_researcher_preview(request):
     researcher = ResearcherProfile.objects.filter(id=request.GET.get('id')).first()
-    print(TechniqueInstance.objects.filter(researcher=researcher.researcher_user))
     researcher_information = {
         'photo': researcher.photo.url,
         'name': researcher.__str__(),
@@ -456,7 +444,6 @@ def show_researcher_preview(request):
     for comment in comment_list:
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
-            print(url)
         except:
             url = "None"
         comments.append({

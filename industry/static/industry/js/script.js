@@ -1,11 +1,15 @@
 $(window).on("load", function () {
     init_windowSize();
     load_dialog();
+    $('*').persiaNumber();
 }).on("resize", function () {
     init_windowSize();
     load_dialog();
 });
-
+function numbersComma(num) {
+    let newNum = num.toString();
+    return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+}
 function setRole(data) {
     role = "<div>" +
         "<div class='question'>" +
@@ -64,7 +68,7 @@ function setResources(data) {
         "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.required_budget +
+        numbersComma(data.required_budget) +
         "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
@@ -124,7 +128,7 @@ function setMajors(data) {
         "برآورد شما از سود مالی این پروژه چگونه است؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.predict_profit +
+        numbersComma(data.predict_profit) +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
@@ -132,35 +136,45 @@ function setMajors(data) {
 function setValue(data) {
     $("#v-pills-settings-tab").click(function () {
         setRole(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-messages-tab").click(function () {
         setResources(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-profile-tab").click(function () {
         setApproach(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-home-tab").click(function () {
         setMajors(data);
+        $('*').persiaNumber();
     });
 }
 
 function setTab(data) {
-    for (let i = 0; i < data.expert_messaged.length; i++) {
-        let tab = "<a class='nav-link' data-toggle='pill'" +
-            "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
-            "" +
-            data.expert_messaged[i].name +
-            "</a>";
-        $(".comment-tabs div").append(tab);
-        $(".comment-tabs .nav-link:last-child").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
-        if (i === 0) {
-            $(".comment-tabs div .nav-link").addClass("active");
+    if (data.expert_messaged.length === 0) {
+        $(".project-comment-innerDiv .add-comment").css("display", "none");
+        let no_comment = "<div class='no-comment'>متاسفانه، هنوز پروژه شما توسط استادی  بررسی نشده است.</div>";
+        $(".project-comment-innerDiv").append(no_comment);
+    } else {
+        for (let i = 0; i < data.expert_messaged.length; i++) {
+            let tab = "<a class='nav-link' data-toggle='pill'" +
+                "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
+                "" +
+                data.expert_messaged[i].name +
+                "</a>";
+            $(".comment-tabs div").append(tab);
+            $(".comment-tabs .nav-link:last-child").attr("id", "v-pills-expert-" + data.expert_messaged[i].id);
+            if (i === 0) {
+                $(".comment-tabs div .nav-link").addClass("active");
+            }
         }
+        getComments($(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""), data.id);
+        $(".comment-tabs .nav-link").click(function () {
+            getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
+        });
     }
-    getComments($(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""), data.id);
-    $(".comment-tabs .nav-link").click(function () {
-        getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
-    });
 }
 
 function setIndustryComment(data) {
@@ -323,27 +337,27 @@ function getComments(expert_id, project_id) {
     });
 }
 
-function addComment(data){
+function addComment(data) {
     let new_comment = "<div class='my-comment'>" +
-                        "<div class='comment-profile'>" +
-                        "</div>" +
-                        "<div class='comment-body'>" +
-                        "<span class='comment-tools'>" +
-                        "<i class='fas fa-pen'>" +
-                        "</i>" +
-                        "<i class='fas fa-reply'><div class='reply'></div>" +
-                        "</i>";
-                        if (data.attachment !== "None") {
-                            new_comment += "<a href='/" +
-                                             data.attachment +
-                                             "'><i class='fas fa-paperclip'></i></a>" ;
-                        }
-                        new_comment += "</span>" +
-                            "<span>" +
-                            data.description +
-                            "</span>" +
-                            "</div>" +
-                            "</div>";
+        "<div class='comment-profile'>" +
+        "</div>" +
+        "<div class='comment-body'>" +
+        "<span class='comment-tools'>" +
+        "<i class='fas fa-pen'>" +
+        "</i>" +
+        "<i class='fas fa-reply'><div class='reply'></div>" +
+        "</i>";
+    if (data.attachment !== "None") {
+        new_comment += "<a href='/" +
+            data.attachment +
+            "'><i class='fas fa-paperclip'></i></a>";
+    }
+    new_comment += "</span>" +
+        "<span>" +
+        data.description +
+        "</span>" +
+        "</div>" +
+        "</div>";
     // let new_comment = "<div class='my-comment'>" +
     //             "<div class='comment-body' dir='ltr'>" +
     //             "<span class='comment-tools'>";
@@ -379,6 +393,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: {id: id},
                 success: function (data) {
+                    console.log(data);
                     localStorage.setItem("project_id", "" + id);
                     localStorage.setItem("replied_text", null);
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
