@@ -68,8 +68,8 @@ class Index(LoginRequiredMixin, generic.FormView):
         all_projects = Project.objects.all().exclude(expert_accepted=None)
         my_projects  = all_projects.filter(researcher_applied__in=[self.request.user.researcheruser])
         new_projects = all_projects.exclude(researcher_applied__in=[self.request.user.researcheruser])
-        technique_id = [item.id for item in self.request.user.researcheruser.techniqueinstance_set.all()]
-        technique = models.Technique.objects.filter(id__in=technique_id)
+        technique_title = [str(item.technique) for item in self.request.user.researcheruser.techniqueinstance_set.all()]
+        technique = models.Technique.objects.filter(technique_title__in=technique_title)
         projects = []
         for project in new_projects:
             try:
