@@ -122,6 +122,7 @@ function showQuestion() {
 
 $(document).ready(function () {
 
+    $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
     const questions = $(".tab-content div.card").toArray();
     $(".nav-tabs .nav-item .nav-link").click(function () {
         if ($(this).attr("id") === "active-questions") {
@@ -1054,7 +1055,7 @@ function setResources(data) {
         "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
         "</div>" +
         "<div class='answer'>" +
-        numbersComma(data.required_budget) +
+        numbersComma(data.required_budget) + " ریال" +
         "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
@@ -1114,7 +1115,7 @@ function setMajors(data) {
         "برآورد شما از سود مالی این پروژه چگونه است؟" +
         "</div>" +
         "<div class='answer'>" +
-        numbersComma(data.predict_profit) +
+        numbersComma(data.predict_profit) + " ریال" +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
