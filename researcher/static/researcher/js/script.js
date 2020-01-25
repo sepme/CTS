@@ -185,7 +185,6 @@ function setValue(data) {
 
 function setComment(data) {
     let comments_code = "";
-    let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert            
             comments_code += "<div class='expert-comment' dir='ltr' >" +
@@ -904,7 +903,7 @@ $(".add-new-technique").click(function (event) {
         method: 'GET',
         url: '/researcher/show_technique/',
         dataType: 'json',
-        data: {'id': "fuckU"},
+        data: {'id': "None"},
         success: function (data) {            
             let source = [];
             for (let i = 0; i <= Object.keys(data).length - 1; i++) {

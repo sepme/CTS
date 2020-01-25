@@ -306,7 +306,7 @@ class ResearchQuestion(models.Model):
 
 class ExpertRequestedProject(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
-    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
+    project = models.ForeignKey("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
     date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
     required_technique = models.ManyToManyField('researcher.Technique', verbose_name='تکنیک های مورد نیاز استاد',
                                                 blank=True)

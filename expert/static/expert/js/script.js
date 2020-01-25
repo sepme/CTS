@@ -8,6 +8,10 @@ $(window).on("load", function () {
     load_dialog();
 });
 
+function numbersComma(num) {
+    let newNum = num.toString();
+    return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+}
 
 function tag_input_label(tag_input) {
     $("#" + tag_input + "_tagsinput .tags_clear").css("display", "none");
@@ -118,6 +122,7 @@ function showQuestion() {
 
 $(document).ready(function () {
 
+    $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
     const questions = $(".tab-content div.card").toArray();
     $(".nav-tabs .nav-item .nav-link").click(function () {
         if ($(this).attr("id") === "active-questions") {
@@ -178,85 +183,76 @@ $(document).ready(function () {
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
     $(".confirm_project").click(function () {
-        $(".select-technique").find("#fancy-tree").fancytree({
-            extensions: ["glyph"],
-            checkbox: false,
-            selectMode: 1,
-            checkboxAutoHide: true,
-            clickFolderMode: 2,
-            lazyLoad: function (event, data) {
-                data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
-            },
-            select: function (event, data) {
+        $.ajax({
+            method: 'GET',
+            url: '/expert/show_technique/',
+            dataType: 'json',
+            data: {'id': "None"},
+            success: function (data) {
+                console.log(data);
+                let source = [];
+                for (let i = 0; i <= Object.keys(data).length - 1; i++) {
+                    let item = {};
+                    item["title"] = Object.keys(data)[i];
+                    item["key"] = i + 1;
+                    if (Object.values(data)[i].length) {
+                        item["folder"] = true;
+                        let children = [];
+                        for (let j = 0; j < Object.values(data)[i].length; j++) {
+                            let child_item = {};
+                            child_item["title"] = Object.values(data)[i][j];
+                            child_item["key"] = i + "." + j;
+                            children.push(child_item);
+                        }
+                        item["children"] = children;
+                    }
+                    source.push(item);
+                }
+                $(".select-technique").find("#fancy-tree").fancytree({
+                    extensions: ["glyph"],
+                    checkbox: false,
+                    selectMode: 1,
+                    checkboxAutoHide: true,
+                    clickFolderMode: 2,
+                    lazyLoad: function (event, data) {
+                        data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                    },
+                    activate: function (event, data) {
+                        $('#tags').addTag(data.node.title);
+                    },
+                    select: function (event, data) {
 
-            },
-            source: [
-                {
-                    "title": "histology", "key": "1", "folder": true, "children": [
-                        {
-                            "title": "Sterile Tissue Harvest", "key": "101", "folder": true, "children": [
-                                {"title": "Sterile Tissue Harvest", "key": "10101"},
-                                {"title": "Diagnostic Necropsy and Tissue Harvest", "key": "10102"}
-                            ]
-                        },
-                        {"title": "Tissue Cryopreservation", "key": "102"},
-                        {"title": "Tissue Fixation", "key": "103"},
-                        {"title": "Microtome Sectioning", "key": "104"},
-                        {"title": "Cryostat Sectioning", "key": "105"},
-                        {"title": "H&E staining", "key": "106"},
-                        {"title": "Histochemistry", "key": "107"},
-                        {"title": "Histoflouresence", "key": "108"}
-                    ]
-                },
-                {
-                    "title": "general lab", "key": "2", "folder": true, "children": [
-                        {"title": "An Introduction to the Centrifuge", "key": "201"},
-                        {"title": "Regulating Temperature in the Lab Preserving Samples Using Cold", "key": "202"},
-                        {"title": "Introduction to the Bunsen Burner", "key": "203"},
-                        {"title": "Introduction to Serological Pipettes and Pipettor", "key": "204"},
-                        {"title": "An Introduction to the Micropipettor", "key": "205"},
-                        {"title": "Making Solutions in the Laboratory", "key": "206"},
-                        {"title": "Understanding Concentration and Measuring Volumes", "key": "207"},
-                        {"title": "Introduction to the Microplate Reader", "key": "208"},
-                        {"title": "Regulation Temperature in the Lab Applying Heat", "key": "209"},
-                        {"title": "Common Lab Glassware and Users", "key": "210"},
-                        {"title": "Solutions and Concentrations", "key": "211"},
-                        {"title": "Determining the Density of a Solid and Liquid", "key": "212"},
-                        {"title": "Determining the Mass Percent Composition in an Aqueous Solution", "key": "213"},
-                        {"title": "Determining the Empirical Formula", "key": "214"},
-                        {"title": "Determining the Solubility Rules of Ionic Compounds", "key": "215"},
-                        {"title": "Using a pH Meter", "key": "216"},
-                        {"title": "Introduction to Titration", "key": "217"},
-                        {"title": "Ideal Gas Law", "key": "218"}
-                    ]
-                }
-            ],
-            glyph: {
-                preset: "awesome5",
-                map: {
-                    _addClass: "",
-                    checkbox: "fas fa-square",
-                    checkboxSelected: "fas fa-check-square",
-                    checkboxUnknown: "fas fa-square",
-                    radio: "fas fa-circle",
-                    radioSelected: "fas fa-circle",
-                    radioUnknown: "fas fa-dot-circle",
-                    dragHelper: "fas fa-arrow-right",
-                    dropMarker: "fas fa-long-arrow-right",
-                    error: "fas fa-exclamation-triangle",
-                    expanderClosed: "fas fa-chevron-left",
-                    expanderLazy: "fas fa-angle-right",
-                    expanderOpen: "fas fa-chevron-down",
-                    loading: "fas fa-spinner fa-pulse",
-                    nodata: "fas fa-meh",
-                    noExpander: "",
-                    // Default node icons.
-                    // (Use tree.options.icon callback to define custom icons based on node data)
-                    doc: "fas fa-screwdriver",
-                    docOpen: "fas fa-screwdriver",
-                    folder: "fas fa-folder",
-                    folderOpen: "fas fa-folder-open"
-                }
+                    },
+                    source: source,
+                    glyph: {
+                        preset: "awesome5",
+                        map: {
+                            _addClass: "",
+                            checkbox: "fas fa-square",
+                            checkboxSelected: "fas fa-check-square",
+                            checkboxUnknown: "fas fa-square",
+                            radio: "fas fa-circle",
+                            radioSelected: "fas fa-circle",
+                            radioUnknown: "fas fa-dot-circle",
+                            dragHelper: "fas fa-arrow-right",
+                            dropMarker: "fas fa-long-arrow-right",
+                            error: "fas fa-exclamation-triangle",
+                            expanderClosed: "fas fa-chevron-left",
+                            expanderLazy: "fas fa-angle-right",
+                            expanderOpen: "fas fa-chevron-down",
+                            loading: "fas fa-spinner fa-pulse",
+                            nodata: "fas fa-meh",
+                            noExpander: "",
+                            // Default node icons.
+                            // (Use tree.options.icon callback to define custom icons based on node data)
+                            doc: "fas fa-screwdriver",
+                            docOpen: "fas fa-screwdriver",
+                            folder: "fas fa-folder",
+                            folderOpen: "fas fa-folder-open"
+                        }
+                    },
+                });
+                select_technique(".select-technique");
             },
         });
         $('#tags').tagsInput({
@@ -271,7 +267,6 @@ $(document).ready(function () {
             $(this).css("width", "fit-content");
         });
         tag_input_label("tags");
-        select_technique();
         let techniquesForm = $('.ajax-select-techniques');
         techniquesForm.submit(function (event) {
             event.preventDefault();
@@ -280,7 +275,7 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            console.log(id);
+            // console.log(id);
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -421,10 +416,10 @@ $(document).ready(function () {
             method: 'GET',
             url: url,
             dataType: 'json',
-            data: {id: id},
+            data: {id: id, project_id: project_id},
             success: function (data) {
-                $(".researcher_id").attr("value" ,id);
-                $(".project_id").attr("value" ,project_id);
+                $(".researcher_id").attr("value", id);
+                $(".project_id").attr("value", project_id);
                 $('#researcher_photo').attr("src", data.photo);
                 $('#researcher_name').html(data.name);
                 $('#researcher_major').html(data.major);
@@ -450,7 +445,6 @@ $(document).ready(function () {
                 $('#researcher_entry_year').html(data.entry_year);
 
                 var scientific_record = JSON.parse(data.scientific_record);
-                console.log(scientific_record);
                 if (scientific_record.length !== 0) {
                     var table_row = "";
                     for (i = 0; i < scientific_record.length; i++) {
@@ -505,7 +499,7 @@ $(document).ready(function () {
                         $('#researcher_research_record').html(table_row)
                     }
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
-
+                setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
             error: function (data) {
@@ -915,8 +909,8 @@ ResearchQuestionForm.submit(function (event) {
     var $thisURL = ResearchQuestionForm.attr('data-url');
     var data = new FormData(ResearchQuestionForm.get(0));
     ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-    console.log(data);
-    console.log($(this).find("input[type='file']").get(0).files.item(0));
+    // console.log(data);
+    // console.log($(this).find("input[type='file']").get(0).files.item(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -1039,7 +1033,7 @@ function setResources(data) {
         "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.required_technique +
+        data.required_method +
         "</div>" +
         "</div>" +
         "<div>" +
@@ -1061,7 +1055,7 @@ function setResources(data) {
         "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.required_budget +
+        numbersComma(data.required_budget) + " ریال" +
         "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
@@ -1121,7 +1115,7 @@ function setMajors(data) {
         "برآورد شما از سود مالی این پروژه چگونه است؟" +
         "</div>" +
         "<div class='answer'>" +
-        data.predict_profit +
+        numbersComma(data.predict_profit) + " ریال" +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
@@ -1129,25 +1123,26 @@ function setMajors(data) {
 function setValue(data) {
     $("#v-pills-settings-tab").click(function () {
         setRole(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-messages-tab").click(function () {
         setResources(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-profile-tab").click(function () {
         setApproach(data);
+        $('*').persiaNumber();
     });
     $("#v-pills-home-tab").click(function () {
         setMajors(data);
+        $('*').persiaNumber();
     });
 }
 
 function setComment(data) {
-    console.log(data);
     let comments_code = "";
-    let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert
-            console.log("sender type is 0");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
@@ -1169,8 +1164,6 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
-            console.log("sender type isn't 0");
-            console.log(data[i].attachment);
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
@@ -1192,7 +1185,6 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else { //system
-            console.log("sender type isn't 0 and 2");
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -1236,25 +1228,48 @@ $.ajaxSetup({
     }
 });
 
+function addComment(data) {
+    let comment_code = "<div class='my-comment'>" +
+        "<div class='comment-body' dir='ltr'>" +
+        "<span class='comment-tools'>" +
+        "<i class='fas fa-trash-alt'></i>" +
+        "<i class='fas fa-reply' value=" +
+        data.pk +
+        "></i>" +
+        "<i class='fas fa-pen'>" +
+        "</i>";
+    if (data.attachment !== "None") {
+        comment_code += "<a href='/" +
+            data.attachment +
+            "'><i class='fas fa-paperclip'></i></a>";
+    }
+    comment_code += "</span>" +
+        "<span>" +
+        data.description +
+        "</span>" +
+        "</div>" +
+        "</div>";
+    return comment_code;
+}
+
 let comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
-    let description = $(this).closest(".col-lg-12").find("#description").val();
-    let id = $(this).closest(".showProject").attr("id");
-    let thisUrl = "/expert/industry_comment/";
-    let attachment = $('#comment-attach').val();
-    console.log(attachment);
-    data = {project_id: id, description: description, attachment: attachment}
-    var form = new FormData()
-    console.log(description);
-    console.log(id);
+    let thisUrl = "";
+    console.log(comment_form.find(".researcher_id").val()=="");
+    if (comment_form.find(".researcher_id").val() == "")
+        thisUrl = "/expert/industry_comment/";
+    else
+        thisUrl = "/expert/researcher_comment/";
+    $(".project_id").attr('value', $('.preview-project').attr("id"));
+
+    let form = new FormData(comment_form.get(0));
     $.ajax({
         method: 'POST',
         url: thisUrl,
         data: form,
-        // dataType: 'json',
         processData: false,
         contentType: false,
         success: function (data) {
@@ -1262,26 +1277,7 @@ comment_form.submit(function (event) {
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-            let comment_code = "<div class='my-comment'>" +
-                "<div class='comment-profile'>" +
-                "</div>" +
-                "<div class='comment-body'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-pen'>" +
-                "</i>" +
-                "<i class='fas fa-reply'><div class='reply'></div>" +
-                "</i>";
-            // if (data[i].attachment !== "None") {
-            //     comment_code += "<a href='/" +
-            //                      data[i].attachment +
-            //                      "'><i class='fas fa-paperclip'></i></a>" ;
-            // }
-            comment_code += "</span>" +
-                "<span>" +
-                description +
-                "</span>" +
-                "</div>" +
-                "</div>";
+            let comment_code = addComment(data);
             $(".project-comment-innerDiv").find(".comments").append(comment_code);
             iziToast.success({
                 rtl: true,
@@ -1293,7 +1289,6 @@ comment_form.submit(function (event) {
 
         },
         error: function (data) {
-            console.log(data);
             var obj = JSON.parse(data.responseText);
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -1309,6 +1304,7 @@ comment_form.submit(function (event) {
                     "</div>");
                 $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
+            comment_form[0].reset();
         },
     });
 });

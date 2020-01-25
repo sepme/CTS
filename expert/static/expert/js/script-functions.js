@@ -965,16 +965,26 @@ function show_question_answers(data) {
         }
     })
 }
-function select_technique() {
-    $("li[role='treeitem']").click(function () {
-        let tree = $("#fancy-tree").fancytree({
-            activate: function (event, data) {
-                node = data.node;
-                $('#tags').addTag(node.title);
-            }
-        });
-    });
+function select_technique(className) {
+    // $("li[role='treeitem']").click(function () {
+    //     var tree = $("#fancy-tree").fancytree({
+    //         activate: function (event, data) {
+    //             node = data.node;
+    //             $("input#technique-name").val(node.title);
+    //             express();
+    //             input_focus();
+    //     }
+    //});
+    // $("li[role='treeitem']").click(function () {
+    //     console.log("click");
+    //     let tree = $("#fancy-tree").fancytree({
+    //
+    //     });
+    // });
     $("#add-new-technique").keyup(function (e) {
+        console.log("FUCK");
+        console.log($(this).val());
+        console.log(e);
        if(e.keyCode === 13) {
            if($(this).val() !== "") {
                $('#tags').addTag($(this).val());

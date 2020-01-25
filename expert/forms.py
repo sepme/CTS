@@ -19,6 +19,7 @@ def completely_numeric(string):
 
 
 class InitialInfoForm(forms.Form):
+    photo = forms.FileField(max_length=255, error_messages={'required': "عکس نمی تواند خالی باشد."})
     first_name = forms.CharField(max_length=32, error_messages={'required': "نام نمی تواند خالی باشد."})
     last_name = forms.CharField(max_length=32, error_messages={'required': "نام خانوادگی نمی تواند خالی باشد."})
     special_field = forms.CharField(max_length=256, error_messages={'required': "حوزه تخصصی نمی تواند خالی باشد."})
@@ -342,10 +343,9 @@ class CommentForm(forms.Form):
     def clean_description(self):
         data = self.cleaned_data["description"]
         if data == "None":
-            raise ValidationError(_("نظر خود را لطفا بنوبسید."))
+            raise ValidationError("نظر خود را لطفا بنوبسید.")
         return data
     
     def clean_attachment(self):
         data = self.cleaned_data["attachment"]
-        print("attachment",data)
         return data

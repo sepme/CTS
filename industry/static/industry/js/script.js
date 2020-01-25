@@ -205,7 +205,6 @@ function setIndustryComment(data) {
 }
 
 function setComment(data) {
-
     let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
     data = data.comment;
     let comments_code = "";
@@ -410,6 +409,7 @@ $(document).ready(function () {
                     $('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
+                    console.log(data.expert_messaged);
                     if (data.status !== 0) {
                         if (data.vote === "false") {
                             $(".vote").remove();
@@ -687,7 +687,6 @@ $(document).ready(function () {
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        console.log(data);
                         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                             .prop("disabled", false);
                         comment_form.find("label").removeClass("progress-cursor");
