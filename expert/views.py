@@ -50,8 +50,10 @@ class ResearcherRequest(generic.TemplateView):
         for project in projects_list:
             try:
                 researchers_applied = []
-                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user)[0] for
-                                    researcher_user in project.researcher_applied.all()]
+                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user).first() for researcher_user in project.researcher_applied.all()]
+                for com in Comment.objects.filter(project=project).exclude(researcher_user=None):
+                    if com.researcher_user.researcherprofile not in researchers_form:
+                        researchers_form.append(com.researcher_user.researcherprofile)
                 if len(researchers_form) == 0:
                     continue
                 for research in researchers_form:
@@ -344,6 +346,13 @@ def accept_project(request):
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
+        text = "درخواست شما برای صنعت ارسال شد."
+        comment = Comment(description=text,
+                          sender_type="system",
+                          project=project,
+                          expert_user=expert_user,
+                          industry_user=project.industry_creator)
+        comment.save()
         return JsonResponse({
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
