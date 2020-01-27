@@ -1,4 +1,5 @@
 @import "fontiran.css";
+@import "flags.css";
 
 .mbottom-10 {
     margin-bottom: 10px;
@@ -205,6 +206,10 @@ img {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
 }
 
+.fixed-back > .small-card.min-padding {
+    padding-bottom: 20px !important;
+}
+
 @media (min-width: 1200px) {
     .fixed-back > .small-card {
         width: 550px;
@@ -291,6 +296,21 @@ img {
     bottom: 0;
     left: 0;
     height: 45px;
+    width: 100%;
+    border: none;
+    background-color: #E3FFDD;
+    text-align: left;
+    padding: 8px;
+}
+
+.fixed-back .card-footer.comment {
+    height: 175px !important;
+    -webkit-border-radius: 0.25em !important;
+    -moz-border-radius: 0.25em !important;
+    border-radius: 0.25em !important;
+    position: relative;
+    bottom: 0;
+    left: 0;
     width: 100%;
     border: none;
     background-color: #E3FFDD;
@@ -1182,10 +1202,26 @@ table {
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+.expert-resume table thead td {
+    font-weight: 400;
+    color: #707070;
+    font-size: 11px;
+    padding: 5px;
+}
+
+thead {
+    background-color: #f8fdf7;
 }
 
 .user-info table {
     border: none;
+}
+
+.table td, .table th {
+    border-left: 1px solid #dee2e6;
 }
 
 .education table, .executive table, .paper table, .research table {
@@ -1892,3 +1928,61 @@ span.title-back {
     background-color: #3ccd1c;
     outline: none;
 }
+
+.confirm-request {
+    border: 1px dashed #3ccd1c;
+    background-color: #f8fdf7;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    /*box-shadow: 0 1px 2px 0 #d3d3d3;*/
+    padding: 5px 10px;
+}
+
+.confirm-request .button-group {
+    width: 100%;
+    text-align: left;
+}
+
+.confirm-request .button-group button {
+    border: none;
+    outline: none;
+    padding: 5px 15px;
+    text-align: center;
+    min-width: 50px;
+    height: auto;
+    margin-top: 0 !important;
+    border-radius: 0.25em;
+    color: #ffffff !important;
+    font-size: 0.75em;
+}
+
+.confirm-request .button-group button.show-resume {
+    background-color: #737373;
+}
+
+.confirm-request .button-group button.accept-request {
+    background-color: #89E076;
+}
+
+.confirm-request .button-group button.reject-request {
+    background-color: #ff4545;
+}
+
+ul.win-ul {
+    list-style-image: url("../img/win.png");
+}
+
+ul.tick-ul {
+    list-style-image: url("../img/tick.png");
+}
+
+ul.tick-ul .researcher-num span:nth-child(2),
+ul.tick-ul .out-college-research span:nth-child(2), .B-g {
+    color: #3ccd1c;
+    font-weight: 800;
+}
+
+/*.success-btn:hover {*/
+/*    background-color: #3ccd1c;*/
+/*}*/

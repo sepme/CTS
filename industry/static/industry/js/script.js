@@ -6,10 +6,12 @@ $(window).on("load", function () {
     init_windowSize();
     load_dialog();
 });
+
 function numbersComma(num) {
     let newNum = num.toString();
     return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 }
+
 function setRole(data) {
     role = "<div>" +
         "<div class='question'>" +
@@ -80,7 +82,7 @@ function setApproach(data) {
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
         "</span>" +
-        "طفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
+        "لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
         "</div>" +
         "<div class='answer'>" +
         data.approach +
@@ -175,6 +177,15 @@ function setTab(data) {
             getComments($(this).attr("id").replace("v-pills-expert-", ""), data.id);
         });
     }
+}
+
+function expertResume() {
+    $(".show-resume").click(function () {
+        $(".showProject").slideUp('slow').delay('slow');
+        $(".expert-resume").delay('slow').slideDown('slow');
+        close_dialog(".expert-resume");
+        load_dialog();
+    });
 }
 
 function setIndustryComment(data) {
@@ -406,7 +417,7 @@ $(document).ready(function () {
                             + "</span>"
                         );
                     }
-                    $('.card-head').html(data.project_title_persian);
+                    dialog.find('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
                     console.log(data.expert_messaged);
@@ -462,6 +473,7 @@ $(document).ready(function () {
             init_windowSize();
             init_dialog_btn(".chamran-btn-info", ".showProject");
             init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+            expertResume();
             // if($(".mainInfo-body").css("display") === "block"){
             //     blur_div_toggle(".top-bar");
             //     blur_div_toggle(".side-bar");

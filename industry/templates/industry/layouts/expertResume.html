@@ -1,0 +1,186 @@
+{% load static %}
+<div class="fixed-back expert-resume">
+    <div class="card small-card text-right">
+        <div class="close"></div>
+        <div class="card-head">نام استاد</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">سوابق علمی</span>
+                    <div class="section">
+                        <table class='table'>
+                            <thead>
+                            <tr>
+                                <td>مقطع تحصیلی</td>
+                                <td>رشته تحصیلی</td>
+                                <td>دانشگاه</td>
+                                <td>شهر محل تحصیل</td>
+                                <td>سال اخذ مدرک</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ instance.degree }}</td>
+                                <td>{{ instance.major }}</td>
+                                <td>{{ instance.university }}</td>
+                                <td>{{ instance.city }}</td>
+                                <td>{{ instance.date_of_graduation }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">سوابق اجرایی</span>
+                    <div class="section">
+                        <table class='table'>
+                            <thead>
+                            <tr>
+                                <td>سمت</td>
+                                <td>از تاریخ:</td>
+                                <td>تا تاریخ:</td>
+                                <td>محل خدمت:</td>
+                                <td>شهر:</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ instance.executive_post }}</td>
+                                <td>{{ instance.date_start_post }}</td>
+                                <td>{{ instance.date_end_post }}</td>
+                                <td>{{ instance.organization }}</td>
+                                <td>{{ instance.city }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">سوابق پژوهشی</span>
+                    <div class="section">
+                        <table class='table'>
+                            <thead>
+                            <tr>
+                                <td>عنوان طرح پژوهشی</td>
+                                <td>نام مجری</td>
+                                <td>مسئول اجرا/همکار</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ instance.research_title }}</td>
+                                <td>{{ instance.researcher }}</td>
+                                <td>{{ instance.co_researcher }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">مقالات</span>
+                    <div class="section">
+                        <table class='table'>
+                            <thead>
+                            <tr>
+                                <td>عنوان مقاله</td>
+                                <td>تاریخ انتشار</td>
+                                <td>محل دقیق انتشار</td>
+                                <td>Impact Factor</td>
+                                <td>تعداد ارجاع به مقاله شما</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ instance.research_title }}</td>
+                                <td>{{ instance.date_published }}</td>
+                                <td>{{ instance.published_at }}</td>
+                                <td>{{ instance.impact_factor }}</td>
+                                <td>{{ instance.citation }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">افتخارات</span>
+                    <div class="section">
+                        <ul class="win-ul">
+                            <li>افتخارات</li>
+                            <li>افتخارات</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">سایر موارد</span>
+                    <div class="section">
+                        <ul class="tick-ul">
+                            <li>
+                                <div class="researcher-num text-right">
+                                    <span dir="ltr">،درحال حاضر</span>
+                                    <span>10 نفر</span>
+                                    <span> زیر نظر این استاد در حال انجام کار پژوهشی هستند.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="out-college-research text-right">
+                                    <span>این استاد تجربه کار با شرکت های خارج دانشگاه را</span>
+                                    <span>داشته</span>
+                                    <span> است.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="foreign-lang">
+                                    <span>زبان های خارجی:</span>
+                                    <div class="row B-g">
+                                        <div class="col-6">
+                                            <i class="r-flag En"></i>
+                                            <span>انگلیسی</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="r-flag Ge"></i>
+                                            <span>آلمانی</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="r-flag Fr"></i>
+                                            <span>فرانسوی</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="r-flag So"></i>
+                                            <span>کره ای</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="r-flag Sa"></i>
+                                            <span>عربی</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="r-flag It"></i>
+                                            <span>ایتالیایی</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="r-flag Po"></i>
+                                            <span>پرتقالی</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="r-flag Ru"></i>
+                                            <span>روسی</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
