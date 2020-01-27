@@ -99,8 +99,8 @@ class ExpertForm(models.Model):
                                                verbose_name="دانشجو تحت نظارت",
                                                blank=True, null=True)
     has_industrial_research_choice = (
-        ('آری', 'آری'),
-        ('خیر', 'خیر'),
+        ('yes', 'آری'),
+        ('no', 'خیر'),
     )
     has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice,
                                                verbose_name="همکاری با شرکت خارج دانشگاه", blank=True)
@@ -137,7 +137,7 @@ class ScientificRecord(models.Model):
 
 class ExecutiveRecord(models.Model):
     executive_post = models.CharField(max_length=64, verbose_name="سمت")
-    date_start_post = models.CharField(max_length=15, verbose_name="تلریخ شروع")
+    date_start_post = models.CharField(max_length=15, verbose_name="تاریخ شروع")
     date_end_post = models.CharField(max_length=15, verbose_name="تاریخ پایان")
     city = models.CharField(max_length=32, verbose_name="شهر")
     organization = models.CharField(max_length=32, verbose_name="مجل خدمت")

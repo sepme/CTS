@@ -11,6 +11,8 @@ class ExpertAdmin(admin.ModelAdmin):
 admin.site.register(models.ExpertForm)
 admin.site.register(models.ScientificRecord)
 admin.site.register(models.ExecutiveRecord)
+admin.site.register(models.ResearchRecord)
+admin.site.register(models.PaperRecord)
 admin.site.register(models.EqTest)
 admin.site.register(models.ResearchQuestion)
 admin.site.register(models.ExpertRequestedProject)

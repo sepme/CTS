@@ -185,6 +185,74 @@ function expertResume() {
         $(".expert-resume").delay('slow').slideDown('slow');
         close_dialog(".expert-resume");
         load_dialog();
+        id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "")
+        $.ajax({
+                method: 'GET',
+                url: '/expert/get_resume',
+                dataType: 'json',
+                data: {id :id},
+                success: function (data) {
+                    var sci_record = JSON.parse(data.sci_record);
+                    if (sci_record.length !== 0) {
+                        var table_row = "";
+                        for (i = 0; i < sci_record.length; i++) {
+                            table_row += "<tr>" +
+                                "<td>" + sci_record[i].fields.degree + "</td>" +
+                                "<td>" + sci_record[i].fields.major + "</td>" +
+                                "<td>" + sci_record[i].fields.university + "</td>" +
+                                "<td>" + sci_record[i].fields.city + "</td>" +
+                                "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
+                                "</tr>";
+                            $('.sci_record').html(table_row);
+                        }
+                    }
+                    var executive_record = JSON.parse(data.exe_record);
+                    if (executive_record.length !== 0) {
+                        var table_row = "";
+                        for (i = 0; i < executive_record.length; i++) {
+                            table_row += "<tr>" +
+                                "<td>" + executive_record[i].fields.executive_post + "</td>" +
+                                "<td>" + executive_record[i].fields.date_start_post + "</td>" +
+                                "<td>" + executive_record[i].fields.date_end_post + "</td>" +
+                                "<td>" + executive_record[i].fields.organization + "</td>" +
+                                "<td>" + executive_record[i].fields.city + "</td>" +
+                                "</tr>";
+                            $('.executive_record').html(table_row);
+                        }
+                    }
+                    var research_record = JSON.parse(data.research_record);
+                    console.log(research_record);
+                    if (research_record.length !== 0) {
+                        var table_row = "";
+                        for (i = 0; i < research_record.length; i++) {
+                            table_row += "<tr>" +
+                                "<td>" + research_record[i].fields.research_title + "</td>" +
+                                "<td>" + research_record[i].fields.researcher + "</td>" +
+                                "<td>" + research_record[i].fields.co_researcher + "</td>" +
+                                "</tr>";
+                            $('.research_record').html(table_row);
+                        }
+                    }
+                    var paper_record = JSON.parse(data.paper_record);
+                    if (paper_record.length !== 0) {
+                        var table_row = "";
+                        for (i = 0; i < paper_record.length; i++) {
+                            table_row += "<tr>" +
+                                "<td>" + paper_record[i].fields.research_title + "</td>" +
+                                "<td>" + paper_record[i].fields.date_published + "</td>" +
+                                "<td>" + paper_record[i].fields.published_at + "</td>" +
+                                "<td>" + paper_record[i].fields.impact_factor + "</td>" +
+                                "<td>" + paper_record[i].fields.citation + "</td>" +
+                                "</tr>";
+                            $('.paper_record').html(table_row);
+                        }
+                    }
+                    $('.researcher_count').html(data.researcher_count);
+                    $('.has_industrial_research').html(data.has_industrial_research);
+                    $('.awards').html(data.awards);
+                    $('.languages').html(data.languages);
+                },
+        });
     });
 }
 

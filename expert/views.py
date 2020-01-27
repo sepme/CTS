@@ -550,3 +550,40 @@ def ShowTechnique(request):
         if len(q) > 1:
             data[q[-1]] = q[:-1]
     return JsonResponse(data=data)
+
+def GetResume(request):
+    expert_id = request.GET['id']
+    expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
+    data = {
+    'exe_record' : serializers.serialize('json', ExecutiveRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'research_record' : serializers.serialize('json', ResearchRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'sci_record' : serializers.serialize('json', ScientificRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'paper_record' : serializers.serialize('json', PaperRecord.objects.filter(
+        expert_form=expert_form)),
+
+    "awards"    : expert_form.awards,
+    'languages' : expert_form.languages,
+    }
+
+    if expert_form.has_industrial_research == 'yes':
+        data['has_industrial_research'] = 'داشته'
+    if expert_form.has_industrial_research == 'no':
+        data['has_industrial_research'] = 'نداشته'
+
+    if expert_form.number_of_researcher == 1:
+        data['researcher_count'] = '1-10'
+    if expert_form.number_of_researcher == 2:
+        data['researcher_count'] = '11-30'
+    if expert_form.number_of_researcher == 3:
+        data['researcher_count'] = '31-60'
+    if expert_form.number_of_researcher == 4:
+        data['researcher_count'] = '+60'
+
+    return JsonResponse(data=data)
