@@ -125,7 +125,13 @@
                         <div class="col-lg-6 col-md-6">
                             <div class="card project-card text-right">
                                 <h6> {{ project.project_form.project_title_persian }}</h6>
-                                <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
+                                
+                                {% if project.industryUnseenCommentCount != 0 %}
+                                    <div class="employer"><i class="far fa-envelope"></i> پیام ها{{project.industryUnseenCommentCount}}</div>
+                                {% else %}
+                                    <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
+                                {% endif %}
+                                    
                                 {% if project.expert_accepted %}
                                 <div class="employer"><i class="fas fa-user-tie"></i> استاد {{project.expert_accepted.expertform}}</div>
                                 {% endif %}

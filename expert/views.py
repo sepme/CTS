@@ -351,7 +351,8 @@ def accept_project(request):
                           sender_type="system",
                           project=project,
                           expert_user=expert_user,
-                          industry_user=project.industry_creator)
+                          industry_user=project.industry_creator,
+                          status='unseen')
         comment.save()
         return JsonResponse({
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
@@ -477,7 +478,8 @@ def CommentForResearcher(request):
                           , project=project
                           , researcher_user=researcher
                           , expert_user=request.user.expertuser
-                          , sender_type="expert")
+                          , sender_type="expert"
+                          , status='unseen')
         comment.save()
         if form.cleaned_data["attachment"] is not None:
             data = {
@@ -504,11 +506,12 @@ def CommentForIndustry(request):
             project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
             project.save()
         new_comment = Comment.objects.create(sender_type="expert",
-                                         project=project,
-                                         expert_user=request.user.expertuser,
-                                         industry_user=project.industry_creator,
-                                         description=form.cleaned_data["description"],
-                                         attachment =form.cleaned_data["attachment"])
+                                             project=project,
+                                             expert_user=request.user.expertuser,
+                                             industry_user=project.industry_creator,
+                                             description=form.cleaned_data["description"],
+                                             attachment =form.cleaned_data["attachment"],
+                                             status='unseen')
         new_comment.save()
         if form.cleaned_data["attachment"] is not None:
             data = {

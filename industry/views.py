@@ -140,7 +140,8 @@ def submit_comment(request):
                                              sender_type="industry",
                                              expert_user=expert_user,
                                              description=description,
-                                             attachment=attachment)
+                                             attachment=attachment,
+                                             status='unseen')
         new_comment.save()
         if attachment is not None:
             data = {
@@ -175,9 +176,9 @@ class Index(generic.TemplateView):
             context['form'] = forms.IndustryBasicInfoForm(self.request.user)
         else:
             industry_user = self.request.user.industryuser
-            # print('he\'s got {} projects'.format(industry_user.projects.count()))
             context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
         return context
+
     # submitting the initial info form
     def post(self, request, *args, **kwargs):
         form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
