@@ -118,7 +118,16 @@ def GetComment(request):
             'attachment'   : url
         }
         response.append(temp)    
-    data = {'comment' : response}
+    if expert in project.expert_applied.all():
+        data = {
+            'comment' : response,
+            'applied' : True
+            }
+    else:
+        data = {
+            'comment' : response,
+            'applied' : False
+            }
     return JsonResponse(data=data)
 
 

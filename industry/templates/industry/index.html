@@ -195,7 +195,7 @@
                                 {% if project.expert_accepted %}
                                 <div class="employer"><i class="fas fa-user-tie"></i> استاد {{project.expert_accepted.expertform}}</div>
                                 {% endif %}
-                                <button class="chamran-btn-info show-btn show-project" type="button" id="{{ project.id }}">نمایش</button>
+                                <button class="chamran-btn-info default-btn show-btn show-project" type="button" id="{{ project.id }}">نمایش</button>
                                 <div class="timetable"><i></i> معلق!</div>
                                 <div class="refuse-circle">
                                     <i class="fas fa-ban fa-lg"></i>
@@ -207,7 +207,7 @@
 {#                                              fill="#FF4545"></path>#}
 {#                                    </g>#}
 {#                                </svg>#}
-                                <div class="bottom-line"></div>
+                                <!-- <div class="bottom-line"></div> -->
                             </div>
                         </div>
                     {% elif project.status == 3 %}
@@ -220,7 +220,7 @@
                                 {% if project.expert_accepted %}
                                 <div class="employer"><i class="fas fa-user-tie"></i> استاد {{project.expert_accepted.expertform}}</div>
                                 {% endif %}
-                                <button class="chamran-btn-info" type="button" id="{{ project.id }}">نمایش</button>
+                                <button class="chamran-btn-info default-btn show-btn" type="button" id="{{ project.id }}">نمایش</button>
                                 <div class="timetable"><i class="fas fa-check-double"></i> تکمیل شد</div>
                                 <div class="default-circle"><i class="fas fa-check-circle fa-lg"></i></div>
 {#                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 496">#}
@@ -257,7 +257,7 @@
 {#                                              fill="#57E32C"></path>#}
 {#                                    </g>#}
 {#                                </svg>#}
-                                <div class="bottom-line"></div>
+                                <!--<div class="bottom-line"></div> -->
                             </div>
                         </div>
                     {% endif %}

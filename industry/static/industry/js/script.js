@@ -408,6 +408,10 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
+            if (data.applied == false){
+                $(".accept-request").attr("style", "display :none");
+                $(".reject-request").attr("style", "display :none");
+            }
             setComment(data);
         },
         error: function (data) {
@@ -489,14 +493,16 @@ $(document).ready(function () {
                     setMajors(data);
                     setValue(data);
                     console.log(data.expert_messaged);
-                    if (data.status !== 0) {
+                    if (data.status !== 1) {
+                        $('.vote').attr('style' ,"display : none");
+                        $('.add-comment').attr('style' ,"display : none");
+                    } else {
                         if (data.vote === "false") {
                             $(".vote").remove();
                         }
+                        $('.vote').attr('style' ,"display : block");
+                        $('.add-comment').attr('style' ,"display : block");
                         setTab(data);
-                    } else {
-                        $('.vote').remove();
-                        $('.add-comment').remove();
                     }
                 },
                 error: function (data) {
