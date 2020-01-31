@@ -39,13 +39,12 @@
                                             </span>
                                         </span>
                                     </div>
-                                    <div>{% getUnseenMessages p.pk request.user.expertuser %}</div>
                                     <div class="question-info w-50">
                                         <div class="date w-25">
                                             <span>{% calculate_date_remaining p.date_finished %}</span> تا اتمام پروژه
                                         </div>
                                         <div class="answers w-25"><i class="far fa-comments fa-lg"><span
-                                                class="num"></span></i></div>
+                                                class="num">{% getUnseenMessages p.pk request.user.expertuser %}</span></i></div>
                                         <div class="status w-25"><span>{{ p.project_form.required_budget }}</span> ریال
                                         </div>
                                         <div class="show w-25">
