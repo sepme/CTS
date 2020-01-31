@@ -137,7 +137,7 @@ def index(request):
                                                     'expert_user': expert_user})    
     projects = Project.objects.filter(status=1)
     return render(request, 'expert/index.html', {'expert_user': expert_user,
-                                                    'projects': projects})
+                                                 'projects'   : projects})
 
 class UserInfo(generic.FormView):
     template_name = 'expert/userInfo.html'
