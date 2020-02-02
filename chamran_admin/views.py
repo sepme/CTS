@@ -479,9 +479,15 @@ class View(generic.TemplateView):
     template_name = 'registration/email_template.html'
 
 
-class notFound(generic.TemplateView):
-    template_name = '404Template.html'
+# class notFound(generic.TemplateView):
+#     template_name = '404Template.html'
 
+def notFound(request ,exception):
+    context = {'data' : exception}
+    return render(request ,'404Template.html',context)
+
+def notFound500(request):
+    return render(request ,'404Template.html',{})
 
 class RecoverPassword(generic.TemplateView):
     template_name = 'registration/recover_pass.html'

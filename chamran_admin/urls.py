@@ -6,7 +6,7 @@ app_name = 'chamran'
 
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
-    path('notFound/', views.notFound.as_view(), name='notFound'),
+    # path('notFound/', views.notFound.as_view(), name='notFound'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('test/', views.View.as_view(), name='test'),
     path('login_ajax/', views.login_ajax, name='login_ajax'),
