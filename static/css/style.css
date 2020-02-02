@@ -1983,6 +1983,32 @@ ul.tick-ul .out-college-research span:nth-child(2), .B-g {
     font-weight: 800;
 }
 
+div.no-project {
+    background-color: #ffffff;
+    color: #3ccd1c;
+    margin: 1px auto;
+    border: 1px dashed #3ccd1c;
+    text-align: center;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    padding: 10px;
+}
+
+div.no-project p {
+    font-size: 13px;
+    display: inline-block;
+}
+
+div.no-project > span {
+    border-radius: 30px;
+    background-color: #EFF0F2;
+    color: #aaa;
+    text-decoration: none;
+    margin:0 5px;
+    padding: 4px 5px;
+}
+
 /*.success-btn:hover {*/
 /*    background-color: #3ccd1c;*/
 /*}*/
