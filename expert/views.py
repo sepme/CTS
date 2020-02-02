@@ -135,7 +135,12 @@ def index(request):
         form = forms.InitialInfoForm()
         return render(request, 'expert/index.html', {'form': form,
                                                     'expert_user': expert_user})    
-    projects = Project.objects.filter(status=1)
+    elif expert_user.status == "free":
+        projects = Project.objects.filter(status=1)
+
+    elif expert_user.status == "involved":
+        projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
+    
     return render(request, 'expert/index.html', {'expert_user': expert_user,
                                                  'projects'   : projects})
 
@@ -300,6 +305,9 @@ def show_project_view(request):
             'sender_type': comment.sender_type,
             'attachment': url,
         })
+        if comment.sender_type == "industry":
+            comment.status = "seen"
+            comment.save()
     data = {
         'comments': comments,
         'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
@@ -357,11 +365,6 @@ def accept_project(request):
         return JsonResponse({
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
-    # Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
-    # ) + "استاد",
-    #                        expert_user=request.user.expertuser,
-    #                        industry_user=project.industry_creator,
-    #                        sender_type=3)
 
 
 def add_research_question(request):
@@ -462,6 +465,9 @@ def show_researcher_preview(request):
             'sender_type': comment.sender_type,
             'attachment': url,
         })
+        if comment.sender_type == 'researcher':
+            comment.status = 'seen'
+            comment.save()
     researcher_information['comments'] = comments
     return JsonResponse(researcher_information)
 

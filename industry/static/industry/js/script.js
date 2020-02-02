@@ -256,6 +256,53 @@ function expertResume() {
     });
 }
 
+
+$('.accept-request').click(function(data){
+    expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    project_id = $(this).closest(".showProject").attr("id");
+    data = {"expert_id" : expert_id,
+            "project_id" : project_id};    
+    $.ajax({
+            method: 'post',
+            url: 'accept_request/',
+            dataType: 'json',
+            data: data,
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "درخواست شما با موفقیت ارسال شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error:function(data){
+                console.log("error");
+            },
+    });
+});
+
+$('.reject-request').click(function(data){
+    expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    project_id = $(this).closest(".showProject").attr("id");
+    data = {"expert_id" : expert_id,
+            "project_id" : project_id};
+    $.ajax({
+            method: 'POST',
+            url: 'refuse_request/',
+            dataType: 'json',
+            data: data,
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "درخواست شما با موفقیت ارسال شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error:function(data){
+                console.log("error");
+            },
+    });
+});
+
 function setIndustryComment(data) {
     let comments_code = "";
     for (let i = 0; i < data.length; i++) {
@@ -476,7 +523,6 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: {id: id},
                 success: function (data) {
-                    console.log(data);
                     localStorage.setItem("project_id", "" + id);
                     localStorage.setItem("replied_text", null);
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
@@ -492,8 +538,7 @@ $(document).ready(function () {
                     dialog.find('.card-head').html(data.project_title_persian);
                     setMajors(data);
                     setValue(data);
-                    console.log(data.expert_messaged);
-                    if (data.status !== 1) {
+                    if (data.status !== 1 && data.status !== 2) {
                         $('.vote').attr('style' ,"display : none");
                         $('.add-comment').attr('style' ,"display : none");
                     } else {

@@ -14,8 +14,7 @@ from ChamranTeamSite import settings
 from persiantools.jdatetime import JalaliDate
 from industry.models import IndustryForm, Comment
 from expert import models as expert_models
-from . import models
-from . import forms
+from . import models ,forms
 from expert.models import ExpertUser
 
 # function name says it all :)
@@ -101,7 +100,7 @@ def GetComment(request):
     expert_id  = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
     project = get_object_or_404(models.Project ,pk=project_id)
-    expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    expert  = get_object_or_404(ExpertUser ,pk=expert_id)
     all_comments = models.Comment.objects.filter(project=project)
     comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)    
     response = []
@@ -118,6 +117,9 @@ def GetComment(request):
             'attachment'   : url
         }
         response.append(temp)    
+        if comment.sender_type == 'expert':
+            comment.status = "seen"
+            comment.save()
     if expert in project.expert_applied.all():
         data = {
             'comment' : response,
@@ -131,10 +133,26 @@ def GetComment(request):
     return JsonResponse(data=data)
 
 
-def accept_project_ajax(request):
-    expert_user = ExpertUser.objects.filter(request.GET.get('expert_user_id')).first()
-    project = models.Project.objects.filter(request.GET.get('project_id')).first()
-    project.expert_accepted = expert_user
+def accept_project(request):
+    expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
+    project = models.Project.objects.filter(pk=request.POST['project_id']).first()
+    project.expert_accepted = expert
+    project.date_start = datetime.date.today()
+    project.status = 2
+    project.save()
+    expert.status = 'involved'
+    expert.save()
+    data = {'success' : 'successful'}
+    return JsonResponse(data=data)
+
+def refuse_expert(request):
+    print(request.POST)
+    expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
+    project = models.Project.objects.filter(pk=request.POST['project_id']).first()
+    expert.banned_list.add(project)
+    expert.save()
+    data = {'success' : 'successful'}
+    return JsonResponse(data=data)
 
 # this function is called when the industry user comments on a project
 def submit_comment(request):

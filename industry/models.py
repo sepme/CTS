@@ -157,10 +157,10 @@ class Project(models.Model):
     project_priority_level = models.FloatField(verbose_name="سطح اهمیت پروژه", null=True, blank=True)
     PROJECT_STATUS_CHOICES = (
         (0, 'در حال بررسی'),
-        (1, 'فعال'),
-        (2, 'معلق'),
-        (3, 'انجام شد'),
-        (4, 'در حال انتظار')
+        (1, 'در حال انتظار'),
+        (2, 'فعال'),
+        (3, 'معلق'),
+        (4, 'انجام شد'),
     )
     status = models.IntegerField(choices=PROJECT_STATUS_CHOICES, verbose_name='وضعیت پروژه', default=0, blank=True)
 
@@ -185,8 +185,9 @@ class Project(models.Model):
 
     @property
     def industryUnseenCommentCount(self):
-        expert_unseen = Comment.objects.filter(sender_type='expert').filter(status='unseen').filter(industry_user=self.industry_creator).count()
-        system_unseen = Comment.objects.filter(sender_type='system').filter(status='unseen').filter(industry_user=self.industry_creator).count()
+        comment = Comment.objects.filter(project__project_form=self.project_form)
+        expert_unseen = comment.filter(sender_type='expert').filter(status='unseen').filter(industry_user=self.industry_creator).count()
+        system_unseen = comment.filter(sender_type='system').filter(status='unseen').filter(industry_user=self.industry_creator).count()
         return expert_unseen + system_unseen
 
     class Meta:
