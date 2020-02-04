@@ -24,5 +24,6 @@ urlpatterns = [
     path('researcher_comment/', views.CommentForResearcher, name="researcher_comment"),
     path('industry_comment/', views.CommentForIndustry, name="industry_comment"),
     path('show_technique/', views.ShowTechnique, name="show-technique"),
+    path('get_resume/', views.GetResume, name="get-resume"),
 ]
 

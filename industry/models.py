@@ -183,6 +183,12 @@ class Project(models.Model):
         else:
             return 'امروز'
 
+    @property
+    def industryUnseenCommentCount(self):
+        expert_unseen = Comment.objects.filter(sender_type='expert').filter(status='unseen').filter(industry_user=self.industry_creator).count()
+        system_unseen = Comment.objects.filter(sender_type='system').filter(status='unseen').filter(industry_user=self.industry_creator).count()
+        return expert_unseen + system_unseen
+
     class Meta:
         ordering = ['-date_submitted_by_industry']
 
@@ -207,12 +213,14 @@ class Comment(models.Model):
     researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     attachment = models.FileField(upload_to=upload_comment, blank=True, null=True)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
+    STATUS=(
+        ('seen', 'seen'),
+        ('unseen' ,'unseen'),
+    )
+    status = models.CharField(max_length=6, choices=STATUS, null=True)
 
     def __str__(self):
-        return self.description
-    
-    def __str__(self):
-        return self.sender_type
+        return self.sender_type + " - " + str(self.project)
 
 class ProjectHistory(models.Model):
     project_title_english = models.CharField(max_length=128)

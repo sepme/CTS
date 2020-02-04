@@ -582,7 +582,8 @@ def ApplyProject(request):
         comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
                           sender_type="system",
                           project=project,
-                          researcher_user=request.user.researcheruser)
+                          researcher_user=request.user.researcheruser,
+                          status='unseen')
         comment.save()
         project.researcher_applied.add(request.user.researcheruser)
         return JsonResponse(data={'success' : "success"})
@@ -660,7 +661,8 @@ def AddComment(request):
                          ,project=project
                          ,researcher_user=request.user.researcheruser
                          ,expert_user=project.expert_accepted
-                         ,sender_type="researcher")
+                         ,sender_type="researcher"
+                         ,status='unseen')
         comment.save()
         if attachment is not None:
             data = {

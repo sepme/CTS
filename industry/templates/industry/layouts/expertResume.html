@@ -18,14 +18,7 @@
                                 <td>سال اخذ مدرک</td>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ instance.degree }}</td>
-                                <td>{{ instance.major }}</td>
-                                <td>{{ instance.university }}</td>
-                                <td>{{ instance.city }}</td>
-                                <td>{{ instance.date_of_graduation }}</td>
-                            </tr>
+                            <tbody class="sci_record">
                             </tbody>
                         </table>
                     </div>
@@ -45,14 +38,7 @@
                                 <td>شهر:</td>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ instance.executive_post }}</td>
-                                <td>{{ instance.date_start_post }}</td>
-                                <td>{{ instance.date_end_post }}</td>
-                                <td>{{ instance.organization }}</td>
-                                <td>{{ instance.city }}</td>
-                            </tr>
+                            <tbody class="executive_record">
                             </tbody>
                         </table>
                     </div>
@@ -70,12 +56,7 @@
                                 <td>مسئول اجرا/همکار</td>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ instance.research_title }}</td>
-                                <td>{{ instance.researcher }}</td>
-                                <td>{{ instance.co_researcher }}</td>
-                            </tr>
+                            <tbody class="research_record">
                             </tbody>
                         </table>
                     </div>
@@ -95,14 +76,7 @@
                                 <td>تعداد ارجاع به مقاله شما</td>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ instance.research_title }}</td>
-                                <td>{{ instance.date_published }}</td>
-                                <td>{{ instance.published_at }}</td>
-                                <td>{{ instance.impact_factor }}</td>
-                                <td>{{ instance.citation }}</td>
-                            </tr>
+                            <tbody class="paper_record">
                             </tbody>
                         </table>
                     </div>
@@ -111,7 +85,7 @@
             <div class="row">
                 <div class="col-lg-12 text-right">
                     <span class="section-title">افتخارات</span>
-                    <div class="section">
+                    <div class="section awards">
                         <ul class="win-ul">
                             <li>افتخارات</li>
                             <li>افتخارات</li>
@@ -127,21 +101,21 @@
                             <li>
                                 <div class="researcher-num text-right">
                                     <span dir="ltr">،درحال حاضر</span>
-                                    <span>10 نفر</span>
+                                    <span class="researcher_count">10 نفر</span>
                                     <span> زیر نظر این استاد در حال انجام کار پژوهشی هستند.</span>
                                 </div>
                             </li>
                             <li>
                                 <div class="out-college-research text-right">
                                     <span>این استاد تجربه کار با شرکت های خارج دانشگاه را</span>
-                                    <span>داشته</span>
+                                    <span class="has_industrial_research">داشته</span>
                                     <span> است.</span>
                                 </div>
                             </li>
                             <li>
                                 <div class="foreign-lang">
                                     <span>زبان های خارجی:</span>
-                                    <div class="row B-g">
+                                    <div class="row B-g languages">
                                         <div class="col-6">
                                             <i class="r-flag En"></i>
                                             <span>انگلیسی</span>

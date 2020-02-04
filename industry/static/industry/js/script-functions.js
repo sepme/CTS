@@ -172,7 +172,7 @@ function close_dialog(className) {
         $(className).css("display", "none");
         $(".main").removeClass("blur-div");
         $(className).find(".no-comment").remove();
-        $(className).find(".project-info-tabs .nav").html("");
+        $(className).find(".comment-tabs .nav").html("");
     });
 }
 

@@ -44,15 +44,27 @@
                                             <span>{% calculate_date_remaining p.date_finished %}</span> تا اتمام پروژه
                                         </div>
                                         <div class="answers w-25"><i class="far fa-comments fa-lg"><span
-                                                class="num"></span></i></div>
+                                                class="num">{% getUnseenMessages p.pk request.user.expertuser %}</span></i>
+                                        </div>
                                         <div class="status w-25"><span>{{ p.project_form.required_budget }}</span> ریال
                                         </div>
                                         <div class="show w-25">
-                                            <button class="default-btn preview-project" id="{{ p.id }}" data-url="{% url 'expert:show_project' %}">
+                                            <button class="default-btn preview-project" id="{{ p.id }}"
+                                                    data-url="{% url 'expert:show_project' %}">
                                                 مشاهده
                                             </button>
                                         </div>
                                     </div>
+                                </div>
+                                {% empty %}
+                                <div class="no-project">
+                                    <h4>متاسفانه، هنوز پروژه ای ثبت نکرده اید!</h4>
+                                    <p>برای ثبت پروژه های خود و سپردن آن ها به متخصصین حوزه شما، لطفا از طریق</p>
+                                    <span>
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>ثبت پروژه جدید</span>
+                                    </span>
+                                    <p>در منوی سمت راست، اقدام نمایید.</p>
                                 </div>
                                 {#                                <div class="row">#}
                                 {#                                    <div class="col-lg-12">#}
@@ -119,5 +131,5 @@
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-{#    <script src="{% static 'js/inputTags.jquery.min.js' %}" type="text/javascript"></script>#}
+    {#    <script src="{% static 'js/inputTags.jquery.min.js' %}" type="text/javascript"></script>#}
 {% endblock %}

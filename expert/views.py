@@ -50,8 +50,10 @@ class ResearcherRequest(generic.TemplateView):
         for project in projects_list:
             try:
                 researchers_applied = []
-                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user)[0] for
-                                    researcher_user in project.researcher_applied.all()]
+                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user).first() for researcher_user in project.researcher_applied.all()]
+                for com in Comment.objects.filter(project=project).exclude(researcher_user=None):
+                    if com.researcher_user.researcherprofile not in researchers_form:
+                        researchers_form.append(com.researcher_user.researcherprofile)
                 if len(researchers_form) == 0:
                     continue
                 for research in researchers_form:
@@ -135,7 +137,7 @@ def index(request):
                                                     'expert_user': expert_user})    
     projects = Project.objects.filter(status=1)
     return render(request, 'expert/index.html', {'expert_user': expert_user,
-                                                    'projects': projects})
+                                                 'projects'   : projects})
 
 class UserInfo(generic.FormView):
     template_name = 'expert/userInfo.html'
@@ -344,6 +346,14 @@ def accept_project(request):
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
+        text = "درخواست شما برای صنعت ارسال شد."
+        comment = Comment(description=text,
+                          sender_type="system",
+                          project=project,
+                          expert_user=expert_user,
+                          industry_user=project.industry_creator,
+                          status='unseen')
+        comment.save()
         return JsonResponse({
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
@@ -468,7 +478,8 @@ def CommentForResearcher(request):
                           , project=project
                           , researcher_user=researcher
                           , expert_user=request.user.expertuser
-                          , sender_type="expert")
+                          , sender_type="expert"
+                          , status='unseen')
         comment.save()
         if form.cleaned_data["attachment"] is not None:
             data = {
@@ -495,11 +506,12 @@ def CommentForIndustry(request):
             project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
             project.save()
         new_comment = Comment.objects.create(sender_type="expert",
-                                         project=project,
-                                         expert_user=request.user.expertuser,
-                                         industry_user=project.industry_creator,
-                                         description=form.cleaned_data["description"],
-                                         attachment =form.cleaned_data["attachment"])
+                                             project=project,
+                                             expert_user=request.user.expertuser,
+                                             industry_user=project.industry_creator,
+                                             description=form.cleaned_data["description"],
+                                             attachment =form.cleaned_data["attachment"],
+                                             status='unseen')
         new_comment.save()
         if form.cleaned_data["attachment"] is not None:
             data = {
@@ -540,4 +552,41 @@ def ShowTechnique(request):
     for q in query:
         if len(q) > 1:
             data[q[-1]] = q[:-1]
+    return JsonResponse(data=data)
+
+def GetResume(request):
+    expert_id = request.GET['id']
+    expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
+    data = {
+    'exe_record' : serializers.serialize('json', ExecutiveRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'research_record' : serializers.serialize('json', ResearchRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'sci_record' : serializers.serialize('json', ScientificRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'paper_record' : serializers.serialize('json', PaperRecord.objects.filter(
+        expert_form=expert_form)),
+
+    "awards"    : expert_form.awards,
+    'languages' : expert_form.languages,
+    }
+
+    if expert_form.has_industrial_research == 'yes':
+        data['has_industrial_research'] = 'داشته'
+    if expert_form.has_industrial_research == 'no':
+        data['has_industrial_research'] = 'نداشته'
+
+    if expert_form.number_of_researcher == 1:
+        data['researcher_count'] = '1-10'
+    if expert_form.number_of_researcher == 2:
+        data['researcher_count'] = '11-30'
+    if expert_form.number_of_researcher == 3:
+        data['researcher_count'] = '31-60'
+    if expert_form.number_of_researcher == 4:
+        data['researcher_count'] = '+60'
+
     return JsonResponse(data=data)
