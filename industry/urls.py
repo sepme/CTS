@@ -14,4 +14,6 @@ urlpatterns = [
     path('project_list/', views.ProjectListView.as_view(), name='project_list'),
     path('messages/', chamran_admin_views.MessagesView.as_view(), name="messages"),
     path('get_comment/', views.GetComment),
+    path('accept_request/', views.accept_project),
+    path('refuse_request/', views.refuse_expert),
 ]
