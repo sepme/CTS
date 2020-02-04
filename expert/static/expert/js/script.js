@@ -371,6 +371,22 @@ $(document).ready(function () {
 })
 ;
 
+$('*').persiaNumber();
+input_focus();
+question_dialog_init();
+question_page_init();
+init_dialog_btn(".preview-project", ".showProject");
+init_dialog_btn(".confirm_project", ".select-technique");
+init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+init_dialog_btn(".question-info .show-btn", ".show-question");
+init_dialog_btn(".add-new-question", ".add-question");
+init_dialog_btn(".education-btn", ".scientific_form");
+init_dialog_btn(".executive-btn", ".executive_form");
+init_dialog_btn(".research-btn", ".research_form");
+init_dialog_btn(".paper-btn", ".paper_form");
+init_dialog_btn(".technique", ".technique-dialog-main");
+search_input(".search_message");
+
 $(document).ready(function () {
 
     /*
