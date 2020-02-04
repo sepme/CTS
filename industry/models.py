@@ -163,6 +163,7 @@ class Project(models.Model):
         (4, 'انجام شد'),
     )
     status = models.IntegerField(choices=PROJECT_STATUS_CHOICES, verbose_name='وضعیت پروژه', default=0, blank=True)
+    expert_banned = models.ManyToManyField("expert.ExpertUser", verbose_name="اساتید رد شده", related_name="expert_banned")
 
     def __str__(self):
         return self.project_form.project_title_english

@@ -180,86 +180,85 @@ function setTab(data) {
 }
 
 function expertResume() {
-    $(".show-resume").click(function () {
-        $(".showProject").slideUp('slow').delay('slow');
-        $(".expert-resume").delay('slow').slideDown('slow');
-        close_dialog(".expert-resume");
-        load_dialog();
-        id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "")
-        $.ajax({
-                method: 'GET',
-                url: '/expert/get_resume',
-                dataType: 'json',
-                data: {id :id},
-                success: function (data) {
-                    var sci_record = JSON.parse(data.sci_record);
-                    if (sci_record.length !== 0) {
-                        var table_row = "";
-                        for (i = 0; i < sci_record.length; i++) {
-                            table_row += "<tr>" +
-                                "<td>" + sci_record[i].fields.degree + "</td>" +
-                                "<td>" + sci_record[i].fields.major + "</td>" +
-                                "<td>" + sci_record[i].fields.university + "</td>" +
-                                "<td>" + sci_record[i].fields.city + "</td>" +
-                                "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
-                                "</tr>";
-                            $('.sci_record').html(table_row);
-                        }
+    // $(".show-resume").click(function () {
+    $(".showProject").slideUp('slow').delay('slow');
+    $(".expert-resume").delay('slow').slideDown('slow');
+    close_dialog(".expert-resume");
+    load_dialog();
+    id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    $.ajax({
+            method: 'GET',
+            url: '/expert/get_resume',
+            dataType: 'json',
+            data: {id :id},
+            success: function (data) {
+                var sci_record = JSON.parse(data.sci_record);
+                if (sci_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < sci_record.length; i++) {
+                        table_row += "<tr>" +
+                            "<td>" + sci_record[i].fields.degree + "</td>" +
+                            "<td>" + sci_record[i].fields.major + "</td>" +
+                            "<td>" + sci_record[i].fields.university + "</td>" +
+                            "<td>" + sci_record[i].fields.city + "</td>" +
+                            "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
+                            "</tr>";
+                        $('.sci_record').html(table_row);
                     }
-                    var executive_record = JSON.parse(data.exe_record);
-                    if (executive_record.length !== 0) {
-                        var table_row = "";
-                        for (i = 0; i < executive_record.length; i++) {
-                            table_row += "<tr>" +
-                                "<td>" + executive_record[i].fields.executive_post + "</td>" +
-                                "<td>" + executive_record[i].fields.date_start_post + "</td>" +
-                                "<td>" + executive_record[i].fields.date_end_post + "</td>" +
-                                "<td>" + executive_record[i].fields.organization + "</td>" +
-                                "<td>" + executive_record[i].fields.city + "</td>" +
-                                "</tr>";
-                            $('.executive_record').html(table_row);
-                        }
+                }
+                var executive_record = JSON.parse(data.exe_record);
+                if (executive_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < executive_record.length; i++) {
+                        table_row += "<tr>" +
+                            "<td>" + executive_record[i].fields.executive_post + "</td>" +
+                            "<td>" + executive_record[i].fields.date_start_post + "</td>" +
+                            "<td>" + executive_record[i].fields.date_end_post + "</td>" +
+                            "<td>" + executive_record[i].fields.organization + "</td>" +
+                            "<td>" + executive_record[i].fields.city + "</td>" +
+                            "</tr>";
+                        $('.executive_record').html(table_row);
                     }
-                    var research_record = JSON.parse(data.research_record);
-                    console.log(research_record);
-                    if (research_record.length !== 0) {
-                        var table_row = "";
-                        for (i = 0; i < research_record.length; i++) {
-                            table_row += "<tr>" +
-                                "<td>" + research_record[i].fields.research_title + "</td>" +
-                                "<td>" + research_record[i].fields.researcher + "</td>" +
-                                "<td>" + research_record[i].fields.co_researcher + "</td>" +
-                                "</tr>";
-                            $('.research_record').html(table_row);
-                        }
+                }
+                var research_record = JSON.parse(data.research_record);
+                if (research_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < research_record.length; i++) {
+                        table_row += "<tr>" +
+                            "<td>" + research_record[i].fields.research_title + "</td>" +
+                            "<td>" + research_record[i].fields.researcher + "</td>" +
+                            "<td>" + research_record[i].fields.co_researcher + "</td>" +
+                            "</tr>";
+                        $('.research_record').html(table_row);
                     }
-                    var paper_record = JSON.parse(data.paper_record);
-                    if (paper_record.length !== 0) {
-                        var table_row = "";
-                        for (i = 0; i < paper_record.length; i++) {
-                            table_row += "<tr>" +
-                                "<td>" + paper_record[i].fields.research_title + "</td>" +
-                                "<td>" + paper_record[i].fields.date_published + "</td>" +
-                                "<td>" + paper_record[i].fields.published_at + "</td>" +
-                                "<td>" + paper_record[i].fields.impact_factor + "</td>" +
-                                "<td>" + paper_record[i].fields.citation + "</td>" +
-                                "</tr>";
-                            $('.paper_record').html(table_row);
-                        }
+                }
+                var paper_record = JSON.parse(data.paper_record);
+                if (paper_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < paper_record.length; i++) {
+                        table_row += "<tr>" +
+                            "<td>" + paper_record[i].fields.research_title + "</td>" +
+                            "<td>" + paper_record[i].fields.date_published + "</td>" +
+                            "<td>" + paper_record[i].fields.published_at + "</td>" +
+                            "<td>" + paper_record[i].fields.impact_factor + "</td>" +
+                            "<td>" + paper_record[i].fields.citation + "</td>" +
+                            "</tr>";
+                        $('.paper_record').html(table_row);
                     }
-                    $('.researcher_count').html(data.researcher_count);
-                    $('.has_industrial_research').html(data.has_industrial_research);
-                    $('.awards').html(data.awards);
-                    $('.languages').html(data.languages);
-                },
-        });
+                }
+                $('.researcher_count').html(data.researcher_count);
+                $('.has_industrial_research').html(data.has_industrial_research);
+                $('.awards').html(data.awards);
+                $('.languages').html(data.languages);
+            },
     });
+    // });
 }
 
-
-$('.accept-request').click(function(data){
+function accept_request(object) {
+    // $('.accept-request').click(function(data){
     expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    project_id = $(this).closest(".showProject").attr("id");
+    project_id = $(object).closest(".showProject").attr("id");
     data = {"expert_id" : expert_id,
             "project_id" : project_id};    
     $.ajax({
@@ -275,14 +274,16 @@ $('.accept-request').click(function(data){
                 });
             },
             error:function(data){
-                console.log("error");
+                console.log("Error");
             },
     });
-});
+    // });   
+}
 
-$('.reject-request').click(function(data){
+function reject_request(object) {
+    // $('.reject-request').click(function(data){
     expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    project_id = $(this).closest(".showProject").attr("id");
+    project_id = $(object).closest(".showProject").attr("id");
     data = {"expert_id" : expert_id,
             "project_id" : project_id};
     $.ajax({
@@ -298,10 +299,11 @@ $('.reject-request').click(function(data){
                 });
             },
             error:function(data){
-                console.log("error");
+                console.log("Error");
             },
     });
-});
+    // });   
+}
 
 function setIndustryComment(data) {
     let comments_code = "";
@@ -455,14 +457,27 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            if (data.applied == false){
-                $(".accept-request").attr("style", "display :none");
-                $(".reject-request").attr("style", "display :none");
-            }
             setComment(data);
+            let button = "<button class='show-resume'>مشاهده رزومه</button>\n";
+            if (data.applied == true){
+                button += "<button class='accept-request'>تایید درخواست</button>\n"+
+                          "<button class='reject-request'>رد درخواست</button>\n";
+            }
+            $('.button-group').html(button);
+            $(".show-resume").click(function () {
+                expertResume();
+            });
+
+            $('.accept-request').click(function() {
+                accept_request(this);
+            });
+
+            $('.reject-request').click(function() {
+                reject_request(this);
+            });
         },
         error: function (data) {
-
+            console.log("Error");
         },
     });
 }
@@ -488,21 +503,6 @@ function addComment(data) {
         "</span>" +
         "</div>" +
         "</div>";
-    // let new_comment = "<div class='my-comment'>" +
-    //             "<div class='comment-body' dir='ltr'>" +
-    //             "<span class='comment-tools'>";
-    //             if (data.attachment !== "None") {
-    //                 new_comment += "<a href='/" +
-    //                                 data.attachment +
-    //                                 "'><i class='fas fa-paperclip'></i></a>" ;   
-    //             }
-    //         new_comment += "</span>" +
-    //             "<span>" +
-    //             data.description +
-    //             "</span>" +
-    //             "</div>" +
-    //             "</div>";
-    console.log(new_comment);
     return new_comment;
 }
 
@@ -592,7 +592,7 @@ $(document).ready(function () {
             init_windowSize();
             init_dialog_btn(".chamran-btn-info", ".showProject");
             init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-            expertResume();
+            // expertResume();
             // if($(".mainInfo-body").css("display") === "block"){
             //     blur_div_toggle(".top-bar");
             //     blur_div_toggle(".side-bar");
@@ -833,7 +833,6 @@ $(document).ready(function () {
                         $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
                     },
                     error: function (data) {
-                        console.log(data);
                         var obj = JSON.parse(data.responseText);
                         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                             .prop("disabled", false);

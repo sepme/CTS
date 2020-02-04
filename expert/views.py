@@ -136,7 +136,7 @@ def index(request):
         return render(request, 'expert/index.html', {'form': form,
                                                     'expert_user': expert_user})    
     elif expert_user.status == "free":
-        projects = Project.objects.filter(status=1)
+        projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
 
     elif expert_user.status == "involved":
         projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
