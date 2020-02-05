@@ -339,11 +339,12 @@ function setComment(data) {
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "industry") { //industry
-            comments_code += "<div class='my-comment'>" +
+            comments_code += "<div class='my-comment' id='"+ data[i].pk +"'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
                 "<div class='comment-body'>" +
                 "<span class='comment-tools'>" +
+                "<i class='fas fa-trash-alt'></i>" +
                 "<i class='fas fa-pen'>" +
                 "</i>" +
                 "<i class='fas fa-reply'><div class='reply'></div>" +
@@ -360,15 +361,12 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === "expert") { //expert
-            comments_code += "<div class='your-comment'>" +
+            comments_code += "<div class='your-comment' id='"+ data[i].pk +"'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
-                "<i class='fas fa-trash-alt'></i>" +
                 "<i class='fas fa-reply' value=" +
                 data[i].pk +
-                "></i>" +
-                "<i class='fas fa-pen'>" +
-                "</i>";
+                "></i>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" +
                     data[i].attachment +
@@ -475,9 +473,32 @@ function getComments(expert_id, project_id) {
             $('.reject-request').click(function() {
                 reject_request(this);
             });
+            $(".fa-trash-alt").click(function(){
+                deleteComment($(this).closest('.my-comment'));
+            });
         },
         error: function (data) {
             console.log("Error");
+        },
+    });
+}
+
+function deleteComment(comment){
+    $.ajax({
+        method : 'POST',
+        url: '/deleteComment/',
+        dataType: 'json',
+        data : {id : $(comment).attr("id")},
+        success: function(data){
+            $(comment).remove()
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت پاک شد.",
+                position: 'bottomLeft'
+            });
+        },
+        error: function(data){
+            console.log('Error');
         },
     });
 }

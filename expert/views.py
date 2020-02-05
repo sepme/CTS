@@ -304,6 +304,7 @@ def show_project_view(request):
             'text': comment.description,
             'sender_type': comment.sender_type,
             'attachment': url,
+            'pk' : comment.pk,
         })
         if comment.sender_type == "industry":
             comment.status = "seen"
@@ -453,7 +454,7 @@ def show_researcher_preview(request):
         researcher_information['techniques'].append(tech.technique.technique_title)
     project = get_object_or_404(Project ,pk=request.GET["project_id"])
     comments = []
-    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(researcher_user=None)
+    comment_list = project.comment_set.all().filter(researcher_user=researcher.researcher_user).exclude(sender_type='system')
     for comment in comment_list:
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
@@ -464,6 +465,7 @@ def show_researcher_preview(request):
             'text': comment.description,
             'sender_type': comment.sender_type,
             'attachment': url,
+            'pk' : comment.pk,
         })
         if comment.sender_type == 'researcher':
             comment.status = 'seen'

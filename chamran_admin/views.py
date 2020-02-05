@@ -14,11 +14,10 @@ from django.conf import settings
 from persiantools.jdatetime import JalaliDate
 from chamran_admin.models import Message
 from django.http import JsonResponse
-from . import models
-from . import forms
+from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
-from industry.models import IndustryUser
+from industry.models import IndustryUser, Comment
 from django.template.loader import get_template
 from django.urls import resolve
 
@@ -519,3 +518,11 @@ def RecoverPassword_ajax(request):
         response = {"seccessful" :"seccessful"}
         return JsonResponse(response)
     return JsonResponse(form.errors ,status=400)
+
+def DeleteComment(request):
+    try:
+        comment = get_object_or_404(Comment ,pk=request.POST['id'])
+        comment.delete()
+    except:
+        return JsonResponse({} ,400)
+    return JsonResponse({'successful' :"successful"})
