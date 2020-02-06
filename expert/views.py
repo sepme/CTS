@@ -598,3 +598,15 @@ def GetResume(request):
         data['researcher_count'] = '+60'
 
     return JsonResponse(data=data)
+
+def confirmResearcher(request):
+    try:
+        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(Project, pk=request.POST['project_id'])
+        project.researcher_accepted.add(researcher)
+        researcher.status.status = 'involved'
+        project.save()
+        researcher.status.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={} ,status=400)
