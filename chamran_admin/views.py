@@ -325,10 +325,7 @@ class LoginView(generic.TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            if not request.user.is_superuser:
                 if request.user.is_authenticated:
-                    # if request.user.is_superuser:
-                    #     return HttpResponseRedirect(reverse('chamran:home'))
                     return find_user(request.user).get_absolute_url()
         except:
             pass
