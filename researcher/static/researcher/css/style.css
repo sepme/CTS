@@ -1,5 +1,5 @@
-
 @import "comments.css";
+
 @media screen {
     .mbottom-lg-25 {
         margin-bottom: 25px;
@@ -1718,134 +1718,155 @@ span.title-back {
 .refuse-btn {
     background-color: #ff4545;
 }
+
 /*
     * vote
     */
-    .vote-question{
-        border: 1px solid #bdbdbd;
-        border-radius: 50%;
-        position: absolute;
-        bottom: -5px;
-        right: -10px;
-        height: 30px;
-        width: 30px;
-        color: #bdbdbd;
-        background-color: #ffffff;
-        box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.16);
-        z-index: 999;
-    }
-    .vote-question:hover{
-        color: #3ccd1c;
-        border-color: #3ccd1c;
-        box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.16);
-        cursor: pointer;
-    }
-    .vote-question > span{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -45%);
-        font-size: 22px;
-        font-weight:300;
-    }
-    input.vote-select + label{
-        position: relative;
-        top: 50%;
-        transform: translateY(50%);
-    }
-    input.vote-select.l +{
-        position: relative;
-        top: 0%;
-        left: 0%;
-        /*-webkit-transform: translate(-50%, -50%);*/
-        /*-moz-transform: translate(-50%, -50%);*/
-        /*-ms-transform: translate(-50%, -50%);*/
-        /*-o-transform: translate(-50%, -50%);*/
-        /*transform: translate(-50%, -50%);*/
-        width: 15px;
-        height: 15px;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        border-radius: 50%;
-    }
-    input.vote-select[value='0'] + label{
-        height: 30px;
-        width: 30px;
-        border: 1px solid #ff0505;
-        background-color: #ffffff;
-    }
-    input.vote-select[value='0'] + label:hover, input.vote-select[value='0']:checked + label{
-        background-color: #ff0505;
-        cursor: pointer;
-    }
-    input.vote-select[value='1'] + label{
-        height: 20px;
-        width: 20px;
-        border: 1px solid #ff8f00;
-        background-color: #ffffff;
-    }
-    input.vote-select[value='1'] + label:hover, input.vote-select[value='1']:checked + label{
-        background-color: #ff8f00;
-        cursor: pointer;
-    }
-    input.vote-select[value='2'] + label{
-        height: 20px;
-        width: 20px;
-        border: 1px solid #fff600;
-        background-color: #ffffff;
-    }
-    input.vote-select[value='2'] + label:hover, input.vote-select[value='2']:checked + label{
-        background-color: #fff600;
-        cursor: pointer;
-    }
-    input.vote-select[value='3'] + label{
-        height: 20px;
-        width: 20px;
-        border: 1px solid #78be20;
-        background-color: #ffffff;
-    }
-    input.vote-select[value='3'] + label:hover, input.vote-select[value='3']:checked + label{
-        background-color: #78be20;
-        cursor: pointer;
-    }
-    input.vote-select[value='4'] + label{
-        height: 30px;
-        width: 30px;
-        border: 1px solid #009639;
-        background-color: #ffffff;
-    }
-    input.vote-select[value='4'] + label:hover, input.vote-select[value='4']:checked + label{
-        background-color: #009639;
-        cursor: pointer;
-    }
-    input.vote-select[value='5'] + label{
-        height: 40px;
-        width: 40px;
-        border: 1px solid #006747;
-        background-color: #ffffff;
-    }
-    input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked + label{
-        background-color: #006747;
-        cursor: pointer;
-    }
-    .vote-content{
-        display: flex;
-        padding-right: 20px;
-        font-weight: 300;
-    }
-    .vote-content > div > .number{
-        position: absolute;
-        top: 5px;
-        right: 5px;
-    }
-    .vote-select-label{
-        margin: 5px;
-        top: 0;
-        right: 0;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        border-radius: 50%;
-    }
+.vote-question {
+    border: 1px solid #bdbdbd;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -5px;
+    right: -10px;
+    height: 30px;
+    width: 30px;
+    color: #bdbdbd;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.16);
+    z-index: 999;
+}
+
+.vote-question:hover {
+    color: #3ccd1c;
+    border-color: #3ccd1c;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+}
+
+.vote-question > span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -45%);
+    font-size: 22px;
+    font-weight: 300;
+}
+
+input.vote-select + label {
+    position: relative;
+    top: 50%;
+    transform: translateY(50%);
+}
+
+input.vote-select.l + {
+    position: relative;
+    top: 0%;
+    left: 0%;
+    /*-webkit-transform: translate(-50%, -50%);*/
+    /*-moz-transform: translate(-50%, -50%);*/
+    /*-ms-transform: translate(-50%, -50%);*/
+    /*-o-transform: translate(-50%, -50%);*/
+    /*transform: translate(-50%, -50%);*/
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+input.vote-select[value='0'] + label {
+    height: 30px;
+    width: 30px;
+    border: 1px solid #ff0505;
+    background-color: #ffffff;
+}
+
+input.vote-select[value='0'] + label:hover, input.vote-select[value='0']:checked + label {
+    background-color: #ff0505;
+    cursor: pointer;
+}
+
+input.vote-select[value='1'] + label {
+    height: 20px;
+    width: 20px;
+    border: 1px solid #ff8f00;
+    background-color: #ffffff;
+}
+
+input.vote-select[value='1'] + label:hover, input.vote-select[value='1']:checked + label {
+    background-color: #ff8f00;
+    cursor: pointer;
+}
+
+input.vote-select[value='2'] + label {
+    height: 20px;
+    width: 20px;
+    border: 1px solid #fff600;
+    background-color: #ffffff;
+}
+
+input.vote-select[value='2'] + label:hover, input.vote-select[value='2']:checked + label {
+    background-color: #fff600;
+    cursor: pointer;
+}
+
+input.vote-select[value='3'] + label {
+    height: 20px;
+    width: 20px;
+    border: 1px solid #78be20;
+    background-color: #ffffff;
+}
+
+input.vote-select[value='3'] + label:hover, input.vote-select[value='3']:checked + label {
+    background-color: #78be20;
+    cursor: pointer;
+}
+
+input.vote-select[value='4'] + label {
+    height: 30px;
+    width: 30px;
+    border: 1px solid #009639;
+    background-color: #ffffff;
+}
+
+input.vote-select[value='4'] + label:hover, input.vote-select[value='4']:checked + label {
+    background-color: #009639;
+    cursor: pointer;
+}
+
+input.vote-select[value='5'] + label {
+    height: 40px;
+    width: 40px;
+    border: 1px solid #006747;
+    background-color: #ffffff;
+}
+
+input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked + label {
+    background-color: #006747;
+    cursor: pointer;
+}
+
+.vote-content {
+    display: flex;
+    padding-right: 20px;
+    font-weight: 300;
+}
+
+.vote-content > div > .number {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.vote-select-label {
+    margin: 5px;
+    top: 0;
+    right: 0;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
 /*
  * Vote
  */
@@ -3382,4 +3403,12 @@ ul.nav-tabs {
     width: 100px;
     height: 100px;
     margin-bottom: 50px;
+}
+
+.question-progress {
+    width: 100%;
+}
+
+.question-progress .progress-bar {
+    background-color: #3CCD1C;
 }

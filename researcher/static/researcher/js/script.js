@@ -5,7 +5,28 @@ $(window).on("load", function () {
     init_windowSize();
     load_dialog();
 });
-
+function CountDown(min, hour, day) {
+    let new_day = day, new_hour = hour, new_min = min;
+    function counter() {
+        let day_div= $(".preview-question .left-time-counter .day .count");
+        let hour_div = $(".preview-question .left-time-counter .hour .count");
+        let min_div = $(".preview-question .left-time-counter .minute .count");
+        new_min = new_min - 1;
+        if( new_min === -1 ) {
+            new_hour  = new_hour - 1;
+            new_min = 59;
+        }
+        min_div.html(new_min);
+        if( new_hour === -1 ) {
+            new_day = new_day - 1;
+            new_hour = 23;
+        }
+        hour_div.html(new_hour);
+        day_div.html(new_day);
+    }
+    setInterval(counter, 1000*60);
+}
+CountDown(10, 1, 1);
 $(".chamran-btn-info").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
