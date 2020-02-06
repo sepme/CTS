@@ -185,43 +185,44 @@ function expertResume() {
     $(".expert-resume").delay('slow').slideDown('slow');
     close_dialog(".expert-resume");
     load_dialog();
-    id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    $.ajax({
-            method: 'GET',
-            url: '/expert/get_resume',
-            dataType: 'json',
-            data: {id :id},
-            success: function (data) {
-                var sci_record = JSON.parse(data.sci_record);
-                if (sci_record.length !== 0) {
-                    var table_row = "";
-                    for (i = 0; i < sci_record.length; i++) {
-                        table_row += "<tr>" +
-                            "<td>" + sci_record[i].fields.degree + "</td>" +
-                            "<td>" + sci_record[i].fields.major + "</td>" +
-                            "<td>" + sci_record[i].fields.university + "</td>" +
-                            "<td>" + sci_record[i].fields.city + "</td>" +
-                            "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
-                            "</tr>";
-                        $('.sci_record').html(table_row);
+    let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+
+        $.ajax({
+                method: 'GET',
+                url: '/expert/get_resume',
+                dataType: 'json',
+                data: {id :id},
+                success: function (data) {
+                    var sci_record = JSON.parse(data.sci_record);
+                    if (sci_record.length !== 0) {
+                        var table_row = "";
+                        for (i = 0; i < sci_record.length; i++) {
+                            table_row += "<tr>" +
+                                "<td>" + sci_record[i].fields.degree + "</td>" +
+                                "<td>" + sci_record[i].fields.major + "</td>" +
+                                "<td>" + sci_record[i].fields.university + "</td>" +
+                                "<td>" + sci_record[i].fields.city + "</td>" +
+                                "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
+                                "</tr>";
+                            $('.sci_record').html(table_row);
+                        }
                     }
-                }
-                var executive_record = JSON.parse(data.exe_record);
-                if (executive_record.length !== 0) {
-                    var table_row = "";
-                    for (i = 0; i < executive_record.length; i++) {
-                        table_row += "<tr>" +
-                            "<td>" + executive_record[i].fields.executive_post + "</td>" +
-                            "<td>" + executive_record[i].fields.date_start_post + "</td>" +
-                            "<td>" + executive_record[i].fields.date_end_post + "</td>" +
-                            "<td>" + executive_record[i].fields.organization + "</td>" +
-                            "<td>" + executive_record[i].fields.city + "</td>" +
-                            "</tr>";
-                        $('.executive_record').html(table_row);
+                    var executive_record = JSON.parse(data.exe_record);
+                    if (executive_record.length !== 0) {
+                        var table_row = "";
+                        for (i = 0; i < executive_record.length; i++) {
+                            table_row += "<tr>" +
+                                "<td>" + executive_record[i].fields.executive_post + "</td>" +
+                                "<td>" + executive_record[i].fields.date_start_post + "</td>" +
+                                "<td>" + executive_record[i].fields.date_end_post + "</td>" +
+                                "<td>" + executive_record[i].fields.organization + "</td>" +
+                                "<td>" + executive_record[i].fields.city + "</td>" +
+                                "</tr>";
+                            $('.executive_record').html(table_row);
+                        }
                     }
-                }
-                var research_record = JSON.parse(data.research_record);
-                if (research_record.length !== 0) {
+                    var research_record = JSON.parse(data.research_record);
+                    if (research_record.length !== 0) {
                     var table_row = "";
                     for (i = 0; i < research_record.length; i++) {
                         table_row += "<tr>" +
@@ -252,13 +253,12 @@ function expertResume() {
                 $('.languages').html(data.languages);
             },
     });
-    // });
 }
 
-function accept_request(object) {
-    // $('.accept-request').click(function(data){
+
+$('.accept-request').click(function(data){
     expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    project_id = $(object).closest(".showProject").attr("id");
+    project_id = $(this).closest(".showProject").attr("id");
     data = {"expert_id" : expert_id,
             "project_id" : project_id};    
     $.ajax({
@@ -274,16 +274,14 @@ function accept_request(object) {
                 });
             },
             error:function(data){
-                console.log("Error");
+                console.log("error");
             },
     });
-    // });   
-}
+});
 
-function reject_request(object) {
-    // $('.reject-request').click(function(data){
+$('.reject-request').click(function(data){
     expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    project_id = $(object).closest(".showProject").attr("id");
+    project_id = $(this).closest(".showProject").attr("id");
     data = {"expert_id" : expert_id,
             "project_id" : project_id};
     $.ajax({
@@ -299,11 +297,10 @@ function reject_request(object) {
                 });
             },
             error:function(data){
-                console.log("Error");
+                console.log("error");
             },
     });
-    // });   
-}
+});
 
 function setIndustryComment(data) {
     let comments_code = "";
@@ -339,12 +336,11 @@ function setComment(data) {
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "industry") { //industry
-            comments_code += "<div class='my-comment' id='"+ data[i].pk +"'>" +
+            comments_code += "<div class='my-comment'>" +
                 "<div class='comment-profile'>" +
                 "</div>" +
                 "<div class='comment-body'>" +
                 "<span class='comment-tools'>" +
-                "<i class='fas fa-trash-alt'></i>" +
                 "<i class='fas fa-pen'>" +
                 "</i>" +
                 "<i class='fas fa-reply'><div class='reply'></div>" +
@@ -361,12 +357,15 @@ function setComment(data) {
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === "expert") { //expert
-            comments_code += "<div class='your-comment' id='"+ data[i].pk +"'>" +
+            comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
+                "<i class='fas fa-trash-alt'></i>" +
                 "<i class='fas fa-reply' value=" +
                 data[i].pk +
-                "></i>";
+                "></i>" +
+                "<i class='fas fa-pen'>" +
+                "</i>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" +
                     data[i].attachment +
@@ -455,50 +454,14 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            setComment(data);
-            let button = "<button class='show-resume'>مشاهده رزومه</button>\n";
-            if (data.applied == true){
-                button += "<button class='accept-request'>تایید درخواست</button>\n"+
-                          "<button class='reject-request'>رد درخواست</button>\n";
+            if (data.applied == false){
+                $(".accept-request").attr("style", "display :none");
+                $(".reject-request").attr("style", "display :none");
             }
-            $('.button-group').html(button);
-            $(".show-resume").click(function () {
-                expertResume();
-            });
-
-            $('.accept-request').click(function() {
-                accept_request(this);
-            });
-
-            $('.reject-request').click(function() {
-                reject_request(this);
-            });
-            $(".fa-trash-alt").click(function(){
-                deleteComment($(this).closest('.my-comment'));
-            });
+            setComment(data);
         },
         error: function (data) {
-            console.log("Error");
-        },
-    });
-}
 
-function deleteComment(comment){
-    $.ajax({
-        method : 'POST',
-        url: '/deleteComment/',
-        dataType: 'json',
-        data : {id : $(comment).attr("id")},
-        success: function(data){
-            $(comment).remove()
-            iziToast.success({
-                rtl: true,
-                message: "پیام با موفقیت پاک شد.",
-                position: 'bottomLeft'
-            });
-        },
-        error: function(data){
-            console.log('Error');
         },
     });
 }
@@ -524,6 +487,21 @@ function addComment(data) {
         "</span>" +
         "</div>" +
         "</div>";
+    // let new_comment = "<div class='my-comment'>" +
+    //             "<div class='comment-body' dir='ltr'>" +
+    //             "<span class='comment-tools'>";
+    //             if (data.attachment !== "None") {
+    //                 new_comment += "<a href='/" +
+    //                                 data.attachment +
+    //                                 "'><i class='fas fa-paperclip'></i></a>" ;   
+    //             }
+    //         new_comment += "</span>" +
+    //             "<span>" +
+    //             data.description +
+    //             "</span>" +
+    //             "</div>" +
+    //             "</div>";
+    console.log(new_comment);
     return new_comment;
 }
 
@@ -613,7 +591,7 @@ $(document).ready(function () {
             init_windowSize();
             init_dialog_btn(".chamran-btn-info", ".showProject");
             init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-            // expertResume();
+            expertResume();
             // if($(".mainInfo-body").css("display") === "block"){
             //     blur_div_toggle(".top-bar");
             //     blur_div_toggle(".side-bar");
@@ -854,6 +832,7 @@ $(document).ready(function () {
                         $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
                     },
                     error: function (data) {
+                        console.log(data);
                         var obj = JSON.parse(data.responseText);
                         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                             .prop("disabled", false);

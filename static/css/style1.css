@@ -20,6 +20,9 @@
 .pb-40{
     padding-bottom: 40px;
 }
+.green {
+    color: #3CCD1C;
+}
 button:hover, button:focus {
     outline: none;
 }

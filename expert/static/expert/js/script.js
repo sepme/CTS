@@ -124,34 +124,6 @@ $(document).ready(function () {
 
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
     const questions = $(".tab-content div.card").toArray();
-    $(".nav-tabs .nav-item .nav-link").click(function () {
-        if ($(this).attr("id") === "active-questions") {
-            $(".tab-content").html("");
-            $.each(questions, function (i, val) {
-                if ($(val).closest("div").hasClass("active-question")) {
-                    $(".tab-content").append(val);
-                }
-            });
-        } else if ($(this).attr("id") === "check-questions") {
-            $(".tab-content").html("");
-            $.each(questions, function (i, val) {
-                if ($(val).closest("div").hasClass("check-question")) {
-                    $(".tab-content").append(val);
-                }
-            });
-        } else if ($(this).attr("id") === "answered-questions") {
-            $(".tab-content").html("");
-            $.each(questions, function (i, val) {
-                if ($(val).closest("div").hasClass("close-question")) {
-                    $(".tab-content").append(val);
-                }
-            });
-        } else if ($(this).attr("id") === "all-questions") {
-            $(".tab-content").html(questions);
-        }
-        init_dialog_btn(".show-btn", ".show-question");
-        showQuestion();
-    });
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
         $(this).css("width", "fit-content");
@@ -166,22 +138,6 @@ $(document).ready(function () {
     });
     tag_input_label("id_key_words");
 
-
-    $('*').persiaNumber();
-    input_focus();
-    question_dialog_init();
-    question_page_init();
-    init_dialog_btn(".preview-project", ".showProject");
-    init_dialog_btn(".confirm_project", ".select-technique");
-    init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".question-info .show-btn", ".show-question");
-    init_dialog_btn(".add-new-question", ".add-question");
-    init_dialog_btn(".education-btn", ".scientific_form");
-    init_dialog_btn(".executive-btn", ".executive_form");
-    init_dialog_btn(".research-btn", ".research_form");
-    init_dialog_btn(".paper-btn", ".paper_form");
-    init_dialog_btn(".technique", ".technique-dialog-main");
-    search_input(".search_message");
     $(".confirm_project").click(function () {
         $.ajax({
             method: 'GET',
@@ -286,7 +242,7 @@ $(document).ready(function () {
                     iziToast.success({
                         rtl: true,
                         message: data.success,
-                        position: 'topCenter'
+                        position: 'bottomLeft'
                     });
                 },
                 error: function (data) {
@@ -368,8 +324,7 @@ $(document).ready(function () {
             }
         });
     }
-})
-;
+});
 
 $('*').persiaNumber();
 input_focus();
@@ -388,7 +343,6 @@ init_dialog_btn(".technique", ".technique-dialog-main");
 search_input(".search_message");
 
 $(document).ready(function () {
-
     /*
     * I didn't find a better place to put this;
     * so please move this part to a section you prefer.
@@ -396,7 +350,52 @@ $(document).ready(function () {
     * after clicking on 'show-btn' of a new research question, 'attachments' and
     * 'answers' of the previous one is still shown (in the case the previous one had it).
     */
+    input_focus();
     showQuestion();
+    $('*').persiaNumber();
+    question_dialog_init();
+    question_page_init();
+    init_dialog_btn(".preview-project", ".showProject");
+    init_dialog_btn(".confirm_project", ".select-technique");
+    init_dialog_btn("#accept-techniques", ".project-details");
+    init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+    init_dialog_btn(".question-info .show-btn", ".show-question");
+    init_dialog_btn(".add-new-question", ".add-question");
+    init_dialog_btn(".education-btn", ".scientific_form");
+    init_dialog_btn(".executive-btn", ".executive_form");
+    init_dialog_btn(".research-btn", ".research_form");
+    init_dialog_btn(".paper-btn", ".paper_form");
+    init_dialog_btn(".technique", ".technique-dialog-main");
+    search_input(".search_message");
+
+    $(".nav-tabs .nav-item .nav-link").click(function () {
+        if ($(this).attr("id") === "active-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("active-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "check-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("check-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "answered-questions") {
+            $(".tab-content").html("");
+            $.each(questions, function (i, val) {
+                if ($(val).closest("div").hasClass("close-question")) {
+                    $(".tab-content").append(val);
+                }
+            });
+        } else if ($(this).attr("id") === "all-questions") {
+            $(".tab-content").html(questions);
+        }
+        init_dialog_btn(".show-btn", ".show-question");
+        showQuestion();
+    });
 
     $(".close-answer").click(function () {
         var id = $(this).attr("id");
@@ -411,7 +410,7 @@ $(document).ready(function () {
                 iziToast.success({
                     rtl: true,
                     message: "از این به بعد پاسخی برای این سوال دریافت نخواهد شد.",
-                    position: 'topCenter'
+                    position: 'bottomLeft'
                 });
             },
             error: function (data) {
