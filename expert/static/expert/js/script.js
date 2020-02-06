@@ -1354,3 +1354,23 @@ comment_form.submit(function (event) {
         },
     });
 });
+
+$('.confirm-researcher').click(function(){
+    $.ajax({
+        method: "POST",
+        url: 'confirmResearcher/',
+        dataType: "json",
+        data: {researcher_id : $(this).attr("id"),
+               project_id :  $('.div_project_id').attr("id")},
+        success: function(data){
+            iziToast.success({
+                rtl: true,
+                message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
+                position: 'bottomLeft'
+            });
+        },
+        error: function(data){
+            console.log("Error");
+        }
+    });
+});

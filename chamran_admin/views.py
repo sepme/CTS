@@ -324,11 +324,11 @@ class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
-            if request.user.is_authenticated:
-                # if request.user.is_superuser:
-                #     return HttpResponseRedirect(reverse('chamran:home'))
-                return find_user(request.user).get_absolute_url()
+        try:
+                if request.user.is_authenticated:
+                    return find_user(request.user).get_absolute_url()
+        except:
+            pass
         login_form = forms.LoginForm()
         register_form = forms.RegisterEmailForm()
         context = {'form': login_form,
