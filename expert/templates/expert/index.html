@@ -7,7 +7,7 @@
 
 {% block dialog %}
     {% include 'expert/layouts/initial_information.html' %}
-    {#    {% include 'expert/layouts/project_details.html' %}#}
+    {% include 'expert/layouts/project_details.html' %}
     {% include 'expert/layouts/showProject.html' %}
     {% include 'expert/layouts/vote_dialog_industry.html' %}
     {% include 'expert/layouts/vote_dialog_researcher.html' %}
@@ -56,15 +56,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% empty %}
+                            {% empty %}
                                 <div class="no-project">
-                                    <h4>متاسفانه، هنوز پروژه ای ثبت نکرده اید!</h4>
-                                    <p>برای ثبت پروژه های خود و سپردن آن ها به متخصصین حوزه شما، لطفا از طریق</p>
+                                    <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>
+                                    <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>
                                     <span>
-                                        <i class="fas fa-plus-circle"></i>
-                                        <span>ثبت پروژه جدید</span>
+                                        <i class="fas fa-cog"></i>
+                                        <span>پروفایل کاربری</span>
                                     </span>
-                                    <p>در منوی سمت راست، اقدام نمایید.</p>
+                                    <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت و
+                                        اطمینان کامل، پروژه شان را به شما بسپارند.</p>
                                 </div>
                                 {#                                <div class="row">#}
                                 {#                                    <div class="col-lg-12">#}

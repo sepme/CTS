@@ -958,9 +958,9 @@ span.add-researcher.hover > span {
 
 .step-top > .step-content:after {
     content: '';
-    height: 8px;
+    height: 13px;
     width: 8px;
-    border: 6px solid #F8FDF7;
+    border: 6px solid #ffffff;
     border-top-color: #3CCD1C;
     position: absolute;
     top: 50%;
@@ -1030,7 +1030,7 @@ span.add-researcher.hover > span {
     content: '';
     height: 8px;
     width: 8px;
-    border: 6px solid #F8FDF7;
+    border: 6px solid #ffffff;
     border-bottom-color: #3CCD1C;
     position: absolute;
     top: 50%;
