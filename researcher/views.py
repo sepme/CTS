@@ -462,6 +462,7 @@ class QuestionShow(generic.TemplateView ):
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question_text
         context['attachment'] = question.research_question.attachment
+        context['attach_type'] = str(question.research_question.attachment).split("/")[-1].split('.')[-1]
         context['file_name'] = question.research_question.attachment.name.split("/")[-1]
         context['hour'] = 23 - datetime.datetime.now().hour
         context['minute'] = 59 - datetime.datetime.now().minute
@@ -486,7 +487,7 @@ class QuestionShow(generic.TemplateView ):
                             question.research_question.question_title)
             email = question.research_question.expert.user.username
             try:
-                send_mail(
+                send_mail(  
                     subject=subject,
                     message=message, 
                     from_email=settings.EMAIL_HOST_USER,

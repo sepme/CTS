@@ -1,5 +1,6 @@
 {% extends "researcher/layouts/base_layout.html" %}
 {% load static %}
+{% block title %}سوال پژوهشی{% endblock %}
 {% block content %}
     <div class="preview-question">
         <div class="card info-card text-right">
@@ -20,12 +21,20 @@
                         <div class="question-attach text-left">
                             <ul class="inline-list">
                                 <li class="list-item">
-                                    {% if attachment == "  " %}
-                                        <a href="{{ attachment.url }}" class="attach-file">
+                                {% if attachment != "" %}
+                                    <a href="{{ attachment.url }}" class="attach-file">
+                                        {% if attach_type == "doc" or attach_type == "docx" %}
                                             <span class="doc-file"></span>
-                                            <span>{{ file_name }}</span>
-                                        </a>
-                                    {% endif %}
+                                        {% elif attach_type == "pdf" %}
+                                            <span class="pdf-file"></span>
+                                        {% elif attach_type == "jpg" or attach_type == "jpeg" %}
+                                            <span class="jpg-file"></span>
+                                        {% elif attach_type == "png" %}
+                                            <span class="png-file"></span>
+                                        {% endif %}
+                                        <span>{{ file_name }}</span>
+                                    </a>
+                                {% endif %} 
                                 </li>
                             </ul>
                         </div>
