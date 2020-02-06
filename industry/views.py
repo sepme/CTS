@@ -146,11 +146,10 @@ def accept_project(request):
     return JsonResponse(data=data)
 
 def refuse_expert(request):
-    print(request.POST)
     expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
-    expert.banned_list.add(project)
-    expert.save()
+    project.expert_banned.add(expert)
+    project.save()
     data = {'success' : 'successful'}
     return JsonResponse(data=data)
 

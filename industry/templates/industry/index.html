@@ -1,4 +1,5 @@
 {% extends "industry/layouts/base_layout.html" %}
+{% load static %}
 {% load gregorian_to_jalali %}
 {% block title %}پروژه ها{% endblock %}
 
@@ -303,6 +304,7 @@
                     {% endif %}
                 {% empty %}
                     <div class="no-project">
+                        <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
                         <h4>متاسفانه، هنوز پروژه ای ثبت نکرده اید!</h4>
                         <p>برای ثبت پروژه های خود و سپردن آن ها به متخصصین حوزه شما، لطفا از طریق</p>
                         <span>

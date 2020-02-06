@@ -122,7 +122,7 @@ function showQuestion() {
 
 $(document).ready(function () {
 
-    $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
+    // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
     const questions = $(".tab-content div.card").toArray();
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
@@ -326,6 +326,22 @@ $(document).ready(function () {
     }
 });
 
+$('*').persiaNumber();
+input_focus();
+question_dialog_init();
+question_page_init();
+init_dialog_btn(".preview-project", ".showProject");
+init_dialog_btn(".confirm_project", ".select-technique");
+init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+init_dialog_btn(".question-info .show-btn", ".show-question");
+init_dialog_btn(".add-new-question", ".add-question");
+init_dialog_btn(".education-btn", ".scientific_form");
+init_dialog_btn(".executive-btn", ".executive_form");
+init_dialog_btn(".research-btn", ".research_form");
+init_dialog_btn(".paper-btn", ".paper_form");
+init_dialog_btn(".technique", ".technique-dialog-main");
+search_input(".search_message");
+
 $(document).ready(function () {
     /*
     * I didn't find a better place to put this;
@@ -500,6 +516,10 @@ $(document).ready(function () {
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
                 setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
+
+                $(".fa-trash-alt").click(function(){
+                    deleteComment($(this).closest('.my-comment'));
+                });
             },
             error: function (data) {
 
@@ -991,12 +1011,36 @@ showInfo.click(function (event) {
             setMajors(data);
             setValue(data);
             setComment(data.comments);
+
+            $(".fa-trash-alt").click(function(){
+                deleteComment($(this).closest('.my-comment'));
+            });
         },
         error: function (data) {
         }
 
     })
 });
+
+function deleteComment(comment){
+    $.ajax({
+        method : 'POST',
+        url: '/deleteComment/',
+        dataType: 'json',
+        data : {id : $(comment).attr("id")},
+        success: function(data){
+            $(comment).remove()
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت پاک شد.",
+                position: 'bottomLeft'
+            });
+        },
+        error: function(data){
+            console.log('Error');
+        },
+    });
+}
 
 function setRole(data) {
     role = "<div>" +
@@ -1142,11 +1186,12 @@ function setComment(data) {
     let comments_code = "";
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert
-            comments_code += "<div class='my-comment'>" +
+            comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
                 "<div class='comment-profile'>" +
                 "</div>" +
                 "<div class='comment-body'>" +
                 "<span class='comment-tools'>" +
+                "<i class='fas fa-trash-alt'></i>" +
                 "<i class='fas fa-pen'>" +
                 "</i>" +
                 "<i class='fas fa-reply'><div class='reply'></div>" +
@@ -1166,12 +1211,9 @@ function setComment(data) {
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span class='comment-tools'>" +
-                "<i class='fas fa-trash-alt'></i>" +
                 "<i class='fas fa-reply' value=" +
                 data[i].pk +
-                "></i>" +
-                "<i class='fas fa-pen'>" +
-                "</i>";
+                "></i>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" +
                     data[i].attachment +
@@ -1228,7 +1270,7 @@ $.ajaxSetup({
 });
 
 function addComment(data) {
-    let comment_code = "<div class='my-comment'>" +
+    let comment_code = "<div class='my-comment' id='" + data.pk + "' >" +
         "<div class='comment-body' dir='ltr'>" +
         "<span class='comment-tools'>" +
         "<i class='fas fa-trash-alt'></i>" +
@@ -1283,6 +1325,11 @@ comment_form.submit(function (event) {
                 message: "پیام با موفقیت ارسال شد!",
                 position: 'bottomLeft'
             });
+
+            $(".fa-trash-alt").click(function(){
+                deleteComment($(this).closest('.my-comment'));
+            });
+
             comment_form[0].reset();
             $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
 

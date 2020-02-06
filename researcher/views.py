@@ -558,15 +558,18 @@ def ShowProject(request):
             'attachment'   : url
         }
         json_response['comments'].append(temp)
+        if com.sender_type == expert:
+            com.status = 'seen'
+            com.save()
     return JsonResponse(json_response)
 
 def DeleteComment(request):
     try:
-        comment = get_object_or_404(Comment ,pk=request.POST['comment_id'])
+        comment = get_object_or_404(Comment ,pk=request.POST['id'])
         comment.delete()
     except:
         return JsonResponse({} ,400)
-    return JsonResponse({'successful' :"successful"} ,200)
+    return JsonResponse({'successful' :"successful"})
 
 def ApplyProject(request):
     form = forms.ApplyForm(request.POST)
@@ -669,12 +672,14 @@ def AddComment(request):
                 'success' : 'successful',
                 'attachment' : comment.attachment.url[comment.attachment.url.find('media' ,2):],
                 'description':description,
+                'pk' : comment.pk,
             }
         else:
             data = {
                 'success' : 'successful',
                 'attachment' : "None",
                 'description': description,
+                'pk' : comment.pk,
             }
         return JsonResponse(data)
     return JsonResponse(form.errors ,status=400)
