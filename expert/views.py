@@ -393,7 +393,7 @@ def show_research_question(request):
             'researcher_name': researcher_user.__str__(),
             'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
             'is_correct': answer.is_correct,
-            'answer_attachment': answer.answer.path,
+            'answer_attachment': answer.answer.url,
             'answer_id': str(answer.id),
         }
         answers_list.append(answer_json)
@@ -407,7 +407,7 @@ def show_research_question(request):
     }
     if research_question.attachment:
         attachment = research_question.attachment
-        json_response['question_attachment_path'] = attachment.path
+        json_response['question_attachment_path'] = attachment.url
         json_response['question_attachment_name'] = attachment.name.split('/')[-1]
         json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
     return JsonResponse(json_response)
