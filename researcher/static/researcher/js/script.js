@@ -5,28 +5,35 @@ $(window).on("load", function () {
     init_windowSize();
     load_dialog();
 });
+
 function CountDown(min, hour, day) {
-    let new_day = day, new_hour = hour, new_min = min;
+    let day_div = $(".preview-question .left-time-counter .day .count");
+    let hour_div = $(".preview-question .left-time-counter .hour .count");
+    let min_div = $(".preview-question .left-time-counter .minute .count");
+
+    let new_day = day_div.html();
+    let new_hour = hour_div.html();
+    let new_min = min_div.html();
+
     function counter() {
-        let day_div= $(".preview-question .left-time-counter .day .count");
-        let hour_div = $(".preview-question .left-time-counter .hour .count");
-        let min_div = $(".preview-question .left-time-counter .minute .count");
         new_min = new_min - 1;
-        if( new_min === -1 ) {
-            new_hour  = new_hour - 1;
+        if (new_min === -1) {
+            new_hour = new_hour - 1;
             new_min = 59;
         }
         min_div.html(new_min);
-        if( new_hour === -1 ) {
+        if (new_hour === -1) {
             new_day = new_day - 1;
             new_hour = 23;
         }
         hour_div.html(new_hour);
         day_div.html(new_day);
     }
-    setInterval(counter, 1000*60);
+
+    setInterval(counter, 1000 * 60);
 }
-CountDown(10, 1, 1);
+
+CountDown();
 $(".chamran-btn-info").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
@@ -61,8 +68,8 @@ $(".chamran-btn-info").click(function () {
             setMajors(data);
             setValue(data);
             setComment(data.comments);
-            
-            $(".fa-trash-alt").click(function(){
+
+            $(".fa-trash-alt").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
         },
@@ -215,13 +222,13 @@ function setComment(data) {
             comments_code += "<div class='expert-comment' dir='ltr' id='" + data[i].pk + "' >" +
                 "<div class='comment-body'>" +
                 "<span class='comment-tools'>" +
-                "<i class='fas fa-reply'><div class='reply'></div>"+
-                "</i>" ;
-                if (data[i].attachment !== "None") {
-                    comments_code += "<a href='/" +
-                                     data[i].attachment +
-                                     "'><i class='fas fa-paperclip'></i></a>" ;   
-                }
+                "<i class='fas fa-reply'><div class='reply'></div>" +
+                "</i>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" +
+                    data[i].attachment +
+                    "'><i class='fas fa-paperclip'></i></a>";
+            }
             comments_code += "</span>" +
                 "<span>" +
                 data[i].description +
@@ -237,19 +244,18 @@ function setComment(data) {
                 "</i>" +
                 "<i class='fas fa-reply'><div class='reply'></div>" +
                 "</i>";
-                if (data[i].attachment !== "None") {
-                    comments_code += "<a href='/" +
-                                     data[i].attachment +
-                                     "'><i class='fas fa-paperclip'></i></a>" ;   
-                }
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" +
+                    data[i].attachment +
+                    "'><i class='fas fa-paperclip'></i></a>";
+            }
             comments_code += "</span>" +
                 "<span>" +
                 data[i].description +
                 "</span>" +
                 "</div>" +
                 "</div>";
-        }
-        else { //system
+        } else { //system
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<span>" +
@@ -262,7 +268,7 @@ function setComment(data) {
     $('.comments').html(comments_code);
 }
 
-$(".trash").click(function(event){
+$(".trash").click(function (event) {
     let comment_id = $(this).attr('id');
     $.ajax({
         method: 'POST',
@@ -346,7 +352,7 @@ $(document).ready(function () {
 $(".submit-button").click(function (event) {
     event.preventDefault();
     let voteForm = $(this).closest("form");
-    let data =  voteForm.serialize();
+    let data = voteForm.serialize();
     console.log(data);
     $.ajax({
         method: 'POST',
@@ -723,20 +729,20 @@ technique_review.submit(function (event) {
 });
 
 function show_add_technique_record(title) {
-    new_tech = "<div class='card active-question flow-root-display'>"+
-            "<div class='technique-title w-50'>"+
-            title+
-            "</div>"+
-            "<div class='technique-info w-50'>"+
-                "<div class='w-25'></div>"+
-                "<div class='mark w-25'><span>"+
-                        "در حال بررسی..."+
-                "<span></div>"+
-                "<div class='date w-25'><span>"+
-                "امروز"+
-                "</span></div>"+
-                "<div class='show w-25'><button class='default-btn show-btn new-review-request'>ارتقا نمره</button></div>"+
-            "</div></div>";
+    new_tech = "<div class='card active-question flow-root-display'>" +
+        "<div class='technique-title w-50'>" +
+        title +
+        "</div>" +
+        "<div class='technique-info w-50'>" +
+        "<div class='w-25'></div>" +
+        "<div class='mark w-25'><span>" +
+        "در حال بررسی..." +
+        "<span></div>" +
+        "<div class='date w-25'><span>" +
+        "امروز" +
+        "</span></div>" +
+        "<div class='show w-25'><button class='default-btn show-btn new-review-request'>ارتقا نمره</button></div>" +
+        "</div></div>";
     $(".techniques-list").append(new_tech);
 }
 
@@ -819,26 +825,26 @@ add_technique_form.submit(function (event) {
     })
 });
 
-function addComment(data){
+function addComment(data) {
     new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
-                  "<div class='comment-body' dir='ltr'>" +
-                  "<span class='comment-tools'>" +
-                  "<i class='fas fa-trash-alt'></i>" +
-                  "<i class='fas fa-pen'>" +
-                  "</i>" +
-                  "<i class='fas fa-reply'><div class='reply'></div>" +
-                  "</i>";
+        "<div class='comment-body' dir='ltr'>" +
+        "<span class='comment-tools'>" +
+        "<i class='fas fa-trash-alt'></i>" +
+        "<i class='fas fa-pen'>" +
+        "</i>" +
+        "<i class='fas fa-reply'><div class='reply'></div>" +
+        "</i>";
     if (data.attachment !== "None") {
         new_comment += "<a href='/" +
-                        data.attachment +
-                        "'><i class='fas fa-paperclip'></i></a>" ;   
+            data.attachment +
+            "'><i class='fas fa-paperclip'></i></a>";
     }
     new_comment += "</span>" +
-                    "<span>" +
-                    data.description +
-                    "</span>" +
-                    "</div>" +
-                    "</div>";
+        "<span>" +
+        data.description +
+        "</span>" +
+        "</div>" +
+        "</div>";
     $(".comments").append(new_comment);
 }
 
@@ -869,7 +875,7 @@ comment_form.submit(function (event) {
             });
             comment_form[0].reset();
 
-            $(".fa-trash-alt").click(function(){
+            $(".fa-trash-alt").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
         },
@@ -934,13 +940,13 @@ apply_form.submit(function (event) {
     })
 });
 
-$(".add-new-technique").click(function (event) {    
+$(".add-new-technique").click(function (event) {
     $.ajax({
         method: 'GET',
         url: '/researcher/show_technique/',
         dataType: 'json',
         data: {'id': "None"},
-        success: function (data) {            
+        success: function (data) {
             let source = [];
             for (let i = 0; i <= Object.keys(data).length - 1; i++) {
                 let item = {};
@@ -1083,13 +1089,13 @@ $("#your-project").click(function (event) {
     // });
 });
 
-$(".my-project").click(function(){
+$(".my-project").click(function () {
     const dialog = $(".showProject");
     let projectId = $(this).attr("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/myProject/',
-        data:{id : projectId},
+        data: {id: projectId},
         dataType: 'json',
         success: function (data) {
             dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
@@ -1107,7 +1113,7 @@ $(".my-project").click(function(){
             setValue(data);
             setComment(data.comments);
 
-            $(".fa-trash-alt").click(function(){
+            $(".fa-trash-alt").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
 
@@ -1119,17 +1125,17 @@ $(".my-project").click(function(){
         error: function (data) {
             console.log('You don\'t have any project.');
         },
-        });
-    
+    });
+
 });
 
-function deleteComment(comment){
+function deleteComment(comment) {
     $.ajax({
-        method : 'POST',
+        method: 'POST',
         url: '/deleteComment/',
         dataType: 'json',
-        data : {id : $(comment).attr("id")},
-        success: function(data){
+        data: {id: $(comment).attr("id")},
+        success: function (data) {
             $(comment).remove()
             iziToast.success({
                 rtl: true,
@@ -1137,7 +1143,7 @@ function deleteComment(comment){
                 position: 'bottomLeft'
             });
         },
-        error: function(data){
+        error: function (data) {
             console.log('Error');
         },
     });
