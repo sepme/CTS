@@ -1,7 +1,11 @@
 {% extends account_type|add:"/layouts/base_layout.html" %}
 {% load static %}
 {% block title %}پیام ها{% endblock %}
-
+{% block name %}
+  {{ request.user.expertuser.expertform}}
+  {{ request.user.industryuser.industryform}}
+  {{ request.user.researcheruser.researcherprofile}}
+{% endblock name %}
 
 {% block dialog %}
     {% with account_type|add:"/layouts/message_show.html" as dialog_template %}

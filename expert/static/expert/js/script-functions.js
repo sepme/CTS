@@ -630,7 +630,7 @@ function show_new_research_question() {
         '<div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>' +
         '</div>' +
         '</div>';
-    $(".tab-content").html(new_question);
+    $(".tab-content").append(new_question);
 }
 
 function dialog_comment_init() {
