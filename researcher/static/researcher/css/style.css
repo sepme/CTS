@@ -3368,19 +3368,60 @@ ul.nav-tabs {
 }
 
 .wrap {
-    position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
+    /*position: relative;*/
+    /*display: -ms-flexbox;*/
+    /*display: flex;*/
+    /*-ms-flex-wrap: wrap;*/
+    /*flex-wrap: wrap;*/
+    /*margin-right: -15px;*/
+    /*margin-left: -15px;*/
 }
 
 .wrap .count {
+    position: relative;
     display: block;
     font-size: 45px;
+    padding: 25px 0;
+    z-index: 1;
 }
+
+/*.wrap .count:before {*/
+/*    content: '';*/
+/*    height: 100%;*/
+/*    width: 50%;*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    -webkit-transform: translateX(50%);*/
+/*    -moz-transform: translateX(50%);*/
+/*    -ms-transform: translateX(50%);*/
+/*    -o-transform: translateX(50%);*/
+/*    transform: translateX(50%);*/
+/*    background-color: #3CCD1C;*/
+/*    -webkit-border-radius: 50%;*/
+/*    -moz-border-radius: 50%;*/
+/*    border-radius: 50%;*/
+/*    z-index: -1;*/
+/*}*/
+
+/*.wrap .count:after {*/
+/*    content: '';*/
+/*    height: calc(100% - 20px);*/
+/*    width: calc(50% - 20px);*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*    -webkit-transform: translate(-50%, -50%);*/
+/*    -moz-transform: translate(-50%, -50%);*/
+/*    -ms-transform: translate(-50%, -50%);*/
+/*    -o-transform: translate(-50%, -50%);*/
+/*    transform: translate(-50%, -50%);*/
+/*    background-color: #ffffff;*/
+/*    -webkit-border-radius: 50%;*/
+/*    -moz-border-radius: 50%;*/
+/*    border-radius: 50%;*/
+/*    z-index: 0;*/
+/*}*/
 
 .wrap > div {
     -ms-flex: 0 0 33.33%;
