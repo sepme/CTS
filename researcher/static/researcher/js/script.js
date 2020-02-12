@@ -5,8 +5,11 @@ $(window).on("load", function () {
     init_windowSize();
     load_dialog();
 });
-function CountDown(min, hour, day) {
-    let new_day = day, new_hour = hour, new_min = min;
+
+function CountDown() {    
+    let new_day= $(".preview-question .left-time-counter .day .count").attr("value");
+    let new_hour = $(".preview-question .left-time-counter .hour .count").attr("value");
+    let new_min = $(".preview-question .left-time-counter .minute .count").attr("value");
     function counter() {
         let day_div= $(".preview-question .left-time-counter .day .count");
         let hour_div = $(".preview-question .left-time-counter .hour .count");
@@ -26,7 +29,7 @@ function CountDown(min, hour, day) {
     }
     setInterval(counter, 1000*60);
 }
-CountDown(10, 1, 1);
+// CountDown(10, 1, 1);
 $(".chamran-btn-info").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
@@ -340,6 +343,7 @@ $(document).ready(function () {
             }
         });
     }
+    CountDown();
 });
 
 

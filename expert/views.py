@@ -393,6 +393,7 @@ def show_research_question(request):
             'researcher_name': researcher_user.__str__(),
             'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
             'is_correct': answer.is_correct,
+            'file_name' : answer.answer.name.split(".com-")[-1],
             'answer_attachment': answer.answer.url,
             'answer_id': str(answer.id),
         }
