@@ -993,28 +993,31 @@ ResearchQuestionForm.submit(function (event) {
 var showInfo = $('.preview-project');
 showInfo.click(function (event) {
     $.ajax({
-        url: $(this).attr('data-url'),
+        // url: $(this).attr('data-url'),
+        method:'GET',
+        url:'active/',
         data: {
-            'id': $(this).attr("id")
+            id: $(this).attr("id")
         },
         dataType: 'json',
         success: function (data) {
-            $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
-            $(".showProject").find(".establish-time .time-body").html(data.date);
-            $(".showProject").find(".time-left .time-body").html(data.deadline);
-            const keys = JSON.parse(data.key_words);
-            var keys_code = '';
-            for (let i = 0; i < keys.length; i++) {
-                keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
-            }
-            $(".showProject").find(".techniques").html(keys_code);
-            setMajors(data);
-            setValue(data);
-            setComment(data.comments);
+            console.log("-----------");
+            // $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
+            // $(".showProject").find(".establish-time .time-body").html(data.date);
+            // $(".showProject").find(".time-left .time-body").html(data.deadline);
+            // const keys = JSON.parse(data.key_words);
+            // var keys_code = '';
+            // for (let i = 0; i < keys.length; i++) {
+            //     keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
+            // }
+            // $(".showProject").find(".techniques").html(keys_code);
+            // setMajors(data);
+            // setValue(data);
+            // setComment(data.comments);
 
-            $(".fa-trash-alt").click(function(){
-                deleteComment($(this).closest('.my-comment'));
-            });
+            // $(".fa-trash-alt").click(function(){
+            //     deleteComment($(this).closest('.my-comment'));
+            // });
         },
         error: function (data) {
         }
