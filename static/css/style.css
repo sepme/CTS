@@ -37,6 +37,10 @@
     cursor: progress !important;
 }
 
+.fc-white {
+    color: #ffffff!important;
+}
+
 body {
     background-color: #f8fdf7;
     font-family: iranyekan, serif;

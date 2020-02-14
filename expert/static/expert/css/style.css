@@ -618,6 +618,7 @@ a.nav-link:hover {
 }
 
 .tab-content {
+    display: flex;
     border: 1px solid #bdbdbd;
     border-top: none;
     background-color: #f8fdf7;

@@ -11,26 +11,42 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="card info-card">
-                <div class="techniques-list">
-                    <div class="w-100 text-left">
-                        <div class="add-new-technique">افزودن تکنیک</div>
-                    </div>
-                    {% for tech in technique_list %}
-                        <div class="card active-question flow-root-display">
-                            <div class="technique-title w-50">{{tech.technique.technique_title}}</div>
-                            <div class="technique-info w-50">
-                                <div class="w-25"></div>{#{{tech.evaluat_date}}</div>#}
-                                <div class="mark w-25"><span> {% if tech.level %}
-                                        {{tech.level}}
-                                {% else %}
+            <div class="card info-card text-right">
+                <div class="card-header">تکنیک ها</div>
+                <div class="inner-card card">
+                    <div class="techniques-list">
+                        {% for tech in technique_list %}
+                            <div class="card active-question flow-root-display ">
+                                <div class="technique-title w-50">{{ tech.technique.technique_title }}</div>
+                                <div class="technique-info w-50">
+                                    <div class="w-25"></div>
+                                    {#{{tech.evaluat_date}}</div>#}
+                                    <div class="mark w-25"><span> {% if tech.level %}
+                                        {{ tech.level }}
+                                    {% else %}
                                         در حال بررسی...
-                                {% endif %}</span></div>
-                                <div class="date w-25"><span>{{tech.date_last}}</span></div>
-                                <div class="show w-25"><button class="default-btn show-btn new-review-request">ارتقا نمره</button></div>
+                                    {% endif %}</span></div>
+                                    <div class="date w-25"><span>{{ tech.date_last }}</span></div>
+                                    <div class="show w-25">
+                                        <button class="default-btn show-btn new-review-request">ارتقا نمره</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% empty %}
+                            <div class="no-project">
+                                <h4>متاسفانه، هنوز تکنیکی ثبت نکرده اید!</h4>
+                                <p>
+                                    تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد
+                                    استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از
+                                    یک تکنیک هستند.
+                                    تکنیک‌های رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما
+                                    پیشنهاد می‌شود که شما تکنیک‌های مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید.
+                                    برای افزودن یک تکنیک به حساب کاربری خود،
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="add-new-technique success-btn">افزودن تکنیک</button>
                 </div>
             </div>
         </div>
