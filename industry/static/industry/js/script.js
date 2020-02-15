@@ -180,49 +180,49 @@ function setTab(data) {
 }
 
 function expertResume() {
-    // $(".show-resume").click(function () {
-    $(".showProject").slideUp('slow').delay('slow');
-    $(".expert-resume").delay('slow').slideDown('slow');
-    close_dialog(".expert-resume");
-    load_dialog();
-    let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    $(".show-resume").click(function () {
+        $(".showProject").slideUp('slow').delay('slow');
+        $(".expert-resume").delay('slow').slideDown('slow');
+        close_dialog(".expert-resume");
+        load_dialog();
+        let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
 
         $.ajax({
-                method: 'GET',
-                url: '/expert/get_resume',
-                dataType: 'json',
-                data: {id :id},
-                success: function (data) {
-                    var sci_record = JSON.parse(data.sci_record);
-                    if (sci_record.length !== 0) {
-                        var table_row = "";
-                        for (i = 0; i < sci_record.length; i++) {
-                            table_row += "<tr>" +
-                                "<td>" + sci_record[i].fields.degree + "</td>" +
-                                "<td>" + sci_record[i].fields.major + "</td>" +
-                                "<td>" + sci_record[i].fields.university + "</td>" +
-                                "<td>" + sci_record[i].fields.city + "</td>" +
-                                "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
-                                "</tr>";
-                            $('.sci_record').html(table_row);
-                        }
+            method: 'GET',
+            url: '/expert/get_resume',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                var sci_record = JSON.parse(data.sci_record);
+                if (sci_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < sci_record.length; i++) {
+                        table_row += "<tr>" +
+                            "<td>" + sci_record[i].fields.degree + "</td>" +
+                            "<td>" + sci_record[i].fields.major + "</td>" +
+                            "<td>" + sci_record[i].fields.university + "</td>" +
+                            "<td>" + sci_record[i].fields.city + "</td>" +
+                            "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
+                            "</tr>";
+                        $('.sci_record').html(table_row);
                     }
-                    var executive_record = JSON.parse(data.exe_record);
-                    if (executive_record.length !== 0) {
-                        var table_row = "";
-                        for (i = 0; i < executive_record.length; i++) {
-                            table_row += "<tr>" +
-                                "<td>" + executive_record[i].fields.executive_post + "</td>" +
-                                "<td>" + executive_record[i].fields.date_start_post + "</td>" +
-                                "<td>" + executive_record[i].fields.date_end_post + "</td>" +
-                                "<td>" + executive_record[i].fields.organization + "</td>" +
-                                "<td>" + executive_record[i].fields.city + "</td>" +
-                                "</tr>";
-                            $('.executive_record').html(table_row);
-                        }
+                }
+                var executive_record = JSON.parse(data.exe_record);
+                if (executive_record.length !== 0) {
+                    var table_row = "";
+                    for (i = 0; i < executive_record.length; i++) {
+                        table_row += "<tr>" +
+                            "<td>" + executive_record[i].fields.executive_post + "</td>" +
+                            "<td>" + executive_record[i].fields.date_start_post + "</td>" +
+                            "<td>" + executive_record[i].fields.date_end_post + "</td>" +
+                            "<td>" + executive_record[i].fields.organization + "</td>" +
+                            "<td>" + executive_record[i].fields.city + "</td>" +
+                            "</tr>";
+                        $('.executive_record').html(table_row);
                     }
-                    var research_record = JSON.parse(data.research_record);
-                    if (research_record.length !== 0) {
+                }
+                var research_record = JSON.parse(data.research_record);
+                if (research_record.length !== 0) {
                     var table_row = "";
                     for (i = 0; i < research_record.length; i++) {
                         table_row += "<tr>" +
@@ -252,53 +252,58 @@ function expertResume() {
                 $('.awards').html(data.awards);
                 $('.languages').html(data.languages);
             },
+        });
     });
 }
 
 
-$('.accept-request').click(function(data){
+$('.accept-request').click(function (data) {
     expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
     project_id = $(this).closest(".showProject").attr("id");
-    data = {"expert_id" : expert_id,
-            "project_id" : project_id};    
+    data = {
+        "expert_id": expert_id,
+        "project_id": project_id
+    };
     $.ajax({
-            method: 'post',
-            url: 'accept_request/',
-            dataType: 'json',
-            data: data,
-            success: function (data) {
-                iziToast.success({
-                    rtl: true,
-                    message: "درخواست شما با موفقیت ارسال شد!",
-                    position: 'bottomLeft'
-                });
-            },
-            error:function(data){
-                console.log("error");
-            },
+        method: 'post',
+        url: 'accept_request/',
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما با موفقیت ارسال شد!",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log("error");
+        },
     });
 });
 
-$('.reject-request').click(function(data){
+$('.reject-request').click(function (data) {
     expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
     project_id = $(this).closest(".showProject").attr("id");
-    data = {"expert_id" : expert_id,
-            "project_id" : project_id};
+    data = {
+        "expert_id": expert_id,
+        "project_id": project_id
+    };
     $.ajax({
-            method: 'POST',
-            url: 'refuse_request/',
-            dataType: 'json',
-            data: data,
-            success: function (data) {
-                iziToast.success({
-                    rtl: true,
-                    message: "درخواست شما با موفقیت ارسال شد!",
-                    position: 'bottomLeft'
-                });
-            },
-            error:function(data){
-                console.log("error");
-            },
+        method: 'POST',
+        url: 'refuse_request/',
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما با موفقیت ارسال شد!",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log("error");
+        },
     });
 });
 
@@ -454,7 +459,7 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            if (data.applied == false){
+            if (data.applied == false) {
                 $(".accept-request").attr("style", "display :none");
                 $(".reject-request").attr("style", "display :none");
             }
@@ -538,14 +543,14 @@ $(document).ready(function () {
                     setMajors(data);
                     setValue(data);
                     if (data.status !== 1 && data.status !== 2) {
-                        $('.vote').attr('style' ,"display : none");
-                        $('.add-comment').attr('style' ,"display : none");
+                        $('.vote').attr('style', "display : none");
+                        $('.add-comment').attr('style', "display : none");
                     } else {
                         if (data.vote === "false") {
                             $(".vote").remove();
                         }
-                        $('.vote').attr('style' ,"display : block");
-                        $('.add-comment').attr('style' ,"display : block");
+                        $('.vote').attr('style', "display : block");
+                        $('.add-comment').attr('style', "display : block");
                         setTab(data);
                     }
                 },
@@ -915,5 +920,4 @@ $(document).ready(function () {
                 }
             }
         });
-    }
-);
+    });

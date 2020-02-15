@@ -1,5 +1,5 @@
 {% extends "researcher/layouts/base_layout.html" %}
-
+{% load static %}
 {% block title %}تکنیک ها{% endblock %}
 
 {% block dialog %}
@@ -34,6 +34,7 @@
                             </div>
                         {% empty %}
                             <div class="no-project">
+                                <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
                                 <h4>متاسفانه، هنوز تکنیکی ثبت نکرده اید!</h4>
                                 <p>
                                     تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد

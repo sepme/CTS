@@ -936,3 +936,7 @@ div.inputTags-list span.inputTags-item {
 .message-show .close:hover:before {
     background-color: #ff4545;
 }
+
+div.row.cover-page {
+    min-height: 80vh;
+}
