@@ -60,42 +60,44 @@
 
         <h5>{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}</h5>
         <h6>پژوهشگر</h6>
-        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ request.user.researcheruser.points|default:0 }}</span>/10</p>
+        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ request.user.researcheruser.points|default:0 }}</span>/10
+        </p>
         <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{ request.user.researcheruser.score|default:0 }}" aria-valuemin="0"
-                 aria-valuemax="100" style="width: {{request.user.researcheruser.score}}px">
+            <div class="progress-bar" role="progressbar"
+                 aria-valuenow="{{ request.user.researcheruser.score|default:0 }}" aria-valuemin="0"
+                 aria-valuemax="100" style="width: {{ request.user.researcheruser.score }}px">
                 <span class="sr-only">{{ request.user.researcheruser.score|default:0 }}% completed</span>
             </div>
         </div>
         <div class="hr"></div>
         <ul class="list-group">
             {% url "researcher:index" as index_url %}
-            <li class="list-group-item text-right {% if request.get_full_path == index_url %}active{% endif %}">
-                <a href="{{ index_url }}">
+            <a href="{{ index_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
                     <div>
                         <span>پروژه ها</span>
                         <span class="fas fa-list-ul"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
             {% url 'researcher:messages' as messages_url %}
-            <li class="list-group-item text-right {% if messages_url == request.get_full_path %}active{% endif %}">
-                <a href="{{ messages_url }}">
+            <a href="{{ messages_url }}">
+                <li class="list-group-item text-right {% if messages_url == request.get_full_path %}active{% endif %}">
                     <div>
                         <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
             {% url 'researcher:technique' as technique_url %}
-            <li class="list-group-item text-right">
-                <a href="{{ technique_url }}">
+            <a href="{{ technique_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path ==  technique_url %}active{% endif %}">
                     <div>
                         <span>تکنیک ها</span>
                         <span class="fas fa-file-medical"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
             <!-- {% url 'researcher:question-alert' as question_url %} -->
             {% if question_instance %}
                 {% url 'researcher:question-show' question_id=uuid as question_url %}
@@ -103,23 +105,23 @@
                 <h1>{{ question_instance }}</h1>
                 {% url 'researcher:question-alert' as question_url %}
             {% endif %}
-            <li class="list-group-item text-right">
-                <a href="{{ question_url }}">
+            <a href="{{ question_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path ==  question_url %}active{% endif %}">
                     <div>
                         <span>سوالات پژوهشی</span>
                         <span class="fas fa-question"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
             {% url 'researcher:userInfo' as userInfo_url %}
-            <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
-                <a href="{{ userInfo_url }}">
+            <a href="{{ userInfo_url }}">
+                <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
                     <div>
                         <span>تنظیمات کاربری</span>
                         <span class="fas fa-cog"></span>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
         </ul>
     </div>
 </div>
@@ -127,6 +129,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+<script type="text/javascript" src="{% static 'js/persianumber.min.js' %}"></script>
 {% block script %}{% endblock %}
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>

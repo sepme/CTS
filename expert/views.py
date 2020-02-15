@@ -393,6 +393,7 @@ def show_research_question(request):
             'researcher_name': researcher_user.__str__(),
             'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
             'is_correct': answer.is_correct,
+            'file_name' : answer.answer.name.split(".com-")[-1],
             'answer_attachment': answer.answer.url,
             'answer_id': str(answer.id),
         }
@@ -610,3 +611,26 @@ def confirmResearcher(request):
         return JsonResponse(data={})
     except:
         return JsonResponse(data={} ,status=400)
+
+def ActiveProjcet(request):
+    project = get_object_or_404(Project, pk=int(request.GET.get('id')))
+    industryform = project.industry_creator.industryform
+    data = {
+        "industry_name" : industryform.name,
+        "industry_logo" : industryform.photo.url[industryform.photo.url.find('media' ,2)],
+        'enforced_name' : project.expert_accepted.expertform,
+        "executive_info": project.executive_info,
+        "budget_amount" : project.project_form.required_budget,
+        "start"         : project.date_start,
+        "first_phase"   : project.date_project_started,
+        "second_phase"  : project.date_phase_two_deadline,
+        "third_phase"   : project.date_phase_three_deadline,
+        'date_finished' : project.date_finished,
+        "technique"     : [],
+    }
+
+    projectRequest = ExpertRequestedProject.objects.filter(project=project).filter(expert=project.expert_accepted).first()
+    for technique in projectRequest.required_technique.all():
+        data["technique"].append(technique.__str__())
+
+    return JsonResponse(data=data)

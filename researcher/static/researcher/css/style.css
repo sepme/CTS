@@ -941,11 +941,6 @@ hr {
 }
 
 /* new */
-.info-card {
-    margin: 20px 100px;
-    padding: 10px;
-    color: #6f7285;
-}
 
 .row {
     direction: rtl !important;
@@ -1001,15 +996,6 @@ hr {
 /*  color: #6f7285;*/
 /*  cursor: pointer;*/
 /*}*/
-.inner-card {
-    padding: 20px;
-    margin-top: 10px;
-    margin-bottom: 25px;
-    background-color: #fff;
-    border: none;
-    border-top: 1px solid #dee2e6;
-    border-radius: 0;
-}
 
 .ch-card-item:last-child {
     margin-bottom: 25px;
@@ -1306,7 +1292,6 @@ input#search_technique + label {
 .fa-search:hover {
     cursor: pointer;
     color: #3CCD1C;
-
 }
 
 .technique-list, #fancy-tree {
@@ -3300,10 +3285,15 @@ ul.nav-tabs {
 }
 
 .techniques-list {
+    display: inline-flex;
     border: 1px solid #bdbdbd;
     background-color: #f8fdf7;
     border-radius: 0.25em;
     padding: 10px 5px;
+}
+
+.techniques-list.cover-page {
+    min-height: 67vh;
 }
 
 .tab-content .empty-question svg {
@@ -3371,13 +3361,13 @@ ul.nav-tabs {
 }
 
 .wrap {
-    /*position: relative;*/
-    /*display: -ms-flexbox;*/
-    /*display: flex;*/
-    /*-ms-flex-wrap: wrap;*/
-    /*flex-wrap: wrap;*/
-    /*margin-right: -15px;*/
-    /*margin-left: -15px;*/
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
 }
 
 .wrap .count {

@@ -6,6 +6,7 @@ $(window).on("load", function () {
     load_dialog();
 });
 
+
 function CountDown(min, hour, day) {
     let day_div = $(".preview-question .left-time-counter .day .count");
     let hour_div = $(".preview-question .left-time-counter .hour .count");
@@ -29,7 +30,7 @@ function CountDown(min, hour, day) {
         hour_div.html(new_hour);
         day_div.html(new_day);
     }
-
+    $("*").persiaNumber();
     setInterval(counter, 1000 * 60);
 }
 

@@ -986,6 +986,10 @@ hr {
     color: #6f7285;
 }
 
+.info-card.cover-page {
+    min-height: 80vh;
+}
+
 .row {
     direction: rtl !important;
 }
@@ -1086,6 +1090,11 @@ hr {
     border: none;
     border-top: 1px solid #dee2e6;
     border-radius: 0;
+}
+
+
+.inner-card.no-vr-padding {
+    padding: 20px 0!important;
 }
 
 .ch-card-item {
@@ -1989,10 +1998,11 @@ ul.tick-ul .out-college-research span:nth-child(2), .B-g {
 
 div.no-project {
     position: relative;
+    height: fit-content;
     width: 100%;
     background-color: #ffffff;
     color: #3ccd1c;
-    margin: 50px;
+    margin: auto 50px;
     border: 1px dashed #3ccd1c;
     text-align: right;
     -webkit-border-radius: 0.25em;
@@ -2055,3 +2065,6 @@ div.no-project > img.icon {
 /*.success-btn:hover {*/
 /*    background-color: #3ccd1c;*/
 /*}*/
+.tab-content.cover-page {
+    min-height: 67vh;
+}

@@ -457,16 +457,15 @@ class QuestionShow(generic.TemplateView ):
         context = super().get_context_data(**kwargs)
         question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse()[0]
         deltatime = datetime.date.today() - question.hand_out_date
-        if deltatime.days < 8:
-            context['rest_days'] = 8 - deltatime.days
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question_text
         context['attachment'] = question.research_question.attachment
         context['attach_type'] = str(question.research_question.attachment).split("/")[-1].split('.')[-1]
         context['file_name'] = question.research_question.attachment.name.split("/")[-1]
+        delta = datetime.date.today() - question.hand_out_date
+        context['day']  = 8 - delta.days
         context['hour'] = 23 - datetime.datetime.now().hour
         context['minute'] = 59 - datetime.datetime.now().minute
-        context['second'] = 59 - datetime.datetime.now().second
         return context
     
     def post(self ,request ,*args, **kwargs):
