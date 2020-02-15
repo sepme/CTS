@@ -58,6 +58,8 @@ class Index(LoginRequiredMixin, generic.FormView):
             raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')        
         if researcher.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
+        if request.user.researcheruser.status.status == 'wait_for_answer':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -166,6 +168,8 @@ class UserInfo(generic.TemplateView):
         except:
             return HttpResponseRedirect(reverse("researcher:index"))    
         if request.user.researcheruser.status.status == 'not_answered':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
+        if request.user.researcheruser.status.status == 'wait_for_answer':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(request, *args, **kwargs)    
 
@@ -313,6 +317,8 @@ class Technique(generic.TemplateView):
 
         if request.user.researcheruser.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
+        if request.user.researcheruser.status.status == 'wait_for_answer':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
 
         return render(request ,self.template_name ,context=self.get_context_data(**kwargs))
 
@@ -406,6 +412,9 @@ class Question(generic.TemplateView):
             if researcher.researchquestioninstance_set.all().count():
                 question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
                 return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={'question_id' : question.research_question.uniqe_id}))
+            return super().get(self, request, *args, **kwargs)
+        elif researcher.status.status == "wait_for_answer":
+            self.template_name = "researcher/layouts/waiting_for_question.html"
             return super().get(self, request, *args, **kwargs)
         else:
             raise Http404('شما به سوال ارزیابی پاسخ داده اید.')
