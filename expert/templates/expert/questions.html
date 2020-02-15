@@ -14,7 +14,7 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="card info-card">
+            <div class="card info-card cover-page">
                 <ul class="nav nav-tabs w-100" id="project-list">
                     <li class="nav-item"><a class="nav-link active" id="all-questions" href="#all-questions">همه</a></li>
                     <li class="nav-item"><a class="nav-link" id="active-questions" href="#active-questions">فعال</a></li>
@@ -22,7 +22,7 @@
                     <li class="nav-item"><a class="nav-link" id="answered-questions" href="#answered-questions">پاسخ داده شده</a></li>
                     <li class="add-new-question">ثبت سوال جدید</li>
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content cover-page">
                     {% if research_questions %}
                         {% for research_question in research_questions %}
                             {% if research_question.status == "not_answered" %}

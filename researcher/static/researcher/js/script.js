@@ -29,7 +29,9 @@ function CountDown(min, hour, day) {
         }
         hour_div.html(new_hour);
         day_div.html(new_day);
+        $("*").persiaNumber();
     }
+
     $("*").persiaNumber();
     setInterval(counter, 1000 * 60);
 }
