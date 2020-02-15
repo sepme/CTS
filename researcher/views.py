@@ -85,12 +85,6 @@ class Index(LoginRequiredMixin, generic.FormView):
         for project in projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
-            # all_comments = project.get_comments()
-            # expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
-            # researcher_comment = all_comments.filter(sender_type=2)
-            # comments= sorted(
-            #         chain(researcher_comment, expert_comment),
-            #         key=attrgetter('date_submitted'))
             temp ={
                 'PK'                 : project.pk,
                 'project_title'      : project.project_form.project_title_persian,
@@ -453,7 +447,7 @@ class QuestionShow(generic.TemplateView ):
                 return HttpResponseRedirect(reverse('researcher:index'))
             if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
-                request.user.researcheruser.status.status.save()
+                request.user.researcheruser.status.save()
         else:
             status = request.user.researcheruser.status
             status.status = 'inactivated'
@@ -484,8 +478,10 @@ class QuestionShow(generic.TemplateView ):
             question.answer = request.FILES['answer']
             question.is_answered = True
             question.save()
-            request.user.researcheruser.status.status = 'free'
+            print("-------")
+            request.user.researcheruser.status.status = 'wait_for_answer'
             request.user.researcheruser.status.save()
+            print(request.user.researcheruser.status.status)
             subject = 'Research Question Validation'
             message ="""با عرض سلام و خسته نباشید.
             پژوهشگر {} به نام {} {} به سوال پژوهشی {} پاسخ داده است.
@@ -581,6 +577,9 @@ def DeleteComment(request):
     return JsonResponse({'successful' :"successful"})
 
 def ApplyProject(request):
+    if request.user.researcheruser.status.status == "waiting":
+        data = {"error": "your waiting for another project"}
+        return JsonResponse(data ,status=400)
     form = forms.ApplyForm(request.POST)
     if form.is_valid():
         project=get_object_or_404(Project ,id=request.POST['id'])
