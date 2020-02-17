@@ -442,9 +442,10 @@ class QuestionShow(generic.TemplateView ):
         question = request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]        
         deltatime = datetime.date.today() - question.hand_out_date
         if deltatime.days < 8:
-            if question.is_answered:
-                print("+_+_+_+_+_+_+_+_+_+_====")
-                return HttpResponseRedirect(reverse('researcher:index'))
+            STATUS = ["not_answered", "wait_for_answer"]
+            if request.user.researcheruser.status not in STATUS:
+                self.template_name = "researcher/layouts/answered_question.html"
+                return super().get(request, args, kwargs)
             if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.save()
@@ -465,6 +466,10 @@ class QuestionShow(generic.TemplateView ):
         context['attachment'] = question.research_question.attachment
         context['attach_type'] = str(question.research_question.attachment).split("/")[-1].split('.')[-1]
         context['file_name'] = question.research_question.attachment.name.split("/")[-1]
+        STATUS = ["not_answered", "wait_for_answer"]
+        if self.request.user.researcheruser.status not in STATUS:
+            context['answer'] = question.answer
+            return context
         delta = datetime.date.today() - question.hand_out_date
         context['day']  = 8 - delta.days
         context['hour'] = 23 - datetime.datetime.now().hour
@@ -478,10 +483,8 @@ class QuestionShow(generic.TemplateView ):
             question.answer = request.FILES['answer']
             question.is_answered = True
             question.save()
-            print("-------")
             request.user.researcheruser.status.status = 'wait_for_answer'
             request.user.researcheruser.status.save()
-            print(request.user.researcheruser.status.status)
             subject = 'Research Question Validation'
             message ="""با عرض سلام و خسته نباشید.
             پژوهشگر {} به نام {} {} به سوال پژوهشی {} پاسخ داده است.
