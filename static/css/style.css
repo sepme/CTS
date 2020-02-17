@@ -2051,6 +2051,19 @@ div.no-project > img.icon {
     transform: translate(-50%, -50%);
 }
 
+div.no-project > span.disable-success-btn {
+    border: none;
+    outline: none;
+    padding: 5px 15px;
+    text-align: center;
+    min-width: 100px;
+    height: auto;
+    margin-top: 0 !important;
+    border-radius: 0.25em;
+    background-color: #89E076;
+    color: #ffffff !important;
+}
+
 .aparat-ico {
     position: relative;
     width: 22px;
