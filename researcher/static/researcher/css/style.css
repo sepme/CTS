@@ -3202,6 +3202,7 @@ ul.nav-tabs {
     padding: 15px 20px;
     text-align: right;
     margin-bottom: 10px;
+    height: fit-content;
 }
 
 .active-question:last-child, .check-question:last-child, .close-question:last-child {
@@ -3285,7 +3286,7 @@ ul.nav-tabs {
 }
 
 .techniques-list {
-    display: inline-flex;
+    display: inherit;
     border: 1px solid #bdbdbd;
     background-color: #f8fdf7;
     border-radius: 0.25em;
