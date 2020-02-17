@@ -2073,13 +2073,14 @@ div.no-project > img.icon {
     min-height: 67vh;
 }
 
-.tab-content.cover-page > div.card{
+.tab-content.cover-page > div.card {
     height: fit-content;
 }
 
 .project-card .employer {
     position: relative;
 }
+
 .project-card .unseen-msg {
     position: absolute;
     top: -5px;
@@ -2087,7 +2088,8 @@ div.no-project > img.icon {
     color: #ffffff;
     z-index: 1;
 }
-.project-card .unseen-msg:before{
+
+.project-card .unseen-msg:before {
     content: '';
     position: absolute;
     top: 2px;
