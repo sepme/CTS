@@ -1024,6 +1024,7 @@ hr {
 }
 
 .chamran_btn:hover, .chamran_btn:focus {
+    color: #ffffff;
     box-shadow: none;
     background-color: #3CCD1C;
     outline: none;
