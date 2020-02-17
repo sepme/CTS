@@ -130,8 +130,11 @@
                                 <h6> {{ project.project_form.project_title_persian }}</h6>
 
                                 {% if project.industryUnseenCommentCount != 0 %}
-                                    <div class="employer"><i class="far fa-envelope"></i> پیام
-                                        ها{{ project.industryUnseenCommentCount }}</div>
+                                    <div class="employer">
+                                        <i class="far fa-envelope"></i>
+                                        پیام ها
+                                        <span class="unseen-msg">{{ project.industryUnseenCommentCount }}</span>
+                                    </div>
                                 {% else %}
                                     <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
                                 {% endif %}
@@ -149,15 +152,21 @@
                                 <h6> {{ project.project_form.project_title_persian }}</h6>
 
                                 {% if project.industryUnseenCommentCount != 0 %}
-                                    <div class="employer"><i class="far fa-envelope"></i> پیام
-                                        ها{{ project.industryUnseenCommentCount }}</div>
+                                    <div class="employer">
+                                        <i class="far fa-envelope"></i>
+                                        پیام ها
+                                        <span class="unseen-msg">{{ project.industryUnseenCommentCount }}</span>
+                                    </div>
                                 {% else %}
                                     <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
                                 {% endif %}
 
                                 {% if project.expert_accepted %}
-                                    <div class="employer"><i class="fas fa-user-tie"></i>
-                                        استاد {{ project.expert_accepted.expertform }}</div>
+                                    <div class="employer">
+                                        <i class="fas fa-user-tie"></i>
+                                        استاد
+                                        {{ project.expert_accepted.expertform }}
+                                    </div>
                                 {% endif %}
                                 <button class="chamran-btn-info default-btn show-btn show-project" type="button"
                                         id="{{ project.id }}">مشاهده
@@ -220,8 +229,11 @@
                                     {{ project.project_form.project_title_persian }}</h6>
                                 <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
                                 {% if project.expert_accepted %}
-                                    <div class="employer"><i class="fas fa-user-tie"></i>
-                                        استاد {{ project.expert_accepted.expertform }}</div>
+                                    <div class="employer">
+                                        <i class="fas fa-user-tie"></i>
+                                        استاد
+                                        {{ project.expert_accepted.expertform }}
+                                    </div>
                                 {% endif %}
                                 <button class="chamran-btn-info default-btn show-btn show-project" type="button"
                                         id="{{ project.id }}">نمایش
@@ -256,8 +268,11 @@
                                     {{ project.project_form.project_title_persian }}</h6>
                                 <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>
                                 {% if project.expert_accepted %}
-                                    <div class="employer"><i class="fas fa-user-tie"></i>
-                                        استاد {{ project.expert_accepted.expertform }}</div>
+                                    <div class="employer">
+                                        <i class="fas fa-user-tie"></i>
+                                        استاد
+                                        {{ project.expert_accepted.expertform }}
+                                    </div>
                                 {% endif %}
                                 <button class="chamran-btn-info default-btn show-btn" type="button"
                                         id="{{ project.id }}">نمایش

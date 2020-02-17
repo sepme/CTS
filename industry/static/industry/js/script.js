@@ -909,7 +909,7 @@ $(document).ready(function () {
         var csrftoken = getCookie('csrftoken');
 
         function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
+            // these HTTP methods do not requiref CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
 

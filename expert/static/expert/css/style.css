@@ -1691,21 +1691,21 @@ ul.nav-tabs {
 }
 
 .add-new-question {
-    padding: 8px 16px;
+    /*padding: 8px 16px;*/
     position: absolute;
     top: 0;
     left: 0;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    margin-left: 0 !important;
-    font-weight: 400;
+    /*-webkit-border-radius: 5px;*/
+    /*-moz-border-radius: 5px;*/
+    /*border-radius: 5px;*/
+    /*margin-left: 0 !important;*/
+    /*font-weight: 400;*/
 }
 
-.add-new-question:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-}
+/*.add-new-question:hover {*/
+/*    background-color: rgba(0, 0, 0, 0.05);*/
+/*    cursor: pointer;*/
+/*}*/
 
 .flow-root-display {
     display: flow-root;

@@ -1471,6 +1471,7 @@ button:hover, button:focus {
 
 .success-btn:hover {
     background-color: #3ccd1c;
+    cursor: pointer;
 }
 
 .danger-btn {
@@ -2074,4 +2075,28 @@ div.no-project > img.icon {
 
 .tab-content.cover-page > div.card{
     height: fit-content;
+}
+
+.project-card .employer {
+    position: relative;
+}
+.project-card .unseen-msg {
+    position: absolute;
+    top: -5px;
+    right: 10px;
+    color: #ffffff;
+    z-index: 1;
+}
+.project-card .unseen-msg:before{
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #ff4545;
+    z-index: -1;
 }

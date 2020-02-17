@@ -108,7 +108,10 @@ function showQuestion() {
                 var answer_list_obj = data.question_answers_list;
                 if (answer_list_obj.length != 0) {
                     show_question_answers(answer_list_obj);
-                } /* else show a box within "there is no answers!" */
+                } else {
+                    let no_answer = "<div class='no-comment'>متاسفانه، هنوز پاسخی به سوال شما داده نشده است.</div>";
+                    dialog.find(".all-answers").html(no_answer);
+                }
 
                 question_dialog_init();
 
