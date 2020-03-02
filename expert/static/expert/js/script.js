@@ -106,7 +106,7 @@ function showQuestion() {
                 }
 
                 var answer_list_obj = data.question_answers_list;
-                if (answer_list_obj.length != 0) {
+                if (answer_list_obj.length !== 0) {
                     show_question_answers(answer_list_obj);
                 } else {
                     let no_answer = "<div class='no-comment'>متاسفانه، هنوز پاسخی به سوال شما داده نشده است.</div>";
@@ -126,7 +126,6 @@ function showQuestion() {
 $(document).ready(function () {
 
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
-    const questions = $(".tab-content div.card").toArray();
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
         $(this).css("width", "fit-content");
@@ -370,36 +369,138 @@ $(document).ready(function () {
     init_dialog_btn(".paper-btn", ".paper_form");
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
-
-    $(".nav-tabs .nav-item .nav-link").click(function () {
-        if ($(this).attr("id") === "active-questions") {
-            $(".tab-content").html("");
-            $.each(questions, function (i, val) {
-                if ($(val).closest("div").hasClass("active-question")) {
-                    $(".tab-content").append(val);
-                }
-            });
-        } else if ($(this).attr("id") === "check-questions") {
-            $(".tab-content").html("");
-            $.each(questions, function (i, val) {
-                if ($(val).closest("div").hasClass("check-question")) {
-                    $(".tab-content").append(val);
-                }
-            });
-        } else if ($(this).attr("id") === "answered-questions") {
-            $(".tab-content").html("");
-            $.each(questions, function (i, val) {
-                if ($(val).closest("div").hasClass("close-question")) {
-                    $(".tab-content").append(val);
-                }
-            });
-        } else if ($(this).attr("id") === "all-questions") {
-            $(".tab-content").html(questions);
+    //****************************************//
+    //  Questions Page
+    //****************************************//
+    if (window.location.href.indexOf('questions') > -1) {
+        function getAllQuestions() {
+            return $(".tab-content div.card").toArray();
         }
-        init_dialog_btn(".show-btn", ".show-question");
-        showQuestion();
-    });
 
+        function questionsNav(questions, element) {
+            if ($(element).attr("id") === "active-questions") {
+                $(".tab-content").html("");
+                $.each(questions, function (i, val) {
+                    if ($(val).closest("div").hasClass("active-question")) {
+                        $(".tab-content").append(val);
+                    }
+                });
+                if ($(".tab-content").is(":empty")) {
+                    console.log("not active question");
+                }
+            } else if ($(element).attr("id") === "check-questions") {
+                $(".tab-content").html("");
+                $.each(questions, function (i, val) {
+                    if ($(val).closest("div").hasClass("check-question")) {
+                        $(".tab-content").append(val);
+                    }
+                });
+                if ($(".tab-content").is(":empty")) {
+                    console.log("not check question");
+                }
+            } else if ($(element).attr("id") === "answered-questions") {
+                $(".tab-content").html("");
+                $.each(questions, function (i, val) {
+                    if ($(val).closest("div").hasClass("close-question")) {
+                        $(".tab-content").append(val);
+                    }
+                });
+                if ($(".tab-content").is(":empty")) {
+                    console.log("not answered question");
+                }
+            } else if ($(element).attr("id") === "all-questions") {
+                $(".tab-content").html(questions);
+            }
+            init_dialog_btn(".show-btn", ".show-question");
+            showQuestion();
+        }
+
+        let questions = getAllQuestions();
+        $(".nav-tabs .nav-item .nav-link").click(function () {
+            questionsNav(questions, this);
+        });
+
+        var ResearchQuestionForm = $('.ajax-new-rq-form');
+        ResearchQuestionForm.submit(function (event) {
+            event.preventDefault();
+            ResearchQuestionForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+                .attr("disabled", "true");
+            ResearchQuestionForm.find("button[type='reset']").attr("disabled", "true");
+            ResearchQuestionForm.find("label").addClass("progress-cursor");
+            ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
+            var $thisURL = ResearchQuestionForm.attr('data-url');
+            var data = new FormData(ResearchQuestionForm.get(0));
+            ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+            // console.log(data);
+            // console.log($(this).find("input[type='file']").get(0).files.item(0));
+            $.ajax({
+                method: 'POST',
+                url: $thisURL,
+                // dataType: 'json',
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
+                    ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    ResearchQuestionForm.find("label").removeClass("progress-cursor");
+                    ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (data.success === "successful") {
+                        $(".add-question").css("display", "none");
+                        $(".main").removeClass("blur-div");
+                        $(".empty-question").remove();
+                        show_new_research_question();
+                        let questions = getAllQuestions();
+                        $(".nav-tabs .nav-item .nav-link").click(function () {
+                            questionsNav(questions, this);
+                        });
+                        iziToast.success({
+                            rtl: true,
+                            message: "سوال پژوهشی با موفقیت ذخیره شد. " +
+                                "لطفا منتظر تایید آن توسط ادمین بمانید.",
+                            position: 'bottomLeft'
+                        });
+                        ResearchQuestionForm[0].reset();
+                    }
+                },
+                error: function (data) {
+                    var obj = JSON.parse(data.responseText);
+                    ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
+                    ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    ResearchQuestionForm.find("label").removeClass("progress-cursor");
+                    ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (obj.question_title) {
+                        $("#question-title").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.question_title + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.question_title !== "undefined") {
+                        $("#question-body").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.question_text + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                },
+            })
+        });
+    }
+    //****************************************//
+    //  End Questions Page
+    //****************************************//
     $(".close-answer").click(function () {
         var id = $(this).attr("id");
         $.ajax({
@@ -520,7 +621,7 @@ $(document).ready(function () {
                 setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
 
-                $(".fa-trash-alt").click(function(){
+                $(".fa-trash-alt").click(function () {
                     deleteComment($(this).closest('.my-comment'));
                 });
             },
@@ -919,86 +1020,12 @@ paperForm.submit(function (event) {
     })
 });
 
-
-var ResearchQuestionForm = $('.ajax-new-rq-form');
-ResearchQuestionForm.submit(function (event) {
-    event.preventDefault();
-    ResearchQuestionForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
-        .attr("disabled", "true");
-    ResearchQuestionForm.find("button[type='reset']").attr("disabled", "true");
-    ResearchQuestionForm.find("label").addClass("progress-cursor");
-    ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = ResearchQuestionForm.attr('data-url');
-    var data = new FormData(ResearchQuestionForm.get(0));
-    ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-    // console.log(data);
-    // console.log($(this).find("input[type='file']").get(0).files.item(0));
-    $.ajax({
-        method: 'POST',
-        url: $thisURL,
-        // dataType: 'json',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
-            ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            ResearchQuestionForm.find("label").removeClass("progress-cursor");
-            ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (data.success === "successful") {
-                $(".add-question").css("display", "none");
-                $(".main").removeClass("blur-div");
-                show_new_research_question();
-                iziToast.success({
-                    rtl: true,
-                    message: "سوال پژوهشی با موفیت ذخیره شد. " +
-                        "لطفا منتظر تایید آن توسط ادمین بمانید.",
-                    position: 'bottomLeft'
-                });
-                ResearchQuestionForm[0].reset();
-            }
-        },
-        error: function (data) {
-            var obj = JSON.parse(data.responseText);
-            ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
-            ResearchQuestionForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            ResearchQuestionForm.find("label").removeClass("progress-cursor");
-            ResearchQuestionForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (obj.question_title) {
-                $("#question-title").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.question_title + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#question-title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.question_title != "undefined") {
-                $("#question-body").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.question_text + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#question-body").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-        },
-    })
-});
-
 var showInfo = $('.preview-project');
 showInfo.click(function (event) {
     $.ajax({
         // url: $(this).attr('data-url'),
-        method:'GET',
-        url:'active/',
+        method: 'GET',
+        url: 'active/',
         data: {
             id: $(this).attr("id")
         },
@@ -1028,13 +1055,13 @@ showInfo.click(function (event) {
     })
 });
 
-function deleteComment(comment){
+function deleteComment(comment) {
     $.ajax({
-        method : 'POST',
+        method: 'POST',
         url: '/deleteComment/',
         dataType: 'json',
-        data : {id : $(comment).attr("id")},
-        success: function(data){
+        data: {id: $(comment).attr("id")},
+        success: function (data) {
             $(comment).remove()
             iziToast.success({
                 rtl: true,
@@ -1042,7 +1069,7 @@ function deleteComment(comment){
                 position: 'bottomLeft'
             });
         },
-        error: function(data){
+        error: function (data) {
             console.log('Error');
         },
     });
@@ -1305,7 +1332,7 @@ comment_form.submit(function (event) {
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
     let thisUrl = "";
-    console.log(comment_form.find(".researcher_id").val()=="");
+    console.log(comment_form.find(".researcher_id").val() == "");
     if (comment_form.find(".researcher_id").val() == "")
         thisUrl = "/expert/industry_comment/";
     else
@@ -1332,7 +1359,7 @@ comment_form.submit(function (event) {
                 position: 'bottomLeft'
             });
 
-            $(".fa-trash-alt").click(function(){
+            $(".fa-trash-alt").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
 
@@ -1361,21 +1388,23 @@ comment_form.submit(function (event) {
     });
 });
 
-$('.confirm-researcher').click(function(){
+$('.confirm-researcher').click(function () {
     $.ajax({
         method: "POST",
         url: 'confirmResearcher/',
         dataType: "json",
-        data: {researcher_id : $(this).attr("id"),
-               project_id :  $('.div_project_id').attr("id")},
-        success: function(data){
+        data: {
+            researcher_id: $(this).attr("id"),
+            project_id: $('.div_project_id').attr("id")
+        },
+        success: function (data) {
             iziToast.success({
                 rtl: true,
                 message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
                 position: 'bottomLeft'
             });
         },
-        error: function(data){
+        error: function (data) {
             console.log("Error");
         }
     });

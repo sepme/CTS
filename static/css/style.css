@@ -1997,7 +1997,14 @@ ul.tick-ul .out-college-research span:nth-child(2), .B-g {
     color: #3ccd1c;
     font-weight: 800;
 }
-
+div.no-project-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
 div.no-project {
     position: relative;
     height: fit-content;
@@ -2115,4 +2122,7 @@ div.no-project > span.disable-success-btn {
     border-radius: 50%;
     background-color: #ff4545;
     z-index: -1;
+}
+.empty-question {
+    margin: auto;
 }
