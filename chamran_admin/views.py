@@ -176,7 +176,6 @@ class SignupEmail(generic.FormView):
 
 
 def signup_email_ajax(request):
-    print(request.is_ajax())
     print(request.POST)
     form = forms.RegisterEmailForm(request.POST)
     print('is valid: ', form.is_valid())
@@ -267,57 +266,53 @@ class SignupUser(generic.FormView):
             self.temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
         except models.TempUser.DoesNotExist:
             raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
-        # context = {'form': forms.RegisterUserForm(),
-        #            'username': temp_user.email}
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = forms.RegisterUserForm()
-        context['username'] = self.temp_user.email
+        [account_type, uuid] = self.request.path.split('/')[2:]
+        try:
+            temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
+        except models.TempUser.DoesNotExist:
+            raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
+        context['username'] = temp_user.email
         return context
 
-    def post(self, request, *args, **kwargs):
-        form = forms.RegisterUserForm(request.POST or None)
-        unique_id = kwargs['unique_id']
-        print(unique_id)
+    def form_valid(self, form):
+        unique_id = self.kwargs['unique_id']
         temp_user = get_object_or_404(models.TempUser, unique=unique_id)
-        context = {'form': form,
-                   'username': temp_user.email}
-        if form.is_valid():
-            password = form.cleaned_data['password']
-            email = temp_user.email
-            username = email
-            account_type = temp_user.account_type
-            user = User(username=username, email=email)
-            user.set_password(password)
-            user.save()
-            if account_type == 'researcher':
-                researcher = ResearcherUser.objects.create(user=user)
-                Status.objects.create(researcher_user=researcher)
-                temp_user.delete()
-                new_user = authenticate(request, username=username, password=password)
-                if new_user is not None:
-                    login(request, new_user)
-                return researcher.get_absolute_url()
+        password = form.cleaned_data['password']
+        email = temp_user.email
+        username = email
+        account_type = temp_user.account_type
+        user = User(username=username, email=email)
+        user.set_password(password)
+        user.save()
+        if account_type == 'researcher':
+            researcher = ResearcherUser.objects.create(user=user)
+            Status.objects.create(researcher_user=researcher)
+            temp_user.delete()
+            new_user = authenticate(self.request, username=username, password=password)
+            if new_user is not None:
+                login(self.request, new_user)
+            return researcher.get_absolute_url()
 
-            elif account_type == 'expert':
-                expert = ExpertUser.objects.create(user=user)
-                temp_user.delete()
-                new_user = authenticate(request, username=username, password=password)
-                if new_user is not None:
-                    login(request, new_user)
-                return expert.get_absolute_url()
+        elif account_type == 'expert':
+            expert = ExpertUser.objects.create(user=user)
+            temp_user.delete()
+            new_user = authenticate(self.request, username=username, password=password)
+            if new_user is not None:
+                login(self.request, new_user)
+            return expert.get_absolute_url()
 
-            elif account_type == 'industry':
-                industry = IndustryUser.objects.create(user=user)
-                temp_user.delete()
-                new_user = authenticate(request, username=username, password=password)
-                if new_user is not None:
-                    login(request, new_user)
-                return industry.get_absolute_url()
-
-        return render(request, self.template_name, context)
+        elif account_type == 'industry':
+            industry = IndustryUser.objects.create(user=user)
+            temp_user.delete()
+            new_user = authenticate(self.request, username=username, password=password)
+            if new_user is not None:
+                login(self.request, new_user)
+            return industry.get_absolute_url()
+        return super().form_valid(form)
 
 
 class LoginView(generic.TemplateView):
