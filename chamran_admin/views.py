@@ -73,10 +73,10 @@ class MessagesView(View):
             if i < 3:
                 top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate), message.read_by.filter(
                     username=request.user.username).exists()))
-            else:
-                other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
-                                       message.read_by.filter(
-                                           username=request.user.username).exists()))
+
+            other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
+                                    message.read_by.filter(
+                                        username=request.user.username).exists()))
         return render(request, 'chamran_admin/messages.html', context={
             'top_3': top_3,
             'other_messages': other_messages,
