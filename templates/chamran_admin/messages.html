@@ -115,7 +115,6 @@
 {% endblock %}
 {% block script %}
     <script>
-        {#just for test#}
         $("button").click(function(){
             const id = $(this).attr('id');
             $.ajax({
@@ -126,6 +125,9 @@
                     console.log(data);
                     $(".message-show-body .body").html(data.text);
                     $(".message-show-head .title").html(data.title);
+                    let attachment = "<a  href='/" + data.attachment +
+                    "'><span class='fas fa-paperclip fa-lg'></span></a>";
+                    $(".message-show-head .title").append(attachment);
                     $(".message-show-body .message-info .date span").html(data.date);
                 }
             });

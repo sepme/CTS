@@ -6,6 +6,7 @@ from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_o
 from django.views import generic, View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -36,8 +37,7 @@ def get_message_detail(request, message_id):
         message.read_by.add(request.user)
     attachment = None
     if message.attachment:
-        attachment = message.attachment.url
-    print(message.date)
+        attachment = message.attachment.url[message.attachment.url.find('media', 2):]
     return JsonResponse({
         'text': message.text,
         'date': jalali_date(JalaliDate(message.date)),
@@ -48,7 +48,9 @@ def get_message_detail(request, message_id):
     })
 
 
-class MessagesView(View):
+class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
+    template_name = 'chamran_admin/messages.html'
+    login_url = "/login"
     jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
                      'دی', 'بهمن', 'اسفند')
 
@@ -64,36 +66,36 @@ class MessagesView(View):
         else:
             return '(امروز)'
 
-    def get(self, request):
-        all_messages = Message.get_user_messages(request.user.id)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_messages = Message.get_user_messages(self.request.user.id)
         top_3 = []
         other_messages = []
         for i, message in enumerate(all_messages):
             jdate = JalaliDate(message.date)
             if i < 3:
                 top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate), message.read_by.filter(
-                    username=request.user.username).exists()))
+                    username=self.request.user.username).exists()))
 
             other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
                                     message.read_by.filter(
-                                        username=request.user.username).exists()))
-        return render(request, 'chamran_admin/messages.html', context={
-            'top_3': top_3,
-            'other_messages': other_messages,
-            'account_type': find_account_type(request.user),
-        })
+                                        username=self.request.user.username).exists()))
+        context['top_3'] = top_3
+        context['other_messages'] = other_messages
+        context['account_type'] = find_account_type(self.request.user)
+        return context
 
 
 def find_account_type(user):
     expert = ExpertUser.objects.filter(user=user)
-    researcher = ResearcherUser.objects.filter(user=user)
-    industry = IndustryUser.objects.filter(user=user)
     if expert.exists():
         return 'expert'
-    elif researcher.exists():
-        return 'researcher'
-    elif industry.exists():
+    industry = IndustryUser.objects.filter(user=user)
+    if industry.exists():
         return 'industry'
+    researcher = ResearcherUser.objects.filter(user=user)
+    if researcher.exists():
+        return 'researcher'
     else:
         return False
 
