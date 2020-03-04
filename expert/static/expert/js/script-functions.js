@@ -621,7 +621,7 @@ function show_paper_record() {
 }
 
 function show_new_research_question() {
-    new_question = '<div class="card check-question flow-root-display">' +
+    new_question = '<div class="card check-question flow-root-display w-100">' +
         '<div class="question-title w-50">' + $("#question-title").val() + '</div>' +
         '<div class="question-info w-50">' +
         '<div class="date w-25\"><span>الان</span></div>' +
