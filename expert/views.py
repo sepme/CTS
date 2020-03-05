@@ -1,7 +1,8 @@
 from django.views import generic
 # from django.views import View
-from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404, Http404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
 
@@ -36,8 +37,55 @@ def calculate_deadline(finished, started):
         return 'تاریخ نامشخص'
 
 
-class Index(generic.TemplateView):
+class Index(LoginRequiredMixin, generic.FormView):
     template_name = 'expert/index.html'
+    login_url = "/login/"
+    form_class = forms.InitialInfoForm
+
+    def get(self, request, *args, **kwargs):
+        try:
+            expert_user = ExpertUser.objects.get(user=request.user)
+        except ExpertUser.DoesNotExist:
+            raise Http404('.کاربر استاد مربوطه یافت نشد')
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expert_user = get_object_or_404(ExpertUser, user=self.request.user)
+
+        if expert_user.status != "signed_up":
+            projects = []
+            if expert_user.status == "free":
+                projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
+            if expert_user.status == "involved":
+                projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
+            context['projects'] = projects
+        return context
+    
+    def form_valid(self, form):
+        expert_user = get_object_or_404(ExpertUser, user=self.request.user)
+
+        photo = form.cleaned_data['photo']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        special_field = form.cleaned_data['special_field']
+        melli_code = form.cleaned_data['melli_code']
+        scientific_rank = form.cleaned_data['scientific_rank']
+        university = form.cleaned_data['university']
+        address = form.cleaned_data['address']
+        home_number = form.cleaned_data['home_number']
+        phone_number = form.cleaned_data['phone_number']
+        email = form.cleaned_data['email_address']
+        expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
+                                                expert_firstname=first_name, expert_lastname=last_name,
+                                                special_field=special_field, national_code=melli_code,
+                                                scientific_rank=scientific_rank, university=university,
+                                                phone_number=home_number, home_address=address,
+                                                mobile_phone=phone_number, email_address=expert_user.user.get_username())
+        expert_user.status = 'free'
+        expert_user.save()
+        expert_form.save()
+        return HttpResponseRedirect(reverse('expert:index'))
 
 
 class ResearcherRequest(generic.TemplateView):
@@ -98,51 +146,6 @@ class Questions(generic.TemplateView):
             'research_questions': research_questions,
         }
         return render(request, self.template_name, context)
-
-
-@login_required(login_url='/login/')
-def index(request):
-    expert_user = get_object_or_404(ExpertUser, user=request.user)
-    if request.method == 'POST':
-        form = forms.InitialInfoForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            photo = form.cleaned_data['photo']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            special_field = form.cleaned_data['special_field']
-            melli_code = form.cleaned_data['melli_code']
-            scientific_rank = form.cleaned_data['scientific_rank']
-            university = form.cleaned_data['university']
-            address = form.cleaned_data['address']
-            home_number = form.cleaned_data['home_number']
-            phone_number = form.cleaned_data['phone_number']
-            email = form.cleaned_data['email_address']
-            expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
-                                                    expert_firstname=first_name, expert_lastname=last_name,
-                                                    special_field=special_field, national_code=melli_code,
-                                                    scientific_rank=scientific_rank, university=university,
-                                                    phone_number=home_number, home_address=address,
-                                                    mobile_phone=phone_number, email_address=expert_user.user.get_username())
-            expert_user.status = 'free'
-            expert_user.save()
-            expert_form.save()
-            return HttpResponseRedirect(reverse('expert:index'))
-        else:
-            return render(request, 'expert/index.html', {'form': form,
-                                                 'expert_user': expert_user,})
-    if expert_user.status == "signed_up":
-        form = forms.InitialInfoForm()
-        return render(request, 'expert/index.html', {'form': form,
-                                                    'expert_user': expert_user})    
-    elif expert_user.status == "free":
-        projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
-
-    elif expert_user.status == "involved":
-        projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
-    
-    return render(request, 'expert/index.html', {'expert_user': expert_user,
-                                                 'projects'   : projects})
 
 class UserInfo(generic.FormView):
     template_name = 'expert/userInfo.html'

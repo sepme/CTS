@@ -1,6 +1,6 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back initial-information"{% if expert_user.status == "signed_up" %}
+<div class="fixed-back initial-information" {% if request.user.expertuser.status == 'signed_up' %}
      style="display: block" {% endif %}>
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
