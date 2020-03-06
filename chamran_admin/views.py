@@ -478,7 +478,7 @@ class View(generic.TemplateView):
 # class notFound(generic.TemplateView):
 #     template_name = '404Template.html'
 
-def notFound(request ,exception):
+def notFound404(request ,exception):
     context = {'data' : exception}
     return render(request ,'404Template.html',context)
 
