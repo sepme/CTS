@@ -7,12 +7,13 @@ from industry.models import Keyword
 from researcher.models import ResearchQuestionInstance
 
 
-def get_image_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{}.{}'.format('profile', ext)
-
-    return os.path.join('unique', instance.expert_user.user.username, filename)
+def profileUpload(instance, filename):
+    return os.path.join('Expert Profile' , instance.expert_user.user.username ,filename)
     
+    # ext = filename.split('.')[-1]
+    # filename = '{}.{}'.format('profile', ext)
+
+    # return os.path.join('unique', instance.expert_user.user.username, filename)
 
 def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
@@ -107,7 +108,7 @@ class ExpertForm(models.Model):
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
 
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
