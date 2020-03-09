@@ -369,6 +369,13 @@ $(document).ready(function () {
     init_dialog_btn(".paper-btn", ".paper_form");
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
+    $('.content').scroll(function () {
+        if ($(".content").scrollTop() > 300) {
+            $("a.top-button").addClass('show');
+        } else {
+            $("a.top-button").removeClass('show');
+        }
+    });
     //****************************************//
     //  Questions Page
     //****************************************//
@@ -416,7 +423,7 @@ $(document).ready(function () {
         }
 
         let questions = getAllQuestions();
-        $(".nav-tabs .nav-item .nav-link").click(function () {
+        $(".nav-pills .nav-link").click(function () {
             questionsNav(questions, this);
         });
 

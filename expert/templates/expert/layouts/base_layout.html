@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" href="{% static 'expert/img/logo.ico' %}">
+    <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
     <link rel="stylesheet" href="{% static 'expert/css/pageLoader.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
@@ -48,9 +48,8 @@
     </div>
     <div class="content">
         <div class="container">
-            {% block content %}
-
-            {% endblock %}
+            <div id="top"></div>
+            {% block content %}{% endblock %}
         </div>
     </div>
     <div class="side-bar">
