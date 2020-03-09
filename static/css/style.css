@@ -41,6 +41,14 @@
     color: #ffffff !important;
 }
 
+.fc-yellow {
+    color: #FFE600 !important;
+}
+
+.fc-gray {
+    color: #707070 !important;
+}
+
 body {
     background-color: #f8fdf7;
     font-family: iranyekan, serif;
@@ -163,9 +171,9 @@ img {
     margin: 70px auto;
     overflow: hidden;
     border-color: #BDBDBD;
-    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+    /*-webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);*/
+    /*-moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);*/
+    /*box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);*/
 }
 
 .fixed-back > .card.wait:hover {
@@ -317,7 +325,6 @@ img {
     left: 0;
     width: 100%;
     border: none;
-    background-color: #E3FFDD;
     text-align: left;
     padding: 8px;
 }
@@ -1046,6 +1053,7 @@ hr {
     color: #fff;
     box-shadow: none;
     outline: none;
+    margin: 15px 0 3px 0;
 }
 
 .chamran_btn.ch-form-submit:hover, .chamran_btn.ch-form-submit:focus {
@@ -2177,8 +2185,24 @@ div.no-project > span.disable-success-btn {
     font-weight: bold !important;
 }
 
+.h3.border-bottom {
+    border-bottom: 1px solid #00000033 !important;
+    padding-bottom: 0.5rem;
+}
+
 .fs-15 {
     font-size: 15px !important;
+}
+
+.center-abs {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .tab-content.auto-scroll {
@@ -2186,12 +2210,6 @@ div.no-project > span.disable-success-btn {
     overflow-y: scroll;
 }
 
-.c-yellow {
-    color: #FFE600 !important;
-}
-.c-gray {
-    color: #707070 !important;
-}
 .box {
     /*box-shadow: 0 2px 4px rgba(126, 142, 177, 0.12);*/
     border-radius: 6px;
@@ -2289,10 +2307,11 @@ a.top-button i {
 }
 
 .top-page-button {
-    padding: 6px 15px!important;
+    padding: 6px 15px !important;
     margin-top: 15px;
     margin-left: 15px;
 }
+
 /*.top-page-button:after {*/
 /*  content: "";*/
 /*  position: absolute;*/
@@ -2319,14 +2338,27 @@ a.top-button i {
     border-radius: 0.25em;
     padding: 5px 10px;
 }
+
 .border-button:hover {
     background-color: #3CCD1C;
     color: #ffffff;
 }
+
 /***
 ****   Question    ****
 ****/
 .box .box-header .active-status {
+    position: relative;
+    top: 50%;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #3CCD1C;
+    float: left;
+}
+
+.box .box-header .wait-status {
     position: relative;
     top: 50%;
     left: 0;
@@ -2357,4 +2389,51 @@ a.top-button i {
     border-radius: 50%;
     background-color: #707070;
     float: left;
+}
+
+.box .box-header .reject-status {
+    position: relative;
+    top: 50%;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ff4545;
+    float: left;
+}
+
+.box .box-header .complete-status {
+    position: relative;
+    top: 50%;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #3CCD1C;
+    float: left;
+}
+.box .box-header .notification {
+    position: relative;
+    top: 50%;
+    left: 0;
+    float: left;
+}
+.box .box-header .notification i{
+    font-size: 16px;
+}
+.box .box-header .notification span{
+    position: relative;
+    top: -10px;
+    left: 25px;
+    padding: 0 2px;
+    background-color: #E65252;
+    color: #ffffff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }

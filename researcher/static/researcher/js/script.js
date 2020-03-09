@@ -305,6 +305,13 @@ $(document).ready(function () {
     search_input(".search_message");
     question();
     vote_dialog_init();
+    $('.content').scroll(function () {
+        if ($(".content").scrollTop() > 300) {
+            $("a.top-button").addClass('show');
+        } else {
+            $("a.top-button").removeClass('show');
+        }
+    });
     $(".new-review-request").click(function () {
         $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
     });
