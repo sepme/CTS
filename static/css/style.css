@@ -2186,6 +2186,12 @@ div.no-project > span.disable-success-btn {
     overflow-y: scroll;
 }
 
+.c-yellow {
+    color: #FFE600 !important;
+}
+.c-gray {
+    color: #707070 !important;
+}
 .box {
     /*box-shadow: 0 2px 4px rgba(126, 142, 177, 0.12);*/
     border-radius: 6px;
