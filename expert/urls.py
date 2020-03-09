@@ -5,7 +5,7 @@ from chamran_admin import views as chamran_admin_views
 app_name = 'expert'
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', views.Index.as_view(), name="index"),
     path('userInfo/', views.UserInfo.as_view(), name="userInfo"),
     path('researcher/', views.ResearcherRequest.as_view(), name="researcherRequest"),
     path('researcher/confirmResearcher/', views.confirmResearcher, name="confirm_researcher"),

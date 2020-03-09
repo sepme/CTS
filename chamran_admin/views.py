@@ -6,6 +6,7 @@ from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_o
 from django.views import generic, View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -36,8 +37,7 @@ def get_message_detail(request, message_id):
         message.read_by.add(request.user)
     attachment = None
     if message.attachment:
-        attachment = message.attachment.url
-    print(message.date)
+        attachment = message.attachment.url[message.attachment.url.find('media', 2):]
     return JsonResponse({
         'text': message.text,
         'date': jalali_date(JalaliDate(message.date)),
@@ -48,7 +48,9 @@ def get_message_detail(request, message_id):
     })
 
 
-class MessagesView(View):
+class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
+    template_name = 'chamran_admin/messages.html'
+    login_url = "/login"
     jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
                      'دی', 'بهمن', 'اسفند')
 
@@ -64,36 +66,36 @@ class MessagesView(View):
         else:
             return '(امروز)'
 
-    def get(self, request):
-        all_messages = Message.get_user_messages(request.user.id)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_messages = Message.get_user_messages(self.request.user.id)
         top_3 = []
         other_messages = []
         for i, message in enumerate(all_messages):
             jdate = JalaliDate(message.date)
             if i < 3:
                 top_3.append((message, jalali_date(jdate), MessagesView.date_dif(jdate), message.read_by.filter(
-                    username=request.user.username).exists()))
-            else:
-                other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
-                                       message.read_by.filter(
-                                           username=request.user.username).exists()))
-        return render(request, 'chamran_admin/messages.html', context={
-            'top_3': top_3,
-            'other_messages': other_messages,
-            'account_type': find_account_type(request.user),
-        })
+                    username=self.request.user.username).exists()))
+
+            other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
+                                    message.read_by.filter(
+                                        username=self.request.user.username).exists()))
+        context['top_3'] = top_3
+        context['other_messages'] = other_messages
+        context['account_type'] = find_account_type(self.request.user)
+        return context
 
 
 def find_account_type(user):
     expert = ExpertUser.objects.filter(user=user)
-    researcher = ResearcherUser.objects.filter(user=user)
-    industry = IndustryUser.objects.filter(user=user)
     if expert.exists():
         return 'expert'
-    elif researcher.exists():
-        return 'researcher'
-    elif industry.exists():
+    industry = IndustryUser.objects.filter(user=user)
+    if industry.exists():
         return 'industry'
+    researcher = ResearcherUser.objects.filter(user=user)
+    if researcher.exists():
+        return 'researcher'
     else:
         return False
 
@@ -176,7 +178,6 @@ class SignupEmail(generic.FormView):
 
 
 def signup_email_ajax(request):
-    print(request.is_ajax())
     print(request.POST)
     form = forms.RegisterEmailForm(request.POST)
     print('is valid: ', form.is_valid())
@@ -267,57 +268,53 @@ class SignupUser(generic.FormView):
             self.temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
         except models.TempUser.DoesNotExist:
             raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
-        # context = {'form': forms.RegisterUserForm(),
-        #            'username': temp_user.email}
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = forms.RegisterUserForm()
-        context['username'] = self.temp_user.email
+        [account_type, uuid] = self.request.path.split('/')[2:]
+        try:
+            temp_user = models.TempUser.objects.get(account_type=account_type, unique=uuid)
+        except models.TempUser.DoesNotExist:
+            raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
+        context['username'] = temp_user.email
         return context
 
-    def post(self, request, *args, **kwargs):
-        form = forms.RegisterUserForm(request.POST or None)
-        unique_id = kwargs['unique_id']
-        print(unique_id)
+    def form_valid(self, form):
+        unique_id = self.kwargs['unique_id']
         temp_user = get_object_or_404(models.TempUser, unique=unique_id)
-        context = {'form': form,
-                   'username': temp_user.email}
-        if form.is_valid():
-            password = form.cleaned_data['password']
-            email = temp_user.email
-            username = email
-            account_type = temp_user.account_type
-            user = User(username=username, email=email)
-            user.set_password(password)
-            user.save()
-            if account_type == 'researcher':
-                researcher = ResearcherUser.objects.create(user=user)
-                Status.objects.create(researcher_user=researcher)
-                temp_user.delete()
-                new_user = authenticate(request, username=username, password=password)
-                if new_user is not None:
-                    login(request, new_user)
-                return researcher.get_absolute_url()
+        password = form.cleaned_data['password']
+        email = temp_user.email
+        username = email
+        account_type = temp_user.account_type
+        user = User(username=username, email=email)
+        user.set_password(password)
+        user.save()
+        if account_type == 'researcher':
+            researcher = ResearcherUser.objects.create(user=user)
+            Status.objects.create(researcher_user=researcher)
+            temp_user.delete()
+            new_user = authenticate(self.request, username=username, password=password)
+            if new_user is not None:
+                login(self.request, new_user)
+            return researcher.get_absolute_url()
 
-            elif account_type == 'expert':
-                expert = ExpertUser.objects.create(user=user)
-                temp_user.delete()
-                new_user = authenticate(request, username=username, password=password)
-                if new_user is not None:
-                    login(request, new_user)
-                return expert.get_absolute_url()
+        elif account_type == 'expert':
+            expert = ExpertUser.objects.create(user=user)
+            temp_user.delete()
+            new_user = authenticate(self.request, username=username, password=password)
+            if new_user is not None:
+                login(self.request, new_user)
+            return expert.get_absolute_url()
 
-            elif account_type == 'industry':
-                industry = IndustryUser.objects.create(user=user)
-                temp_user.delete()
-                new_user = authenticate(request, username=username, password=password)
-                if new_user is not None:
-                    login(request, new_user)
-                return industry.get_absolute_url()
-
-        return render(request, self.template_name, context)
+        elif account_type == 'industry':
+            industry = IndustryUser.objects.create(user=user)
+            temp_user.delete()
+            new_user = authenticate(self.request, username=username, password=password)
+            if new_user is not None:
+                login(self.request, new_user)
+            return industry.get_absolute_url()
+        return super().form_valid(form)
 
 
 class LoginView(generic.TemplateView):
@@ -481,7 +478,7 @@ class View(generic.TemplateView):
 # class notFound(generic.TemplateView):
 #     template_name = '404Template.html'
 
-def notFound(request ,exception):
+def notFound404(request ,exception):
     context = {'data' : exception}
     return render(request ,'404Template.html',context)
 

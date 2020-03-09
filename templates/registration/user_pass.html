@@ -19,7 +19,6 @@
     <p class="ChamranTeam">ثبت نام کاربری و رمز عبور</p>
     <form method="post" id="user-pass-form">
         {% csrf_token %}
-        {{ form.non_field_errors }}
         <div class="username">
             <label for="username">نام کاربری</label>
             <input type="text" id="username" name="username" {% if request.user.is_authenticated %}
@@ -27,8 +26,11 @@
             <i class="fas fa-user-alt fa-lg"></i>
         </div>
         <div class="password">
-            <label for="password">رمز عبور</label>
-            {{ form.password|attr:"id:password" }}
+            <label for="id_password">رمز عبور</label>
+            {{ form.password }}
+            <div class="error">
+                {{ form.non_field_errors }}
+            </div>
             <i class="fas fa-lock fa-lg"></i>
         </div>
         <div class="confirm_password">

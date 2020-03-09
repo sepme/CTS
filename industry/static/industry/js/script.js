@@ -460,8 +460,21 @@ function getComments(expert_id, project_id) {
         },
         success: function (data) {
             if (data.applied == false) {
-                $(".accept-request").attr("style", "display :none");
-                $(".reject-request").attr("style", "display :none");
+                // $(".accept-request").attr("style", "display :none");
+                // $(".reject-request").attr("style", "display :none");
+                // $(".accept-request").hide();
+                // $(".reject-request").hide();
+                // $(".accept-request").setAttribute("hidden", 'true');
+                // $(".reject-request").setAttribute("hidden", 'true');
+                $(".accept-request")["hidden"] =  true;
+                $(".reject-request")["hidden"] = true;
+            }else if ($(".accept-request").getAttribute("hidden") == "true" ) {
+                $(".accept-request").attr("style", "display :block");
+                $(".reject-request").attr("style", "display :block");
+                // $(".reject-request").setAttribute("disabled","disabled");
+                // $(".reject-request").hide();
+                $(".accept-request").setAttribute("hidden", 'false');
+                $(".reject-request").setAttribute("hidden", 'false');
             }
             setComment(data);
         },
@@ -527,6 +540,14 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: {id: id},
                 success: function (data) {
+                    console.log(data);
+                    console.log(data.accepted);
+                    // if (data.accepted == "true")
+                    //     console.log("accepted");
+                        // dialog = $(".project-details");
+                    // }else{
+                    //     console.log("not accepted");
+                    // }
                     localStorage.setItem("project_id", "" + id);
                     localStorage.setItem("replied_text", null);
                     dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
