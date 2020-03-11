@@ -163,6 +163,12 @@ img {
     justify-content: center;
 }
 
+@media (max-width: 767px) {
+    .fixed-back {
+        overflow: hidden;
+    }
+}
+
 .fixed-back.show {
     display: block;
 }
@@ -200,7 +206,8 @@ img {
 
 @media (max-width: 767px) {
     .fixed-back > .card {
-        width: 100% !important;
+        display: none;
+        width: 100vw !important;
         border-radius: 1rem 1rem 0 0;
         top: 100%;
         -webkit-transform: translate(-50%, 0);
@@ -211,11 +218,16 @@ img {
     }
 
     .fixed-back.show > .card {
+        display: block;
         -webkit-transform: translate(-50%, -100%);
         -moz-transform: translate(-50%, -100%);
         -ms-transform: translate(-50%, -100%);
         -o-transform: translate(-50%, -100%);
         transform: translate(-50%, -100%);
+    }
+
+    .fixed-back > .card.b-x2 {
+        padding-bottom: 99px;
     }
 }
 
@@ -346,6 +358,10 @@ img {
     color: #3ccd1c;
 }
 
+.fixed-back .row > div {
+    padding: 0;
+}
+
 .fixed-back .card-footer {
     position: absolute;
     bottom: 0;
@@ -361,6 +377,10 @@ img {
 @media (max-width: 767px) {
     .fixed-back .card-footer {
         height: 55px;
+    }
+
+    .fixed-back .card.b-x2 .card-footer {
+        height: 99px;
     }
 }
 
@@ -392,7 +412,15 @@ img {
 @media (max-width: 767px) {
     .fixed-back .card-footer .reject-btn, .fixed-back .card-footer .save-btn {
         padding: 10px 15px;
-        min-width: calc(50% - 3px);
+        min-width: 100%;
+    }
+
+    .fixed-back .card-footer button {
+        margin-bottom: 5px;
+    }
+
+    .fixed-back .card-footer button:last-child {
+        margin-bottom: 0;
     }
 }
 
@@ -403,6 +431,7 @@ img {
 
 .fixed-back .card-footer .reject-btn:hover {
     color: #3ccd1c;
+    background-color: #f7fff5;
 }
 
 .fixed-back .card-footer .reject-btn:disabled:hover {
@@ -2031,7 +2060,6 @@ span.title-back {
     -ms-transition: all ease 0.2s;
     -o-transition: all ease 0.2s;
     transition: all ease 0.2s;
-    z-index: 999;
 }
 
 .nav-pills > .nav-link.active:after, .nav-pills > .nav-link:hover:after {
@@ -2323,6 +2351,12 @@ div.no-project > span.disable-success-btn {
 .h1, .h2, .h3, .h4, .h5 {
     color: #484848 !important;
     font-weight: bold !important;
+}
+
+@media (max-width: 767px) {
+    .h3 {
+        font-size: x-large;
+    }
 }
 
 .h3.border-bottom {
