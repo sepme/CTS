@@ -41,6 +41,7 @@
                 <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
+        <a href="#" id="toggle"><span></span></a>
     </div>
     <div class="content">
         <div class="container">
@@ -120,6 +121,25 @@
                     <div>
                         <span>تنظیمات کاربری</span>
                         <span class="fas fa-cog"></span>
+                    </div>
+                </li>
+            </a>
+        </ul>
+        <div class="hr display-sm"></div>
+        <ul class="list-group display-sm">
+            <a href="{% url 'chamran:send_reset_email' %}">
+                <li class="list-group-item text-right">
+                    <div>
+                        <span>تغییر رمز عبور</span>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </li>
+            </a>
+            <a href="{% url 'chamran:logout' %}">
+                <li class="list-group-item text-right">
+                    <div>
+                        <span>خروج</span>
+                        <i class="fas fa-sign-out-alt"></i>
                     </div>
                 </li>
             </a>

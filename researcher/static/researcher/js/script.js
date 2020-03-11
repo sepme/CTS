@@ -321,24 +321,24 @@ $(document).ready(function () {
     if ($(window).width() < 575.98) {
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
-            if ($(this).hasClass("on")) {
+            if ($(".side-bar").hasClass("show")) {
+                $(".side-bar").removeClass("show");
                 $(this).removeClass("on");
-                $(".side-bar").css("right", "-500px");
                 $(".content").removeClass("blur-div");
             } else {
+                $(".side-bar").addClass("show");
                 $(this).addClass("on");
-                $(".side-bar").css("right", "0");
                 $(".content").addClass("blur-div");
             }
         });
     } else {
         init_windowSize();
         init_dialog_btn(".chamran-btn-info", ".showProject");
-        $(".form-submit").click(function () {
-            blur_div_toggle(".top-bar");
-            blur_div_toggle(".side-bar");
-            $(".mainInfo-body").css("display", "none");
-        });
+        // $(".form-submit").click(function () {
+        //     blur_div_toggle(".top-bar");
+        //     blur_div_toggle(".side-bar");
+        //     $(".mainInfo-body").css("display", "none");
+        // });
 
         // education_record();
         // executive_record();
