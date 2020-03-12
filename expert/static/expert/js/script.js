@@ -253,17 +253,17 @@ $(document).ready(function () {
             });
         });
     });
-    if ($(window).width() < 575.98) {
+    if ($(window).width() < 767) {
         // toggle slide-bar => all views
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
-            if ($(this).hasClass("on")) {
+            if ($(".side-bar").hasClass("show")) {
+                $(".side-bar").removeClass("show");
                 $(this).removeClass("on");
-                $(".side-bar").css("right", "-500px");
                 $(".content").removeClass("blur-div");
             } else {
+                $(".side-bar").addClass("show");
                 $(this).addClass("on");
-                $(".side-bar").css("right", "0");
                 $(".content").addClass("blur-div");
             }
         });
@@ -283,11 +283,11 @@ $(document).ready(function () {
         });
         init_windowSize();
         init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
-        $(".form-submit").click(function () {
-            blur_div_toggle(".top-bar");
-            blur_div_toggle(".side-bar");
-            $(".mainInfo-body").css("display", "none");
-        });
+        // $(".form-submit").click(function () {
+        //     blur_div_toggle(".top-bar");
+        //     blur_div_toggle(".side-bar");
+        //     $(".mainInfo-body").css("display", "none");
+        // });
         $("i.fa-plus").click(function () {
             if ($("input#Uni").val() !== '') {
                 div = document.createElement("div");
@@ -370,6 +370,13 @@ $(document).ready(function () {
     init_dialog_btn(".paper-btn", ".paper_form");
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
+    $('.content').scroll(function () {
+        if ($(".content").scrollTop() > 300) {
+            $("a.top-button").addClass('show');
+        } else {
+            $("a.top-button").removeClass('show');
+        }
+    });
     //****************************************//
     //  Questions Page
     //****************************************//
@@ -417,7 +424,7 @@ $(document).ready(function () {
         }
 
         let questions = getAllQuestions();
-        $(".nav-tabs .nav-item .nav-link").click(function () {
+        $(".nav-pills .nav-link").click(function () {
             questionsNav(questions, this);
         });
 

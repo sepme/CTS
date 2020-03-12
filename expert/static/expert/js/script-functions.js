@@ -13,20 +13,20 @@ function load_dialog() {
 }
 
 function init_windowSize() {
-    if ($(window).width() < 575.98) {
-    } else {
-        var contentWidth = $(document).innerWidth() - 250;
-        var contentMargin = 0.0862 * contentWidth - 54.9655;
-        $(".info-card").css({
-            "margin-right": contentMargin,
-            "margin-left": contentMargin
-        });
-        $(".content").css({
-            "width": contentWidth,
-            "height": "90%"
-        });
-        $(".side-bar").css("height", "100%");
-    }
+    // if ($(window).width() < 575.98) {
+    // } else {
+    //     var contentWidth = $(document).innerWidth() - 250;
+    //     var contentMargin = 0.0862 * contentWidth - 54.9655;
+    //     $(".info-card").css({
+    //         "margin-right": contentMargin,
+    //         "margin-left": contentMargin
+    //     });
+    //     $(".content").css({
+    //         "width": contentWidth,
+    //         "height": "90%"
+    //     });
+    //     $(".side-bar").css("height", "100%");
+    // }
 }
 
 function loading() {
@@ -56,14 +56,13 @@ function blur_div_toggle(content) {
 
 function init_dialog_btn(element, dialogClass) {
     $(element).click(function () {
-        $(".fixed-back").css("display", "none");
+        $(".fixed-back").removeClass("show");
         $(".main").removeClass("blur-div");
         blur_div_toggle(".main");
-        $(dialogClass).css("display", "block");
+        $(dialogClass).addClass("show");
         close_dialog(dialogClass);
         dialog_comment_init();
         load_dialog();
-        // $(".project-info-innerDiv").height($(".project-info-content").outerHeight());
         if (dialogClass === ".showProject") {
             accept_project();
             $(dialogClass).removeAttr("id");
@@ -198,7 +197,7 @@ function close_dialog(className) {
                 '</li>' +
                 '</ul>');
         }
-        $(className).css("display", "none");
+        $(className).removeClass("show");
         $(".main").removeClass("blur-div");
     });
 }

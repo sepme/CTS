@@ -16,122 +16,612 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card info-card cover-page">
-                <div class="row">
-                    <div class="col-lg-12 col-xs-12">
-                        <ul class="nav nav-tabs w-100" id="project-list">
-                            <li class="nav-item"><a class="nav-link active" id="new-projects" href="#new-projects">جدیدترین
-                                پروژه ها</a></li>
-                            <li class="nav-item"><a class="nav-link" id="your-project" href="#your-project">پروژه های
-                                مرتبط</a></li>
-                            <li class="nav-item"><a class="nav-link" id="done-project" href="#done-project">پروژه های
-                                انجام شده</a></li>
-                        </ul>
-                        <div class="tab-content cover-page">
-                            {% for p in projects %}
-                                <div class="card active-question flow-root-display w-100">
-                                    <div class="question-title w-50">
-                                        <span class="header">
-                                            {{ p.project_form.project_title_persian }}
-                                            <span class="sub-header">
-                                                ( {% calculate_date_past p.date_submitted_by_industry %} قبل )
-                                            </span>
-                                        </span>
+        <div class="col-12 text-right">
+            <h3 class="h3 p-top-15">پروژه ها</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-9 text-right lg-left-border">
+            <div class="project-info-tabs">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                     aria-orientation="vertical">
+                    <a class="nav-link active fs-15" id="new-projects" data-toggle="pill"
+                       role="tab" aria-selected="true">
+                        جدیدترین پروژه ها
+                    </a>
+                    <a class="nav-link fs-15" id="your-project" data-toggle="pill"
+                       role="tab" aria-selected="false">
+                        پروژه های مرتبط
+                    </a>
+                    <a class="nav-link fs-15" id="done-project" data-toggle="pill"
+                       role="tab" aria-selected="false">
+                        پروژه های انجام شده
+                    </a>
+                </div>
+            </div>
+            <div class="tab-content cover-page">
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="question-info w-50">
-                                        <div class="date w-25">
-                                            <span>{% calculate_date_remaining p.date_finished %}</span> تا اتمام پروژه
-                                        </div>
-                                        <div class="answers w-25"><i class="far fa-comments fa-lg"><span
-                                                class="num">{% getUnseenMessages p.pk request.user.expertuser %}</span></i>
-                                        </div>
-                                        <div class="status w-25"><span>{{ p.project_form.required_budget }}</span> ریال
-                                        </div>
-                                        <div class="show w-25">
-                                            <button class="default-btn preview-project" id="{{ p.id }}"
-                                                    data-url="{% url 'expert:show_project' %}">
-                                                مشاهده
-                                            </button>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            {% empty %}
-                                <div class="no-project-container">
-                                    <div class="no-project">
-                                        <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
-                                        <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>
-                                        <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>
-                                        <span>
-                                        <i class="fas fa-cog"></i>
-                                        <span>پروفایل کاربری</span>
-                                    </span>
-                                        <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت
-                                            و
-                                            اطمینان کامل، پروژه شان را به شما بسپارند.</p>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                {#                                <div class="row">#}
-                                {#                                    <div class="col-lg-12">#}
-                                {#                                        <div class="card project-item">#}
-                                {#                                            {% if forloop.counter0 == 0 %}#}
-                                {#                                                <div class="alert"><span>فرم نظرسنجی فعال شده است!</span></div>#}
-                                {#                                            {% endif %}#}
-                                {#                                            <span class="header">{{ p.project_form.project_title_persian }} <span#}
-                                {#                                                    class="sub-header"> ( {% calculate_date_past p.date_submitted_by_industry %} قبل ) </span></span>#}
-                                {#                                            <span><i class="far fa-envelope"></i> پیام ها </span>#}
-                                {#                                            <span><i#}
-                                {#                                                    class="fas fa-dollar-sign"></i><span>{{ p.project_form.required_budget }}</span> ریال </span>#}
-                                {#                                            <span><i#}
-                                {#                                                    class="fas fa-hourglass-end"></i><span>{% calculate_date_remaining p.date_finished %}</span> تا اتمام پروژه</span>#}
-                                {#                                            <button type="button" class="chamran-btn-info" id="{{ p.id }}"#}
-                                {#                                                    data-url="{% url 'expert:show_project' %}">مشاهده#}
-                                {#                                            </button>#}
-                                {#                                            <button type="button" class="chamran-btn-delete">رد</button>#}
-                                {#                                        </div>#}
-                                {#                                    </div>#}
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
                                 {#                                </div>#}
-                                {#                                <div class="card active-question flow-root-display">#}
-                                {#                                    <div class="question-title w-50">#}
-                                {#                                        <span class="header">#}
-                                {#                                            {{ p.project_form.project_title_persian }}#}
-                                {#                                            <span class="sub-header"> ( {% calculate_date_past p.date_submitted_by_industry %} قبل ) </span>#}
-                                {#                                        </span>#}
-                                {#                                    </div>#}
-                                {#                                    <div class="question-info w-50">#}
-                                {#                                        <div class="date w-25">#}
-                                {#                                            <span>#}
-                                {#                                                <i class="fas fa-hourglass-end"></i>#}
-                                {#                                                <span>{% calculate_date_remaining p.date_finished %}</span>#}
-                                {#                                                تا اتمام پروژه#}
-                                {#                                            </span>#}
-                                {#                                        </div>#}
-                                {#                                        <div class="answers w-25">#}
-                                {#                                            <i class="far fa-envelope">#}
-                                {#                                                <span class="num">5</span>#}
-                                {#                                            </i>#}
-                                {#                                            پیام ها#}
-                                {#                                        </div>#}
-                                {#                                        <div class="status w-25">#}
-                                {#                                            <span>#}
-                                {#                                                <i class="fas fa-dollar-sign"></i>#}
-                                {#                                                <span>{{ p.cost_of_project }}</span>#}
-                                {#                                                ریال#}
-                                {#                                            </span>#}
-                                {#                                        </div>#}
-                                {#                                        <div class="show w-25">#}
-                                {#                                            <button class="default-btn show-btn chamran-btn-info" id="{{ p.id }}"#}
-                                {#                                                    data-url="{% url 'expert:show_project' %}">مشاهده</button>#}
-                                {#                                        </div>#}
-                                {#                                    </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
                                 {#                                </div>#}
-                            {% endfor %}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header">
+                        <h6>
+                            دستگاه سایتومتری
+                            {#                                                <span class="sub-header">#}
+                            {#                                                    ( دو روز قبل )#}
+                            {#                                                </span>#}
+                        </h6>
+                        <div class="data-modified">
+                            <span>دو روز قبل</span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="date text-center">
+                                            <div class="label">مهلت</div>
+                                            <div class="value">
+                                                <span>3</span>
+                                                <span>روز</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="status text-center">
+                                            <div class="label">بودجه</div>
+                                            <div class="value">
+                                                <span>120000000</span>
+                                                <span>ریال</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+                                {#                                        class="num">0</span></i>#}
+                                {#                                </div>#}
+                            </div>
+                            <div class="col-6">
+                                <button class="default-btn preview-project" id="1"
+                                        data-url="{% url 'expert:show_project' %}">
+                                    مشاهده
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {#                {% for p in projects %}#}
+            {#                    <div class="card active-question flow-root-display w-100">#}
+            {#                        <div class="question-title w-50">#}
+            {#                                            <span class="header">#}
+            {#                                                {{ p.project_form.project_title_persian }}#}
+            {#                                                <span class="sub-header">#}
+            {#                                                    ( {% calculate_date_past p.date_submitted_by_industry %} قبل )#}
+            {#                                                </span>#}
+            {#                                            </span>#}
+            {#                        </div>#}
+            {#                        <div class="question-info w-50">#}
+            {#                            <div class="date w-25">#}
+            {#                                <span>{% calculate_date_remaining p.date_finished %}</span> تا اتمام پروژه#}
+            {#                            </div>#}
+            {#                            <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
+            {#                                    class="num">{% getUnseenMessages p.pk request.user.expertuser %}</span></i>#}
+            {#                            </div>#}
+            {#                            <div class="status w-25"><span>{{ p.project_form.required_budget }}</span> ریال#}
+            {#                            </div>#}
+            {#                            <div class="show w-25">#}
+            {#                                <button class="default-btn preview-project" id="{{ p.id }}"#}
+            {#                                        data-url="{% url 'expert:show_project' %}">#}
+            {#                                    مشاهده#}
+            {#                                </button>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                {% empty %}#}
+            {#                    <div class="no-project-container">#}
+            {#                        <div class="no-project">#}
+            {#                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">#}
+            {#                            <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>#}
+            {#                            <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>#}
+            {#                            <span>#}
+            {#                                            <i class="fas fa-cog"></i>#}
+            {#                                            <span>پروفایل کاربری</span>#}
+            {#                                        </span>#}
+            {#                            <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت#}
+            {#                                و#}
+            {#                                اطمینان کامل، پروژه شان را به شما بسپارند.</p>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                    <div class="row">#}
+            {#                        <div class="col-lg-12">#}
+            {#                            <div class="card project-item">#}
+            {#                                {% if forloop.counter0 == 0 %}#}
+            {#                                    <div class="alert"><span>فرم نظرسنجی فعال شده است!</span></div>#}
+            {#                                {% endif %}#}
+            {#                                <span class="header">{{ p.project_form.project_title_persian }} <span#}
+            {#                                        class="sub-header"> ( {% calculate_date_past p.date_submitted_by_industry %} قبل ) </span></span>#}
+            {#                                <span><i class="far fa-envelope"></i> پیام ها </span>#}
+            {#                                <span><i#}
+            {#                                        class="fas fa-dollar-sign"></i><span>{{ p.project_form.required_budget }}</span> ریال </span>#}
+            {#                                <span><i#}
+            {#                                        class="fas fa-hourglass-end"></i><span>{% calculate_date_remaining p.date_finished %}</span> تا اتمام پروژه</span>#}
+            {#                                <button type="button" class="chamran-btn-info" id="{{ p.id }}"#}
+            {#                                        data-url="{% url 'expert:show_project' %}">مشاهده#}
+            {#                                </button>#}
+            {#                                <button type="button" class="chamran-btn-delete">رد</button>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                    <div class="card active-question flow-root-display">#}
+            {#                        <div class="question-title w-50">#}
+            {#                                            <span class="header">#}
+            {#                                                {{ p.project_form.project_title_persian }}#}
+            {#                                                <span class="sub-header"> ( {% calculate_date_past p.date_submitted_by_industry %} قبل ) </span>#}
+            {#                                            </span>#}
+            {#                        </div>#}
+            {#                        <div class="question-info w-50">#}
+            {#                            <div class="date w-25">#}
+            {#                                                <span>#}
+            {#                                                    <i class="fas fa-hourglass-end"></i>#}
+            {#                                                    <span>{% calculate_date_remaining p.date_finished %}</span>#}
+            {#                                                    تا اتمام پروژه#}
+            {#                                                </span>#}
+            {#                            </div>#}
+            {#                            <div class="answers w-25">#}
+            {#                                <i class="far fa-envelope">#}
+            {#                                    <span class="num">5</span>#}
+            {#                                </i>#}
+            {#                                پیام ها#}
+            {#                            </div>#}
+            {#                            <div class="status w-25">#}
+            {#                                                <span>#}
+            {#                                                    <i class="fas fa-dollar-sign"></i>#}
+            {#                                                    <span>{{ p.cost_of_project }}</span>#}
+            {#                                                    ریال#}
+            {#                                                </span>#}
+            {#                            </div>#}
+            {#                            <div class="show w-25">#}
+            {#                                <button class="default-btn show-btn chamran-btn-info" id="{{ p.id }}"#}
+            {#                                        data-url="{% url 'expert:show_project' %}">مشاهده#}
+            {#                                </button>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                {% endfor %}#}
         </div>
+        <div class="col-lg-3">col-lg-3</div>
     </div>
+    <a href="#top" class="top-button">
+        <i class="fas fa-angle-up"></i>
+    </a>
 {% endblock %}
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>

@@ -620,7 +620,7 @@ a.nav-link:hover {
 .tab-content {
     position: relative;
     display: flow-root;
-    border: 1px solid #bdbdbd;
+    /*border: 1px solid #bdbdbd;*/
     border-top: none;
     background-color: #f8fdf7;
     border-radius: 0 0 0.25em 0.25em;
@@ -1712,27 +1712,27 @@ ul.nav-tabs {
     display: flow-root;
 }
 
-.active-question, .check-question, .close-question {
-    padding: 15px 20px;
-    text-align: right;
-    margin-bottom: 10px;
-}
+/*.active-question, .check-question, .close-question {*/
+/*    padding: 15px 20px;*/
+/*    text-align: right;*/
+/*    margin-bottom: 10px;*/
+/*}*/
 
-.active-question:last-child, .check-question:last-child, .close-question:last-child {
-    margin-bottom: 0;
-}
+/*.active-question:last-child, .check-question:last-child, .close-question:last-child {*/
+/*    margin-bottom: 0;*/
+/*}*/
 
-.active-question {
-    border-right: 5px solid #3ccd1c;
-}
+/*.active-question {*/
+/*    border-right: 5px solid #3ccd1c;*/
+/*}*/
 
-.check-question {
-    border-right: 5px solid #FFE600;
-}
+/*.check-question {*/
+/*    border-right: 5px solid #FFE600;*/
+/*}*/
 
-.close-question {
-    border-right: 5px solid #707070;
-}
+/*.close-question {*/
+/*    border-right: 5px solid #707070;*/
+/*}*/
 
 .check-question .question-info > .answers > i {
     color: rgba(0, 0, 0, 0.25);
@@ -1821,7 +1821,7 @@ ul.nav-tabs {
     font-weight: 700;
     font-size: 17px;
     margin-bottom: 15px;
-    color: #89E076;
+    color: #3CCD1C;
 }
 
 .tab-content .empty-question .add-new-question {

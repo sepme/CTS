@@ -1,5 +1,5 @@
 {% extends "researcher/layouts/base_layout.html" %}
-
+{% load static %}
 {% block title %}پروژه ها{% endblock %}
 
 {% block dialog %}
@@ -11,7 +11,146 @@
 {% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}
 
 {% block content %}
-    {% include 'researcher/layouts/projectList.html' %}
+    <div class="row">
+        <div class="col-12 text-right">
+            <h3 class="h3 p-top-15">پروژه ها</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-9 text-right lg-left-border">
+            <div class="project-info-tabs">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                     aria-orientation="vertical">
+                    <a class="nav-link active fs-15" id="new-projects" data-toggle="pill"
+                       role="tab" aria-selected="true">
+                        جدیدترین پروژه ها
+                    </a>
+                    <a class="nav-link fs-15" id="your-project" data-toggle="pill"
+                       role="tab" aria-selected="false">
+                        پروژه های مرتبط
+                    </a>
+                    <a class="nav-link fs-15" id="done-project" data-toggle="pill"
+                       role="tab" aria-selected="false">
+                        پروژه های انجام شده
+                    </a>
+                </div>
+            </div>
+            <div class="tab-content cover-page">
+                {% for project in new_project_list %}
+
+                {% empty %}
+                    <div class="no-project-container">
+                        <div class="no-project">
+                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
+                            <h4>متاسفانه، هنوز پروژه ای متناسب با تکنیک های ثبت شده شما، ارائه نشده!</h4>
+                            <p>می توانید تکنیک های بیشتر را از طریق</p>
+                            <a href="https://www.aparat.com/chamran_team">
+                                <i class="aparat-ico"></i>
+                                <span>Chamran_Team</span>
+                            </a>
+                            <p>یاد بگیرید و در قسمت </p>
+                            <span>
+                                    <i class="fas fa-file-medical"></i>
+                                    <span>تکنیک ها</span>
+                                </span>
+                            <p>آن را ثبت کنید. با این کار شانس بیشتری برای همکاری با اساتید خواهید داشت. </p>
+                            <br>
+                            <p> همچنین با تکمیل رزومه خود از طریق </p>
+                            <span>
+                                    <i class="fas fa-cog"></i>
+                                    <span>پروفایل کاربری</span>
+                                </span>
+                            <p> می توانید کمک تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tab-content cover-page" style="display: flex;">
+                        {% for project in new_project_list %}
+                            <div class="card project-item w-100">
+                                <span class="header">{{ project.project_title }} <span
+                                        class="sub-header">( {{ project.started }} قبل )</span></span>
+                                <span>
+
+                            {% for keyword in project.keyword %}
+                                <span class="border-span">{{ keyword.name }}</span>
+                            {% endfor %}
+                        </span>
+                                <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>
+                                <span><i
+                                        class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>
+                                <button type="button" class="chamran-btn-info" id="{{ project.PK }}">مشاهده</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="tab-content your-project" style="display: none;">
+                        {% if my_project_list == "None" %}
+                            <p>پروژه فعالی برای شما ثبت نشده است.</p>
+                        {% else %}
+                            {% for project in my_project_list %}
+                                <div class="card project-item">
+                                    <span class="header">{{ project.project_title }} <span
+                                            class="sub-header">( {{ project.started }} قبل )</span></span>
+                                    <span>
+                            {% for keyword in project.keyword %}
+                                <span class="border-span">{{ keyword.name }}</span>
+                            {% endfor %}
+                        </span>
+                                    <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>
+                                    <span><i
+                                            class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>
+                                    <button type="button" class="chamran-btn-info my-project" value="myproject"
+                                            id="{{ project.PK }}">مشاهده
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="tab-content done-project" style="display: none;">
+                        {% for project in done_project_list %}
+                            <div class='card project-item'>
+                                <span class='header'>{{ project.project_title }}<span
+                                        class='sub-header'> ({{ project.started }} قبل )</span></span>
+                                <span><i
+                                        class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{ project.date_started }}</span> شروع شده است.</span>
+                                <span><i
+                                        class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{ project.date_finished }}</span> به پایان رسیده است.</span>
+                                <span><i
+                                        class='fas fa-hourglass-end'></i>مدت زمان پروژه : <span> {{ project.delta_date }} </span></span>
+                                <span><i
+                                        class='fas fa-hourglass-end'></i>درأمد : <span> {{ project.income }} </span> کسب کرده اید.</span>
+                                <span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده :
+                                    {% for technique in project.technique %}
+                                        <span> {{ technique }} , </span>
+                                    {% endfor %}
+                    </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#            <!-- {% for com in comments %}#}
+        {#        <div class="your-comment">#}
+        {#                <div class="comment-body">#}
+        {#                    <span class="comment-tools">#}
+        {#                        <i class="fas fa-reply"></i>#}
+        {#                    </span>#}
+        {#                    <span>#}
+        {#                            {{com.description}}#}
+        {#                            ,{{com.sender}},#}
+        {#                            asdfasdfasf#}
+        {#                    </span>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#    {% endfor %} -->#}
+        <div class="col-lg-3"></div>
+    </div>
+    <a href="#top" class="top-button">
+        <i class="fas fa-angle-up"></i>
+    </a>
 {% endblock %}
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>

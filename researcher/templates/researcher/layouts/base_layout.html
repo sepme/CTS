@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
-    <link rel="icon" href="{% static 'researcher/img/logo.ico' %}">
+    <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -41,9 +41,11 @@
                 <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
+        <a href="#" id="toggle"><span></span></a>
     </div>
     <div class="content">
         <div class="container">
+            <div id="top"></div>
             {% block content %}{% endblock %}
         </div>
     </div>
@@ -119,6 +121,25 @@
                     <div>
                         <span>تنظیمات کاربری</span>
                         <span class="fas fa-cog"></span>
+                    </div>
+                </li>
+            </a>
+        </ul>
+        <div class="hr display-sm"></div>
+        <ul class="list-group display-sm">
+            <a href="{% url 'chamran:send_reset_email' %}">
+                <li class="list-group-item text-right">
+                    <div>
+                        <span>تغییر رمز عبور</span>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </li>
+            </a>
+            <a href="{% url 'chamran:logout' %}">
+                <li class="list-group-item text-right">
+                    <div>
+                        <span>خروج</span>
+                        <i class="fas fa-sign-out-alt"></i>
                     </div>
                 </li>
             </a>
