@@ -19,6 +19,10 @@ from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance
 
 
+def gregorian_to_numeric_jalali(date):
+    j_date = JalaliDate(date)
+    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
+
 def calculate_deadline(finished, started):
     try:
         diff = JalaliDate(finished) - JalaliDate(started)
@@ -294,6 +298,15 @@ def paper_record_view(request):
 def show_project_view(request):
     id = request.GET.get('id')
     project = Project.objects.get(id=id)
+    data = {}
+    try:
+        if project.expert_accepted.user == request.user:
+            ActiveProjcet(request, project, data)
+    except:
+        pass
+    return UsualShowProject(request, project, data)
+
+def UsualShowProject(request, project, data):
     project_form = project.project_form
     comments = []
     comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
@@ -312,27 +325,32 @@ def show_project_view(request):
         if comment.sender_type == "industry":
             comment.status = "seen"
             comment.save()
-    data = {
-        'comments': comments,
-        'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
-        'key_words': serializers.serialize('json', project_form.key_words.all()),
-        'main_problem_and_importance': project_form.main_problem_and_importance,
-        'progress_profitability': project_form.progress_profitability,
-        'required_lab_equipment': project_form.required_lab_equipment,
-        'approach': project_form.approach,
-        'deadline': calculate_deadline(project.date_finished, project.date_submitted_by_industry),
-        'project_title_persian': project_form.project_title_persian,
-        'project_title_english': project_form.project_title_english,
-        'research_methodology': project_form.research_methodology,
-        'policy': project_form.policy,
-        'potential_problems': project_form.potential_problems,
-        'required_budget': project_form.required_budget,
-        'required_method': project_form.required_method,
-        'project_phase': project_form.project_phase,
-        'predict_profit': project_form.predict_profit,
-        'techniques_list': Technique.get_technique_list(),
-        'success': 'successful',
-    }
+    # data = {
+    try:
+        if data["status"]:
+            pass
+    except:
+        data["status"] = "non active"
+    data['comments']= comments
+    data['date']= JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d")
+    data['key_words']= serializers.serialize('json', project_form.key_words.all())
+    data['main_problem_and_importance']= project_form.main_problem_and_importance
+    data['progress_profitability']= project_form.progress_profitability
+    data['required_lab_equipment']= project_form.required_lab_equipment
+    data['approach']= project_form.approach
+    data['deadline']= calculate_deadline(project.date_finished, project.date_submitted_by_industry)
+    data['project_title_persian']= project_form.project_title_persian
+    data['project_title_english']= project_form.project_title_english
+    data['research_methodology']= project_form.research_methodology
+    data['policy']= project_form.policy
+    data['potential_problems']= project_form.potential_problems
+    data['required_budget']= project_form.required_budget
+    data['required_method']= project_form.required_method
+    data['project_phase']= project_form.project_phase
+    data['predict_profit']= project_form.predict_profit
+    data['techniques_list']= Technique.get_technique_list()
+    data['success']= 'successful'
+    # }
     # data['required_technique']=[]
     # for tech in project.project_form.required_technique:
     #     data['required_technique'].append(tech.__str__())
@@ -615,25 +633,26 @@ def confirmResearcher(request):
     except:
         return JsonResponse(data={} ,status=400)
 
-def ActiveProjcet(request):
-    project = get_object_or_404(Project, pk=int(request.GET.get('id')))
+def ActiveProjcet(request, project, data):
     industryform = project.industry_creator.industryform
-    data = {
-        "industry_name" : industryform.name,
-        "industry_logo" : industryform.photo.url[industryform.photo.url.find('media' ,2)],
-        'enforced_name' : project.expert_accepted.expertform,
-        "executive_info": project.executive_info,
-        "budget_amount" : project.project_form.required_budget,
-        "start"         : project.date_start,
-        "first_phase"   : project.date_project_started,
-        "second_phase"  : project.date_phase_two_deadline,
-        "third_phase"   : project.date_phase_three_deadline,
-        'date_finished' : project.date_finished,
-        "technique"     : [],
-    }
-
+    projectDate = [
+        gregorian_to_numeric_jalali(project.date_start),
+        gregorian_to_numeric_jalali(project.date_project_started),
+        gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+        gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+        gregorian_to_numeric_jalali(project.date_finished),
+    ]
+    # data = {
+    data["status"]         = "active"
+    data["industry_name"]  = industryform.name
+    data["industry_logo"]  = "/media/industry/industry-logo.jpg"
+    data['enforced_name']  = str(project.expert_accepted.expertform)
+    data["executive_info"] = project.executive_info
+    data["budget_amount"]  = project.project_form.required_budget
+    data['timeScheduling']           = projectDate
+    data["techniques"]     = []
+    # }
     projectRequest = ExpertRequestedProject.objects.filter(project=project).filter(expert=project.expert_accepted).first()
     for technique in projectRequest.required_technique.all():
-        data["technique"].append(technique.__str__())
-
+        data["techniques"].append(technique.__str__())
     return JsonResponse(data=data)

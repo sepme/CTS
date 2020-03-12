@@ -358,6 +358,7 @@ $(document).ready(function () {
     question_dialog_init();
     question_page_init();
     init_dialog_btn(".preview-project", ".showProject");
+    init_dialog_btn(".preview-project", ".project-details");
     init_dialog_btn(".confirm_project", ".select-technique");
     init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
@@ -1020,34 +1021,76 @@ paperForm.submit(function (event) {
     })
 });
 
+function setDates(date) {
+    $(".start").html(date[0]);
+    $(".first_phase").html(date[1]);
+    $(".second_phase").html(date[2]);
+    $(".third_phase").html(date[3]);
+    $(".date_finished").html(date[4]);
+}
+
+function projectDetail(data){
+    console.log("project_detail");
+    let techniques = "";
+    for (let tech_index = 0; tech_index < data.techniques.length; tech_index++) {
+        const element = data.techniques[tech_index];
+        techniques += "<span class='border-span'>" +
+                      element +
+                      "</span>";
+    }
+    $(".techniques").html(techniques);
+    $("#industry-name").val(data.industry_name);
+    $("#enforced-name").val(data.enforced_name);
+    $("#executive-info").val(data.executive_info);
+    $("#industry_logo").attr("src", data.industry_logo);
+    $(".budget-amount").html(data.budget_amount);
+    setDates(data.timeScheduling);
+    setMajors(data);
+    setValue(data);
+    setComment(data.comments);
+
+    $(".fa-trash-alt").click(function(){
+        deleteComment($(this).closest('.my-comment'));
+    });
+}
+
 var showInfo = $('.preview-project');
 showInfo.click(function (event) {
+    console.log("-----------");
     $.ajax({
-        // url: $(this).attr('data-url'),
+        url: $(this).attr('data-url'), 
         method: 'GET',
-        url: 'active/',
         data: {
             id: $(this).attr("id")
         },
         dataType: 'json',
         success: function (data) {
-            console.log("-----------");
-            // $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
-            // $(".showProject").find(".establish-time .time-body").html(data.date);
-            // $(".showProject").find(".time-left .time-body").html(data.deadline);
-            // const keys = JSON.parse(data.key_words);
-            // var keys_code = '';
-            // for (let i = 0; i < keys.length; i++) {
-            //     keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
-            // }
-            // $(".showProject").find(".techniques").html(keys_code);
-            // setMajors(data);
-            // setValue(data);
-            // setComment(data.comments);
+            console.log(data);
+            if (data.status == "non active"){
+                console.log("non active");
+                $(".hidden").attr("style", "display : none;");
+                $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
+                $(".showProject").find(".establish-time .time-body").html(data.date);
+                $(".showProject").find(".time-left .time-body").html(data.deadline);
+                const keys = JSON.parse(data.key_words);
+                var keys_code = '';
+                for (let i = 0; i < keys.length; i++) {
+                    keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
+                }
+                $(".techniques").html(keys_code);
+                setMajors(data);
+                setValue(data);
+                setComment(data.comments);
 
-            // $(".fa-trash-alt").click(function(){
-            //     deleteComment($(this).closest('.my-comment'));
-            // });
+                $(".fa-trash-alt").click(function(){
+                    deleteComment($(this).closest('.my-comment'));
+                });
+            }
+            else{
+                console.log("active");
+                $(".hidden").attr("style", "display : block;");
+                projectDetail(data);
+            }
         },
         error: function (data) {
         }

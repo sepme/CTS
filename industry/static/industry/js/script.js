@@ -459,6 +459,7 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
+            console.log(data);
             if (data.applied == false) {
                 // $(".accept-request").attr("style", "display :none");
                 // $(".reject-request").attr("style", "display :none");
@@ -468,7 +469,8 @@ function getComments(expert_id, project_id) {
                 // $(".reject-request").setAttribute("hidden", 'true');
                 $(".accept-request")["hidden"] =  true;
                 $(".reject-request")["hidden"] = true;
-            }else if ($(".accept-request").getAttribute("hidden") == "true" ) {
+            }else if ($(".accept-request").hidden ) {
+                console.log($(".accept-request").hidden);
                 $(".accept-request").attr("style", "display :block");
                 $(".reject-request").attr("style", "display :block");
                 // $(".reject-request").setAttribute("disabled","disabled");
