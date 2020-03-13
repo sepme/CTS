@@ -77,14 +77,14 @@ class IndustryForm(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        super().save()
-        if self.photo:
-            if '\\' in self.photo.name:
-                self.photo.name = self.photo.name.split('\\')[-1]
-            elif '/' in self.photo.name:
-                self.photo.name = self.photo.name.split('/')[-1]
-        super().save()
+    # def save(self, *args, **kwargs):
+    #     super().save()
+    #     if self.photo:
+    #         if '\\' in self.photo.name:
+    #             self.photo.name = self.photo.name.split('\\')[-1]
+    #         elif '/' in self.photo.name:
+    #             self.photo.name = self.photo.name.split('/')[-1]
+    #     super().save()
 
 
 class Keyword(models.Model):
