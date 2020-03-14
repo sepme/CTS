@@ -170,7 +170,7 @@ function search_input(className) {
 }
 
 function close_dialog(className) {
-    $(".close").click(function () {
+    $(".close, " + className).click(function () {
         $(className).removeClass("show");
         $(".main").removeClass("blur-div");
         $(className).find(".no-comment").remove();

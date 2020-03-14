@@ -131,7 +131,7 @@ img {
 
 .mainInfo-body, .dialog-main, .fixed-back {
     position: fixed;
-    display: none;
+    visibility: hidden;
     top: 0;
     left: 0;
     width: 100%;
@@ -158,7 +158,6 @@ img {
 }
 
 .dialog-main, .fixed-back {
-    display: none;
     overflow-y: scroll;
     justify-content: center;
 }
@@ -170,7 +169,7 @@ img {
 }
 
 .fixed-back.show {
-    display: block;
+    visibility: visible;
 }
 
 .dialog {
@@ -186,13 +185,13 @@ img {
 
 .fixed-back > .card {
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -100%);
+    -moz-transform: translate(-50%, -100%);
+    -ms-transform: translate(-50%, -100%);
+    -o-transform: translate(-50%, -100%);
+    transform: translate(-50%, -100%);
     color: #262626;
     padding: 35px 10px 55px 10px;
     overflow: hidden;
@@ -201,12 +200,20 @@ img {
     -moz-transition: all ease 0.2s;
     -ms-transition: all ease 0.2s;
     -o-transition: all ease 0.2s;
-    transition: all ease 0.2s, transform 0.2s ease;
+    transition: all ease 0.2s;
+}
+
+.fixed-back.show > .card {
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 @media (max-width: 767px) {
     .fixed-back > .card {
-        display: none;
         width: 100vw !important;
         border-radius: 1rem 1rem 0 0;
         top: 100%;
@@ -218,7 +225,7 @@ img {
     }
 
     .fixed-back.show > .card {
-        display: block;
+        top: 100%;
         -webkit-transform: translate(-50%, -100%);
         -moz-transform: translate(-50%, -100%);
         -ms-transform: translate(-50%, -100%);
@@ -267,10 +274,9 @@ img {
 
 .fixed-back > .small-card {
     padding: 35px 10px 55px 10px;
-    margin: 70px auto;
-    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
-    -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
+    /*-webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);*/
+    /*-moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);*/
+    /*box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);*/
 }
 
 .fixed-back > .small-card.min-padding {
@@ -358,8 +364,14 @@ img {
     color: #3ccd1c;
 }
 
-.fixed-back .row > div {
-    padding: 0;
+@media (max-width: 767px) {
+    .fixed-back .row > div {
+        padding: 0;
+    }
+}
+
+.fixed-back .form-image {
+    width: 100%;
 }
 
 .fixed-back .card-footer {
@@ -792,6 +804,16 @@ hr {
     height: 100%;
     display: flex;
     overflow: hidden;
+}
+
+@media (max-width: 767px) {
+    .main {
+        -webkit-transition: all ease 0.2s;
+        -moz-transition: all ease 0.2s;
+        -ms-transition: all ease 0.2s;
+        -o-transition: all ease 0.2s;
+        transition: all ease 0.2s;
+    }
 }
 
 .side-bar {
@@ -2032,6 +2054,12 @@ span.title-back {
     transition: all ease 0.2s;
 }
 
+@media (max-width: 767px) {
+    .nav-pills > .nav-link {
+        min-width: 50px;
+    }
+}
+
 .nav-pills > .nav-link.active, .nav-pills > .nav-link:hover {
     background-color: transparent;
     /*font-weight: 800;*/
@@ -2060,6 +2088,7 @@ span.title-back {
     -ms-transition: all ease 0.2s;
     -o-transition: all ease 0.2s;
     transition: all ease 0.2s;
+    z-index: 1;
 }
 
 .nav-pills > .nav-link.active:after, .nav-pills > .nav-link:hover:after {
