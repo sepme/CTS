@@ -270,7 +270,7 @@ class Index(generic.TemplateView):
             phone_number = form.cleaned_data['phone_number']
             email_address = form.cleaned_data['email_address']
             industry_user = request.user.industryuser
-            industry_info = models.IndustryForm(photo=photo,
+            industry_info = models.IndustryForm(industry_user=industry_user,
                                                 name=name,
                                                 registration_number=registration_number,
                                                 date_of_foundation=date_of_foundation,
@@ -278,7 +278,8 @@ class Index(generic.TemplateView):
                                                 industry_type=industry_type,
                                                 industry_address=industry_address,
                                                 phone_number=phone_number,
-                                                email_address=email_address)
+                                                email_address=email_address)            
+            industry_info.photo.save(photo.name, photo)
             industry_info.save()
             if not industry_info.photo:
                 with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
@@ -286,7 +287,6 @@ class Index(generic.TemplateView):
                     default_image = image_file.read()
                     industry_info.photo.save('profile.jpg', ContentFile(default_image))
             industry_user.status = 'free'
-            industry_user.industryform = industry_info
             industry_user.save()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/index.html', context={'form': form})
@@ -312,19 +312,18 @@ class UserInfo(View):
         if form.is_valid():
             model_form = form.save(commit=False)
             IndustryForm.objects.filter(name=model_form.name).update(
+                industry_user=request.user.industryuser,
                 industry_type=model_form.industry_type,
                 tax_declaration=model_form.tax_declaration,
                 services_products=model_form.services_products,
                 awards_honors=model_form.awards_honors
             )
-            if request.user.industryuser.industryform.photo:
-                os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
-                                       request.user.industryuser.industryform.photo.name))
+            # if request.user.industryuser.industryform.photo:
+            #     os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
+            #                            request.user.industryuser.industryform.photo.name))
             if model_form.photo:
-                print('the form has this pic:', model_form.photo)
                 model_form.photo.save(model_form.photo.name, model_form.photo)
             else:
-                print('the form ain\'t have no photo')
                 with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
                           'rb') as image_file:
                     default_image = image_file.read()

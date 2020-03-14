@@ -27,8 +27,6 @@ delete the Project object and only keep its main information in a ProjectHistory
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
-    industryform = models.OneToOneField('industry.IndustryForm', blank=True, null=True, on_delete=models.CASCADE,
-                                        verbose_name="فرم صنعت")
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('free', "فعال - بدون پروژه"),
@@ -51,11 +49,12 @@ class IndustryUser(models.Model):
 #     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
 
 
-def unique_upload(instance, file_name):
-    return os.path.join('{}/'.format(instance.name), file_name)
-
+def profileUpload(instance, file_name):
+    return os.path.join('Industry Profile' , instance.industry_user.user.username ,file_name)
 
 class IndustryForm(models.Model):
+    industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
+                                    verbose_name="صنعت")
     name = models.CharField(max_length=64, verbose_name="نام شرکت")
     registration_number = models.IntegerField(verbose_name="شماره ثبت")
     date_of_foundation = models.IntegerField(verbose_name="تاریخ تاسیس")
@@ -68,24 +67,24 @@ class IndustryForm(models.Model):
     industry_address = models.TextField(verbose_name="ادرس شرکت")
     phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
     # international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
-    tax_declaration = models.FileField(null=True, blank=True, upload_to=unique_upload, verbose_name="اظهارنامه مالیاتی")
+    tax_declaration = models.FileField(null=True, blank=True, upload_to=profileUpload, verbose_name="اظهارنامه مالیاتی")
     # turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
     services_products = models.TextField(null=True, blank=True, verbose_name="خدمات/محصولات")
     awards_honors = models.TextField(null=True, blank=True, verbose_name="افتخارات")
     email_address = models.EmailField(max_length=254, verbose_name="ادرس")
-    photo = models.ImageField(upload_to=unique_upload, null=True, blank=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        super().save()
-        if self.photo:
-            if '\\' in self.photo.name:
-                self.photo.name = self.photo.name.split('\\')[-1]
-            elif '/' in self.photo.name:
-                self.photo.name = self.photo.name.split('/')[-1]
-        super().save()
+    # def save(self, *args, **kwargs):
+    #     super().save()
+    #     if self.photo:
+    #         if '\\' in self.photo.name:
+    #             self.photo.name = self.photo.name.split('\\')[-1]
+    #         elif '/' in self.photo.name:
+    #             self.photo.name = self.photo.name.split('/')[-1]
+    #     super().save()
 
 
 class Keyword(models.Model):
@@ -163,7 +162,7 @@ class Project(models.Model):
         (4, 'انجام شد'),
     )
     status = models.IntegerField(choices=PROJECT_STATUS_CHOICES, verbose_name='وضعیت پروژه', default=0, blank=True)
-    expert_banned = models.ManyToManyField("expert.ExpertUser", verbose_name="اساتید رد شده", related_name="expert_banned")
+    expert_banned = models.ManyToManyField("expert.ExpertUser", verbose_name="اساتید رد شده", related_name="expert_banned", blank=True)
     executive_info = models.TextField(verbose_name="توضیحات اجرایی", null=True, blank=True)
 
     def __str__(self):

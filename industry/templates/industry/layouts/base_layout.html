@@ -27,11 +27,19 @@
             <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
                 <img
                         {% if user.industryuser.industryform.photo %}
-                            src="/media/{{ user.industryuser.industryform.name }}/{{ user.industryuser.industryform.photo.name }}"
+                            src="/media/Industry Profile/{{ user.username }}/{{ user.industryuser.industryform.photo.name }}"
                         {% else %}
                             src="{% static 'industry/img/profile.jpg' %}"
                         {% endif %}
                             alt="profile" class="dropdown-img profile" height="45px">
+                <!-- {% if request.user.industryuser.industryform.photo %}
+                    <img src="{{ request.user.industryuser.industryform.photo.url }}" alt="profile"
+                         class="dropdown-img profile"
+                         height="45px">
+                {% else %}
+                    <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="dropdown-img profile"
+                         height="45px">
+                {% endif %} -->
             </button>
             <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
                 <li><a href="{% url 'industry:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
@@ -53,11 +61,19 @@
         <div class="expert-icon"></div>
         <img
                 {% if user.industryuser.industryform.photo %}
-                    src="/media/{{ user.industryuser.industryform.name }}/{{ user.industryuser.industryform.photo.name }}"
+                    src="/media/Industry Profile/{{ user.username }}/{{ user.industryuser.industryform.photo.name }}"
                 {% else %}
                     src="{% static 'industry/img/profile.jpg' %}"
                 {% endif %}
                     alt="profile" class="profile" width="150px" height="150px">
+        <!-- {% if request.user.industryuser.industryform.photo %}
+            <img src="{{ request.user.industryuser.industryform.photo.url }}" alt="profile"
+                    class="dropdown-img profile"
+                    height="45px">
+        {% else %}
+            <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="dropdown-img profile"
+                    height="45px">
+        {% endif %} -->
         <h5 class="fc-white">{% block name %}{% endblock %}</h5>
         <h6>صنعت</h6>
         <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ user.industryuser.industry_points|default:0 }}</span>/10

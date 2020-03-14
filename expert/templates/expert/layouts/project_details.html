@@ -23,9 +23,9 @@
             </div>
             <div class="row mbottom-lg-25">
                 <div class="col-lg-12 text-right">
-                    <span class="section-title">اطلاعات پروژه</span>
+                    <span class="section-title hidden" style="display: none;">اطلاعات پروژه</span>
                     <div class="section">
-                        <div class="row">
+                        <div class="row hidden" style="display: none;">
                             <div class="col-lg-9">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -49,7 +49,7 @@
                             </div>
                             <div class="col-lg-3">
                                 <div class="industry-logo-preview">
-                                    <img src="{% static 'expert/img/industry.jpg' %}" alt="industry-logo">
+                                    <img id="industry_logo" src="{% static 'expert/img/industry.jpg' %}" alt="industry-logo">
                                 </div>
                                 <div class="budget-section">
                                     <div class="budget">
@@ -62,11 +62,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="project-process">
+                        <div class="project-process hidden" style="display: none;">
                             <div class="progress-row">
                                 <div class="step-top">
                                     <div class="time">
-                                        12/12/1212
+                                        <div class="start">
+                                            12/12/1212
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="step-top">
@@ -77,7 +79,9 @@
                                 </div>
                                 <div class="step-top">
                                     <div class="date">
-                                        12/12/1212
+                                        <div class="second_phase">
+                                            12/12/1212
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="step-top">
@@ -87,7 +91,7 @@
                                     <div class="step-circle"></div>
                                 </div>
                                 <div class="step-top">
-                                    <div class="date">
+                                    <div class="date_finished">
                                         12/12/1212
                                     </div>
                                 </div>
@@ -104,7 +108,9 @@
                                 </div>
                                 <div class="step-down">
                                     <div class="date">
-                                        12/12/1212
+                                        <div class="first_phase">
+                                            12/12/1212
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="step-down">
@@ -115,7 +121,9 @@
                                 </div>
                                 <div class="step-down">
                                     <div class="date">
-                                        12/12/1212
+                                        <div class="third_phase">
+                                            12/12/1212
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="step-down">
@@ -192,7 +200,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row add-researcher-row">
+                        <!-- <div class="row add-researcher-row">
                             <div class="col-lg-12 text-center">
                                 <span class="add-researcher">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="512px" viewBox="-42 0 512 512"
@@ -228,7 +236,7 @@
                                     <span>درخواست پژوهشگر</span>
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

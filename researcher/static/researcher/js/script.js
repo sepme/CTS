@@ -68,6 +68,12 @@ $(".chamran-btn-info").click(function () {
                     + "</span>"
                 );
             }
+            if (data.status == "waiting" || data.status == "involved")
+            {
+                console.log(data.status);
+                $('.vote').remove();
+                $('.apply').remove();
+            }
             setMajors(data);
             setValue(data);
             setComment(data.comments);

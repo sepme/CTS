@@ -569,6 +569,7 @@ def ShowProject(request):
         if com.sender_type == expert:
             com.status = 'seen'
             com.save()
+    json_response['status'] = request.user.researcheruser.status.status
     return JsonResponse(json_response)
 
 def DeleteComment(request):

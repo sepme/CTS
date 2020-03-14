@@ -459,6 +459,7 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
+            console.log(data);
             if (data.applied == false) {
                 // $(".accept-request").attr("style", "display :none");
                 // $(".reject-request").attr("style", "display :none");

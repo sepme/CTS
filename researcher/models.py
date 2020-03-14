@@ -6,11 +6,13 @@ import datetime
 import uuid
 from . import persianNumber
 
-def get_image_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{}.{}'.format('profile', ext)
+def profileUpload(instance, filename):
+    return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,filename)
+    # ext = filename.split('.')[-1]
+    # filename = '{}.{}'.format('profile', ext)
 
-    return os.path.join('unique', instance.researcher_user.user.username, filename)
+    # return os.path.join('unique', instance.researcher_user.user.username, filename)
+
 
 
 def get_answerFile_path(instance, filename):
@@ -100,7 +102,7 @@ class ResearcherProfile(models.Model):
                                            on_delete=models.CASCADE, blank=True, null=True)
     first_name = models.CharField(max_length=300, verbose_name="نام")
     last_name = models.CharField(max_length=300, verbose_name="نام خانوادگی")
-    photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     national_code = models.CharField(max_length=10, verbose_name="کد ملی")
