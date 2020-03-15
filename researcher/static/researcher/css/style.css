@@ -286,74 +286,6 @@ a:hover, a:focus {
 .next-button, .submit-button {
     margin-left: 10px;
 }
-
-input, textarea, select {
-    background-color: #fefefe;
-    border: 1px solid #bdbdbd85;
-    color: #6f7285;
-    border-radius: 5px;
-    margin-top: 20px;
-    direction: rtl;
-    padding-right: 10px;
-}
-
-textarea {
-    padding: 10px;
-}
-
-select {
-    border-radius: 5px 0 0 5px;
-}
-
-input:focus, textarea:focus {
-    outline: none;
-    border: 1px solid #3CCD1C;
-    color: #3CCD1C;
-    background-color: #fff;
-}
-
-input, select {
-    height: 40px;
-}
-
-label {
-    position: absolute;
-    top: 28px;
-    right: 25px;
-    color: #6f7285;
-    z-index: 0;
-    transition: 300ms all ease;
-}
-
-label.full-focus-out:after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #ffffff;
-    z-index: -1;
-    -webkit-transition: all ease 0.3s;
-    -moz-transition: all ease 0.3s;
-    -ms-transition: all ease 0.3s;
-    -o-transition: all ease 0.3s;
-    transition: all ease 0.3s;
-}
-
-label.fix {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 13px;
-    color: #8d8d8d;
-}
-
 .textarea-text {
     position: relative;
     padding: 10px;
@@ -416,33 +348,6 @@ div.error {
 /*  color: #6f7285;*/
 /*  cursor: pointer;*/
 /*}*/
-.rankDiv {
-    display: flex;
-}
-
-.rankLabel {
-    position: relative;
-    border-radius: 0 5px 5px 0;
-    background-color: #6f7285;
-    color: #fdfdfd;
-    top: 20px;
-    right: 0;
-    height: 40px;
-    width: 160px;
-    text-align: center;
-    padding-top: 6px;
-    padding-right: 3px;
-    border: 1px solid #bdbdbd;
-    border-left: none;
-}
-
-#rank {
-    width: 100%;
-    position: relative;
-    outline: none;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
 
 .selected_uni {
     display: flex;

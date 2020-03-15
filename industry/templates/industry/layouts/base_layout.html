@@ -27,7 +27,7 @@
             <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
                 <img
                         {% if user.industryuser.industryform.photo %}
-                            src="/media/Industry Profile/{{ user.username }}/{{ user.industryuser.industryform.photo.name }}"
+                            src="/media/{{ user.industryuser.industryform.photo.name }}"
                         {% else %}
                             src="{% static 'industry/img/profile.jpg' %}"
                         {% endif %}
@@ -61,7 +61,7 @@
         <div class="expert-icon"></div>
         <img
                 {% if user.industryuser.industryform.photo %}
-                    src="/media/Industry Profile/{{ user.username }}/{{ user.industryuser.industryform.photo.name }}"
+                    src="/media/{{ user.industryuser.industryform.photo.name }}"
                 {% else %}
                     src="{% static 'industry/img/profile.jpg' %}"
                 {% endif %}
@@ -163,6 +163,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
 <script type="text/javascript" src="{% static 'js/persianumber.min.js' %}"></script>
 {% block script %}{% endblock %}
+<script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'industry/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'industry/js/script.js' %}"></script>
 </body>

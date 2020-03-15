@@ -29,31 +29,6 @@ function init_windowSize() {
     // }
 }
 
-function loading() {
-    $(".main").addClass("blur-div");
-    var canvas = $("#loading-canvas");
-    canvas.drawArc({
-        strokeStyle: '#000',
-        strokeWidth: 4,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x: 160, y: 120,
-        start: 90,
-        end: 360,
-        radius: 50
-    });
-}
-
-function blur_div_toggle(content) {
-    if ($(content).hasClass("blur-div")) {
-        $(content).removeClass("blur-div");
-    } else {
-        $(content).addClass("blur-div");
-    }
-}
-
 function init_dialog_btn(element, dialogClass) {
     $(element).click(function () {
         $(".fixed-back").removeClass("show");
@@ -63,83 +38,6 @@ function init_dialog_btn(element, dialogClass) {
         close_dialog(dialogClass);
         dialog_comment_init();
         load_dialog();
-    });
-}
-
-function input_focus() {
-    if ($("input[type='text'],input[type='email'],textarea").prop("disabled")) {
-        $(this).each(function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "13px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#8d8d8d"
-            });
-
-        });
-    }
-    $("input[type='text'],input[type='email'],textarea").each(function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).val() !== '') {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#6f7285",
-                "padding": "0 10px"
-            });
-        }
-        if ($(this).hasClass("error")) {
-            $(inputLabel).css("color", "#ff4545");
-        }
-    }).on("focus", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-            var errorDiv = $(this).next(".error");
-            $(this).on("change", function () {
-                if ($(this).hasClass("error")) {
-                    $(this).removeClass("error");
-                    $(errorDiv).remove();
-                }
-            });
-        } else {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#3CCD1C",
-                "padding": "0 10px"
-            });
-            $(this).css("color", "#3ccd1c");
-        }
-    }).on("focusout", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-
-        } else {
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "13px",
-                    "top": "28px",
-                    "right": "25px",
-                    "color": "#6f7285",
-                    "padding": "0"
-                });
-                $(inputLabel).removeClass("full-focus-out");
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-        }
     });
 }
 

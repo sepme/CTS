@@ -242,29 +242,23 @@ img {
     cursor: progress;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 767px) {
     .fixed-back > .card {
-        width: 50%;
+        width: 75%;
     }
 }
 
-@media (max-width: 1200px) {
-    .fixed-back > .card {
-        width: 50%;
-    }
-}
-
-@media (max-width: 992px) {
+@media (min-width: 992px) {
     .fixed-back > .card {
         width: 70%;
     }
 }
 
-/*@media (max-width: 768px) {*/
-/*    .fixed-back > .card {*/
-/*        width: 75%;*/
-/*    }*/
-/*}*/
+@media (min-width: 1200px) {
+    .fixed-back > .card {
+        width: 60%;
+    }
+}
 
 /*@media (max-width: 576px) {*/
 /*    .fixed-back > .card {*/
@@ -602,7 +596,7 @@ a:hover, a:focus {
 input, textarea, select, div.tagsinput {
     background-color: #fefefe;
     border: 1px solid #bdbdbd85;
-    color: #484848;
+    color: #8d8d8d;
     border-radius: 5px;
     margin-top: 20px;
     direction: rtl;
@@ -641,7 +635,9 @@ div.tagsinput span.tag a {
 }
 
 select {
-    border-radius: 5px 0 0 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 input:focus, textarea:focus {
@@ -712,28 +708,46 @@ div.error {
 }
 
 .rankLabel {
-    position: relative;
-    border-radius: 0 5px 5px 0;
-    background-color: #6f7285;
-    color: #fdfdfd;
-    top: 20px;
-    right: 0;
-    height: 40px;
-    width: 90px;
-    text-align: center;
-    padding-top: 6px;
-    padding-right: 3px;
-    border: 1px solid #bdbdbd;
-    border-left: none;
+    position: absolute;
+    user-select: auto;
+    font-size: 12px;
+    top: 12px;
+    right: 30px;
+    color: rgb(141, 141, 141);
+    padding: 0 10px;
+    z-index: 1;
+}
+
+.rankLabel:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+    z-index: -1;
+    -webkit-transition: all ease 0.3s;
+    -moz-transition: all ease 0.3s;
+    -ms-transition: all ease 0.3s;
+    -o-transition: all ease 0.3s;
+    transition: all ease 0.3s;
 }
 
 #rank {
     width: 100%;
     position: relative;
     outline: none;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
 }
+
+/*#rank:active {*/
+/*    color: #3CCD1C;*/
+/*}*/
 
 .selected_uni {
     display: flex;

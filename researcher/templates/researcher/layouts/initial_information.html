@@ -1,7 +1,6 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back initial-information" {% if request.user.researcheruser.status.status == 'signed_up' %}
-     style="display: block"{% endif %}>
+<div class="fixed-back initial-information {% if request.user.researcheruser.status.status == 'signed_up' %}show{% endif %}">
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
         <div class="container">
@@ -20,7 +19,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="FirstName">نام</label>
                                 {% if form.first_name.errors %}
                                     {{ form.first_name|attr:"id:FirstName"|attr:"class:error w-100" }}
@@ -31,7 +30,7 @@
                                     <span class="error-body">{% render_field form.first_name.errors %}</span>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="LastName">نام خانوادگی</label>
                                 {% if form.last_name.errors %}
                                     {{ form.last_name|attr:"id:LastName"|attr:"class:error w-100" }}
@@ -44,7 +43,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-md-8">
                                 <label for="Field">رشته تحصیلی</label>
                                 {% if form.major.errors %}
                                     {{ form.major|attr:"id:Field"|attr:"class:error w-100" }}
@@ -55,9 +54,7 @@
                                     <span class="error-body">{% render_field form.major.errors %}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-md-4">
                                 <label for="MelliCode">کد ملی</label>
                                 {% if form.national_code.errors %}
                                     {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100" }}
@@ -70,7 +67,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="student-num">شماره دانشجویی</label>
                                 {% if form.student_number.errors %}
                                     {{ form.student_number|attr:"id:student-num"|attr:"class:error w-100" }}
@@ -81,7 +78,7 @@
                                     <span class="error-body">{% render_field form.student_number.errors %}</span>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-2 col-md-6">
                                 <label for="enter-date">سال ورود</label>
                                 {% if form.entry_year.errors %}
                                     {{ form.entry_year|attr:"id:enter-date"|attr:"class:error w-100" }}
@@ -92,12 +89,10 @@
                                     <span class="error-body">{% render_field form.entry_year.errors %}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 rankDiv">
+                            <div class="col-lg-7 col-md-5 rankDiv">
                                 <label class="rankLabel" for="rank">آخرین مقطع تحصیلی</label>
                                 <select id="rank" name="grade">
-                                    <option selected dir="rtl">انتخاب کنید ...</option>
+                                    <option selected dir="rtl" disabled>انتخاب کنید ...</option>
                                     <option value="1">کارشناسی</option>
                                     <option value="2">کارشناسی ارشد</option>
                                     <option value="3">دکتری</option>
@@ -107,9 +102,7 @@
                                     <span class="error-body">{% render_field form.grade.errors %}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 col-md-7">
                                 <label for="Uni">دانشگاه محل تحصیل</label>
                                 {% if form.university.errors %}
                                     {{ form.university|attr:"id:Uni"|attr:"class:error w-100" }}
@@ -125,9 +118,9 @@
                             <div class="col-lg-12">
                                 <label for="Address">آدرس محل سکونت</label>
                                 {% if form.address.errors %}
-                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100" }}
+                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4" }}
                                 {% else %}
-                                    {{ form.address|attr:"id:Address"|attr:"class:w-100" }}
+                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.address.errors %}</span>
@@ -135,7 +128,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="PhoneNum">تلفن همراه</label>
                                 {% if form.phone_number.errors %}
                                     {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100" }}
@@ -146,7 +139,7 @@
                                     <span class="error-body">{% render_field form.phone_number.errors %}</span>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="HomeNum">تلفن منزل</label>
                                 {% if form.home_number.errors %}
                                     {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100" }}
