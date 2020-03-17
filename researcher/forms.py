@@ -275,7 +275,7 @@ class InitialInfoForm(forms.ModelForm):
         # exclude = ['birth_year', 'team_work', 'creative_thinking', 'interest_in_major',
         #            'motivation', 'sacrifice', 'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
         #            'project_knowledge', 'description', 'researcher_user']
-        fields = ['first_name', 'last_name', 'photo', 'major', 'national_code', 'grade', 'university',
+        fields = ['photo', 'first_name', 'last_name', 'major', 'national_code', 'grade', 'university',
                   'entry_year', 'address', 'home_number', 'phone_number', 'student_number']
         error_messages = {
             'first_name': {'required': "نام نمی تواند خالی باشد."},
@@ -293,6 +293,13 @@ class InitialInfoForm(forms.ModelForm):
             #           'invalid': 'پست الکترونیکی وارد شده نامعتبر است.'},
 
         }
+
+    def clean_photo(self):
+        data = self.cleaned_data["photo"]
+        if data is None:
+            raise forms.ValidationError('عکس نمی تواند خالی باشد.')
+        return data
+    
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
