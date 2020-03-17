@@ -41,7 +41,7 @@ function blur_div_toggle(content) {
 }
 
 function input_focus() {
-    if ($("input[type='text'],input[type='email'],textarea").prop("disabled")) {
+    if ($("input[type='text'],input[type='email'],textarea, input[type='number']").prop("disabled")) {
         $(this).each(function () {
             var inputLabel = "label[for='" + $(this).attr("id") + "']";
             $(inputLabel).addClass("full-focus-out");
@@ -54,7 +54,7 @@ function input_focus() {
 
         });
     }
-    $("input[type='text'],input[type='email'],textarea").each(function () {
+    $("input[type='text'],input[type='email'],textarea, input[type='number']").each(function () {
         var inputLabel = "label[for='" + $(this).attr("id") + "']";
         if ($(this).val() !== '') {
             $(inputLabel).addClass("full-focus-out");

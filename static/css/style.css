@@ -164,7 +164,7 @@ img {
 
 @media (max-width: 767px) {
     .fixed-back {
-        overflow: hidden;
+        overflow-x: hidden;
     }
 }
 
@@ -210,6 +210,7 @@ img {
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    /*margin: 60px 0;*/
 }
 
 @media (max-width: 767px) {
@@ -2135,9 +2136,7 @@ span.title-back {
 }
 
 .question {
-    font-weight: bold;
-    color: #3CCD1C;
-    padding-right: 2px;
+
 }
 
 .answer {
@@ -2256,11 +2255,16 @@ div.no-project-container {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
+    min-height: 500px;
     width: 100%;
     display: flex;
 }
-
+@media (max-width: 767px) {
+    div.no-project-container {
+        position: relative;
+        min-height: auto;
+    }
+}
 div.no-project {
     position: relative;
     height: fit-content;
@@ -2276,14 +2280,26 @@ div.no-project {
     padding: 50px 10px 10px;
 }
 
+@media (max-width: 767px) {
+    div.no-project {
+        margin: 51px 10px 0;
+    }
+}
+
 div.no-project p {
     font-size: 13px;
     display: inline;
-    line-height: 25px;
+    line-height: 30px;
 }
 
 div.no-project h4 {
     text-align: center;
+}
+
+@media (max-width: 767px) {
+    div.no-project h4 {
+        font-size: 19px;
+    }
 }
 
 div.no-project > span, div.no-project > a {
