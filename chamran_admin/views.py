@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.exceptions import ValidationError
@@ -316,10 +317,10 @@ class SignupUser(generic.FormView):
             return industry.get_absolute_url()
         return super().form_valid(form)
 
-
 class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
+    @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         try:
                 if request.user.is_authenticated:
