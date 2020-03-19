@@ -40,483 +40,51 @@
                 </div>
             </div>
             <div class="tab-content cover-page">
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-6 col-9">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-md-6 col-3">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
+                {% for project in projects %}
+                    <div class="card box flow-root-display w-100">
+                        <div class="box-header">
+                            <h6>
+                                {{ project.project_form.project_title_persian }}
+                            </h6>
+                            <div class="data-modified">
+                                <span>{% calculate_date_past project.date_submitted_by_industry %} قبل </span>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6 col-9">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="date text-center">
+                                                <div class="label">مهلت</div>
+                                                <div class="value">
+                                                    <span>{% calculate_date_remaining project.date_finished %}</span>
+                                                    <!-- <span>3</span>
+                                                    <span>روز</span> -->
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
+                                        <div class="col-6">
+                                            <div class="status text-center">
+                                                <div class="label">بودجه</div>
+                                                <div class="value">
+                                                    <span>{{ project.project_form.required_budget}}</span>
+                                                    <span>ریال</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-md-6 col-3">
+                                    <button class="default-btn preview-project" id={{project.pk}}
+                                            data-url="{% url 'expert:show_project' %}">
+                                        مشاهده
+                                    </button>
                                 </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header">
-                        <h6>
-                            دستگاه سایتومتری
-                            {#                                                <span class="sub-header">#}
-                            {#                                                    ( دو روز قبل )#}
-                            {#                                                </span>#}
-                        </h6>
-                        <div class="data-modified">
-                            <span>دو روز قبل</span>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="date text-center">
-                                            <div class="label">مهلت</div>
-                                            <div class="value">
-                                                <span>3</span>
-                                                <span>روز</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="status text-center">
-                                            <div class="label">بودجه</div>
-                                            <div class="value">
-                                                <span>120000000</span>
-                                                <span>ریال</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {#                                <div class="answers w-25"><i class="far fa-comments fa-lg"><span#}
-                                {#                                        class="num">0</span></i>#}
-                                {#                                </div>#}
-                            </div>
-                            <div class="col-6">
-                                <button class="default-btn preview-project" id="1"
-                                        data-url="{% url 'expert:show_project' %}">
-                                    مشاهده
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
             {#                {% for p in projects %}#}
             {#                    <div class="card active-question flow-root-display w-100">#}

@@ -10,6 +10,8 @@ register = template.Library()
 
 @register.simple_tag
 def calculate_date_past(date):
+    if date is None:
+        return ""
     diff = JalaliDate.today() - JalaliDate(date)
     days = diff.days
     if days < 1:
