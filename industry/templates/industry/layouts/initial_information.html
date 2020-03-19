@@ -14,60 +14,114 @@
                         <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile"
                              width="150px" height="150px">
                         {% render_field form.photo id="upload-input" accept="image/png, image/jpeg" %}
+                        <div class="col-lg-7 text-center">
+                            <div class="error">
+                                {% render_field form.photo.errors %}
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
+                {% if form.photo.errors %}
+                    <div class="row"><div class="col-lg-12"> <br></div></div>
+                {% endif %}
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="id_name">نام شرکت</label>
-                        {% render_field form.name class+="w-100" %}
+                        
+                        {% if form.name.errors %}
+                            {% render_field form.name class+="w-100 error" %}
+                        {% else %}
+                            {% render_field form.name class+="w-100" %}
+                        {% endif %}
+                    <div class="error">
                         {% render_field form.name.errors %}
                     </div>
+                </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <label for="id_registration_number">شماره ثبت</label>
-                        {% render_field form.registration_number class+="w-100" %}
-                        {% render_field form.registration_number.errors %}
+                        {% if form.registration_number.errors %}
+                            {% render_field form.registration_number class+="w-100 error" %}
+                        {% else %}
+                            {% render_field form.registration_number class+="w-100" %}
+                        {% endif %}
+                        <div class="error">
+                            {% render_field form.registration_number.errors %}
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label for="id_date_of_foundation">سال تاسیس</label>
-                        {% render_field form.date_of_foundation class+="w-100" %}
-                        {% render_field form.date_of_foundation.errors %}
+                        {% if form.date_of_foundation.errors %}
+                            {% render_field form.date_of_foundation class+="w-100 error" %}
+                        {% else %}
+                            {% render_field form.date_of_foundation class+="w-100" %}
+                        {% endif %}
+                        <div class="error">
+                            {% render_field form.date_of_foundation.errors %}
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-7">
                         <label for="id_research_field">حوزه فعالیت</label>
-                        {% render_field form.research_field class+="w-100" %}
-                        {% render_field form.research_field.errors %}
+                        {% if form.research_field.errors %}
+                            {% render_field form.research_field class+="w-100 error" %}
+                        {% else %}
+                            {% render_field form.research_field class+="w-100" %}
+                        {% endif %}
+                        <div class="error">
+                            {% render_field form.research_field.errors %}
+                        </div>
                     </div>
                     <div class="col-lg-5 rankDiv">
                         <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
                         <select id="id_industry_type" name="industry_type" class="w-100">
-                            <option dir="rtl" disabled>انتخاب کنید ...</option>
+                            <option dir="rtl" value="-1">انتخاب کنید ...</option>
                             <option value="0">خصوصی</option>
                             <option value="1">دولتی</option>
                         </select>
-                        {% render_field form.industry_type.errors %}
+                        <div class="error">
+                            {% render_field form.industry_type.errors %}
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="id_industry_address">نشانی</label>
-                        {% render_field form.industry_address class+="w-100" rows="3" dir="rtl" %}
-                        {% render_field form.industry_address.errors %}
+                        {% if form.industry_address.errors %}
+                            {% render_field form.industry_address class+="w-100 error" rows="3" dir="rtl" %}
+                        {% else %}
+                            {% render_field form.industry_address class+="w-100" rows="3" dir="rtl" %}
+                        {% endif %}
+                        <div class="error">
+                            {% render_field form.industry_address.errors %}
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <label for="id_phone_number">تلفن</label>
-                        {% render_field form.phone_number class+="w-100" %}
-                        {% render_field form.phone_number.errors %}
+                        {% if form.phone_number.errors %}
+                            {% render_field form.phone_number class+="w-100 error" %}
+                        {% else %}
+                            {% render_field form.phone_number class+="w-100" %}
+                        {% endif %}
+                        <div class="error">
+                            {% render_field form.phone_number.errors %}
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label for="id_email_address">پست الکترونیکی</label>
-                        {% render_field form.email_address class+="w-100" %}
-                        {% render_field form.email_address.errors %}
+                        {% if form.email_address.errors %}
+                            {% render_field form.email_address class+="w-100 error" %}
+                        {% else %}
+                            {% render_field form.email_address class+="w-100" %}
+                        {% endif %}
+                        <div class="error">
+                            {% render_field form.email_address.errors %}
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

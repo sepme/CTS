@@ -7,17 +7,32 @@ from django.contrib.auth.models import User
 from . import models
 
 
-class IndustryBasicInfoForm(forms.Form):
+class IndustryBasicInfoForm(forms.ModelForm):
     photo = forms.FileField(required=False)
     name = forms.CharField(max_length=300, required=False)
     registration_number = forms.CharField(max_length=50, required=False)
     date_of_foundation = forms.CharField(max_length=50, required=False)
-    research_field = forms.CharField(max_length=300, required=True,
-                                     error_messages={'required': 'حوزه فعالیت را وارد کنید'})
-    industry_type = forms.IntegerField(error_messages={'invalid': 'لطفا نوع شرکت را انتخاب کنید.'})
-    industry_address = forms.CharField(max_length=3000 ,widget=forms.Textarea())
-    phone_number = forms.CharField(max_length=15)
-    email_address = forms.EmailField()
+    research_field = forms.CharField(max_length=300, required=False )
+    industry_type = forms.IntegerField(required=False)
+    industry_address = forms.CharField(max_length=3000 ,widget=forms.Textarea(), required=False)
+    phone_number = forms.CharField(max_length=15, required=False)
+    email_address = forms.EmailField(required=False)
+
+    class Meta:
+        model = models.IndustryForm
+        fields = ['photo', 'name', 'registration_number', 'date_of_foundation', 'research_field'
+                 ,'industry_type', 'industry_address', 'phone_number', 'email_address'] 
+        
+        # error_massages = {
+        #     'name' : {'required' : 'نام نمی تواند خالی باشد.'},
+        #     'registration_number' : {'required': 'شماره ثبت نمی تواند خالی باشد.'},
+        #     'date_of_foundation' : {'required': 'شماره تاسیس نمی تواند خالی باشد.'},
+        #     'research_field' : {'required': 'حوزه فعالیت را وارد کنید'},
+        #     'industry_type' : {'required': ' نوع شرکت نمی تواند خالی باشد.'},
+        #     'industry_address' : {'required': 'نشانی نمی تواند خالی باشد.'},
+        #     'phone_number' : {'required': 'تلفن نمی تواند خالی باشد.'},
+        #     'email_address' : {'required': 'پست الکترونیکی نمی تواند خالی باشد.'},
+        # }
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -25,6 +40,8 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]
+        if data is None:
+            raise ValidationError(_("عکس نمی تواند خالی باشد."))
         return data
 
     def clean_name(self):
@@ -38,6 +55,8 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_registration_number(self):
         data = self.cleaned_data["registration_number"]
+        if data is "":
+            raise ValidationError(_("شماره ثبت نمی تواند خالی باشد."))
         try:
             int(data)
         except ValueError:
@@ -48,6 +67,8 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_date_of_foundation(self):
         data = self.cleaned_data["date_of_foundation"]
+        if data is "":
+            raise ValidationError(_("سال تاسیس نمی تواند خالی باشد."))
         try:
             int(data)
         except ValueError:
@@ -58,20 +79,28 @@ class IndustryBasicInfoForm(forms.Form):
 
     def clean_research_field(self):
         data = self.cleaned_data["research_field"]
+        if data == "":
+            raise ValidationError(_("حوزه فعالیت نمی تواند خالی باشد."))
         return data
 
     def clean_industry_type(self):
-        data = self.cleaned_data["industry_type"]
+        data = self.cleaned_data["industry_type"]                
+        if data == -1:
+            raise ValidationError(_("نوع شرکت نمی تواند خالی باشد."))
         return data
 
     def clean_industry_address(self):
         data = self.cleaned_data["industry_address"]
+        if data == "":
+            raise ValidationError(_("نشانی نمی تواند خالی باشد."))
         return data
 
     def clean_phone_number(self):
         data = self.cleaned_data["phone_number"]
         if not re.match(r'^([\d]+)$', data):
             raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
+        if len(data) != 11:
+            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
         return data
 
     def clean_email_address(self):

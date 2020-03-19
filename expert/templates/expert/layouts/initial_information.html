@@ -14,8 +14,18 @@
                         <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="profile"
                              width="150px" height="150px">
                         <input type="file" id="upload-input" name="photo" accept="image/png, image/jpeg">
+                        {{ form.photo |attr:'id:upload-input' |attr:'accept:image/png, image/jpeg'}}
+                        <div class="col-lg-7 text-center">
+                            <div class="error">
+                                {{ form.photo.errors }}
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
+                {% if form.photo.errors %}
+                    <div class="row"> <div class="col-lg-12"><br></div> </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-md-6">
                         {#for adding error add class "error" to input or textarea then add following div after that#}
@@ -99,7 +109,7 @@
                         {% if form.address.errors %}
                             {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4" }}
                         {% else %}
-                            {{ form.address|attr:"id:Address"|attr:"class:w-100" }}
+                            {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4" }}
                         {% endif %}
                         <div class="error">
                             <span class="error-body">{% render_field form.address.errors %}</span>

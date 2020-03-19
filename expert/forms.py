@@ -32,6 +32,13 @@ class InitialInfoForm(forms.Form):
     email_address = forms.EmailField(error_messages={'required': "ایمیل نمی تواند خالی باشد.",
                                                      'invalid': 'ایمیل وارد شده نامعتبر است.'})
 
+    def clean_photo(self):
+        data = self.cleaned_data["photo"]
+        if data is None:
+            raise ValidationError('عکس نمی تواند خالی باشد.')
+        return data
+    
+
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
         if is_numeric(first_name):
