@@ -158,7 +158,7 @@ img {
 }
 
 .dialog-main, .fixed-back {
-    overflow-y: scroll;
+    overflow-y: auto;
     justify-content: center;
 }
 
@@ -187,51 +187,52 @@ img {
     position: absolute;
     top: 0;
     left: 50%;
-    -webkit-transform: translate(-50%, -100%);
-    -moz-transform: translate(-50%, -100%);
-    -ms-transform: translate(-50%, -100%);
-    -o-transform: translate(-50%, -100%);
-    transform: translate(-50%, -100%);
+    /*-webkit-transform: translate(-50%, -100%);*/
+    /*-moz-transform: translate(-50%, -100%);*/
+    /*-ms-transform: translate(-50%, -100%);*/
+    /*-o-transform: translate(-50%, -100%);*/
+    transform: translateX(-50%);
     color: #262626;
     padding: 35px 10px 55px 10px;
     overflow: hidden;
     border-color: #BDBDBD;
-    -webkit-transition: all ease 0.2s;
-    -moz-transition: all ease 0.2s;
-    -ms-transition: all ease 0.2s;
-    -o-transition: all ease 0.2s;
-    transition: all ease 0.2s;
+    -webkit-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+    -moz-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+    -ms-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+    -o-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+    transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
 }
 
 .fixed-back.show > .card {
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    /*margin: 60px 0;*/
+    /*top: 50%;*/
+    /*-webkit-transform: translate(-50%, -50%);*/
+    /*-moz-transform: translate(-50%, -50%);*/
+    /*-ms-transform: translate(-50%, -50%);*/
+    /*-o-transform: translate(-50%, -50%);*/
+    transform: translateX(-50%);
+    margin: 50px 0 20px 0;
 }
 
 @media (max-width: 767px) {
     .fixed-back > .card {
         width: 100vw !important;
         border-radius: 1rem 1rem 0 0;
-        top: 100%;
-        -webkit-transform: translate(-50%, 0);
-        -moz-transform: translate(-50%, 0);
-        -ms-transform: translate(-50%, 0);
-        -o-transform: translate(-50%, 0);
-        transform: translate(-50%, 0);
+        /*top: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*-moz-transform: translate(-50%, 0);*/
+        /*-ms-transform: translate(-50%, 0);*/
+        /*-o-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
     }
 
     .fixed-back.show > .card {
-        top: 100%;
-        -webkit-transform: translate(-50%, -100%);
-        -moz-transform: translate(-50%, -100%);
-        -ms-transform: translate(-50%, -100%);
-        -o-transform: translate(-50%, -100%);
-        transform: translate(-50%, -100%);
+        /*top: 100%*/;
+        /*-webkit-transform: translate(-50%, -100%);*/
+        /*-moz-transform: translate(-50%, -100%);*/
+        /*-ms-transform: translate(-50%, -100%);*/
+        /*-o-transform: translate(-50%, -100%);*/
+        /*transform: translate(-50%, -100%);*/
+        margin-bottom: 0;
     }
 
     .fixed-back > .card.b-x2 {
@@ -658,7 +659,7 @@ label {
     right: 25px;
     color: #6f7285;
     z-index: 0;
-    transition: 300ms all ease;
+    transition: 200ms top ease, 200ms hover ease;
 }
 
 label.full-focus-out:after {
@@ -819,6 +820,11 @@ hr {
     height: 100%;
     display: flex;
     overflow: hidden;
+    -webkit-transition: filter ease-in-out 0.3s;
+    -moz-transition: filter ease-in-out 0.3s;
+    -ms-transition: filter ease-in-out 0.3s;
+    -o-transition: filter ease-in-out 0.3s;
+    transition: filter ease-in-out 0.3s;
 }
 
 @media (max-width: 767px) {
