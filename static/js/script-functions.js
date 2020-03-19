@@ -1,3 +1,6 @@
+function init_setup() {
+    autosize($("textarea"));
+}
 function init_windowSize() {
     // if ($(window).width() < 575.98) {
     // } else {

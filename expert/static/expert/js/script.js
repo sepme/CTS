@@ -352,6 +352,7 @@ $(document).ready(function () {
     * after clicking on 'show-btn' of a new research question, 'attachments' and
     * 'answers' of the previous one is still shown (in the case the previous one had it).
     */
+    init_setup();
     input_focus();
     showQuestion();
     $('*').persiaNumber();

@@ -45,55 +45,50 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="id_first_name">نام</label>
                                 <!-- <input type="text" id="FirstName" class="w-100"> -->
                                 {% render_field form.first_name class+="w-100" readonly="true" %}
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="id_last_name">نام خانوادگی</label>
                                 <!-- <input type="text" id="LastName" class="w-100"> -->
                                 {% render_field form.last_name class+="w-100" readonly="true" %}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-md-8">
                                 <label for="id_major">رشته تحصیلی</label>
                                 <!-- <input type="text" id="Field" class="w-100"> -->
                                 {% render_field form.major class+="w-100" readonly="true" %}
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-md-4">
                                 <label for="id_national_code">کد ملی</label>
                                 <!-- <input type="text" id="MelliCode" class="w-100"> -->
                                 {% render_field form.national_code class+="w-100" readonly="true" %}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-3 col-md-6">
                                 <label for="id_student_number">شماره دانشجویی</label>
                                 <!-- <input type="text" id="student-num" class="w-100"> -->
                                 {% render_field form.student_number class+="w-100" readonly="true" %}
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-2 col-md-6">
                                 <label for="id_entry_year">سال ورود</label>
                                 <!-- <input type="text" id="enter-date" class="w-100"> -->
                                 {% render_field form.entry_year class+="w-100" readonly="true" %}
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 rankDiv">
+                            <div class="col-lg-7 col-md-5 rankDiv">
                                 <label class="rankLabel" for="id_grade">آخرین مقطع تحصیلی</label>
-                                <select id="grade" name="grade" class="w-100">
-                                    <option selected dir="rtl">انتخاب کنید ...</option>
-
+                                <select id="id_grade" name="grade" class="w-100">
+                                    <option selected disabled dir="rtl">انتخاب کنید ...</option>
                                     {% for option in form.grade %}
                                         {{ option }}
                                     {% endfor %}
                                 </select>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 col-md-7">
                                 <label for="id_university">دانشگاه محل تحصیل</label>
                                 <!-- <input type="text" id="Uni" class="w-100"> -->
                                 {% render_field form.university class+="w-100" readonly="true" %}
@@ -103,11 +98,11 @@
                             <div class="col-lg-12">
                                 <label for="id_address">آدرس محل سکونت</label>
                                 <!-- <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea> -->
-                                {% render_field form.address class+="w-100" row="3" dir="rtl" %}
+                                {% render_field form.address class+="w-100" rows="3" dir="rtl" %}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="id_home_number">تلفن منزل</label>
                                 <!-- <input type="text" id="HomeNum" class="w-100"> -->
                                 {% render_field form.home_number class+="w-100" %}
@@ -116,7 +111,7 @@
                                     {{ home_number_error }}
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-md-6">
                                 <label for="id_phone_number">تلفن همراه</label>
                                 <!-- <input type="text" id="PhoneNum" class="w-100"> -->
                                 {% render_field form.phone_number class+="w-100" %}
@@ -299,8 +294,10 @@
                                 <div class="col-lg-12 text-right">
                                     <div class="w-100 text-center">
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">روحیه کار تیمی</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">روحیه کار تیمی</span>
+                                            </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="team_work" id="team_work-1" value="1"
                                                             {% if researcher_form.team_work == 1 %}
@@ -339,8 +336,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">تفکر خلاقانه</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">تفکر خلاقانه</span>
+                                            </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="creative_thinking"
                                                            id="creative_thinking-1"
@@ -389,8 +388,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">علاقه به رشته تحصیلی</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">علاقه به رشته تحصیلی</span>
+                                            </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="interest_in_major"
                                                            id="interest_in_major-1"
@@ -439,8 +440,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">انگیزه داشتن برای انجام پروژه</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">انگیزه داشتن برای انجام پروژه</span>
+                                            </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="motivation" id="motivation-1"
                                                            value="1"
@@ -484,8 +487,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">تعهد داشتن و از خودگذشتگی</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">تعهد داشتن و از خودگذشتگی</span>
+                                                </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="sacrifice" id="sacrifice-1" value="1"
                                                             {% if researcher_form.sacrifice == 1 %}
@@ -524,8 +529,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">پشتکار</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">پشتکار</span>
+                                            </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="diligence" id="diligence-1" value="1"
                                                             {% if researcher_form.diligence == 1 %}
@@ -564,8 +571,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">علاقه به یادگیری</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">علاقه به یادگیری</span>
+                                                </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="interest_in_learn"
                                                            id="interest_in_learn-1"
@@ -614,8 +623,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">وقت شناسی</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">وقت شناسی</span>
+                                                </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="punctuality" id="punctuality-1"
                                                            value="1"
@@ -659,8 +670,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">جمع آوری داده ها</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">جمع آوری داده ها</span>
+                                                </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="data_collection"
                                                            id="data_collection-1"
@@ -709,8 +722,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7 col-12">آگاهی از اصول انجام پروژه</div>
-                                            <div class="col-lg-5 col-12">
+                                            <div class="col-md-6 col-12">
+                                                <span class="radio-label">آگاهی از اصول انجام پروژه</span>
+                                            </div>
+                                            <div class="col-md-6 col-12">
                                                 <div class="radio-item">
                                                     <input type="radio" name="project_knowledge"
                                                            id="project_knowledge-1"
@@ -779,7 +794,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <!-- <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea> -->
-                                {% render_field form.description class+="w-100" row="3" dir="rtl" %}
+                                {% render_field form.description class+="w-100" rows="3" dir="rtl" %}
                                 <label for="id_description">چه ویژگی در تیم چمران شما را به عضویت در این تیم متمایل
                                     کرد؟</label>
 

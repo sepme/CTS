@@ -601,7 +601,8 @@ $(document).ready(function () {
         'onRemoveTag': newItem_label
     });
     tag_input_label("id_key_words");
-// variable
+    init_setup();
+    // variable
     edu_count = 0;
     exe_count = 0;
     stu_count = 0;

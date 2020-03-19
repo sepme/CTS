@@ -295,6 +295,7 @@ $(".trash").click(function (event) {
 
 $(document).ready(function () {
     // variable
+    init_setup();
     edu_count = 0;
     exe_count = 0;
     stu_count = 0;
