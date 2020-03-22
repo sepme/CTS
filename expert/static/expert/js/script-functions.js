@@ -66,7 +66,7 @@ function search_input(className) {
 }
 
 function close_dialog(className) {
-    $(".close, " + className).click(function () {
+    $(".close").click(function () {
         if($(className).closest(".fixed-back").hasClass("show-question")){
             $(className).find(".all-answers").html("");
             $(className).find(".question-attach").html('<ul class="inline-list">' +
