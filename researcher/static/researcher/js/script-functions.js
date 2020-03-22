@@ -65,9 +65,29 @@ function close_dialog(className) {
     $(".close").click(function () {
         $(className).removeClass("show");
         $(".main").removeClass("blur-div");
-        $(className).find("input").val("");
-        $(className).find("input:checked").prop("checked", false);
-        $(className).find(".keywords").html("");
+        if (className === ".add-technique") {
+            express();
+            $(className).find("input").val("");
+            $(className).find("input:checked").prop("checked", false);
+            reset($(className).find(".upload-resume + label"));
+            let upload_resume = ".fixed-back input.upload-resume";
+            reset($(upload_resume).closest("div").find("img.upload-img"));
+            reset($(upload_resume).closest("div").find("img.file-img"));
+            $(upload_resume).next().find(".upload-file-text").css("padding-top", "0").html("آپلود فایل");
+        } else if (className === ".review-request") {
+            $(className).find("textarea").val("");
+            $(className).find("input:checked").prop("checked", false);
+            reset($(className).find(".upload-resume + label"));
+            let upload_resume = ".fixed-back input.upload-resume";
+            reset($(upload_resume).closest("div").find("img.upload-img"));
+            reset($(upload_resume).closest("div").find("img.file-img"));
+            $(upload_resume).next().find(".upload-file-text").css("padding-top", "0").html("آپلود فایل");
+        } else {
+            $(className).find("input").val("");
+            $(className).find("input:checked").prop("checked", false);
+            $(className).find(".keywords").html("");
+        }
+        input_focus();
     });
 }
 
@@ -621,46 +641,38 @@ if (window.location.href.indexOf("researcher/technique/") > -1) {
         $(".fixed-back .select-technique i").removeClass("fa-search").addClass("fa-plus");
         $(".fixed-back label[for='technique-name']").html("نام تکنیک");
     }
-}
 
-function select_technique(className) {
-
-    $(className).click(function () {
+    $(".fixed-back .select-technique").click(function () {
         if ($(".fixed-back input#technique-name").hasClass("expand")) {
             express();
         } else {
             expand();
         }
+
     });
-    // $("li[role='treeitem']").click(function () {
-    //     var tree = $("#fancy-tree").fancytree({
-    //         activate: function (event, data) {
-    //             node = data.node;
-    //             $("input#technique-name").val(node.title);
-    //             express();
-    //             input_focus();
-    //         }
-    //     });
-    // });
     $(".fixed-back input.upload-resume").next().hover(function () {
         $(this).find("svg").find("path").attr("fill", "#3ccd1c");
     }, function () {
         $(this).find("svg").find("path").attr("fill", "#bdbdbd");
     });
+
     $(".fixed-back .confirmation .upload-file").click(function () {
         $(this).closest("form").find("input.upload-resume").next().slideDown("slow").closest("div.col-12").css("padding-bottom", "15px");
     });
+
     $(".fixed-back .confirmation .close-upload").click(function () {
         $(this).closest("form").find("input.upload-resume").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
     });
+
     $(".fixed-back input.upload-resume").on("change", function () {
-        $(this).next().find("svg").first().css("display", "none");
-        $(this).next().find("svg").last().css("display", "block");
-        var fileName = $(this).val().split("\\").pop();
+        $(this).closest("div").find("img.upload-img").css("display", "none");
+        $(this).closest("div").find("img.file-img").css("display", "block");
+        let fileName = $(this).val().split("\\").pop();
         $(this).next().find(".upload-file-text").css("padding-top", "5px")
             .html(fileName);
     });
 }
+
 
 function question() {
     $(".show-researching-question").click(function () {
@@ -685,18 +697,13 @@ function question() {
         $(this).closest("form").find("input.upload-answer").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
     });
     $("input.upload-answer").on("change", function () {
-        $(this).next().find("svg").first().css("display", "none");
-        $(this).next().find("svg").last().css("display", "block");
+        $(this).closest("div").find("img.upload-img").css("display", "none");
+        $(this).next("img.file-img").css("display", "block");
         var fileName = $(this).val().split("\\").pop();
         $(this).next().find(".upload-file-text").css("padding-top", "5px")
             .html(fileName);
     });
 
-    function counter() {
-
-    }
-
-    counter();
 }
 
 function getCookie(name) {

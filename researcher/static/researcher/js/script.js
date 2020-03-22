@@ -1015,7 +1015,7 @@ $(".add-new-technique").click(function (event) {
                 }
                 source.push(item);
             }
-            select_technique(".select-technique");
+
             $("#fancy-tree").fancytree({
                 extensions: ["glyph"],
                 checkbox: false,
@@ -1023,16 +1023,20 @@ $(".add-new-technique").click(function (event) {
                 checkboxAutoHide: true,
                 clickFolderMode: 2,
                 lazyLoad: function (event, data) {
-                    data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                    data.result = {url: 'https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json'};
                 },
                 select: function (event, data) {
 
                 },
                 activate: function (event, data) {
-                    node = data.node;
+                    let node = data.node;
                     $("input#technique-name").val(node.title);
                     express();
                     input_focus();
+                    let inputLabel = "label[for='#technique-name']";
+                    $(inputLabel).css({
+                        "color": "#8d8d8d"
+                    });
                 },
                 source: source,
                 glyph: {

@@ -290,17 +290,26 @@ img {
     .fixed-back > .small-card {
         width: 550px;
     }
+    .fixed-back > .medium-card {
+        width: 50%;
+    }
 }
 
 @media (max-width: 1200px) {
     .fixed-back > .small-card {
         width: 550px;
     }
+    .fixed-back > .medium-card {
+        width: 60%;
+    }
 }
 
 @media (max-width: 992px) {
     .fixed-back > .small-card {
         width: 500px;
+    }
+    .fixed-back > .medium-card {
+        width: 70%;
     }
 }
 

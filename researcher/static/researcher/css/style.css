@@ -1339,16 +1339,19 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     display: none;
 }
 
-.fixed-back .upload-resume + label svg {
+.fixed-back .upload-resume + label img {
     width: 50px;
     right: 50%;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
     transform: translateX(50%);
     position: relative;
     height: 50px;
     display: block;
 }
 
-.fixed-back .upload-resume + label svg:nth-child(2) {
+.fixed-back .upload-resume + label img.file-img {
     display: none;
 }
 

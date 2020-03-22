@@ -1,3 +1,6 @@
+function reset(element) {
+    element.removeAttr("style");
+}
 function init_setup() {
     autosize($("textarea"));
 }
@@ -20,20 +23,20 @@ function init_windowSize() {
 }
 
 function loading() {
-    $(".main").addClass("blur-div");
-    var canvas = $("#loading-canvas");
-    canvas.drawArc({
-        strokeStyle: '#000',
-        strokeWidth: 4,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x: 160, y: 120,
-        start: 90,
-        end: 360,
-        radius: 50
-    });
+    // $(".main").addClass("blur-div");
+    // let canvas = $("#loading-canvas");
+    // canvas.drawArc({
+    //     strokeStyle: '#000',
+    //     strokeWidth: 4,
+    //     rounded: true,
+    //     endArrow: true,
+    //     arrowRadius: 15,
+    //     arrowAngle: 90,
+    //     x: 160, y: 120,
+    //     start: 90,
+    //     end: 360,
+    //     radius: 50
+    // });
 }
 
 function blur_div_toggle(content) {
@@ -47,7 +50,7 @@ function blur_div_toggle(content) {
 function input_focus() {
     if ($("input[type='text'],input[type='email'],textarea, input[type='number']").prop("disabled")) {
         $(this).each(function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
+            let inputLabel = "label[for='" + $(this).attr("id") + "']";
             $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
                 "font-size": "13px",
@@ -59,7 +62,7 @@ function input_focus() {
         });
     }
     $("input[type='text'],input[type='email'],textarea, input[type='number']").each(function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
+        let inputLabel = "label[for='" + $(this).attr("id") + "']";
         if ($(this).val() !== '') {
             $(inputLabel).addClass("full-focus-out");
             $(inputLabel).css({
@@ -69,12 +72,21 @@ function input_focus() {
                 "color": "#6f7285",
                 "padding": "0 10px"
             });
+        } else {
+            $(inputLabel).removeClass("full-focus-out");
+            $(inputLabel).css({
+                "font-size": "13px",
+                "top": "28px",
+                "right": "25px",
+                "color": "#6f7285",
+                "padding": "0"
+            });
         }
         if ($(this).hasClass("error")) {
             $(inputLabel).css("color", "#ff4545");
         }
     }).on("focus", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
+        let inputLabel = "label[for='" + $(this).attr("id") + "']";
         if ($(this).hasClass("solid-label")) {
             return false;
         } else if ($(this).hasClass("error")) {
@@ -96,7 +108,7 @@ function input_focus() {
             $(this).css("color", "#3ccd1c");
         }
     }).on("focusout", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
+        let inputLabel = "label[for='" + $(this).attr("id") + "']";
         if ($(this).hasClass("solid-label")) {
             return false;
         } else if ($(this).hasClass("error")) {
