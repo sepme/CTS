@@ -1291,7 +1291,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
 }
 
 .fixed-back .confirmation {
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .fixed-back .confirmation .title {
@@ -1305,6 +1305,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     position: relative;
     border: 1px solid #bdbdbd;
     width: 100% !important;
+    top: 0;
     right: 0 !important;
     padding: 0;
     -webkit-border-radius: 0.25em;
@@ -1454,7 +1455,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
 }
 
 .fixed-back .confirmation .radio-group {
-    margin-bottom: 25px;
+    /*margin-bottom: 25px;*/
 }
 
 .question-attach {

@@ -62,7 +62,7 @@ function search_input(className) {
 }
 
 function close_dialog(className) {
-    $(".close" ).click(function () {
+    $(".close").click(function () {
         $(className).removeClass("show");
         $(".main").removeClass("blur-div");
         $(className).find("input").val("");
@@ -377,8 +377,7 @@ function show_research_record(pk) {
             "<i class='fas fa-trash-alt delete_stu' value=" + pk + "></i>" +
             "</td>" +
             "</tr></tbody>";
-    }
-     else if ($("#rank").val() == 2) {
+    } else if ($("#rank").val() == 2) {
         row = "<tbody class='row-stu-" + pk + "'><tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
@@ -389,19 +388,18 @@ function show_research_record(pk) {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr></tbody>";
-        }
-    else if ( $("#rank").val() == 3) {
-            row = "<tbody class='row-stu-" + pk + "'><tr>" +
-                "<td>" + $("#subject").val() + "</td>" +
-                "<td>" + $("#admin").val() + "</td>" +
-                "<td>" + $("#liable").val() + "</td>" +
-                "<td>متوقف</td>" +
-                "<td>" +
-                "<i class='fas fa-pen' id='edit_stu'></i>" +
-                "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
-                "</td>" +
-                "</tr></tbody>";
-            }
+    } else if ($("#rank").val() == 3) {
+        row = "<tbody class='row-stu-" + pk + "'><tr>" +
+            "<td>" + $("#subject").val() + "</td>" +
+            "<td>" + $("#admin").val() + "</td>" +
+            "<td>" + $("#liable").val() + "</td>" +
+            "<td>متوقف</td>" +
+            "<td>" +
+            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+            "</td>" +
+            "</tr></tbody>";
+    }
     if (!$(".studious > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -572,6 +570,7 @@ function vote_slider(slide_count) {
             }
         });
     }
+
     next_button_init();
     $(".prev-button").click(function () {
         if (counter > 0) {
@@ -599,8 +598,7 @@ function vote_slider(slide_count) {
     });
 }
 
-function select_technique(className) {
-
+if (window.location.href.indexOf("researcher/technique/") > -1) {
     function slide_up() {
         $(".fixed-back .all-techniques").slideUp('slow');
         return $.Deferred().resolve(false);
@@ -623,6 +621,9 @@ function select_technique(className) {
         $(".fixed-back .select-technique i").removeClass("fa-search").addClass("fa-plus");
         $(".fixed-back label[for='technique-name']").html("نام تکنیک");
     }
+}
+
+function select_technique(className) {
 
     $(className).click(function () {
         if ($(".fixed-back input#technique-name").hasClass("expand")) {
@@ -631,16 +632,16 @@ function select_technique(className) {
             expand();
         }
     });
-    $("li[role='treeitem']").click(function () {
-        var tree = $("#fancy-tree").fancytree({
-            activate: function (event, data) {
-                node = data.node;
-                $("input#technique-name").val(node.title);
-                express();
-                input_focus();
-            }
-        });
-    });
+    // $("li[role='treeitem']").click(function () {
+    //     var tree = $("#fancy-tree").fancytree({
+    //         activate: function (event, data) {
+    //             node = data.node;
+    //             $("input#technique-name").val(node.title);
+    //             express();
+    //             input_focus();
+    //         }
+    //     });
+    // });
     $(".fixed-back input.upload-resume").next().hover(function () {
         $(this).find("svg").find("path").attr("fill", "#3ccd1c");
     }, function () {
@@ -729,15 +730,15 @@ $.ajaxSetup({
     }
 });
 
-$(".delete_edu").click(function(){
+$(".delete_edu").click(function () {
     let pk = $(this).attr("value");
     $.ajax({
         method: 'POST',
         url: "/researcher/delete_scientific/",
         dataType: 'json',
-        data: {pk : pk},
+        data: {pk: pk},
         success: function (data) {
-            $(".row-sci-"+pk).remove();
+            $(".row-sci-" + pk).remove();
         },
         error: function (data) {
             console.log(data);
@@ -745,7 +746,7 @@ $(".delete_edu").click(function(){
     });
 });
 
-$(".delete_stu").click(function(){
+$(".delete_stu").click(function () {
     let pk = $(this).attr("value");
     console.log("delete_stu");
     console.log(pk);
@@ -753,10 +754,10 @@ $(".delete_stu").click(function(){
         method: 'POST',
         url: "/researcher/delete_studious/",
         dataType: 'json',
-        data: {pk : pk},
+        data: {pk: pk},
         success: function (data) {
             console.log(pk);
-            $(".row-stu-"+pk).remove();
+            $(".row-stu-" + pk).remove();
         },
         error: function (data) {
             console.log(data);
@@ -764,7 +765,7 @@ $(".delete_stu").click(function(){
     });
 });
 
-$(".delete_exe").click(function(){
+$(".delete_exe").click(function () {
     let pk = $(this).attr("value");
     console.log("delete_exe");
     console.log(pk);
@@ -772,10 +773,10 @@ $(".delete_exe").click(function(){
         method: 'POST',
         url: "/researcher/delete_executive/",
         dataType: 'json',
-        data: {pk : pk},
+        data: {pk: pk},
         success: function (data) {
-            $(".row-exe-"+pk).remove();
-            if (!$(".executive > table").hasClass("tbody")) 
+            $(".row-exe-" + pk).remove();
+            if (!$(".executive > table").hasClass("tbody"))
                 console.log("doesnt have tbody");
         },
         error: function (data) {

@@ -68,7 +68,7 @@
                                             <div class="status text-center">
                                                 <div class="label">بودجه</div>
                                                 <div class="value">
-                                                    <span>{{ project.project_form.required_budget}}</span>
+                                                    <span>{{ project.project_form.required_budget }}</span>
                                                     <span>ریال</span>
                                                 </div>
                                             </div>
@@ -76,12 +76,27 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-3">
-                                    <button class="default-btn preview-project" id={{project.pk}}
+                                    <button class="default-btn preview-project" id={{ project.pk }}
                                             data-url="{% url 'expert:show_project' %}">
                                         مشاهده
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="no-project-container">
+                        <div class="no-project">
+                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
+                            <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>
+                            <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>
+                            <span>
+                                                        <i class="fas fa-cog"></i>
+                                                        <span>تنظیمات کاربری</span>
+                                                    </span>
+                            <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت
+                                و
+                                اطمینان کامل، پروژه شان را به شما بسپارند.</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -113,21 +128,21 @@
             {#                            </div>#}
             {#                        </div>#}
             {#                    </div>#}
-            {#                {% empty %}#}
-            {#                    <div class="no-project-container">#}
-            {#                        <div class="no-project">#}
-            {#                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">#}
-            {#                            <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>#}
-            {#                            <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>#}
-            {#                            <span>#}
-            {#                                            <i class="fas fa-cog"></i>#}
-            {#                                            <span>پروفایل کاربری</span>#}
-            {#                                        </span>#}
-            {#                            <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت#}
-            {#                                و#}
-            {#                                اطمینان کامل، پروژه شان را به شما بسپارند.</p>#}
-            {#                        </div>#}
-            {#                    </div>#}
+            {#                            {% empty %}#}
+            {#                                <div class="no-project-container">#}
+            {#                                    <div class="no-project">#}
+            {#                                        <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">#}
+            {#                                        <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>#}
+            {#                                        <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>#}
+            {#                                        <span>#}
+            {#                                                        <i class="fas fa-cog"></i>#}
+            {#                                                        <span>پروفایل کاربری</span>#}
+            {#                                                    </span>#}
+            {#                                        <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت#}
+            {#                                            و#}
+            {#                                            اطمینان کامل، پروژه شان را به شما بسپارند.</p>#}
+            {#                                    </div>#}
+            {#                                </div>#}
             {#                    <div class="row">#}
             {#                        <div class="col-lg-12">#}
             {#                            <div class="card project-item">#}
@@ -185,7 +200,7 @@
             {#                    </div>#}
             {#                {% endfor %}#}
         </div>
-{#        <div class="col-lg-3">col-lg-3</div>#}
+        {#        <div class="col-lg-3">col-lg-3</div>#}
     </div>
     <a href="#top" class="top-button">
         <i class="fas fa-angle-up"></i>

@@ -1,6 +1,7 @@
 function init_setup() {
     autosize($("textarea"));
 }
+
 function init_windowSize() {
     // if ($(window).width() < 575.98) {
     // } else {
@@ -77,12 +78,11 @@ function input_focus() {
         if ($(this).hasClass("solid-label")) {
             return false;
         } else if ($(this).hasClass("error")) {
-            var errorDiv = $(this).next(".error");
+            let errorDiv = $(this).next(".error");
             $(this).on("change", function () {
-                if ($(this).hasClass("error")) {
-                    $(this).removeClass("error");
-                    $(errorDiv).remove();
-                }
+                console.log($(this).attr("id"));
+                $(this).removeClass("error");
+                errorDiv.remove();
             });
         } else {
             $(inputLabel).addClass("full-focus-out");

@@ -68,8 +68,7 @@ $(".chamran-btn-info").click(function () {
                     + "</span>"
                 );
             }
-            if (data.status == "waiting" || data.status == "involved")
-            {
+            if (data.status == "waiting" || data.status == "involved") {
                 console.log(data.status);
                 $('.vote').remove();
                 $('.apply').remove();
@@ -666,6 +665,21 @@ executive_form.submit(function (event) {
     })
 });
 
+// Techniques Search Input
+if (window.location.href.indexOf("researcher/technique/") > -1) {
+    $("#technique-name").on("focus", function () {
+        if ($(this).hasClass("expand")) {
+            console.log("f");
+            $(this).closest("div").find(".all-techniques").css("border-color", "#3CCD1C");
+        }
+    }).on("focusout", function () {
+        if ($(this).hasClass("expand")) {
+            console.log("o");
+            $(this).closest("div").find(".all-techniques").css("border-color", "#bdbdbd");
+        }
+    });
+}
+
 var technique_review = $('#technique_review');
 technique_review.submit(function (event) {
     event.preventDefault();
@@ -746,33 +760,52 @@ technique_review.submit(function (event) {
 });
 
 function show_add_technique_record(title) {
-    new_tech = "<div class='card active-question flow-root-display'>" +
-        "<div class='technique-title w-50'>" +
-        title +
-        "</div>" +
-        "<div class='technique-info w-50'>" +
-        "<div class='w-25'></div>" +
-        "<div class='mark w-25'><span>" +
-        "در حال بررسی..." +
-        "<span></div>" +
-        "<div class='date w-25'><span>" +
-        "امروز" +
-        "</span></div>" +
-        "<div class='show w-25'><button class='default-btn show-btn new-review-request'>ارتقا نمره</button></div>" +
-        "</div></div>";
-    $(".techniques-list").append(new_tech);
+    let newTechnique = "" +
+        "<div class='card box flow-root-display w-100'>" +
+        "    <div class='box-header text-right'>" +
+        "        <h6>" + title + "</h6>" +
+        "    </div>" +
+        "    <div class='box-body'>" +
+        "        <div class='row'>" +
+        "            <div class='col-md-6 col-8'>" +
+        "                <div class='row'>" +
+        "                    <div class='col-6'>" +
+        "                        <div class='date text-center'>" +
+        "                            <div class='label'>ثبت</div>" +
+        "                            <div class='value'>" +
+        "                                <span>امروز</span>" +
+        "                            </div>" +
+        "                        </div>" +
+        "                    </div>" +
+        "                    <div class='col-6 text-center'>" +
+        "                        <div class='label'>سطح تسلط</div>" +
+        "                        <div class='value'>" +
+        "                            <span>" +
+        "در حال بررسی...                               " +
+        "                            </span>" +
+        "                        </div>" +
+        "                    </div>" +
+        "                </div>" +
+        "            </div>" +
+        "            <div class='col-md-6 col-4'>" +
+        "                <button class='default-btn show-btn new-review-request'>ارتقا نمره</button>" +
+        "            </div>" +
+        "        </div>" +
+        "    </div>" +
+        "</div>";
+    $(".techniques-list").append(newTechnique);
 }
 
-var add_technique_form = $('.ajax-add-technique-form');
+let add_technique_form = $('.ajax-add-technique-form');
 add_technique_form.submit(function (event) {
     event.preventDefault();
     add_technique_form.find("button[type='submit']").addClass("loading-btn").attr("disabled", "true").css("color", "transparent");
     add_technique_form.find("button[type='reset']").attr("disabled", "true");
     add_technique_form.find("label").addClass("progress-cursor");
     add_technique_form.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = add_technique_form.attr('url');
+    let $thisURL = add_technique_form.attr('url');
     // var data = $(this).serialize().toString();
-    var data = new FormData(add_technique_form.get(0));
+    let data = new FormData(add_technique_form.get(0));
     add_technique_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -982,6 +1015,7 @@ $(".add-new-technique").click(function (event) {
                 }
                 source.push(item);
             }
+            select_technique(".select-technique");
             $("#fancy-tree").fancytree({
                 extensions: ["glyph"],
                 checkbox: false,
@@ -993,6 +1027,12 @@ $(".add-new-technique").click(function (event) {
                 },
                 select: function (event, data) {
 
+                },
+                activate: function (event, data) {
+                    node = data.node;
+                    $("input#technique-name").val(node.title);
+                    express();
+                    input_focus();
                 },
                 source: source,
                 glyph: {
@@ -1023,7 +1063,6 @@ $(".add-new-technique").click(function (event) {
                     }
                 },
             });
-            select_technique(".select-technique");
         },
     });
 });
