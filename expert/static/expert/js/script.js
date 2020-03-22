@@ -124,6 +124,40 @@ function showQuestion() {
 }
 
 $(document).ready(function () {
+    /*
+    * I didn't find a better place to put this;
+    * so please move this part to a section you prefer.
+    * By the way, it has a big problem (expect those told earlier in comments),
+    * after clicking on 'show-btn' of a new research question, 'attachments' and
+    * 'answers' of the previous one is still shown (in the case the previous one had it).
+    */
+    init_setup();
+    input_focus();
+    showQuestion();
+    $('*').persiaNumber();
+    question_dialog_init();
+    question_page_init();
+    init_dialog_btn(".preview-project", ".showProject");
+    // init_dialog_btn(".preview-project", ".project-details");
+    init_dialog_btn(".confirm_project", ".select-technique");
+    init_dialog_btn("#accept-techniques", ".project-details");
+    init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+    init_dialog_btn(".question-info .show-btn", ".show-question");
+    init_dialog_btn(".add-new-question", ".add-question");
+    init_dialog_btn(".education-btn", ".scientific_form");
+    init_dialog_btn(".executive-btn", ".executive_form");
+    init_dialog_btn(".research-btn", ".research_form");
+    init_dialog_btn(".paper-btn", ".paper_form");
+    init_dialog_btn(".technique", ".technique-dialog-main");
+    search_input(".search_message");
+
+    $('.content').scroll(function () {
+        if ($(".content").scrollTop() > 300) {
+            $("a.top-button").addClass('show');
+        } else {
+            $("a.top-button").removeClass('show');
+        }
+    });
 
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
 
@@ -326,58 +360,6 @@ $(document).ready(function () {
             }
         });
     }
-});
-
-$('*').persiaNumber();
-input_focus();
-question_dialog_init();
-question_page_init();
-init_dialog_btn(".preview-project", ".showProject");
-init_dialog_btn(".confirm_project", ".select-technique");
-init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-init_dialog_btn(".question-info .show-btn", ".show-question");
-init_dialog_btn(".add-new-question", ".add-question");
-init_dialog_btn(".education-btn", ".scientific_form");
-init_dialog_btn(".executive-btn", ".executive_form");
-init_dialog_btn(".research-btn", ".research_form");
-init_dialog_btn(".paper-btn", ".paper_form");
-init_dialog_btn(".technique", ".technique-dialog-main");
-search_input(".search_message");
-
-$(document).ready(function () {
-    /*
-    * I didn't find a better place to put this;
-    * so please move this part to a section you prefer.
-    * By the way, it has a big problem (expect those told earlier in comments),
-    * after clicking on 'show-btn' of a new research question, 'attachments' and
-    * 'answers' of the previous one is still shown (in the case the previous one had it).
-    */
-    init_setup();
-    input_focus();
-    showQuestion();
-    $('*').persiaNumber();
-    question_dialog_init();
-    question_page_init();
-    init_dialog_btn(".preview-project", ".showProject");
-    init_dialog_btn(".preview-project", ".project-details");
-    init_dialog_btn(".confirm_project", ".select-technique");
-    init_dialog_btn("#accept-techniques", ".project-details");
-    init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".question-info .show-btn", ".show-question");
-    init_dialog_btn(".add-new-question", ".add-question");
-    init_dialog_btn(".education-btn", ".scientific_form");
-    init_dialog_btn(".executive-btn", ".executive_form");
-    init_dialog_btn(".research-btn", ".research_form");
-    init_dialog_btn(".paper-btn", ".paper_form");
-    init_dialog_btn(".technique", ".technique-dialog-main");
-    search_input(".search_message");
-    $('.content').scroll(function () {
-        if ($(".content").scrollTop() > 300) {
-            $("a.top-button").addClass('show');
-        } else {
-            $("a.top-button").removeClass('show');
-        }
-    });
     //****************************************//
     //  Questions Page
     //****************************************//
@@ -742,7 +724,7 @@ function education_record() {
     })
 }
 
-var executiveForm = $('.ajax-executive-form');
+let executiveForm = $('.ajax-executive-form');
 executiveForm.submit(function (event) {
     event.preventDefault();
     executiveForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -750,8 +732,8 @@ executiveForm.submit(function (event) {
     executiveForm.find("button[type='reset']").attr("disabled", "true");
     executiveForm.find("label").addClass("progress-cursor");
     executiveForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = executiveForm.attr('data-url');
-    var data = $(this).serialize().toString();
+    let $thisURL = executiveForm.attr('data-url');
+    let data = $(this).serialize().toString();
     executiveForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -1037,14 +1019,14 @@ function setDates(date) {
     $(".date_finished").html(date[4]);
 }
 
-function projectDetail(data){
+function projectDetail(data) {
     console.log("project_detail");
     let techniques = "";
     for (let tech_index = 0; tech_index < data.techniques.length; tech_index++) {
         const element = data.techniques[tech_index];
         techniques += "<span class='border-span'>" +
-                      element +
-                      "</span>";
+            element +
+            "</span>";
     }
     $(".techniques").html(techniques);
     $("#industry-name").val(data.industry_name);
@@ -1057,16 +1039,16 @@ function projectDetail(data){
     setValue(data);
     setComment(data.comments);
 
-    $(".fa-trash-alt").click(function(){
+    $(".fa-trash-alt").click(function () {
         deleteComment($(this).closest('.my-comment'));
     });
 }
 
-var showInfo = $('.preview-project');
+let showInfo = $('.preview-project');
 showInfo.click(function (event) {
     console.log("-----------");
     $.ajax({
-        url: $(this).attr('data-url'), 
+        url: $(this).attr('data-url'),
         method: 'GET',
         data: {
             id: $(this).attr("id")
@@ -1074,14 +1056,14 @@ showInfo.click(function (event) {
         dataType: 'json',
         success: function (data) {
             console.log(data);
-            if (data.status == "non active"){
+            if (data.status == "non active") {
                 console.log("non active");
                 $(".hidden").attr("style", "display : none;");
                 $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
                 $(".showProject").find(".establish-time .time-body").html(data.date);
                 $(".showProject").find(".time-left .time-body").html(data.deadline);
                 const keys = JSON.parse(data.key_words);
-                var keys_code = '';
+                let keys_code = '';
                 for (let i = 0; i < keys.length; i++) {
                     keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
                 }
@@ -1090,11 +1072,10 @@ showInfo.click(function (event) {
                 setValue(data);
                 setComment(data.comments);
 
-                $(".fa-trash-alt").click(function(){
+                $(".fa-trash-alt").click(function () {
                     deleteComment($(this).closest('.my-comment'));
                 });
-            }
-            else{
+            } else {
                 console.log("active");
                 $(".hidden").attr("style", "display : block;");
                 projectDetail(data);
@@ -1248,19 +1229,19 @@ function setMajors(data) {
 }
 
 function setValue(data) {
-    $("#v-pills-settings-tab").click(function () {
+    $("#v-pills-roles-tab").click(function () {
         setRole(data);
         $('*').persiaNumber();
     });
-    $("#v-pills-messages-tab").click(function () {
+    $("#v-pills-resources-tab").click(function () {
         setResources(data);
         $('*').persiaNumber();
     });
-    $("#v-pills-profile-tab").click(function () {
+    $("#v-pills-approaches-tab").click(function () {
         setApproach(data);
         $('*').persiaNumber();
     });
-    $("#v-pills-home-tab").click(function () {
+    $("#v-pills-majors-tab").click(function () {
         setMajors(data);
         $('*').persiaNumber();
     });

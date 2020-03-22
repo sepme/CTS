@@ -254,44 +254,6 @@ span.title-back {
 /*.nav-pills > .nav-link:nth-child(4)::after {*/
 /*    content: 'قوانین';*/
 /*}*/
-
-.question-mark {
-    height: 100%;
-    padding-left: 5px;
-}
-
-.question {
-    font-weight: bold;
-    color: #3CCD1C;
-    padding-right: 2px;
-}
-
-.answer {
-    font-weight: 300;
-    padding-right: 20px;
-}
-
-.accept-btn, .refuse-btn {
-    padding: 10px 5px;
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: 0.25em;
-    color: #fff;
-    /*box-shadow: 5px 5px 5px 20px #000;*/
-}
-
-.accept-btn:hover, .refuse-btn:hover {
-    box-shadow: none;
-}
-
-.accept-btn {
-    background-color: #3CCD1C;
-}
-
-.refuse-btn {
-    background-color: #ff4545;
-}
-
 span.border-span {
     display: inline-block;
     -webkit-border-radius: 0.25em;

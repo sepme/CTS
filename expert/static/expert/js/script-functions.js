@@ -66,8 +66,10 @@ function search_input(className) {
 }
 
 function close_dialog(className) {
-    $(".close, " + className).click(function () {
-        if($(className).closest(".fixed-back").hasClass("show-question")){
+    $(".close").click(function () {
+        $(className).removeClass("show");
+        $(".main").removeClass("blur-div");
+        if ($(className).closest(".fixed-back").hasClass("show-question")) {
             $(className).find(".all-answers").html("");
             $(className).find(".question-attach").html('<ul class="inline-list">' +
                 '<li class="list-item">' +
@@ -77,9 +79,10 @@ function close_dialog(className) {
                 '</a>' +
                 '</li>' +
                 '</ul>');
+        } else if (className === ".showProject") {
+            $(".showProject .nav .nav-link").removeClass("active");
+            $(".showProject .nav .nav-link#v-pills-majors-tab").addClass("active");
         }
-        $(className).removeClass("show");
-        $(".main").removeClass("blur-div");
     });
 }
 
@@ -756,9 +759,11 @@ function question_dialog_init() {
             method: 'GET',
             url: '/expert/set_answer_situation/',
             dataType: 'json',
-            data: {id: id, type:true},
-            success: function (data) {},
-            error: function (data) {},
+            data: {id: id, type: true},
+            success: function (data) {
+            },
+            error: function (data) {
+            },
         });
     });
     $(".answer .check .wrong button").click(function () {
@@ -769,9 +774,11 @@ function question_dialog_init() {
             method: 'GET',
             url: '/expert/set_answer_situation/',
             dataType: 'json',
-            data: {id: id, type:false},
-            success: function (data) {},
-            error: function (data) {},
+            data: {id: id, type: false},
+            success: function (data) {
+            },
+            error: function (data) {
+            },
         });
     });
 
@@ -815,18 +822,18 @@ function show_question_answers(data) {
     var answer = '';
     for (i = 0; i < data.length; i++) {
         answer = answer + '<div class="col-lg-12">' +
-            '<div class="answer" is-correct="'+ data[i].is_correct +'">' +
+            '<div class="answer" is-correct="' + data[i].is_correct + '">' +
             '<span class="title">' + data[i].researcher_name + '</span>' +
             '<span class="date">' + data[i].hand_out_date + '</span>' +
             '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
             '<div class="check">' +
             '<div class="correct">' +
-            '<button type="button" title="صحیح" id="' + data[i].answer_id +'">' +
+            '<button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
             '<i class="fas fa-check"></i>' +
             '</button>' +
             '</div>' +
             '<div class="wrong">' +
-            '<button type="button" title="نادرست" id="' + data[i].answer_id +'">' +
+            '<button type="button" title="نادرست" id="' + data[i].answer_id + '">' +
             '<i class="fas fa-times"></i>' +
             '</button>' +
             '</div>' +
@@ -838,13 +845,14 @@ function show_question_answers(data) {
     $(".all-answers").html(answer);
     $(".answer").each(function () {
         let is_correct = $(this).attr("is-correct");
-        if (is_correct==='correct') {
+        if (is_correct === 'correct') {
             set_answer_true($(this).find(".check").find(".correct").find("button"))
-        } else if (is_correct==='wrong') {
+        } else if (is_correct === 'wrong') {
             set_answer_wrong($(this).find(".check").find(".correct").find("button"))
         }
     })
 }
+
 function select_technique(className) {
     // $("li[role='treeitem']").click(function () {
     //     var tree = $("#fancy-tree").fancytree({
@@ -865,12 +873,12 @@ function select_technique(className) {
         console.log("FUCK");
         console.log($(this).val());
         console.log(e);
-       if(e.keyCode === 13) {
-           if($(this).val() !== "") {
-               $('#tags').addTag($(this).val());
-               $(this).val("");
-           }
-       }
+        if (e.keyCode === 13) {
+            if ($(this).val() !== "") {
+                $('#tags').addTag($(this).val());
+                $(this).val("");
+            }
+        }
     });
 }
 

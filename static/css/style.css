@@ -290,6 +290,7 @@ img {
     .fixed-back > .small-card {
         width: 550px;
     }
+
     .fixed-back > .medium-card {
         width: 50%;
     }
@@ -299,6 +300,7 @@ img {
     .fixed-back > .small-card {
         width: 550px;
     }
+
     .fixed-back > .medium-card {
         width: 60%;
     }
@@ -308,6 +310,7 @@ img {
     .fixed-back > .small-card {
         width: 500px;
     }
+
     .fixed-back > .medium-card {
         width: 70%;
     }
@@ -2160,7 +2163,9 @@ span.title-back {
 }
 
 .question {
-
+    font-weight: bold;
+    color: #3CCD1C;
+    padding-right: 2px;
 }
 
 .answer {

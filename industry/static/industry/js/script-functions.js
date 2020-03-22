@@ -51,7 +51,7 @@ function search_input(className) {
 }
 
 function close_dialog(className) {
-    $(".close, " + className).click(function () {
+    $(".close").click(function () {
         $(className).removeClass("show");
         $(".main").removeClass("blur-div");
         $(className).find(".no-comment").remove();
