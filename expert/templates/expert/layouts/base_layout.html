@@ -65,7 +65,7 @@
         {% endif %}
         <h5>{% block name %}{% endblock %}</h5>
         <p dir="rtl" class="scoreDiv text-right">امتیاز:
-            <span>{{ request.user.expertuser.expert_point|default:3 }}</span>/10</p>
+            <span>{{ request.user.expertuser.expert_point|default:0 }}</span>/10</p>
         <div class="progress">
             <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0"
                  aria-valuemax="100" style="width: {{ request.user.expertuser.score }}px">
