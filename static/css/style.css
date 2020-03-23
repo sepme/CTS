@@ -2396,6 +2396,13 @@ div.no-project > span.disable-border-button {
 
 .tab-content.cover-page {
     min-height: 67vh;
+    position: relative;
+    display: flow-root;
+    /* border: 1px solid #bdbdbd; */
+    border-top: none;
+    background-color: #f8fdf7;
+    border-radius: 0 0 0.25em 0.25em;
+    padding: 10px 5px;
 }
 
 .tab-content.cover-page > div.card {
@@ -2494,6 +2501,55 @@ div.no-project > span.disable-border-button {
 
 .box .box-header div.data-modified {
     float: left;
+}
+
+.box .box-header div.project-techniques {
+    margin-left: 5px;
+    float: left;
+}
+
+.mix-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    direction: ltr;
+}
+
+.mix-list li {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #3CCD1C;
+    color: #3CCD1C;
+    padding: 3px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    top: 50%;
+    -webkit-transform: translateY(-12%);
+    -moz-transform: translateY(-12%);
+    -ms-transform: translateY(-12%);
+    -o-transform: translateY(-12%);
+    transform: translateY(-12%);
+    margin-left: -15px;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    -ms-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+}
+
+.mix-list li:first-child {
+    margin-left: 0;
+}
+.mix-list li:hover {
+    z-index: 999;
+    margin-right: -5px;
+    box-shadow: 2px 1px 2px rgba(0,0,0,0.16);
+}
+.mix-list.hover li:hover {
+    background-color: #f7fdf8;
+    cursor: default;
 }
 
 .box .box-body {
