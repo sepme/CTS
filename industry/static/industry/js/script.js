@@ -345,17 +345,18 @@ function setComment(data) {
                 "<div class='comment-profile'>" +
                 "</div>" +
                 "<div class='comment-body'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-pen'>" +
-                "</i>" +
-                "<i class='fas fa-reply'><div class='reply'></div>" +
-                "</i>";
+                "<span class='comment-tools'>" ;
+                // "<i class='fas fa-pen'>" +
+                // "</i>" +
+                // "<i class='fas fa-reply'><div class='reply'></div>" +
+                // "</i>"
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" +
                     data[i].attachment +
                     "'><i class='fas fa-paperclip'></i></a>";
             }
-            comments_code += "</span>" +
+            comments_code += "<i class='fas fa-trash-alt'></i>"+
+                "</span>" +
                 "<span>" +
                 data[i].text +
                 "</span>" +
@@ -364,13 +365,12 @@ function setComment(data) {
         } else if (data[i].sender_type === "expert") { //expert
             comments_code += "<div class='your-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-trash-alt'></i>" +
-                "<i class='fas fa-reply' value=" +
-                data[i].pk +
-                "></i>" +
-                "<i class='fas fa-pen'>" +
-                "</i>";
+                "<span class='comment-tools'>" ;
+                // "<i class='fas fa-reply' value=" +
+                // data[i].pk +
+                // "></i>" +
+                // "<i class='fas fa-pen'>" +
+                // "</i>"
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" +
                     data[i].attachment +
@@ -460,23 +460,23 @@ function getComments(expert_id, project_id) {
         },
         success: function (data) {
             console.log(data);
-            if (data.applied == false) {
-                // $(".accept-request").attr("style", "display :none");
-                // $(".reject-request").attr("style", "display :none");
-                // $(".accept-request").hide();
-                // $(".reject-request").hide();
-                // $(".accept-request").setAttribute("hidden", 'true');
-                // $(".reject-request").setAttribute("hidden", 'true');
-                $(".accept-request")["hidden"] = true;
-                $(".reject-request")["hidden"] = true;
-            } else if ($(".accept-request").getAttribute("hidden") == "true") {
-                $(".accept-request").attr("style", "display :block");
-                $(".reject-request").attr("style", "display :block");
-                // $(".reject-request").setAttribute("disabled","disabled");
-                // $(".reject-request").hide();
-                $(".accept-request").setAttribute("hidden", 'false');
-                $(".reject-request").setAttribute("hidden", 'false');
-            }
+            // if (data.applied == false) {
+            //     // $(".accept-request").attr("style", "display :none");
+            //     // $(".reject-request").attr("style", "display :none");
+            //     // $(".accept-request").hide();
+            //     // $(".reject-request").hide();
+            //     // $(".accept-request").setAttribute("hidden", 'true');
+            //     // $(".reject-request").setAttribute("hidden", 'true');
+            //     $(".accept-request")["hidden"] = true;
+            //     $(".reject-request")["hidden"] = true;
+            // } else if ($(".accept-request").getAttribute("hidden") == "true") {
+            //     $(".accept-request").attr("style", "display :block");
+            //     $(".reject-request").attr("style", "display :block");
+            //     // $(".reject-request").setAttribute("disabled","disabled");
+            //     // $(".reject-request").hide();
+            //     $(".accept-request").setAttribute("hidden", 'false');
+            //     $(".reject-request").setAttribute("hidden", 'false');
+            // }
             setComment(data);
         },
         error: function (data) {
@@ -840,7 +840,7 @@ $(document).ready(function () {
             event.preventDefault();
             comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
             comment_form.find("label").addClass("progress-cursor");
-            $("#project_id").attr('value', $(".show-project").attr("id"));
+            $("#project_id").attr('value', $(".showProject").attr("id"));
             $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
             let thisUrl = "/industry/submit_comment/";
             let data = new FormData(comment_form.get(0));

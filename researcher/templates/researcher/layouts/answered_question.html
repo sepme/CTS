@@ -38,8 +38,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-header"><h6><a href="{{answer.url}}" class="attach-file">پاسخ شما</a></h6>
-                </div>
+                {% if answer %}
+                    <div class="card-header">
+                        <h6><a href="{{answer.url}}" class="attach-file">پاسخ شما</a></h6>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
