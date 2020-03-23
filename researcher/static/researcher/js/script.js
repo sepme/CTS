@@ -339,7 +339,7 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".chamran-btn-info", ".showProject");
+        init_dialog_btn(".preview-project", ".showProject");
         // $(".form-submit").click(function () {
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
