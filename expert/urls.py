@@ -27,5 +27,9 @@ urlpatterns = [
     path('show_technique/', views.ShowTechnique, name="show-technique"),
     path('get_resume/', views.GetResume, name="get-resume"),
     path("active/", views.ActiveProjcet),
+    path('delete_scientific/' ,views.DeleteScientificRecord ,name='delete_scientific'),
+    path('delete_executive/' ,views.DeleteExecutiveRecord ,name='delete_executive'),
+    path('delete_research/' ,views.DeleteResearchRecord ,name='delete_research'),
+    path('delete_paper/' ,views.DeletePaperRecord ,name='delete_research'),
 ]
 

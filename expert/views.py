@@ -656,3 +656,35 @@ def ActiveProjcet(request, project, data):
     for technique in projectRequest.required_technique.all():
         data["techniques"].append(technique.__str__())
     return JsonResponse(data=data)
+
+def DeleteScientificRecord(request):
+    try:
+        sci_rec = get_object_or_404(ScientificRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Scientific record isn't found"} ,status=400)
+    sci_rec.delete()
+    return JsonResponse({"successfull" :"Scientific record is deleted"})
+
+def DeleteExecutiveRecord(request):
+    try:
+        exe_rec = get_object_or_404(ExecutiveRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Executive record isn't found"} ,status=400)
+    exe_rec.delete()
+    return JsonResponse({"successfull" :"Executive record is deleted"})
+
+def DeleteResearchRecord(request):
+    try:
+        research_rec = get_object_or_404(ResearchRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Research Record isn't found"} ,status=400)
+    research_rec.delete()
+    return JsonResponse({"successfull" :"Research Record is deleted"})
+
+def DeletePaperRecord(request):
+    try:
+        paper_rec = get_object_or_404(PaperRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Paper Record isn't found"} ,status=400)
+    paper_rec.delete()
+    return JsonResponse({"successfull" :"Paper Record is deleted"})
