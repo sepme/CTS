@@ -134,7 +134,7 @@ $(document).ready(function () {
     init_setup();
     input_focus();
     showQuestion();
-    $('*').persiaNumber();
+    // $('*').persiaNumber();
     question_dialog_init();
     question_page_init();
     init_dialog_btn(".preview-project", ".showProject");
@@ -1231,19 +1231,19 @@ function setMajors(data) {
 function setValue(data) {
     $("#v-pills-roles-tab").click(function () {
         setRole(data);
-        $('*').persiaNumber();
+        // $('*').persiaNumber();
     });
     $("#v-pills-resources-tab").click(function () {
         setResources(data);
-        $('*').persiaNumber();
+        // $('*').persiaNumber();
     });
     $("#v-pills-approaches-tab").click(function () {
         setApproach(data);
-        $('*').persiaNumber();
+        // $('*').persiaNumber();
     });
     $("#v-pills-majors-tab").click(function () {
         setMajors(data);
-        $('*').persiaNumber();
+        // $('*').persiaNumber();
     });
 }
 

@@ -1,6 +1,7 @@
 $(window).on("load", function () {
     init_windowSize();
     load_dialog();
+    // $("*").persiaNumber();
 }).on("resize", function () {
     init_windowSize();
     load_dialog();
@@ -29,10 +30,10 @@ function CountDown(min, hour, day) {
         }
         hour_div.html(new_hour);
         day_div.html(new_day);
-        $("*").persiaNumber();
+        // $("*").persiaNumber();
     }
 
-    $("*").persiaNumber();
+    // $("*").persiaNumber();
     setInterval(counter, 1000 * 60);
 }
 

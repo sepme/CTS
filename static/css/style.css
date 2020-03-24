@@ -1,4 +1,5 @@
 @import "fontiran.css";
+@import "fontStyle.css";
 @import "flags.css";
 
 .mbottom-10 {
@@ -185,11 +186,16 @@ img {
 
 .fixed-back > .card {
     position: relative;
-    top: -5%;
+    top: 0;
     color: #262626;
     padding: 35px 10px 55px 10px;
     overflow: hidden;
     border-color: #BDBDBD;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
     -webkit-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
     -moz-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
     -ms-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
@@ -199,7 +205,11 @@ img {
 }
 
 .fixed-back.show > .card {
-    top: 0;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+    -o-transform: none;
+    transform: none;
 }
 
 @media (max-width: 767px) {
