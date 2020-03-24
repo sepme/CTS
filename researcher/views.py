@@ -466,8 +466,7 @@ class QuestionShow(generic.TemplateView ):
         context['attachment'] = question.research_question.attachment
         context['attach_type'] = str(question.research_question.attachment).split("/")[-1].split('.')[-1]
         context['file_name'] = question.research_question.attachment.name.split("/")[-1]
-        STATUS = ["not_answered", "wait_for_answer"]
-        if self.request.user.researcheruser.status not in STATUS:
+        if self.request.user.researcheruser.status not in ["not_answered", "wait_for_answer"]:
             context['answer'] = question.answer
             return context
         delta = datetime.date.today() - question.hand_out_date
@@ -509,7 +508,7 @@ def ajax_Technique_review(request):
     if form.is_valid():
         description = form.cleaned_data['request_body']
         method = form.cleaned_data['request_confirmation_method']
-        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name'])[0]
+        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name']).first()
         if method != "exam":
             resume = form.cleaned_data['new_resume']
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,

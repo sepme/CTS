@@ -195,8 +195,8 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in scientific_instance %}
+                                            <tbody class="row-sci-{{instance.pk}}">
                                                 <tr>
                                                     <td>{{ instance.degree }}</td>
                                                     <td>{{ instance.major }}</td>
@@ -204,12 +204,12 @@
                                                     <td>{{ instance.city }}</td>
                                                     <td>{{ instance.date_of_graduation }}</td>
                                                     <td>
-                                                        <i class='fas fa-pen' id='edit_edu'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                        <i class='fas fa-pen' id='edit_sci'></i>
+                                                        <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_sci'></i>
                                                     </td>
                                                 </tr>
-                                            {% endfor %}
                                             </tbody>
+                                            {% endfor %}
                                         </table>
                                     {% endif %}
                                 </div>
@@ -243,8 +243,8 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in executive_instance %}
+                                                <tbody class="row-exe-{{instance.pk}}">
                                                 <tr>
                                                     <td>{{ instance.executive_post }}</td>
                                                     <td>{{ instance.date_start_post }}</td>
@@ -253,11 +253,11 @@
                                                     <td>{{ instance.city }}</td>
                                                     <td>
                                                         <i class='fas fa-pen' id='edit_exe'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
+                                                        <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_exe'></i>
                                                     </td>
                                                 </tr>
-                                            {% endfor %}
                                             </tbody>
+                                            {% endfor %}
                                         </table>
                                     {% endif %}
                                 </div>
@@ -289,19 +289,19 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in research_instance %}
-                                                <tr>
-                                                    <td>{{ instance.research_title }}</td>
-                                                    <td>{{ instance.researcher }}</td>
-                                                    <td>{{ instance.co_researcher }}</td>
-                                                    <td>
-                                                        <i class='fas fa-pen' id='edit_exe'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
-                                                    </td>
-                                                </tr>
+                                                <tbody class="row-research-{{instance.pk}}">
+                                                    <tr>
+                                                        <td>{{ instance.research_title }}</td>
+                                                        <td>{{ instance.researcher }}</td>
+                                                        <td>{{ instance.co_researcher }}</td>
+                                                        <td>
+                                                            <i class='fas fa-pen' id='edit_exe'></i>
+                                                            <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_research'></i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             {% endfor %}
-                                            </tbody>
                                         </table>
                                     {% endif %}
                                 </div>
@@ -336,21 +336,21 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in paper_instance %}
-                                                <tr>
-                                                    <td>{{ instance.research_title }}</td>
-                                                    <td>{{ instance.date_published }}</td>
-                                                    <td>{{ instance.published_at }}</td>
-                                                    <td>{{ instance.impact_factor }}</td>
-                                                    <td>{{ instance.citation }}</td>
-                                                    <td>
-                                                        <i class='fas fa-pen' id='edit_exe'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
-                                                    </td>
-                                                </tr>
+                                                <tbody class="row-paper-{{instance.pk}}">
+                                                    <tr>
+                                                        <td>{{ instance.research_title }}</td>
+                                                        <td>{{ instance.date_published }}</td>
+                                                        <td>{{ instance.published_at }}</td>
+                                                        <td>{{ instance.impact_factor }}</td>
+                                                        <td>{{ instance.citation }}</td>
+                                                        <td>
+                                                            <i class='fas fa-pen' id='edit_exe'></i>
+                                                            <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_paper'></i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             {% endfor %}
-                                            </tbody>
                                         </table>
                                     {% endif %}
 

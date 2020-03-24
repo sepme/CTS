@@ -386,7 +386,6 @@ function show_research_record() {
         "<td>" + $("#subject").val() + "</td>" +
         "<td>" + $("#admin").val() + "</td>" +
         "<td>" + $("#liable").val() + "</td>" +
-        "<td>" + $("#rank").val() + "</td>" +
         "<td>" +
         "<i class='fas fa-pen' id='edit_stu'></i>" +
         "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
@@ -399,7 +398,6 @@ function show_research_record() {
             "<td>عنوان طرح پژوهشی</td>" +
             "<td>مجری</td>" +
             "<td>مسئول اجرا/ همکار</td>" +
-            "<td>وضعیت طرح پژوهشی</td>" +
             "<td></td>" +
             "</tr>" +
             "</thead>" +
@@ -930,3 +928,88 @@ function newItem_label() {
     $("#tags_tagsinput").find("#tags_tag").attr("placeholder", "افزودن");
     tag_input_label("tags");
 }
+
+
+$("#delete_sci").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_scientific/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-sci-" + pk).remove();
+            iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت حذف شد!",
+                    position: 'bottomLeft'
+                });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
+
+$("#delete_exe").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_executive/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-exe-" + pk).remove();
+            iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت حذف شد!",
+                    position: 'bottomLeft'
+                });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
+
+$("#delete_research").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_research/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-research-" + pk).remove();
+            iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت حذف شد!",
+                    position: 'bottomLeft'
+                });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
+
+$("#delete_paper").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_paper/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-paper-" + pk).remove();
+            iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت حذف شد!",
+                    position: 'bottomLeft'
+                });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
