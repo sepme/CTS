@@ -77,6 +77,20 @@ class IndustryForm(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.photo = self.compressImage(self.photo)
+        super(ResearcherProfile, self).save(*args, **kwargs)
+
+    def compressImage(self,photo):
+        imageTemproary = Image.open(photo)
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
+
     # def save(self, *args, **kwargs):
     #     super().save()
     #     if self.photo:

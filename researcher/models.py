@@ -6,6 +6,12 @@ import datetime
 import uuid
 from . import persianNumber
 
+
+import sys
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 def profileUpload(instance, filename):
     return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,filename)
     # ext = filename.split('.')[-1]
@@ -158,6 +164,20 @@ class ResearcherProfile(models.Model):
 
     def __str__(self):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.photo = self.compressImage(self.photo)
+        super(ResearcherProfile, self).save(*args, **kwargs)
+
+    def compressImage(self,photo):
+        imageTemproary = Image.open(photo)
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
 
 class ScientificRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
