@@ -11,9 +11,9 @@
             درخواستی برای انجام پروژه شما از طرف این استاد دریافت شده است.
         </p>
         <div class="button-group">
-            <button class="show-resume" >مشاهده رزومه</button>
-            <button class="accept-request" >تایید درخواست</button>
-            <button class="reject-request" >رد درخواست</button>
+            <button class="show-resume">مشاهده رزومه</button>
+            <button class="accept-request">تایید درخواست</button>
+            <button class="reject-request">رد درخواست</button>
         </div>
     </div>
     <div class="industry-comment"></div>
@@ -24,20 +24,26 @@
 <div class="comment">
     <div class="add-comment">
         <form action="" method="post" enctype="multipart/form-data" id="comment-form">
-            <input type="text" name="project_id" id="project_id" hidden>
-            <input type="text" name="expert_id" id="expert_id" hidden>
-            <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
             <div class="row">
                 <div class="col-lg-12">
-                    <label for="description">ثبت نظر جدید</label>
-                    <textarea dir="rtl" id="description" class="w-100 emojiable-option" name="description"
-                              rows="5"></textarea>
-                    <button class="chamran_btn" type="submit" style="left: 16px;bottom: 8px;">ثبت نظر</button>
-                    <span class="new-comment-tools">
-                                        <input type="file" id="comment-attach" name="attachment" hidden>
-                                        <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
-                                    </span>
-                    <div class="attachment"></div>
+                    <input type="text" name="project_id" id="project_id" hidden>
+                    <input type="text" name="expert_id" id="expert_id" hidden>
+                    <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
+                    <div class="send-comment-container">
+                        <button class="image-btn-circle" type="submit"></button>
+                        <div class="comment-input">
+                            <label for="description"></label>
+                            <textarea dir="rtl" id="description" class="" name="description" rows="1"
+                                      placeholder="نظر خود را اینجا وارد کنید ..."></textarea>
+
+                            <div class="new-comment-tools">
+                                <input type="file" id="comment-attach" name="attachment" hidden>
+                                <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
+                            </div>
+
+                            <div class="attachment"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>

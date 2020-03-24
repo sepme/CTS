@@ -4,18 +4,16 @@
         <div class="close"></div>
         <div class="card-head">انتخاب تکنیک</div>
         <div class="container">
-            <form method="post" enctype="multipart/form-data" class="ajax-select-techniques" data-url="{% url 'expert:accept_project' %}">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-lg-12 text-right">
-                        پیش از ارسال در خواستتان برای صاحب پروژه و تایید نهایی آن،
-                        در این قسمت می بایست تکنیک هایی که به نظرتان برای انجام پروژه به آنها نیاز خواهید داشت را انتخاب
-                        کنید.
-                    </div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    پیش از ارسال در خواستتان برای صاحب پروژه و تایید نهایی آن،
+                    در این قسمت می بایست تکنیک هایی که به نظرتان برای انجام پروژه به آنها نیاز خواهید داشت را انتخاب
+                    کنید.
                 </div>
-                <br>
-                <hr>
-                <br>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="ajax-select-techniques"
+                  data-url="{% url 'expert:accept_project' %}">
+                {% csrf_token %}
                 <div class="row mbottom-lg-25">
                     <div class="col-8 text-right">
                         <span class="section-title">لیست تکنیک ها</span>

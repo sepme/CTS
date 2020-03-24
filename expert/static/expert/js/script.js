@@ -260,6 +260,13 @@ $(document).ready(function () {
         });
         tag_input_label("tags");
         let techniquesForm = $('.ajax-select-techniques');
+        $(techniquesForm).on('keyup keypress', function (e) {
+            let keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
         techniquesForm.submit(function (event) {
             event.preventDefault();
             let data = [];
