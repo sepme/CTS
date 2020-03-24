@@ -5,7 +5,7 @@
         <div class="close"></div>
         <div class="card-head">ثبت تکنیک جدید</div>
         <div class="container">
-            <form method="post" enctype="multipart/form-data" action='{% url "researcher:add_technique" %}'
+            <form method="post" enctype="multipart/form-data" url='{% url "researcher:add_technique" %}'
                   class="ajax-add-technique-form">
                 {% csrf_token %}
                 <div class="row mbottom-lg-25">

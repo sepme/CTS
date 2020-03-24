@@ -38,7 +38,7 @@ function CountDown(min, hour, day) {
 }
 
 CountDown();
-$(".chamran-btn-info").click(function () {
+$(".preview-project").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
         return;
@@ -52,6 +52,7 @@ $(".chamran-btn-info").click(function () {
      * end of reset
      */
     var id = $(this).attr("id");
+    console.log("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/show_project/',
