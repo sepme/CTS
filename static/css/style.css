@@ -185,13 +185,7 @@ img {
 
 .fixed-back > .card {
     position: relative;
-    top: 0;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    top: -5%;
     color: #262626;
     padding: 35px 10px 55px 10px;
     overflow: hidden;
@@ -201,16 +195,11 @@ img {
     -ms-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
     -o-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
     transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+    margin: 1.75em auto;
 }
 
 .fixed-back.show > .card {
-    top: 50%;
-    /*-webkit-transform: translate(-50%, -50%);*/
-    /*-moz-transform: translate(-50%, -50%);*/
-    /*-ms-transform: translate(-50%, -50%);*/
-    /*-o-transform: translate(-50%, -50%);*/
-    /*transform: translateX(-50%);*/
-    /*margin: 50px 0 20px 0;*/
+    top: 0;
 }
 
 @media (max-width: 767px) {
@@ -2171,6 +2160,7 @@ span.title-back {
 .answer {
     font-weight: 300;
     padding-right: 20px;
+    text-align: justify;
 }
 
 .accept-btn, .refuse-btn {
@@ -2542,11 +2532,13 @@ div.no-project > span.disable-border-button {
 .mix-list li:first-child {
     margin-left: 0;
 }
+
 .mix-list li:hover {
     z-index: 999;
     margin-right: -5px;
-    box-shadow: 2px 1px 2px rgba(0,0,0,0.16);
+    box-shadow: 2px 1px 2px rgba(0, 0, 0, 0.16);
 }
+
 .mix-list.hover li:hover {
     background-color: #f7fdf8;
     cursor: default;

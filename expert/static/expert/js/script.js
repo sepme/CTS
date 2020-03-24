@@ -105,7 +105,7 @@ function showQuestion() {
                     } /* else delete the attachments row */
                 }
 
-                var answer_list_obj = data.question_answers_list;
+                let answer_list_obj = data.question_answers_list;
                 if (answer_list_obj.length !== 0) {
                     show_question_answers(answer_list_obj);
                 } else {
@@ -411,7 +411,7 @@ $(document).ready(function () {
             questionsNav(questions, this);
         });
 
-        var ResearchQuestionForm = $('.ajax-new-rq-form');
+        let ResearchQuestionForm = $('.ajax-new-rq-form');
         ResearchQuestionForm.submit(function (event) {
             event.preventDefault();
             ResearchQuestionForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -419,8 +419,8 @@ $(document).ready(function () {
             ResearchQuestionForm.find("button[type='reset']").attr("disabled", "true");
             ResearchQuestionForm.find("label").addClass("progress-cursor");
             ResearchQuestionForm.closest(".fixed-back").find(".card").addClass("wait");
-            var $thisURL = ResearchQuestionForm.attr('data-url');
-            var data = new FormData(ResearchQuestionForm.get(0));
+            let $thisURL = ResearchQuestionForm.attr('data-url');
+            let data = new FormData(ResearchQuestionForm.get(0));
             ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
             // console.log(data);
             // console.log($(this).find("input[type='file']").get(0).files.item(0));
@@ -458,7 +458,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function (data) {
-                    var obj = JSON.parse(data.responseText);
+                    let obj = JSON.parse(data.responseText);
                     ResearchQuestionForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                         .prop("disabled", false);
                     ResearchQuestionForm.find("button[type='reset']").prop("disabled", false);
@@ -493,7 +493,7 @@ $(document).ready(function () {
     //  End Questions Page
     //****************************************//
     $(".close-answer").click(function () {
-        var id = $(this).attr("id");
+        let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
             url: '/expert/terminate_research_question/',
@@ -519,9 +519,9 @@ $(document).ready(function () {
     Show researchers information for expert
      */
     $(".researcher-card-button-show").click(function () {
-        var id = $(this).attr("id");
-        var url = $(this).attr("data-url");
-        var project_id = $(this).attr("value");
+        let id = $(this).attr("id");
+        let url = $(this).attr("data-url");
+        let project_id = $(this).attr("value");
         $.ajax({
             method: 'GET',
             url: url,
@@ -547,16 +547,16 @@ $(document).ready(function () {
                         $('#researcher_grade').html('دکتری عمومی');
                         break;
                 }
-                let tech = ""
+                let tech = "";
                 for (let index = 0; index < data.techniques.length; index++)
                     tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
                 $("#researcher_techniques").html(tech)
                 $('#researcher_university').html(data.university);
                 $('#researcher_entry_year').html(data.entry_year);
 
-                var scientific_record = JSON.parse(data.scientific_record);
+                let scientific_record = JSON.parse(data.scientific_record);
                 if (scientific_record.length !== 0) {
-                    var table_row = "";
+                    let table_row = "";
                     for (i = 0; i < scientific_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + scientific_record[i].fields.major + "</td>" +
@@ -569,9 +569,9 @@ $(document).ready(function () {
                     }
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
 
-                var executive_record = JSON.parse(data.executive_record);
+                let executive_record = JSON.parse(data.executive_record);
                 if (executive_record.length !== 0) {
-                    var table_row = "";
+                    let table_row = "";
                     for (i = 0; i < executive_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + executive_record[i].fields.post + "</td>" +
@@ -584,10 +584,10 @@ $(document).ready(function () {
                     }
                 } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
 
-                var research_record = JSON.parse(data.research_record);
+                let research_record = JSON.parse(data.research_record);
                 if (research_record.length !== 0) {
-                    var table_row = "";
-                    var status = "";
+                    let table_row = "";
+                    let status = "";
                     for (i = 0; i < research_record.length; i++) {
                         switch (research_record[i].fields.status) {
                             case 1:
@@ -624,7 +624,7 @@ $(document).ready(function () {
 });
 
 function education_record() {
-    var myForm = $('.ajax-sci-form');
+    let myForm = $('.ajax-sci-form');
     myForm.submit(function (event) {
         event.preventDefault();
         myForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -632,8 +632,8 @@ function education_record() {
         myForm.find("button[type='reset']").attr("disabled", "true");
         myForm.find("label").addClass("progress-cursor");
         myForm.closest(".fixed-back").find(".card").addClass("wait");
-        var $thisURL = myForm.attr('data-url');
-        var data = $(this).serialize();
+        let $thisURL = myForm.attr('data-url');
+        let data = $(this).serialize();
         myForm.find("input").attr("disabled", "true").addClass("progress-cursor");
         $.ajax({
             method: 'POST',
@@ -662,7 +662,7 @@ function education_record() {
                 }
             },
             error: function (data) {
-                var obj = JSON.parse(data.responseText);
+                let obj = JSON.parse(data.responseText);
                 myForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                     .prop("disabled", false);
                 myForm.find("button[type='reset']").prop("disabled", false);
@@ -762,7 +762,7 @@ executiveForm.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             executiveForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             executiveForm.find("button[type='']").prop("disabled", false);
@@ -823,7 +823,7 @@ executiveForm.submit(function (event) {
     })
 });
 
-var researchForm = $('.ajax-research-form');
+let researchForm = $('.ajax-research-form');
 researchForm.submit(function (event) {
     event.preventDefault();
     researchForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -831,8 +831,8 @@ researchForm.submit(function (event) {
     researchForm.find("button[type='reset']").attr("disabled", "true");
     researchForm.find("label").addClass("progress-cursor");
     researchForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = researchForm.attr('data-url');
-    var data = $(this).serialize().toString();
+    let $thisURL = researchForm.attr('data-url');
+    let data = $(this).serialize().toString();
     researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -861,7 +861,7 @@ researchForm.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             researchForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             researchForm.find("button[type='reset']").prop("disabled", false);
@@ -912,7 +912,7 @@ researchForm.submit(function (event) {
     })
 });
 
-var paperForm = $('.ajax-paper-form');
+let paperForm = $('.ajax-paper-form');
 paperForm.submit(function (event) {
     event.preventDefault();
     paperForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -920,8 +920,8 @@ paperForm.submit(function (event) {
     paperForm.find("button[type='reset']").attr("disabled", "true");
     paperForm.find("label").addClass("progress-cursor");
     paperForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = paperForm.attr('data-url');
-    var data = $(this).serialize().toString();
+    let $thisURL = paperForm.attr('data-url');
+    let data = $(this).serialize().toString();
     paperForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -950,7 +950,7 @@ paperForm.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             paperForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             paperForm.find("button[type='reset']").prop("disabled", false);
@@ -1304,11 +1304,11 @@ function setComment(data) {
 }
 
 function getCookie(name) {
-    var cookieValue = null;
+    let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = jQuery.trim(cookies[i]);
             // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -1319,7 +1319,7 @@ function getCookie(name) {
     }
 }
 
-var csrftoken = getCookie('csrftoken');
+let csrftoken = getCookie('csrftoken');
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
@@ -1400,7 +1400,7 @@ comment_form.submit(function (event) {
 
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
