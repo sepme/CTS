@@ -619,7 +619,7 @@ $(document).ready(function () {
                 setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
 
-                $(".fa-trash-alt").click(function () {
+                $(".comments .fa-trash-alt").click(function () {
                     deleteComment($(this).closest('.my-comment'));
                 });
             },
@@ -1046,7 +1046,7 @@ function projectDetail(data) {
     setValue(data);
     setComment(data.comments);
 
-    $(".fa-trash-alt").click(function () {
+    $(".comments .fa-trash-alt").click(function () {
         deleteComment($(this).closest('.my-comment'));
     });
 }
@@ -1079,7 +1079,7 @@ showInfo.click(function (event) {
                 setValue(data);
                 setComment(data.comments);
 
-                $(".fa-trash-alt").click(function () {
+                $(".comments .fa-trash-alt").click(function () {
                     deleteComment($(this).closest('.my-comment'));
                 });
             } else {
@@ -1398,7 +1398,7 @@ comment_form.submit(function (event) {
                 position: 'bottomLeft'
             });
 
-            $(".fa-trash-alt").click(function () {
+            $(".comments .fa-trash-alt").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
 

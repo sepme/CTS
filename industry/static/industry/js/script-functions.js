@@ -306,82 +306,93 @@ function addComment(comment) {
 }
 
 function dialog_comment_init() {
+    $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
+        let fileName = $(this).val().split("\\").pop();
+        $(".send-comment-container .comment-input .attachment span").html(fileName);
+        $(".send-comment-container .comment-input").addClass("attached");
+
+        $(".send-comment-container .comment-input.attached i.fa-trash-alt").click(function () {
+            $(".send-comment-container .comment-input input#comment-attach").val("");
+            $(".send-comment-container .comment-input .attachment span").html("");
+            $(".send-comment-container .comment-input").removeClass("attached");
+        });
+    });
     // add emoji to comment
-    $(".new-comment-tools > .fa-smile").click(function () {
-        alert("Not working");
-        // $('#comment').emojiPicker('toggle');
-        // alert("a");
-    });
+    // $(".new-comment-tools > .fa-smile").click(function () {
+    //     alert("Not working");
+    //     // $('#comment').emojiPicker('toggle');
+    //     // alert("a");
+    // });
     // delete user comment
-    $(".comment-tools > .fa-trash-alt").click(function () {
-        $(this).parents("div.my-comment").remove();
-    });
+    // $(".comment-tools > .fa-trash-alt").click(function () {
+    //     $(this).parents("div.my-comment").remove();
+    // });
     // attach file to comment
-    $(".new-comment-tools > label[for='comment-attach']").click(function () {
-        rows = $("textarea#comment").attr("rows");
-        $("textarea#comment").attr("rows", ++rows);
-        padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
-        $("textarea#comment").css("padding-bottom", padding_bottom);
-
-        if ($("div.attachment > div").last().hasClass("attach")) {
-            bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
-        } else {
-            bottom_position = 10;
-        }
-
-        $("div.attachment").append("<div class='attach'>" +
-            "<span>" + "نام فایل" + "</span>" +
-            "</div>");
-            // "<div class='progress'>" +
-            // "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
-            // "</div>" +
-        $("div.attachment > div").last().css("bottom", bottom_position + 30);
-    });
-    // replay to a comment
-    $(".comment-tools > .fa-reply").click(function () {
-        var text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
-        $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
-        $(".replay-div > .fa-times").click(function () {
-            $(".replay-div").remove();
-            $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
-                var inputLabel = "label[for='" + $(this).attr("id") + "']";
-                $(inputLabel).css("color", "#6f7285");
-                if ($(this).val() === '') {
-                    $(inputLabel).css({
-                        "font-size": "14px",
-                        "top": "28px",
-                        "right": "25px",
-                        "color": "#6f7285"
-                    });
-                } else {
-                    $(this).css("color", "#8d8d8d");
-                    $(inputLabel).css("color", "#8d8d8d");
-                }
-            });
-        });
-        $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "14px",
-                    "top": "58px",
-                    "right": "25px",
-                    "color": "#6f7285"
-                });
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-        });
-    });
-    // edit user comment
-    $(".comment-tools > .fa-pen").click(function () {
-        text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").html(text);
-        $("textarea#comment").focus();
-    });
+    // $(".new-comment-tools > label[for='comment-attach']").click(function () {
+    //     rows = $("textarea#comment").attr("rows");
+    //     $("textarea#comment").attr("rows", ++rows);
+    //     padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
+    //     $("textarea#comment").css("padding-bottom", padding_bottom);
+    //
+    //     if ($("div.attachment > div").last().hasClass("attach")) {
+    //         bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
+    //     } else {
+    //         bottom_position = 10;
+    //     }
+    //
+    //     $("div.attachment").append("<div class='attach'>" +
+    //         "<span>" + "نام فایل" + "</span>" +
+    //         "</div>");
+    //         // "<div class='progress'>" +
+    //         // "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
+    //         // "</div>" +
+    //     $("div.attachment > div").last().css("bottom", bottom_position + 30);
+    // });
+    // // replay to a comment
+    // $(".comment-tools > .fa-reply").click(function () {
+    //     var text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
+    //     $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
+    //     $(".replay-div > .fa-times").click(function () {
+    //         $(".replay-div").remove();
+    //         $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
+    //             var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //             $(inputLabel).css("color", "#6f7285");
+    //             if ($(this).val() === '') {
+    //                 $(inputLabel).css({
+    //                     "font-size": "14px",
+    //                     "top": "28px",
+    //                     "right": "25px",
+    //                     "color": "#6f7285"
+    //                 });
+    //             } else {
+    //                 $(this).css("color", "#8d8d8d");
+    //                 $(inputLabel).css("color", "#8d8d8d");
+    //             }
+    //         });
+    //     });
+    //     $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
+    //         var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //         $(inputLabel).css("color", "#6f7285");
+    //         if ($(this).val() === '') {
+    //             $(inputLabel).css({
+    //                 "font-size": "14px",
+    //                 "top": "58px",
+    //                 "right": "25px",
+    //                 "color": "#6f7285"
+    //             });
+    //         } else {
+    //             $(this).css("color", "#8d8d8d");
+    //             $(inputLabel).css("color", "#8d8d8d");
+    //         }
+    //     });
+    // });
+    // // edit user comment
+    // $(".comment-tools > .fa-pen").click(function () {
+    //     text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").html(text);
+    //     $("textarea#comment").focus();
+    // });
 }
 
 function vote_dialog_init() {
