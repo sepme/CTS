@@ -159,7 +159,13 @@ function setTab(data) {
         $(".project-comment-innerDiv .add-comment").css("display", "none");
         let no_comment = "<div class='no-comment'>متاسفانه، هنوز پروژه شما توسط استادی  بررسی نشده است.</div>";
         $(".project-comment-innerDiv").append(no_comment);
+        $(".confirm-request").attr("style", "display : none");
+        $(".comment").attr("style", "display : none");
+        $(".comments").attr("style", "display : none");
     } else {
+        $(".confirm-request").attr("style", "display : block");
+        $(".comment").attr("style", "display : block");
+        $(".comments").attr("style", "display : block");
         for (let i = 0; i < data.expert_messaged.length; i++) {
             let tab = "<a class='nav-link' data-toggle='pill'" +
                 "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
@@ -576,9 +582,9 @@ $(document).ready(function () {
                     $('.add-comment').attr('style', "display : none");
                 } else {
                     if (data.vote === "false") {
-                        $(".vote").remove();
-                    }
-                    $('.vote').attr('style', "display : block");
+                        $(".vote").attr("style", "display: none");
+                    }else
+                        $('.vote').attr('style', "display : block");
                     $('.add-comment').attr('style', "display : block");
                     setTab(data);
                 }

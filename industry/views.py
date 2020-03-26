@@ -52,7 +52,6 @@ def get_comments_with_expert(request):
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     if not project.expert_accepted:
-        print("++++++++++++")
         json_response = model_to_dict(project.project_form)
         json_response['accepted'] = 'false'
         json_response['expert_messaged'] = []
@@ -100,7 +99,6 @@ def show_project_ajax(request):
             pass
         return JsonResponse(json_response)
     else:
-        print("------------")
         json_response = model_to_dict(project.project_form)
         json_response['accepted'] = 'true'
         json_response['expert_messaged'] = []
@@ -389,7 +387,7 @@ class NewProject(View):
                     subject=subject,
                     message=message,
                     from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[settings.EMAIL_HOST_USER,"a.jafarzadeh1998@gmail.com",],
+                    recipient_list=[settings.EMAIL_HOST_USER,"sepehr.metanat@gmail.com",],
                     fail_silently=False
                 )
             except TimeoutError:
