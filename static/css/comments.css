@@ -31,6 +31,13 @@
     overflow: scroll;
 }
 
+.comments pre {
+    font-family: iranyekan, serif;
+    margin: 0;
+    font-size: 100%;
+    color: #262626;
+}
+
 .my-comment, .your-comment {
     position: relative;
     margin: 10px auto;

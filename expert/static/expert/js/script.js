@@ -1274,9 +1274,9 @@ function setComment(data) {
                     "'><i class='fas fa-paperclip'></i></a>";
             }
             comments_code += "</span>" +
-                "<span>" +
+                "<pre>" +
                 data[i].text +
-                "</span>" +
+                "</pre>" +
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
@@ -1292,17 +1292,17 @@ function setComment(data) {
                     "'><i class='fas fa-paperclip'></i></a>";
             }
             comments_code += "</span>" +
-                "<span>" +
+                "<pre>" +
                 data[i].text +
-                "</span>" +
+                "</pre>" +
                 "</div>" +
                 "</div>";
         } else { //system
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
-                "<span>" +
+                "<pre>" +
                 data[i].text +
-                "</span>" +
+                "</pre>" +
                 "</div>" +
                 "</div>";
         }

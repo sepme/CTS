@@ -49,6 +49,12 @@
                             <div class="data-modified">
                                 <span>{% calculate_date_past project.date_submitted_by_industry %} قبل </span>
                             </div>
+                            <div class="notification">
+                                <i class="far fa-comment-alt center-abs"></i>
+{#                                {% if getUnseenMessages project.pk request.user.expertuser %}#}
+                                    <span>{% getUnseenMessages project.pk request.user.expertuser %} </span>
+{#                                {% endif %}#}
+                            </div>
                         </div>
                         <div class="box-body">
                             <div class="row">

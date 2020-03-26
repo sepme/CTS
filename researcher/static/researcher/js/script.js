@@ -240,9 +240,9 @@ function setComment(data) {
                     "'><i class='fas fa-paperclip'></i></a>";
             }
             comments_code += "</span>" +
-                "<span>" +
+                "<pre>" +
                 data[i].description +
-                "</span>" +
+                "</pre>" +
                 "</div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher") { //researcher
@@ -260,17 +260,17 @@ function setComment(data) {
                     "'><i class='fas fa-paperclip'></i></a>";
             }
             comments_code += "</span>" +
-                "<span>" +
+                "<pre>" +
                 data[i].description +
-                "</span>" +
+                "</pre>" +
                 "</div>" +
                 "</div>";
         } else { //system
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
-                "<span>" +
+                "<pre>" +
                 data[i].description +
-                "</span>" +
+                "</pre>" +
                 "</div>" +
                 "</div>";
         }
