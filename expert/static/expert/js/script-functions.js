@@ -826,40 +826,57 @@ function set_answer_true(item) {
     item.closest('.check').children('.status').append(div);
     item.closest('.check').find('.status').fadeIn('slow');
 }
-
+function returnFileType(type) {
+    type = type.toLowerCase();
+    if( type  === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png" || type === "ppt"
+     || type === "txt" || type === "wmv" || type === "zip") {
+        return type;
+    } else {
+        return "unknown";
+    }
+}
 function show_question_answers(data) {
-    var answer = '';
-    for (i = 0; i < data.length; i++) {
-        answer = answer + '<div class="col-lg-12">' +
-            '<div class="answer" is-correct="' + data[i].is_correct + '">' +
-            '<span class="title">' + data[i].researcher_name + '</span>' +
-            '<span class="date">' + data[i].hand_out_date + '</span>' +
-            '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
-            '<div class="check">' +
-            '<div class="correct">' +
-            '<button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
-            '<i class="fas fa-check"></i>' +
-            '</button>' +
-            '</div>' +
-            '<div class="wrong">' +
-            '<button type="button" title="نادرست" id="' + data[i].answer_id + '">' +
-            '<i class="fas fa-times"></i>' +
-            '</button>' +
-            '</div>' +
-            '<div class="status"></div>' +
-            '</div>' +
-            '</div>' +
+    let answer = '';
+    for (let i = 0; i < data.length; i++) {
+        let file_type = data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf(".") + 1).toUpperCase();
+        answer = answer +
+            '<div class="col-lg-12">' +
+            '   <div class="answer" is-correct="' + data[i].is_correct + '">' +
+            '       <span class="title">' + data[i].researcher_name + '</span>' +
+            '       <span class="date">' + data[i].hand_out_date + '</span>' +
+            '       <div class="answer-body">' +
+            '           <span class="file-type image ' + returnFileType(file_type) +'"></span>' +
+            '           <div class="file-name">' + data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf("/") + 1, data[i].answer_attachment.lastIndexOf(".")) + '</div>' +
+            '           <span class="file-type text">' + file_type + ' File</span>' +
+            '           <a href="' + data[i].answer_attachment + '" class="download">' +
+            '               <i class="fas fa-download"></i>' +
+            '           </a>' +
+            '       </div>' +
+            '       <div class="check">' +
+            '           <div class="correct">' +
+            '               <button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
+            '                   <i class="fas fa-check"></i>' +
+            '               </button>' +
+            '           </div>' +
+            '           <div class="wrong">' +
+            '               <button type="button" title="نادرست" id="' + data[i].answer_id + '">' +
+            '                   <i class="fas fa-times"></i>' +
+            '               </button>' +
+            '           </div>' +
+            '           <div class="status"></div>' +
+            '       </div>' +
+            '   </div>' +
             '</div>';
     }
     $(".all-answers").html(answer);
-    $(".answer").each(function () {
-        let is_correct = $(this).attr("is-correct");
-        if (is_correct === 'correct') {
-            set_answer_true($(this).find(".check").find(".correct").find("button"))
-        } else if (is_correct === 'wrong') {
-            set_answer_wrong($(this).find(".check").find(".correct").find("button"))
-        }
-    })
+    // $(".answer").each(function () {
+    //     let is_correct = $(this).attr("is-correct");
+    //     if (is_correct === 'correct') {
+    //         set_answer_true($(this).find(".check").find(".correct").find("button"))
+    //     } else if (is_correct === 'wrong') {
+    //         set_answer_wrong($(this).find(".check").find(".correct").find("button"))
+    //     }
+    // });
 }
 
 function select_technique(className) {

@@ -2806,3 +2806,20 @@ span.initial-value {
     background-image: url("../img/send-hover.svg");
     background-color: #3CCD1C;
 }
+pre {
+    font-family: iranyekan, serif;
+    margin: 0;
+    font-size: 100%;
+    color: #262626;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    white-space: pre-wrap;
+}
+pre#question-body {
+    min-height: 200px;
+}
+.pre-header {
+    color: #3CCD1C;
+    font-weight: 400;
+    margin-bottom: 10px;
+}

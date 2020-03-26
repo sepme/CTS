@@ -77,7 +77,6 @@ function showQuestion() {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-
                 if (data.question_status === "waiting") {
                     dialog.find(".question-status").html("در حال بررسی");
                 } else if (data.question_status === "not_answered") {
@@ -142,7 +141,6 @@ $(document).ready(function () {
     init_dialog_btn(".confirm_project", ".select-technique");
     init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".question-info .show-btn", ".show-question");
     init_dialog_btn(".add-new-question", ".add-question");
     init_dialog_btn(".education-btn", ".scientific_form");
     init_dialog_btn(".executive-btn", ".executive_form");
@@ -371,6 +369,8 @@ $(document).ready(function () {
     //  Questions Page
     //****************************************//
     if (window.location.href.indexOf('questions') > -1) {
+        init_dialog_btn(".show-btn", ".show-question");
+
         function getAllQuestions() {
             return $(".tab-content div.card").toArray();
         }
@@ -1258,44 +1258,60 @@ function setComment(data) {
     let comments_code = "";
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert
-            comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
-                "<div class='comment-profile'>" +
-                "</div>" +
-                "<div class='comment-body'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-trash-alt'></i>" +
-                "<i class='fas fa-pen'>" +
-                "</i>" +
-                "<i class='fas fa-reply'><div class='reply'></div>" +
-                "</i>";
+            let comment_body_classes = "comment-body";
             if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" +
-                    data[i].attachment +
-                    "'><i class='fas fa-paperclip'></i></a>";
+                comment_body_classes += " attached";
             }
-            comments_code += "</span>" +
-                "<pre>" +
-                data[i].text +
-                "</pre>" +
-                "</div>" +
+            comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
+                "   <div class='comment-profile'></div>" +
+                "       <div class='" + comment_body_classes + "'>" +
+                "           <span class='comment-tools'>" +
+                "               <div class='btn-group dropright'>" +
+                "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+                "                       <i class='fas fa-cog'></i>" +
+                "                   </button>" +
+                "                   <div class='dropdown-menu'>" +
+                "                       <div class='dropdown-item'>" +
+                "                           <i class='fas fa-pen'></i>" +
+                "                           <span>ویرایش پیام</span>" +
+                "                       </div>" +
+                "                       <div class='dropdown-item'>" +
+                "                           <i class='fas fa-trash-alt'></i>" +
+                "                           <span>حذف پیام</span>" +
+                "                       </div>" +
+                "                   </div>" +
+                "               </div>" +
+                "               <i class='fas fa-reply'>" +
+                "                   <div class='reply'></div>" +
+                "               </i>" +
+                "           </span>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                    "   <i class='fas fa-paperclip'></i>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+                    "</a>";
+            }
+            comments_code += "<pre>" + data[i].text + "</pre>" +
+                "   </div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
-            comments_code += "<div class='your-comment'>" +
-                "<div class='comment-body' dir='ltr'>" +
-                "<span class='comment-tools'>" +
-                "<i class='fas fa-reply' value=" +
-                data[i].pk +
-                "></i>";
+            let comment_body_classes = "comment-body";
             if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" +
-                    data[i].attachment +
-                    "'><i class='fas fa-paperclip'></i></a>";
+                comment_body_classes += " attached";
             }
-            comments_code += "</span>" +
-                "<pre>" +
-                data[i].text +
-                "</pre>" +
-                "</div>" +
+            comments_code += "<div class='your-comment'>" +
+                "   <div class='" + comment_body_classes + "' dir='ltr'>" +
+                "       <span class='comment-tools'>" +
+                "           <i class='fas fa-reply'" + data[i].pk + "></i>" +
+                "       </span>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                    "   <i class='fas fa-paperclip'></i>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+                    "</a>";
+            }
+            comments_code += "<pre>" + data[i].text + "</pre>" +
+                "   </div>" +
                 "</div>";
         } else { //system
             comments_code += "<div class='my-comment'>" +

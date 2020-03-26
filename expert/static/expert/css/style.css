@@ -42,8 +42,12 @@
     border: none;
     color: #707070;
     padding: 7px 25px 7px 10px;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
     border-radius: 0.25em;
+    display: inline-block;
     position: relative;
+    direction: ltr;
 }
 
 .fixed-back .question-attach .inline-list .attach-file:hover,
@@ -181,15 +185,11 @@
     background-color: #FDFDFD;
 }
 
-/*.fixed-back .answer{*/
-/*    position: relative;*/
-/*    border: 1px solid #CDCDCD;*/
-/*    -webkit-border-radius: 0.25em;*/
-/*    -moz-border-radius: 0.25em;*/
-/*    border-radius: 0.25em;*/
-/*    margin-top: 10px;*/
-/*    padding: 5px 20px 5px 5px;*/
-/*}*/
+.fixed-back .answer {
+    padding: 0 20px 0 80px;
+    min-height: 70px;
+}
+
 /*.fixed-back .answer:hover{*/
 /*    background-color: rgba(0, 0, 0, 0.05);*/
 /*    cursor: default;*/
@@ -208,8 +208,100 @@
     color: #707070;
 }
 
-.fixed-back .answer div {
+.fixed-back .answer .answer-body {
     text-align: justify;
+}
+
+.fixed-back .answer .answer-body .file-type.image {
+    position: absolute;
+    top: 5px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.fixed-back .answer .answer-body .file-type.image.pdf {
+    background-image: url("../img/pdf.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.doc {
+    background-image: url("../img/doc.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.gif {
+    background-image: url("../img/gif.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.jpg {
+    background-image: url("../img/jpg.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.png {
+    background-image: url("../img/png.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.ppt {
+    background-image: url("../img/ppt.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.txt {
+    background-image: url("../img/txt.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.unknown {
+    background-image: url("../img/unknown.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.wmv {
+    background-image: url("../img/wmv.svg");
+}
+
+.fixed-back .answer .answer-body .file-type.image.zip {
+    background-image: url("../img/zip.svg");
+}
+
+
+.fixed-back .answer .answer-body .file-type.text {
+    position: absolute;
+    bottom: 5px;
+    left: 95px;
+}
+
+.fixed-back .answer .answer-body .file-name {
+    text-align: left;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.fixed-back .answer .download {
+    position: absolute;
+    bottom: 5px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    color: #707070;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.fixed-back .answer .download:hover {
+    color: #ffffff;
+    background-color: #3CCD1C;
+}
+
+.fixed-back .answer .download i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .fixed-back .show-more-answer {
