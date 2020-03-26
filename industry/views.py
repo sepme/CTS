@@ -4,11 +4,12 @@ import os
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.mail import send_mail
 from django.core.files.base import ContentFile
 from django.forms import model_to_dict
 from django.views import generic, View
 from django.urls import reverse
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
 from persiantools.jdatetime import JalaliDate
@@ -378,9 +379,21 @@ class NewProject(View):
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
-            print('the creator is', new_project.industry_creator)
-            # request.user.industryuser.projects.add(new_project)
-            # models.IndustryUser.objects.filter(user=request.user).update()
+            subject = 'ثبت پروژه جدید'
+            message ="""با سلام و احترام
+            کاربر صنعت با نام کاربری {}
+            پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
+            با تشکر""".format(request.user.username ,project_title_persian,JalaliDate(datetime.date.today()))
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[settings.EMAIL_HOST_USER,"a.jafarzadeh1998@gmail.com",],
+                    fail_silently=False
+                )
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/newProject.html', context={'form': form})
 
