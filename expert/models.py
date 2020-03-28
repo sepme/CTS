@@ -6,6 +6,11 @@ import uuid
 from industry.models import Keyword
 from researcher.models import ResearchQuestionInstance
 
+#for Compress the photo
+import sys
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 def profileUpload(instance, filename):
     return os.path.join('Expert Profile' , instance.expert_user.user.username ,filename)

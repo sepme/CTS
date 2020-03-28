@@ -6,7 +6,7 @@ import datetime
 import uuid
 from . import persianNumber
 
-
+#for Compress the photo
 import sys
 from PIL import Image
 from io import BytesIO

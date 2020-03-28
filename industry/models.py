@@ -3,13 +3,18 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 from ChamranTeamSite import settings
-# from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
+
+#for Compress the photo
+import sys
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from researcher.models import ResearcherUser ,RequestedProject ,Technique
 from expert import models as expertModels
