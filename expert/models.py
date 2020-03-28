@@ -118,10 +118,10 @@ class ExpertForm(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.photo = self.compressImage(self.photo)
-        super(ResearcherProfile, self).save(*args, **kwargs)
+        super(ExpertForm, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
-        imageTemproary = Image.open(photo)
+        imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
         imageTemproary.save(outputIoStream , format='JPEG', quality=60)
