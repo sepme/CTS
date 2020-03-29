@@ -6,7 +6,7 @@ import datetime
 import uuid
 from . import persianNumber
 
-
+#for Compress the photo
 import sys
 from PIL import Image
 from io import BytesIO
@@ -171,7 +171,7 @@ class ResearcherProfile(models.Model):
         super(ResearcherProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
-        imageTemproary = Image.open(photo)
+        imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
         imageTemproary.save(outputIoStream , format='JPEG', quality=60)
