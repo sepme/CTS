@@ -561,7 +561,7 @@ $(document).ready(function () {
         /*
          * end of reset
          */
-        var id = $(this).attr("id");
+        let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
             url: '/industry/show_project/',
@@ -594,6 +594,14 @@ $(document).ready(function () {
                 if (data.status !== 1 && data.status !== 2) {
                     $('.vote').attr('style', "display : none");
                     $('.add-comment').attr('style', "display : none");
+                    dialog.find(".card").addClass("b-x0");
+                    let info_msg = "<div class='message info'>" +
+                        "<h5>توجه</h5>" +
+                        "<p>پروژه شما در حال بررسی توسط کارشناسان ما می‌باشد تا در صورت نیاز به اصلاح، با شما تماس گرفته شود.</p>" +
+                        "<p>این فرآیند، حداکثر <strong>8 ساعت</strong> زمان خواهد برد.</p>" +
+                        "<p>با تشکر از صبر و بردباری شما</p>" +
+                        "</div>";
+                    dialog.find(".container").append(info_msg);
                 } else {
                     if (data.vote === "false") {
                         $(".vote").attr("style", "display: none");

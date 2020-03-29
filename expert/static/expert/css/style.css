@@ -190,6 +190,21 @@
     min-height: 70px;
 }
 
+.fixed-back .answer.divider-top {
+
+}
+
+.fixed-back .answer.divider-top:after {
+    /*content: "";*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 50%;*/
+    /*transform: translateX(-50%);*/
+    /*height: 1px;*/
+    /*width: 95%;*/
+    /*background-color: #BDBDBD;*/
+}
+
 /*.fixed-back .answer:hover{*/
 /*    background-color: rgba(0, 0, 0, 0.05);*/
 /*    cursor: default;*/
@@ -278,7 +293,7 @@
 .fixed-back .answer .download {
     position: absolute;
     bottom: 5px;
-    right: 20px;
+    right: 185px;
     width: 30px;
     height: 30px;
     font-size: 16px;
@@ -313,9 +328,31 @@
 
 .fixed-back .answer .check {
     position: absolute;
-    height: 18px;
-    top: 2px;
-    left: 5px;
+    height: 30px;
+    bottom: 5px;
+    right: 20px;
+}
+
+.fixed-back .answer .check:after {
+    content: "یا";
+    text-align: center;
+    font-weight: 500;
+    line-height: 24px;
+    color: #707070;
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #ffffff;
 }
 
 .fixed-back .answer .check .wrong,
@@ -326,44 +363,53 @@
 
 .fixed-back .answer .check .wrong button,
 .fixed-back .answer .check .correct button {
-    background-color: transparent;
     border: none;
     outline: none;
-    border-radius: 50%;
+    color: #ffffff;
     position: relative;
-    width: 25px;
-    height: 25px;
-    display: none;
+    padding: 5px 10px;
+    display: block;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    -ms-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
 }
 
 .fixed-back .answer .check .wrong button {
-    color: #ff4545;
+    background-color: #ff4545;
+    padding-right: 15px;
+    -webkit-border-radius: 0.25em 0 0 0.25em;
+    -moz-border-radius: 0.25em 0 0 0.25em;
+    border-radius: 0.25em 0 0 0.25em;
 }
 
 .fixed-back .answer .check .wrong button:hover {
-    background-color: #ff4545;
-    color: #ffffff;
+    background-color: #ff2c2c;
 }
 
 .fixed-back .answer .check .correct button {
-    color: #3ccd1c;
+    padding-left: 15px;
+    background-color: #3ccd1c;
+    -webkit-border-radius: 0 0.25em 0.25em 0;
+    -moz-border-radius: 0 0.25em 0.25em 0;
+    border-radius: 0 0.25em 0.25em 0;
 }
 
 .fixed-back .answer .check .correct button:hover {
-    background-color: #3ccd1c;
-    color: #ffffff;
+    background-color: #35b719;
 }
 
 .fixed-back .answer .check .correct i,
 .fixed-back .answer .check .wrong i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*-webkit-transform: translate(-50%, -50%);*/
+    /*-moz-transform: translate(-50%, -50%);*/
+    /*-ms-transform: translate(-50%, -50%);*/
+    /*-o-transform: translate(-50%, -50%);*/
+    /*transform: translate(-50%, -50%);*/
 }
 
 .fixed-back .answer .check .status {
@@ -386,8 +432,23 @@
 }
 
 .fixed-back .close-answer {
-    float: left;
+    background-color: transparent;
+    color: #ff4545;
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    -ms-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
 }
+
+.fixed-back .close-answer:hover {
+    background-color: #ff4545;
+    color: #ffffff;
+}
+
 
 .vote {
     position: absolute;
