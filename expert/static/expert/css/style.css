@@ -185,7 +185,7 @@
     background-color: #FDFDFD;
 }
 
-.fixed-back .answer {
+.fixed-back.show-question .answer {
     padding: 0 20px 0 80px;
     min-height: 70px;
 }
@@ -456,95 +456,154 @@
     left: 5px;
     height: 30px;
     width: 30px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
     border-radius: 50%;
-    border: 1px solid #bdbdbd;
     color: #bdbdbd;
     z-index: 100;
 }
 
 .vote:hover {
-    color: #3ccd1c;
-    border-color: #3ccd1c;
+    color: #ffffff;
+    background-color: #3CCD1C;
     cursor: pointer;
 }
 
-.vote > span.dots {
+.vote i {
     position: absolute;
-    left: 50%;
     top: 50%;
-    height: 0;
-    width: 0;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 2px solid #bdbdbd;
-    background-color: #bdbdbd;
-    transition: 0.3s;
+    padding: 0;
+    margin: 0;
 }
 
-.vote > span.dots:after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    border: 2px solid #bdbdbd;
-    background-color: #bdbdbd;
-    transition: 0.3s;
+.vote.expand {
+    color: #ffffff;
+    background-color: #3CCD1C;
 }
 
-.vote > span.dots:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 5px;
-    width: 0;
-    height: 0;
-    transform: translate(-40%, -200%);
-    border-radius: 50%;
-    border: 2px solid #bdbdbd;
-    background-color: #bdbdbd;
-    transition: 0.3s;
-}
+/*.vote > span.dots {*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    height: 3px;*/
+/*    width: 3px;*/
+/*    -webkit-transform: translate(-50%, -50%);*/
+/*    -moz-transform: translate(-50%, -50%);*/
+/*    -ms-transform: translate(-50%, -50%);*/
+/*    -o-transform: translate(-50%, -50%);*/
+/*    transform: translate(-50%, -50%);*/
+/*    -webkit-border-radius: 50%;*/
+/*    -moz-border-radius: 50%;*/
+/*    border-radius: 50%;*/
+/*    background-color: #bdbdbd;*/
+/*    -webkit-transition: all ease 0.2s;*/
+/*    -moz-transition: all ease 0.2s;*/
+/*    -ms-transition: all ease 0.2s;*/
+/*    -o-transition: all ease 0.2s;*/
+/*    transition: all ease 0.2s;*/
+/*}*/
 
-.vote > span.dots.expand {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    height: 0;
-    width: 0;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 2px solid transparent;
-    background-color: transparent;
-}
+/*.vote:hover > span.dots {*/
+/*    background-color: #3CCD1C;*/
+/*}*/
 
-.vote > span.dots.expand:after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 8px;
-    height: 3px;
-    transform: translate(-70%, -50%) rotate(45deg);
-    border-radius: 2px;
-    border: none;
-    background-color: #3ccd1c;
-}
+/*.vote > span.dots:after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: calc(50% - 5px);*/
+/*    height: 3px;*/
+/*    width: 3px;*/
+/*    -webkit-transform: translate(-50%, -50%);*/
+/*    -moz-transform: translate(-50%, -50%);*/
+/*    -ms-transform: translate(-50%, -50%);*/
+/*    -o-transform: translate(-50%, -50%);*/
+/*    transform: translate(-50%, -50%);*/
+/*    -webkit-border-radius: 50%;*/
+/*    -moz-border-radius: 50%;*/
+/*    border-radius: 50%;*/
+/*    background-color: #bdbdbd;*/
+/*    -webkit-transition: all ease 0.2s;*/
+/*    -moz-transition: all ease 0.2s;*/
+/*    -ms-transition: all ease 0.2s;*/
+/*    -o-transition: all ease 0.2s;*/
+/*    transition: all ease 0.2s;*/
+/*}*/
 
-.vote > span.dots.expand:before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 8px;
-    height: 3px;
-    transform: translate(-10%, -40%) rotate(135deg);
-    border-radius: 2px;
-    border: none;
-    background-color: #3ccd1c;
-}
+/*.vote:hover > span.dots:after {*/
+/*    background-color: #3CCD1C;*/
+/*}*/
+
+/*.vote > span.dots:before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: calc(50% + 5px);*/
+/*    height: 3px;*/
+/*    width: 3px;*/
+/*    -webkit-transform: translate(-50%, -50%);*/
+/*    -moz-transform: translate(-50%, -50%);*/
+/*    -ms-transform: translate(-50%, -50%);*/
+/*    -o-transform: translate(-50%, -50%);*/
+/*    transform: translate(-50%, -50%);*/
+/*    -webkit-border-radius: 50%;*/
+/*    -moz-border-radius: 50%;*/
+/*    border-radius: 50%;*/
+/*    background-color: #bdbdbd;*/
+/*    -webkit-transition: all ease 0.2s;*/
+/*    -moz-transition: all ease 0.2s;*/
+/*    -ms-transition: all ease 0.2s;*/
+/*    -o-transition: all ease 0.2s;*/
+/*    transition: all ease 0.2s;*/
+/*}*/
+
+/*.vote:hover > span.dots:before {*/
+/*    background-color: #3CCD1C;*/
+/*}*/
+
+/*.vote > span.dots.expand {*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    height: 0;*/
+/*    width: 0;*/
+/*    transform: translate(-50%, -50%);*/
+/*    border-radius: 50%;*/
+/*    border: 2px solid transparent;*/
+/*    background-color: transparent;*/
+/*}*/
+
+/*.vote > span.dots.expand:after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    width: 8px;*/
+/*    height: 3px;*/
+/*    transform: translate(-70%, -50%) rotate(45deg);*/
+/*    border-radius: 2px;*/
+/*    border: none;*/
+/*    background-color: #3ccd1c;*/
+/*}*/
+
+/*.vote > span.dots.expand:before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    width: 8px;*/
+/*    height: 3px;*/
+/*    transform: translate(-10%, -40%) rotate(135deg);*/
+/*    border-radius: 2px;*/
+/*    border: none;*/
+/*    background-color: #3ccd1c;*/
+/*}*/
 
 .vote-dialog {
     position: absolute;
@@ -1046,6 +1105,8 @@ span.add-researcher.hover > span {
 .industry-logo-preview > img {
     height: 150px;
     width: 120px;
+    min-height: 150px;
+    min-width: 120px;
     border-radius: 5px;
     border: 1px solid #bdbdbd;
 }
@@ -1082,7 +1143,7 @@ span.add-researcher.hover > span {
     border: 1px solid #bdbdbd;
 }
 
-.project-process {
+.project-progress {
     width: 100%;
     padding: 10px;
     text-align: center !important;

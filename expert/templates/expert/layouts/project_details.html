@@ -3,9 +3,9 @@
     <div class="card text-right">
         <div class="close"></div>
         <div class="vote">
-            <span class="dots"></span>
+            <i class="fas fa-ellipsis-v"></i>
         </div>
-        <div class="card-head">پروژه</div>
+        <div class="card-head"></div>
         <div class="vote-dialog">
             <div class="card industry-back text-center">ارزیابی از صنعت</div>
             <div class="card researcher-back text-center">ارزیابی از پژوهشگر</div>
@@ -13,19 +13,14 @@
         <div class="container">
             <div class="row mbottom-lg-25">
                 <div class="col-lg-12 techniques">
-                    <span class="border-span">محیط کشت سلولی </span>
-                    <span class="border-span">PCR</span>
-                    <span class="border-span">فلوسایتومتری</span>
-                    <span class="border-span">فلوسایتومتری</span>
-                    <span class="border-span">PCR</span>
-                    <span class="border-span">PCR</span>
+                    <span class="border-span"></span>
                 </div>
             </div>
             <div class="row mbottom-lg-25">
                 <div class="col-lg-12 text-right">
-                    <span class="section-title hidden" style="display: none;">اطلاعات پروژه</span>
+                    <span class="section-title">اطلاعات پروژه</span>
                     <div class="section">
-                        <div class="row hidden" style="display: none;">
+                        <div class="row">
                             <div class="col-lg-9">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -49,7 +44,8 @@
                             </div>
                             <div class="col-lg-3">
                                 <div class="industry-logo-preview">
-                                    <img id="industry_logo" src="{% static 'expert/img/industry.jpg' %}" alt="industry-logo">
+                                    <img id="industry_logo" src="{% static 'expert/img/industry.jpg' %}"
+                                         alt="industry-logo">
                                 </div>
                                 <div class="budget-section">
                                     <div class="budget">
@@ -62,7 +58,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="project-process hidden" style="display: none;">
+                        <div class="project-progress">
                             <div class="progress-row">
                                 <div class="step-top">
                                     <div class="time">
@@ -140,23 +136,23 @@
                                 <div class="project-info-tabs">
                                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                                          aria-orientation="vertical">
-                                        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill"
-                                           role="tab" aria-controls="v-pills-home"
+                                        <a class="nav-link active" id="v-pills-majors-tab" data-toggle="pill"
+                                           role="tab" aria-controls="v-pills-majors"
                                            aria-selected="true">
                                             شاخص ها
                                         </a>
-                                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"
-                                           role="tab" aria-controls="v-pills-profile"
+                                        <a class="nav-link" id="v-pills-approaches-tab" data-toggle="pill"
+                                           role="tab" aria-controls="v-pills-approaches"
                                            aria-selected="false">
                                             راهکار ها
                                         </a>
-                                        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill"
-                                           role="tab" aria-controls="v-pills-messages"
+                                        <a class="nav-link" id="v-pills-resources-tab" data-toggle="pill"
+                                           role="tab" aria-controls="v-pills-resources"
                                            aria-selected="false">
                                             منابع مورد نیاز
                                         </a>
-                                        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill"
-                                           role="tab" aria-controls="v-pills-settings"
+                                        <a class="nav-link" id="v-pills-roles-tab" data-toggle="pill"
+                                           role="tab" aria-controls="v-pills-roles"
                                            aria-selected="false">
                                             قوانین
                                         </a>
