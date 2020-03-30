@@ -1126,7 +1126,7 @@ function deleteComment(comment) {
 }
 
 function setRole(data) {
-    role = "<div>" +
+    let role = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -1140,7 +1140,7 @@ function setRole(data) {
 }
 
 function setResources(data) {
-    resources = "<div>" +
+    let resources = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -1188,7 +1188,7 @@ function setResources(data) {
 }
 
 function setApproach(data) {
-    approach = "<div>" +
+    let approach = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -1213,7 +1213,7 @@ function setApproach(data) {
 }
 
 function setMajors(data) {
-    majors = "<div>" +
+    let majors = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -1325,7 +1325,7 @@ function setComment(data) {
                 "   </div>" +
                 "</div>";
         } else { //system
-            comments_code += "<div class='my-comment'>" +
+            comments_code += "<div class='system-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<pre>" +
                 data[i].text +
@@ -1337,57 +1337,38 @@ function setComment(data) {
     $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
 }
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        let cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            let cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-        return cookieValue;
-    }
-}
-
-let csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-$.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
-
 function addComment(data) {
     let comment_code = "<div class='my-comment' id='" + data.pk + "' >" +
         "<div class='comment-body' dir='ltr'>" +
-        "<span class='comment-tools'>" +
-        "<i class='fas fa-trash-alt'></i>" +
-        "<i class='fas fa-reply' value=" +
-        data.pk +
-        "></i>" +
-        "<i class='fas fa-pen'>" +
-        "</i>";
+        "   <span class='comment-tools'>" +
+        "       <div class='btn-group dropdown'>" +
+        "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+        "               <i class='fas fa-cog'></i>" +
+        "           </button>" +
+        "           <div class='dropdown-menu'>" +
+        "               <div class='dropdown-item'>" +
+        "                   <span>ویرایش پیام</span>" +
+        "                   <i class='fas fa-pen'></i>" +
+        "               </div>" +
+        "               <div class='dropdown-item'>" +
+        "                   <span>حذف پیام</span>" +
+        "                   <i class='fas fa-trash-alt'></i>" +
+        "               </div>" +
+        "           </div>" +
+        "       </div>" +
+        "       <i class='fas fa-reply' value=" + data.pk + ">" +
+        "           <div class='reply'></div>" +
+        "       </i>" +
+        "   </span>";
     if (data.attachment !== "None") {
-        comment_code += "<a href='/" +
-            data.attachment +
-            "'><i class='fas fa-paperclip'></i></a>";
+        comment_code +=
+            "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+            "   <i class='fas fa-paperclip'></i>" +
+            "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+            "</a>"
     }
-    comment_code += "</span>" +
-        "<span>" +
-        data.description +
-        "</span>" +
-        "</div>" +
+    comment_code += "<pre>" + data.description + "</pre>" +
+        "   </div>" +
         "</div>";
     return comment_code;
 }
@@ -1395,8 +1376,7 @@ function addComment(data) {
 let comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
-    comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
-    comment_form.find("label").addClass("progress-cursor");
+    comment_form.find("button[type='submit']").attr("disabled", "true");
     let thisUrl = "";
     console.log(comment_form.find(".researcher_id").val() === "");
     if (comment_form.find(".researcher_id").val() === "")
@@ -1413,9 +1393,7 @@ comment_form.submit(function (event) {
         processData: false,
         contentType: false,
         success: function (data) {
-            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            comment_form.find("label").removeClass("progress-cursor");
+            comment_form.find("button[type='submit']").prop("disabled", false);
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
             let comment_code = addComment(data);
             $(".project-comment-innerDiv").find(".comments").append(comment_code);
@@ -1474,4 +1452,35 @@ $('.confirm-researcher').click(function () {
             console.log("Error");
         }
     });
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+        return cookieValue;
+    }
+}
+
+let csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
 });

@@ -381,6 +381,7 @@ img {
     font-weight: 400;
     font-size: 15px;
     color: #3ccd1c;
+    direction: rtl;
 }
 
 @media (max-width: 767px) {

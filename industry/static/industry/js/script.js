@@ -262,57 +262,6 @@ function expertResume() {
     });
 }
 
-
-$('.accept-request').click(function (data) {
-    expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    project_id = $(this).closest(".showProject").attr("id");
-    data = {
-        "expert_id": expert_id,
-        "project_id": project_id
-    };
-    $.ajax({
-        method: 'post',
-        url: 'accept_request/',
-        dataType: 'json',
-        data: data,
-        success: function (data) {
-            iziToast.success({
-                rtl: true,
-                message: "درخواست شما با موفقیت ارسال شد!",
-                position: 'bottomLeft'
-            });
-        },
-        error: function (data) {
-            console.log("error");
-        },
-    });
-});
-
-$('.reject-request').click(function (data) {
-    expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    project_id = $(this).closest(".showProject").attr("id");
-    data = {
-        "expert_id": expert_id,
-        "project_id": project_id
-    };
-    $.ajax({
-        method: 'POST',
-        url: 'refuse_request/',
-        dataType: 'json',
-        data: data,
-        success: function (data) {
-            iziToast.success({
-                rtl: true,
-                message: "درخواست شما با موفقیت ارسال شد!",
-                position: 'bottomLeft'
-            });
-        },
-        error: function (data) {
-            console.log("error");
-        },
-    });
-});
-
 function setIndustryComment(data) {
     let comments_code = "";
     for (let i = 0; i < data.length; i++) {
@@ -377,7 +326,7 @@ function setComment(data) {
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1 ) + "</span>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
             comments_code += "<pre>" + data[i].text + "</pre>" +
@@ -390,13 +339,13 @@ function setComment(data) {
             }
             comments_code += "<div class='your-comment'>" +
                 "<div class='" + comment_body_classes + "' dir='ltr'>" +
-                "<span class='comment-tools'>" ;
+                "<span class='comment-tools'>" +
                 "   <i class='fas fa-reply'" + data[i].pk + "></i>" +
                 "</span>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1 ) + "</span>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
             comments_code += "<pre>" + data[i].text + "</pre>" +
@@ -552,15 +501,59 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
-    $(".chamran-btn-info").click(function () {
+
+    $('.accept-request').click(function (data) {
+        expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        project_id = $(this).closest(".showProject").attr("id");
+        data = {
+            "expert_id": expert_id,
+            "project_id": project_id
+        };
+        $.ajax({
+            method: 'post',
+            url: 'accept_request/',
+            dataType: 'json',
+            data: data,
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "درخواست شما با موفقیت ارسال شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("error");
+            },
+        });
+    });
+
+    $('.reject-request').click(function (data) {
+        expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        project_id = $(this).closest(".showProject").attr("id");
+        data = {
+            "expert_id": expert_id,
+            "project_id": project_id
+        };
+        $.ajax({
+            method: 'POST',
+            url: 'refuse_request/',
+            dataType: 'json',
+            data: data,
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "درخواست شما با موفقیت ارسال شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("error");
+            },
+        });
+    });
+
+    $(".preview-project").click(function () {
         const dialog = $(".showProject");
-        /*
-         * reset All data
-         */
-        dialog.find(".techniques").html("");
-        /*
-         * end of reset
-         */
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -578,7 +571,7 @@ $(document).ready(function () {
                 // }
                 localStorage.setItem("project_id", "" + id);
                 localStorage.setItem("replied_text", null);
-                dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
+                dialog.find(".card-head").html(data.project_title_persian + " (" + data.project_title_english + ")");
                 dialog.find(".establish-time .time-body").html(data.submission_date);
                 dialog.find(".time-left .time-body").html(data.deadline);
                 for (let i = 0; i < data.key_words.length; i++) {
@@ -588,12 +581,9 @@ $(document).ready(function () {
                         + "</span>"
                     );
                 }
-                dialog.find('.card-head').html(data.project_title_persian);
                 setMajors(data);
                 setValue(data);
                 if (data.status !== 1 && data.status !== 2) {
-                    $('.vote').attr('style', "display : none");
-                    $('.add-comment').attr('style', "display : none");
                     dialog.find(".card").addClass("b-x0");
                     let info_msg = "<div class='message info'>" +
                         "<h5>توجه</h5>" +
@@ -603,10 +593,9 @@ $(document).ready(function () {
                         "</div>";
                     dialog.find(".container").append(info_msg);
                 } else {
-                    if (data.vote === "false") {
-                        $(".vote").attr("style", "display: none");
-                    }else
+                    if (data.vote === "true") {
                         $('.vote').attr('style', "display : block");
+                    }
                     $('.add-comment').attr('style', "display : block");
                     setTab(data);
                 }
@@ -630,11 +619,6 @@ $(document).ready(function () {
     });
     tag_input_label("id_key_words");
     init_setup();
-    // variable
-    edu_count = 0;
-    exe_count = 0;
-    stu_count = 0;
-    art_count = 0;
     search_input(".search_message");
     input_focus();
     if ($(window).width() < 767) {
@@ -652,7 +636,7 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".chamran-btn-info", ".showProject");
+        init_dialog_btn(".preview-project", ".showProject");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
         expertResume();
         // if($(".mainInfo-body").css("display") === "block"){
@@ -978,4 +962,5 @@ $(document).ready(function () {
             }
         }
     });
-});
+})
+;
