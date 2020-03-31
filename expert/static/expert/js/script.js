@@ -1030,7 +1030,7 @@ function setDates(date) {
 
 function projectDetail(data) {
     console.log("project_detail");
-    $(".project-details").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
+    $(".project-details").find(".card-head").html(data.project_title_persian + ' ( ' + data.project_title_english + ' )');
     $(".project-details").find(".establish-time .time-body").html(data.date);
     $(".project-details").find(".time-left .time-body").html(data.deadline);
 
@@ -1045,19 +1045,47 @@ function projectDetail(data) {
     }
     $(".techniques").html(techniques);
 
-    $("#industry-name").val(data.industry_name);
-    $("#enforced-name").val(data.enforced_name);
-    $("#executive-info").val(data.executive_info);
+    $("#industry-name").html(data.industry_name);
+    $("#enforced-name").html(data.enforced_name);
+    $("#executive-info").html(data.executive_info);
     $("#industry_logo").attr("src", data.industry_logo);
     $(".budget-amount").html(data.budget_amount);
     // setDates(data.timeScheduling);
     setMajors(data);
     setValue(data);
     setComment(data.comments);
+    researcherRequest();
     //
     // $(".comments .fa-trash-alt").click(function () {
     //     deleteComment($(this).closest('.my-comment'));
     // });
+}
+
+function researcherRequest() {
+    let requestForm = $("#researcher-request-ajax");
+    requestForm.submit(function (event) {
+        event.preventDefault();
+        let thisUrl = "";
+        let form = new FormData(requestForm.get(0));
+        $.ajax({
+            method: 'POST',
+            url: thisUrl,
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت ذخیره شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+
+                requestForm[0].reset();
+            },
+        });
+    });
 }
 
 let showInfo = $('.preview-project');

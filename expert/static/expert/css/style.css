@@ -1143,6 +1143,18 @@ span.add-researcher.hover > span {
     border: 1px solid #bdbdbd;
 }
 
+.researcher-request {
+    margin-top: -15px;
+}
+
+.researcher-request button {
+    user-select: auto;
+    position: relative;
+    top: 100%;
+    transform: translateY(-100%);
+    line-height: 30px;
+}
+
 .project-progress {
     width: 100%;
     padding: 10px;
@@ -1214,13 +1226,28 @@ span.add-researcher.hover > span {
     z-index: 1;
 }
 
+.project-progress.step-1 .line-100:after {
+    content: '';
+    position: absolute;
+    height: 4px;
+    width: 10%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 0;
+    background-color: #3CCD1C;
+}
+
 .line-100 > .arrow {
     position: absolute;
     top: -8px;
     left: 0;
     height: 15px;
     width: 15px;
-    border: 10px solid #f8fdf7;
+    border: 10px solid #ffffff;
     border-right-color: #3CCD1C;
 }
 
@@ -1240,6 +1267,12 @@ span.add-researcher.hover > span {
     left: 50%;
     top: 50%;
     transform: translate(-50%, 15%);
+}
+
+.project-progress.step-1 .step-down:first-child > .step-content {
+    border: 1px solid #ffffff;
+    background-color: #3CCD1C;
+    color: #ffffff;
 }
 
 .step-down > .step-content:after {
@@ -1267,6 +1300,11 @@ span.add-researcher.hover > span {
     left: 50%;
     transform: translate(-50%, calc(-50% - 12px));
     z-index: 2;
+}
+
+.project-progress.step-1 .step-down:first-child > .step-circle {
+    border: 2px solid #ffffff;
+    background-color: #3CCD1C;
 }
 
 .step-down > .date {

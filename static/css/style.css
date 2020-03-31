@@ -10,6 +10,10 @@
     margin-bottom: 25px;
 }
 
+.m-top-10 {
+    margin-top: 10px;
+}
+
 .mtop-lg-25 {
     margin-top: 25px;
 }
@@ -882,6 +886,7 @@ hr {
 
     .side-bar.show {
         left: calc(100vw - 250px);
+        overflow-y: auto;
     }
 }
 
@@ -1419,6 +1424,27 @@ hr {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+@media (max-width: 767px) {
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
 }
 
 .wait-item, .delete-item {
@@ -2077,6 +2103,15 @@ span.title-back {
     display: block !important;
 }
 
+@media (max-width: 767px) {
+    .nav-pills {
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+    }
+}
+
 .nav-pills > .nav-link {
     position: relative;
     display: inline-block;
@@ -2099,6 +2134,8 @@ span.title-back {
 @media (max-width: 767px) {
     .nav-pills > .nav-link {
         min-width: 50px;
+        display: inline-block;
+        overflow-x: auto;
     }
 }
 
@@ -2163,6 +2200,7 @@ span.title-back {
 }
 
 .question {
+    margin: 15px 0 5px 0;
     font-weight: bold;
     color: #3CCD1C;
     padding-right: 2px;
@@ -2170,6 +2208,7 @@ span.title-back {
 
 .answer {
     font-weight: 300;
+    line-height: 23px;
     padding-right: 20px;
     text-align: justify;
 }
@@ -2461,6 +2500,10 @@ div.no-project > span.disable-border-button {
 
 .fs-15 {
     font-size: 15px !important;
+}
+
+.fs-10 {
+    font-size: 10px !important;
 }
 
 .center-abs {
@@ -2809,8 +2852,11 @@ span.initial-value {
 pre {
     font-family: iranyekan, serif;
     margin: 0;
+    text-align: justify;
+    text-align-last: right;
     font-size: 100%;
     color: #262626;
+    line-height: 23px;
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
     white-space: pre-wrap;

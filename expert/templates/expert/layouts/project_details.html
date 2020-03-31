@@ -21,28 +21,33 @@
                     <span class="section-title">اطلاعات پروژه</span>
                     <div class="section">
                         <div class="row">
-                            <div class="col-lg-9">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <label for="industry-name" class="fix">کارفرما</label>
-                                        <input type="text" class="w-100" id="industry-name" value="شرکت طب باکس"
-                                               disabled>
+                            <div class="col-md-9">
+                                <div class="row mbottom-lg-25 m-top-10">
+                                    <div class="col-md-6">
+                                        <div class="pre-header">
+                                            <span>کارفرما</span>
+                                        </div>
+                                        <div id="industry-name"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="pre-header">
+                                            <span>مجری</span>
+                                        </div>
+                                        <div id="enforced-name">
+                                            استاد فلانی
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <label for="enforced-name" class="fix">مجری</label>
-                                        <input type="text" class="w-100" id="enforced-name" value="نمی دونم!" disabled>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <label for="executive-info" class="fix">توضیحات اجرایی</label>
-                                        <textarea class="w-100" rows="4" id="executive-info" disabled>توضیحات</textarea>
+                                        <div class="pre-header">
+                                            <span>توضیحات اجرایی</span>
+                                        </div>
+                                        <pre id="executive-info">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</pre>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-md-3">
                                 <div class="industry-logo-preview">
                                     <img id="industry_logo" src="{% static 'expert/img/industry.jpg' %}"
                                          alt="industry-logo">
@@ -58,7 +63,31 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="project-progress">
+                        <div class="row m-top-10 mbottom-10">
+                            <div class="col-12">
+                                <div class="pre-header">
+                                    <span>درخواست پژوهشگر</span>
+                                </div>
+                                <div class="researcher-request">
+                                    <form id="researcher-request-ajax" method="post" action="">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <label for="researcher-number">حداکثر تعداد</label>
+                                                <input type="number" class="w-100" id="researcher-number" name="">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label for="researcher-time">ساعت کار <span class="fs-10">(ساعت)</span></label>
+                                                <input type="number" class="w-100" id="researcher-time" name="">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="default-btn" type="submit">تایید</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-progress step-1">
                             <div class="progress-row">
                                 <div class="step-top">
                                     <div class="time">
