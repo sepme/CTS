@@ -22,7 +22,7 @@
                     <div class="section">
                         <div class="row">
                             <div class="col-md-9">
-                                <div class="row mbottom-lg-25 m-top-10">
+                                <div class="row m-top-10">
                                     <div class="col-md-6">
                                         <div class="pre-header">
                                             <span>کارفرما</span>
@@ -35,6 +35,15 @@
                                         </div>
                                         <div id="enforced-name">
                                             استاد فلانی
+                                        </div>
+                                    </div>
+                                    <div class="col-12 budget-text">
+                                        <div class="pre-header">
+                                            <span>بودجه</span>
+                                        </div>
+                                        <div id="budget-content">
+                                            <span class="budget-amount">5,000,000</span>
+                                            <span>ریال</span>
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-top-10 mbottom-10">
+                        <div class="row mbottom-lg-25">
                             <div class="col-12">
                                 <div class="pre-header">
                                     <span>درخواست پژوهشگر</span>
@@ -71,93 +80,113 @@
                                 <div class="researcher-request">
                                     <form id="researcher-request-ajax" method="post" action="">
                                         <div class="row">
-                                            <div class="col-md-5">
+                                            <div class="col-md-5 col-6">
                                                 <label for="researcher-number">حداکثر تعداد</label>
                                                 <input type="number" class="w-100" id="researcher-number" name="">
                                             </div>
-                                            <div class="col-md-5">
+                                            <div class="col-md-5 col-6">
                                                 <label for="researcher-time">ساعت کار <span class="fs-10">(ساعت)</span></label>
                                                 <input type="number" class="w-100" id="researcher-time" name="">
                                             </div>
-                                            <div class="col-md-2">
-                                                <button class="default-btn" type="submit">تایید</button>
+                                            <div class="col-md-2 col-12">
+                                                <button class="default-btn w-100" type="submit">تایید</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div class="project-progress step-1">
-                            <div class="progress-row">
-                                <div class="step-top">
-                                    <div class="time">
-                                        <div class="start">
-                                            12/12/1212
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="step-top">
-                                    <div class="step-content">
-                                        فاز اول
-                                    </div>
-                                    <div class="step-circle"></div>
-                                </div>
-                                <div class="step-top">
-                                    <div class="date">
-                                        <div class="second_phase">
-                                            12/12/1212
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="step-top">
-                                    <div class="step-content">
-                                        فاز سوم
-                                    </div>
-                                    <div class="step-circle"></div>
-                                </div>
-                                <div class="step-top">
-                                    <div class="date_finished">
-                                        12/12/1212
-                                    </div>
-                                </div>
+                        <div class="project-progress step-2 mbottom-lg-25">
+                            <div class="step-container active">
+                                <span class="step-date">1399/01/12</span>
+                                <span class="step-name">شروع پروژه</span>
                             </div>
+                            <div class="step-container active">
+                                <span class="step-date">1399/02/15</span>
+                                <span class="step-name">فاز اول</span>
+                            </div>
+                            <div class="step-container">
+                                <span class="step-date">1399/03/01</span>
+                                <span class="step-name">فاز دوم</span>
+                            </div>
+                            <div class="step-container">
+                                <span class="step-date">1399/03/30</span>
+                                <span class="step-name">فاز سوم</span>
+                            </div>
+                            <div class="step-container">
+                                <span class="step-date">1399/04/08</span>
+                                <span class="step-name">اتمام پروژه</span>
+                            </div>
+                            {#                            <div class="progress-row">#}
+                            {#                                <div class="step-top">#}
+                            {#                                    <div class="time">#}
+                            {#                                        <div class="start">#}
+                            {#                                            12/12/1212#}
+                            {#                                        </div>#}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-top">#}
+                            {#                                    <div class="step-content">#}
+                            {#                                        فاز اول#}
+                            {#                                    </div>#}
+                            {#                                    <div class="step-circle"></div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-top">#}
+                            {#                                    <div class="date">#}
+                            {#                                        <div class="second_phase">#}
+                            {#                                            12/12/1212#}
+                            {#                                        </div>#}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-top">#}
+                            {#                                    <div class="step-content">#}
+                            {#                                        فاز سوم#}
+                            {#                                    </div>#}
+                            {#                                    <div class="step-circle"></div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-top">#}
+                            {#                                    <div class="date_finished">#}
+                            {#                                        12/12/1212#}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
                             <div class="line-100">
                                 <div class="arrow"></div>
                             </div>
-                            <div class="progress-row">
-                                <div class="step-down">
-                                    <div class="step-content">
-                                        شروع پروژه
-                                    </div>
-                                    <div class="step-circle"></div>
-                                </div>
-                                <div class="step-down">
-                                    <div class="date">
-                                        <div class="first_phase">
-                                            12/12/1212
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="step-down">
-                                    <div class="step-content">
-                                        فاز دوم
-                                    </div>
-                                    <div class="step-circle"></div>
-                                </div>
-                                <div class="step-down">
-                                    <div class="date">
-                                        <div class="third_phase">
-                                            12/12/1212
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="step-down">
-                                    <div class="step-content">
-                                        اتمام پروژه
-                                    </div>
-                                    <div class="step-circle"></div>
-                                </div>
-                            </div>
+                            {#                            <div class="progress-row">#}
+                            {#                                <div class="step-down">#}
+                            {#                                    <div class="step-content">#}
+                            {#                                        شروع پروژه#}
+                            {#                                    </div>#}
+                            {#                                    <div class="step-circle"></div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-down">#}
+                            {#                                    <div class="date">#}
+                            {#                                        <div class="first_phase">#}
+                            {#                                            12/12/1212#}
+                            {#                                        </div>#}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-down">#}
+                            {#                                    <div class="step-content">#}
+                            {#                                        فاز دوم#}
+                            {#                                    </div>#}
+                            {#                                    <div class="step-circle"></div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-down">#}
+                            {#                                    <div class="date">#}
+                            {#                                        <div class="third_phase">#}
+                            {#                                            12/12/1212#}
+                            {#                                        </div>#}
+                            {#                                    </div>#}
+                            {#                                </div>#}
+                            {#                                <div class="step-down">#}
+                            {#                                    <div class="step-content">#}
+                            {#                                        اتمام پروژه#}
+                            {#                                    </div>#}
+                            {#                                    <div class="step-circle"></div>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
                         </div>
                         <div class="row mbottom-lg-25">
                             <div class="col-lg-12 text-right">

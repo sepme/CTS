@@ -190,17 +190,18 @@ img {
 }
 
 .fixed-back > .card {
-    position: relative;
+    position: absolute;
     top: 0;
+    left: 50%;
     color: #262626;
-    padding: 35px 10px 55px 10px;
+    padding: 35px 5px 55px 5px;
     overflow: hidden;
     border-color: #BDBDBD;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     -webkit-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
     -moz-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
     -ms-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
@@ -210,11 +211,11 @@ img {
 }
 
 .fixed-back.show > .card {
-    -webkit-transform: none;
-    -moz-transform: none;
-    -ms-transform: none;
-    -o-transform: none;
-    transform: none;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
 }
 
 .fixed-back > .card.b-x0 {
@@ -224,12 +225,12 @@ img {
 @media (max-width: 767px) {
     .fixed-back > .card {
         top: 100%;
-        left: 0;
-        -webkit-transform: none;
-        -moz-transform: none;
-        -ms-transform: none;
-        -o-transform: none;
-        transform: none;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
         width: 100vw !important;
         border-radius: 1rem 1rem 0 0;
         padding-bottom: 70px;
@@ -390,7 +391,7 @@ img {
 
 @media (max-width: 767px) {
     .fixed-back .row > div {
-        padding: 0;
+        /*padding: 0;*/
     }
 }
 
@@ -2109,6 +2110,7 @@ span.title-back {
         overflow: hidden;
         white-space: nowrap;
         width: 100%;
+        margin-bottom: -7px;
     }
 }
 
@@ -2869,7 +2871,7 @@ pre#question-body {
 .pre-header {
     color: #3CCD1C;
     font-weight: 400;
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .message {

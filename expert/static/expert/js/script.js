@@ -1101,7 +1101,6 @@ showInfo.click(function (event) {
         success: function (data) {
             console.log(data);
             if (data.status === "non active") {
-                // init_dialog_btn(".preview-project", ".showProject");
                 console.log("non active");
                 $(".hidden").attr("style", "display : none;");
                 $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
@@ -1122,8 +1121,6 @@ showInfo.click(function (event) {
                 });
             } else {
                 console.log("active");
-                // $(".hidden").attr("style", "display : block;");
-                // init_dialog_btn(".preview-project", ".showProject");
                 projectDetail(data);
             }
         },

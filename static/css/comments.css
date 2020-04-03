@@ -22,6 +22,12 @@
     background-color: #ffffff;
 }
 
+@media (max-width: 767px) {
+    .comment-body {
+        width: 85%;
+    }
+}
+
 .comment-body:hover {
     cursor: default;
 }
@@ -79,10 +85,12 @@
     background-color: #3CCD1C;
     padding: 5px 15px;
 }
+
 .system-comment .comment-body pre {
-    color: #ffffff!important;
+    color: #ffffff !important;
     font-weight: 500;
 }
+
 .my-comment {
     /*padding-right: 70px;*/
 }
