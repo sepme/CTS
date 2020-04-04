@@ -190,6 +190,12 @@
     min-height: 70px;
 }
 
+@media (max-width: 767px) {
+    .fixed-back.show-question .answer {
+        padding-bottom: 60px;
+    }
+}
+
 .fixed-back .answer.divider-top {
 
 }
@@ -284,6 +290,12 @@
     left: 95px;
 }
 
+@media (max-width: 767px) {
+    .fixed-back .answer .answer-body .file-type.text {
+        bottom: 40px;
+    }
+}
+
 .fixed-back .answer .answer-body .file-name {
     text-align: left;
     font-weight: 500;
@@ -301,6 +313,15 @@
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    -ms-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+}
+
+.fixed-back .answer.answered .download {
+    right: 140px;
 }
 
 .fixed-back .answer .download:hover {
@@ -355,6 +376,72 @@
     background-color: #ffffff;
 }
 
+.fixed-back .answer .check.loading:after {
+    content: "";
+    -webkit-transition: all 0s linear, opacity .1s ease;
+    transition: all 0s linear, opacity .1s ease;
+}
+
+.fixed-back .answer .check.loading .wait-load:after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 0.75em;
+    height: 0.75em;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #ffffff;
+}
+
+.fixed-back .answer .check.loading .wait-load {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 50%;
+    margin: -.64285714em 0 0 -.64285714em;
+    width: 1.28571429em;
+    height: 1.28571429em;
+    border: 8px solid rgba(0, 0, 0, .15);
+    border-top-color: #707070;
+    border-radius: 50%;
+    animation: button-spin 1s linear infinite;
+    z-index: 1;
+}
+
+@-webkit-keyframes button-spin {
+    from {
+        -webkit-transform: rotate(0);
+        transform: rotate(0)
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes button-spin {
+    from {
+        -webkit-transform: rotate(0);
+        transform: rotate(0)
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg)
+    }
+}
+
+.fixed-back .answer.answered .check:after {
+    content: "";
+    background-color: transparent;
+}
+
 .fixed-back .answer .check .wrong,
 .fixed-back .answer .check .correct,
 .fixed-back .answer .check .status {
@@ -376,6 +463,11 @@
     transition: all ease 0.2s;
 }
 
+.fixed-back .answer .check.loading .wrong button:hover,
+.fixed-back .answer .check.loading .correct button:hover {
+    cursor: not-allowed;
+}
+
 .fixed-back .answer .check .wrong button {
     background-color: #ff4545;
     padding-right: 15px;
@@ -388,6 +480,10 @@
     background-color: #ff2c2c;
 }
 
+.fixed-back .answer .check.loading .wrong button:hover {
+    background-color: #ff4545;
+}
+
 .fixed-back .answer .check .correct button {
     padding-left: 15px;
     background-color: #3ccd1c;
@@ -398,6 +494,10 @@
 
 .fixed-back .answer .check .correct button:hover {
     background-color: #35b719;
+}
+
+.fixed-back .answer .check.loading .correct button:hover {
+    background-color: #3CCD1C;
 }
 
 .fixed-back .answer .check .correct i,
@@ -413,22 +513,33 @@
 }
 
 .fixed-back .answer .check .status {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 105px;
     -webkit-border-radius: 0.25em;
     -moz-border-radius: 0.25em;
     border-radius: 0.25em;
     padding: 3px 5px 3px 5px;
-    font-size: 12px;
+    font-weight: 500;
     display: none;
+    direction: ltr;
 }
 
 .fixed-back .answer .check .status.correct-answer {
     background-color: #f8fdf7;
     color: #3ccd1c;
+    border: 1px solid #3CCD1C;
 }
 
 .fixed-back .answer .check .status.wrong-answer {
     background-color: #fdf8f8;
     color: #ff4545;
+    border: 1px solid #ff4545;
+}
+
+.fixed-back .answer .check .status span {
+    margin-right: 10px;
 }
 
 .fixed-back .close-answer {

@@ -787,26 +787,29 @@ function question_dialog_init() {
     //     }
     // });
     $(".answer .check .correct button").click(function () {
-        // set_answer_true($(this));
         // $(this).closest(".check").find(".wrong button").css("visibility", "hidden");
         // $(this).closest(".check").find(".wrong button").css("max-width", "0");
-
-        // $(this).closest(".check").find(".wrong").css("max-width", "0");
-        let id = $(this).attr("id");
-        // $.ajax({
-        //     method: 'GET',
-        //     url: '/expert/set_answer_situation/',
-        //     dataType: 'json',
-        //     data: {id: id, type: true},
-        //     success: function (data) {
         //
-        //     },
-        //     error: function (data) {
-        //     },
-        // });
+        // $(this).closest(".check").find(".wrong").css("max-width", "0");
+        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").find("button").attr("disabled", "true");
+        let id = $(this).attr("id");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/set_answer_situation/',
+            dataType: 'json',
+            data: {id: id, type: true},
+            success: function (data) {
+                set_answer_true($(this));
+                $(this).closest(".check").removeClass("loading");
+            },
+            error: function (data) {
+            },
+        });
     });
     $(".answer .check .wrong button").click(function () {
-        // set_answer_wrong($(this));
+        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").find("button").attr("disabled", "true");
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -814,7 +817,8 @@ function question_dialog_init() {
             dataType: 'json',
             data: {id: id, type: false},
             success: function (data) {
-
+                set_answer_wrong($(this));
+                $(this).closest(".check").removeClass("loading");
             },
             error: function (data) {
             },
@@ -839,22 +843,20 @@ function question_dialog_init() {
 
 function set_answer_wrong(item) {
     let div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
-    item.closest('.check').find('.correct').css('display', 'none');
-    item.closest('.check').find('.wrong').css('display', 'none');
-    item.closest('.check').find('button').addClass('answered');
+    item.closest('.answer').addClass("answered");
     item.closest('.check').find('.status').addClass('wrong-answer');
-    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').append(div);
     item.closest('.check').find('.status').fadeIn('slow');
+    item.closest('.check').find("button").remove();
 }
 
 function set_answer_true(item) {
     let div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
-    item.closest('.check').find('.correct').css('display', 'none');
-    item.closest('.check').find('.wrong').css('display', 'none');
-    item.closest('.check').find('button').addClass('answered');
+    item.closest('.answer').addClass("answered");
     item.closest('.check').find('.status').addClass('correct-answer');
-    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').append(div);
     item.closest('.check').find('.status').fadeIn('slow');
+    item.closest('.check').find("button").remove();
 }
 
 function returnFileType(type) {
@@ -872,7 +874,7 @@ function show_question_answers(data) {
     for (let i = 0; i < data.length; i++) {
         let file_type = data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf(".") + 1).toUpperCase();
         let divider_line = "";
-        if(i) {
+        if (i) {
             divider_line = "divider-top";
         }
         answer = answer +
@@ -889,6 +891,7 @@ function show_question_answers(data) {
             '           </a>' +
             '       </div>' +
             '       <div class="check">' +
+            '           <span class="wait-load"></span>' +
             '           <div class="correct">' +
             '               <button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
             '                   <i class="fas fa-check"></i>' +

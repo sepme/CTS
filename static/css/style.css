@@ -1822,6 +1822,7 @@ button:hover, button:focus {
 }
 
 .loading-btn {
+    color: #89E076!important;
     position: relative;
     -webkit-transition: all 0s linear, opacity .1s ease;
     transition: all 0s linear, opacity .1s ease;
@@ -1835,16 +1836,34 @@ button:hover, button:focus {
     margin: -.64285714em 0 0 -.64285714em;
     width: 1.28571429em;
     height: 1.28571429em;
-    border-radius: 500rem;
-    border: .2em solid rgba(0, 0, 0, .15);
+    border: 8px solid rgba(0, 0, 0, .15);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-spin 1s linear infinite;
 }
 
 .loading-btn.left-side:before {
     left: 5px;
 }
+.loading-btn:after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(0.27em, 0.27em);
+    -moz-transform: translate(0.27em, 0.27em);
+    -ms-transform: translate(0.27em, 0.27em);
+    -o-transform: translate(0.27em, 0.27em);
+    transform: translate(0.27em, 0.27em);
+    margin: -.64285714em 0 0 -.64285714em;
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 500rem;
+    background-color: #89E076;
+}
 
 .loading-btn:after {
-    left: 5px;
+    /*left: 5px;*/
 }
 
 .loading-btn.left-side:after {

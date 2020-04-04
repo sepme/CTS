@@ -14,13 +14,13 @@
             <form method="post" enctype="multipart/form-data" class="ajax-select-techniques"
                   data-url="{% url 'expert:accept_project' %}">
                 {% csrf_token %}
-                <div class="row mbottom-lg-25">
-                    <div class="col-8 text-right">
+                <div class="row">
+                    <div class="col-md-8 text-right mbottom-lg-25">
                         <span class="section-title">لیست تکنیک ها</span>
                         <div class="section">
                             <div id="fancy-tree"></div>
                         </div>
-                        <div dir="rtl" class="sub-header">
+                        <div dir="rtl" class="sub-header mtop-lg-25">
                             در صورتی که تکنیک مورد نطر خود را در لیست بالا نیافتید، آن را اینجا وارد کنید و کلید Enter
                             را
                             فشار دهید.
@@ -30,7 +30,7 @@
                                    placeholder="نام تکنیک">
                         </div>
                     </div>
-                    <div class="col-4 text-right">
+                    <div class="col-md-4 text-right mbottom-lg-25">
                         <span class="section-title">تکنیک های انتخاب شده</span>
                         <div class="section">
                             <label for="tags"></label>
