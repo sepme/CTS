@@ -1822,7 +1822,7 @@ button:hover, button:focus {
 }
 
 .loading-btn {
-    color: #89E076!important;
+    color: #89E076 !important;
     position: relative;
     -webkit-transition: all 0s linear, opacity .1s ease;
     transition: all 0s linear, opacity .1s ease;
@@ -1845,6 +1845,7 @@ button:hover, button:focus {
 .loading-btn.left-side:before {
     left: 5px;
 }
+
 .loading-btn:after {
     position: absolute;
     content: '';
@@ -2544,12 +2545,27 @@ div.no-project > span.disable-border-button {
 }
 
 .box {
-    /*box-shadow: 0 2px 4px rgba(126, 142, 177, 0.12);*/
     border-radius: 6px;
     background-color: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.125);
     margin-bottom: 10px;
     color: #484848;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    -ms-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+}
+
+.box.preview-message {
+    padding: 50px 15px;
+    z-index: 2;
+}
+
+.box.hover-enable:hover, .box.hover-enable.focus {
+    border-color: #3CCD1C;
+    cursor: pointer;
+    box-shadow: 0 4px 6px #3CCD1C16;
 }
 
 .box .box-header {
@@ -2557,6 +2573,18 @@ div.no-project > span.disable-border-button {
     border-bottom: 1px solid #00000033;
     padding: 10px 15px;
     margin: 0 5px;
+}
+
+.box.hover-enable:hover .box-header, .box.hover-enable.focus .box-header {
+    border-bottom-color: #3CCD1C;
+}
+
+.box.preview-message .box-header {
+    border-bottom: none;
+}
+
+.min-h-100 {
+    min-height: 100% !important;
 }
 
 .box .box-header h6 {
@@ -2568,10 +2596,297 @@ div.no-project > span.disable-border-button {
     float: left;
 }
 
+.message-expand {
+    visibility: hidden;
+}
+
+.message-expand.show {
+    visibility: visible;
+}
+
+@media (max-width: 767px) {
+    .message-expand {
+        visibility: hidden;
+        position: absolute;
+        top: 15px;
+        left: -50px;
+        -webkit-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+        -moz-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+        -ms-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+        -o-transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+        transition: all cubic-bezier(0.24, 0.24, 1, 1) 0.2s;
+    }
+
+    .message-expand.show {
+        visibility: visible;
+        left: auto;
+    }
+
+    .message-expand .box-body {
+        padding: 5px !important;
+    }
+}
+
+.box.preview-message .box-header div.data-modified {
+    color: #3CCD1C;
+}
+
+.box.preview-message .box-header span.back-arrow {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: rgba(0, 0, 0, 0.6);
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    padding: 8px 10px;
+    background-color: #cacbcd70;
+}
+
+.box.preview-message .box-header span.back-arrow:hover {
+    background-color: #a0a2a570;
+}
+
+@media (max-width: 767px) {
+    .box.preview-message .box-header span.back-arrow {
+        display: block;
+    }
+}
+
+.box.preview-message .box-header span.back-arrow i {
+    position: relative;
+    -webkit-transform: translate(5%, 15%);
+    -moz-transform: translate(5%, 15%);
+    -ms-transform: translate(5%, 15%);
+    -o-transform: translate(5%, 15%);
+    transform: translate(5%, 15%);
+}
+
+.box .box-header div.data-code {
+    float: left;
+    margin-right: 20px;
+}
+
+.box .box-header span.new-message {
+    display: none;
+    position: relative;
+    top: -10px;
+    color: #ffffff;
+    background-color: #ff4545;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 3px 3px 15px;
+}
+
+.box.new .box-header span.new-message {
+    display: inline;
+}
+
+.box .box-header span.new-message:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border: 15px solid transparent;
+    border-bottom-color: #ffffff;
+}
+
+@media (max-width: 767px) {
+    .box .box-header span.new-message:after {
+        bottom: -1px;
+    }
+}
+
 .box .box-header div.project-techniques {
     margin-left: 5px;
     float: left;
 }
+
+.box.preview-message .box-body .attachment {
+
+}
+
+.box.preview-message .box-body .attachment a > div {
+    position: relative;
+    width: fit-content;
+    padding: 30px 5px 5px 65px;
+    color: #262626;
+    /*background-color: #BDBDBD;*/
+    float: left;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.box.preview-message .box-body .attachment a > div:hover {
+    background-color: #f9f9f9;
+}
+
+.box .attachment .file-type.image {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.box .attachment .file-name {
+    font-weight: 400;
+    position: relative;
+}
+
+.box .attachment .file-type.text {
+    position: relative;
+}
+
+.box .attachment .file-type.image.pdf {
+    background-image: url("../img/pdf.svg");
+}
+
+.box .attachment .file-type.image.doc {
+    background-image: url("../img/doc.svg");
+}
+
+.box .attachment .file-type.image.gif {
+    background-image: url("../img/gif.svg");
+}
+
+.box .attachment .file-type.image.jpg {
+    background-image: url("../img/jpg.svg");
+}
+
+.box .attachment .file-type.image.png {
+    background-image: url("../img/png.svg");
+}
+
+.box .attachment .file-type.image.ppt {
+    background-image: url("../img/ppt.svg");
+}
+
+.box .attachment .file-type.image.txt {
+    background-image: url("../img/txt.svg");
+}
+
+.box .attachment .file-type.image.unknown {
+    background-image: url("../img/unknown.svg");
+}
+
+.box .attachment .file-type.image.wmv {
+    background-image: url("../img/wmv.svg");
+}
+
+.box .attachment .file-type.image.zip {
+    background-image: url("../img/zip.svg");
+}
+
+.message-connect {
+    float: right;
+    font-weight: 500;
+    padding-right: 15px;
+    margin-top: 5px;
+    color: #262626;
+}
+
+.message-connect span:first-child {
+    margin-left: 20px;
+}
+
+.message-connect span.telegram,
+.message-connect span.phone,
+.message-connect span.email {
+    position: relative;
+    padding: 10px 20px;
+    width: 35px;
+    height: 35px;
+}
+
+.message-connect a {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 35px;
+    height: 35px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.message-connect span.telegram a {
+    color: #039BE5;
+}
+
+.message-connect span.telegram a:hover {
+    color: #ffffff;
+    background-color: #039BE5;
+}
+
+.message-connect span.phone a {
+    color: #3CCD1C;
+}
+
+.message-connect span.phone a:hover {
+    color: #ffffff;
+    background-color: #3CCD1C;
+}
+
+.message-connect span.email a {
+    color: #ff4545;
+}
+
+.message-connect span.email a:hover {
+    color: #ffffff;
+    background-color: #ff4545;
+}
+
+.message-connect a i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+}
+
+/*.message-connect a:first-child {*/
+/*    color: #039BE5;*/
+/*}*/
+
+/*.message-connect a:first-child:hover {*/
+/*    background-color: #039BE5;*/
+/*}*/
+
+/*.message-connect a i {*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*    -webkit-transform: translate(-50%, -50%);*/
+/*    -moz-transform: translate(-50%, -50%);*/
+/*    -ms-transform: translate(-50%, -50%);*/
+/*    -o-transform: translate(-50%, -50%);*/
+/*    transform: translate(-50%, -50%);*/
+/*    font-size: 20px;*/
+/*}*/
+
 
 .mix-list {
     list-style: none;
