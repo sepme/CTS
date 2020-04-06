@@ -308,6 +308,10 @@ def show_project_view(request):
 
 def UsualShowProject(request, project, data):
     project_form = project.project_form
+    if request.user.expertuser in project.expert_applied.all():
+        data['applied'] = True
+    else:
+        data['applied'] = False
     comments = []
     comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
     for comment in comment_list:
@@ -381,7 +385,6 @@ def accept_project(request):
                           sender_type="system",
                           project=project,
                           expert_user=expert_user,
-                          industry_user=project.industry_creator,
                           status='unseen')
         comment.save()
         return JsonResponse({

@@ -167,7 +167,7 @@ def GetComment(request):
             'attachment'   : url
         }
         response.append(temp)    
-        if comment.sender_type == 'expert':
+        if comment.sender_type == 'expert' or comment.sender_type == 'system':
             comment.status = "seen"
             comment.save()
     if expert in project.expert_applied.all():

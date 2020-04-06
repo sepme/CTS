@@ -1082,6 +1082,9 @@ showInfo.click(function (event) {
                 $(".comments .fa-trash-alt").click(function () {
                     deleteComment($(this).closest('.my-comment'));
                 });
+                if (data.applied == true){
+                    $("#accept-project").attr("disabled" ,"disabled");
+                }
             } else {
                 console.log("active");
                 $(".hidden").attr("style", "display : block;");
@@ -1381,7 +1384,7 @@ function addComment(data) {
     return comment_code;
 }
 
-let comment_form = $('#comment-form');
+let comment_form = $('#comment_form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
