@@ -22,6 +22,12 @@
     background-color: #ffffff;
 }
 
+@media (max-width: 767px) {
+    .comment-body {
+        width: 85%;
+    }
+}
+
 .comment-body:hover {
     cursor: default;
 }
@@ -54,13 +60,35 @@
 }
 
 .comments {
-    max-height: 200px;
+    max-height: 300px;
     overflow: scroll;
 }
 
 .my-comment, .your-comment {
     position: relative;
     margin: 10px auto;
+}
+
+.system-comment {
+
+}
+
+.system-comment .comment-body {
+    margin: 0 auto;
+    min-height: auto;
+    width: fit-content;
+    direction: rtl;
+    border: none;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    background-color: #3CCD1C;
+    padding: 5px 15px;
+}
+
+.system-comment .comment-body pre {
+    color: #ffffff !important;
+    font-weight: 500;
 }
 
 .my-comment {
@@ -203,10 +231,12 @@ span.new-comment-tools {
     color: #707070;
     padding: 0;
 }
+
 .my-comment > .comment-body > .comment-tools .dropdown-toggle:focus i {
     background-color: #e0e1e270;
     cursor: pointer;
 }
+
 .my-comment > .comment-body > .comment-tools .dropdown-toggle:after {
     display: none;
 }

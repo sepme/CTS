@@ -54,6 +54,13 @@ function close_dialog(className) {
     $(".close").click(function () {
         $(className).removeClass("show");
         $(".main").removeClass("blur-div");
+        if (className === ".showProject") {
+            $(className).find(".techniques").html("");
+            $(className).find(".card-head").html("");
+            $(className).find(".time-body").html("");
+            $(className).find(".project-info-content").html("");
+            $(className).find(".comments").html("");
+        }
         $(className).find(".no-comment").remove();
         $(className).find(".comment-tabs .nav").html("");
     });

@@ -1,32 +1,55 @@
-{% load static%}
-<div class="dialog-main message-show notice-message-show">
-    <div class="card text-right dialog">
+{% load static %}
+<div class="fixed-back message-show">
+    <div class="card text-right">
+        <div class="card-head"></div>
         <div class="close"></div>
-        <div class="message-show-head">
-            <div class="icon">
-                <div class="title" dir="rtl">
-                    برگزاری رویداد معرفی «چمران تیم»
+        <div class="container">
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6 text-left">
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6">
+                            <div class="establish-time">
+                                <div class="time-head">ثبت</div>
+                                <div class="time-body">تاریخ ثبت</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <img src="{% static 'expert/img/tick.svg' %}" alt="message-type-icon">
+            </div>
+            <div class="row m-top-10">
+                <div class="col-12">
+                    <pre class="message-text"></pre>
+                </div>
             </div>
         </div>
-        <div class="message-show-body">
-            <div class="body">
-                نخستین رویداد «چمران تیم»، با عنوان «صنعت دانشگاهی یا دانشگاه صنعتی؟»، یکم تیر ماه، در تالار قریب و دانشجو دانشگاه علوم پزشکی تهران، برگزار شد. این رویداد که در دو بخش کارگاه (Policy Brief) و پنل برگزار شد، پذیرای بیش از ۷۰ نفر از دانشجویان و اساتید دغدغه‌مند و فعال در حوزه ارتباط دانشگاه با صنعت و همچنین تعدادی از مسئولین دانشگاه ع.پ. تهران و وزارت بهداشت بود. هدف از برگزاری این رویداد، احیای دغدغه ارتباط دانشگاه با صنعت در بین دانشگاهیان و جلب مشارکت ایشان برای ایفای نقش در حل این مسئله، بود.
-            </div>
-            <hr>
-            <div class="message-info">
-                <div class="date">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>12 مرداد 1398</span>
-                </div>
-            </div>
+        <div class="card-footer">
             <div class="message-connect">
-                    <span>نیاز به راهنمایی دارید ؟</span>
-                    <span class="telegram"><a href="https://t.me/chamran_team"><i class="fab fa-telegram-plane fa-lg"></i></a></span>
-                    <span class="phone"><a  href="tel:+989301510096"><i class="fas fa-phone fa-lg"></i></a></span>
-                    <span class="email"><a  href="mailto:info@chamranteam.ir"><i class="fas fa-email fa-lg"></i></a></span>
+                <span>نیاز به راهنمایی دارید ؟</span>
+                <span class="telegram"><a href="https://t.me/chamran_team"><i
+                        class="fab fa-telegram-plane fa-lg"></i></a></span>
+                <span class="phone"><a href="tel:+989301510096"><i class="fas fa-phone fa-lg"></i></a></span>
+                <span class="email"><a href="mailto:info@chamranteam.ir"><i class="fas fa-email fa-lg"></i></a></span>
             </div>
         </div>
+        {#        <div class="message-show-body">#}
+        {#            <div class="body">#}
+        {#                نخستین رویداد «چمران تیم»، با عنوان «صنعت دانشگاهی یا دانشگاه صنعتی؟»، یکم تیر ماه، در تالار قریب و دانشجو دانشگاه علوم پزشکی تهران، برگزار شد. این رویداد که در دو بخش کارگاه (Policy Brief) و پنل برگزار شد، پذیرای بیش از ۷۰ نفر از دانشجویان و اساتید دغدغه‌مند و فعال در حوزه ارتباط دانشگاه با صنعت و همچنین تعدادی از مسئولین دانشگاه ع.پ. تهران و وزارت بهداشت بود. هدف از برگزاری این رویداد، احیای دغدغه ارتباط دانشگاه با صنعت در بین دانشگاهیان و جلب مشارکت ایشان برای ایفای نقش در حل این مسئله، بود.#}
+        {#            </div>#}
+        {#            <hr>#}
+        {#            <div class="message-info">#}
+        {#                <div class="date">#}
+        {#                    <i class="fas fa-calendar-alt"></i>#}
+        {#                    <span>12 مرداد 1398</span>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#            <div class="message-connect">#}
+        {#                    <span>نیاز به راهنمایی دارید ؟</span>#}
+        {#                    <span class="telegram"><a href="https://t.me/chamran_team"><i class="fab fa-telegram-plane fa-lg"></i></a></span>#}
+        {#                    <span class="phone"><a  href="tel:+989301510096"><i class="fas fa-phone fa-lg"></i></a></span>#}
+        {#                    <span class="email"><a  href="mailto:info@chamranteam.ir"><i class="fas fa-email fa-lg"></i></a></span>#}
+        {#            </div>#}
+        {#        </div>#}
     </div>
 </div>

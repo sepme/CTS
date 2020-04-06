@@ -502,15 +502,41 @@ function show_paper_record() {
 }
 
 function show_new_research_question() {
-    new_question = '<div class="card check-question flow-root-display w-100">' +
-        '<div class="question-title w-50">' + $("#question-title").val() + '</div>' +
-        '<div class="question-info w-50">' +
-        '<div class="date w-25\"><span>الان</span></div>' +
-        '<div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num"></span></i></div>' +
-        '<div class="status w-25"><span>درحال بررسی</span></div>' +
-        '<div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>' +
-        '</div>' +
-        '</div>';
+    let new_question = "<div class='card check-question box flow-root-display w-100'>" +
+        "                                <div class='box-header'>" +
+        "                                    <h6>" + $("#question-title").val() + "</h6>" +
+        "                                    <span class='check-status'></span>" +
+        "                                </div>" +
+        "                                <div class='box-body'>" +
+        "                                    <div class='row'>" +
+        "                                        <div class='col-md-6 col-9'>" +
+        "                                            <div class='row'>" +
+        "                                                <div class='col-6'>" +
+        "                                                    <div class='date text-center'>" +
+        "                                                        <div class='label'>زمان ثبت</div>" +
+        "                                                        <div class='value'>" +
+        "                                                            <span>الان</span>" +
+        "                                                        </div>" +
+        "                                                    </div>" +
+        "                                                </div>" +
+        "                                                <div class='col-6'>" +
+        "                                                    <div class='answers text-center'>" +
+        "                                                        <div class='label'>پاسخ های جدید</div>" +
+        "                                                        <div class='value'>" +
+        "                                                            <span>0</span>" +
+        "                                                            <span></span>" +
+        "                                                        </div>" +
+        "                                                    </div>" +
+        "                                                </div>" +
+        "                                            </div>" +
+        "                                        </div>" +
+        "                                        <div class='col-md-6 col-3'>" +
+        "                                            <button class='default-btn show-btn' id=''>مشاهده" +
+        "                                            </button>" +
+        "                                        </div>" +
+        "                                    </div>" +
+        "                                </div>" +
+        "                            </div>";
     $(".tab-content").append(new_question);
 }
 
@@ -749,20 +775,24 @@ function question_page_init() {
 }
 
 function question_dialog_init() {
-    $(".answer").hover(function () {
-        if (!$(this).find('button').hasClass('answered')) {
-            $(this).find('.correct button').fadeIn('slow');
-            $(this).find(".wrong button").fadeIn('slow');
-        }
-    }, function () {
-        if (!$(this).find('button').hasClass('answered')) {
-            $(this).find('.correct button').fadeOut('slow');
-            $(this).find(".wrong button").fadeOut('slow');
-        }
-    });
+    // $(".answer").hover(function () {
+    //     if (!$(this).find('button').hasClass('answered')) {
+    //         $(this).find('.correct button').fadeIn('slow');
+    //         $(this).find(".wrong button").fadeIn('slow');
+    //     }
+    // }, function () {
+    //     if (!$(this).find('button').hasClass('answered')) {
+    //         $(this).find('.correct button').fadeOut('slow');
+    //         $(this).find(".wrong button").fadeOut('slow');
+    //     }
+    // });
     $(".answer .check .correct button").click(function () {
-        set_answer_true($(this));
-
+        // $(this).closest(".check").find(".wrong button").css("visibility", "hidden");
+        // $(this).closest(".check").find(".wrong button").css("max-width", "0");
+        //
+        // $(this).closest(".check").find(".wrong").css("max-width", "0");
+        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").find("button").attr("disabled", "true");
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -770,14 +800,16 @@ function question_dialog_init() {
             dataType: 'json',
             data: {id: id, type: true},
             success: function (data) {
+                set_answer_true($(this));
+                $(this).closest(".check").removeClass("loading");
             },
             error: function (data) {
             },
         });
     });
     $(".answer .check .wrong button").click(function () {
-        set_answer_wrong($(this));
-
+        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").find("button").attr("disabled", "true");
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -785,6 +817,8 @@ function question_dialog_init() {
             dataType: 'json',
             data: {id: id, type: false},
             success: function (data) {
+                set_answer_wrong($(this));
+                $(this).closest(".check").removeClass("loading");
             },
             error: function (data) {
             },
@@ -808,44 +842,48 @@ function question_dialog_init() {
 }
 
 function set_answer_wrong(item) {
-    var div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
-    item.closest('.check').find('.correct').css('display', 'none');
-    item.closest('.check').find('.wrong').css('display', 'none');
-    item.closest('.check').find('button').addClass('answered');
+    let div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
+    item.closest('.answer').addClass("answered");
     item.closest('.check').find('.status').addClass('wrong-answer');
-    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').append(div);
     item.closest('.check').find('.status').fadeIn('slow');
+    item.closest('.check').find("button").remove();
 }
 
 function set_answer_true(item) {
-    var div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
-    item.closest('.check').find('.correct').css('display', 'none');
-    item.closest('.check').find('.wrong').css('display', 'none');
-    item.closest('.check').find('button').addClass('answered');
+    let div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
+    item.closest('.answer').addClass("answered");
     item.closest('.check').find('.status').addClass('correct-answer');
-    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').append(div);
     item.closest('.check').find('.status').fadeIn('slow');
+    item.closest('.check').find("button").remove();
 }
+
 function returnFileType(type) {
     type = type.toLowerCase();
-    if( type  === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png" || type === "ppt"
-     || type === "txt" || type === "wmv" || type === "zip") {
+    if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png" || type === "ppt"
+        || type === "txt" || type === "wmv" || type === "zip") {
         return type;
     } else {
         return "unknown";
     }
 }
+
 function show_question_answers(data) {
     let answer = '';
     for (let i = 0; i < data.length; i++) {
         let file_type = data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf(".") + 1).toUpperCase();
+        let divider_line = "";
+        if (i) {
+            divider_line = "divider-top";
+        }
         answer = answer +
-            '<div class="col-lg-12">' +
-            '   <div class="answer" is-correct="' + data[i].is_correct + '">' +
+            '<div class="col-lg-12 mbottom-10">' +
+            '   <div class="answer ' + divider_line + '" is-correct="' + data[i].is_correct + '">' +
             '       <span class="title">' + data[i].researcher_name + '</span>' +
             '       <span class="date">' + data[i].hand_out_date + '</span>' +
             '       <div class="answer-body">' +
-            '           <span class="file-type image ' + returnFileType(file_type) +'"></span>' +
+            '           <span class="file-type image ' + returnFileType(file_type) + '"></span>' +
             '           <div class="file-name">' + data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf("/") + 1, data[i].answer_attachment.lastIndexOf(".")) + '</div>' +
             '           <span class="file-type text">' + file_type + ' File</span>' +
             '           <a href="' + data[i].answer_attachment + '" class="download">' +
@@ -853,14 +891,17 @@ function show_question_answers(data) {
             '           </a>' +
             '       </div>' +
             '       <div class="check">' +
+            '           <span class="wait-load"></span>' +
             '           <div class="correct">' +
             '               <button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
             '                   <i class="fas fa-check"></i>' +
+            '                   <span>درست</span>' +
             '               </button>' +
             '           </div>' +
             '           <div class="wrong">' +
             '               <button type="button" title="نادرست" id="' + data[i].answer_id + '">' +
             '                   <i class="fas fa-times"></i>' +
+            '                   <span>نادرست</span>' +
             '               </button>' +
             '           </div>' +
             '           <div class="status"></div>' +
