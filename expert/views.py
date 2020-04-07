@@ -648,16 +648,25 @@ def ActiveProjcet(request, project, data):
     # data = {
     data["status"]         = "active"
     data["industry_name"]  = industryform.name
-    data["industry_logo"]  = "/media/industry/industry-logo.jpg"
+    data["industry_logo"]  = industryform.photo.url
     data['enforced_name']  = str(project.expert_accepted.expertform)
     data["executive_info"] = project.executive_info
     data["budget_amount"]  = project.project_form.required_budget
-    data['timeScheduling']           = projectDate
+    data['timeScheduling'] = projectDate
     data["techniques"]     = []
     # }
     projectRequest = ExpertRequestedProject.objects.filter(project=project).filter(expert=project.expert_accepted).first()
     for technique in projectRequest.required_technique.all():
         data["techniques"].append(technique.__str__())
+    try:
+        researcher_request = RequestResearcher.objects.get(project=project)
+        if researcher_request.need_researcher != 0:
+            data['request_status'] = True
+        else:
+            data['request_status'] = False
+    except:
+        data['request_status'] = True
+
     return JsonResponse(data=data)
 
 def DeleteScientificRecord(request):
@@ -691,3 +700,21 @@ def DeletePaperRecord(request):
         return JsonResponse({"errors" :"Paper Record isn't found"} ,status=400)
     paper_rec.delete()
     return JsonResponse({"successfull" :"Paper Record is deleted"})
+
+def ExpertRequestResearcher(request):
+    project = Project.objects.get(id=request.POST['project_id'])
+    expert = request.user.expertuser
+    try:
+        researcher_request = RequestResearcher.objects.get(project=project)
+        researcher_request.researcher_count += int(request.POST['reseacherCount'])
+        researcher_request.least_hour = int(request.POST['hour'])
+        researcher_request.save()
+    except:
+        researcher_request = RequestResearcher(project=project
+                                                ,expert=expert
+                                                ,researcher_count=int(request.POST['reseacherCount'])
+                                                ,least_hour=int(request.POST['hour']))
+
+        researcher_request.save()
+    
+    return JsonResponse({"successfull" : "successfull"})

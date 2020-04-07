@@ -79,14 +79,15 @@
                                 </div>
                                 <div class="researcher-request">
                                     <form id="researcher-request-ajax" method="post" action="">
+                                        <input type="text" class="project" name="project_id" hidden>
                                         <div class="row">
                                             <div class="col-md-5 col-6">
                                                 <label for="researcher-number">حداکثر تعداد</label>
-                                                <input type="number" class="w-100" id="researcher-number" name="">
+                                                <input type="number" class="w-100" id="researcher-number" name="reseacherCount" required>
                                             </div>
                                             <div class="col-md-5 col-6">
                                                 <label for="researcher-time">ساعت کار <span class="fs-10">(ساعت)</span></label>
-                                                <input type="number" class="w-100" id="researcher-time" name="">
+                                                <input type="number" class="w-100" id="researcher-time" name="hour" required>
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <button class="default-btn w-100" type="submit">تایید</button>

@@ -1065,7 +1065,8 @@ function researcherRequest() {
     let requestForm = $("#researcher-request-ajax");
     requestForm.submit(function (event) {
         event.preventDefault();
-        let thisUrl = "";
+        $(".project").attr("value", $('.showProject').attr('id'));
+        let thisUrl = "request_researcher/";
         let form = new FormData(requestForm.get(0));
         $.ajax({
             method: 'POST',
@@ -1074,6 +1075,7 @@ function researcherRequest() {
             processData: false,
             contentType: false,
             success: function (data) {
+                requestForm[0].reset();
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
