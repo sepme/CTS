@@ -46,15 +46,16 @@
                             <h6>
                                 {{ project.project_form.project_title_persian }}
                             </h6>
+                            <!-- {% calculate_date_past project.date_submitted_by_industry as date_past%} -->
                             <div class="data-modified">
-                                <span>{% calculate_date_past project.date_submitted_by_industry %} قبل </span>
+                                <span>{{date_past}} قبل </span>
                             </div>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
-                                {% getUnseenMessages project.pk request.user.expertuser as UnseenMessages%}
+                                <!-- {% getUnseenMessages project.pk request.user.expertuser as UnseenMessages%}
                                 {% if UnseenMessages != 0 %}
                                     <span> {{UnseenMessages}} </span>
-                                {% endif %}
+                                {% endif %} -->
                             </div>
                         </div>
                         <div class="box-body">
