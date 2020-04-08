@@ -78,10 +78,6 @@ $(".preview-project").click(function () {
             setMajors(data);
             setValue(data);
             setComment(data.comments);
-
-            $(".fa-trash-alt").click(function () {
-                deleteComment($(this).closest('.my-comment'));
-            });
         },
         error: function (data) {
             console.log("error");
@@ -236,14 +232,14 @@ function setComment(data) {
             comments_code += "<div class='expert-comment' dir='ltr' id='" + data[i].pk + "' >" +
                 "<div class='" + comment_body_classes + "'>" +
                 "   <span class='comment-tools'>" +
-                "       <i class='fas fa-reply'>" +
-                "           <div class='reply'></div>" +
-                "       </i>" +
+                // "       <i class='fas fa-reply'>" +
+                // "           <div class='reply'></div>" +
+                // "       </i>" +
                 "</span>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1 ) + "</span>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
             comments_code += "<pre>" + data[i].description + "</pre>" +
@@ -262,24 +258,24 @@ function setComment(data) {
                 "               <i class='fas fa-cog'></i>" +
                 "           </button>" +
                 "           <div class='dropdown-menu'>" +
-                "               <div class='dropdown-item'>" +
-                "                   <i class='fas fa-pen'></i>" +
-                "                   <span>ویرایش پیام</span>" +
-                "               </div>" +
+                // "               <div class='dropdown-item'>" +
+                // "                   <i class='fas fa-pen'></i>" +
+                // "                   <span>ویرایش پیام</span>" +
+                // "               </div>" +
                 "               <div class='dropdown-item'>" +
                 "                   <i class='fas fa-trash-alt'></i>" +
                 "                   <span>حذف پیام</span>" +
                 "               </div>" +
                 "           </div>" +
                 "       </div>" +
-                "       <i class='fas fa-reply'>" +
-                "           <div class='reply'></div>" +
-                "       </i>" +
+                // "       <i class='fas fa-reply'>" +
+                // "           <div class='reply'></div>" +
+                // "       </i>" +
                 "   </span>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1 ) + "</span>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
             comments_code += "<pre>" + data[i].description + "</pre>" +
@@ -296,6 +292,9 @@ function setComment(data) {
         }
     }
     $('.comments').html(comments_code);
+    $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+        deleteComment($(this).closest('.my-comment'));
+    });
 }
 
 $(".trash").click(function (event) {
@@ -332,7 +331,6 @@ $(document).ready(function () {
     input_focus();
     search_input(".search_message");
     question();
-    vote_dialog_init();
     $('.content').scroll(function () {
         if ($(".content").scrollTop() > 300) {
             $("a.top-button").addClass('show');
@@ -900,12 +898,13 @@ add_technique_form.submit(function (event) {
 function addComment(data) {
     new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
         "<div class='comment-body' dir='ltr'>" +
-        "<span class='comment-tools'>" +
-        "<i class='fas fa-trash-alt'></i>" +
-        "<i class='fas fa-pen'>" +
-        "</i>" +
-        "<i class='fas fa-reply'><div class='reply'></div>" +
-        "</i>";
+        "<span class='comment-tools'>"
+    // "<i class='fas fa-trash-alt'></i>" +
+    // "<i class='fas fa-pen'>" +
+    // "</i>" +
+    // "<i class='fas fa-reply'><div class='reply'></div>" +
+    // "</i>"
+    ;
     if (data.attachment !== "None") {
         new_comment += "<a href='/" +
             data.attachment +
@@ -946,8 +945,7 @@ comment_form.submit(function (event) {
                 position: 'bottomLeft'
             });
             comment_form[0].reset();
-
-            $(".fa-trash-alt").click(function () {
+            $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
         },
@@ -1194,10 +1192,6 @@ $(".my-project").click(function () {
             setMajors(data);
             setValue(data);
             setComment(data.comments);
-
-            $(".fa-trash-alt").click(function () {
-                deleteComment($(this).closest('.my-comment'));
-            });
 
             $(".apply").remove();
             if (data.vote === "false") {

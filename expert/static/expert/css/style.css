@@ -561,42 +561,7 @@
 }
 
 
-.vote {
-    position: absolute;
-    top: 40px;
-    left: 5px;
-    height: 30px;
-    width: 30px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    color: #bdbdbd;
-    z-index: 100;
-}
 
-.vote:hover {
-    color: #ffffff;
-    background-color: #3CCD1C;
-    cursor: pointer;
-}
-
-.vote i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    padding: 0;
-    margin: 0;
-}
-
-.vote.expand {
-    color: #ffffff;
-    background-color: #3CCD1C;
-}
 
 /*.vote > span.dots {*/
 /*    position: absolute;*/

@@ -13,6 +13,7 @@ function load_dialog() {
 }
 
 function init_dialog_btn(element, dialogClass) {
+    vote_dialog_init(dialogClass);
     $(element).click(function () {
         $(".fixed-back").removeClass("show");
         $(".main").removeClass("blur-div");
@@ -20,7 +21,6 @@ function init_dialog_btn(element, dialogClass) {
         $(dialogClass).addClass("show");
         close_dialog(dialogClass);
         dialog_comment_init();
-        vote_dialog_init();
         load_dialog();
         if (dialogClass === ".showProject") {
             $(dialogClass).removeAttr("id");
@@ -402,7 +402,7 @@ function dialog_comment_init() {
     // });
 }
 
-function vote_dialog_init() {
+function vote_dialog_init(className) {
     flag = 0;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
@@ -421,13 +421,13 @@ function vote_dialog_init() {
     }).click(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').toggleClass('fix');
     });
-    $(".vote").click(function () {
+    $(className + " .vote").click(function () {
         if ($('.vote-dialog').css('display') === 'none') {
             $('.vote-dialog').slideDown();
-            $('.vote > .dots').addClass('expand');
+            $('.vote').addClass('expand');
         } else {
             $('.vote-dialog').slideUp();
-            $('.vote > .dots').removeClass('expand');
+            $('.vote').removeClass('expand');
         }
     });
     $(".vote-dialog > .expert-back").hover(function () {
