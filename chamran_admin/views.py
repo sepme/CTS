@@ -69,7 +69,7 @@ class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        all_messages = Message.get_user_messages(self.request.user.id)
+        all_messages = Message.get_user_messages(self.request.user)
         top_3 = []
         other_messages = []
         for i, message in enumerate(all_messages):

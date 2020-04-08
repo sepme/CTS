@@ -1057,7 +1057,8 @@ function researcherRequest() {
     let requestForm = $("#researcher-request-ajax");
     requestForm.submit(function (event) {
         event.preventDefault();
-        let thisUrl = "";
+        $(".project").attr("value", $('.showProject').attr('id'));
+        let thisUrl = "request_researcher/";
         let form = new FormData(requestForm.get(0));
         $.ajax({
             method: 'POST',
@@ -1066,6 +1067,7 @@ function researcherRequest() {
             processData: false,
             contentType: false,
             success: function (data) {
+                requestForm[0].reset();
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -1107,6 +1109,10 @@ showInfo.click(function (event) {
                 setMajors(data);
                 setValue(data);
                 setComment(data.comments);
+
+                if (data.applied === true){
+                    $("#accept-project").attr("disabled" ,"disabled");
+                }
             } else {
                 console.log("active");
                 projectDetail(data);
@@ -1389,7 +1395,7 @@ function addComment(data) {
     return comment_code;
 }
 
-let comment_form = $('#comment-form');
+let comment_form = $('#comment_form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").attr("disabled", "true");

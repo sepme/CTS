@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load UnseenMessage_tag %}
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -21,6 +22,7 @@
     {#    <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">#}
 </head>
 <body>
+{% getUnseenMessages request.user as UnseenMessages %}
 {#  {% include 'expert/layouts/pageLoader.html' %}#}
 {% block dialog %}{% endblock %}
 <div class="main {% if request.user.expertuser.status == "signed_up" %} blur-div {% endif %}">
@@ -87,7 +89,7 @@
             <a href="{{ messages_url }}">
                 <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
                     <div>
-                        <span class="new-message">2</span>
+                        <span class="new-message">{{UnseenMessages}}</span>
                         <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
                     </div>

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import os
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
-from industry.models import Keyword
+from industry.models import Keyword, Project
 from researcher.models import ResearchQuestionInstance
 
 #for Compress the photo
@@ -330,3 +330,18 @@ class ExpertRequestedProject(models.Model):
 
     def __str__(self):
         return "{}'s request for '{}' project".format(self.expert.expertform, self.project)
+
+class RequestResearcher(models.Model):
+    project    = models.OneToOneField(Project, verbose_name="پروژه", on_delete=models.CASCADE)
+    expert     = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
+    least_hour = models.IntegerField(verbose_name="حداقل ساعت")
+    researcher_count = models.IntegerField(verbose_name="تعداد دانشجو")
+
+    def __str__(self):
+        return str(self.project) + " - " +str(self.researcher_count)
+    
+    @property
+    def need_researcher(self):
+        if self.researcher_count > 0:
+            return True
+        return False

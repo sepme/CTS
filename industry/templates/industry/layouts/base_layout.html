@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load custom_tags %}
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -18,6 +19,7 @@
     <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
 </head>
 <body>
+{% getUnseenMessages request.user as UnseenMessages %}
 {% block dialog %}{% endblock %}
 <div class="main
         {% if user.industryuser.status == 'signed_up' %} blur-div {% endif %}">
@@ -100,7 +102,7 @@
             <a href="{{ messages }}">
                 <li class="list-group-item text-right {% if request.get_full_path == messages %}active{% endif %}">
                     <div>
-                        <span class="new-message">2</span>
+                        <span class="new-message">{{UnseenMessages}}</span>
                         <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
                     </div>

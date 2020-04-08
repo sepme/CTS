@@ -14,7 +14,7 @@ from itertools import chain
 from operator import attrgetter
 
 from . import models ,forms ,persianNumber
-from expert.models import ResearchQuestion
+from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project ,Comment
 
 def gregorian_to_numeric_jalali(date):
@@ -67,7 +67,8 @@ class Index(LoginRequiredMixin, generic.FormView):
         if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
-        all_projects = Project.objects.all().exclude(expert_accepted=None)
+        all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gte=0)]
+        all_projects = Project.objects.filter(id__in=all_projects)
         my_projects  = all_projects.filter(researcher_applied__in=[self.request.user.researcheruser])
         new_projects = all_projects.exclude(researcher_applied__in=[self.request.user.researcheruser])
         technique_title = [str(item.technique) for item in self.request.user.researcheruser.techniqueinstance_set.all()]
@@ -86,11 +87,12 @@ class Index(LoginRequiredMixin, generic.FormView):
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
             temp ={
-                'PK'                 : project.pk,
-                'project_title'      : project.project_form.project_title_persian,
-                'keyword'            : project.project_form.key_words.all(),
-                'started'            : date_last(datetime.date.today() ,project.date_start),
-                'finished'           : date_last(datetime.date.today() ,project.date_finished),
+                'PK'            : project.pk,
+                'project_title' : project.project_form.project_title_persian,
+                'keyword'       : project.project_form.key_words.all(),
+                'started'       : date_last(datetime.date.today() ,project.date_start),
+                'finished'      : date_last(datetime.date.today() ,project.date_finished),
+                'need_hour'     : project.requestresearcher.least_hour,
             }
             new_project_list.append(temp)
         context['new_project_list'] = new_project_list
@@ -125,6 +127,7 @@ class Index(LoginRequiredMixin, generic.FormView):
                     'keyword'       : project.project_form.key_words.all(),
                     'started'       : date_last(datetime.date.today() ,project.date_start),
                     'finished'      : date_last(datetime.date.today() ,project.date_finished),
+                    'need_hour'     : project.requestresearcher.least_hour,
                 }
                 my_project_list.append(temp)
             context["my_project_list"] = my_project_list

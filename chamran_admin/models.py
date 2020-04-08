@@ -39,8 +39,8 @@ class Message(models.Model):
         return self.text
 
     @staticmethod
-    def get_user_messages(user_id):
-        user_messages = Message.objects.filter(receiver=User.objects.get(id=user_id))
+    def get_user_messages(user):
+        user_messages = Message.objects.filter(receiver=user)
         return user_messages
 
 
