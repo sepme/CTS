@@ -330,11 +330,9 @@ def UsualShowProject(request, project, data):
             comment.status = "seen"
             comment.save()
     # data = {
-    try:
-        if data["status"]:
-            pass
-    except:
+    if "status" not in data.keys():
         data["status"] = "non active"
+        data['techniques_list']= Technique.get_technique_list()
     data['comments']= comments
     data['date']= JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d")
     data['key_words']= serializers.serialize('json', project_form.key_words.all())
@@ -351,8 +349,7 @@ def UsualShowProject(request, project, data):
     data['required_budget']= project_form.required_budget
     data['required_method']= project_form.required_method
     data['project_phase']= project_form.project_phase
-    data['predict_profit']= project_form.predict_profit
-    data['techniques_list']= Technique.get_technique_list()
+    data['predict_profit']= project_form.predict_profit 
     data['success']= 'successful'
     # }
     # data['required_technique']=[]

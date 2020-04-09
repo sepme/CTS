@@ -1020,7 +1020,6 @@ paperForm.submit(function (event) {
 });
 
 function setDates(date) {
-    console.log(data);
     $(".project-details .project-progress .start").html(date[0]);
     $(".project-details .project-progress .first_phase").html(date[1]);
     $(".project-details .project-progress .second_phase").html(date[2]);
@@ -1029,19 +1028,16 @@ function setDates(date) {
 }
 
 function projectDetail(data) {
-    console.log("project_detail");
     $(".project-details").find(".card-head").html(data.project_title_persian + ' ( ' + data.project_title_english + ' )');
     $(".project-details").find(".establish-time .time-body").html(data.date);
     $(".project-details").find(".time-left .time-body").html(data.deadline);
 
     let techniques = "";
-    for (let tech_index = 0; tech_index < Object.keys(data.techniques_list).length; tech_index++) {
-        if (Object.values(data.techniques_list)[tech_index].length) {
-            let element = Object.values(data.techniques_list)[tech_index];
-            techniques += "<span class='border-span'>" +
-                element +
-                "</span>";
-        }
+    for (let tech_index = 0; tech_index < data.techniques.length; tech_index++) {
+        let element = data.techniques[tech_index];
+        techniques += "<span class='border-span'>" +
+            element +
+            "</span>";
     }
     $(".techniques").html(techniques);
 
@@ -1050,7 +1046,7 @@ function projectDetail(data) {
     $("#executive-info").html(data.executive_info);
     $("#industry_logo").attr("src", data.industry_logo);
     $(".budget-amount").html(data.budget_amount);
-    // setDates(data.timeScheduling);
+    setDates(data.timeScheduling);
     setMajors(data);
     setValue(data);
     setComment(data.comments);
@@ -1368,8 +1364,12 @@ function setComment(data) {
 }
 
 function addComment(data) {
+    let comment_body_classes = "comment-body";
+    if (data.attachment !== "None") {
+        comment_body_classes += " attached";
+    }
     let comment_code = "<div class='my-comment' id='" + data.pk + "' >" +
-        "<div class='comment-body' dir='ltr'>" +
+        "<div class='"+ comment_body_classes +"' dir='ltr'>" +
         "   <span class='comment-tools'>" +
         "       <div class='btn-group dropdown'>" +
         "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
@@ -1392,9 +1392,9 @@ function addComment(data) {
         "   </span>";
     if (data.attachment !== "None") {
         comment_code +=
-            "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+            "<a href='/" + data.attachment + "' class='attached-file'>" +
             "   <i class='fas fa-paperclip'></i>" +
-            "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+            "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
             "</a>"
     }
     comment_code += "<pre>" + data.description + "</pre>" +
@@ -1408,7 +1408,6 @@ comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").attr("disabled", "true");
     let thisUrl = "";
-    console.log(comment_form.find(".researcher_id").val() === "");
     if (comment_form.find(".researcher_id").val() === "")
         thisUrl = "/expert/industry_comment/";
     else
