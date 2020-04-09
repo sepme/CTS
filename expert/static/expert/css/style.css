@@ -22,6 +22,11 @@
     padding: 5px 25px 5px 15px;
 }
 
+.fixed-back .question-attach .attach-btn label span:last-child{
+    direction: ltr;
+    display: block;
+}
+
 .fixed-back .question-attach .attach-btn label:hover,
 .fixed-back .question-attach .attach-btn label:focus {
     cursor: pointer;
@@ -31,6 +36,7 @@
 .fixed-back .question-attach .inline-list {
     list-style: none;
     transition: 0.3s;
+    margin-bottom: 5px;
 }
 
 .fixed-back .question-attach .inline-list .list-item {
@@ -559,8 +565,6 @@
     background-color: #ff4545;
     color: #ffffff;
 }
-
-
 
 
 /*.vote > span.dots {*/

@@ -830,8 +830,9 @@ function question_dialog_init() {
 
 
     $(".question-attach input[type='file']").on('change', function () {
-        var fileType = $(this).val().split('.').pop().toLowerCase();
-        var fileName = $(this).val().split('\\').pop();
+        console.log("attach");
+        let fileType = $(this).val().split('.').pop().toLowerCase();
+        let fileName = $(this).val().split('\\').pop();
         $(this).closest(".list-item").find(".attach-btn label span:last-child").html(fileName);
         $(this).closest(".list-item").find(".attach-btn label span.attach-icon").removeClass("attach-icon").addClass(fileType + "-file");
         // attach_li = "<li class='list-item'>" +
@@ -940,7 +941,6 @@ function select_technique(className) {
     //     });
     // });
     $("#add-new-technique").keyup(function (e) {
-        console.log("FUCK");
         console.log($(this).val());
         console.log(e);
         if (e.keyCode === 13) {
