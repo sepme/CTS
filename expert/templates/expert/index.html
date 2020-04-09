@@ -7,8 +7,15 @@
 
 {% block dialog %}
     {% include 'expert/layouts/initial_information.html' %}
-    {% include 'expert/layouts/project_details.html' %}
-    {% include 'expert/layouts/showProject.html' %}
+
+    {% with projects|first as project %}
+        {% if project.status == 2 %}
+            {% include 'expert/layouts/project_details.html' %}
+        {% else %}
+            {% include 'expert/layouts/showProject.html' %}
+        {% endif %}
+    {% endwith %}
+
     {% include 'expert/layouts/vote_dialog_industry.html' %}
     {% include 'expert/layouts/vote_dialog_researcher.html' %}
     {% include 'expert/layouts/select_techniques.html' %}
@@ -46,16 +53,16 @@
                             <h6>
                                 {{ project.project_form.project_title_persian }}
                             </h6>
-{#                            <!-- {% calculate_date_past project.date_submitted_by_industry as date_past%} -->#}
+                            {#                            <!-- {% calculate_date_past project.date_submitted_by_industry as date_past%} -->#}
                             <div class="data-modified">
-                                <span>{{date_past}} قبل </span>
+                                <span>{{ date_past }} قبل </span>
                             </div>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
-{#                                <!-- {% getUnseenMessages project.pk request.user.expertuser as UnseenMessages%}#}
-{#                                {% if UnseenMessages != 0 %}#}
-{#                                    <span> {{UnseenMessages}} </span>#}
-{#                                {% endif %} -->#}
+                                {#                                <!-- {% getUnseenMessages project.pk request.user.expertuser as UnseenMessages%}#}
+                                {#                                {% if UnseenMessages != 0 %}#}
+                                {#                                    <span> {{UnseenMessages}} </span>#}
+                                {#                                {% endif %} -->#}
                             </div>
                         </div>
                         <div class="box-body">
@@ -66,7 +73,7 @@
                                             <div class="date text-center">
                                                 <div class="label">مهلت</div>
                                                 <div class="value">
-{#                                                    <span>{% calculate_date_remaining project.date_finished %}</span>#}
+                                                    {#                                                    <span>{% calculate_date_remaining project.date_finished %}</span>#}
                                                     <!-- <span>3</span>
                                                     <span>روز</span> -->
                                                 </div>
@@ -84,8 +91,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-3">
-                                    <button class="default-btn preview-project type-{{ project.status }}" id={{ project.pk }}
-                                            data-url="{% url 'expert:show_project' %}">
+                                    <button class="default-btn preview-project type-{{ project.status }}"
+                                            id={{ project.pk }}
+                                                    data-url="{% url 'expert:show_project' %}">
                                         مشاهده
                                     </button>
                                 </div>
