@@ -13,6 +13,7 @@ function load_dialog() {
 }
 
 function init_dialog_btn(element, dialogClass) {
+    vote_dialog_init(dialogClass);
     $(element).click(function () {
         $(".fixed-back").removeClass("show");
         $(".main").removeClass("blur-div");
@@ -50,7 +51,7 @@ function accept_project() {
         }, function () {
             $(this).removeClass("hover");
         });
-        vote_dialog_init();
+        // vote_dialog_init();
         load_dialog();
     });
 }
@@ -718,8 +719,8 @@ function vote_slider_researcher(slide_count) {
     });
 }
 
-function vote_dialog_init() {
-    flag = 0;
+function vote_dialog_init(className) {
+    let flag = 0;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
             "color": "#3ccd1c",
@@ -737,13 +738,15 @@ function vote_dialog_init() {
     }).click(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').toggleClass('fix');
     });
-    $(".vote").click(function () {
+    $(className + " .vote").click(function () {
         if ($('.vote-dialog').css('display') === 'none') {
+            console.log("expand on");
             $('.vote-dialog').slideDown();
-            $('.vote > .dots').addClass('expand');
+            $('.vote').addClass('expand');
         } else {
+            console.log("expand off");
             $('.vote-dialog').slideUp();
-            $('.vote > .dots').removeClass('expand');
+            $('.vote').removeClass('expand');
         }
     });
     $(".vote-dialog > .industry-back").hover(function () {
@@ -827,8 +830,9 @@ function question_dialog_init() {
 
 
     $(".question-attach input[type='file']").on('change', function () {
-        var fileType = $(this).val().split('.').pop().toLowerCase();
-        var fileName = $(this).val().split('\\').pop();
+        console.log("attach");
+        let fileType = $(this).val().split('.').pop().toLowerCase();
+        let fileName = $(this).val().split('\\').pop();
         $(this).closest(".list-item").find(".attach-btn label span:last-child").html(fileName);
         $(this).closest(".list-item").find(".attach-btn label span.attach-icon").removeClass("attach-icon").addClass(fileType + "-file");
         // attach_li = "<li class='list-item'>" +
@@ -937,7 +941,6 @@ function select_technique(className) {
     //     });
     // });
     $("#add-new-technique").keyup(function (e) {
-        console.log("FUCK");
         console.log($(this).val());
         console.log(e);
         if (e.keyCode === 13) {

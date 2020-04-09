@@ -89,7 +89,8 @@
             <a href="{{ messages_url }}">
                 <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
                     <div>
-                        <span>پیام ها{{UnseenMessages}}</span>
+                        <span class="new-message">{{UnseenMessages}}</span>
+                        <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
                     </div>
 

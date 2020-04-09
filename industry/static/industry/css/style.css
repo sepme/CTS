@@ -345,101 +345,101 @@ div.inputTags-list span.inputTags-item {
 /*
  * Vote
  */
-.vote {
-    position: absolute;
-    top: 40px;
-    left: 5px;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    border: 1px solid #bdbdbd;
-    color: #bdbdbd;
-    z-index: 100;
-}
+/*.vote {*/
+/*    position: absolute;*/
+/*    top: 40px;*/
+/*    left: 5px;*/
+/*    height: 30px;*/
+/*    width: 30px;*/
+/*    border-radius: 50%;*/
+/*    border: 1px solid #bdbdbd;*/
+/*    color: #bdbdbd;*/
+/*    z-index: 100;*/
+/*}*/
 
-.vote:hover {
-    color: #3ccd1c;
-    border-color: #3ccd1c;
-    cursor: pointer;
-}
+/*.vote:hover {*/
+/*    color: #3ccd1c;*/
+/*    border-color: #3ccd1c;*/
+/*    cursor: pointer;*/
+/*}*/
 
-.vote > span.dots {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    height: 0;
-    width: 0;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 2px solid #bdbdbd;
-    background-color: #bdbdbd;
-    transition: 0.3s;
-}
+/*.vote > span.dots {*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    height: 0;*/
+/*    width: 0;*/
+/*    transform: translate(-50%, -50%);*/
+/*    border-radius: 50%;*/
+/*    border: 2px solid #bdbdbd;*/
+/*    background-color: #bdbdbd;*/
+/*    transition: 0.3s;*/
+/*}*/
 
-.vote > span.dots:after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    border: 2px solid #bdbdbd;
-    background-color: #bdbdbd;
-    transition: 0.3s;
-}
+/*.vote > span.dots:after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 5px;*/
+/*    left: 0;*/
+/*    width: 0;*/
+/*    height: 0;*/
+/*    border-radius: 50%;*/
+/*    border: 2px solid #bdbdbd;*/
+/*    background-color: #bdbdbd;*/
+/*    transition: 0.3s;*/
+/*}*/
 
-.vote > span.dots:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 5px;
-    width: 0;
-    height: 0;
-    transform: translate(-40%, -200%);
-    border-radius: 50%;
-    border: 2px solid #bdbdbd;
-    background-color: #bdbdbd;
-    transition: 0.3s;
-}
+/*.vote > span.dots:before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 0;*/
+/*    top: 5px;*/
+/*    width: 0;*/
+/*    height: 0;*/
+/*    transform: translate(-40%, -200%);*/
+/*    border-radius: 50%;*/
+/*    border: 2px solid #bdbdbd;*/
+/*    background-color: #bdbdbd;*/
+/*    transition: 0.3s;*/
+/*}*/
 
-.vote > span.dots.expand {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    height: 0;
-    width: 0;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 2px solid transparent;
-    background-color: transparent;
-}
+/*.vote > span.dots.expand {*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    height: 0;*/
+/*    width: 0;*/
+/*    transform: translate(-50%, -50%);*/
+/*    border-radius: 50%;*/
+/*    border: 2px solid transparent;*/
+/*    background-color: transparent;*/
+/*}*/
 
-.vote > span.dots.expand:after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 8px;
-    height: 3px;
-    transform: translate(-70%, -50%) rotate(45deg);
-    border-radius: 2px;
-    border: none;
-    background-color: #3ccd1c;
-}
+/*.vote > span.dots.expand:after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    width: 8px;*/
+/*    height: 3px;*/
+/*    transform: translate(-70%, -50%) rotate(45deg);*/
+/*    border-radius: 2px;*/
+/*    border: none;*/
+/*    background-color: #3ccd1c;*/
+/*}*/
 
-.vote > span.dots.expand:before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 8px;
-    height: 3px;
-    transform: translate(-10%, -40%) rotate(135deg);
-    border-radius: 2px;
-    border: none;
-    background-color: #3ccd1c;
-}
+/*.vote > span.dots.expand:before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    top: 50%;*/
+/*    width: 8px;*/
+/*    height: 3px;*/
+/*    transform: translate(-10%, -40%) rotate(135deg);*/
+/*    border-radius: 2px;*/
+/*    border: none;*/
+/*    background-color: #3ccd1c;*/
+/*}*/
 
 .vote-dialog {
     position: absolute;
