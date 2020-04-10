@@ -155,7 +155,6 @@ $(document).ready(function () {
             $("a.top-button").addClass('show');
         } else {
             $("a.top-button").removeClass('show');
-        }
     });
 
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
@@ -1081,7 +1080,6 @@ function researcherRequest() {
 
 let showInfo = $('.preview-project');
 showInfo.click(function (event) {
-    console.log("-----------");
     $.ajax({
         url: $(this).attr('data-url'),
         method: 'GET',
@@ -1265,19 +1263,19 @@ function setMajors(data) {
 function setValue(data) {
     $("#v-pills-roles-tab").click(function () {
         setRole(data);
-        // $('*').persiaNumber();
+        $('*').persiaNumber();
     });
     $("#v-pills-resources-tab").click(function () {
         setResources(data);
-        // $('*').persiaNumber();
+        $('*').persiaNumber();
     });
     $("#v-pills-approaches-tab").click(function () {
         setApproach(data);
-        // $('*').persiaNumber();
+        $('*').persiaNumber();
     });
     $("#v-pills-majors-tab").click(function () {
         setMajors(data);
-        // $('*').persiaNumber();
+        $('*').persiaNumber();
     });
 }
 
@@ -1406,7 +1404,6 @@ comment_form.submit(function (event) {
     else
         thisUrl = "/expert/researcher_comment/";
     $(".project_id").attr('value', $('.showProject').attr("id"));
-
     let form = new FormData(comment_form.get(0));
     $.ajax({
         method: 'POST',

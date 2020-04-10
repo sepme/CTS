@@ -715,3 +715,4 @@ def ExpertRequestResearcher(request):
         researcher_request.save()
     
     return JsonResponse({"successfull" : "successfull"})
+

@@ -506,7 +506,7 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
-
+  
     $('.accept-request').click(function (data) {
         expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         project_id = $(this).closest(".showProject").attr("id");

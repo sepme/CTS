@@ -923,7 +923,6 @@ function show_question_answers(data) {
     //     }
     // });
 }
-
 function select_technique(className) {
     // $("li[role='treeitem']").click(function () {
     //     var tree = $("#fancy-tree").fancytree({

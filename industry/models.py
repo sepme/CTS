@@ -132,7 +132,7 @@ class ProjectForm(models.Model):
     required_budget             = models.IntegerField(verbose_name="بودجه مورد نیاز")
     policy                      = models.TextField(verbose_name="نکات اخلاقی")
     predict_profit              = models.IntegerField(verbose_name='سود مالی')
-
+    
     def __str__(self):
         return self.project_title_english
 
@@ -232,6 +232,7 @@ class Comment(models.Model):
     industry_user   = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
     expert_user     = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
     researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True, blank=True)
+
     attachment      = models.FileField(upload_to=upload_comment, blank=True, null=True)
     date_submitted  = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")
     STATUS=(
