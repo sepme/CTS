@@ -1,12 +1,44 @@
 $(window).on("load", function () {
     init_windowSize();
     load_dialog();
+    // $("*").persiaNumber();
 }).on("resize", function () {
     init_windowSize();
     load_dialog();
 });
 
-$(".chamran-btn-info").click(function () {
+
+function CountDown(min, hour, day) {
+    let day_div = $(".preview-question .left-time-counter .day .count");
+    let hour_div = $(".preview-question .left-time-counter .hour .count");
+    let min_div = $(".preview-question .left-time-counter .minute .count");
+
+    let new_day = day_div.html();
+    let new_hour = hour_div.html();
+    let new_min = min_div.html();
+
+    function counter() {
+        new_min = new_min - 1;
+        if (new_min === -1) {
+            new_hour = new_hour - 1;
+            new_min = 59;
+        }
+        min_div.html(new_min);
+        if (new_hour === -1) {
+            new_day = new_day - 1;
+            new_hour = 23;
+        }
+        hour_div.html(new_hour);
+        day_div.html(new_day);
+        // $("*").persiaNumber();
+    }
+
+    // $("*").persiaNumber();
+    setInterval(counter, 1000 * 60);
+}
+
+CountDown();
+$(".preview-project").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
         return;
@@ -20,6 +52,7 @@ $(".chamran-btn-info").click(function () {
      * end of reset
      */
     var id = $(this).attr("id");
+    console.log("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/show_project/',
@@ -36,6 +69,11 @@ $(".chamran-btn-info").click(function () {
                     keys[i]
                     + "</span>"
                 );
+            }
+            if (data.status == "waiting" || data.status == "involved") {
+                console.log(data.status);
+                $('.vote').remove();
+                $('.apply').remove();
             }
             setMajors(data);
             setValue(data);
@@ -186,56 +224,81 @@ function setValue(data) {
 function setComment(data) {
     let comments_code = "";
     for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === "expert") { //expert            
-            comments_code += "<div class='expert-comment' dir='ltr' >" +
-                "<div class='comment-body'>" +
-                "<span class='comment-tools'>" ;
-                // "<i class='fas fa-reply'><div class='reply'></div>"+
-                // "</i>" ;
-                if (data[i].attachment !== "None") {
-                    comments_code += "<a href='/" +
-                                     data[i].attachment +
-                                     "'><i class='fas fa-paperclip'></i></a>" ;   
-                }
-            comments_code += "</span>" +
-                "<span>" +
-                data[i].description +
-                "</span>" +
-                "</div>" +
+        if (data[i].sender_type === "expert") { //expert
+            let comment_body_classes = "comment-body";
+            if (data[i].attachment !== "None") {
+                comment_body_classes += " attached";
+            }
+            comments_code += "<div class='expert-comment' dir='ltr' id='" + data[i].pk + "' >" +
+                "<div class='" + comment_body_classes + "'>" +
+                "   <span class='comment-tools'>" +
+                // "       <i class='fas fa-reply'>" +
+                // "           <div class='reply'></div>" +
+                // "       </i>" +
+                "</span>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                    "   <i class='fas fa-paperclip'></i>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+                    "</a>";
+            }
+            comments_code += "<pre>" + data[i].description + "</pre>" +
+                "   </div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher") { //researcher
-            comments_code += "<div class='my-comment'>" +
-                "<div class='comment-body' dir='ltr'>" +
-                "<span class='comment-tools'>";
-                if (data[i].attachment !== "None") {
-                    comments_code += "<a href='/" +
-                                     data[i].attachment +
-                                     "'><i class='fas fa-paperclip'></i></a>" ;   
-                }
-            comments_code += "</span>" +
-                "<span>" +
-                data[i].description +
-                "</span>" +
-                "</div>" +
+            let comment_body_classes = "comment-body";
+            if (data[i].attachment !== "None") {
+                comment_body_classes += " attached";
+            }
+            comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
+                "<div class='" + comment_body_classes + "' dir='ltr'>" +
+                "   <span class='comment-tools'>" +
+                "       <div class='btn-group dropright'>" +
+                "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+                "               <i class='fas fa-cog'></i>" +
+                "           </button>" +
+                "           <div class='dropdown-menu'>" +
+                // "               <div class='dropdown-item'>" +
+                // "                   <i class='fas fa-pen'></i>" +
+                // "                   <span>ویرایش پیام</span>" +
+                // "               </div>" +
+                "               <div class='dropdown-item'>" +
+                "                   <i class='fas fa-trash-alt'></i>" +
+                "                   <span>حذف پیام</span>" +
+                "               </div>" +
+                "           </div>" +
+                "       </div>" +
+                // "       <i class='fas fa-reply'>" +
+                // "           <div class='reply'></div>" +
+                // "       </i>" +
+                "   </span>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                    "   <i class='fas fa-paperclip'></i>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+                    "</a>";
+            }
+            comments_code += "<pre>" + data[i].description + "</pre>" +
+                "   </div>" +
                 "</div>";
-        }
-        else { //system
+        } else { //system
             comments_code += "<div class='my-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
-                "<span>" +
+                "<pre>" +
                 data[i].description +
-                "</span>" +
+                "</pre>" +
                 "</div>" +
                 "</div>";
         }
     }
     $('.comments').html(comments_code);
+    $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+        deleteComment($(this).closest('.my-comment'));
+    });
 }
 
-$(".trash").click(function(event){
-    console.log("----------------");
+$(".trash").click(function (event) {
     let comment_id = $(this).attr('id');
-    console.log(comment_id);
     $.ajax({
         method: 'POST',
         url: "/researcher/delete_comment",
@@ -245,13 +308,14 @@ $(".trash").click(function(event){
             console.log("seccessful");
         },
         error: function (data) {
-            console.log("fucked up");
+            console.log("Error");
         }
     });
 });
 
 $(document).ready(function () {
     // variable
+    init_setup();
     edu_count = 0;
     exe_count = 0;
     stu_count = 0;
@@ -267,7 +331,13 @@ $(document).ready(function () {
     input_focus();
     search_input(".search_message");
     question();
-    vote_dialog_init();
+    $('.content').scroll(function () {
+        if ($(".content").scrollTop() > 300) {
+            $("a.top-button").addClass('show');
+        } else {
+            $("a.top-button").removeClass('show');
+        }
+    });
     $(".new-review-request").click(function () {
         $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
     });
@@ -277,24 +347,24 @@ $(document).ready(function () {
     if ($(window).width() < 575.98) {
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
-            if ($(this).hasClass("on")) {
+            if ($(".side-bar").hasClass("show")) {
+                $(".side-bar").removeClass("show");
                 $(this).removeClass("on");
-                $(".side-bar").css("right", "-500px");
                 $(".content").removeClass("blur-div");
             } else {
+                $(".side-bar").addClass("show");
                 $(this).addClass("on");
-                $(".side-bar").css("right", "0");
                 $(".content").addClass("blur-div");
             }
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".chamran-btn-info", ".showProject");
-        $(".form-submit").click(function () {
-            blur_div_toggle(".top-bar");
-            blur_div_toggle(".side-bar");
-            $(".mainInfo-body").css("display", "none");
-        });
+        init_dialog_btn(".preview-project", ".showProject");
+        // $(".form-submit").click(function () {
+        //     blur_div_toggle(".top-bar");
+        //     blur_div_toggle(".side-bar");
+        //     $(".mainInfo-body").css("display", "none");
+        // });
 
         // education_record();
         // executive_record();
@@ -318,7 +388,7 @@ $(document).ready(function () {
 $(".submit-button").click(function (event) {
     event.preventDefault();
     let voteForm = $(this).closest("form");
-    let data =  voteForm.serialize();
+    let data = voteForm.serialize();
     console.log(data);
     $.ajax({
         method: 'POST',
@@ -615,6 +685,21 @@ executive_form.submit(function (event) {
     })
 });
 
+// Techniques Search Input
+if (window.location.href.indexOf("researcher/technique/") > -1) {
+    $("#technique-name").on("focus", function () {
+        if ($(this).hasClass("expand")) {
+            console.log("f");
+            $(this).closest("div").find(".all-techniques").css("border-color", "#3CCD1C");
+        }
+    }).on("focusout", function () {
+        if ($(this).hasClass("expand")) {
+            console.log("o");
+            $(this).closest("div").find(".all-techniques").css("border-color", "#bdbdbd");
+        }
+    });
+}
+
 var technique_review = $('#technique_review');
 technique_review.submit(function (event) {
     event.preventDefault();
@@ -695,33 +780,52 @@ technique_review.submit(function (event) {
 });
 
 function show_add_technique_record(title) {
-    new_tech = "<div class='card active-question flow-root-display'>"+
-            "<div class='technique-title w-50'>"+
-            title+
-            "</div>"+
-            "<div class='technique-info w-50'>"+
-                "<div class='w-25'></div>"+
-                "<div class='mark w-25'><span>"+
-                        "در حال بررسی..."+
-                "<span></div>"+
-                "<div class='date w-25'><span>"+
-                "امروز"+
-                "</span></div>"+
-                "<div class='show w-25'><button class='default-btn show-btn new-review-request'>ارتقا نمره</button></div>"+
-            "</div></div>";
-    $(".techniques-list").append(new_tech);
+    let newTechnique = "" +
+        "<div class='card box flow-root-display w-100'>" +
+        "    <div class='box-header text-right'>" +
+        "        <h6>" + title + "</h6>" +
+        "    </div>" +
+        "    <div class='box-body'>" +
+        "        <div class='row'>" +
+        "            <div class='col-md-6 col-8'>" +
+        "                <div class='row'>" +
+        "                    <div class='col-6'>" +
+        "                        <div class='date text-center'>" +
+        "                            <div class='label'>ثبت</div>" +
+        "                            <div class='value'>" +
+        "                                <span>امروز</span>" +
+        "                            </div>" +
+        "                        </div>" +
+        "                    </div>" +
+        "                    <div class='col-6 text-center'>" +
+        "                        <div class='label'>سطح تسلط</div>" +
+        "                        <div class='value'>" +
+        "                            <span>" +
+        "در حال بررسی...                               " +
+        "                            </span>" +
+        "                        </div>" +
+        "                    </div>" +
+        "                </div>" +
+        "            </div>" +
+        "            <div class='col-md-6 col-4'>" +
+        "                <button class='default-btn show-btn new-review-request'>ارتقا نمره</button>" +
+        "            </div>" +
+        "        </div>" +
+        "    </div>" +
+        "</div>";
+    $(".techniques-list").append(newTechnique);
 }
 
-var add_technique_form = $('.ajax-add-technique-form');
+let add_technique_form = $('.ajax-add-technique-form');
 add_technique_form.submit(function (event) {
     event.preventDefault();
     add_technique_form.find("button[type='submit']").addClass("loading-btn").attr("disabled", "true").css("color", "transparent");
     add_technique_form.find("button[type='reset']").attr("disabled", "true");
     add_technique_form.find("label").addClass("progress-cursor");
     add_technique_form.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = add_technique_form.attr('url');
+    let $thisURL = add_technique_form.attr('url');
     // var data = $(this).serialize().toString();
-    var data = new FormData(add_technique_form.get(0));
+    let data = new FormData(add_technique_form.get(0));
     add_technique_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -791,28 +895,33 @@ add_technique_form.submit(function (event) {
     })
 });
 
-function addComment(data){
-    new_comment = "<div class='my-comment'>" +
-                "<div class='comment-body' dir='ltr'>" +
-                "<span class='comment-tools'>";
-                if (data.attachment !== "None") {
-                    new_comment += "<a href='/" +
-                                    data.attachment +
-                                    "'><i class='fas fa-paperclip'></i></a>" ;   
-                }
-            new_comment += "</span>" +
-                "<span>" +
-                data.description +
-                "</span>" +
-                "</div>" +
-                "</div>";
+function addComment(data) {
+    new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
+        "<div class='comment-body' dir='ltr'>" +
+        "<span class='comment-tools'>"
+    // "<i class='fas fa-trash-alt'></i>" +
+    // "<i class='fas fa-pen'>" +
+    // "</i>" +
+    // "<i class='fas fa-reply'><div class='reply'></div>" +
+    // "</i>"
+    ;
+    if (data.attachment !== "None") {
+        new_comment += "<a href='/" +
+            data.attachment +
+            "'><i class='fas fa-paperclip'></i></a>";
+    }
+    new_comment += "</span>" +
+        "<span>" +
+        data.description +
+        "</span>" +
+        "</div>" +
+        "</div>";
     $(".comments").append(new_comment);
 }
 
 var comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
-    $("#project_id").attr('value', $('.my-project').attr("id"));
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
     var $thisURL = comment_form.attr('url');
@@ -836,6 +945,9 @@ comment_form.submit(function (event) {
                 position: 'bottomLeft'
             });
             comment_form[0].reset();
+            $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+                deleteComment($(this).closest('.my-comment'));
+            });
         },
         error: function (data) {
             var obj = JSON.parse(data.responseText);
@@ -898,13 +1010,13 @@ apply_form.submit(function (event) {
     })
 });
 
-$(".add-new-technique").click(function (event) {    
+$(".add-new-technique").click(function (event) {
     $.ajax({
         method: 'GET',
         url: '/researcher/show_technique/',
         dataType: 'json',
         data: {'id': "None"},
-        success: function (data) {            
+        success: function (data) {
             let source = [];
             for (let i = 0; i <= Object.keys(data).length - 1; i++) {
                 let item = {};
@@ -923,6 +1035,7 @@ $(".add-new-technique").click(function (event) {
                 }
                 source.push(item);
             }
+
             $("#fancy-tree").fancytree({
                 extensions: ["glyph"],
                 checkbox: false,
@@ -930,10 +1043,20 @@ $(".add-new-technique").click(function (event) {
                 checkboxAutoHide: true,
                 clickFolderMode: 2,
                 lazyLoad: function (event, data) {
-                    data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                    data.result = {url: 'https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json'};
                 },
                 select: function (event, data) {
 
+                },
+                activate: function (event, data) {
+                    let node = data.node;
+                    $("input#technique-name").val(node.title);
+                    express();
+                    input_focus();
+                    let inputLabel = "label[for='#technique-name']";
+                    $(inputLabel).css({
+                        "color": "#8d8d8d"
+                    });
                 },
                 source: source,
                 glyph: {
@@ -964,7 +1087,6 @@ $(".add-new-technique").click(function (event) {
                     }
                 },
             });
-            select_technique(".select-technique");
         },
     });
 });
@@ -1047,13 +1169,13 @@ $("#your-project").click(function (event) {
     // });
 });
 
-$(".my-project").click(function(){
+$(".my-project").click(function () {
     const dialog = $(".showProject");
     let projectId = $(this).attr("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/myProject/',
-        data:{id : projectId},
+        data: {id: projectId},
         dataType: 'json',
         success: function (data) {
             dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
@@ -1070,6 +1192,7 @@ $(".my-project").click(function(){
             setMajors(data);
             setValue(data);
             setComment(data.comments);
+
             $(".apply").remove();
             if (data.vote === "false") {
                 $(".vote").remove();
@@ -1078,9 +1201,29 @@ $(".my-project").click(function(){
         error: function (data) {
             console.log('You don\'t have any project.');
         },
-        });
-    
+    });
+
 });
+
+function deleteComment(comment) {
+    $.ajax({
+        method: 'POST',
+        url: '/deleteComment/',
+        dataType: 'json',
+        data: {id: $(comment).attr("id")},
+        success: function (data) {
+            $(comment).remove()
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت پاک شد.",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log('Error');
+        },
+    });
+}
 
 $("#new-projects").click(function (event) {
     $(".new-projects").attr("style", "display :block");

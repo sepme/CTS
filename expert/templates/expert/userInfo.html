@@ -22,12 +22,19 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card info-card user-info text-right">
-                <form action="" method="post" enctype="multipart/form-data" novalidate>
-                    {% csrf_token %}
-                    <div class="card-header">اطلاعات کاربری</div>
-                    <div class="inner-card card">
+        <div class="col-12 text-right">
+            <h3 class="h3 border-bottom p-top-15">تنظیمات کاربری</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form action="" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>اطلاعات کاربری</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-center">
                                 <label for="upload-input" class="upload text-center">
@@ -148,18 +155,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">کلیدواژه</div>
-                    <div class="inner-card card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>کلیدواژه</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <label for="id_key_words">کلیدواژه ها</label>
-{#                                {{ expert_info_form.keywords|attr:"id:id_key_words"|attr:"class:w-100"|attr:"value:اولی,دومی," }}#}
-                                <input type="text" name="expert_info-keywords" id="id_key_words" class="w-100" value="{{ keywords }}">
+                                {#                                {{ expert_info_form.keywords|attr:"id:id_key_words"|attr:"class:w-100"|attr:"value:اولی,دومی," }}#}
+                                <input type="text" name="expert_info-keywords" id="id_key_words" class="w-100"
+                                       value="{{ keywords }}">
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">سوابق علمی</div>
-                    <div class="inner-card card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>سوابق علمی</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="education text-center w-100">
@@ -179,8 +195,8 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in scientific_instance %}
+                                            <tbody class="row-sci-{{instance.pk}}">
                                                 <tr>
                                                     <td>{{ instance.degree }}</td>
                                                     <td>{{ instance.major }}</td>
@@ -188,12 +204,12 @@
                                                     <td>{{ instance.city }}</td>
                                                     <td>{{ instance.date_of_graduation }}</td>
                                                     <td>
-                                                        <i class='fas fa-pen' id='edit_edu'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_edu'></i>
+                                                        <i class='fas fa-pen' id='edit_sci'></i>
+                                                        <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_sci'></i>
                                                     </td>
                                                 </tr>
-                                            {% endfor %}
                                             </tbody>
+                                            {% endfor %}
                                         </table>
                                     {% endif %}
                                 </div>
@@ -201,11 +217,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">سوابق اجرایی</div>
-                    <div class="inner-card card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>سوابق اجرایی</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header"></span>
                                 <div class="executive text-center w-100">
                                     {% if not executive_instance %}
                                         <span class="initial-value"
@@ -223,8 +242,8 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in executive_instance %}
+                                                <tbody class="row-exe-{{instance.pk}}">
                                                 <tr>
                                                     <td>{{ instance.executive_post }}</td>
                                                     <td>{{ instance.date_start_post }}</td>
@@ -233,11 +252,11 @@
                                                     <td>{{ instance.city }}</td>
                                                     <td>
                                                         <i class='fas fa-pen' id='edit_exe'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
+                                                        <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_exe'></i>
                                                     </td>
                                                 </tr>
-                                            {% endfor %}
                                             </tbody>
+                                            {% endfor %}
                                         </table>
                                     {% endif %}
                                 </div>
@@ -245,12 +264,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">سوابق پژوهشی</div>
-                    <div class="card-header-info">بهترین ها طی پنج سال گذشته</div>
-                    <div class="inner-card card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>سوابق پژوهشی</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header"> <span class="sub-header"></span></span>
                                 <div class="research text-center w-100">
                                     {% if not research_instance %}
                                         <span class="initial-value"
@@ -266,19 +287,19 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in research_instance %}
-                                                <tr>
-                                                    <td>{{ instance.research_title }}</td>
-                                                    <td>{{ instance.researcher }}</td>
-                                                    <td>{{ instance.co_researcher }}</td>
-                                                    <td>
-                                                        <i class='fas fa-pen' id='edit_exe'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
-                                                    </td>
-                                                </tr>
+                                                <tbody class="row-research-{{instance.pk}}">
+                                                    <tr>
+                                                        <td>{{ instance.research_title }}</td>
+                                                        <td>{{ instance.researcher }}</td>
+                                                        <td>{{ instance.co_researcher }}</td>
+                                                        <td>
+                                                            <i class='fas fa-pen' id='edit_exe'></i>
+                                                            <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_research'></i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             {% endfor %}
-                                            </tbody>
                                         </table>
                                     {% endif %}
                                 </div>
@@ -286,13 +307,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">مقالات</div>
-                    <div class="card-header-info">چند مورد از بهترین مقالات</div>
-                    <div class="inner-card card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>مقالات</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <span class="label header"> <span
-                                        class="sub-header"></span></span>
                                 <div class="paper text-center w-100">
                                     {% if not paper_instance %}
                                         <span class="initial-value"
@@ -310,21 +332,21 @@
                                                 <td></td>
                                             </tr>
                                             </thead>
-                                            <tbody>
                                             {% for instance in paper_instance %}
-                                                <tr>
-                                                    <td>{{ instance.research_title }}</td>
-                                                    <td>{{ instance.date_published }}</td>
-                                                    <td>{{ instance.published_at }}</td>
-                                                    <td>{{ instance.impact_factor }}</td>
-                                                    <td>{{ instance.citation }}</td>
-                                                    <td>
-                                                        <i class='fas fa-pen' id='edit_exe'></i>
-                                                        <i class='fas fa-trash-alt' id='delete_exe'></i>
-                                                    </td>
-                                                </tr>
+                                                <tbody class="row-paper-{{instance.pk}}">
+                                                    <tr>
+                                                        <td>{{ instance.research_title }}</td>
+                                                        <td>{{ instance.date_published }}</td>
+                                                        <td>{{ instance.published_at }}</td>
+                                                        <td>{{ instance.impact_factor }}</td>
+                                                        <td>{{ instance.citation }}</td>
+                                                        <td>
+                                                            <i class='fas fa-pen' id='edit_exe'></i>
+                                                            <i class='fas fa-trash-alt' value={{instance.pk}} id='delete_paper'></i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             {% endfor %}
-                                            </tbody>
                                         </table>
                                     {% endif %}
 
@@ -333,8 +355,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">افتخارات</div>
-                    <div class="inner-card card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>افتخارات</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">چند نمونه از بهترین افتخارات - مقالات خاص، جوایز و ...- به همراه سال وقوع</span>
@@ -344,8 +370,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">هوش هیجانی</div>
-                    <div class="inner-card card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>هوش هیجانی</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <div class="w-100 text-center">
@@ -650,10 +680,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header">اطلاعات تکمیلی</div>
-                    <div class="card inner-card">
+                </div>
+                <div class="card box flow-root-display w-100">
+                    <div class="box-header text-right">
+                        <h6>اطلاعات تکمیلی</h6>
+                    </div>
+                    <div class="box-body">
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 text-right">
                                 <span class="sub-header">نحوه آشنایی شما با چمران تیم</span>
                                 {#                                <textarea dir="rtl" class="w-100" rows="3" placeholder="اینجا وارد کنید ..."#}
                                 {#                                          style="margin-top: 0;"></textarea>#}
@@ -726,22 +760,15 @@
                                 {#                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..."#}
                                 {#                                          style="margin-top: 0;"></textarea>#}
                                 {{ expert_info_form.languages|attr:"dir:rtl"|attr:"class:w-100"|attr:"rows:4"|attr:"placeholder:اینجا وارد کنید ..."|attr:"style:margin-top: 0;" }}
-
                             </div>
                         </div>
                     </div>
-                    {#                    <div class="card-header">تکنیک ها</div>#}
-                    {#                    <div class="inner-card card">#}
-                    {#                        <div class="row">#}
-                    {#                            <div class="col-lg-12 text-right">#}
-                    {#                                <span class="label header"></span>#}
-                    {#                                <button class="success-btn technique" type="button">افزودن</button>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {#                    </div>#}
-                    <input type="submit" value="اعمال تغییرات" class="chamran_btn" style="  left: 0;bottom: -1px;">
-                </form>
-            </div>
+                </div>
+                <button type="submit" class="form-submit">
+                    <i class="fas fa-check"></i>
+                    اعمال تغییرات
+                </button>
+            </form>
         </div>
     </div>
 {% endblock %}
@@ -834,4 +861,7 @@
     {#            },#}
     {#        });#}
     {#    </script>#}
+    <a href="#top" class="top-button">
+        <i class="fas fa-angle-up"></i>
+    </a>
 {% endblock %}

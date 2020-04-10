@@ -1,7 +1,8 @@
 from django.views import generic
 # from django.views import View
-from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404, Http404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
 
@@ -17,6 +18,10 @@ from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance
 
+
+def gregorian_to_numeric_jalali(date):
+    j_date = JalaliDate(date)
+    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
 def calculate_deadline(finished, started):
     try:
@@ -36,8 +41,55 @@ def calculate_deadline(finished, started):
         return 'تاریخ نامشخص'
 
 
-class Index(generic.TemplateView):
+class Index(LoginRequiredMixin, generic.FormView):
     template_name = 'expert/index.html'
+    login_url = "/login/"
+    form_class = forms.InitialInfoForm
+
+    def get(self, request, *args, **kwargs):
+        try:
+            expert_user = ExpertUser.objects.get(user=request.user)
+        except ExpertUser.DoesNotExist:
+            raise Http404('.کاربر استاد مربوطه یافت نشد')
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expert_user = get_object_or_404(ExpertUser, user=self.request.user)
+
+        if expert_user.status != "signed_up":
+            projects = []
+            if expert_user.status == "free":
+                projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
+            if expert_user.status == "involved":
+                projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
+            context['projects'] = projects
+        return context
+    
+    def form_valid(self, form):
+        expert_user = get_object_or_404(ExpertUser, user=self.request.user)
+
+        photo = form.cleaned_data['photo']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        special_field = form.cleaned_data['special_field']
+        melli_code = form.cleaned_data['melli_code']
+        scientific_rank = form.cleaned_data['scientific_rank']
+        university = form.cleaned_data['university']
+        address = form.cleaned_data['address']
+        home_number = form.cleaned_data['home_number']
+        phone_number = form.cleaned_data['phone_number']
+        email = form.cleaned_data['email_address']
+        expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
+                                                expert_firstname=first_name, expert_lastname=last_name,
+                                                special_field=special_field, national_code=melli_code,
+                                                scientific_rank=scientific_rank, university=university,
+                                                phone_number=home_number, home_address=address,
+                                                mobile_phone=phone_number, email_address=expert_user.user.get_username())
+        expert_user.status = 'free'
+        expert_user.save()
+        expert_form.save()
+        return HttpResponseRedirect(reverse('expert:index'))
 
 
 class ResearcherRequest(generic.TemplateView):
@@ -50,8 +102,10 @@ class ResearcherRequest(generic.TemplateView):
         for project in projects_list:
             try:
                 researchers_applied = []
-                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user)[0] for
-                                    researcher_user in project.researcher_applied.all()]
+                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user).first() for researcher_user in project.researcher_applied.all()]
+                for com in Comment.objects.filter(project=project).exclude(researcher_user=None):
+                    if com.researcher_user.researcherprofile not in researchers_form:
+                        researchers_form.append(com.researcher_user.researcherprofile)
                 if len(researchers_form) == 0:
                     continue
                 for research in researchers_form:
@@ -96,46 +150,6 @@ class Questions(generic.TemplateView):
             'research_questions': research_questions,
         }
         return render(request, self.template_name, context)
-
-
-@login_required(login_url='/login/')
-def index(request):
-    expert_user = get_object_or_404(ExpertUser, user=request.user)
-    if request.method == 'POST':
-        form = forms.InitialInfoForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            photo = form.cleaned_data['photo']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            special_field = form.cleaned_data['special_field']
-            melli_code = form.cleaned_data['melli_code']
-            scientific_rank = form.cleaned_data['scientific_rank']
-            university = form.cleaned_data['university']
-            address = form.cleaned_data['address']
-            home_number = form.cleaned_data['home_number']
-            phone_number = form.cleaned_data['phone_number']
-            email = form.cleaned_data['email_address']
-            expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
-                                                    expert_firstname=first_name, expert_lastname=last_name,
-                                                    special_field=special_field, national_code=melli_code,
-                                                    scientific_rank=scientific_rank, university=university,
-                                                    phone_number=home_number, home_address=address,
-                                                    mobile_phone=phone_number, email_address=expert_user.user.get_username())
-            expert_user.status = 'free'
-            expert_user.save()
-            expert_form.save()
-            return HttpResponseRedirect(reverse('expert:index'))
-        else:
-            return render(request, 'expert/index.html', {'form': form,
-                                                 'expert_user': expert_user,})
-    if expert_user.status == "signed_up":
-        form = forms.InitialInfoForm()
-        return render(request, 'expert/index.html', {'form': form,
-                                                    'expert_user': expert_user})    
-    projects = Project.objects.filter(status=1)
-    return render(request, 'expert/index.html', {'expert_user': expert_user,
-                                                    'projects': projects})
 
 class UserInfo(generic.FormView):
     template_name = 'expert/userInfo.html'
@@ -284,7 +298,20 @@ def paper_record_view(request):
 def show_project_view(request):
     id = request.GET.get('id')
     project = Project.objects.get(id=id)
+    data = {}
+    try:
+        if project.expert_accepted.user == request.user:
+            ActiveProjcet(request, project, data)
+    except:
+        pass
+    return UsualShowProject(request, project, data)
+
+def UsualShowProject(request, project, data):
     project_form = project.project_form
+    if request.user.expertuser in project.expert_applied.all():
+        data['applied'] = True
+    else:
+        data['applied'] = False
     comments = []
     comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
     for comment in comment_list:
@@ -297,28 +324,34 @@ def show_project_view(request):
             'text': comment.description,
             'sender_type': comment.sender_type,
             'attachment': url,
+            'pk' : comment.pk,
         })
-    data = {
-        'comments': comments,
-        'date': JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d"),
-        'key_words': serializers.serialize('json', project_form.key_words.all()),
-        'main_problem_and_importance': project_form.main_problem_and_importance,
-        'progress_profitability': project_form.progress_profitability,
-        'required_lab_equipment': project_form.required_lab_equipment,
-        'approach': project_form.approach,
-        'deadline': calculate_deadline(project.date_finished, project.date_submitted_by_industry),
-        'project_title_persian': project_form.project_title_persian,
-        'project_title_english': project_form.project_title_english,
-        'research_methodology': project_form.research_methodology,
-        'policy': project_form.policy,
-        'potential_problems': project_form.potential_problems,
-        'required_budget': project_form.required_budget,
-        'required_method': project_form.required_method,
-        'project_phase': project_form.project_phase,
-        'predict_profit': project_form.predict_profit,
-        'techniques_list': Technique.get_technique_list(),
-        'success': 'successful',
-    }
+        if comment.sender_type == "industry":
+            comment.status = "seen"
+            comment.save()
+    # data = {
+    if "status" not in data.keys():
+        data["status"] = "non active"
+        data['techniques_list']= Technique.get_technique_list()
+    data['comments']= comments
+    data['date']= JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d")
+    data['key_words']= serializers.serialize('json', project_form.key_words.all())
+    data['main_problem_and_importance']= project_form.main_problem_and_importance
+    data['progress_profitability']= project_form.progress_profitability
+    data['required_lab_equipment']= project_form.required_lab_equipment
+    data['approach']= project_form.approach
+    data['deadline']= calculate_deadline(project.date_finished, project.date_submitted_by_industry)
+    data['project_title_persian']= project_form.project_title_persian
+    data['project_title_english']= project_form.project_title_english
+    data['research_methodology']= project_form.research_methodology
+    data['policy']= project_form.policy
+    data['potential_problems']= project_form.potential_problems
+    data['required_budget']= project_form.required_budget
+    data['required_method']= project_form.required_method
+    data['project_phase']= project_form.project_phase
+    data['predict_profit']= project_form.predict_profit 
+    data['success']= 'successful'
+    # }
     # data['required_technique']=[]
     # for tech in project.project_form.required_technique:
     #     data['required_technique'].append(tech.__str__())
@@ -344,14 +377,16 @@ def accept_project(request):
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
+        text = "درخواست شما برای صنعت ارسال شد."
+        comment = Comment(description=text,
+                          sender_type="system",
+                          project=project,
+                          expert_user=expert_user,
+                          status='unseen')
+        comment.save()
         return JsonResponse({
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
-    # Comment.objects.create(description="برای انجام پروژه درخواست داد. " + request.user.expertuser.expertform.__str__(
-    # ) + "استاد",
-    #                        expert_user=request.user.expertuser,
-    #                        industry_user=project.industry_creator,
-    #                        sender_type=3)
 
 
 def add_research_question(request):
@@ -379,7 +414,8 @@ def show_research_question(request):
             'researcher_name': researcher_user.__str__(),
             'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
             'is_correct': answer.is_correct,
-            'answer_attachment': answer.answer.path,
+            'file_name' : answer.answer.name.split(".com-")[-1],
+            'answer_attachment': answer.answer.url,
             'answer_id': str(answer.id),
         }
         answers_list.append(answer_json)
@@ -393,7 +429,7 @@ def show_research_question(request):
     }
     if research_question.attachment:
         attachment = research_question.attachment
-        json_response['question_attachment_path'] = attachment.path
+        json_response['question_attachment_path'] = attachment.url
         json_response['question_attachment_name'] = attachment.name.split('/')[-1]
         json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
     return JsonResponse(json_response)
@@ -440,7 +476,7 @@ def show_researcher_preview(request):
         researcher_information['techniques'].append(tech.technique.technique_title)
     project = get_object_or_404(Project ,pk=request.GET["project_id"])
     comments = []
-    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(researcher_user=None)
+    comment_list = project.comment_set.all().filter(researcher_user=researcher.researcher_user).exclude(sender_type='system')
     for comment in comment_list:
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
@@ -451,7 +487,11 @@ def show_researcher_preview(request):
             'text': comment.description,
             'sender_type': comment.sender_type,
             'attachment': url,
+            'pk' : comment.pk,
         })
+        if comment.sender_type == 'researcher':
+            comment.status = 'seen'
+            comment.save()
     researcher_information['comments'] = comments
     return JsonResponse(researcher_information)
 
@@ -468,7 +508,8 @@ def CommentForResearcher(request):
                           , project=project
                           , researcher_user=researcher
                           , expert_user=request.user.expertuser
-                          , sender_type="expert")
+                          , sender_type="expert"
+                          , status='unseen')
         comment.save()
         if form.cleaned_data["attachment"] is not None:
             data = {
@@ -495,11 +536,12 @@ def CommentForIndustry(request):
             project.expert_messaged.add(ExpertUser.objects.all().filter(id=request.user.expertuser.id).first())
             project.save()
         new_comment = Comment.objects.create(sender_type="expert",
-                                         project=project,
-                                         expert_user=request.user.expertuser,
-                                         industry_user=project.industry_creator,
-                                         description=form.cleaned_data["description"],
-                                         attachment =form.cleaned_data["attachment"])
+                                             project=project,
+                                             expert_user=request.user.expertuser,
+                                             industry_user=project.industry_creator,
+                                             description=form.cleaned_data["description"],
+                                             attachment =form.cleaned_data["attachment"],
+                                             status='unseen')
         new_comment.save()
         if form.cleaned_data["attachment"] is not None:
             data = {
@@ -541,3 +583,136 @@ def ShowTechnique(request):
         if len(q) > 1:
             data[q[-1]] = q[:-1]
     return JsonResponse(data=data)
+
+def GetResume(request):
+    expert_id = request.GET['id']
+    expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
+    data = {
+    'exe_record' : serializers.serialize('json', ExecutiveRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'research_record' : serializers.serialize('json', ResearchRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'sci_record' : serializers.serialize('json', ScientificRecord.objects.filter(
+        expert_form=expert_form)),
+
+    'paper_record' : serializers.serialize('json', PaperRecord.objects.filter(
+        expert_form=expert_form)),
+
+    "awards"    : expert_form.awards,
+    'languages' : expert_form.languages,
+    }
+
+    if expert_form.has_industrial_research == 'yes':
+        data['has_industrial_research'] = 'داشته'
+    if expert_form.has_industrial_research == 'no':
+        data['has_industrial_research'] = 'نداشته'
+
+    if expert_form.number_of_researcher == 1:
+        data['researcher_count'] = '1-10'
+    if expert_form.number_of_researcher == 2:
+        data['researcher_count'] = '11-30'
+    if expert_form.number_of_researcher == 3:
+        data['researcher_count'] = '31-60'
+    if expert_form.number_of_researcher == 4:
+        data['researcher_count'] = '+60'
+
+    return JsonResponse(data=data)
+
+def confirmResearcher(request):
+    try:
+        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(Project, pk=request.POST['project_id'])
+        project.researcher_accepted.add(researcher)
+        researcher.status.status = 'involved'
+        project.save()
+        researcher.status.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={} ,status=400)
+
+def ActiveProjcet(request, project, data):
+    industryform = project.industry_creator.industryform
+    projectDate = [
+        gregorian_to_numeric_jalali(project.date_start),
+        gregorian_to_numeric_jalali(project.date_project_started),
+        gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+        gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+        gregorian_to_numeric_jalali(project.date_finished),
+    ]
+    # data = {
+    data["status"]         = "active"
+    data["industry_name"]  = industryform.name
+    data["industry_logo"]  = industryform.photo.url
+    data['enforced_name']  = str(project.expert_accepted.expertform)
+    data["executive_info"] = project.executive_info
+    data["budget_amount"]  = project.project_form.required_budget
+    data['timeScheduling'] = projectDate
+    data["techniques"]     = []
+    # }
+    projectRequest = ExpertRequestedProject.objects.filter(project=project).filter(expert=project.expert_accepted).first()
+    for technique in projectRequest.required_technique.all():
+        data["techniques"].append(technique.__str__())
+    try:
+        researcher_request = RequestResearcher.objects.get(project=project)
+        if researcher_request.need_researcher != 0:
+            data['request_status'] = True
+        else:
+            data['request_status'] = False
+    except:
+        data['request_status'] = True
+
+    return JsonResponse(data=data)
+
+def DeleteScientificRecord(request):
+    try:
+        sci_rec = get_object_or_404(ScientificRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Scientific record isn't found"} ,status=400)
+    sci_rec.delete()
+    return JsonResponse({"successfull" :"Scientific record is deleted"})
+
+def DeleteExecutiveRecord(request):
+    try:
+        exe_rec = get_object_or_404(ExecutiveRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Executive record isn't found"} ,status=400)
+    exe_rec.delete()
+    return JsonResponse({"successfull" :"Executive record is deleted"})
+
+def DeleteResearchRecord(request):
+    try:
+        research_rec = get_object_or_404(ResearchRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Research Record isn't found"} ,status=400)
+    research_rec.delete()
+    return JsonResponse({"successfull" :"Research Record is deleted"})
+
+def DeletePaperRecord(request):
+    try:
+        paper_rec = get_object_or_404(PaperRecord ,pk=request.POST['pk'])
+    except:
+        return JsonResponse({"errors" :"Paper Record isn't found"} ,status=400)
+    paper_rec.delete()
+    return JsonResponse({"successfull" :"Paper Record is deleted"})
+
+def ExpertRequestResearcher(request):
+    project = Project.objects.get(id=request.POST['project_id'])
+    expert = request.user.expertuser
+    try:
+        researcher_request = RequestResearcher.objects.get(project=project)
+        researcher_request.researcher_count += int(request.POST['reseacherCount'])
+        researcher_request.least_hour = int(request.POST['hour'])
+        researcher_request.save()
+    except:
+        researcher_request = RequestResearcher(project=project
+                                                ,expert=expert
+                                                ,researcher_count=int(request.POST['reseacherCount'])
+                                                ,least_hour=int(request.POST['hour']))
+
+        researcher_request.save()
+    
+    return JsonResponse({"successfull" : "successfull"})
+

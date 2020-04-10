@@ -53,7 +53,6 @@ class InitailForm(forms.ModelForm):
         except:
             raise ValidationError(_("فقط عدد وارد کنید."))
         if len(data) < 10 and len(data) != 0:
-            print('تعداد اعداد وارد شده اشتباه است.')
             raise ValidationError(_("تعداد اعداد وارد شده اشتباه است."))
         return data
 
@@ -61,7 +60,6 @@ class InitailForm(forms.ModelForm):
     #     data = self.cleaned_data["student_number"]
     #     for item in data:
     #         if ord(item) < 48 or ord(item) > 57:
-    #             print('فقط عدد وارد کنید.')
     #             raise ValidationError(_("فقط عدد وارد کنید."))
     #     return data
 
@@ -140,7 +138,6 @@ class ResearcherProfileForm(forms.ModelForm):
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]
-        print("photo : " ,data)
         return data
 
     def clean_email(self):
@@ -166,7 +163,6 @@ class ResearcherProfileForm(forms.ModelForm):
 
     def clean_grade(self):
         data = self.cleaned_data["grade"]
-        print('grade : ',data)
         return data
 
     def clean_university(self):
@@ -215,57 +211,46 @@ class ResearcherProfileForm(forms.ModelForm):
 
     def clean_team_work(self):
         data = self.cleaned_data["team_work"]
-        print('teamwork ', data)
         return data
 
     def clean_creative_thinking(self):
         data = self.cleaned_data["creative_thinking"]
-        print('creative_thinking ', data)
         return data
 
     def clean_interest_in_major(self):
         data = self.cleaned_data["interest_in_major"]
-        print('interest in major ', data)
         return data
 
     def clean_motivation(self):
         data = self.cleaned_data["motivation"]
-        print('motivation ', data)
         return data
 
     def clean_sacrifice(self):
         data = self.cleaned_data["sacrifice"]
-        print('sacrif ', data)
         return data
 
     def clean_diligence(self):
         data = self.cleaned_data["diligence"]
-        print('diligence ', data)
         return data
 
     def clean_interest_in_learn(self):
         data = self.cleaned_data["interest_in_learn"]
-        print('interest in learn ', data)
         return data
 
     def clean_punctuality(self):
         data = self.cleaned_data["punctuality"]
-        print('punctuality ', data)
         return data
 
     def clean_data_collection(self):
         data = self.cleaned_data["data_collection"]
-        print('data_collection ', data)
         return data
 
     def clean_project_knowledge(self):
         data = self.cleaned_data["project_knowledge"]
-        print('project knowledge ', data)
         return data
 
     def clean_description(self):
         data = self.cleaned_data["description"]
-        print('description ', data)
         return data
 
 
@@ -275,7 +260,7 @@ class InitialInfoForm(forms.ModelForm):
         # exclude = ['birth_year', 'team_work', 'creative_thinking', 'interest_in_major',
         #            'motivation', 'sacrifice', 'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
         #            'project_knowledge', 'description', 'researcher_user']
-        fields = ['first_name', 'last_name', 'photo', 'major', 'national_code', 'grade', 'university',
+        fields = ['photo', 'first_name', 'last_name', 'major', 'national_code', 'grade', 'university',
                   'entry_year', 'address', 'home_number', 'phone_number', 'student_number']
         error_messages = {
             'first_name': {'required': "نام نمی تواند خالی باشد."},
@@ -293,6 +278,13 @@ class InitialInfoForm(forms.ModelForm):
             #           'invalid': 'پست الکترونیکی وارد شده نامعتبر است.'},
 
         }
+
+    def clean_photo(self):
+        data = self.cleaned_data["photo"]
+        if data is None:
+            raise forms.ValidationError('عکس نمی تواند خالی باشد.')
+        return data
+    
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
@@ -390,33 +382,28 @@ class ScientificRecordForm(forms.ModelForm):
         grade = self.cleaned_data.get('grade')
         if is_numeric(grade):
             raise ValidationError(_("مقطع تحصیلی نمی تواند شامل عدد باشد."))
-        print('grade' ,grade)
         return grade
 
     def clean_major(self):
         data = self.cleaned_data["major"]
         if is_numeric(data):
             raise ValidationError(_("رشته تحصیلی نمی تواند شامل عدد باشد."))
-        print('major' ,data)
         return data
 
     def clean_university(self):
         data = self.cleaned_data["university"]
         if is_numeric(data):
             raise ValidationError(_("دانشگاه نمی تواند شامل عدد باشد."))
-        print('university' ,data)
         return data
     
     def clean_place(self):
         data = self.cleaned_data["place"]
         if is_numeric(data):
             raise ValidationError(_("شهر نمی تواند شامل عدد باشد."))
-        print('place' ,data)
         return data
     
     def clean_graduated_year(self):
         data = self.cleaned_data["graduated_year"]
-        print('year' ,data)
         if len(data) > 5:
             raise ValidationError(_("تعداد کاراکتر بیش از حد مجاز است."))
         if data:
@@ -558,7 +545,6 @@ class TechniqueInstanceForm(forms.Form):
     
     def clean_confirmation_method(self):
         data = self.cleaned_data["confirmation_method"]
-        print("method :" ,data)
         if data == "":
             raise ValidationError(_("یکی از راه ثبت را انتخاب کنید."))
         return data
@@ -566,8 +552,6 @@ class TechniqueInstanceForm(forms.Form):
     def clean_resume(self):
         data = self.cleaned_data["resume"]
         method = self.cleaned_data.get('confirmation_method')
-        print("method in resume :" ,method)
-        print('resume : ' ,data)
         if method == 'exam':
             return data
         elif method is None:
@@ -596,7 +580,6 @@ class TechniqueReviewFrom(forms.Form):
     def clean_new_resume(self):
         data = self.cleaned_data["new_resume"]
         method = self.cleaned_data.get('request_confirmation_method')
-        print('method in resume :' ,method)
         if method == 'exam':
             return data
         if method == None:

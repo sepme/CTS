@@ -14,7 +14,7 @@ from itertools import chain
 from operator import attrgetter
 
 from . import models ,forms ,persianNumber
-from expert.models import ResearchQuestion
+from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project ,Comment
 
 def gregorian_to_numeric_jalali(date):
@@ -58,6 +58,8 @@ class Index(LoginRequiredMixin, generic.FormView):
             raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')        
         if researcher.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
+        if request.user.researcheruser.status.status == 'wait_for_answer':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -65,7 +67,8 @@ class Index(LoginRequiredMixin, generic.FormView):
         if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
-        all_projects = Project.objects.all().exclude(expert_accepted=None)
+        all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gte=0)]
+        all_projects = Project.objects.filter(id__in=all_projects)
         my_projects  = all_projects.filter(researcher_applied__in=[self.request.user.researcheruser])
         new_projects = all_projects.exclude(researcher_applied__in=[self.request.user.researcheruser])
         technique_title = [str(item.technique) for item in self.request.user.researcheruser.techniqueinstance_set.all()]
@@ -83,18 +86,13 @@ class Index(LoginRequiredMixin, generic.FormView):
         for project in projects:
             if self.request.user.researcheruser in project.researcher_applied.all():
                 continue
-            # all_comments = project.get_comments()
-            # expert_comment = all_comments.filter(sender_type=0).exclude(researcher_user=None)
-            # researcher_comment = all_comments.filter(sender_type=2)
-            # comments= sorted(
-            #         chain(researcher_comment, expert_comment),
-            #         key=attrgetter('date_submitted'))
             temp ={
-                'PK'                 : project.pk,
-                'project_title'      : project.project_form.project_title_persian,
-                'keyword'            : project.project_form.key_words.all(),
-                'started'            : date_last(datetime.date.today() ,project.date_start),
-                'finished'           : date_last(datetime.date.today() ,project.date_finished),
+                'PK'            : project.pk,
+                'project_title' : project.project_form.project_title_persian,
+                'keyword'       : project.project_form.key_words.all(),
+                'started'       : date_last(datetime.date.today() ,project.date_start),
+                'finished'      : date_last(datetime.date.today() ,project.date_finished),
+                'need_hour'     : project.requestresearcher.least_hour,
             }
             new_project_list.append(temp)
         context['new_project_list'] = new_project_list
@@ -129,6 +127,7 @@ class Index(LoginRequiredMixin, generic.FormView):
                     'keyword'       : project.project_form.key_words.all(),
                     'started'       : date_last(datetime.date.today() ,project.date_start),
                     'finished'      : date_last(datetime.date.today() ,project.date_finished),
+                    'need_hour'     : project.requestresearcher.least_hour,
                 }
                 my_project_list.append(temp)
             context["my_project_list"] = my_project_list
@@ -166,6 +165,8 @@ class UserInfo(generic.TemplateView):
         except:
             return HttpResponseRedirect(reverse("researcher:index"))    
         if request.user.researcheruser.status.status == 'not_answered':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
+        if request.user.researcheruser.status.status == 'wait_for_answer':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(request, *args, **kwargs)    
 
@@ -313,6 +314,8 @@ class Technique(generic.TemplateView):
 
         if request.user.researcheruser.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
+        if request.user.researcheruser.status.status == 'wait_for_answer':
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
 
         return render(request ,self.template_name ,context=self.get_context_data(**kwargs))
 
@@ -407,6 +410,9 @@ class Question(generic.TemplateView):
                 question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
                 return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={'question_id' : question.research_question.uniqe_id}))
             return super().get(self, request, *args, **kwargs)
+        elif researcher.status.status == "wait_for_answer":
+            self.template_name = "researcher/layouts/waiting_for_question.html"
+            return super().get(self, request, *args, **kwargs)
         else:
             raise Http404('شما به سوال ارزیابی پاسخ داده اید.')
         return super().get(self, request, *args, **kwargs)
@@ -439,12 +445,13 @@ class QuestionShow(generic.TemplateView ):
         question = request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]        
         deltatime = datetime.date.today() - question.hand_out_date
         if deltatime.days < 8:
-            if question.is_answered:
-                print("+_+_+_+_+_+_+_+_+_+_====")
-                return HttpResponseRedirect(reverse('researcher:index'))
+            STATUS = ["not_answered", "wait_for_answer"]
+            if request.user.researcheruser.status not in STATUS:
+                self.template_name = "researcher/layouts/answered_question.html"
+                return super().get(request, args, kwargs)
             if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
-                request.user.researcheruser.status.status.save()
+                request.user.researcheruser.status.save()
         else:
             status = request.user.researcheruser.status
             status.status = 'inactivated'
@@ -457,15 +464,18 @@ class QuestionShow(generic.TemplateView ):
         context = super().get_context_data(**kwargs)
         question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse()[0]
         deltatime = datetime.date.today() - question.hand_out_date
-        if deltatime.days < 8:
-            context['rest_days'] = 8 - deltatime.days
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question_text
         context['attachment'] = question.research_question.attachment
+        context['attach_type'] = str(question.research_question.attachment).split("/")[-1].split('.')[-1]
         context['file_name'] = question.research_question.attachment.name.split("/")[-1]
+        if self.request.user.researcheruser.status not in ["not_answered", "wait_for_answer"]:
+            context['answer'] = question.answer
+            return context
+        delta = datetime.date.today() - question.hand_out_date
+        context['day']  = 8 - delta.days
         context['hour'] = 23 - datetime.datetime.now().hour
         context['minute'] = 59 - datetime.datetime.now().minute
-        context['second'] = 59 - datetime.datetime.now().second
         return context
     
     def post(self ,request ,*args, **kwargs):
@@ -475,7 +485,7 @@ class QuestionShow(generic.TemplateView ):
             question.answer = request.FILES['answer']
             question.is_answered = True
             question.save()
-            request.user.researcheruser.status.status = 'free'
+            request.user.researcheruser.status.status = 'wait_for_answer'
             request.user.researcheruser.status.save()
             subject = 'Research Question Validation'
             message ="""با عرض سلام و خسته نباشید.
@@ -486,7 +496,7 @@ class QuestionShow(generic.TemplateView ):
                             question.research_question.question_title)
             email = question.research_question.expert.user.username
             try:
-                send_mail(
+                send_mail(  
                     subject=subject,
                     message=message, 
                     from_email=settings.EMAIL_HOST_USER,
@@ -501,7 +511,7 @@ def ajax_Technique_review(request):
     if form.is_valid():
         description = form.cleaned_data['request_body']
         method = form.cleaned_data['request_confirmation_method']
-        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name'])[0]
+        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name']).first()
         if method != "exam":
             resume = form.cleaned_data['new_resume']
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,
@@ -558,17 +568,24 @@ def ShowProject(request):
             'attachment'   : url
         }
         json_response['comments'].append(temp)
+        if com.sender_type == expert:
+            com.status = 'seen'
+            com.save()
+    json_response['status'] = request.user.researcheruser.status.status
     return JsonResponse(json_response)
 
 def DeleteComment(request):
     try:
-        comment = get_object_or_404(Comment ,pk=request.POST['comment_id'])
+        comment = get_object_or_404(Comment ,pk=request.POST['id'])
         comment.delete()
     except:
         return JsonResponse({} ,400)
-    return JsonResponse({'successful' :"successful"} ,200)
+    return JsonResponse({'successful' :"successful"})
 
 def ApplyProject(request):
+    if request.user.researcheruser.status.status == "waiting":
+        data = {"error": "your waiting for another project"}
+        return JsonResponse(data ,status=400)
     form = forms.ApplyForm(request.POST)
     if form.is_valid():
         project=get_object_or_404(Project ,id=request.POST['id'])
@@ -582,7 +599,8 @@ def ApplyProject(request):
         comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
                           sender_type="system",
                           project=project,
-                          researcher_user=request.user.researcheruser)
+                          researcher_user=request.user.researcheruser,
+                          status='unseen')
         comment.save()
         project.researcher_applied.add(request.user.researcheruser)
         return JsonResponse(data={'success' : "success"})
@@ -660,19 +678,22 @@ def AddComment(request):
                          ,project=project
                          ,researcher_user=request.user.researcheruser
                          ,expert_user=project.expert_accepted
-                         ,sender_type="researcher")
+                         ,sender_type="researcher"
+                         ,status='unseen')
         comment.save()
         if attachment is not None:
             data = {
                 'success' : 'successful',
                 'attachment' : comment.attachment.url[comment.attachment.url.find('media' ,2):],
                 'description':description,
+                'pk' : comment.pk,
             }
         else:
             data = {
                 'success' : 'successful',
                 'attachment' : "None",
                 'description': description,
+                'pk' : comment.pk,
             }
         return JsonResponse(data)
     return JsonResponse(form.errors ,status=400)

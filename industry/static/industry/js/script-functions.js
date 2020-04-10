@@ -12,136 +12,19 @@ function load_dialog() {
     });
 }
 
-function init_windowSize() {
-    if ($(window).width() < 575.98) {
-    } else {
-        var contentWidth = $(document).innerWidth() - 250;
-        var contentMargin = 0.0862 * contentWidth - 54.9655;
-        $(".info-card").css({
-            "margin-right": contentMargin,
-            "margin-left": contentMargin
-        });
-        $(".content").css({
-            "width": contentWidth,
-            "height": "90%"
-        });
-        $(".side-bar").css("height", "100%");
-    }
-}
-
-function loading() {
-    $(".main").addClass("blur-div");
-    var canvas = $("#loading-canvas");
-    canvas.drawArc({
-        strokeStyle: '#000',
-        strokeWidth: 4,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x: 160, y: 120,
-        start: 90,
-        end: 360,
-        radius: 50
-    });
-}
-
-function blur_div_toggle(content) {
-    if ($(content).hasClass("blur-div")) {
-        $(content).removeClass("blur-div");
-    } else {
-        $(content).addClass("blur-div");
-    }
-}
-
 function init_dialog_btn(element, dialogClass) {
+    vote_dialog_init(dialogClass);
     $(element).click(function () {
+        $(".fixed-back").removeClass("show");
+        $(".main").removeClass("blur-div");
         blur_div_toggle(".main");
-        $(dialogClass).css("display", "block");
+        $(dialogClass).addClass("show");
         close_dialog(dialogClass);
         dialog_comment_init();
-        vote_dialog_init();
         load_dialog();
         if (dialogClass === ".showProject") {
             $(dialogClass).removeAttr("id");
             $(dialogClass).attr("id", $(this).attr("id"));
-        }
-    });
-}
-
-function input_focus() {
-    if ($("input[type='text'],input[type='email'],input[type='number'],textarea").prop("disabled")) {
-        $(this).each(function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "13px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#8d8d8d"
-            });
-
-        });
-    }
-    $("input[type='text'],input[type='email'],input[type='number'],textarea").each(function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).val() !== '') {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#6f7285",
-                "padding": "0 10px"
-            });
-        }
-        if ($(this).hasClass("error")) {
-            $(inputLabel).css("color", "#ff4545");
-        }
-    }).on("focus", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-            var errorDiv = $(this).next(".error");
-            $(this).on("change", function () {
-                if ($(this).hasClass("error")) {
-                    $(this).removeClass("error");
-                    $(errorDiv).remove();
-                }
-            });
-        } else {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#3CCD1C",
-                "padding": "0 10px"
-            });
-            $(this).css("color", "#3ccd1c");
-        }
-    }).on("focusout", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-
-        } else {
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "13px",
-                    "top": "28px",
-                    "right": "25px",
-                    "color": "#6f7285",
-                    "padding": "0"
-                });
-                $(inputLabel).removeClass("full-focus-out");
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
         }
     });
 }
@@ -169,10 +52,17 @@ function search_input(className) {
 
 function close_dialog(className) {
     $(".close").click(function () {
-        $(className).css("display", "none");
+        $(className).removeClass("show");
         $(".main").removeClass("blur-div");
+        if (className === ".showProject") {
+            $(className).find(".techniques").html("");
+            $(className).find(".card-head").html("");
+            $(className).find(".time-body").html("");
+            $(className).find(".project-info-content").html("");
+            $(className).find(".comments").html("");
+        }
         $(className).find(".no-comment").remove();
-        $(className).find(".project-info-tabs .nav").html("");
+        $(className).find(".comment-tabs .nav").html("");
     });
 }
 
@@ -423,85 +313,96 @@ function addComment(comment) {
 }
 
 function dialog_comment_init() {
+    $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
+        let fileName = $(this).val().split("\\").pop();
+        $(".send-comment-container .comment-input .attachment span").html(fileName);
+        $(".send-comment-container .comment-input").addClass("attached");
+
+        $(".send-comment-container .comment-input.attached i.fa-trash-alt").click(function () {
+            $(".send-comment-container .comment-input input#comment-attach").val("");
+            $(".send-comment-container .comment-input .attachment span").html("");
+            $(".send-comment-container .comment-input").removeClass("attached");
+        });
+    });
     // add emoji to comment
-    $(".new-comment-tools > .fa-smile").click(function () {
-        alert("Not working");
-        // $('#comment').emojiPicker('toggle');
-        // alert("a");
-    });
+    // $(".new-comment-tools > .fa-smile").click(function () {
+    //     alert("Not working");
+    //     // $('#comment').emojiPicker('toggle');
+    //     // alert("a");
+    // });
     // delete user comment
-    $(".comment-tools > .fa-trash-alt").click(function () {
-        $(this).parents("div.my-comment").remove();
-    });
+    // $(".comment-tools > .fa-trash-alt").click(function () {
+    //     $(this).parents("div.my-comment").remove();
+    // });
     // attach file to comment
-    $(".new-comment-tools > label[for='comment-attach']").click(function () {
-        rows = $("textarea#comment").attr("rows");
-        $("textarea#comment").attr("rows", ++rows);
-        padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
-        $("textarea#comment").css("padding-bottom", padding_bottom);
-
-        if ($("div.attachment > div").last().hasClass("attach")) {
-            bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
-        } else {
-            bottom_position = 10;
-        }
-
-        $("div.attachment").append("<div class='attach'>" +
-            "<span>" + "نام فایل" + "</span>" +
-            "</div>");
-            // "<div class='progress'>" +
-            // "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
-            // "</div>" +
-        $("div.attachment > div").last().css("bottom", bottom_position + 30);
-    });
-    // replay to a comment
-    $(".comment-tools > .fa-reply").click(function () {
-        var text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
-        $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
-        $(".replay-div > .fa-times").click(function () {
-            $(".replay-div").remove();
-            $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
-                var inputLabel = "label[for='" + $(this).attr("id") + "']";
-                $(inputLabel).css("color", "#6f7285");
-                if ($(this).val() === '') {
-                    $(inputLabel).css({
-                        "font-size": "14px",
-                        "top": "28px",
-                        "right": "25px",
-                        "color": "#6f7285"
-                    });
-                } else {
-                    $(this).css("color", "#8d8d8d");
-                    $(inputLabel).css("color", "#8d8d8d");
-                }
-            });
-        });
-        $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "14px",
-                    "top": "58px",
-                    "right": "25px",
-                    "color": "#6f7285"
-                });
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-        });
-    });
-    // edit user comment
-    $(".comment-tools > .fa-pen").click(function () {
-        text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").html(text);
-        $("textarea#comment").focus();
-    });
+    // $(".new-comment-tools > label[for='comment-attach']").click(function () {
+    //     rows = $("textarea#comment").attr("rows");
+    //     $("textarea#comment").attr("rows", ++rows);
+    //     padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
+    //     $("textarea#comment").css("padding-bottom", padding_bottom);
+    //
+    //     if ($("div.attachment > div").last().hasClass("attach")) {
+    //         bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
+    //     } else {
+    //         bottom_position = 10;
+    //     }
+    //
+    //     $("div.attachment").append("<div class='attach'>" +
+    //         "<span>" + "نام فایل" + "</span>" +
+    //         "</div>");
+    //         // "<div class='progress'>" +
+    //         // "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
+    //         // "</div>" +
+    //     $("div.attachment > div").last().css("bottom", bottom_position + 30);
+    // });
+    // // replay to a comment
+    // $(".comment-tools > .fa-reply").click(function () {
+    //     var text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
+    //     $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
+    //     $(".replay-div > .fa-times").click(function () {
+    //         $(".replay-div").remove();
+    //         $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
+    //             var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //             $(inputLabel).css("color", "#6f7285");
+    //             if ($(this).val() === '') {
+    //                 $(inputLabel).css({
+    //                     "font-size": "14px",
+    //                     "top": "28px",
+    //                     "right": "25px",
+    //                     "color": "#6f7285"
+    //                 });
+    //             } else {
+    //                 $(this).css("color", "#8d8d8d");
+    //                 $(inputLabel).css("color", "#8d8d8d");
+    //             }
+    //         });
+    //     });
+    //     $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
+    //         var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //         $(inputLabel).css("color", "#6f7285");
+    //         if ($(this).val() === '') {
+    //             $(inputLabel).css({
+    //                 "font-size": "14px",
+    //                 "top": "58px",
+    //                 "right": "25px",
+    //                 "color": "#6f7285"
+    //             });
+    //         } else {
+    //             $(this).css("color", "#8d8d8d");
+    //             $(inputLabel).css("color", "#8d8d8d");
+    //         }
+    //     });
+    // });
+    // // edit user comment
+    // $(".comment-tools > .fa-pen").click(function () {
+    //     text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").html(text);
+    //     $("textarea#comment").focus();
+    // });
 }
 
-function vote_dialog_init() {
+function vote_dialog_init(className) {
     flag = 0;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
@@ -520,13 +421,13 @@ function vote_dialog_init() {
     }).click(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').toggleClass('fix');
     });
-    $(".vote").click(function () {
+    $(className + " .vote").click(function () {
         if ($('.vote-dialog').css('display') === 'none') {
             $('.vote-dialog').slideDown();
-            $('.vote > .dots').addClass('expand');
+            $('.vote').addClass('expand');
         } else {
             $('.vote-dialog').slideUp();
-            $('.vote > .dots').removeClass('expand');
+            $('.vote').removeClass('expand');
         }
     });
     $(".vote-dialog > .expert-back").hover(function () {

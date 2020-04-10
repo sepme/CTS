@@ -1,0 +1,48 @@
+i.r-flag {
+    position: relative;
+    display: inline-block;
+    min-width: 15px;
+    min-height: 15px;
+    background-size: cover!important;
+    background-repeat: no-repeat!important;
+}
+
+i.r-flag.En {
+    background: url("../img/flags/united-kingdom.png");
+}
+
+i.r-flag.Fr {
+    background: url("../img/flags/france.png");
+}
+
+i.r-flag.Ge {
+    background: url("../img/flags/germany.png");
+}
+
+i.r-flag.It {
+    background: url("../img/flags/italy.png");
+}
+
+i.r-flag.Ja {
+    background: url("../img/flags/japan.png");
+}
+
+i.r-flag.Po {
+    background: url("../img/flags/portugal.png");
+}
+
+i.r-flag.Ru {
+    background: url("../img/flags/russia.png");
+}
+
+i.r-flag.Sa {
+    background: url("../img/flags/saudi-arabia.png");
+}
+
+i.r-flag.So {
+    background: url("../img/flags/south-korea.png");
+}
+
+i.r-flag.Tur {
+    background: url("../img/flags/turkey.png");
+}

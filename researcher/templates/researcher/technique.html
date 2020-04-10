@@ -1,5 +1,5 @@
 {% extends "researcher/layouts/base_layout.html" %}
-
+{% load static %}
 {% block title %}تکنیک ها{% endblock %}
 
 {% block dialog %}
@@ -10,31 +10,84 @@
 
 {% block content %}
     <div class="row">
+        <div class="col-12 text-right">
+            <h3 class="h3 p-top-15 border-bottom">تکنیک ها</h3>
+            <button class="add-new-technique top-page-button border-button">
+                <i class="fas fa-plus"></i>
+                <span>افزودن تکنیک جدید</span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-12">
-            <div class="card info-card">
-                <div class="techniques-list">
-                    <div class="w-100 text-left">
-                        <div class="add-new-technique">افزودن تکنیک</div>
-                    </div>
-                    {% for tech in technique_list %}
-                        <div class="card active-question flow-root-display">
-                            <div class="technique-title w-50">{{tech.technique.technique_title}}</div>
-                            <div class="technique-info w-50">
-                                <div class="w-25"></div>{#{{tech.evaluat_date}}</div>#}
-                                <div class="mark w-25"><span> {% if tech.level %}
-                                        {{tech.level}}
-                                {% else %}
-                                        در حال بررسی...
-                                {% endif %}</span></div>
-                                <div class="date w-25"><span>{{tech.date_last}}</span></div>
-                                <div class="show w-25"><button class="default-btn show-btn new-review-request">ارتقا نمره</button></div>
+            <div class="techniques-list cover-page">
+                {% for tech in technique_list %}
+                    <div class="card box flow-root-display w-100">
+                        <div class="box-header text-right">
+                            <h6>{{ tech.technique.technique_title }}</h6>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6 col-8">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="date text-center">
+                                                <div class="label">ثبت</div>
+                                                <div class="value">
+                                                    <span>{{ tech.date_last }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 text-center">
+                                            <div class="label">سطح تسلط</div>
+                                            <div class="value">
+                                                <span>
+                                                    {% if tech.level %}
+                                                        {{ tech.level }}
+                                                    {% else %}
+                                                        در حال بررسی...
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-4">
+                                    <button class="default-btn show-btn new-review-request">ارتقا نمره</button>
+                                </div>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% empty %}
+                    <div class="no-project-container">
+                        <div class="no-project">
+                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
+                            <h4>متاسفانه، هنوز تکنیکی ثبت نکرده اید!</h4>
+                            <p>
+                                تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد
+                                استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از
+                                یک تکنیک هستند.
+                                تکنیک‌های رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما پیشنهاد
+                                می‌شود
+                                که شما تکنیک‌های مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید.
+                                برای افزودن یک تکنیک به حساب کاربری خود، بر روی دکمه
+                            </p>
+                            <span class="disable-border-button">
+                                    <i class="fas fa-plus"></i>
+                                    <span>افزودن تکنیک جدید</span>
+                            </span>
+                            <p>
+                                در گوشه بالا سمت چپ کلیک کنید.
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+    <a href="#top" class="top-button">
+        <i class="fas fa-angle-up"></i>
+    </a>
 {% endblock %}
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>

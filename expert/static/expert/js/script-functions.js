@@ -12,141 +12,22 @@ function load_dialog() {
     });
 }
 
-function init_windowSize() {
-    if ($(window).width() < 575.98) {
-    } else {
-        var contentWidth = $(document).innerWidth() - 250;
-        var contentMargin = 0.0862 * contentWidth - 54.9655;
-        $(".info-card").css({
-            "margin-right": contentMargin,
-            "margin-left": contentMargin
-        });
-        $(".content").css({
-            "width": contentWidth,
-            "height": "90%"
-        });
-        $(".side-bar").css("height", "100%");
-    }
-}
-
-function loading() {
-    $(".main").addClass("blur-div");
-    var canvas = $("#loading-canvas");
-    canvas.drawArc({
-        strokeStyle: '#000',
-        strokeWidth: 4,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x: 160, y: 120,
-        start: 90,
-        end: 360,
-        radius: 50
-    });
-}
-
-function blur_div_toggle(content) {
-    if ($(content).hasClass("blur-div")) {
-        $(content).removeClass("blur-div");
-    } else {
-        $(content).addClass("blur-div");
-    }
-}
-
 function init_dialog_btn(element, dialogClass) {
+    vote_dialog_init(dialogClass);
     $(element).click(function () {
-        $(".fixed-back").css("display", "none");
+        $(".fixed-back").removeClass("show");
         $(".main").removeClass("blur-div");
         blur_div_toggle(".main");
-        $(dialogClass).css("display", "block");
+        $(dialogClass).addClass("show");
         close_dialog(dialogClass);
         dialog_comment_init();
         load_dialog();
-        // $(".project-info-innerDiv").height($(".project-info-content").outerHeight());
         if (dialogClass === ".showProject") {
             accept_project();
             $(dialogClass).removeAttr("id");
             $(dialogClass).attr("id", $(this).attr("id"));
         } else if (dialogClass === ".select-technique") {
             $(dialogClass).find("form").attr("id", $(element).closest(".fixed-back").attr("id"));
-        }
-    });
-}
-
-function input_focus() {
-    if ($("input[type='text'],input[type='email'],textarea").prop("disabled")) {
-        $(this).each(function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "13px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#8d8d8d"
-            });
-
-        });
-    }
-    $("input[type='text'],input[type='email'],textarea").each(function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).val() !== '') {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#6f7285",
-                "padding": "0 10px"
-            });
-        }
-        if ($(this).hasClass("error")) {
-            $(inputLabel).css("color", "#ff4545");
-        }
-    }).on("focus", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-            var errorDiv = $(this).next(".error");
-            $(this).on("change", function () {
-                if ($(this).hasClass("error")) {
-                    $(this).removeClass("error");
-                    $(errorDiv).remove();
-                }
-            });
-        } else {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#3CCD1C",
-                "padding": "0 10px"
-            });
-            $(this).css("color", "#3ccd1c");
-        }
-    }).on("focusout", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-
-        } else {
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "13px",
-                    "top": "28px",
-                    "right": "25px",
-                    "color": "#6f7285",
-                    "padding": "0"
-                });
-                $(inputLabel).removeClass("full-focus-out");
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
         }
     });
 }
@@ -170,7 +51,7 @@ function accept_project() {
         }, function () {
             $(this).removeClass("hover");
         });
-        vote_dialog_init();
+        // vote_dialog_init();
         load_dialog();
     });
 }
@@ -187,7 +68,9 @@ function search_input(className) {
 
 function close_dialog(className) {
     $(".close").click(function () {
-        if($(className).closest(".fixed-back").hasClass("show-question")){
+        $(className).removeClass("show");
+        $(".main").removeClass("blur-div");
+        if ($(className).closest(".fixed-back").hasClass("show-question")) {
             $(className).find(".all-answers").html("");
             $(className).find(".question-attach").html('<ul class="inline-list">' +
                 '<li class="list-item">' +
@@ -197,9 +80,10 @@ function close_dialog(className) {
                 '</a>' +
                 '</li>' +
                 '</ul>');
+        } else if (className === ".showProject") {
+            $(".showProject .nav .nav-link").removeClass("active");
+            $(".showProject .nav .nav-link#v-pills-majors-tab").addClass("active");
         }
-        $(className).css("display", "none");
-        $(".main").removeClass("blur-div");
     });
 }
 
@@ -503,7 +387,6 @@ function show_research_record() {
         "<td>" + $("#subject").val() + "</td>" +
         "<td>" + $("#admin").val() + "</td>" +
         "<td>" + $("#liable").val() + "</td>" +
-        "<td>" + $("#rank").val() + "</td>" +
         "<td>" +
         "<i class='fas fa-pen' id='edit_stu'></i>" +
         "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
@@ -516,7 +399,6 @@ function show_research_record() {
             "<td>عنوان طرح پژوهشی</td>" +
             "<td>مجری</td>" +
             "<td>مسئول اجرا/ همکار</td>" +
-            "<td>وضعیت طرح پژوهشی</td>" +
             "<td></td>" +
             "</tr>" +
             "</thead>" +
@@ -621,95 +503,132 @@ function show_paper_record() {
 }
 
 function show_new_research_question() {
-    new_question = '<div class="card check-question flow-root-display">' +
-        '<div class="question-title w-50">' + $("#question-title").val() + '</div>' +
-        '<div class="question-info w-50">' +
-        '<div class="date w-25\"><span>الان</span></div>' +
-        '<div class="answers w-25"><i class="far fa-comments fa-lg"><span class="num"></span></i></div>' +
-        '<div class="status w-25"><span>درحال بررسی</span></div>' +
-        '<div class="show w-25"><button class="default-btn show-btn">مشاهده</button></div>' +
-        '</div>' +
-        '</div>';
-    $(".tab-content").html(new_question);
+    let new_question = "<div class='card check-question box flow-root-display w-100'>" +
+        "                                <div class='box-header'>" +
+        "                                    <h6>" + $("#question-title").val() + "</h6>" +
+        "                                    <span class='check-status'></span>" +
+        "                                </div>" +
+        "                                <div class='box-body'>" +
+        "                                    <div class='row'>" +
+        "                                        <div class='col-md-6 col-9'>" +
+        "                                            <div class='row'>" +
+        "                                                <div class='col-6'>" +
+        "                                                    <div class='date text-center'>" +
+        "                                                        <div class='label'>زمان ثبت</div>" +
+        "                                                        <div class='value'>" +
+        "                                                            <span>الان</span>" +
+        "                                                        </div>" +
+        "                                                    </div>" +
+        "                                                </div>" +
+        "                                                <div class='col-6'>" +
+        "                                                    <div class='answers text-center'>" +
+        "                                                        <div class='label'>پاسخ های جدید</div>" +
+        "                                                        <div class='value'>" +
+        "                                                            <span>0</span>" +
+        "                                                            <span></span>" +
+        "                                                        </div>" +
+        "                                                    </div>" +
+        "                                                </div>" +
+        "                                            </div>" +
+        "                                        </div>" +
+        "                                        <div class='col-md-6 col-3'>" +
+        "                                            <button class='default-btn show-btn' id=''>مشاهده" +
+        "                                            </button>" +
+        "                                        </div>" +
+        "                                    </div>" +
+        "                                </div>" +
+        "                            </div>";
+    $(".tab-content").append(new_question);
 }
 
 function dialog_comment_init() {
     // add emoji to comment
-    $(".new-comment-tools > .fa-smile").click(function () {
-        alert("Not working");
-        // $('#comment').emojiPicker('toggle');
-        // alert("a");
-    });
+    // $(".new-comment-tools > .fa-smile").click(function () {
+    //     alert("Not working");
+    //     // $('#comment').emojiPicker('toggle');
+    //     // alert("a");
+    // });
     // delete user comment
-    $(".comment-tools > .fa-trash-alt").click(function () {
-        $(this).parents("div.my-comment").remove();
-    });
+    // $(".comment-tools > .fa-trash-alt").click(function () {
+    //     $(this).parents("div.my-comment").remove();
+    // });
     // attach file to comment
-    $(".new-comment-tools > label[for='comment-attach']").click(function () {
-        rows = $("textarea#comment").attr("rows");
-        $("textarea#comment").attr("rows", ++rows);
-        padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
-        $("textarea#comment").css("padding-bottom", padding_bottom);
+    $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
+        let fileName = $(this).val().split("\\").pop();
+        $(".send-comment-container .comment-input .attachment span").html(fileName);
+        $(".send-comment-container .comment-input").addClass("attached");
 
-        if ($("div.attachment > div").last().hasClass("attach")) {
-            bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
-        } else {
-            bottom_position = 10;
-        }
-
-        // $("div.attachment").append("<div class='attach'>" +
-        //     "<span>" + "نام فایل" + "</span>" +
-        //     "<div class='progress'>" +
-        //     "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
-        //     "</div>" +
-        //     "</div>");
-        // $("div.attachment > div").last().css("bottom", bottom_position + 30);
+        $(".send-comment-container .comment-input.attached i.fa-trash-alt").click(function () {
+            $(".send-comment-container .comment-input input#comment-attach").val("");
+            $(".send-comment-container .comment-input .attachment span").html("");
+            $(".send-comment-container .comment-input").removeClass("attached");
+        });
     });
+    // $(".new-comment-tools > label[for='comment-attach']").click(function () {
+    //     let rows = $("textarea#comment").attr("rows");
+    //     $("textarea#comment").attr("rows", ++rows);
+    //     let padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
+    //     $("textarea#comment").css("padding-bottom", padding_bottom);
+    //
+    //     if ($("div.attachment > div").last().hasClass("attach")) {
+    //         let bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
+    //     } else {
+    //         let bottom_position = 10;
+    //     }
+    //
+    //     // $("div.attachment").append("<div class='attach'>" +
+    //     //     "<span>" + "نام فایل" + "</span>" +
+    //     //     "<div class='progress'>" +
+    //     //     "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
+    //     //     "</div>" +
+    //     //     "</div>");
+    //     // $("div.attachment > div").last().css("bottom", bottom_position + 30);
+    // });
     // replay to a comment
-    $(".comment-tools > .fa-reply").click(function () {
-        var text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
-        $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
-        $(".replay-div > .fa-times").click(function () {
-            $(".replay-div").remove();
-            $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
-                var inputLabel = "label[for='" + $(this).attr("id") + "']";
-                $(inputLabel).css("color", "#6f7285");
-                if ($(this).val() === '') {
-                    $(inputLabel).css({
-                        "font-size": "14px",
-                        "top": "28px",
-                        "right": "25px",
-                        "color": "#6f7285"
-                    });
-                } else {
-                    $(this).css("color", "#8d8d8d");
-                    $(inputLabel).css("color", "#8d8d8d");
-                }
-            });
-        });
-        $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "14px",
-                    "top": "58px",
-                    "right": "25px",
-                    "color": "#6f7285"
-                });
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-        });
-    });
+    // $(".comment-tools > .fa-reply").click(function () {
+    //     var text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
+    //     $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
+    //     $(".replay-div > .fa-times").click(function () {
+    //         $(".replay-div").remove();
+    //         $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
+    //             var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //             $(inputLabel).css("color", "#6f7285");
+    //             if ($(this).val() === '') {
+    //                 $(inputLabel).css({
+    //                     "font-size": "14px",
+    //                     "top": "28px",
+    //                     "right": "25px",
+    //                     "color": "#6f7285"
+    //                 });
+    //             } else {
+    //                 $(this).css("color", "#8d8d8d");
+    //                 $(inputLabel).css("color", "#8d8d8d");
+    //             }
+    //         });
+    //     });
+    //     $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
+    //         var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //         $(inputLabel).css("color", "#6f7285");
+    //         if ($(this).val() === '') {
+    //             $(inputLabel).css({
+    //                 "font-size": "14px",
+    //                 "top": "58px",
+    //                 "right": "25px",
+    //                 "color": "#6f7285"
+    //             });
+    //         } else {
+    //             $(this).css("color", "#8d8d8d");
+    //             $(inputLabel).css("color", "#8d8d8d");
+    //         }
+    //     });
+    // });
     // edit user comment
-    $(".comment-tools > .fa-pen").click(function () {
-        text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").html(text);
-        $("textarea#comment").focus();
-    });
+    // $(".comment-tools > .fa-pen").click(function () {
+    //     text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").html(text);
+    //     $("textarea#comment").focus();
+    // });
 }
 
 function vote_slider_industry(slide_count) {
@@ -800,8 +719,8 @@ function vote_slider_researcher(slide_count) {
     });
 }
 
-function vote_dialog_init() {
-    flag = 0;
+function vote_dialog_init(className) {
+    let flag = 0;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
             "color": "#3ccd1c",
@@ -819,13 +738,15 @@ function vote_dialog_init() {
     }).click(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').toggleClass('fix');
     });
-    $(".vote").click(function () {
+    $(className + " .vote").click(function () {
         if ($('.vote-dialog').css('display') === 'none') {
+            console.log("expand on");
             $('.vote-dialog').slideDown();
-            $('.vote > .dots').addClass('expand');
+            $('.vote').addClass('expand');
         } else {
+            console.log("expand off");
             $('.vote-dialog').slideUp();
-            $('.vote > .dots').removeClass('expand');
+            $('.vote').removeClass('expand');
         }
     });
     $(".vote-dialog > .industry-back").hover(function () {
@@ -857,48 +778,61 @@ function question_page_init() {
 }
 
 function question_dialog_init() {
-    $(".answer").hover(function () {
-        if (!$(this).find('button').hasClass('answered')) {
-            $(this).find('.correct button').fadeIn('slow');
-            $(this).find(".wrong button").fadeIn('slow');
-        }
-    }, function () {
-        if (!$(this).find('button').hasClass('answered')) {
-            $(this).find('.correct button').fadeOut('slow');
-            $(this).find(".wrong button").fadeOut('slow');
-        }
-    });
+    // $(".answer").hover(function () {
+    //     if (!$(this).find('button').hasClass('answered')) {
+    //         $(this).find('.correct button').fadeIn('slow');
+    //         $(this).find(".wrong button").fadeIn('slow');
+    //     }
+    // }, function () {
+    //     if (!$(this).find('button').hasClass('answered')) {
+    //         $(this).find('.correct button').fadeOut('slow');
+    //         $(this).find(".wrong button").fadeOut('slow');
+    //     }
+    // });
     $(".answer .check .correct button").click(function () {
-        set_answer_true($(this));
-
+        // $(this).closest(".check").find(".wrong button").css("visibility", "hidden");
+        // $(this).closest(".check").find(".wrong button").css("max-width", "0");
+        //
+        // $(this).closest(".check").find(".wrong").css("max-width", "0");
+        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").find("button").attr("disabled", "true");
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
             url: '/expert/set_answer_situation/',
             dataType: 'json',
-            data: {id: id, type:true},
-            success: function (data) {},
-            error: function (data) {},
+            data: {id: id, type: true},
+            success: function (data) {
+                set_answer_true($(this));
+                $(this).closest(".check").removeClass("loading");
+            },
+            error: function (data) {
+            },
         });
     });
     $(".answer .check .wrong button").click(function () {
-        set_answer_wrong($(this));
-
+        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").find("button").attr("disabled", "true");
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
             url: '/expert/set_answer_situation/',
             dataType: 'json',
-            data: {id: id, type:false},
-            success: function (data) {},
-            error: function (data) {},
+            data: {id: id, type: false},
+            success: function (data) {
+                set_answer_wrong($(this));
+                $(this).closest(".check").removeClass("loading");
+            },
+            error: function (data) {
+            },
         });
     });
 
 
     $(".question-attach input[type='file']").on('change', function () {
-        var fileType = $(this).val().split('.').pop().toLowerCase();
-        var fileName = $(this).val().split('\\').pop();
+        console.log("attach");
+        let fileType = $(this).val().split('.').pop().toLowerCase();
+        let fileName = $(this).val().split('\\').pop();
         $(this).closest(".list-item").find(".attach-btn label span:last-child").html(fileName);
         $(this).closest(".list-item").find(".attach-btn label span.attach-icon").removeClass("attach-icon").addClass(fileType + "-file");
         // attach_li = "<li class='list-item'>" +
@@ -912,58 +846,82 @@ function question_dialog_init() {
 }
 
 function set_answer_wrong(item) {
-    var div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
-    item.closest('.check').find('.correct').css('display', 'none');
-    item.closest('.check').find('.wrong').css('display', 'none');
-    item.closest('.check').find('button').addClass('answered');
+    let div = "<span>پاسخ نادرست</span><i class='fas fa-times'></i>";
+    item.closest('.answer').addClass("answered");
     item.closest('.check').find('.status').addClass('wrong-answer');
-    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').append(div);
     item.closest('.check').find('.status').fadeIn('slow');
+    item.closest('.check').find("button").remove();
 }
 
 function set_answer_true(item) {
-    var div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
-    item.closest('.check').find('.correct').css('display', 'none');
-    item.closest('.check').find('.wrong').css('display', 'none');
-    item.closest('.check').find('button').addClass('answered');
+    let div = "<span>پاسخ صحیح</span><i class='fas fa-check'></i>";
+    item.closest('.answer').addClass("answered");
     item.closest('.check').find('.status').addClass('correct-answer');
-    item.closest('.check').children('.status').append(div);
+    item.closest('.check').find('.status').append(div);
     item.closest('.check').find('.status').fadeIn('slow');
+    item.closest('.check').find("button").remove();
+}
+
+function returnFileType(type) {
+    type = type.toLowerCase();
+    if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png" || type === "ppt"
+        || type === "txt" || type === "wmv" || type === "zip") {
+        return type;
+    } else {
+        return "unknown";
+    }
 }
 
 function show_question_answers(data) {
-    var answer = '';
-    for (i = 0; i < data.length; i++) {
-        answer = answer + '<div class="col-lg-12">' +
-            '<div class="answer" is-correct="'+ data[i].is_correct +'">' +
-            '<span class="title">' + data[i].researcher_name + '</span>' +
-            '<span class="date">' + data[i].hand_out_date + '</span>' +
-            '<div><a href="' + data[i].answer_attachment + '">File Link</a></div>' +
-            '<div class="check">' +
-            '<div class="correct">' +
-            '<button type="button" title="صحیح" id="' + data[i].answer_id +'">' +
-            '<i class="fas fa-check"></i>' +
-            '</button>' +
-            '</div>' +
-            '<div class="wrong">' +
-            '<button type="button" title="نادرست" id="' + data[i].answer_id +'">' +
-            '<i class="fas fa-times"></i>' +
-            '</button>' +
-            '</div>' +
-            '<div class="status"></div>' +
-            '</div>' +
-            '</div>' +
+    let answer = '';
+    for (let i = 0; i < data.length; i++) {
+        let file_type = data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf(".") + 1).toUpperCase();
+        let divider_line = "";
+        if (i) {
+            divider_line = "divider-top";
+        }
+        answer = answer +
+            '<div class="col-lg-12 mbottom-10">' +
+            '   <div class="answer ' + divider_line + '" is-correct="' + data[i].is_correct + '">' +
+            '       <span class="title">' + data[i].researcher_name + '</span>' +
+            '       <span class="date">' + data[i].hand_out_date + '</span>' +
+            '       <div class="answer-body">' +
+            '           <span class="file-type image ' + returnFileType(file_type) + '"></span>' +
+            '           <div class="file-name">' + data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf("/") + 1, data[i].answer_attachment.lastIndexOf(".")) + '</div>' +
+            '           <span class="file-type text">' + file_type + ' File</span>' +
+            '           <a href="' + data[i].answer_attachment + '" class="download">' +
+            '               <i class="fas fa-download"></i>' +
+            '           </a>' +
+            '       </div>' +
+            '       <div class="check">' +
+            '           <span class="wait-load"></span>' +
+            '           <div class="correct">' +
+            '               <button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
+            '                   <i class="fas fa-check"></i>' +
+            '                   <span>درست</span>' +
+            '               </button>' +
+            '           </div>' +
+            '           <div class="wrong">' +
+            '               <button type="button" title="نادرست" id="' + data[i].answer_id + '">' +
+            '                   <i class="fas fa-times"></i>' +
+            '                   <span>نادرست</span>' +
+            '               </button>' +
+            '           </div>' +
+            '           <div class="status"></div>' +
+            '       </div>' +
+            '   </div>' +
             '</div>';
     }
     $(".all-answers").html(answer);
-    $(".answer").each(function () {
-        let is_correct = $(this).attr("is-correct");
-        if (is_correct==='correct') {
-            set_answer_true($(this).find(".check").find(".correct").find("button"))
-        } else if (is_correct==='wrong') {
-            set_answer_wrong($(this).find(".check").find(".correct").find("button"))
-        }
-    })
+    // $(".answer").each(function () {
+    //     let is_correct = $(this).attr("is-correct");
+    //     if (is_correct === 'correct') {
+    //         set_answer_true($(this).find(".check").find(".correct").find("button"))
+    //     } else if (is_correct === 'wrong') {
+    //         set_answer_wrong($(this).find(".check").find(".correct").find("button"))
+    //     }
+    // });
 }
 function select_technique(className) {
     // $("li[role='treeitem']").click(function () {
@@ -982,15 +940,14 @@ function select_technique(className) {
     //     });
     // });
     $("#add-new-technique").keyup(function (e) {
-        console.log("FUCK");
         console.log($(this).val());
         console.log(e);
-       if(e.keyCode === 13) {
-           if($(this).val() !== "") {
-               $('#tags').addTag($(this).val());
-               $(this).val("");
-           }
-       }
+        if (e.keyCode === 13) {
+            if ($(this).val() !== "") {
+                $('#tags').addTag($(this).val());
+                $(this).val("");
+            }
+        }
     });
 }
 
@@ -1047,3 +1004,88 @@ function newItem_label() {
     $("#tags_tagsinput").find("#tags_tag").attr("placeholder", "افزودن");
     tag_input_label("tags");
 }
+
+
+$("#delete_sci").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_scientific/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-sci-" + pk).remove();
+            iziToast.success({
+                rtl: true,
+                message: "اطلاعات با موفقیت حذف شد!",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
+
+$("#delete_exe").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_executive/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-exe-" + pk).remove();
+            iziToast.success({
+                rtl: true,
+                message: "اطلاعات با موفقیت حذف شد!",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
+
+$("#delete_research").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_research/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-research-" + pk).remove();
+            iziToast.success({
+                rtl: true,
+                message: "اطلاعات با موفقیت حذف شد!",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});
+
+$("#delete_paper").click(function () {
+    let pk = $(this).attr("value");
+    $.ajax({
+        method: 'POST',
+        url: "/expert/delete_paper/",
+        dataType: 'json',
+        data: {pk: pk},
+        success: function (data) {
+            $(".row-paper-" + pk).remove();
+            iziToast.success({
+                rtl: true,
+                message: "اطلاعات با موفقیت حذف شد!",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log(data);
+        },
+    });
+});

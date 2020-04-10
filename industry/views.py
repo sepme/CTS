@@ -4,18 +4,18 @@ import os
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.mail import send_mail
 from django.core.files.base import ContentFile
 from django.forms import model_to_dict
 from django.views import generic, View
 from django.urls import reverse
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from ChamranTeamSite import settings
 from persiantools.jdatetime import JalaliDate
 from industry.models import IndustryForm, Comment
 from expert import models as expert_models
-from . import models
-from . import forms
+from . import models ,forms
 from expert.models import ExpertUser
 
 # function name says it all :)
@@ -51,57 +51,106 @@ def get_comments_with_expert(request):
 # is called by an ajax request and returns the necessary information to display the project on the front-end
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
-    json_response = model_to_dict(project.project_form)
-    json_response['expert_messaged'] = []
-    for expert in project.expert_messaged.all():
-        json_response['expert_messaged'].append({
-            'id': expert.id,
-            'name': expert.expertform.__str__(),
-            'applied' : expert in project.expert_applied.all(),
-        })
-    for expert in project.expert_applied.all():
-        if expert not in project.expert_messaged.all():
+    if not project.expert_accepted:
+        json_response = model_to_dict(project.project_form)
+        json_response['accepted'] = 'false'
+        json_response['expert_messaged'] = []
+        for expert in project.expert_messaged.all():
             json_response['expert_messaged'].append({
                 'id': expert.id,
                 'name': expert.expertform.__str__(),
                 'applied' : expert in project.expert_applied.all(),
             })
-    json_response['deadline'] = 'نا مشخص'
-    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
+        for expert in project.expert_applied.all():
+            if expert not in project.expert_messaged.all():
+                json_response['expert_messaged'].append({
+                    'id': expert.id,
+                    'name': expert.expertform.__str__(),
+                    'applied' : expert in project.expert_applied.all(),
+                })
+        json_response['deadline'] = 'نا مشخص'
+        if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+            json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
+        else:
+            json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
+        json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+        for ind, value in enumerate(json_response['key_words']):
+            json_response['key_words'][ind] = value.__str__()
+        try:
+            json_response['required_technique']=[]
+            for tech in project.project_form.required_technique:
+                json_response['required_technique'].append(tech.__str__())
+        except:
+            pass
+        evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+        json_response['status'] = project.status
+        json_response['vote'] = "false"
+        try:
+            if datetime.date.today() > project.date_finished:
+                if len(evaluation_history.filter(phase=3)) == 0:
+                    json_response['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_two_finished:
+                if len(evaluation_history.filter(phase=2)) == 0:
+                    json_response['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_one_finished:
+                if len(evaluation_history.filter(phase=1)) == 0:
+                    json_response['vote'] = "true"
+        except:
+            pass
+        return JsonResponse(json_response)
     else:
-        json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-    json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-    for ind, value in enumerate(json_response['key_words']):
-        json_response['key_words'][ind] = value.__str__()
-    try:
-        json_response['required_technique']=[]
-        for tech in project.project_form.required_technique:
-            json_response['required_technique'].append(tech.__str__())
-    except:
-        pass
-    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
-    json_response['status'] = project.status
-    json_response['vote'] = "false"
-    try:
-        if datetime.date.today() > project.date_finished:
-            if len(evaluation_history.filter(phase=3)) == 0:
-                json_response['vote'] = "true"
-        elif datetime.date.today() > project.date_phase_two_finished:
-            if len(evaluation_history.filter(phase=2)) == 0:
-                json_response['vote'] = "true"
-        elif datetime.date.today() > project.date_phase_one_finished:
-            if len(evaluation_history.filter(phase=1)) == 0:
-                json_response['vote'] = "true"
-    except:
-        pass
-    return JsonResponse(json_response)
+        json_response = model_to_dict(project.project_form)
+        json_response['accepted'] = 'true'
+        json_response['expert_messaged'] = []
+        for expert in project.expert_messaged.all():
+            json_response['expert_messaged'].append({
+                'id': expert.id,
+                'name': expert.expertform.__str__(),
+                'applied' : expert in project.expert_applied.all(),
+            })
+        for expert in project.expert_applied.all():
+            if expert not in project.expert_messaged.all():
+                json_response['expert_messaged'].append({
+                    'id': expert.id,
+                    'name': expert.expertform.__str__(),
+                    'applied' : expert in project.expert_applied.all(),
+                })
+        json_response['deadline'] = 'نا مشخص'
+        if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+            json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
+        else:
+            json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
+        json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+        for ind, value in enumerate(json_response['key_words']):
+            json_response['key_words'][ind] = value.__str__()
+        try:
+            json_response['required_technique']=[]
+            for tech in project.project_form.required_technique:
+                json_response['required_technique'].append(tech.__str__())
+        except:
+            pass
+        evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+        json_response['status'] = project.status
+        json_response['vote'] = "false"
+        try:
+            if datetime.date.today() > project.date_finished:
+                if len(evaluation_history.filter(phase=3)) == 0:
+                    json_response['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_two_finished:
+                if len(evaluation_history.filter(phase=2)) == 0:
+                    json_response['vote'] = "true"
+            elif datetime.date.today() > project.date_phase_one_finished:
+                if len(evaluation_history.filter(phase=1)) == 0:
+                    json_response['vote'] = "true"
+        except:
+            pass
+        return JsonResponse(json_response)
 
 def GetComment(request):
     expert_id  = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
     project = get_object_or_404(models.Project ,pk=project_id)
-    expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    expert  = get_object_or_404(ExpertUser ,pk=expert_id)
     all_comments = models.Comment.objects.filter(project=project)
     comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)    
     response = []
@@ -118,14 +167,41 @@ def GetComment(request):
             'attachment'   : url
         }
         response.append(temp)    
-    data = {'comment' : response}
+        if comment.sender_type == 'expert' or comment.sender_type == 'system':
+            comment.status = "seen"
+            comment.save()
+    if expert in project.expert_applied.all():
+        data = {
+            'comment' : response,
+            'applied' : True
+            }
+    else:
+        data = {
+            'comment' : response,
+            'applied' : False
+            }
     return JsonResponse(data=data)
 
 
-def accept_project_ajax(request):
-    expert_user = ExpertUser.objects.filter(request.GET.get('expert_user_id')).first()
-    project = models.Project.objects.filter(request.GET.get('project_id')).first()
-    project.expert_accepted = expert_user
+def accept_project(request):
+    expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
+    project = models.Project.objects.filter(pk=request.POST['project_id']).first()
+    project.expert_accepted = expert
+    project.date_start = datetime.date.today()
+    project.status = 2
+    project.save()
+    expert.status = 'involved'
+    expert.save()
+    data = {'success' : 'successful'}
+    return JsonResponse(data=data)
+
+def refuse_expert(request):
+    expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
+    project = models.Project.objects.filter(pk=request.POST['project_id']).first()
+    project.expert_banned.add(expert)
+    project.save()
+    data = {'success' : 'successful'}
+    return JsonResponse(data=data)
 
 # this function is called when the industry user comments on a project
 def submit_comment(request):
@@ -140,7 +216,8 @@ def submit_comment(request):
                                              sender_type="industry",
                                              expert_user=expert_user,
                                              description=description,
-                                             attachment=attachment)
+                                             attachment=attachment,
+                                             status='unseen')
         new_comment.save()
         if attachment is not None:
             data = {
@@ -175,9 +252,9 @@ class Index(generic.TemplateView):
             context['form'] = forms.IndustryBasicInfoForm(self.request.user)
         else:
             industry_user = self.request.user.industryuser
-            # print('he\'s got {} projects'.format(industry_user.projects.count()))
             context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
         return context
+
     # submitting the initial info form
     def post(self, request, *args, **kwargs):
         form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
@@ -192,7 +269,7 @@ class Index(generic.TemplateView):
             phone_number = form.cleaned_data['phone_number']
             email_address = form.cleaned_data['email_address']
             industry_user = request.user.industryuser
-            industry_info = models.IndustryForm(photo=photo,
+            industry_info = models.IndustryForm(industry_user=industry_user,
                                                 name=name,
                                                 registration_number=registration_number,
                                                 date_of_foundation=date_of_foundation,
@@ -200,7 +277,8 @@ class Index(generic.TemplateView):
                                                 industry_type=industry_type,
                                                 industry_address=industry_address,
                                                 phone_number=phone_number,
-                                                email_address=email_address)
+                                                email_address=email_address)            
+            industry_info.photo.save(photo.name, photo)
             industry_info.save()
             if not industry_info.photo:
                 with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
@@ -208,7 +286,6 @@ class Index(generic.TemplateView):
                     default_image = image_file.read()
                     industry_info.photo.save('profile.jpg', ContentFile(default_image))
             industry_user.status = 'free'
-            industry_user.industryform = industry_info
             industry_user.save()
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/index.html', context={'form': form})
@@ -234,19 +311,18 @@ class UserInfo(View):
         if form.is_valid():
             model_form = form.save(commit=False)
             IndustryForm.objects.filter(name=model_form.name).update(
+                industry_user=request.user.industryuser,
                 industry_type=model_form.industry_type,
                 tax_declaration=model_form.tax_declaration,
                 services_products=model_form.services_products,
                 awards_honors=model_form.awards_honors
             )
-            if request.user.industryuser.industryform.photo:
-                os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
-                                       request.user.industryuser.industryform.photo.name))
+            # if request.user.industryuser.industryform.photo:
+            #     os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
+            #                            request.user.industryuser.industryform.photo.name))
             if model_form.photo:
-                print('the form has this pic:', model_form.photo)
                 model_form.photo.save(model_form.photo.name, model_form.photo)
             else:
-                print('the form ain\'t have no photo')
                 with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
                           'rb') as image_file:
                     default_image = image_file.read()
@@ -301,9 +377,21 @@ class NewProject(View):
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
-            print('the creator is', new_project.industry_creator)
-            # request.user.industryuser.projects.add(new_project)
-            # models.IndustryUser.objects.filter(user=request.user).update()
+            subject = 'ثبت پروژه جدید'
+            message ="""با سلام و احترام
+            کاربر صنعت با نام کاربری {}
+            پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
+            با تشکر""".format(request.user.username ,project_title_persian,JalaliDate(datetime.date.today()))
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[settings.EMAIL_HOST_USER,"sepehr.metanat@gmail.com",],
+                    fail_silently=False
+                )
+            except TimeoutError:
+                return HttpResponse('Timeout Error!!')
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/newProject.html', context={'form': form})
 
@@ -326,5 +414,5 @@ class ProjectListView(generic.ListView):
             context['photo'] = self.industry.industryform.photo
         return context
 
-# class Messages(generic.TemplateView):
-#     template_name = 'industry/messages.html'
+class Messages(generic.TemplateView):
+    template_name = 'industry/layouts/project_details.html'

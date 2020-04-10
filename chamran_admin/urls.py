@@ -6,7 +6,7 @@ app_name = 'chamran'
 
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
-    path('notFound/', views.notFound.as_view(), name='notFound'),
+    # path('notFound/', views.notFound.as_view(), name='notFound'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('test/', views.View.as_view(), name='test'),
     path('login_ajax/', views.login_ajax, name='login_ajax'),
@@ -19,6 +19,6 @@ urlpatterns = [
     path('recover_password/', views.RecoverPassword.as_view(), name='recover_password'),
     path('recover_password_ajax/', views.RecoverPassword_ajax, name="recovery_ajax"),
     path('recover_password/<uuid:unique_id>/', views.RecoverPasswordConfirm.as_view(), name='recover_password_confirm'),
-    path('message_detail/<int:message_id>/', views.get_message_detail, name='message_detail')
-
+    path('message_detail/<int:message_id>/', views.get_message_detail, name='message_detail'),
+    path('deleteComment/' ,views.DeleteComment ,name='delete_comment'),
 ]

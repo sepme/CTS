@@ -10,8 +10,8 @@
     <form method="post" class="recover-pass" novalidate data-url="{% url 'chamran:recovery_ajax' %}">
         {% csrf_token %}
             <div class="email" style="display: block">
-                <label for="email">پست الکترونیکی</label>
-                <input type="email" name="username" id="email">
+                <label for="email"></label>
+                <input type="email" name="username" id="email" placeholder="لطفا ایمیل خود را وارد کنید">
                 <!-- {{ form.username|attr:"id:email" }}
                 {{ form.username.errors }} -->
                 <i class="fas fa-user-alt fa-lg"></i>

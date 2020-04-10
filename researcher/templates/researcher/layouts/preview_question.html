@@ -1,18 +1,17 @@
 {% extends "researcher/layouts/base_layout.html" %}
 {% load static %}
+{% block title %}سوال پژوهشی{% endblock %}
 {% block content %}
     <div class="preview-question">
         <div class="card info-card text-right">
-            <div class="card-header"> سوال پژوهشی{{ question_title }}</div>
+            <div class="card-header"> سوال پژوهشی </div>
             <div class="inner-card">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="textarea-text">
-                            <span class="title">متن سوال</span>
-                            <div class="body">
-                                {{ question }}
+                        <h6 class="green">{{ question_title }}</h6>
+                            <div>
+                                {{ question | linebreaksbr }}
                             </div>
-                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -20,9 +19,17 @@
                         <div class="question-attach text-left">
                             <ul class="inline-list">
                                 <li class="list-item">
-                                {% if attachment == "  " %}
+                                {% if attachment != "" %}
                                     <a href="{{ attachment.url }}" class="attach-file">
-                                        <span class="doc-file"></span>
+                                        {% if attach_type == "doc" or attach_type == "docx" %}
+                                            <span class="doc-file"></span>
+                                        {% elif attach_type == "pdf" %}
+                                            <span class="pdf-file"></span>
+                                        {% elif attach_type == "jpg" or attach_type == "jpeg" %}
+                                            <span class="jpg-file"></span>
+                                        {% elif attach_type == "png" %}
+                                            <span class="png-file"></span>
+                                        {% endif %}
                                         <span>{{ file_name }}</span>
                                     </a>
                                 {% endif %} 
@@ -35,31 +42,32 @@
             <div class="card-header">ارسال پاسخ</div>
             <div class="inner-card">
                 <div class="row">
-                    <div class="col-12 text-center">
+                    <div class="col-12 text-center left-time-counter">
                         <h5>مدت زمان باقی مانده</h5>
                         <div class="wrap text-center">
-                            <div class="day">
-                                                <span class="count">
-                                                    1
-                                                </span>
+                            <div class="day col-md-4 col-lg-4">
+                                <span class="count">{{ day }}</span>
                                 <span>روز</span>
                             </div>
-                            <div class="hour">
-                                                <span class="count">
-                                                    10
-                                                </span>
+                            <div class="hour col-md-4 col-lg-4">
+                                <span class="count">{{ hour }}</span>
                                 <span>ساعت</span>
                             </div>
-                            <div class="minute">
-                                                <span class="count">
-                                                    35
-                                                </span>
+                            <div class="minute col-md-4 col-lg-4">
+                                <span class="count">{{ minute }}</span>
                                 <span>دقیقه</span>
                             </div>
-                            <div class="progress-line"></div>
                         </div>
                     </div>
                 </div>
+{#                <div class="row">#}
+{#                    <div class="col-12">#}
+{#                        <div class="progress question-progress">#}
+{#                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"#}
+{#                                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">

@@ -5,9 +5,10 @@ from chamran_admin import views as chamran_admin_views
 app_name = 'expert'
 
 urlpatterns = [
-    path('', views.index, name="index"),
+    path('', views.Index.as_view(), name="index"),
     path('userInfo/', views.UserInfo.as_view(), name="userInfo"),
     path('researcher/', views.ResearcherRequest.as_view(), name="researcherRequest"),
+    path('researcher/confirmResearcher/', views.confirmResearcher, name="confirm_researcher"),
     path('messages/', chamran_admin_views.MessagesView.as_view(), name="messages"),
     path('questions/', views.Questions.as_view(), name="questions"),
     path('scientific/', views.scienfic_record_view, name="ajax_scientific"),
@@ -24,5 +25,11 @@ urlpatterns = [
     path('researcher_comment/', views.CommentForResearcher, name="researcher_comment"),
     path('industry_comment/', views.CommentForIndustry, name="industry_comment"),
     path('show_technique/', views.ShowTechnique, name="show-technique"),
+    path('get_resume/', views.GetResume, name="get-resume"),
+    path("active/", views.ActiveProjcet),
+    path('delete_scientific/' ,views.DeleteScientificRecord ,name='delete_scientific'),
+    path('delete_executive/' ,views.DeleteExecutiveRecord ,name='delete_executive'),
+    path('delete_research/' ,views.DeleteResearchRecord ,name='delete_research'),
+    path('delete_paper/' ,views.DeletePaperRecord ,name='delete_research'),
+    path('request_researcher/', views.ExpertRequestResearcher ,name="request_researcher"),
 ]
-

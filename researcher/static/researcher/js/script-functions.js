@@ -13,131 +13,31 @@ function load_dialog() {
 }
 
 function init_windowSize() {
-    if ($(window).width() < 575.98) {
-    } else {
-        var contentWidth = $(document).innerWidth() - 250;
-        var contentMargin = 0.0862 * contentWidth - 54.9655;
-        $(".info-card").css({
-            "margin-right": contentMargin,
-            "margin-left": contentMargin
-        });
-        $(".content").css({
-            "width": contentWidth,
-            "height": "90%"
-        });
-        $(".side-bar").css("height", "100%");
-    }
-}
-
-function loading() {
-    $(".main").addClass("blur-div");
-    var canvas = $("#loading-canvas");
-    canvas.drawArc({
-        strokeStyle: '#000',
-        strokeWidth: 4,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x: 160, y: 120,
-        start: 90,
-        end: 360,
-        radius: 50
-    });
-}
-
-function blur_div_toggle(content) {
-    if ($(content).hasClass("blur-div")) {
-        $(content).removeClass("blur-div");
-    } else {
-        $(content).addClass("blur-div");
-    }
+    // if ($(window).width() < 575.98) {
+    // } else {
+    //     var contentWidth = $(document).innerWidth() - 250;
+    //     var contentMargin = 0.0862 * contentWidth - 54.9655;
+    //     $(".info-card").css({
+    //         "margin-right": contentMargin,
+    //         "margin-left": contentMargin
+    //     });
+    //     $(".content").css({
+    //         "width": contentWidth,
+    //         "height": "90%"
+    //     });
+    //     $(".side-bar").css("height", "100%");
+    // }
 }
 
 function init_dialog_btn(element, dialogClass) {
     $(element).click(function () {
+        $(".fixed-back").removeClass("show");
+        $(".main").removeClass("blur-div");
         blur_div_toggle(".main");
-        $(dialogClass).css("display", "block");
+        $(dialogClass).addClass("show");
         close_dialog(dialogClass);
         dialog_comment_init();
         load_dialog();
-    });
-}
-
-function input_focus() {
-    if ($("input[type='text'],input[type='email'],textarea").prop("disabled")) {
-        $(this).each(function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "13px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#8d8d8d"
-            });
-
-        });
-    }
-    $("input[type='text'],input[type='email'],textarea").each(function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).val() !== '') {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#6f7285",
-                "padding": "0 10px"
-            });
-        }
-        if ($(this).hasClass("error")) {
-            $(inputLabel).css("color", "#ff4545");
-        }
-    }).on("focus", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-            var errorDiv = $(this).next(".error");
-            $(this).on("change", function () {
-                if ($(this).hasClass("error")) {
-                    $(this).removeClass("error");
-                    $(errorDiv).remove();
-                }
-            });
-        } else {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#3CCD1C",
-                "padding": "0 10px"
-            });
-            $(this).css("color", "#3ccd1c");
-        }
-    }).on("focusout", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-
-        } else {
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "13px",
-                    "top": "28px",
-                    "right": "25px",
-                    "color": "#6f7285",
-                    "padding": "0"
-                });
-                $(inputLabel).removeClass("full-focus-out");
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-        }
     });
 }
 
@@ -163,11 +63,31 @@ function search_input(className) {
 
 function close_dialog(className) {
     $(".close").click(function () {
-        $(className).css("display", "none");
+        $(className).removeClass("show");
         $(".main").removeClass("blur-div");
-        $(className).find("input").val("");
-        $(className).find("input:checked").prop("checked", false);
-        $(className).find(".keywords").html("");
+        if (className === ".add-technique") {
+            express();
+            $(className).find("input").val("");
+            $(className).find("input:checked").prop("checked", false);
+            reset($(className).find(".upload-resume + label"));
+            let upload_resume = ".fixed-back input.upload-resume";
+            reset($(upload_resume).closest("div").find("img.upload-img"));
+            reset($(upload_resume).closest("div").find("img.file-img"));
+            $(upload_resume).next().find(".upload-file-text").css("padding-top", "0").html("آپلود فایل");
+        } else if (className === ".review-request") {
+            $(className).find("textarea").val("");
+            $(className).find("input:checked").prop("checked", false);
+            reset($(className).find(".upload-resume + label"));
+            let upload_resume = ".fixed-back input.upload-resume";
+            reset($(upload_resume).closest("div").find("img.upload-img"));
+            reset($(upload_resume).closest("div").find("img.file-img"));
+            $(upload_resume).next().find(".upload-file-text").css("padding-top", "0").html("آپلود فایل");
+        } else {
+            $(className).find("input").val("");
+            $(className).find("input:checked").prop("checked", false);
+            $(className).find(".keywords").html("");
+        }
+        input_focus();
     });
 }
 
@@ -477,8 +397,7 @@ function show_research_record(pk) {
             "<i class='fas fa-trash-alt delete_stu' value=" + pk + "></i>" +
             "</td>" +
             "</tr></tbody>";
-    }
-     else if ($("#rank").val() == 2) {
+    } else if ($("#rank").val() == 2) {
         row = "<tbody class='row-stu-" + pk + "'><tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
@@ -489,19 +408,18 @@ function show_research_record(pk) {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr></tbody>";
-        }
-    else if ( $("#rank").val() == 3) {
-            row = "<tbody class='row-stu-" + pk + "'><tr>" +
-                "<td>" + $("#subject").val() + "</td>" +
-                "<td>" + $("#admin").val() + "</td>" +
-                "<td>" + $("#liable").val() + "</td>" +
-                "<td>متوقف</td>" +
-                "<td>" +
-                "<i class='fas fa-pen' id='edit_stu'></i>" +
-                "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
-                "</td>" +
-                "</tr></tbody>";
-            }
+    } else if ($("#rank").val() == 3) {
+        row = "<tbody class='row-stu-" + pk + "'><tr>" +
+            "<td>" + $("#subject").val() + "</td>" +
+            "<td>" + $("#admin").val() + "</td>" +
+            "<td>" + $("#liable").val() + "</td>" +
+            "<td>متوقف</td>" +
+            "<td>" +
+            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
+            "</td>" +
+            "</tr></tbody>";
+    }
     if (!$(".studious > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -524,82 +442,93 @@ function show_research_record(pk) {
 }
 
 function dialog_comment_init() {
+    $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
+        let fileName = $(this).val().split("\\").pop();
+        $(".send-comment-container .comment-input .attachment span").html(fileName);
+        $(".send-comment-container .comment-input").addClass("attached");
+
+        $(".send-comment-container .comment-input.attached i.fa-trash-alt").click(function () {
+            $(".send-comment-container .comment-input input#comment-attach").val("");
+            $(".send-comment-container .comment-input .attachment span").html("");
+            $(".send-comment-container .comment-input").removeClass("attached");
+        });
+    });
     // add emoji to comment
-    $(".new-comment-tools > .fa-smile").click(function () {
-        alert("Not working");
-        // $('#comment').emojiPicker('toggle');
-        // alert("a");
-    });
-    // delete user comment
-    $(".comment-tools > .fa-trash-alt").click(function () {
-        $(this).parents("div.my-comment").remove();
-    });
-    // attach file to comment
-    $(".new-comment-tools > label[for='comment-attach']").click(function () {
-        rows = $("textarea#comment").attr("rows");
-        $("textarea#comment").attr("rows", ++rows);
-        padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
-        $("textarea#comment").css("padding-bottom", padding_bottom);
-
-        if ($("div.attachment > div").last().hasClass("attach")) {
-            bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
-        } else {
-            bottom_position = 20;
-        }
-
-        // $("div.attachment").append("<div class='attach'>" +
-        //     "<span>" + "نام فایل" + "</span>" +
-        //     "<div class='progress'>" +
-        //     "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
-        //     "</div>" +
-        //     "</div>");
-        $("div.attachment > div").last().css("bottom", bottom_position + 15);
-    });
-    // replay to a comment
-    $(".comment-tools > .fa-reply").click(function () {
-        var text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
-        $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
-        $(".replay-div > .fa-times").click(function () {
-            $(".replay-div").remove();
-            $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
-                var inputLabel = "label[for='" + $(this).attr("id") + "']";
-                $(inputLabel).css("color", "#6f7285");
-                if ($(this).val() === '') {
-                    $(inputLabel).css({
-                        "font-size": "14px",
-                        "top": "28px",
-                        "right": "25px",
-                        "color": "#6f7285"
-                    });
-                } else {
-                    $(this).css("color", "#8d8d8d");
-                    $(inputLabel).css("color", "#8d8d8d");
-                }
-            });
-        });
-        $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "14px",
-                    "top": "58px",
-                    "right": "25px",
-                    "color": "#6f7285"
-                });
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-        });
-    });
-    // edit user comment
-    $(".comment-tools > .fa-pen").click(function () {
-        text = $.trim($(this).closest("div").children(2).text());
-        $("textarea#comment").html(text);
-        $("textarea#comment").focus();
-    });
+    // $(".new-comment-tools > .fa-smile").click(function () {
+    //     alert("Not working");
+    //     // $('#comment').emojiPicker('toggle');
+    //     // alert("a");
+    // });
+    // // delete user comment
+    // $(".comment-tools > .fa-trash-alt").click(function () {
+    //     $(this).parents("div.my-comment").remove();
+    // });
+    // // attach file to comment
+    // $(".new-comment-tools > label[for='comment-attach']").click(function () {
+    //     rows = $("textarea#comment").attr("rows");
+    //     $("textarea#comment").attr("rows", ++rows);
+    //     padding_bottom = parseInt($("textarea#comment").css("padding-bottom")) + 30;
+    //     $("textarea#comment").css("padding-bottom", padding_bottom);
+    //
+    //     if ($("div.attachment > div").last().hasClass("attach")) {
+    //         bottom_position = parseInt($("div.attachment > div").last().css("bottom"));
+    //     } else {
+    //         bottom_position = 20;
+    //     }
+    //
+    //     // $("div.attachment").append("<div class='attach'>" +
+    //     //     "<span>" + "نام فایل" + "</span>" +
+    //     //     "<div class='progress'>" +
+    //     //     "<div class='progress-bar progress-bar-striped progress-bar-animated' role='progressbar' aria-valuenow='75' aria-valuemin='0' aria-valuemax='100' style='width: 75%'></div>" +
+    //     //     "</div>" +
+    //     //     "</div>");
+    //     $("div.attachment > div").last().css("bottom", bottom_position + 15);
+    // });
+    // // replay to a comment
+    // $(".comment-tools > .fa-reply").click(function () {
+    //     var text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
+    //     $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
+    //     $(".replay-div > .fa-times").click(function () {
+    //         $(".replay-div").remove();
+    //         $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
+    //             var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //             $(inputLabel).css("color", "#6f7285");
+    //             if ($(this).val() === '') {
+    //                 $(inputLabel).css({
+    //                     "font-size": "14px",
+    //                     "top": "28px",
+    //                     "right": "25px",
+    //                     "color": "#6f7285"
+    //                 });
+    //             } else {
+    //                 $(this).css("color", "#8d8d8d");
+    //                 $(inputLabel).css("color", "#8d8d8d");
+    //             }
+    //         });
+    //     });
+    //     $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
+    //         var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //         $(inputLabel).css("color", "#6f7285");
+    //         if ($(this).val() === '') {
+    //             $(inputLabel).css({
+    //                 "font-size": "14px",
+    //                 "top": "58px",
+    //                 "right": "25px",
+    //                 "color": "#6f7285"
+    //             });
+    //         } else {
+    //             $(this).css("color", "#8d8d8d");
+    //             $(inputLabel).css("color", "#8d8d8d");
+    //         }
+    //     });
+    // });
+    // // edit user comment
+    // $(".comment-tools > .fa-pen").click(function () {
+    //     text = $.trim($(this).closest("div").children(2).text());
+    //     $("textarea#comment").html(text);
+    //     $("textarea#comment").focus();
+    // });
 }
 
 function vote_dialog_init() {
@@ -672,6 +601,7 @@ function vote_slider(slide_count) {
             }
         });
     }
+
     next_button_init();
     $(".prev-button").click(function () {
         if (counter > 0) {
@@ -699,8 +629,7 @@ function vote_slider(slide_count) {
     });
 }
 
-function select_technique(className) {
-
+if (window.location.href.indexOf("researcher/technique/") > -1) {
     function slide_up() {
         $(".fixed-back .all-techniques").slideUp('slow');
         return $.Deferred().resolve(false);
@@ -724,42 +653,37 @@ function select_technique(className) {
         $(".fixed-back label[for='technique-name']").html("نام تکنیک");
     }
 
-    $(className).click(function () {
+    $(".fixed-back .select-technique").click(function () {
         if ($(".fixed-back input#technique-name").hasClass("expand")) {
             express();
         } else {
             expand();
         }
-    });
-    $("li[role='treeitem']").click(function () {
-        var tree = $("#fancy-tree").fancytree({
-            activate: function (event, data) {
-                node = data.node;
-                $("input#technique-name").val(node.title);
-                express();
-                input_focus();
-            }
-        });
+
     });
     $(".fixed-back input.upload-resume").next().hover(function () {
         $(this).find("svg").find("path").attr("fill", "#3ccd1c");
     }, function () {
         $(this).find("svg").find("path").attr("fill", "#bdbdbd");
     });
+
     $(".fixed-back .confirmation .upload-file").click(function () {
         $(this).closest("form").find("input.upload-resume").next().slideDown("slow").closest("div.col-12").css("padding-bottom", "15px");
     });
+
     $(".fixed-back .confirmation .close-upload").click(function () {
         $(this).closest("form").find("input.upload-resume").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
     });
+
     $(".fixed-back input.upload-resume").on("change", function () {
-        $(this).next().find("svg").first().css("display", "none");
-        $(this).next().find("svg").last().css("display", "block");
-        var fileName = $(this).val().split("\\").pop();
+        $(this).closest("div").find("img.upload-img").css("display", "none");
+        $(this).closest("div").find("img.file-img").css("display", "block");
+        let fileName = $(this).val().split("\\").pop();
         $(this).next().find(".upload-file-text").css("padding-top", "5px")
             .html(fileName);
     });
 }
+
 
 function question() {
     $(".show-researching-question").click(function () {
@@ -784,18 +708,13 @@ function question() {
         $(this).closest("form").find("input.upload-answer").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
     });
     $("input.upload-answer").on("change", function () {
-        $(this).next().find("svg").first().css("display", "none");
-        $(this).next().find("svg").last().css("display", "block");
+        $(this).closest("div").find("img.upload-img").css("display", "none");
+        $(this).next("img.file-img").css("display", "block");
         var fileName = $(this).val().split("\\").pop();
         $(this).next().find(".upload-file-text").css("padding-top", "5px")
             .html(fileName);
     });
 
-    function counter() {
-
-    }
-
-    counter();
 }
 
 function getCookie(name) {
@@ -829,15 +748,15 @@ $.ajaxSetup({
     }
 });
 
-$(".delete_edu").click(function(){
+$(".delete_edu").click(function () {
     let pk = $(this).attr("value");
     $.ajax({
         method: 'POST',
         url: "/researcher/delete_scientific/",
         dataType: 'json',
-        data: {pk : pk},
+        data: {pk: pk},
         success: function (data) {
-            $(".row-sci-"+pk).remove();
+            $(".row-sci-" + pk).remove();
         },
         error: function (data) {
             console.log(data);
@@ -845,7 +764,7 @@ $(".delete_edu").click(function(){
     });
 });
 
-$(".delete_stu").click(function(){
+$(".delete_stu").click(function () {
     let pk = $(this).attr("value");
     console.log("delete_stu");
     console.log(pk);
@@ -853,10 +772,10 @@ $(".delete_stu").click(function(){
         method: 'POST',
         url: "/researcher/delete_studious/",
         dataType: 'json',
-        data: {pk : pk},
+        data: {pk: pk},
         success: function (data) {
             console.log(pk);
-            $(".row-stu-"+pk).remove();
+            $(".row-stu-" + pk).remove();
         },
         error: function (data) {
             console.log(data);
@@ -864,7 +783,7 @@ $(".delete_stu").click(function(){
     });
 });
 
-$(".delete_exe").click(function(){
+$(".delete_exe").click(function () {
     let pk = $(this).attr("value");
     console.log("delete_exe");
     console.log(pk);
@@ -872,10 +791,10 @@ $(".delete_exe").click(function(){
         method: 'POST',
         url: "/researcher/delete_executive/",
         dataType: 'json',
-        data: {pk : pk},
+        data: {pk: pk},
         success: function (data) {
-            $(".row-exe-"+pk).remove();
-            if (!$(".executive > table").hasClass("tbody")) 
+            $(".row-exe-" + pk).remove();
+            if (!$(".executive > table").hasClass("tbody"))
                 console.log("doesnt have tbody");
         },
         error: function (data) {

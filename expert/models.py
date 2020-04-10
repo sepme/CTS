@@ -3,16 +3,22 @@ from django.contrib.auth.models import User
 import os
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
-from industry.models import Keyword
+from industry.models import Keyword, Project
 from researcher.models import ResearchQuestionInstance
 
+#for Compress the photo
+import sys
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
-def get_image_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{}.{}'.format('profile', ext)
-
-    return os.path.join('unique', instance.expert_user.user.username, filename)
+def profileUpload(instance, filename):
+    return os.path.join('Expert Profile' , instance.expert_user.user.username ,filename)
     
+    # ext = filename.split('.')[-1]
+    # filename = '{}.{}'.format('profile', ext)
+
+    # return os.path.join('unique', instance.expert_user.user.username, filename)
 
 def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
@@ -35,9 +41,6 @@ class ExpertUser(models.Model):
 
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("expert:index"))
-
-    def get_profile_photo_url(self):
-        return self.user.email
 
     @property
     def score(self):
@@ -99,18 +102,32 @@ class ExpertForm(models.Model):
                                                verbose_name="دانشجو تحت نظارت",
                                                blank=True, null=True)
     has_industrial_research_choice = (
-        ('آری', 'آری'),
-        ('خیر', 'خیر'),
+        ('yes', 'آری'),
+        ('no', 'خیر'),
     )
     has_industrial_research = models.CharField(max_length=10, choices=has_industrial_research_choice,
                                                verbose_name="همکاری با شرکت خارج دانشگاه", blank=True)
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
 
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.photo = self.compressImage(self.photo)
+        super(ExpertForm, self).save(*args, **kwargs)
+
+    def compressImage(self,photo):
+        imageTemproary = Image.open(photo).convert('RGB')
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
 
     def get_keywords(self):
         keyword_list = self.keywords.all()
@@ -137,7 +154,7 @@ class ScientificRecord(models.Model):
 
 class ExecutiveRecord(models.Model):
     executive_post = models.CharField(max_length=64, verbose_name="سمت")
-    date_start_post = models.CharField(max_length=15, verbose_name="تلریخ شروع")
+    date_start_post = models.CharField(max_length=15, verbose_name="تاریخ شروع")
     date_end_post = models.CharField(max_length=15, verbose_name="تاریخ پایان")
     city = models.CharField(max_length=32, verbose_name="شهر")
     organization = models.CharField(max_length=32, verbose_name="مجل خدمت")
@@ -313,3 +330,18 @@ class ExpertRequestedProject(models.Model):
 
     def __str__(self):
         return "{}'s request for '{}' project".format(self.expert.expertform, self.project)
+
+class RequestResearcher(models.Model):
+    project    = models.OneToOneField(Project, verbose_name="پروژه", on_delete=models.CASCADE)
+    expert     = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
+    least_hour = models.IntegerField(verbose_name="حداقل ساعت")
+    researcher_count = models.IntegerField(verbose_name="تعداد دانشجو")
+
+    def __str__(self):
+        return str(self.project) + " - " +str(self.researcher_count)
+    
+    @property
+    def need_researcher(self):
+        if self.researcher_count > 0:
+            return True
+        return False

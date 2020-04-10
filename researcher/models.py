@@ -6,11 +6,19 @@ import datetime
 import uuid
 from . import persianNumber
 
-def get_image_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{}.{}'.format('profile', ext)
+#for Compress the photo
+import sys
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
-    return os.path.join('unique', instance.researcher_user.user.username, filename)
+def profileUpload(instance, filename):
+    return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,filename)
+    # ext = filename.split('.')[-1]
+    # filename = '{}.{}'.format('profile', ext)
+
+    # return os.path.join('unique', instance.researcher_user.user.username, filename)
+
 
 
 def get_answerFile_path(instance, filename):
@@ -70,6 +78,7 @@ class Status(models.Model):
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
+        ('wait_for_answer', "منتظر جواب ادمین"),
         ('free', "فعال - بدون پروژه"),
         ('waiting', "فعال - در حال انتظار پروژه"),
         ('involved', "فعال - درگیر پروژه"),
@@ -99,7 +108,7 @@ class ResearcherProfile(models.Model):
                                            on_delete=models.CASCADE, blank=True, null=True)
     first_name = models.CharField(max_length=300, verbose_name="نام")
     last_name = models.CharField(max_length=300, verbose_name="نام خانوادگی")
-    photo = models.ImageField(upload_to=get_image_path, max_length=255, blank=True, null=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     national_code = models.CharField(max_length=10, verbose_name="کد ملی")
@@ -155,6 +164,20 @@ class ResearcherProfile(models.Model):
 
     def __str__(self):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.photo = self.compressImage(self.photo)
+        super(ResearcherProfile, self).save(*args, **kwargs)
+
+    def compressImage(self,photo):
+        imageTemproary = Image.open(photo).convert('RGB')
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
+        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
 
 class ScientificRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)

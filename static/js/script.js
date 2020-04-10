@@ -143,7 +143,9 @@ myForm.submit(function (event) {
         success: function (data) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
-            $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!\nجهت تکمیل ثبت نام ایمیل خود را بررسی کنید!");
+            $('.loading h6').html("<span class='green'>ایمیل با موفقیت ارسال شد!</span>" +
+                "<br><br>" +
+                "<span>جهت تکمیل ثبت نام ایمیل خود را بررسی کنید!</span>");
         },
         error: function (data) {
             $(".loading").css('display', "none");
