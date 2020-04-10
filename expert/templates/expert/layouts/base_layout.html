@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
-{% load UnseenMessage_tag %}
+{#{% load UnseenMessage_tag %}#}
+{% load message_tags %}
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -89,7 +90,9 @@
             <a href="{{ messages_url }}">
                 <li class="list-group-item text-right {% if request.get_full_path == messages_url %}active{% endif %}">
                     <div>
-                        <span class="new-message">{{UnseenMessages}}</span>
+                        {% if UnseenMessages %}
+                            <span class="new-message">{{UnseenMessages}}</span>
+                        {% endif %}
                         <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
                     </div>

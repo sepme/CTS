@@ -24,7 +24,7 @@ class InitialInfoForm(forms.Form):
     last_name = forms.CharField(max_length=32, error_messages={'required': "نام خانوادگی نمی تواند خالی باشد."})
     special_field = forms.CharField(max_length=256, error_messages={'required': "حوزه تخصصی نمی تواند خالی باشد."})
     melli_code = forms.CharField(error_messages={'required': "کد ملی نمی تواند خالی باشد."})
-    scientific_rank = forms.IntegerField(error_messages={'invalid': 'مرتبه علمی نباید خالی باشد!'})
+    scientific_rank = forms.IntegerField(error_messages={'required': 'مرتبه علمی نباید خالی باشد!'})
     university = forms.CharField(max_length=128, error_messages={'required': "دانشگاه مورد نظر نمی تواند خالی باشد."})
     address = forms.CharField(widget=forms.Textarea(), error_messages={'required': "آدرس  نمی تواند خالی باشد."})
     home_number = forms.CharField(error_messages={'required': "شماره تلفن منزل نمی تواند خالی باشد."})

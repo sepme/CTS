@@ -286,6 +286,7 @@ $(document).ready(function () {
                         message: data.success,
                         position: 'bottomLeft'
                     });
+                    $(".main").removeClass("blur-div");
                 },
                 error: function (data) {
 
@@ -1404,7 +1405,7 @@ comment_form.submit(function (event) {
         thisUrl = "/expert/industry_comment/";
     else
         thisUrl = "/expert/researcher_comment/";
-    $(".project_id").attr('value', $('.preview-project').attr("id"));
+    $(".project_id").attr('value', $('.showProject').attr("id"));
 
     let form = new FormData(comment_form.get(0));
     $.ajax({

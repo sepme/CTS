@@ -78,7 +78,12 @@
                 <div class="row">
                     <div class="col-md-6 rankDiv">
                         <label class="rankLabel" for="rank">مرتبه علمی</label>
-                        <select id="rank" name="scientific_rank">
+                        
+                        {% if form.scientific_rank.errors %}
+                            <select id="rank" class="error" name="scientific_rank">
+                        {% else %}
+                            <select id="rank" name="scientific_rank">
+                        {% endif %}
                             <option selected dir="rtl" disabled>انتخاب کنید ...</option>
                             <option value="1">مربی</option>
                             <option value="2">استادیار</option>

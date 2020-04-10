@@ -1,6 +1,7 @@
 {% extends "expert/layouts/base_layout.html" %}
 {% load static %}
-{% load custom_tags %}
+{% load date_tags %}
+{% load message_tags %}
 {% block title %}پروژه ها{% endblock %}
 
 {% block name %} {{ request.user.expertuser.expertform }}{% endblock %}
@@ -53,16 +54,16 @@
                             <h6>
                                 {{ project.project_form.project_title_persian }}
                             </h6>
-                            {#                            <!-- {% calculate_date_past project.date_submitted_by_industry as date_past%} -->#}
+                            {% calculate_date_past project.date_submitted_by_industry as date_past %}
                             <div class="data-modified">
                                 <span>{{ date_past }} قبل </span>
                             </div>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
-                                {#                                <!-- {% getUnseenMessages project.pk request.user.expertuser as UnseenMessages%}#}
-                                {#                                {% if UnseenMessages != 0 %}#}
-                                {#                                    <span> {{UnseenMessages}} </span>#}
-                                {#                                {% endif %} -->#}
+                                {% getUnseenComments project.pk request.user.expertuser as UnseenComments%}
+                                {% if UnseenComments != 0 %}
+                                    <span> {{UnseenComments}} </span>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="box-body">

@@ -1,12 +1,7 @@
 from django import template
 from persiantools.jdatetime import JalaliDate
-from django.shortcuts import get_object_or_404
-
-from expert.models import ExpertUser
-from industry.models import Project ,Comment
 
 register = template.Library()
-
 
 @register.simple_tag
 def calculate_date_past(date):
@@ -62,9 +57,3 @@ def calculate_deadline(finished, started):
             return '{} سال'.format(int(days / 365))
     except:
         return 'بدون تاریخ'
-
-@register.simple_tag
-def getUnseenMessages(project_id ,expert):
-    project = get_object_or_404(Project ,pk=project_id)
-    all_unseen = Comment.objects.filter(project=project).filter(status='unseen')
-    return all_unseen.exclude(industry_user=None).filter(expert_user=expert).count()

@@ -168,7 +168,6 @@ class SignupEmail(generic.FormView):
                                              to=[email])
                 msg.attach_alternative(email_template, "text/html")
                 msg.send()
-                print('WTF??')
                 temp_user.save()
             except TimeoutError:
                 return HttpResponse('Timeout Error!!')
@@ -179,7 +178,6 @@ class SignupEmail(generic.FormView):
 
 
 def signup_email_ajax(request):
-    print(request.POST)
     form = forms.RegisterEmailForm(request.POST)
     print('is valid: ', form.is_valid())
     if form.is_valid():
@@ -207,7 +205,6 @@ def signup_email_ajax(request):
                                          to=[email])
             msg.attach_alternative(email_template, 'text/html')
             msg.send()
-            print('WTF??')
             temp_user.save()
         except TimeoutError:
             return JsonResponse({'Error': 'Timeout Error!'})
@@ -218,14 +215,11 @@ def signup_email_ajax(request):
 
 
 def login_ajax(request):
-    print(request.is_ajax())
     form = forms.LoginForm(request.POST)
     if form.is_valid():
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         entry_user = authenticate(request, username=username, password=password)
-        print(entry_user)
-        print("----------------")
         data = {'success': 'successful'}
         if entry_user is not None:
             login(request, entry_user)
@@ -248,13 +242,11 @@ def login_ajax(request):
         else:
             # context = {'form': form,
             #            'error': 'گذرواژه اشتباه است'}
-            print("+++++++++++++=")
             return JsonResponse({
                 'error': 'گذرواژه اشتباه است'
             } ,400)
     else:
         print('form error')
-        print(form.errors)
         return JsonResponse(form.errors, status=400)
 
 
@@ -361,7 +353,6 @@ class ResetPassword(generic.TemplateView):
                                              to=[request.user.username])
                 msg.attach_alternative(email_template, 'text/html')
                 msg.send()
-                print('WTF??')
             except TimeoutError:
                 return Http404('Timeout Error!')
 
@@ -376,9 +367,7 @@ class ResetPasswordConfirm(generic.FormView):
 
     def get(self, request, *args, **kwargs):
         path = request.path
-        print(path)
         uuid = path.split('/')[-2]
-        print('uuid', uuid)
         try:
             ExpertUser.objects.get(unique__exact=uuid)
         except ExpertUser.DoesNotExist:
@@ -404,18 +393,14 @@ class ResetPasswordConfirm(generic.FormView):
         # print('recover: \nuser: ', self.recover, self.user)
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
-        print(unique_id)
         user = find_user(request.user)
         # context = {'form': form,
         #            'username': self.user.user.username}
         if form.is_valid():
-            print('user:', user)
             password = form.cleaned_data['password']
             user.user.set_password(password)
             user.user.save()
-            print('username:', user.user.username, 'pass: ', user.user.password)
             new_user = authenticate(username=user.user.username, password=password)
-            print('new_user:', new_user)
             if new_user is not None:
                 login(request, new_user)
             return user.get_absolute_url()
@@ -429,9 +414,7 @@ class RecoverPasswordConfirm(generic.FormView):
 
     def get(self, request, *args, **kwargs):
         path = request.path
-        print(path)
         uuid = path.split('/')[-2]
-        print('uuid', uuid)
         try:
             user = ExpertUser.objects.get(unique__exact=uuid)
         except ExpertUser.DoesNotExist:
@@ -449,18 +432,14 @@ class RecoverPasswordConfirm(generic.FormView):
         # print('recover: \nuser: ', self.recover, self.user)
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
-        print(unique_id)
         user = get_user_by_unique_id(unique_id)
         context = {'form': form,
                    'username': user.user.username}
         if form.is_valid():
-            print('user:', user)
             password = form.cleaned_data['password']
             user.user.set_password(password)
             user.user.save()
-            print('username:', user.user.username, 'pass: ', user.user.password)
             new_user = authenticate(username=user.user.username, password=password)
-            print('new_user:', new_user)
             if new_user is not None:
                 login(request, new_user)
             return user.get_absolute_url()
