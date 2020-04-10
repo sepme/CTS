@@ -155,6 +155,7 @@ $(document).ready(function () {
             $("a.top-button").addClass('show');
         } else {
             $("a.top-button").removeClass('show');
+        }
     });
 
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
