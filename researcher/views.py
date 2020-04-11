@@ -511,7 +511,7 @@ def ajax_Technique_review(request):
     if form.is_valid():
         description = form.cleaned_data['request_body']
         method = form.cleaned_data['request_confirmation_method']
-        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__technique_title=request.POST['technique_name']).first()
+        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__pk=request.POST['technique_id']).first()
         if method != "exam":
             resume = form.cleaned_data['new_resume']
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,

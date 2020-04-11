@@ -339,7 +339,7 @@ $(document).ready(function () {
         }
     });
     $(".new-review-request").click(function () {
-        $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
+        $("#technique_id").attr('value', $(this).attr('id'));
     });
     $('input#upload-input').change(function (event) {
         $("img.profile").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
@@ -739,6 +739,7 @@ technique_review.submit(function (event) {
             }
         },
         error: function (data) {
+            console.log(data);
             var obj = JSON.parse(data.responseText);
             technique_review.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -806,9 +807,6 @@ function show_add_technique_record(title) {
         "                        </div>" +
         "                    </div>" +
         "                </div>" +
-        "            </div>" +
-        "            <div class='col-md-6 col-4'>" +
-        "                <button class='default-btn show-btn new-review-request'>ارتقا نمره</button>" +
         "            </div>" +
         "        </div>" +
         "    </div>" +
