@@ -865,12 +865,12 @@ function set_answer_true(item) {
 
 function returnFileType(type) {
     type = type.toLowerCase();
-    if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png" || type === "ppt"
-        || type === "txt" || type === "wmv" || type === "zip") {
+    if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png"
+     || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
         return type;
-    } else {
-        return "unknown";
-    }
+    } else if ( type === "jpeg") 
+        return "jpg"
+    return "unknown";
 }
 
 function show_question_answers(data) {
@@ -888,7 +888,7 @@ function show_question_answers(data) {
             '       <span class="date">' + data[i].hand_out_date + '</span>' +
             '       <div class="answer-body">' +
             '           <span class="file-type image ' + returnFileType(file_type) + '"></span>' +
-            '           <div class="file-name">' + data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf("/") + 1, data[i].answer_attachment.lastIndexOf(".")) + '</div>' +
+            '           <div class="file-name">' + data[i].file_name.substring(0, data[i].file_name.lastIndexOf(".")) + '</div>' +
             '           <span class="file-type text">' + file_type + ' File</span>' +
             '           <a href="' + data[i].answer_attachment + '" class="download">' +
             '               <i class="fas fa-download"></i>' +

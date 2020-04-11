@@ -58,7 +58,7 @@ class Index(LoginRequiredMixin, generic.FormView):
             raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')        
         if researcher.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
-        if request.user.researcheruser.status.status == 'wait_for_answer':
+        if request.user.researcheruser.status.status == 'wait_for_result':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(self, request, *args, **kwargs)
 
@@ -166,7 +166,7 @@ class UserInfo(generic.TemplateView):
             return HttpResponseRedirect(reverse("researcher:index"))    
         if request.user.researcheruser.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
-        if request.user.researcheruser.status.status == 'wait_for_answer':
+        if request.user.researcheruser.status.status == 'wait_for_result':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(request, *args, **kwargs)    
 
@@ -314,7 +314,7 @@ class Technique(generic.TemplateView):
 
         if request.user.researcheruser.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
-        if request.user.researcheruser.status.status == 'wait_for_answer':
+        if request.user.researcheruser.status.status == 'wait_for_result':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
 
         return render(request ,self.template_name ,context=self.get_context_data(**kwargs))
@@ -410,7 +410,7 @@ class Question(generic.TemplateView):
                 question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]
                 return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={'question_id' : question.research_question.uniqe_id}))
             return super().get(self, request, *args, **kwargs)
-        elif researcher.status.status == "wait_for_answer":
+        elif researcher.status.status == "wait_for_result":
             self.template_name = "researcher/layouts/waiting_for_question.html"
             return super().get(self, request, *args, **kwargs)
         else:
@@ -419,6 +419,15 @@ class Question(generic.TemplateView):
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse()[0]
+        if self.request.user.researcheruser.status.status == "wait_for_result":
+            answer = question.answer
+            context['answerName'] = answer.name.split(".com-")[-1]
+            context["answerType"] = answer.name.split(".")[-1]
+            if context["answerType"] == "jpeg":
+                context["answerType"] = "jpg"
+            context['answerUrl']  = answer.url
+            return context
         if self.request.user.researcheruser.researchquestioninstance_set.all().count() > 0:
             context['question_instance'] = "True"
             context['uuid'] = self.request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id
@@ -443,12 +452,17 @@ class QuestionShow(generic.TemplateView ):
         if kwargs['question_id'] != request.user.researcheruser.researchquestioninstance_set.all().reverse()[0].research_question.uniqe_id:
             raise Http404("سوال مورد نظر پیدا نشد.")
         question = request.user.researcheruser.researchquestioninstance_set.all().reverse()[0]        
-        deltatime = datetime.date.today() - question.hand_out_date
-        if deltatime.days < 8:
-            STATUS = ["not_answered", "wait_for_answer"]
-            if request.user.researcheruser.status not in STATUS:
+        delta = datetime.date.today() - question.hand_out_date
+        if delta.days < 8:
+            STATUS = ["not_answered", "wait_for_result"]
+            if request.user.researcheruser.status.status not in STATUS:
                 self.template_name = "researcher/layouts/answered_question.html"
                 return super().get(request, args, kwargs)
+
+            if request.user.researcheruser.status.status == "wait_for_result":
+                self.template_name = "researcher/layouts/waiting_for_question.html"
+                return super().get(request, args, kwargs)
+
             if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.save()
@@ -463,13 +477,20 @@ class QuestionShow(generic.TemplateView ):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse()[0]
+        if self.request.user.researcheruser.status.status == "wait_for_result":
+            answer = question.anwer
+            context['answerName'] = answer.name.split(".com-")[-1]
+            context["answerType"] = answer.name.split(".")[-1]
+            context['answerUrl']  = answer.url
+            print(context)
+            return context
         deltatime = datetime.date.today() - question.hand_out_date
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question_text
         context['attachment'] = question.research_question.attachment
         context['attach_type'] = str(question.research_question.attachment).split("/")[-1].split('.')[-1]
         context['file_name'] = question.research_question.attachment.name.split("/")[-1]
-        if self.request.user.researcheruser.status not in ["not_answered", "wait_for_answer"]:
+        if self.request.user.researcheruser.status.status != "not_answered":
             context['answer'] = question.answer
             return context
         delta = datetime.date.today() - question.hand_out_date
@@ -484,9 +505,6 @@ class QuestionShow(generic.TemplateView ):
         if 'answer' in request.FILES:
             question.answer = request.FILES['answer']
             question.is_answered = True
-            question.save()
-            request.user.researcheruser.status.status = 'wait_for_answer'
-            request.user.researcheruser.status.save()
             subject = 'Research Question Validation'
             message ="""با عرض سلام و خسته نباشید.
             پژوهشگر {} به نام {} {} به سوال پژوهشی {} پاسخ داده است.
@@ -500,10 +518,16 @@ class QuestionShow(generic.TemplateView ):
                     subject=subject,
                     message=message, 
                     from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[email],
+                    recipient_list=[email, "a.jafarzadeh1998@gmail.com"],
                 )
             except TimeoutError:
                 return HttpResponse('Timeout Error!!')
+            question.save()
+            request.user.researcheruser.status.status = 'wait_for_result'
+            request.user.researcheruser.status.save()
+        else:
+            print(request.FILES)
+            print("FUCK")
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):

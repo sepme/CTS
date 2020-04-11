@@ -1,5 +1,6 @@
 {% extends 'researcher/layouts/base_layout.html' %}
 {% load static %}
+{% block title %} در انتظار بررسی جواب سوال پژوهشی{% endblock title %}
 {% block content %}
     <div class="card info-card text-center wait-card">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1411.05 1096.44" style="margin: 20px auto;width: 40%">
@@ -122,5 +123,13 @@
                 لطفا تا اعلام نتیجه نهایی شکیبا باشید.
             </h6>
             </div>
+            {# I'm sorry for editing your files MR.REZA!#}
+            <div class="answer-body"> 
+                <span class="file-type image  {{answerType}} "></span> 
+                <div class="file-name"><h6> {{answerName}} </h6></div> 
+                <a href="{{answerUrl}}" class="download"> 
+                    <h5><i class="fas fa-download"></i> </h5>
+                </a> 
+            </div> 
         </div>
 {% endblock content %}

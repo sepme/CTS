@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import reverse, HttpResponseRedirect
+from django.utils.timezone import now
 import os
 import datetime
 import uuid
@@ -78,7 +79,7 @@ class Status(models.Model):
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
-        ('wait_for_answer', "منتظر جواب ادمین"),
+        ('wait_for_result', "منتظر جواب ادمین"),
         ('free', "فعال - بدون پروژه"),
         ('waiting', "فعال - در حال انتظار پروژه"),
         ('involved', "فعال - درگیر پروژه"),
@@ -382,7 +383,7 @@ class TechniqueReview(models.Model):
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
     project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
-    date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
+    date_requested = models.DateField(default=now, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
     def __str__(self):
@@ -393,8 +394,8 @@ class ResearchQuestionInstance(models.Model):
                                           verbose_name="سوال پژوهشی")
     researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
                                    blank=True, null=True)
-    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", auto_now_add=True)
-    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True)
+    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", default=now)
+    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True, blank=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
     is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={
         ('not_seen', 'بررسی نشده'),

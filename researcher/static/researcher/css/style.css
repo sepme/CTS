@@ -1808,3 +1808,43 @@ button.start-question {
 .question-progress .progress-bar {
     background-color: #3CCD1C;
 }
+
+.file-type.image.pdf {
+    background-image: url("../../../../static/img/pdf.svg");
+}
+
+.file-type.image.doc {
+    background-image: url("../../../../static/img/doc.svg");
+}
+
+.file-type.image.gif {
+    background-image: url("../../../../static/img/gif.svg");
+}
+
+.file-type.image.jpg {
+    background-image: url("../../../../static/img/jpg.svg");
+}
+
+.file-type.image.png {
+    background-image: url("../../../../static/img/png.svg");
+}
+
+.file-type.image.ppt {
+    background-image: url("../../../../static/img/ppt.svg");
+}
+
+.file-type.image.txt {
+    background-image: url("../../../../static/img/txt.svg");
+}
+
+.file-type.image.unknown {
+    background-image: url("../../../../static/img/unknown.svg");
+}
+
+.file-type.image.wmv {
+    background-image: url("../../../../static/img/wmv.svg");
+}
+
+.file-type.image.zip {
+    background-image: url("../../../../static/img/zip.svg");
+}
