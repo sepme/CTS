@@ -811,6 +811,7 @@ function show_add_technique_record(title) {
         "        </div>" +
         "    </div>" +
         "</div>";
+    $(".techniques-list .no-project-container").remove();
     $(".techniques-list").append(newTechnique);
 }
 
