@@ -2216,6 +2216,19 @@ span.title-back {
     width: 100%;
 }
 
+.nav-pills > .nav-link.new:before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    left: 7px;
+    width: 7px;
+    height: 7px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #ff4545;
+}
+
 /*.nav-pills > .nav-link::after {*/
 /*	content: 'شاخص ها';*/
 /*	position: absolute;*/

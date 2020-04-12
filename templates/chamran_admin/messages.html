@@ -40,7 +40,7 @@
             </div>
             <div class="tab-content cover-page">
                 {% for message in other_messages %}
-                    <div class="card new box flow-root-display hover-enable w-100 {% if message.0.type == 0 %}notice-message{% elif message.0.type == 1 %}alert-message{% else %}news-message{% endif %}" id="{{ message.0.id }}">
+                    <div class="card {% if not message.3 %}new{% endif %} box flow-root-display hover-enable w-100 {% if message.0.type == 0 %}notice-message{% elif message.0.type == 1 %}alert-message{% else %}news-message{% endif %}" id="{{ message.0.id }}">
                         <div class="box-header">
                             <h6>
                                 {{ message.0.title }}
