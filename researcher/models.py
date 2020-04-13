@@ -87,12 +87,13 @@ class Status(models.Model):
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    inactivate_duration_temp = models.DateField(verbose_name="غیرفعال تا تاریخ", blank=True, null=True)
 
     def is_inactivate(self):
-        return datetime.datetime.now() < self.inactivate_duration
+        return datetime.date.now() < self.inactivate_duration
 
     def __str__(self):
-        return '{user}- {status}'.format(user=self.researcher_user, status=self.status)
+        return '{user} - {status}'.format(user=self.researcher_user, status=self.status)
 
 class MembershipFee(models.Model):
     researcher_user = models.OneToOneField('ResearcherUser', verbose_name="حق عضویت", on_delete=models.CASCADE,

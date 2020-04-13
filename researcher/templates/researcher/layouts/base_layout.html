@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-{% load custom_tags%}
+{% load custom_tags %}
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -106,10 +106,10 @@
                 </li>
             </a>
             <!-- {% url 'researcher:question-alert' as question_url %} -->
-            {% if question_instance %}
-                {% url 'researcher:question-show' question_id=uuid as question_url %}
+            {% getQuestionUrl request.user.researcheruser as questionId%}
+            {% if questionId %}
+                {% url 'researcher:question-show' question_id=questionId as question_url %}
             {% else %}
-                <h1>{{ question_instance }}</h1>
                 {% url 'researcher:question-alert' as question_url %}
             {% endif %}
             <a href="{{ question_url }}">
