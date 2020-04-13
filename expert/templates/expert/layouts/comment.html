@@ -6,7 +6,7 @@
         <div class="add-comment">
             <form action="" method="POST" enctype="multipart/form-data" id="comment_form">
                 {% csrf_token %}
-                <div class="row"
+                <div class="row">
                     <div class="col-lg-12">
                         <input type="text" class="project_id" name="project_id" value="" hidden>
                         <input type="text" class="researcher_id" name="researcher_id" value="" hidden>
@@ -25,7 +25,7 @@
 
                                 <div class="attachment">
                                     <i class="fas fa-paperclip"></i>
-                                    <span></span>
+                                    <span class="file-name"></span>
                                     <i class="far fa-trash-alt"></i>
                                 </div>
                             </div>

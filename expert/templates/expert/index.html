@@ -62,7 +62,7 @@
                                 <i class="far fa-comment-alt center-abs"></i>
                                 {% getUnseenComments project.pk request.user.expertuser as UnseenComments%}
                                 {% if UnseenComments != 0 %}
-                                    <span> {{UnseenComments}} </span>
+                                    <span class="unseen-comments"> {{UnseenComments}} </span>
                                 {% endif %}
                             </div>
                         </div>

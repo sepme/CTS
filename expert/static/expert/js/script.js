@@ -1081,17 +1081,18 @@ function researcherRequest() {
 
 let showInfo = $('.preview-project');
 showInfo.click(function (event) {
+    project_id = $(this).attr('id');
+    $(this).closest(".card").find('.unseen-comments').html("");
     $.ajax({
         url: $(this).attr('data-url'),
         method: 'GET',
         data: {
-            id: $(this).attr("id")
+            id: project_id
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            $('.project_id').attr('value', project_id);
             if (data.status === "non active") {
-                console.log("non active");
                 $(".hidden").attr("style", "display : none;");
                 $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
                 $(".showProject").find(".establish-time .time-body").html(data.date);
@@ -1110,7 +1111,6 @@ showInfo.click(function (event) {
                     $("#accept-project").attr("disabled" ,"disabled");
                 }
             } else {
-                console.log("active");
                 projectDetail(data);
             }
         },
@@ -1428,6 +1428,9 @@ comment_form.submit(function (event) {
             });
 
             comment_form[0].reset();
+            $('.error').remove();
+            $('.file-name').html("");
+            $(".send-comment-container .comment-input").removeClass("attached");
             $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
 
         },
