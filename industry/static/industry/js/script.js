@@ -559,6 +559,7 @@ $(document).ready(function () {
 
     $(".preview-project").click(function () {
         const dialog = $(".showProject");
+        $(this).closest(".card").find('.unseen-comments').html("");
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -566,8 +567,6 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                console.log(data);
-                console.log(data.accepted);
                 // if (data.accepted == "true")
                 //     console.log("accepted");
                 // dialog = $(".project-details");
@@ -881,6 +880,9 @@ $(document).ready(function () {
                         position: 'bottomLeft'
                     });
                     comment_form[0].reset();
+                    $('.error').remove();
+                    $('.file-name').html("");
+                    $(".send-comment-container .comment-input").removeClass("attached");
                     $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
                 },
                 error: function (data) {
