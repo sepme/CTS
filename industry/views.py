@@ -11,8 +11,11 @@ from django.views import generic, View
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render
-from ChamranTeamSite import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
 from persiantools.jdatetime import JalaliDate
+
+from ChamranTeamSite import settings
 from industry.models import IndustryForm, Comment
 from expert import models as expert_models
 from . import models ,forms
@@ -182,7 +185,6 @@ def GetComment(request):
             }
     return JsonResponse(data=data)
 
-
 def accept_project(request):
     expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
@@ -235,13 +237,13 @@ def submit_comment(request):
     return JsonResponse(data=form.errors ,status=400)
 
 # main page for an industry user
-class Index(generic.TemplateView):
+class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = 'industry/index.html'
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
 
     def get(self, request, *args, **kwargs):
-        if (not request.user.is_authenticated) or (not models.IndustryUser.objects.filter(
-                user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -334,10 +336,11 @@ class UserInfo(View):
         return render(request, 'industry/userInfo.html', context={'form': form})
 
 
-class NewProject(View):
+class NewProject(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
+
     def get(self, request):
-        if request.user.is_authenticated and (not models.IndustryUser.objects.filter(user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
         return render(request, 'industry/newProject.html', context={'form': forms.ProjectForm()})
 
     def post(self, request):
@@ -395,24 +398,19 @@ class NewProject(View):
             return HttpResponseRedirect(reverse('industry:index'))
         return render(request, 'industry/newProject.html', context={'form': form})
 
-
-class ProjectListView(generic.ListView):
+class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     template_name = 'industry/project_list.html'
-    model = models.ProjectForm
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
 
     def get(self, request, *args, **kwargs):
-        try:
-            self.industry = get_object_or_404(models.IndustryUser, user=request.user)
-        except:
-            return HttpResponseRedirect(reverse('chamran:login'))
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['industry'] = self.industry
-        if self.industry.industryform:
-            context['photo'] = self.industry.industryform.photo
+        industry = get_object_or_404(models.IndustryUser, user=self.request.user)
+        context['industry'] = industry
+        if industry.industryform:
+            context['photo'] = industry.industryform.photo
         return context
-
-class Messages(generic.TemplateView):
-    template_name = 'industry/layouts/project_details.html'

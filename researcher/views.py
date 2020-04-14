@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, reverse, Http404 ,HttpResponse
 from django.views import generic
-from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User ,Permission
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.core.serializers import serialize
@@ -45,25 +46,28 @@ def date_last(date1 ,date2):
         return years + months + days
     return "امروز"
 
-
-class Index(LoginRequiredMixin, generic.FormView):
+class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     template_name = 'researcher/index.html'
     form_class = forms.InitialInfoForm
     login_url = '/login/'
+    permission_required = ('researcher.be_researcher',)
 
     def get(self, request, *args, **kwargs):
-        try:
-            researcher = models.ResearcherUser.objects.get(user=request.user)
-        except models.ResearcherUser.DoesNotExist:
-            raise Http404('.کاربر پژوهشگر مربوطه یافت نشد')        
+        researcher = models.ResearcherUser.objects.get(user=request.user)
+        status = researcher.status
+        if status.status == 'deactivated':
+            if status.check_activity_status:
+                status.status = 'not_answered'
+                status.save()
         STATUS = ['wait_for_result', 'not_answered']
-        if researcher.status.status in STATUS:
-            question = Question(**kwargs)
-            return question.get(request, *args, **kwargs)
+        if status.status in STATUS:
+            return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
+        if self.request.user.researcheruser.status.status == 'deactivated':
+            return context
         all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gte=0)]
         all_projects = Project.objects.filter(id__in=all_projects)
         my_projects  = all_projects.filter(researcher_applied__in=[self.request.user.researcheruser])
@@ -296,17 +300,12 @@ def signup(request, username):
     return HttpResponseRedirect(reverse('researcher:index'))
 
 
-class Messages(generic.TemplateView):
-    template_name = 'researcher/messages.html'
-
-class Technique(LoginRequiredMixin, generic.TemplateView):
+class Technique(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = 'researcher/technique.html'
     login_url = '/login/'
+    permission_required = ('researcher.be_researcher', 'researcher.is_active')
 
     def get(self, request, *args, **kwargs):
-        if not models.ResearcherUser.objects.filter(user=request.user).count():
-            return HttpResponseRedirect(reverse('chamran:login'))
-
         if request.user.researcheruser.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
         if request.user.researcheruser.status.status == 'wait_for_result':
@@ -393,8 +392,10 @@ def AddTechnique(request):
         return JsonResponse(data=data)
     return JsonResponse(form.errors ,status=400)
 
-class Question(generic.TemplateView):
+class Question(LoginRequiredMixin,PermissionRequiredMixin, generic.TemplateView):
     template_name = 'researcher/question.html'
+    login_url = '/login/'
+    permission_required = ('researcher.be_researcher', 'researcher.is_active')
     
     def get(self, request, *args, **kwargs):
         self.request = request
@@ -437,12 +438,12 @@ class Question(generic.TemplateView):
         question_instance.save()
         return HttpResponseRedirect(reverse('researcher:question-show' ,kwargs={"question_id" :question.uniqe_id}))
 
-class QuestionShow(generic.TemplateView ):
+class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView ):
     template_name = 'researcher/layouts/preview_question.html'
+    login_url = '/login/'
+    permission_required = ('researcher.be_researcher', 'researcher.is_active')
 
     def get(self ,request ,*args, **kwargs):
-        if (not request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
         if kwargs['question_id'] != request.user.researcheruser.researchquestioninstance_set.all().reverse().first().research_question.uniqe_id:
             raise Http404("سوال مورد نظر پیدا نشد.")
         if self.request.user.researcheruser.status.status != "not_answered":
@@ -457,10 +458,15 @@ class QuestionShow(generic.TemplateView ):
                 return super().get(request, args, kwargs)
         elif request.user.researcheruser.status.status == "not_answered" :
             status = request.user.researcheruser.status
-            status.status = 'inactivated'
-            inactivate_date = datetime.date.today()+ datetime.timedelta(days=30)
-            status.inactivate_duration = inactivate_date
+            status.status = 'deactivated'
+            inactivate_date = datetime.date.today() + datetime.timedelta(days=30)
+            status.inactivate_duration_temp = inactivate_date
             status.save()
+            ctype = ContentType.objects.get_for_model(models.ResearcherUser)
+            permission = Permission.objects.get(content_type=ctype, codename='is_active')
+            request.user.user_permissions.remove(permission)
+            request.user.save()
+            return HttpResponseRedirect(reverse("researcher:index"))
         return super().get(request ,args, kwargs)
     
     def get_context_data(self, **kwargs):
@@ -473,8 +479,7 @@ class QuestionShow(generic.TemplateView ):
         context['attach_type'] = str(question.research_question.attachment).split("/")[-1].split('.')[-1]
         context['file_name'] = question.research_question.attachment.name.split("/")[-1]
         if self.request.user.researcheruser.status.status != "not_answered":
-            context['answer'] = question.answer
-            print(context)
+            context['answer'] = question.answer            
             return context
         delta = datetime.date.today() - question.hand_out_date
         context['day']  = 8 - delta.days
@@ -510,7 +515,6 @@ class QuestionShow(generic.TemplateView ):
             request.user.researcheruser.status.save()
         else:
             print(request.FILES)
-            print("FUCK")
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
     
 def ajax_Technique_review(request):

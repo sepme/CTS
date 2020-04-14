@@ -50,25 +50,18 @@ class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
+
+    class Meta:
+        permissions = (
+            ('be_researcher' ,'Be Researcher'),
+            ('is_active' ,'is active'),
+            )
     
     def __str__(self):
         return self.user.get_username()
 
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("researcher:index"))
-    @property
-    def score(self):
-        return self.points*23
-
-    def question_status(self):
-        if self.status.status == "not_answered":
-            deltatime = datetime.date.today() - self.researchquestioninstance.hand_out_date
-            if deltatime.days > 15:
-                self.status.status = 'inactivated'
-                self.status.status.save()
-                return "inactivated"
-            return 'not_answered'
-        return 'free'
 
     @property
     def score(self):
@@ -83,14 +76,18 @@ class Status(models.Model):
         ('free', "فعال - بدون پروژه"),
         ('waiting', "فعال - در حال انتظار پروژه"),
         ('involved', "فعال - درگیر پروژه"),
-        ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
+        ('deactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
-    inactivate_duration_temp = models.DateField(verbose_name="غیرفعال تا تاریخ", blank=True, null=True)
+    inactivate_duration_temp = models.DateField(verbose_name="غیرفعال تا تاریخ",default='0001-01-01' , blank=True, null=True)
 
-    def is_inactivate(self):
-        return datetime.date.now() < self.inactivate_duration
+    @property
+    def check_activity_status(self):
+        today = datetime.datetime.today().date()
+        if  today > self.inactivate_duration_temp:
+            return True
+        return False
 
     def __str__(self):
         return '{user} - {status}'.format(user=self.researcher_user, status=self.status)

@@ -11,9 +11,9 @@ def getUnseenMessages(user):
 
 @register.simple_tag
 def getQuestionUrl(researcher):
+    uniqe_id = None
     if researcher.status.status in 'not_answered':
-        question = ResearchQuestionInstance.objects.filter(researcher=researcher).reverse().first()
-        uniqe_id = question.research_question.uniqe_id
-    else:
-        uniqe_id = None
+        question = ResearchQuestionInstance.objects.filter(researcher=researcher).reverse().first()        
+        if question is not None:
+            uniqe_id = question.research_question.uniqe_id
     return uniqe_id

@@ -36,6 +36,11 @@ class ExpertUser(models.Model):
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
+    class Meta:
+        permissions = (
+            ('be_expert', 'Be Expert'),
+        )
+
     def __str__(self):
         return self.user.get_username()
 

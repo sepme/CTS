@@ -2,7 +2,7 @@ from django.views import generic
 # from django.views import View
 from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404, Http404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
 
@@ -41,16 +41,14 @@ def calculate_deadline(finished, started):
         return 'تاریخ نامشخص'
 
 
-class Index(LoginRequiredMixin, generic.FormView):
+class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     template_name = 'expert/index.html'
     login_url = "/login/"
+    permission_required = ("expert.be_expert",)
     form_class = forms.InitialInfoForm
 
     def get(self, request, *args, **kwargs):
-        try:
-            expert_user = ExpertUser.objects.get(user=request.user)
-        except ExpertUser.DoesNotExist:
-            raise Http404('.کاربر استاد مربوطه یافت نشد')
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -92,8 +90,10 @@ class Index(LoginRequiredMixin, generic.FormView):
         return HttpResponseRedirect(reverse('expert:index'))
 
 
-class ResearcherRequest(generic.TemplateView):
+class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = 'expert/researcherRequest.html'
+    login_url = '/login/'
+    permission_required = ("expert.be_expert",)
 
     def get(self, request, *args, **kwargs):
         expert_user = get_object_or_404(ExpertUser, user=request.user)
@@ -135,12 +135,10 @@ class ResearcherRequest(generic.TemplateView):
         return render(request, self.template_name, context)
 
 
-class Messages(generic.TemplateView):
-    template_name = 'expert/messages.html'
-
-
-class Questions(generic.TemplateView):
+class Questions(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = 'expert/questions.html'
+    login_url = '/login/'
+    permission_required = ("expert.be_expert",)
 
     def get(self, request, *args, **kwargs):
         expert_user = request.user.expertuser
