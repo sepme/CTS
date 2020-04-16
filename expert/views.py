@@ -1,7 +1,7 @@
 from django.views import generic
 # from django.views import View
 from django.shortcuts import render, HttpResponseRedirect, reverse, HttpResponse, get_object_or_404, Http404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
@@ -241,6 +241,7 @@ class UserInfo(generic.FormView):
         return render(request, self.template_name, context)
 
 
+@permission_required('expert.be_expert', login_url='/login/')
 def scienfic_record_view(request):
     scientific_form = forms.ScientificRecordForm(request.POST)
     if scientific_form.is_valid():
@@ -253,7 +254,7 @@ def scienfic_record_view(request):
         print('form error occured')
         return JsonResponse(scientific_form.errors, status=400)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def executive_record_view(request):
     executive_form = forms.ExecutiveRecordForm(request.POST)
     if executive_form.is_valid():
@@ -266,7 +267,7 @@ def executive_record_view(request):
         print('form error occured')
         return JsonResponse(executive_form.errors, status=400)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def research_record_view(request):
     research_form = forms.ResearchRecordForm(request.POST)
     if research_form.is_valid():
@@ -279,7 +280,7 @@ def research_record_view(request):
         print('form error occured')
         return JsonResponse(research_form.errors, status=400)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def paper_record_view(request):
     paper_form = forms.PaperRecordForm(request.POST)
     if paper_form.is_valid():
@@ -292,7 +293,7 @@ def paper_record_view(request):
         print('form error occured')
         return JsonResponse(paper_form.errors, status=400)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def show_project_view(request):
     id = request.GET.get('id')
     project = Project.objects.get(id=id)
@@ -304,6 +305,7 @@ def show_project_view(request):
         pass
     return UsualShowProject(request, project, data)
 
+@permission_required('expert.be_expert', login_url='/login/')
 def UsualShowProject(request, project, data):
     project_form = project.project_form
     if request.user.expertuser in project.expert_applied.all():
@@ -355,7 +357,7 @@ def UsualShowProject(request, project, data):
     #     data['required_technique'].append(tech.__str__())
     return JsonResponse(data)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def accept_project(request):
     expert_user = get_object_or_404(ExpertUser, user=request.user)
     project = Project.objects.get(id=request.POST.get('id'))
@@ -386,7 +388,7 @@ def accept_project(request):
             'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def add_research_question(request):
     research_question_form = forms.ResearchQuestionForm(request.POST, request.FILES)
     if research_question_form.is_valid():
@@ -401,7 +403,7 @@ def add_research_question(request):
     else:
         return JsonResponse(research_question_form.errors, status=400)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def show_research_question(request):
     research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
 
@@ -432,7 +434,7 @@ def show_research_question(request):
         json_response['question_attachment_type'] = attachment.name.split('/')[-1].split('.')[-1]
     return JsonResponse(json_response)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def terminate_research_question(request):
     research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
     research_question.status = 'answered'
@@ -441,7 +443,7 @@ def terminate_research_question(request):
         'success': 'successful'
     })
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def set_answer_situation(request):
     answer = ResearchQuestionInstance.objects.filter(id=request.GET.get('id')).first()
     if request.GET.get('type') == 'true':
@@ -453,7 +455,7 @@ def set_answer_situation(request):
         'success': 'successful'
     })
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def show_researcher_preview(request):
     researcher = ResearcherProfile.objects.filter(id=request.GET.get('id')).first()
     researcher_information = {
@@ -493,7 +495,7 @@ def show_researcher_preview(request):
     researcher_information['comments'] = comments
     return JsonResponse(researcher_information)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def CommentForResearcher(request):
     form = forms.CommentForm(request.POST, request.FILES)
     project = Project.objects.filter(id=request.POST['project_id'])[0]
@@ -526,6 +528,7 @@ def CommentForResearcher(request):
         return JsonResponse(data)
     return JsonResponse(form.errors, status=400)
 
+@permission_required('expert.be_expert', login_url='/login/')
 def CommentForIndustry(request):
     project = Project.objects.get(id=request.POST['project_id'])
     form = forms.CommentForm(request.POST ,request.FILES)
@@ -559,6 +562,7 @@ def CommentForIndustry(request):
     else:
         return JsonResponse(form.errors, status=400)
 
+@permission_required('expert.be_expert', login_url='/login/')
 def ShowTechnique(request):
     TYPE = (
         'molecular_biology',
@@ -582,6 +586,7 @@ def ShowTechnique(request):
             data[q[-1]] = q[:-1]
     return JsonResponse(data=data)
 
+@permission_required('expert.be_expert', login_url='/login/')
 def GetResume(request):
     expert_id = request.GET['id']
     expert = get_object_or_404(ExpertUser ,pk=expert_id)
@@ -619,6 +624,7 @@ def GetResume(request):
 
     return JsonResponse(data=data)
 
+@permission_required('expert.be_expert', login_url='/login/')
 def confirmResearcher(request):
     try:
         researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
@@ -631,6 +637,7 @@ def confirmResearcher(request):
     except:
         return JsonResponse(data={} ,status=400)
 
+@permission_required('expert.be_expert', login_url='/login/')
 def ActiveProjcet(request, project, data):
     industryform = project.industry_creator.industryform
     projectDate = [
@@ -664,6 +671,7 @@ def ActiveProjcet(request, project, data):
 
     return JsonResponse(data=data)
 
+@permission_required('expert.be_expert', login_url='/login/')
 def DeleteScientificRecord(request):
     try:
         sci_rec = get_object_or_404(ScientificRecord ,pk=request.POST['pk'])
@@ -672,6 +680,7 @@ def DeleteScientificRecord(request):
     sci_rec.delete()
     return JsonResponse({"successfull" :"Scientific record is deleted"})
 
+@permission_required('expert.be_expert', login_url='/login/')
 def DeleteExecutiveRecord(request):
     try:
         exe_rec = get_object_or_404(ExecutiveRecord ,pk=request.POST['pk'])
@@ -680,6 +689,7 @@ def DeleteExecutiveRecord(request):
     exe_rec.delete()
     return JsonResponse({"successfull" :"Executive record is deleted"})
 
+@permission_required('expert.be_expert', login_url='/login/')
 def DeleteResearchRecord(request):
     try:
         research_rec = get_object_or_404(ResearchRecord ,pk=request.POST['pk'])
@@ -688,6 +698,7 @@ def DeleteResearchRecord(request):
     research_rec.delete()
     return JsonResponse({"successfull" :"Research Record is deleted"})
 
+@permission_required('expert.be_expert', login_url='/login/')
 def DeletePaperRecord(request):
     try:
         paper_rec = get_object_or_404(PaperRecord ,pk=request.POST['pk'])
@@ -696,6 +707,7 @@ def DeletePaperRecord(request):
     paper_rec.delete()
     return JsonResponse({"successfull" :"Paper Record is deleted"})
 
+@permission_required('expert.be_expert', login_url='/login/')
 def ExpertRequestResearcher(request):
     project = Project.objects.get(id=request.POST['project_id'])
     expert = request.user.expertuser

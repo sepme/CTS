@@ -11,8 +11,7 @@ from django.forms import model_to_dict
 import os ,random ,datetime
 from persiantools.jdatetime import JalaliDate
 from dateutil.relativedelta import relativedelta
-from itertools import chain
-from operator import attrgetter
+from django.contrib.auth.decorators import permission_required
 
 from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion, RequestResearcher
@@ -249,6 +248,7 @@ class UserInfo(generic.TemplateView):
 
         return render(request ,'researcher/userInfo.html' ,context=context)
 
+@permission_required('researcher.be_researcher',login_url='/login/')
 def ajax_ScientificRecord(request):    
     form = forms.ScientificRecordForm(request.POST)
     if form.is_valid():
@@ -264,6 +264,7 @@ def ajax_ScientificRecord(request):
         print("error happened")
         return JsonResponse(form.errors ,status=400)
 
+@permission_required('researcher.be_researcher',login_url='/login/')
 def ajax_ExecutiveRecord(request):
     form = forms.ExecutiveRecordForm(request.POST)
     if form.is_valid():
@@ -279,6 +280,7 @@ def ajax_ExecutiveRecord(request):
         print("error happened")
         return JsonResponse(form.errors ,status=400)
 
+@permission_required('researcher.be_researcher',login_url='/login/')
 def ajax_StudiousRecord(request):
     form = forms.StudiousRecordForm(request.POST)
     if form.is_valid():
@@ -318,6 +320,7 @@ class Technique(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateVie
         context['technique_list'] = self.request.user.researcheruser.techniqueinstance_set.all()
         return context
 
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def ShowTechnique(request):
     TYPE = (
         'molecular_biology',
@@ -341,6 +344,7 @@ def ShowTechnique(request):
             data[q[-1]] = q[:-1]
     return JsonResponse(data=data)
 
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def AddTechnique(request):
     form = forms.TechniqueInstanceForm(request.user ,request.POST ,request.FILES)    
     if form.is_valid():
@@ -516,7 +520,8 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
         else:
             print(request.FILES)
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
-    
+
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def ajax_Technique_review(request):
     form = forms.TechniqueReviewFrom(request.POST ,request.FILES)
     if form.is_valid():
@@ -550,6 +555,7 @@ def ajax_Technique_review(request):
         return JsonResponse(data)
     return JsonResponse(form.errors ,status=400)
 
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def ShowProject(request):
     project = Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
@@ -585,6 +591,7 @@ def ShowProject(request):
     json_response['status'] = request.user.researcheruser.status.status
     return JsonResponse(json_response)
 
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def DeleteComment(request):
     try:
         comment = get_object_or_404(Comment ,pk=request.POST['id'])
@@ -593,6 +600,7 @@ def DeleteComment(request):
         return JsonResponse({} ,400)
     return JsonResponse({'successful' :"successful"})
 
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def ApplyProject(request):
     if request.user.researcheruser.status.status == "waiting":
         data = {"error": "your waiting for another project"}
@@ -617,6 +625,7 @@ def ApplyProject(request):
         return JsonResponse(data={'success' : "success"})
     return JsonResponse(form.errors ,status=400)
 
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def MyProject(request):    
     project = Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
@@ -678,6 +687,7 @@ def MyProject(request):
 #         }
 #     return JsonResponse(data={"project_list" : project_list})
 
+@permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def AddComment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
     project = Project.objects.filter(id=request.POST['project_id'])[0]
@@ -709,6 +719,7 @@ def AddComment(request):
         return JsonResponse(data)
     return JsonResponse(form.errors ,status=400)
 
+@permission_required('researcher.be_researcher', login_url='/login/')
 def DeleteScientificRecord(request):
     try:
         sci_rec = get_object_or_404(models.ScientificRecord ,pk=request.POST['pk'])
@@ -717,6 +728,7 @@ def DeleteScientificRecord(request):
     sci_rec.delete()
     return JsonResponse({"successfull" :"Scientific record is deleted"})
 
+@permission_required('researcher.be_researcher', login_url='/login/')
 def DeleteExecutiveRecord(request):
     try:
         exe_rec = get_object_or_404(models.ExecutiveRecord ,pk=request.POST['pk'])
@@ -725,6 +737,7 @@ def DeleteExecutiveRecord(request):
     exe_rec.delete()
     return JsonResponse({"successfull" :"Executive record is deleted"})
 
+@permission_required('researcher.be_researcher', login_url='/login/')
 def DeleteStudiousRecord(request):
     try:
         stu_rec = get_object_or_404(models.StudiousRecord ,pk=request.POST['pk'])

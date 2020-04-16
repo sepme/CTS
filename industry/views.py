@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import permission_required
 
 from persiantools.jdatetime import JalaliDate
 
@@ -39,6 +40,7 @@ def date_dif(start_date, deadline_date):
         return 'امروز'
 
 # is called through an ajax request. returns the comments on a particular project with a particular expert
+@permission_required('industry.be_industry', login_url='/login/')
 def get_comments_with_expert(request):
     comment_list = Comment.objects.filter(project_id=request.GET.get('project_id'),
                                           industry_user=request.user.industryuser,
@@ -52,6 +54,7 @@ def get_comments_with_expert(request):
         })
 
 # is called by an ajax request and returns the necessary information to display the project on the front-end
+@permission_required('industry.be_industry', login_url='/login/')
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     if not project.expert_accepted:
@@ -149,6 +152,7 @@ def show_project_ajax(request):
             pass
         return JsonResponse(json_response)
 
+@permission_required('industry.be_industry', login_url='/login/')
 def GetComment(request):
     expert_id  = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
@@ -185,6 +189,7 @@ def GetComment(request):
             }
     return JsonResponse(data=data)
 
+@permission_required('industry.be_industry', login_url='/login/')
 def accept_project(request):
     expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
@@ -197,6 +202,7 @@ def accept_project(request):
     data = {'success' : 'successful'}
     return JsonResponse(data=data)
 
+@permission_required('industry.be_industry', login_url='/login/')
 def refuse_expert(request):
     expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
@@ -206,6 +212,7 @@ def refuse_expert(request):
     return JsonResponse(data=data)
 
 # this function is called when the industry user comments on a project
+@permission_required('industry.be_industry', login_url='/login/')
 def submit_comment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
     if form.is_valid():
