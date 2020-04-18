@@ -1,5 +1,5 @@
 from django.conf.urls.static import static
-from django.conf.urls import handler404 ,handler500
+from django.conf.urls import handler404 ,handler500 ,handler403
 from django.contrib import admin
 from django.urls import path, include
 from . import settings
@@ -19,3 +19,4 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = views.notFound404
 handler500 = views.notFound500
+# handler403 = views.Handler403

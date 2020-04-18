@@ -13,15 +13,18 @@ from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.template.loader import get_template
+from django.urls import resolve
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+
 from persiantools.jdatetime import JalaliDate
+
 from chamran_admin.models import Message
-from django.http import JsonResponse
 from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment
-from django.template.loader import get_template
-from django.urls import resolve
 
 LOCAL_URL = 'chamranteambot.pythonanywhere.com'
 
@@ -249,6 +252,25 @@ def login_ajax(request):
         print('form error')
         return JsonResponse(form.errors, status=400)
 
+def addGroup(user, group_name):
+    if not Group.objects.filter(name = group_name).exists():
+        newGroup = Group(name=group_name)
+        newGroup.save()
+        if group_name == "Researcher":
+            ctype = ContentType.objects.get_for_model(ResearcherUser)
+        elif group_name == "Expert":
+            ctype = ContentType.objects.get_for_model(ExpertUser)
+        else:
+            ctype = ContentType.objects.get_for_model(IndustryUser)
+        permissionName = 'be_' + group_name.lower()
+        permission = Permission.objects.get(content_type=ctype, codename=permissionName)
+        newGroup.permissions.add(permission)
+        newGroup.user_set.add(user)
+        newGroup.save()
+    else:
+        group = Group.objects.get(name = group_name)
+        group.user_set.add(user)
+        group.save()
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
@@ -290,6 +312,11 @@ class SignupUser(generic.FormView):
             new_user = authenticate(self.request, username=username, password=password)
             if new_user is not None:
                 login(self.request, new_user)
+            addGroup(user, "Researcher")
+            ctype = ContentType.objects.get_for_model(ResearcherUser)
+            permission = Permission.objects.get(content_type=ctype, codename='is_active')
+            user.user_permissions.add(permission)
+            user.save()    
             return researcher.get_absolute_url()
 
         elif account_type == 'expert':
@@ -298,6 +325,7 @@ class SignupUser(generic.FormView):
             new_user = authenticate(self.request, username=username, password=password)
             if new_user is not None:
                 login(self.request, new_user)
+            addGroup(new_user, "Expert")
             return expert.get_absolute_url()
 
         elif account_type == 'industry':
@@ -306,6 +334,7 @@ class SignupUser(generic.FormView):
             new_user = authenticate(self.request, username=username, password=password)
             if new_user is not None:
                 login(self.request, new_user)
+            addGroup(new_user, "Industry")
             return industry.get_absolute_url()
         return super().form_valid(form)
 

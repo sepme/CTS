@@ -10,8 +10,8 @@ register = template.Library()
 @register.simple_tag
 def getUnseenComments(project_id ,expert):
     project = get_object_or_404(Project ,pk=project_id)
-    all_unseen = Comment.objects.filter(project=project).filter(status='unseen')
-    return all_unseen.exclude(industry_user=None).filter(expert_user=expert).count()
+    all_unseen = Comment.objects.filter(project=project).filter(status='unseen').filter(sender_type="industry")
+    return all_unseen.filter(expert_user=expert).count()
 
 @register.simple_tag
 def getUnseenMessages(user):
