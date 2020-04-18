@@ -1106,8 +1106,8 @@ showInfo.click(function (event) {
                 setValue(data);
                 setComment(data.comments);
 
-                if (data.applied === true){
-                    $("#accept-project").attr("disabled" ,"disabled");
+                if (data.applied === true) {
+                    $("#accept-project").attr("disabled", "disabled");
                 }
             } else {
                 console.log("active");
@@ -1361,7 +1361,7 @@ function addComment(data) {
         comment_body_classes += " attached";
     }
     let comment_code = "<div class='my-comment' id='" + data.pk + "' >" +
-        "<div class='"+ comment_body_classes +"' dir='ltr'>" +
+        "<div class='" + comment_body_classes + "' dir='ltr'>" +
         "   <span class='comment-tools'>" +
         "       <div class='btn-group dropdown'>" +
         "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
@@ -1452,27 +1452,47 @@ comment_form.submit(function (event) {
     });
 });
 
-$('.confirm-researcher').click(function () {
-    $.ajax({
-        method: "POST",
-        url: 'confirmResearcher/',
-        dataType: "json",
-        data: {
-            researcher_id: $(this).attr("id"),
-            project_id: $('.div_project_id').attr("id")
-        },
-        success: function (data) {
-            iziToast.success({
-                rtl: true,
-                message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
-                position: 'bottomLeft'
-            });
-        },
-        error: function (data) {
-            console.log("Error");
+// Researcher Request Page
+if (window.location.href.indexOf("expert/researcher/") > 0) {
+
+    $.each($(".box.no-border").toArray(), function (key, val) {
+        let score = parseInt($(val).find(".box-score .score-amount").text());
+        $(val).find(".box-score .score-amount").text(score);
+        for (let i = 2; i < 7; i++) {
+            let circle = $(val).find(".box-score .circle:nth-child(" + i + ")");
+            if (score - 2 >= 0) {
+                circle.addClass("fill");
+            } else if (score - 2 === -1){
+                circle.addClass("semi-fill");
+                break
+            }
+            score -= 2;
         }
     });
-});
+
+    $('.confirm-researcher').click(function () {
+        $.ajax({
+            method: "POST",
+            url: 'confirmResearcher/',
+            dataType: "json",
+            data: {
+                researcher_id: $(this).attr("id"),
+                project_id: $('.div_project_id').attr("id")
+            },
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("Error");
+            }
+        });
+    });
+}
+
 
 function getCookie(name) {
     let cookieValue = null;
