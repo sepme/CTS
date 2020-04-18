@@ -28,9 +28,9 @@
                         </div>
                         <div class="box-body">
                             <div class="row">
-                                <div class="col-md-6 col-8">
+                                <div class="col-md-10 col-10">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <div class="date text-center">
                                                 <div class="label">ثبت</div>
                                                 <div class="value">
@@ -38,7 +38,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6 text-center">
+                                        <div class="col-2 text-center">
                                             <div class="label">سطح تسلط</div>
                                             <div class="value">
                                                 <span>
@@ -50,18 +50,20 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="col-md-12 col-12 text-center">
+                                        <div class="col-md-6 col-6 text-center" style="overflow: hidden" dir="ltr">
                                             <div class="label">لینک آموزشی</div>
                                             <div class="value">
                                                 <span>
-                                                    {{tech.technique.tutorial_link}}
+                                                    <a href="{{tech.technique.tutorial_link}}">
+                                                        {{tech.technique.tutorial_link}}
+                                                    </a>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>          
                                 {% if tech.level %}
-                                    <div class="col-md-6 col-4">
+                                    <div class="col-md-2 col-2">
                                         <button id={{tech.id}} class="default-btn show-btn new-review-request">ارتقا نمره</button>
                                     </div>
                                 {% endif %}

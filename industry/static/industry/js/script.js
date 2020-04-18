@@ -188,6 +188,7 @@ function setTab(data) {
 function expertResume() {
     $(".show-resume").click(function () {
         $(".showProject").slideUp('slow').delay('slow');
+        $(".expert-resume").addClass("show");
         $(".expert-resume").delay('slow').slideDown('slow');
         close_dialog(".expert-resume");
         load_dialog();

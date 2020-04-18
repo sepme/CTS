@@ -522,11 +522,12 @@ img {
 }
 
 a {
-    color: #5cb85c;
+    color: #3CCD1C;
 }
 
 a:hover, a:focus {
     color: #3ccd1c;
+    text-decoration: underline;
 }
 
 .center-dialog {
@@ -1925,6 +1926,10 @@ button:hover, button:focus {
     margin-top: 0;
     padding-top: 5px;
     border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+.section.no-border {
+    padding-top: 10px;
+    border-top: none;
 }
 
 .section-title {
