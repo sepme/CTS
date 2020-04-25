@@ -4,18 +4,17 @@ from dateutil.relativedelta import relativedelta
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
 from django.views import generic, View
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.conf import settings
 from django.template.loader import get_template
 from django.urls import resolve
-from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
 from persiantools.jdatetime import JalaliDate
@@ -240,6 +239,7 @@ def login_ajax(request):
                         data['type'] = 'industry'
                     except IndustryUser.DoesNotExist:
                         raise ValidationError('کابر مربوطه وجود ندارد.')
+            data['next'] = request.POST.get('next')
             return JsonResponse(data)
             # return HttpResponseRedirect(reverse)
         else:
@@ -344,16 +344,21 @@ class LoginView(generic.TemplateView):
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         try:
-                if request.user.is_authenticated:
-                    return find_user(request.user).get_absolute_url()
+            if request.user.is_authenticated:
+                return find_user(request.user).get_absolute_url()
         except:
             pass
-        login_form = forms.LoginForm()
-        register_form = forms.RegisterEmailForm()
-        context = {'form': login_form,
-                    'register_form': register_form}
-        return render(request, self.template_name, context)
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        context['form'] = forms.LoginForm()
+        context['register_form'] = forms.RegisterEmailForm()
+        if self.request.GET.get('next') :
+            context['next'] = self.request.GET.get('next')
+        return context
+    
 
 class LogoutView(generic.TemplateView):
     template_name = 'registration/base.html'
@@ -480,19 +485,16 @@ class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
-class View(generic.TemplateView):
-    template_name = 'registration/email_template.html'
-
-
-# class notFound(generic.TemplateView):
-#     template_name = '404Template.html'
-
 def notFound404(request ,exception):
     context = {'data' : exception}
     return render(request ,'404Template.html',context)
 
 def notFound500(request):
     return render(request ,'404Template.html',{})
+
+def Handler403(request ,exception):
+    context = {'data' : exception}
+    return render(request ,'403Template.html',context)
 
 class RecoverPassword(generic.TemplateView):
     template_name = 'registration/recover_pass.html'

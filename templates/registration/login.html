@@ -19,6 +19,7 @@
     <p class="ChamranTeam">چمران تیم</p>
     <div class="login-div">
         <form method="post" novalidate class="login-ajax" data-url="{% url 'chamran:login_ajax' %}">
+            <input type="text" name="next" value="{{next}}" hidden>
             <div class="username">
                 <label for="id_username">نام کاربری</label>
                 {{ form.username|attr:"id:id_username" }}

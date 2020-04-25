@@ -169,11 +169,6 @@ loginForm.submit(function (event) {
     $(".registration").css('display', "none");
     event.preventDefault();
     // var formData = $(this).serialize().toString();
-    // var major = $("#edu-subject").val();
-    // var degree = $("#edu-section").val();
-    // var university = $("#university").val();
-    // var city = $("#edu-city").val();
-    // var date_of_graduation = $("#edu-year").val();
     var $thisURL = loginForm.attr('data-url');
     $.ajax({
         method: 'POST',
@@ -184,7 +179,10 @@ loginForm.submit(function (event) {
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
             if (data.success === 'successful') {
-                window.location.href = "/" + data.type;
+                if (data.next)
+                    window.location.href = data.next;
+                else
+                    window.location.href = "/" + data.type;
             } else {
                 $(".loading").css('display', "none");
                 $(".registration").css('display', "block");
