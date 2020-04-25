@@ -507,7 +507,7 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
-  
+
     $('.accept-request').click(function (data) {
         expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         project_id = $(this).closest(".showProject").attr("id");
@@ -588,7 +588,9 @@ $(document).ready(function () {
                 }
                 setMajors(data);
                 setValue(data);
+                console.log(data);
                 if (data.status !== 1 && data.status !== 2) {
+                    $(".row.add-comment").css("display", "none");
                     dialog.find(".card").addClass("b-x0");
                     let info_msg = "<div class='message info'>" +
                         "<h5>توجه</h5>" +
@@ -602,8 +604,12 @@ $(document).ready(function () {
                         $('.vote').attr('style', "display : block");
                     }
                     $('.add-comment').attr('style', "display : block");
+                    // if (data.status === 1) {
+                    //     $(".row.add-comment").css("display", "none");
+                    // }
                     setTab(data);
                 }
+                modalPreview(".showProject")
             },
             error: function (data) {
 
@@ -641,7 +647,7 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".preview-project", ".showProject");
+        // init_dialog_btn(".preview-project", ".showProject");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
         expertResume();
         // if($(".mainInfo-body").css("display") === "block"){

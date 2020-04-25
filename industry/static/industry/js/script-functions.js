@@ -1,10 +1,10 @@
 function load_dialog() {
     $(".title-back").each(function () {
-        var title_back_width = $(this).prev().outerWidth() + 30;
+        let title_back_width = $(this).prev().outerWidth() + 30;
         $(this).css("width", title_back_width);
     });
     $(".row-header > .header").each(function () {
-        var divWidth = $(this).outerWidth();
+        let divWidth = $(this).outerWidth();
         divWidth = $(this).closest("div").innerWidth() - divWidth;
         $(this).prev().css("width", divWidth / 2 - 10);
         $(this).next().css("width", divWidth / 2 - 10);
@@ -29,16 +29,31 @@ function init_dialog_btn(element, dialogClass) {
     });
 }
 
-function cancel_add(className) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".refuse-btn").click(function () {
-        $(className + " div#" + $(this).attr("id")).remove();
-        alert($(className).val());
-        if ($(className).val() === '') {
-            $(className).append(div);
+function modalPreview(modalClass) {
+    vote_dialog_init(modalClass);
+        $(".fixed-back").removeClass("show");
+        $(".main").removeClass("blur-div");
+        blur_div_toggle(".main");
+        $(modalClass).addClass("show");
+        close_dialog(modalClass);
+        dialog_comment_init();
+        load_dialog();
+        if (modalClass === ".showProject") {
+            $(modalClass).removeAttr("id");
+            $(modalClass).attr("id", $(this).attr("id"));
         }
-    });
 }
+
+// function cancel_add(className) {
+//     let div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
+//     $(".refuse-btn").click(function () {
+//         $(className + " div#" + $(this).attr("id")).remove();
+//         alert($(className).val());
+//         if ($(className).val() === '') {
+//             $(className).append(div);
+//         }
+//     });
+// }
 
 function search_input(className) {
     $(className).focusin(function () {
@@ -60,257 +75,19 @@ function close_dialog(className) {
             $(className).find(".time-body").html("");
             $(className).find(".project-info-content").html("");
             $(className).find(".comments").html("");
+            $(className).find(".message.info").remove();
         }
         $(className).find(".no-comment").remove();
         $(className).find(".comment-tabs .nav").html("");
     });
 }
-
-function education_record() {
-    $(".education-btn > i.fa-plus").click(function () {
-        div = document.createElement("div");
-        $(div).addClass('card').addClass('ch-card-item');
-        $(div).attr("id", edu_count);
-        $(div).html("<form action='' method='post'><div class='row'>" +
-            "<div class='col-lg-6'>" +
-            "<label for=\"edu-section" + edu_count + "\">مقطع تحصیلی</label>\n" +
-            "<input type=\"text\" id=\"edu-section" + edu_count + "\" class=\"w-100\">" +
-            "</div>" +
-            "<div class='col-lg-6'>" +
-            "<label for=\"edu-subject" + edu_count + "\">رشته تحصیلی</label>\n" +
-            "<input type=\"text\" id=\"edu-subject" + edu_count + "\" class=\"w-100\">" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "<div class='row'>" +
-            "<div class='col-lg-5'>" +
-            "<label for=\"university" + edu_count + "\">دانشگاه</label>\n" +
-            "<input type=\"text\" id=\"university" + edu_count + "\" class=\"w-100\">" +
-            "</div>" +
-            "<div class='col-lg-4'>" +
-            "<label for=\"edu-city" + edu_count + "\">شهر محل تحصیل</label>\n" +
-            "<input type=\"text\" id=\"edu-city" + edu_count + "\" class=\"w-100\">" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<label for=\"edu-year" + edu_count + "\">سال اخذ مدرک</label>\n" +
-            "<input type=\"text\" id=\"edu-year" + edu_count + "\" class=\"w-100\">" +
-            "</div>" +
-            "</div>" +
-            "<div class='row mtop-lg-25'>" +
-            "<div class='col-lg-9'>" +
-            "<button type='button' id='" + edu_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<button type='button' id='" + edu_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
-            "</div>" +
-            "</div></form>");
-        if ($(".education > .initial-value").hasClass("initial-value")) {
-            $(".education").html(div);
-        } else {
-            $('.education').append(div);
-        }
-        cancel_add(".education");
-        add_education_record(edu_count);
-        input_focus();
-        edu_count++;
-    });
-}
-
-function add_education_record(edu_count) {
-    div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
-    $(".education .accept-btn").click(function () {
-        row = "<tr>" +
-            "<td>" + $("#edu-section" + edu_count).val() + "</td>" +
-            "<td>" + $("#edu-subject" + edu_count).val() + "</td>" +
-            "<td>" + $("#university" + edu_count).val() + "</td>" +
-            "<td>" + $("#edu-city" + edu_count).val() + "</td>" +
-            "<td>" + $("#edu-year" + edu_count).val() + "</td>" +
-            "<td>" +
-            "<i class='fas fa-pen'></i>" +
-            "<i class='fas fa-trash-alt'></i>" +
-            "</td>" +
-            "</tr>";
-        if (!$(".education > table").hasClass("table")) {
-            table = "<table class='table mtop-lg-25'>" +
-                "<thead>" +
-                "<tr>" +
-                "<td>مقطع تحصیلی</td>" +
-                "<td>رشته تحصیلی</td>" +
-                "<td>دانشگاه</td>" +
-                "<td>شهر محل تحصیل</td>" +
-                "<td>سال اخذ مدرک</td>" +
-                "<td></td>" +
-                "</tr>" +
-                "</thead>" +
-                "<tbody>" +
-                "</tbody>" +
-                "</table>";
-            $(".education").html(table);
-        }
-        $(".education > table > tbody").append(row);
-        $(".education div#" + $(this).attr("id")).remove();
-    });
-}
-
-function executive_record() {
-    $(".executive-btn > i.fa-plus").click(function () {
-        div = document.createElement("div");
-        $(div).addClass('card').addClass('ch-card-item');
-        $(div).attr("id", exe_count);
-        $(div).html("<form action='' method='post'><div class='row'>" +
-            "<div class='col-lg-5'>" +
-            "<label for='duty" + exe_count + "'>سمت</label>" +
-            "<input type='text' id='duty" + exe_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-1'>" +
-            "<span class='center-vr'>زمان :</span>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<label for='from" + exe_count + "'>از تاریخ</label>" +
-            "<input type='text' id='from" + exe_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<label for='until" + exe_count + "'>تا تاریخ</label>" +
-            "<input type='text' id='until" + exe_count + "' class='w-100'>" +
-            "</div>" +
-            "</div>" +
-            "<div class='row'>" +
-            "<div class='col-lg-5'>" +
-            "<label for='workplace" + exe_count + "'>محل خدمت</label>" +
-            "<input type='text' id='workplace" + exe_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-4'>" +
-            "<label for='exe-city" + exe_count + "'>شهر</label>" +
-            "<input type='text' id='exe-city" + exe_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-3'></div>" +
-            "</div>" +
-            "<div class='row mtop-lg-25'>" +
-            "<div class='col-lg-9'>" +
-            "<button type='button' id='" + exe_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<button type='button' id='" + exe_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
-            "</div>" +
-            "</div></form>");
-        if ($(".executive > .initial-value").hasClass("initial-value")) {
-            $(".executive").html(div);
-        } else {
-            $('.executive').append(div);
-        }
-        cancel_add(".executive");
-        input_focus();
-        $("#from" + exe_count).persianDatepicker({});
-        $("#until" + exe_count).persianDatepicker({});
-        exe_count++;
-    });
-}
-
-function studious_record() {
-    $(".studious-btn > i.fa-plus").click(function () {
-        div = document.createElement("div");
-        $(div).addClass('card').addClass('ch-card-item');
-        $(div).attr("id", stu_count);
-        $(div).html("<form action='' method='post'><div class='row'>" +
-            "<div class='col-lg-5'>" +
-            "<label for='subject" + stu_count + "'>عنوان طرح پژوهشی</label>" +
-            "<input type='text' id='subject" + stu_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<label for='admin" + stu_count + "'>نام مجری</label>" +
-            "<input type='text' id='admin" + stu_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-4'>" +
-            "<label for='liable" + stu_count + "'>مسئول اجرا/همکار</label>" +
-            "<input type='text' id='liable" + stu_count + "' class='w-100'>" +
-            "</div>" +
-            "</div>" +
-            "<div class='row'>" +
-            "<div class='col-lg-7 rankDiv'>" +
-            "<label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>" +
-            "<select id='rank'>" +
-            "<option selected dir='rtl'>انتخاب کنید ...</option>" +
-            "<option value='1'>در دست  اجرا</option>" +
-            "<option value='2'>خاتمه یافته</option>" +
-            "<option value='3'>متوقف</option>" +
-            "</select>" +
-            "</div>" +
-            "<div class='col-lg-5'></div>" +
-            "</div>" +
-            "<div class='row mtop-lg-25'>" +
-            "<div class='col-lg-9'>" +
-            "<button type='button' id='" + stu_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<button type='button' id='" + stu_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
-            "</div>" +
-            "</div></form>");
-        if ($(".studious > .initial-value").hasClass("initial-value")) {
-            $(".studious").html(div);
-        } else {
-            $('.studious').append(div);
-        }
-        cancel_add(".studious");
-        input_focus();
-        stu_count++;
-    });
-}
-
-function article_record() {
-    $(".article-btn > i.fa-plus").click(function () {
-        div = document.createElement("div");
-        $(div).addClass('card').addClass('ch-card-item');
-        $(div).attr("id", art_count);
-        $(div).html("<form action='' method='post'><div class='row'>" +
-            "<div class='col-lg-4'>" +
-            "<label for='article-name" + art_count + "'>عنوان مقاله</label>" +
-            "<input type='text' id='article-name" + art_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-4'>" +
-            "<label for='publish-date" + art_count + "'>تاریخ انتشار</label>" +
-            "<input type='text' id='publish-date" + art_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-4'>" +
-            "<label for='published-at" + art_count + "'>محل دقیق انتشار</label>" +
-            "<input type='text' id='published-at" + art_count + "' class='w-100'>" +
-            "</div>" +
-            "</div>" +
-            "<div class='row'>" +
-            "<div class='col-lg-5'>" +
-            "<label for='impact-factor" + art_count + "'>Impact Factor</label>" +
-            "<input type='text' id='impact-factor" + art_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-4'>" +
-            "<label for='referring-num" + art_count + "'>تعداد ارجاع به مقاله شما</label>" +
-            "<input type='text' id='referring-num" + art_count + "' class='w-100'>" +
-            "</div>" +
-            "<div class='col-lg-3'></div>" +
-            "</div>" +
-            "<div class='row mtop-lg-25'>" +
-            "<div class='col-lg-9'>" +
-            "<button type='button' id='" + art_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
-            "</div>" +
-            "<div class='col-lg-3'>" +
-            "<button type='button' id='" + art_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
-            "</div>" +
-            "</div></form>");
-        if ($(".article > .initial-value").hasClass("initial-value")) {
-            $(".article").html(div);
-        } else {
-            $('.article').append(div);
-        }
-        cancel_add(".article");
-        input_focus();
-        art_count++;
-    });
-}
-
-function addComment(comment) {
-    let newPost = "<div class=\"my-comment\" style='display: none'><div class=\"comment-profile\"></div><div class=\"comment-body\" dir=\"ltr\"><span class=\"comment-tools\"><i class=\"fas fa-trash-alt\"></i><i class=\"fas fa-reply\"></i><i class=\"fas fa-pen\"></i></span><span>" + comment + "</span></div></div>";
-    let $comments = $(".comments");
-    $comments.html(newPost + $comments.html());
-
-}
+//
+// function addComment(comment) {
+//     let newPost = "<div class=\"my-comment\" style='display: none'><div class=\"comment-profile\"></div><div class=\"comment-body\" dir=\"ltr\"><span class=\"comment-tools\"><i class=\"fas fa-trash-alt\"></i><i class=\"fas fa-reply\"></i><i class=\"fas fa-pen\"></i></span><span>" + comment + "</span></div></div>";
+//     let $comments = $(".comments");
+//     $comments.html(newPost + $comments.html());
+//
+// }
 
 function dialog_comment_init() {
     $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
