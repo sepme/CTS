@@ -429,7 +429,7 @@ scientificForm.submit(function (event) {
             scientificForm.closest(".fixed-back").find(".card").removeClass("wait");
 
             if (data.success === "successful") {
-                $(".scientific_form").css("display", "none");
+                $(".scientific_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_scientific_record(data.pk);
                 iziToast.success({
@@ -526,7 +526,7 @@ researchForm.submit(function (event) {
             researchForm.find("label").removeClass("progress-cursor");
             researchForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".research_form").css("display", "none");
+                $(".research_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_research_record(data.pk);
                 iziToast.success({
@@ -612,7 +612,7 @@ executive_form.submit(function (event) {
             executive_form.find("label").removeClass("progress-cursor");
             executive_form.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".executive_form").css("display", "none");
+                $(".executive_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_executive_record();
                 iziToast.success({
