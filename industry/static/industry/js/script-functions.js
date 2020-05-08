@@ -61,6 +61,10 @@ function close_dialog(className) {
             $(className).find(".project-info-content").html("");
             $(className).find(".comments").html("");
         }
+        if (className === ".expert-resume") {
+            $(".expert-resume").slideUp('slow').delay('slow');
+            $(".showProject").delay('slow').slideDown('slow');
+        }
         $(className).find(".no-comment").remove();
         $(className).find(".comment-tabs .nav").html("");
     });

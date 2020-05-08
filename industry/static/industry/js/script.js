@@ -494,7 +494,6 @@ function addComment(data) {
     //             "</span>" +
     //             "</div>" +
     //             "</div>";
-    console.log(new_comment);
     return new_comment;
 }
 
@@ -642,6 +641,7 @@ $(document).ready(function () {
         init_windowSize();
         init_dialog_btn(".preview-project", ".showProject");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+        init_dialog_btn(".show-resume", ".expert-resume");
         expertResume();
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");
