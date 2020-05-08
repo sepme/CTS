@@ -60,6 +60,7 @@ function close_dialog(className) {
             $(className).find(".time-body").html("");
             $(className).find(".project-info-content").html("");
             $(className).find(".comments").html("");
+            $(className).find(".message").remove();
         }
         if (className === ".expert-resume") {
             $(".expert-resume").slideUp('slow').delay('slow');

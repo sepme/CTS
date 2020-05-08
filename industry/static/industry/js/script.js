@@ -432,24 +432,17 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            console.log(data);
-            // if (data.applied == false) {
-            //     // $(".accept-request").attr("style", "display :none");
-            //     // $(".reject-request").attr("style", "display :none");
-            //     // $(".accept-request").hide();
-            //     // $(".reject-request").hide();
-            //     // $(".accept-request").setAttribute("hidden", 'true');
-            //     // $(".reject-request").setAttribute("hidden", 'true');
-            //     $(".accept-request")["hidden"] = true;
-            //     $(".reject-request")["hidden"] = true;
-            // } else if ($(".accept-request").getAttribute("hidden") == "true") {
-            //     $(".accept-request").attr("style", "display :block");
-            //     $(".reject-request").attr("style", "display :block");
-            //     // $(".reject-request").setAttribute("disabled","disabled");
-            //     // $(".reject-request").hide();
-            //     $(".accept-request").setAttribute("hidden", 'false');
-            //     $(".reject-request").setAttribute("hidden", 'false');
-            // }
+            if (data.applied == false) {
+                $(".accept-request").hide();
+                $(".accept-request").prop('disabled', true);
+                $(".reject-request").hide();
+                $(".reject-request").prop('disabled', true);
+            } else {
+                $(".accept-request").show();
+                $(".accept-request").prop('disabled', false);
+                $(".reject-request").show();
+                $(".reject-request").prop('disabled', false);
+            }
             setComment(data);
         },
         error: function (data) {
@@ -587,6 +580,8 @@ $(document).ready(function () {
                 setMajors(data);
                 setValue(data);
                 if (data.status !== 1 && data.status !== 2) {
+                    dialog.find('.add-comment').attr('style' ,'display : none');
+                    $('.image-btn-circle').prop('disabled', true);
                     dialog.find(".card").addClass("b-x0");
                     let info_msg = "<div class='message info'>" +
                         "<h5>توجه</h5>" +
@@ -600,6 +595,7 @@ $(document).ready(function () {
                         $('.vote').attr('style', "display : block");
                     }
                     $('.add-comment').attr('style', "display : block");
+                    $('.image-btn-circle').prop('disabled', false);
                     setTab(data);
                 }
             },
