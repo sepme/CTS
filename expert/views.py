@@ -586,7 +586,7 @@ def ShowTechnique(request):
             data[q[-1]] = q[:-1]
     return JsonResponse(data=data)
 
-@permission_required('expert.be_expert', login_url='/login/')
+@permission_required([],login_url='/login/')
 def GetResume(request):
     expert_id = request.GET['id']
     expert = get_object_or_404(ExpertUser ,pk=expert_id)

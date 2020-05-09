@@ -433,24 +433,17 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            console.log(data);
-            // if (data.applied == false) {
-            //     // $(".accept-request").attr("style", "display :none");
-            //     // $(".reject-request").attr("style", "display :none");
-            //     // $(".accept-request").hide();
-            //     // $(".reject-request").hide();
-            //     // $(".accept-request").setAttribute("hidden", 'true');
-            //     // $(".reject-request").setAttribute("hidden", 'true');
-            //     $(".accept-request")["hidden"] = true;
-            //     $(".reject-request")["hidden"] = true;
-            // } else if ($(".accept-request").getAttribute("hidden") == "true") {
-            //     $(".accept-request").attr("style", "display :block");
-            //     $(".reject-request").attr("style", "display :block");
-            //     // $(".reject-request").setAttribute("disabled","disabled");
-            //     // $(".reject-request").hide();
-            //     $(".accept-request").setAttribute("hidden", 'false');
-            //     $(".reject-request").setAttribute("hidden", 'false');
-            // }
+            if (data.applied == false) {
+                $(".accept-request").hide();
+                $(".accept-request").prop('disabled', true);
+                $(".reject-request").hide();
+                $(".reject-request").prop('disabled', true);
+            } else {
+                $(".accept-request").show();
+                $(".accept-request").prop('disabled', false);
+                $(".reject-request").show();
+                $(".reject-request").prop('disabled', false);
+            }
             setComment(data);
         },
         error: function (data) {
@@ -495,7 +488,6 @@ function addComment(data) {
     //             "</span>" +
     //             "</div>" +
     //             "</div>";
-    console.log(new_comment);
     return new_comment;
 }
 
@@ -590,6 +582,8 @@ $(document).ready(function () {
                 setValue(data);
                 console.log(data);
                 if (data.status !== 1 && data.status !== 2) {
+                    dialog.find('.add-comment').attr('style' ,'display : none');
+                    $('.image-btn-circle').prop('disabled', true);
                     $(".row.add-comment").css("display", "none");
                     dialog.find(".card").addClass("b-x0");
                     let info_msg = "<div class='message info'>" +
@@ -604,6 +598,7 @@ $(document).ready(function () {
                         $('.vote').attr('style', "display : block");
                     }
                     $('.add-comment').attr('style', "display : block");
+                    $('.image-btn-circle').prop('disabled', false);
                     // if (data.status === 1) {
                     //     $(".row.add-comment").css("display", "none");
                     // }
@@ -649,6 +644,7 @@ $(document).ready(function () {
         init_windowSize();
         // init_dialog_btn(".preview-project", ".showProject");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+        init_dialog_btn(".show-resume", ".expert-resume");
         expertResume();
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");

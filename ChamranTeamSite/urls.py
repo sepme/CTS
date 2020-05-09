@@ -19,4 +19,4 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = views.notFound404
 handler500 = views.notFound500
-# handler403 = views.Handler403
+handler403 = views.Handler403

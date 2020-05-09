@@ -655,7 +655,7 @@ function education_record() {
                 myForm.find("label").removeClass("progress-cursor");
                 myForm.closest(".fixed-back").find(".card").removeClass("wait");
                 if (data.success === "successful") {
-                    $(".scientific_form").css("display", "none");
+                    $(".scientific_form").removeClass("show");
                     $(".main").removeClass("blur-div");
                     show_scientific_record();
                     iziToast.success({
@@ -755,7 +755,7 @@ executiveForm.submit(function (event) {
             executiveForm.find("label").removeClass("progress-cursor");
             executiveForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".executive_form").css("display", "none");
+                $(".executive_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_executive_record();
                 iziToast.success({
@@ -854,7 +854,7 @@ researchForm.submit(function (event) {
             researchForm.find("label").removeClass("progress-cursor");
             researchForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".research_form").css("display", "none");
+                $(".research_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_research_record();
                 iziToast.success({
@@ -943,7 +943,7 @@ paperForm.submit(function (event) {
             paperForm.find("label").removeClass("progress-cursor");
             paperForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".paper_form").css("display", "none");
+                $(".paper_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_paper_record();
                 iziToast.success({
