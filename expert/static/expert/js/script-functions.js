@@ -32,6 +32,24 @@ function init_dialog_btn(element, dialogClass) {
     });
 }
 
+function showModal(dialogClass) {
+    vote_dialog_init(dialogClass);
+    $(".fixed-back").removeClass("show");
+    $(".main").removeClass("blur-div");
+    blur_div_toggle(".main");
+    $(dialogClass).addClass("show");
+    close_dialog(dialogClass);
+    dialog_comment_init();
+    load_dialog();
+    if (dialogClass === ".showProject") {
+        accept_project();
+        $(dialogClass).removeAttr("id");
+        $(dialogClass).attr("id", $(this).attr("id"));
+    } else if (dialogClass === ".select-technique") {
+        $(dialogClass).find("form").attr("id", $(element).closest(".fixed-back").attr("id"));
+    }
+}
+
 function cancel_add(className) {
     div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
     $(".reject-btn").click(function () {
@@ -870,9 +888,9 @@ function set_answer_true(item) {
 function returnFileType(type) {
     type = type.toLowerCase();
     if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png"
-     || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
+        || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
         return type;
-    } else if ( type === "jpeg") 
+    } else if (type === "jpeg")
         return "jpg"
     return "unknown";
 }
@@ -927,6 +945,7 @@ function show_question_answers(data) {
     //     }
     // });
 }
+
 function select_technique(className) {
     // $("li[role='treeitem']").click(function () {
     //     var tree = $("#fancy-tree").fancytree({

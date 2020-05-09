@@ -4,10 +4,6 @@
 
 {% block title %}درخواست پژوهشگر{% endblock %}
 
-{% block header %}
-
-{% endblock %}
-
 {% block name %}{{ request.user.expertuser.expertform }}{% endblock %}
 
 {% block dialog %}
@@ -16,41 +12,69 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card info-card user-info text-right">
-                {% if applications %}
-                    {% for project in applications %}
-                    <div class="card-header">{{ project.project }}</div>
-                    <div class="div_project_id" id="{{project.id}}" hidden></div>
-                    <div class="inner-card card" style="margin-bottom: 0;">
-                        {% for researcher in project.researchers_applied %}
-                            <div class="researcher-request-info-innerDiv">
+        <div class="col-12 text-right">
+            <h3 class="h3 p-top-15 border-bottom">درخواست پژوهشگر</h3>
+        </div>
+    </div>
+    <div class="row">
+        {% if applications %}
+            {% for project in applications %}
+                {% for researcher in project.researchers_applied %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card third-width box flow-root-display no-border has-image w-100 text-right">
+                            <div class="box-image">
+                                <img src="{{ researcher.profile.photo.url }}" alt="researcher-profile-image">
+                            </div>
+                            <div class="box-header">
+                                <h5>
+                                    {{ researcher.profile }}
+                                </h5>
+                                <div class="box-score">
+                                    <span class="score-amount">{{ researcher.profile.researcher_user.points }}/10</span>
+                                    <img src="{% static 'img/signs.svg' %}" alt="star">
+                                </div>
+                            </div>
+                            <div class="box-body">
                                 <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="card researcher-info">
-                                            <img src="{{ researcher.profile.photo.url }}" alt="researcher-profile">
-                                            <div class="researcher-info-innerDiv text-right">
-                                                <h6>{{ researcher.profile }}</h6>
-                                                <div>{{ researcher.profile.major }} - {{ researcher.profile.university }}</div>
-                                                <div>مقطع: <span> {% if researcher.profile.grade == 1 %}
-                                                                    کارشناسی
-                                                                {% elif researcher.profile.grade == 2 %}
-                                                                    کارشناسی ارشد
-                                                                {% elif researcher.profile.grade == 3 %}
-                                                                    دکتری
-                                                                {% elif researcher.profile.grade == 4 %}
-                                                                    دکتری عمومی
-                                                                {% endif %}</span></div>
-                                                <div class="">
-                                                {% for tech in researcher.techniques %}
-                                                    <span class="border-span">{{tech}}</span>
-                                                {% endfor %}
-                                                </div>
+                                    <div class="col-12">
+                                        <div class="box-item-list">
+                                            <div class="researcher-uni">
+                                                <span class="label">
+                                                    دانشگاه
+                                                </span>
+                                                <span class="value">
+                                                    {{ researcher.profile.university }}
+                                                </span>
                                             </div>
-                                            <div class="researcher-score">
-                                                <span>امتیاز: </span>
-                                                <span>10/</span>
-                                                <span>{{researcher.profile.researcher_user.points}}</span>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="researcher-field">
+                                                <span class="label">
+                                                    رشته
+                                                </span>
+                                                        <span class="value">
+                                                    {{ researcher.profile.major }}
+                                                </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="researcher-rank">
+                                                        <span class="label">
+                                                    مقطع
+                                                        </span>
+                                                        <span class="value">
+                                                            {% if researcher.profile.grade == 1 %}
+                                                                کارشناسی
+                                                            {% elif researcher.profile.grade == 2 %}
+                                                                کارشناسی ارشد
+                                                            {% elif researcher.profile.grade == 3 %}
+                                                                دکتری
+                                                            {% elif researcher.profile.grade == 4 %}
+                                                                دکتری عمومی
+                                                            {% endif %}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
     {#                                                   <button class="show-researcher">مشاهده</button>#}
     {#                                                   <button class="accept-researcher">تایید</button>#}
@@ -61,17 +85,35 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="project-techniques">
+                                            <ul class="mix-list hover">
+                                                {% for tech in researcher.techniques %}
+                                                    <li>{{ tech }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-left">
+                                        <button class="default-btn researcher-card-button-show" value="{{ project.id }}"
+                                                id="{{ researcher.profile.id }}"
+                                                data-url="{% url 'expert:show_researcher_preview' %}">مشاهده
+                                        </button>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <button class="border-button confirm-researcher"
+                                                id="{{ researcher.profile.id }}">تایید
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <hr>
-                        {% endfor %}
+                        </div>
                     </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
     </div>
-{% endblock %}
-
-{% block script %}
-
 {% endblock %}

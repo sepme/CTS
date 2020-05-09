@@ -136,7 +136,7 @@ $(document).ready(function () {
     // $('*').persiaNumber();
     question_dialog_init();
     question_page_init();
-    init_dialog_btn(".preview-project", ".showProject");
+    // init_dialog_btn(".preview-project", ".showProject");
     init_dialog_btn(".preview-project.type-2", ".project-details");
     // init_dialog_btn(".preview-project", ".project-details");
     init_dialog_btn(".confirm_project", ".select-technique");
@@ -198,7 +198,7 @@ $(document).ready(function () {
                     }
                     source.push(item);
                 }
-                $(".select-technique").find("#fancy-tree").fancytree({
+                $(".select-technique").finFd("#fancy-tree").fancytree({
                     extensions: ["glyph"],
                     checkbox: false,
                     selectMode: 1,
@@ -321,7 +321,6 @@ $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
         init_windowSize();
-        init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
         // $(".form-submit").click(function () {
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
@@ -365,6 +364,7 @@ $(document).ready(function () {
             }
         });
     }
+    init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
     //****************************************//
     //  Questions Page
     //****************************************//
@@ -1077,7 +1077,7 @@ function researcherRequest() {
 
 let showInfo = $('.preview-project');
 showInfo.click(function (event) {
-    project_id = $(this).attr('id');
+    let project_id = $(this).attr('id');
     $(this).closest(".card").find('.unseen-comments').html("");
     $.ajax({
         url: $(this).attr('data-url'),
@@ -1102,13 +1102,15 @@ showInfo.click(function (event) {
                 setMajors(data);
                 setValue(data);
                 setComment(data.comments);
-
-                if (data.applied === true){
-                    $("#accept-project").attr("disabled" ,"disabled");
+                vote_dialog_init(".showProject");
+                showModal(".showProject");
+                if (data.applied === true) {
+                    $("#accept-project").attr("disabled", "disabled");
                 }
             } else {
                 projectDetail(data);
             }
+
         },
         error: function (data) {
         }
@@ -1286,7 +1288,6 @@ function setComment(data) {
             }
             comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
                 "   <div class='comment-profile'></div>" +
-                "       <div class='" + comment_body_classes + "'>" +
                 "           <span class='comment-tools'>" +
                 "               <div class='btn-group dropright'>" +
                 "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
@@ -1306,14 +1307,16 @@ function setComment(data) {
                 // "               <i class='fas fa-reply'>" +
                 // "                   <div class='reply'></div>" +
                 // "               </i>" +
-                "           </span>";
+                "           </span>" +
+                "       <div class='" + comment_body_classes + "'>";
+            comments_code += "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
-            comments_code += "<pre>" + data[i].text + "</pre>" +
+            comments_code += "" +
                 "   </div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
@@ -1325,14 +1328,15 @@ function setComment(data) {
                 "   <div class='" + comment_body_classes + "' dir='ltr'>" +
                 "       <span class='comment-tools'>" +
                 // "           <i class='fas fa-reply'" + data[i].pk + "></i>" +
-                "       </span>";
+                "       </span>" +
+                "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
-            comments_code += "<pre>" + data[i].text + "</pre>" +
+            comments_code += "" +
                 "   </div>" +
                 "</div>";
         } else { //system
@@ -1345,7 +1349,11 @@ function setComment(data) {
                 "</div>";
         }
     }
+    if (comments_code === "") {
+        $(".no-comment").addClass("show");
+    }
     $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+
     $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
         deleteComment($(this).closest('.my-comment'));
     });
@@ -1357,7 +1365,7 @@ function addComment(data) {
         comment_body_classes += " attached";
     }
     let comment_code = "<div class='my-comment' id='" + data.pk + "' >" +
-        "<div class='"+ comment_body_classes +"' dir='ltr'>" +
+        "<div class='" + comment_body_classes + "' dir='ltr'>" +
         "   <span class='comment-tools'>" +
         "       <div class='btn-group dropdown'>" +
         "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
@@ -1451,27 +1459,47 @@ comment_form.submit(function (event) {
     });
 });
 
-$('.confirm-researcher').click(function () {
-    $.ajax({
-        method: "POST",
-        url: 'confirmResearcher/',
-        dataType: "json",
-        data: {
-            researcher_id: $(this).attr("id"),
-            project_id: $('.div_project_id').attr("id")
-        },
-        success: function (data) {
-            iziToast.success({
-                rtl: true,
-                message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
-                position: 'bottomLeft'
-            });
-        },
-        error: function (data) {
-            console.log("Error");
-        }
+// Researcher Request Page
+if (window.location.href.indexOf("expert/researcher/") > 0) {
+
+    // $.each($(".box.no-border").toArray(), function (key, val) {
+    //     let score = parseInt($(val).find(".box-score .score-amount").text());
+    //     $(val).find(".box-score .score-amount").text(score);
+    //     for (let i = 2; i < 7; i++) {
+    //         let circle = $(val).find(".box-score .circle:nth-child(" + i + ")");
+    //         if (score - 2 >= 0) {
+    //             circle.addClass("fill");
+    //         } else if (score - 2 === -1) {
+    //             circle.addClass("semi-fill");
+    //             break
+    //         }
+    //         score -= 2;
+    //     }
+    // });
+
+    $('.confirm-researcher').click(function () {
+        $.ajax({
+            method: "POST",
+            url: 'confirmResearcher/',
+            dataType: "json",
+            data: {
+                researcher_id: $(this).attr("id"),
+                project_id: $('.div_project_id').attr("id")
+            },
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("Error");
+            }
+        });
     });
-});
+}
+
 
 function getCookie(name) {
     let cookieValue = null;

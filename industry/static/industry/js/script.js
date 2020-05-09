@@ -188,6 +188,7 @@ function setTab(data) {
 function expertResume() {
     $(".show-resume").click(function () {
         $(".showProject").slideUp('slow').delay('slow');
+        $(".expert-resume").addClass("show");
         $(".expert-resume").delay('slow').slideDown('slow');
         close_dialog(".expert-resume");
         load_dialog();
@@ -498,7 +499,7 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
-  
+
     $('.accept-request').click(function (data) {
         expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         project_id = $(this).closest(".showProject").attr("id");
@@ -579,9 +580,11 @@ $(document).ready(function () {
                 }
                 setMajors(data);
                 setValue(data);
+                console.log(data);
                 if (data.status !== 1 && data.status !== 2) {
                     dialog.find('.add-comment').attr('style' ,'display : none');
                     $('.image-btn-circle').prop('disabled', true);
+                    $(".row.add-comment").css("display", "none");
                     dialog.find(".card").addClass("b-x0");
                     let info_msg = "<div class='message info'>" +
                         "<h5>توجه</h5>" +
@@ -596,8 +599,12 @@ $(document).ready(function () {
                     }
                     $('.add-comment').attr('style', "display : block");
                     $('.image-btn-circle').prop('disabled', false);
+                    // if (data.status === 1) {
+                    //     $(".row.add-comment").css("display", "none");
+                    // }
                     setTab(data);
                 }
+                modalPreview(".showProject")
             },
             error: function (data) {
 
@@ -635,7 +642,7 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".preview-project", ".showProject");
+        // init_dialog_btn(".preview-project", ".showProject");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
         init_dialog_btn(".show-resume", ".expert-resume");
         expertResume();

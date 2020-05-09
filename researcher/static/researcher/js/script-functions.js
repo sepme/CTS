@@ -192,7 +192,7 @@ function education_record() {
                 $('.education').append(education_data_form(edu_count));
             }
             cancel_add(".education");
-            add_education_record(edu_count);
+            // add_education_record(edu_count);
             input_focus();
             edu_count++;
         }
