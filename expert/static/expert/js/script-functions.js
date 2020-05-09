@@ -83,6 +83,10 @@ function close_dialog(className) {
         } else if (className === ".showProject") {
             $(".showProject .nav .nav-link").removeClass("active");
             $(".showProject .nav .nav-link#v-pills-majors-tab").addClass("active");
+        } else if (className === ".researcher-info-dialog") {
+            $('#researcher_scientific_record').html("<tr></tr>");
+            $('#researcher_executive_record').html("<tr></tr>");
+            $('#researcher_research_record').html("<tr></tr>");
         }
     });
 }

@@ -95,30 +95,28 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
     login_url = '/login/'
     permission_required = ("expert.be_expert",)
 
-    def get(self, request, *args, **kwargs):
-        expert_user = get_object_or_404(ExpertUser, user=request.user)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expert_user = get_object_or_404(ExpertUser, user=self.request.user)
         projects_list = Project.objects.filter(expert_accepted=expert_user).only('project_form__project_title_persian')
         projects_data = []
         for project in projects_list:
             try:
                 researchers_applied = []
-                researchers_form = [ResearcherProfile.objects.filter(researcher_user=researcher_user).first() for researcher_user in project.researcher_applied.all()]
+                researchers_form = [ResearcherProfile.objects.get(researcher_user=researcher_user) for researcher_user in project.researcher_applied.all()]
                 for com in Comment.objects.filter(project=project).exclude(researcher_user=None):
                     if com.researcher_user.researcherprofile not in researchers_form:
                         researchers_form.append(com.researcher_user.researcherprofile)
                 if len(researchers_form) == 0:
                     continue
-                for research in researchers_form:
-                    try:
-                        techniques = [tech.technique.technique_title for tech in
-                                      TechniqueInstance.objects.filter(researcher=research.researcher_user)]
-                        researcher_applied = {
-                            'profile': research,
-                            'techniques': techniques,
-                        }
-                        researchers_applied.append(researcher_applied)
-                    except:
-                        continue
+                for researcher_form in researchers_form:
+                    techniques = [tech.technique.technique_title for tech in
+                                    researcher_form.researcher_user.techniqueinstance_set.all()]
+                    researcher_applied = {
+                        'profile': researcher_form,
+                        'techniques': techniques,
+                    }
+                    researchers_applied.append(researcher_applied)
                 appending = {
                     'project': project.project_form.project_title_persian,
                     'id': project.pk,
@@ -131,8 +129,8 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
         context = {}
         if len(projects_data) != 0:
             context = {'applications': projects_data}
-
-        return render(request, self.template_name, context)
+        # print(context)
+        return context    
 
 
 class Questions(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
@@ -457,26 +455,27 @@ def set_answer_situation(request):
 
 @permission_required('expert.be_expert', login_url='/login/')
 def show_researcher_preview(request):
-    researcher = ResearcherProfile.objects.filter(id=request.GET.get('id')).first()
+    researcher = ResearcherUser.objects.get(id=request.GET.get('id'))
+    researcherProfile = researcher.researcherprofile
     researcher_information = {
-        'photo': researcher.photo.url,
-        'name': researcher.__str__(),
-        'major': researcher.major,
-        'grade': researcher.grade,
-        'university': researcher.university,
-        'entry_year': researcher.entry_year,
+        'photo': researcherProfile.photo.url,
+        'name': researcherProfile.__str__(),
+        'major': researcherProfile.major,
+        'grade': researcherProfile.grade,
+        'university': researcherProfile.university,
+        'entry_year': researcherProfile.entry_year,
         'techniques': [],
         'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(
-            researcherProfile=researcher)),
+            researcherProfile=researcherProfile)),
         'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(
-            researcherProfile=researcher)),
-        'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcher)),
+            researcherProfile=researcherProfile)),
+        'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcherProfile)),
     }
-    for tech in TechniqueInstance.objects.filter(researcher=researcher.researcher_user):
+    for tech in TechniqueInstance.objects.filter(researcher=researcher):
         researcher_information['techniques'].append(tech.technique.technique_title)
     project = get_object_or_404(Project ,pk=request.GET["project_id"])
     comments = []
-    comment_list = project.comment_set.all().filter(researcher_user=researcher.researcher_user).exclude(sender_type='system')
+    comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
     for comment in comment_list:
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
@@ -498,8 +497,8 @@ def show_researcher_preview(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def CommentForResearcher(request):
     form = forms.CommentForm(request.POST, request.FILES)
-    project = Project.objects.filter(id=request.POST['project_id'])[0]
-    researcher = ResearcherUser.objects.filter(id=request.POST['researcher_id'])[0]
+    project = Project.objects.get(pk=request.POST['project_id'])
+    researcher = ResearcherUser.objects.get(pk=request.POST['researcher_id'])
     if form.is_valid():
         description = form.cleaned_data['description']
         attachment = form.cleaned_data['attachment']

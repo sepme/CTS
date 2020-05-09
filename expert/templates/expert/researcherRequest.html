@@ -55,7 +55,7 @@
     {#                                                   <button class="show-researcher">مشاهده</button>#}
     {#                                                   <button class="accept-researcher">تایید</button>#}
     {#                                                   <button class="refuse-researcher">رد</button>#}
-                                            <button class="researcher-card-button-show"  value="{{project.id}}" id="{{ researcher.profile.id }}" data-url="{% url 'expert:show_researcher_preview' %}">مشاهده</button>
+                                            <button class="researcher-card-button-show"  value="{{project.id}}" id="{{ researcher.profile.researcher_user.id }}" data-url="{% url 'expert:show_researcher_preview' %}">مشاهده</button>
                                             <button class="researcher-card-button-check confirm-researcher" id="{{ researcher.profile.id }}">تایید</button>
                                             <div class="close"></div>
                                         </div>

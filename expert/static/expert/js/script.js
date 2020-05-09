@@ -180,7 +180,6 @@ $(document).ready(function () {
             dataType: 'json',
             data: {'id': "None"},
             success: function (data) {
-                console.log(data);
                 let source = [];
                 for (let i = 0; i <= Object.keys(data).length - 1; i++) {
                     let item = {};
@@ -273,7 +272,6 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            // console.log(id);
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -431,8 +429,6 @@ $(document).ready(function () {
             let $thisURL = ResearchQuestionForm.attr('data-url');
             let data = new FormData(ResearchQuestionForm.get(0));
             ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-            // console.log(data);
-            // console.log($(this).find("input[type='file']").get(0).files.item(0));
             $.ajax({
                 method: 'POST',
                 url: $thisURL,
