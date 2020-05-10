@@ -785,6 +785,7 @@ function show_add_technique_record(title) {
         "<div class='card box flow-root-display w-100'>" +
         "    <div class='box-header text-right'>" +
         "        <h6>" + title + "</h6>" +
+
         "    </div>" +
         "    <div class='box-body'>" +
         "        <div class='row'>" +
@@ -835,6 +836,8 @@ add_technique_form.submit(function (event) {
         processData: false,
         contentType: false,
         success: function (data) {
+            console.log(data);
+            // Todo : Plz send link of techniques for me here Ali Agha! :D
             add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             add_technique_form.find("button[type='reset']").prop("disabled", false);
