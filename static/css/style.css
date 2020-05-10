@@ -2779,6 +2779,17 @@ div.no-project > span.disable-border-button {
     float: left;
 }
 
+.box .box-header .box-object-left {
+    float: left;
+}
+.box .box-header .box-object-left a{
+    color: #262626;
+}
+.box .box-header .box-object-left a:hover{
+    color: #3CCD1C;
+
+}
+
 .message-expand {
     visibility: hidden;
 }

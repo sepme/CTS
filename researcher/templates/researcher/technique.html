@@ -24,13 +24,18 @@
                 {% for tech in technique_list %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header text-right">
-                                <h6>{{ tech.technique.technique_title }}</h6>
+                            <h6>{{ tech.technique.technique_title }}</h6>
+                            <div class="box-object-left">
+                                <a href="{{ tech.technique.tutorial_link }}">
+                                    <i class="fas fa-link"></i>
+                                </a>
+                            </div>
                         </div>
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-10 col-10">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <div class="date text-center">
                                                 <div class="label">ثبت</div>
                                                 <div class="value">
@@ -38,7 +43,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-2 text-center">
+                                        <div class="col-6 text-center">
                                             <div class="label">سطح تسلط</div>
                                             <div class="value">
                                                 <span>
@@ -50,21 +55,22 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-6 text-center" style="overflow: hidden" dir="ltr">
-                                            <div class="label">لینک آموزشی</div>
-                                            <div class="value">
-                                                <span>
-                                                    <a href="{{tech.technique.tutorial_link}}">
-                                                        {{tech.technique.tutorial_link}}
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        </div>
+                                        {#                                        <div class="col-md-6 col-6 text-center" style="overflow: hidden" dir="ltr">#}
+                                        {#                                            <div class="label">لینک آموزشی</div>#}
+                                        {#                                            <div class="value">#}
+                                        {#                                                <span>#}
+                                        {#                                                    <a href="{{tech.technique.tutorial_link}}">#}
+                                        {#                                                        {{tech.technique.tutorial_link}}#}
+                                        {#                                                    </a>#}
+                                        {#                                                </span>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
-                                </div>          
+                                </div>
                                 {% if tech.level %}
                                     <div class="col-md-2 col-2">
-                                        <button id={{tech.id}} class="default-btn show-btn new-review-request">ارتقا نمره</button>
+                                        <button id={{ tech.id }} class="default-btn show-btn new-review-request
+                                        ">ارتقا نمره</button>
                                     </div>
                                 {% endif %}
                             </div>
