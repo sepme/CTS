@@ -68,7 +68,8 @@
 
 .my-comment, .your-comment {
     position: relative;
-    margin: 10px 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     width: fit-content;
     max-width: 75%;
 }
@@ -304,13 +305,15 @@ span.new-comment-tools {
     cursor: pointer;
 }
 
+
 .your-comment {
     padding-left: 10px;
     padding-right: 20px;
     text-align: left;
     text-align: -webkit-left;
     text-align: -moz-left;
-    float: left;
+    margin-left: 5px;
+    margin-right: auto;
 }
 
 .your-comment > .comment-profile {
@@ -326,12 +329,12 @@ span.new-comment-tools {
 .your-comment > .comment-body:after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     left: -10px;
     height: 10px;
     width: 10px;
     border-bottom-right-radius: 1.25em;
-    background-color: #f8fdf7;
+    background-color: #ffffff;
     border-right: 1px solid #bdbdbd;
     border-bottom: 1px solid #bdbdbd;
 }
@@ -343,7 +346,7 @@ span.new-comment-tools {
     left: -10px;
     height: 10px;
     width: 10px;
-    background-color: #f8fdf7;
+    background-color: #ffffff;
     border-bottom: 1px solid #bdbdbd;
 }
 
