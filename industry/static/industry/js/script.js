@@ -566,6 +566,7 @@ $(document).ready(function () {
                 // }else{
                 //     console.log("not accepted");
                 // }
+                $('.comment').attr('id', id);
                 localStorage.setItem("project_id", "" + id);
                 localStorage.setItem("replied_text", null);
                 dialog.find(".card-head").html(data.project_title_persian + " (" + data.project_title_english + ")");
@@ -859,7 +860,7 @@ $(document).ready(function () {
             event.preventDefault();
             comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
             comment_form.find("label").addClass("progress-cursor");
-            $("#project_id").attr('value', $(".showProject").attr("id"));
+            $("#project_id").attr('value', $(".comment").attr("id"));
             $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
             let thisUrl = "/industry/submit_comment/";
             let data = new FormData(comment_form.get(0));

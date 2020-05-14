@@ -217,8 +217,9 @@ function education_data_form(edu_count) {
 }
 
 
-function show_scientific_record() {
-    row = "<tr>" +
+function show_scientific_record(id) {
+    row = "<tbody class='row-sci-" + id + "'>" +
+        "<tr>" +
         "<td>" + $("#edu-section").val() + "</td>" +
         "<td>" + $("#edu-subject").val() + "</td>" +
         "<td>" + $("#university").val() + "</td>" +
@@ -228,7 +229,8 @@ function show_scientific_record() {
         "<i class='fas fa-pen' id='edit_edu'></i>" +
         "<i class='fas fa-trash-alt' id='delete_edu'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
 
     if (!$(".education > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
@@ -247,7 +249,7 @@ function show_scientific_record() {
             "</table>";
         $(".education").html(table);
     }
-    $(".education > table > tbody").append(row);
+    $(".education > table").append(row);
     $(".education div#" + $(this).attr("id")).remove();
     record_edit(".education");
 }
@@ -313,8 +315,9 @@ function executive_record() {
     });
 }
 
-function show_executive_record() {
-    row = "<tr>" +
+function show_executive_record(id) {
+    row = "<tbody class='row-exe-" + id + "'>" +
+        "<tr>" +
         "<td>" + $("#duty").val() + "</td>" +
         "<td>" + $("#from").val() + "</td>" +
         "<td>" + $("#until").val() + "</td>" +
@@ -324,7 +327,8 @@ function show_executive_record() {
         "<i class='fas fa-pen' id='edit_exe'></i>" +
         "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
     if (!$(".executive > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -342,7 +346,7 @@ function show_executive_record() {
             "</table>";
         $(".executive").html(table);
     }
-    $(".executive > table > tbody").append(row);
+    $(".executive > table").append(row);
     $(".executive div#" + $(this).attr("id")).remove();
     record_edit(".executive");
 }
@@ -404,8 +408,9 @@ function research_record() {
     });
 }
 
-function show_research_record() {
-    row = "<tr>" +
+function show_research_record(id) {
+    row = "<tbody class='row-research-" + id + "'>" +
+        "<tr>" +
         "<td>" + $("#subject").val() + "</td>" +
         "<td>" + $("#admin").val() + "</td>" +
         "<td>" + $("#liable").val() + "</td>" +
@@ -413,7 +418,8 @@ function show_research_record() {
         "<i class='fas fa-pen' id='edit_stu'></i>" +
         "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
     if (!$(".research > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -429,7 +435,7 @@ function show_research_record() {
             "</table>";
         $(".research").html(table);
     }
-    $(".research > table > tbody").append(row);
+    $(".research > table ").append(row);
     $(".research div#" + $(this).attr("id")).remove();
     record_edit(".research");
 }
@@ -490,9 +496,10 @@ function paper_record() {
     });
 }
 
-function show_paper_record() {
-    row = "<tr>" +
-        "<td>" + $("#paper-name").val() + "</td>" +
+function show_paper_record(id) {
+    row = "<tbody class='row-paper-" + id + "'>" +
+        "<tr>" +
+        "<td>" + $("#article-name").val() + "</td>" +
         "<td>" + $("#publish-date").val() + "</td>" +
         "<td>" + $("#published-at").val() + "</td>" +
         "<td>" + $("#impact-factor").val() + "</td>" +
@@ -501,7 +508,8 @@ function show_paper_record() {
         "<i class='fas fa-pen' id='edit_art'></i>" +
         "<i class='fas fa-trash-alt' id='edit_art'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
     if (!$(".paper > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -519,7 +527,7 @@ function show_paper_record() {
             "</table>";
         $(".paper").html(table);
     }
-    $(".paper > table > tbody").append(row);
+    $(".paper > table").append(row);
     $(".paper div#" + $(this).attr("id")).remove();
     record_edit(".paper");
 }
