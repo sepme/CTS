@@ -653,7 +653,7 @@ function education_record() {
                 if (data.success === "successful") {
                     $(".scientific_form").removeClass("show");
                     $(".main").removeClass("blur-div");
-                    show_scientific_record();
+                    show_scientific_record(data.id);
                     iziToast.success({
                         rtl: true,
                         message: "اطلاعات با موفقیت ذخیره شد!",
@@ -753,7 +753,7 @@ executiveForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".executive_form").removeClass("show");
                 $(".main").removeClass("blur-div");
-                show_executive_record();
+                show_executive_record(data.id);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -852,7 +852,7 @@ researchForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".research_form").removeClass("show");
                 $(".main").removeClass("blur-div");
-                show_research_record();
+                show_research_record(data.id);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -941,7 +941,7 @@ paperForm.submit(function (event) {
             if (data.success === "successful") {
                 $(".paper_form").removeClass("show");
                 $(".main").removeClass("blur-div");
-                show_paper_record();
+                show_paper_record(data.id);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",

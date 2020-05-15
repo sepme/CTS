@@ -243,10 +243,13 @@ class UserInfo(generic.FormView):
 def scienfic_record_view(request):
     scientific_form = forms.ScientificRecordForm(request.POST)
     if scientific_form.is_valid():
-        data = {'success': 'successful'}
         scientific_record = scientific_form.save(commit=False)
         scientific_record.expert_form = request.user.expertuser.expertform
         scientific_record.save()
+        data = {
+                    'success': 'successful',
+                    'id': scientific_record.pk,
+            }
         return JsonResponse(data)
     else:
         print('form error occured')
@@ -256,10 +259,13 @@ def scienfic_record_view(request):
 def executive_record_view(request):
     executive_form = forms.ExecutiveRecordForm(request.POST)
     if executive_form.is_valid():
-        data = {'success': 'successful'}
         executive_record = executive_form.save(commit=False)
         executive_record.expert_form = request.user.expertuser.expertform
         executive_record.save()
+        data = {
+                    'success': 'successful',
+                    'id': executive_record.pk,
+            }
         return JsonResponse(data)
     else:
         print('form error occured')
@@ -269,10 +275,13 @@ def executive_record_view(request):
 def research_record_view(request):
     research_form = forms.ResearchRecordForm(request.POST)
     if research_form.is_valid():
-        data = {'success': 'successful'}
         research_record = research_form.save(commit=False)
         research_record.expert_form = request.user.expertuser.expertform
         research_record.save()
+        data = {
+                    'success': 'successful',
+                    'id': research_record.pk,
+            }
         return JsonResponse(data)
     else:
         print('form error occured')
@@ -282,10 +291,13 @@ def research_record_view(request):
 def paper_record_view(request):
     paper_form = forms.PaperRecordForm(request.POST)
     if paper_form.is_valid():
-        data = {'success': 'successful'}
         paper_record = paper_form.save(commit=False)
         paper_record.expert_form = request.user.expertuser.expertform
         paper_record.save()
+        data = {
+                    'success': 'successful',
+                    'id': paper_record.pk,
+            }
         return JsonResponse(data)
     else:
         print('form error occured')
