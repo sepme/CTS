@@ -2036,10 +2036,12 @@ button:hover, button:focus {
  * Tag
  */
 
+
 div.tagsinput span.tag {
-    border-color: transparent;
-    background-color: #89E076;
-    color: #FFFFFF;
+    border-color: #3CCD1C;
+    background-color: #ffffff;
+    color: #3CCD1C;
+    font-weight: 500;
     font-family: iranyekan, serif;
     padding: 3px 5px;
     min-width: 60px;
@@ -2048,6 +2050,7 @@ div.tagsinput span.tag {
 
 div.tagsinput span.tag:hover {
     background-color: #3ccd1c;
+    color: #ffffff;
 }
 
 div.tagsinput span.tag span:hover {
@@ -2055,7 +2058,11 @@ div.tagsinput span.tag span:hover {
 }
 
 div.tagsinput span.tag a {
-    color: #FFFFFF;
+    color: #3CCD1C;
+}
+
+div.tagsinput span.tag:hover a {
+    color: #ffffff;
 }
 
 div.tagsinput span.tag a:hover {
@@ -3496,6 +3503,7 @@ pre {
     padding: 0 5px;
     text-align: justify;
     text-align-last: right;
+    direction: rtl;
     font-size: 100%;
     color: #262626;
     line-height: 23px;

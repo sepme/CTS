@@ -13,7 +13,7 @@ function numbersComma(num) {
 }
 
 function setRole(data) {
-    role = "<div>" +
+    let role = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -27,7 +27,7 @@ function setRole(data) {
 }
 
 function setResources(data) {
-    resources = "<div>" +
+    let resources = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -77,7 +77,7 @@ function setResources(data) {
 }
 
 function setApproach(data) {
-    approach = "<div>" +
+    let approach = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -97,12 +97,12 @@ function setApproach(data) {
         "</div>" +
         "<div class='answer'>" +
         data.potential_problems +
-        "</div></div>"
+        "</div></div>";
     $(".project-info-content").html(approach);
 }
 
 function setMajors(data) {
-    majors = "<div>" +
+    let majors = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -168,7 +168,7 @@ function setTab(data) {
         $(".comments").attr("style", "display : block");
         for (let i = 0; i < data.expert_messaged.length; i++) {
             let tab = "<a class='nav-link' data-toggle='pill'" +
-                "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
+                " role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
                 "" +
                 data.expert_messaged[i].name +
                 "</a>";
@@ -433,7 +433,7 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            if (data.applied == false) {
+            if (data.applied === false) {
                 $(".accept-request").hide();
                 $(".accept-request").prop('disabled', true);
                 $(".reject-request").hide();
@@ -501,8 +501,8 @@ $(document).ready(function () {
     });
 
     $('.accept-request').click(function (data) {
-        expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-        project_id = $(this).closest(".showProject").attr("id");
+        let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        let project_id = $(this).closest(".showProject").attr("id");
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -526,8 +526,8 @@ $(document).ready(function () {
     });
 
     $('.reject-request').click(function (data) {
-        expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-        project_id = $(this).closest(".showProject").attr("id");
+        let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        let project_id = $(this).closest(".showProject").attr("id");
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -875,7 +875,7 @@ $(document).ready(function () {
                         .prop("disabled", false);
                     comment_form.find("label").removeClass("progress-cursor");
                     comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                    comment_code = addComment(data);
+                    let comment_code = addComment(data);
                     $(".project-comment-innerDiv").find(".comments").append(comment_code);
                     iziToast.success({
                         rtl: true,

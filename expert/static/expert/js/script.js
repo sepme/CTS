@@ -1419,6 +1419,9 @@ comment_form.submit(function (event) {
         success: function (data) {
             comment_form.find("button[type='submit']").prop("disabled", false);
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                $(".project-comment-innerDiv").find(".no-comment").remove();
+            }
             let comment_code = addComment(data);
             $(".project-comment-innerDiv").find(".comments").append(comment_code);
             iziToast.success({
@@ -1432,6 +1435,7 @@ comment_form.submit(function (event) {
             });
 
             comment_form[0].reset();
+            comment_form.find("#description").css("height","fit-content");
             $('.error').remove();
             $('.file-name').html("");
             $(".send-comment-container .comment-input").removeClass("attached");
