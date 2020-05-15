@@ -150,6 +150,7 @@ myForm.submit(function (event) {
         error: function (data) {
             $(".loading").css('display', "none");
             $(".registration").css('display', "block");
+            console.log(data);
             var obj = JSON.parse(data.responseText);
             $(".email").append("<div class='error'>" +
                 "<span class='error-body'>" +
@@ -159,6 +160,13 @@ myForm.submit(function (event) {
                 "</span>" +
                 "</div>");
             $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            $(".account_error").append("<div class='error'>" +
+                                             "<span class='error-body'>" +
+                                             "<ul class='errorlist'>" +
+                                             "<li>" + obj.account_type + "</li>" +
+                                             "</ul>" +
+                                             "</span>" +
+                                             "</div>");
         },
     })
 });

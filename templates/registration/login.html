@@ -36,14 +36,15 @@
     <div class="signUp-div">
         <form method="post" action="" novalidate class="sign-up-ajax" data-url="{% url 'chamran:signup_email' %}">
             <div class="user-type-container">
-                <input type="radio" name="user-type" id="researcher" value="researcher">
+                <input type="radio" name="account_type" id="researcher" value="researcher">
                 <label for="researcher" class="user-type researcher text-center">پژوهشگر</label>
-                <input type="radio" name="user-type" id="expert" value="expert">
+                <input type="radio" name="account_type" id="expert" value="expert">
                 <label for="expert" class="user-type expert text-center">استاد</label>
-                <input type="radio" name="user-type" id="industry" value="industry">
+                <input type="radio" name="account_type" id="industry" value="industry">
                 <label for="industry" class="user-type industry text-center">صنعت</label>
 
             </div>
+            <div class="account_error"></div>
             <div class="email">
                 <label for="email">پست الکترونیکی</label>
                 {{ register_form.email|attr:"id:email" }}
