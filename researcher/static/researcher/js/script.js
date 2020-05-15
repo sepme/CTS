@@ -921,7 +921,7 @@ function addComment(data) {
     $(".comments").append(new_comment);
 }
 
-var comment_form = $('#comment-form');
+let comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
@@ -940,6 +940,9 @@ comment_form.submit(function (event) {
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                $(".project-comment-innerDiv").find(".no-comment").remove();
+            }
             addComment(data);
             iziToast.success({
                 rtl: true,
@@ -947,6 +950,7 @@ comment_form.submit(function (event) {
                 position: 'bottomLeft'
             });
             comment_form[0].reset();
+            comment_form.find("#description").css("height","fit-content");
             $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });

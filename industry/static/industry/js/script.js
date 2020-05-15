@@ -582,7 +582,7 @@ $(document).ready(function () {
                 setValue(data);
                 console.log(data);
                 if (data.status !== 1 && data.status !== 2) {
-                    dialog.find('.add-comment').attr('style' ,'display : none');
+                    dialog.find('.add-comment').attr('style', 'display : none');
                     $('.image-btn-circle').prop('disabled', true);
                     $(".row.add-comment").css("display", "none");
                     dialog.find(".card").addClass("b-x0");
@@ -875,6 +875,9 @@ $(document).ready(function () {
                         .prop("disabled", false);
                     comment_form.find("label").removeClass("progress-cursor");
                     comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                    if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                        $(".project-comment-innerDiv").find(".no-comment").remove();
+                    }
                     let comment_code = addComment(data);
                     $(".project-comment-innerDiv").find(".comments").append(comment_code);
                     iziToast.success({
@@ -883,6 +886,7 @@ $(document).ready(function () {
                         position: 'bottomLeft'
                     });
                     comment_form[0].reset();
+                    comment_form.find("#description").css("height","fit-content");
                     $('.error').remove();
                     $('.file-name').html("");
                     $(".send-comment-container .comment-input").removeClass("attached");
