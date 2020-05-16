@@ -245,8 +245,8 @@ def login_ajax(request):
             # context = {'form': form,
             #            'error': 'گذرواژه اشتباه است'}
             return JsonResponse({
-                'error': 'گذرواژه اشتباه است'
-            } ,400)
+                'password': 'گذرواژه اشتباه است'
+            } ,status=400)
     else:
         print('form error')
         return JsonResponse(form.errors, status=400)
