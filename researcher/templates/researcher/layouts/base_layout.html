@@ -8,6 +8,7 @@
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
     <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -89,7 +90,7 @@
                 <li class="list-group-item text-right {% if messages_url == request.get_full_path %}active{% endif %}">
                     <div>
                         {% if UnseenMessages %}
-                            <span class="new-message">{{UnseenMessages}}</span>
+                            <span class="new-message">{{ UnseenMessages }}</span>
                         {% endif %}
                         <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
@@ -106,7 +107,7 @@
                 </li>
             </a>
             <!-- {% url 'researcher:question-alert' as question_url %} -->
-            {% getQuestionUrl request.user.researcheruser as questionId%}
+            {% getQuestionUrl request.user.researcheruser as questionId %}
             {% if questionId %}
                 {% url 'researcher:question-show' question_id=questionId as question_url %}
             {% else %}
@@ -152,6 +153,7 @@
     </div>
 </div>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>

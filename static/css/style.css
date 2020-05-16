@@ -427,7 +427,7 @@ img {
     }
 
     .fixed-back .card.side-card .card-side {
-        background-color:transparent;
+        background-color: transparent;
         position: relative;
         top: auto;
         right: auto;
@@ -2789,10 +2789,12 @@ div.no-project > span.disable-border-button {
 .box .box-header .box-object-left {
     float: left;
 }
-.box .box-header .box-object-left a{
+
+.box .box-header .box-object-left a {
     color: #262626;
 }
-.box .box-header .box-object-left a:hover{
+
+.box .box-header .box-object-left a:hover {
     color: #3CCD1C;
 
 }
@@ -3622,4 +3624,70 @@ pre#question-body {
 
 .info-text p {
     text-align: justify !important;
+}
+
+.ui-menu.ui-autocomplete {
+    /*margin: 0;*/
+    /*padding: 10px 0;*/
+    /*list-style: none;*/
+    /*position: absolute;*/
+    /*width: calc(100% - 30px);*/
+    text-align: right;
+    /*font-weight: 500;*/
+    /*background-color: #ffffff;*/
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    /*-webkit-transition: 0.3s;*/
+    /*-moz-transition: 0.3s;*/
+    /*-ms-transition: 0.3s;*/
+    /*-o-transition: 0.3s;*/
+    /*transition: 0.3s height;*/
+    /*z-index: 999;*/
+    padding-top: 5px;
+}
+
+.ui-menu.ui-autocomplete li {
+    padding: 0;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.ui-menu.ui-autocomplete li:hover {
+    cursor: pointer;
+    background-color: #f7fdf8;
+    color: #3CCD1C;
+}
+
+.ui-menu.ui-autocomplete li:after {
+    content: '';
+    position: absolute;
+    width: calc(100% - 30px);
+    height: 1px;
+    background-color: #ebebeb;
+    bottom: -3px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.ui-menu.ui-autocomplete li:last-child:after {
+    background-color: transparent;
+}
+
+.ui-menu.ui-autocomplete li .ui-menu-item-wrapper {
+    padding: 8px 15px;
+    font-family: iranyekan, serif;
+    font-weight: 500;
+}
+
+.ui-menu.ui-autocomplete li .ui-state-active {
+    color: #3CCD1C;
+    background-color: #f7fdf8;
+    border: none;
+    margin: 0;
 }

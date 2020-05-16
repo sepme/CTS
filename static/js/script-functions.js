@@ -340,3 +340,38 @@ if (window.location.href.indexOf('messages') > -1) {
         messageNav(messages, ".nav-pills .nav-link#news-message");
     }
 }
+
+function customAutocomplete(element, arr) {
+    element.after("<ul class='autocomplete-list'></ul>");
+    element.keyup(function (e) {
+        element.next().html("");
+        element.next().removeClass("show");
+        console.log(e.which);
+        if (e.which === 38) {
+            if (element.next().length > 0) {
+
+            }
+        } else if (e.which === 40) {
+            if (element.next().length > 0) {
+
+            }
+        }
+        let search = element.val();
+        if (search.length > 0) {
+            search = new RegExp(search);
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].match(search)) {
+                    console.log(arr[i]);
+                    element.next().addClass("show");
+                    element.next().append("<li class='item'>" + arr[i] + "</li>");
+                }
+            }
+        }
+    });
+}
+
+let arr = ["دانشگاه شریف", "دانشگاه تهران"];
+// customAutocomplete($("#Uni"), arr);
+$("#Uni").autocomplete({
+   source: arr,
+});
