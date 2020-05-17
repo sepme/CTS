@@ -197,12 +197,6 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
             if self.form.cleaned_data['method_of_introduction']:
                 expertForm.method_of_introduction = self.form.cleaned_data['method_of_introduction']
-            photo = request.FILES.get('photo')
-            if photo is not None:
-                expertForm.photo = photo
-                save_photo = True
-            else:
-                save_photo = False
 
             expertForm.has_industrial_research = request.POST.get('has_industrial_research')
             expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
@@ -221,6 +215,15 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             eq_test.business_thinking      = request.POST.get('morale', False)
             eq_test.risk_averse            = request.POST.get('risk', False)
             eq_test.save()
+
+            photo = request.FILES.get('photo')
+            if photo is not None:
+                os.remove(expertForm.photo.path)
+                expertForm.photo = photo
+                save_photo = True
+            else:
+                save_photo = False
+
             expertForm.save(save_photo=save_photo)
         return super().post(self, request, *args, **kwargs)
     
