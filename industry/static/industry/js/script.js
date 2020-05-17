@@ -585,7 +585,6 @@ $(document).ready(function () {
                 }
                 setMajors(data);
                 setValue(data);
-                console.log(data);
                 if (data.status !== 1 && data.status !== 2) {
                     dialog.find('.add-comment').attr('style', 'display : none');
                     $('.image-btn-circle').prop('disabled', true);
@@ -898,7 +897,6 @@ $(document).ready(function () {
                     $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
                 },
                 error: function (data) {
-                    console.log(data);
                     let obj = JSON.parse(data.responseText);
                     comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                         .prop("disabled", false);

@@ -218,7 +218,8 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
             photo = request.FILES.get('photo')
             if photo is not None:
-                os.remove(expertForm.photo.path)
+                if os.path.isfile(expertForm.photo.path):
+                    os.remove(expertForm.photo.path)
                 expertForm.photo = photo
                 save_photo = True
             else:

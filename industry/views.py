@@ -300,43 +300,38 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
         return render(request, 'industry/index.html', context={'form': form})
 
 
-class UserInfo(View):
-    def get(self, request):
-        if (not request.user.is_authenticated) or (not models.IndustryUser.objects.filter(user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
-        context = {
-            'form': forms.IndustryInfoForm(self.request.user,
+class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView):
+    template_name = 'industry/userInfo.html'
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = forms.IndustryInfoForm(self.request.user,
                                            instance=self.request.user.industryuser.industryform,
                                            initial={
                                                'industry_type':
                                                    self.request.user.industryuser.industryform.industry_type})
-        }
-        return render(request, 'industry/userInfo.html', context=context)
+        return context
 
     def post(self, request):
         form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES,
                                       initial={
                                           'industry_type': self.request.user.industryuser.industryform.industry_type})
         if form.is_valid():
-            model_form = form.save(commit=False)
-            IndustryForm.objects.filter(name=model_form.name).update(
-                industry_user=request.user.industryuser,
-                industry_type=model_form.industry_type,
-                tax_declaration=model_form.tax_declaration,
-                services_products=model_form.services_products,
-                awards_honors=model_form.awards_honors
-            )
-            # if request.user.industryuser.industryform.photo:
-            #     os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
-            #                            request.user.industryuser.industryform.photo.name))
-            if model_form.photo:
-                model_form.photo.save(model_form.photo.name, model_form.photo)
-            else:
-                with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
-                          'rb') as image_file:
-                    default_image = image_file.read()
-                    model_form.photo.save('profile.jpg', ContentFile(default_image))
-            IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
+            # model_form = form.save(commit=False)
+            industryForm = IndustryForm.objects.get(name=form.cleaned_data['name'])
+            industryForm.industry_type=form.cleaned_data['industry_type']
+            industryForm.tax_declaration=form.cleaned_data['tax_declaration']
+            industryForm.services_products=form.cleaned_data['services_products']
+            industryForm.awards_honors=form.cleaned_data['awards_honors']
+            # )
+            if form.cleaned_data['photo']:
+                if os.path.isfile(industryForm.photo.path):
+                    os.remove(industryForm.photo.path)
+                # industryForm.photo.save(form.cleaned_data['photo'].name, form.cleaned_data['photo'])
+                industryForm.photo = form.cleaned_data['photo']
+            industryForm.save()
             return HttpResponseRedirect(reverse('industry:index'))
         else:
             print('the errors are:', form.errors)

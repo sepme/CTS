@@ -88,8 +88,7 @@ class IndustryForm(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.photo = self.compressImage(self.photo)
+        self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
 
     def compressImage(self,photo):

@@ -429,7 +429,7 @@ class ExecutiveRecordForm(forms.ModelForm):
             'post': {'required': "سمت نمی تواند خالی باشد."},
             'start': {'required': "تارخ شروع نمی تواند خالی باشد."},
             'end': {'required': "تارخ پایان نمی تواند خالی باشد."},
-            'place': {'required': "محل خدمت نمی تواند خالی باشد."},
+            'place': {'required': "نام مجموعه نمی تواند خالی باشد."},
             'city': {'required': "شهر نمی تواند خالی باشد."},
             }
     
@@ -480,7 +480,7 @@ class ExecutiveRecordForm(forms.ModelForm):
     def clean_place(self):
         data = self.cleaned_data["place"]
         if is_numeric(data):
-            raise ValidationError(_("محل خدمت نمی تواند شامل عدد باشد."))
+            raise ValidationError(_("نام مجموعه نمی تواند شامل عدد باشد."))
         return data
     
     def clean_city(self):

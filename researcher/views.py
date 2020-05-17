@@ -152,16 +152,16 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
         return super().post(self, request, *args, **kwargs)
 
-class UserInfo(generic.TemplateView):
+class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView):
     template_name = 'researcher/userInfo.html'
     form_class = forms.ResearcherProfileForm
+    login_url = '/login/'
+    permission_required = ('researcher.be_researcher',)
 
 
     def get(self, request, *args, **kwargs):
-        if (not self.request.user.is_authenticated) or (not models.ResearcherUser.objects.filter(user=self.request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
         try:
-            self.request.user.researcheruser.researcherprofile
+            self.researcherProfile = self.request.user.researcheruser.researcherprofile
         except:
             return HttpResponseRedirect(reverse("researcher:index"))    
         if request.user.researcheruser.status.status == 'not_answered':
@@ -173,25 +173,16 @@ class UserInfo(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = forms.ResearcherProfileForm(self.request.user,
-                                           instance=self.request.user.researcheruser.researcherprofile,
+                                           instance=self.researcherProfile,
                                            initial={
                                                 'grade':
-                                                    self.request.user.researcheruser.researcherprofile.grade,
+                                                    self.researcherProfile.grade,
                                                 'email':
                                                     self.request.user.username})
-        # context = {
-        #             'form' :  forms.ResearcherProfileForm(self.request.user,
-        #                                    instance=self.request.user.researcheruser.researcherprofile,
-        #                                    initial={
-        #                                         'grade':
-        #                                             self.request.user.researcheruser.researcherprofile.grade,
-        #                                         'email':
-        #                                             self.request.user.username})
-        #             }
-        context['scientificrecord_set'] = self.request.user.researcheruser.researcherprofile.scientificrecord_set.all()
-        context['executiverecord_set'] = self.request.user.researcheruser.researcherprofile.executiverecord_set.all()
-        context['studiousrecord_set'] = self.request.user.researcheruser.researcherprofile.studiousrecord_set.all()
-        context['researcher_form'] = self.request.user.researcheruser.researcherprofile
+        context['scientificrecord_set'] = self.researcherProfile.scientificrecord_set.all()
+        context['executiverecord_set'] = self.researcherProfile.executiverecord_set.all()
+        context['studiousrecord_set'] = self.researcherProfile.studiousrecord_set.all()
+        context['researcher_form'] = self.researcherProfile
         return context
 
     def post(self, request, *args, **kwargs):        
