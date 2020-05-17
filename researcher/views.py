@@ -376,7 +376,9 @@ def AddTechnique(request):
                                                     evaluat_date=datetime.date.today())
             technique_instance.save()
             data = {'success' : 'successful',
-                    'title'   : technique_title}
+                    'title'   : technique_title,
+                    "is_exam" : method == 'exam',
+                    'link'    : technique.tutorial_link}
             return JsonResponse(data=data)
         technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,

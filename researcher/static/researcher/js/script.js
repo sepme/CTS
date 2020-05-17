@@ -780,7 +780,7 @@ technique_review.submit(function (event) {
     })
 });
 
-function show_add_technique_record(title) {
+function show_add_technique_record(title, is_exam) {
     let newTechnique = "" +
         "<div class='card box flow-root-display w-100'>" +
         "    <div class='box-header text-right'>" +
@@ -801,11 +801,16 @@ function show_add_technique_record(title) {
         "                    </div>" +
         "                    <div class='col-6 text-center'>" +
         "                        <div class='label'>سطح تسلط</div>" +
-        "                        <div class='value'>" +
-        "                            <span>" +
-        "در حال بررسی...                               " +
-        "                            </span>" +
-        "                        </div>" +
+        "                        <div class='value'>";
+        if (is_exam)
+            newTechnique += "                            <span>" +
+                            "زمان آزمون از طریق تماس با شما هماهنگ خواهد شد" +
+                            "                            </span>";
+        else
+            newTechnique += "                            <span>" +
+                            "در حال بررسی...                               " +
+                            "                            </span>" ;
+        newTechnique += "                        </div>" +
         "                    </div>" +
         "                </div>" +
         "            </div>" +
@@ -847,7 +852,7 @@ add_technique_form.submit(function (event) {
             if (data.success === "successful") {
                 $(".add-technique").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_add_technique_record(data.title);
+                show_add_technique_record(data.title, data.is_exam);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",

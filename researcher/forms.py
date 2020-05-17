@@ -541,6 +541,9 @@ class TechniqueInstanceForm(forms.Form):
         #     raise  ValidationError("عنوان تکنیک اشتباه وارد شده است.")        
         if models.TechniqueInstance.objects.filter(researcher=self.user.researcheruser).filter(technique__technique_title=data).count() != 0:
             raise ValidationError(_("این تکنیک قبلا ذخیره شده است."))
+        
+        if not models.Technique.objects.filter(technique_title=data).count():
+            raise ValidationError(_("این تکنیک وجود ندارد."))
         return data
     
     def clean_confirmation_method(self):
