@@ -12,6 +12,8 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
+import time
+
 def profileUpload(instance, filename):
     return os.path.join('Expert Profile' , instance.expert_user.user.username ,filename)
     
@@ -120,8 +122,8 @@ class ExpertForm(models.Model):
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
 
-    def save(self, *args, **kwargs):
-        if not self.id:
+    def save(self,save_photo, *args, **kwargs):
+        if save_photo :
             self.photo = self.compressImage(self.photo)
         super(ExpertForm, self).save(*args, **kwargs)
 

@@ -147,7 +147,85 @@ class Questions(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateVie
         }
         return render(request, self.template_name, context)
 
-class UserInfo(generic.FormView):
+class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
+    template_name = "expert/userInfo.html"
+    form_class = forms.ExpertInfoForm
+    model = ExpertForm
+    login_url = '/login/'
+    success_url = "/"
+    permission_required = ('expert.be_expert',)
+    form = forms.ExpertInfoForm()
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expertForm = get_object_or_404(ExpertForm, expert_user__user=self.request.user)
+        expert_info_form = forms.ExpertInfoForm(instance=expertForm)
+        context['expert_info_form']    = expert_info_form
+        context['scientific_instance'] = ScientificRecord.objects.filter(expert_form=expertForm)
+        context['executive_instance']  = ExecutiveRecord.objects.filter(expert_form=expertForm)
+        context['research_instance']   = ResearchRecord.objects.filter(expert_form=expertForm)
+        context['paper_instance']      = PaperRecord.objects.filter(expert_form=expertForm)
+        context['keywords']            = expertForm.get_keywords()
+        context['expert_form']         = expertForm
+        context['scientific_form']     = forms.ScientificRecordForm()
+        context['executive_form']      = forms.ExecutiveRecordForm()
+        context['research_form']       = forms.ResearchRecordForm()
+        context['paper_form']          = forms.PaperRecordForm()
+        for error in self.form.errors:
+            context[error+"_error"] = self.form.errors[error]
+        return context
+
+    def post(self, request, *args, **kwargs):
+        expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
+        self.form = forms.ExpertInfoForm(request.POST, request.FILES)
+        if self.form.is_valid():
+            expertForm.university   = self.form.cleaned_data['university']
+            expertForm.home_address = self.form.cleaned_data['home_address']
+            expertForm.phone_number = self.form.cleaned_data['phone_number']
+            expertForm.mobile_phone = self.form.cleaned_data['mobile_phone']
+            if self.form.cleaned_data['awards']:
+                expertForm.awards = self.form.cleaned_data['awards']
+            
+            if self.form.cleaned_data['number_of_grants']:
+                expertForm.number_of_grants = self.form.cleaned_data['number_of_grants']
+            
+            if self.form.cleaned_data['languages']:
+                expertForm.languages = self.form.cleaned_data['languages']
+
+            if self.form.cleaned_data['method_of_introduction']:
+                expertForm.method_of_introduction = self.form.cleaned_data['method_of_introduction']
+            photo = request.FILES.get('photo')
+            if photo is not None:
+                expertForm.photo = photo
+                save_photo = True
+            else:
+                save_photo = False
+
+            expertForm.has_industrial_research = request.POST.get('has_industrial_research')
+            expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
+
+            if expertForm.eq_test:
+                    eq_test = expertForm.eq_test
+            else:
+                eq_test = EqTest()
+
+            eq_test.team_work              = request.POST.get('team_work', False)
+            eq_test.innovation             = request.POST.get('creative_thinking', False)
+            eq_test.devotion               = request.POST.get('sacrifice', False)
+            eq_test.productive_research    = request.POST.get('researching', False)
+            eq_test.national_commitment    = request.POST.get('obligation', False)
+            eq_test.collecting_information = request.POST.get('data_collection', False)
+            eq_test.business_thinking      = request.POST.get('morale', False)
+            eq_test.risk_averse            = request.POST.get('risk', False)
+            eq_test.save()
+            expertForm.save(save_photo=save_photo)
+        return super().post(self, request, *args, **kwargs)
+    
+
+class FUserInfo(generic.FormView):
     template_name = 'expert/userInfo.html'
     form_class = forms.ExpertInfoForm
 
@@ -173,8 +251,8 @@ class UserInfo(generic.FormView):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-        expert_info_form = forms.ExpertInfoForm(request.POST, request.FILES, instance=instance)
+        expertForm = get_object_or_404(ExpertForm, expert_user__user=request.user)
+        expert_info_form = forms.ExpertInfoForm(request.POST, request.FILES, instance=expertForm)
         team_work = request.POST.get('team_work', False)
         creative_thinking = request.POST.get('creative-thinking', False)
         sacrifice = request.POST.get('sacrifice', False)
@@ -185,27 +263,12 @@ class UserInfo(generic.FormView):
         risk = request.POST.get('risk', False)
         student_num = request.POST.get('student_num', False)
         foreign_work = request.POST.get('foreign_work', False)
-        scientific_instance = ScientificRecord.objects.filter(expert_form=instance)
-        executive_instance = ExecutiveRecord.objects.filter(expert_form=instance)
-        research_instance = ResearchRecord.objects.filter(expert_form=instance)
-        paper_instance = PaperRecord.objects.filter(expert_form=instance)
-        context = {'expert_info_form': expert_info_form,
-                   'scientific_instance': scientific_instance,
-                   'executive_instance': executive_instance,
-                   'research_instance': research_instance,
-                   'paper_instance': paper_instance,
-                   'expert_form': instance,
-                   'scientific_form': forms.ScientificRecordForm(),
-                   'executive_form': forms.ExecutiveRecordForm(),
-                   'research_form': forms.ResearchRecordForm(),
-                   'paper_form': forms.PaperRecordForm()
-                   }
         if expert_info_form.is_valid():
             expert_form = expert_info_form.save(commit=False)
             expert_form.expert_user = request.user.expertuser
 
-            if instance.eq_test:
-                eq_test = instance.eq_test
+            if expertForm.eq_test:
+                eq_test = expertForm.eq_test
             else:
                 eq_test = EqTest()
             eq_test.team_work = team_work
@@ -222,10 +285,6 @@ class UserInfo(generic.FormView):
             if foreign_work and student_num:
                 expert_form.has_industrial_research = foreign_work
                 expert_form.number_of_researcher = student_num
-
-            if request.FILES.get('photo'):
-                photo = request.FILES.get('photo')
-                expert_form.photo.save(photo.name, photo)
 
             keywords = expert_info_form.cleaned_data['keywords'].split(',')
             keywords_list = []
@@ -603,7 +662,10 @@ def GetResume(request):
     expert = get_object_or_404(ExpertUser ,pk=expert_id)
     expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
     data = {
-    'exe_record' : serializers.serialize('json', ExecutiveRecord.objects.filter(
+    'name'          : expert_form.expert_firstname + " " + expert_form.expert_lastname,
+    "university"    : expert_form.university,
+    "special_field" : expert_form.special_field,
+    'exe_record'    : serializers.serialize('json', ExecutiveRecord.objects.filter(
         expert_form=expert_form)),
 
     'research_record' : serializers.serialize('json', ResearchRecord.objects.filter(
