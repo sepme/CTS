@@ -236,6 +236,10 @@ body.notFound {
     width: 100%;
 }
 
+.user-type-container.error-container label {
+    border-color: #ff4545;
+}
+
 .user-type {
     position: relative;
     top: 0;
@@ -247,7 +251,7 @@ body.notFound {
     color: #bdbdbd;
     border-radius: 5px;
     box-shadow: none;
-    background-color: #fdfdfd;
+    background-color: #ffffff;
     padding-top: 75px;
 }
 
@@ -259,7 +263,15 @@ body.notFound {
     cursor: pointer;
     border: 1px solid #3CCD1C;
     color: #3CCD1C !important;
+    background-color: #f7fdf8;
     box-shadow: 0 0 5px 0 #6aff49;
+}
+
+.user-type-container.error-container .user-type {
+    color: #ff4545 !important;
+    -webkit-box-shadow: none!important;
+    -moz-box-shadow: none!important;
+    box-shadow: none!important;
 }
 
 .user-type > img {
@@ -284,27 +296,39 @@ label.user-type:after {
 }
 
 label.user-type.expert:after {
-    background-image: url("../img/mind.png");
+    background-image: url("../img/mind.svg");
 }
 
 label.user-type.industry:after {
-    background-image: url("../img/settings.png");
+    background-image: url("../img/setting.svg");
 }
 
 label.user-type.researcher:after {
-    background-image: url("../img/research.png");
+    background-image: url("../img/researcher.svg");
 }
 
 label.user-type.select.expert:after {
-    background-image: url("../img/mind_hover.png");
+    background-image: url("../img/mind_hover.svg");
 }
 
 label.user-type.select.industry:after {
-    background-image: url("../img/settings_hover.png");
+    background-image: url("../img/setting_hover.svg");
 }
 
 label.user-type.select.researcher:after {
-    background-image: url("../img/research_hover.png");
+    background-image: url("../img/research_hover.svg");
+}
+
+.user-type-container.error-container label.user-type.expert:after {
+    background-image: url("../img/mind_error.svg")!important;
+}
+
+.user-type-container.error-container label.user-type.industry:after {
+    background-image: url("../img/setting_error.svg")!important;
+}
+
+.user-type-container.error-container label.user-type.researcher:after {
+    background-image: url("../img/research_error.svg")!important;
 }
 
 input[type="radio"] {
@@ -1042,6 +1066,13 @@ div.error {
     left: 15px;
     font-size: 10px;
     color: #ff4545;
+}
+
+div.account_error {
+    left: -10px;
+    position: absolute;
+    top: 33px;
+    width: 100%;
 }
 
 .rankDiv {

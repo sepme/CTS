@@ -151,7 +151,6 @@ myForm.submit(function (event) {
     event.preventDefault();
     // let formData = $(this).serialize().toString();
     let $thisURL = myForm.attr('data-url');
-    $(".email .error").remove();
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -170,9 +169,7 @@ myForm.submit(function (event) {
             $(".loading").css('display', "none");
             $(".owl-carousel").css('display', "block");
             let obj = JSON.parse(data.responseText);
-            if ($(".email").find(".error").length > 0) {
-                $(".email").find("div.error").remove();
-            }
+            $(".email").find("div.error").remove();
             if (obj.email !== undefined) {
                 $(".email").append("<div class='error'>" +
                     "<span class='error-body'>" +
@@ -184,6 +181,10 @@ myForm.submit(function (event) {
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                 $("input#email").next().css("color", "rgb(255, 69, 69)");
             }
+            $(".user-type-container").addClass("error-container");
+            if ($(".account_error").text().length !== 0) {
+                $(".account_error").html("");
+            }
             $(".account_error").append("<div class='error'>" +
                 "<span class='error-body'>" +
                 "<ul class='errorlist'>" +
@@ -191,6 +192,12 @@ myForm.submit(function (event) {
                 "</ul>" +
                 "</span>" +
                 "</div>");
+            $(".user-type-container").find("label").click(function () {
+                if ($(this).closest(".user-type-container").hasClass("error-container")) {
+                    $(this).closest(".user-type-container").removeClass("error-container");
+                    $(".account_error").html("");
+                }
+            });
         },
     })
 });
