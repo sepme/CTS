@@ -162,13 +162,15 @@ myForm.submit(function (event) {
                     "</div>");
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
-            $(".account_error").append("<div class='error'>"+
-                                             "<span class='error-body'>" +
-                                             "<ul class='errorlist'>" +
-                                             "<li>" + obj.account_type + "</li>" +
-                                             "</ul>" +
-                                             "</span>" +
-                                             "</div>");
+            if (obj.account_type != undefined ){
+                $(".account_error").append("<div class='error'>"+
+                                                "<span class='error-body'>" +
+                                                "<ul class='errorlist'>" +
+                                                "<li>" + obj.account_type + "</li>" +
+                                                "</ul>" +
+                                                "</span>" +
+                                                "</div>");
+            }
         },
     })
 });
