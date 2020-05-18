@@ -51,7 +51,7 @@ $(".preview-project").click(function () {
     /*
      * end of reset
      */
-    var id = $(this).attr("id");
+    let id = $(this).attr("id");
     console.log("id");
     $.ajax({
         method: 'GET',
@@ -70,7 +70,7 @@ $(".preview-project").click(function () {
                     + "</span>"
                 );
             }
-            if (data.status == "waiting" || data.status == "involved") {
+            if (data.status === "waiting" || data.status === "involved") {
                 console.log(data.status);
                 $('.vote').remove();
                 $('.apply').remove();
@@ -86,7 +86,7 @@ $(".preview-project").click(function () {
 });
 
 function setRole(data) {
-    role = "<div>" +
+    let role = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -100,7 +100,7 @@ function setRole(data) {
 }
 
 function setResources(data) {
-    resources = "<div>" +
+    let resources = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -148,7 +148,7 @@ function setResources(data) {
 }
 
 function setApproach(data) {
-    approach = "<div>" +
+    let approach = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -173,7 +173,7 @@ function setApproach(data) {
 }
 
 function setMajors(data) {
-    majors = "<div>" +
+    let majors = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -314,11 +314,7 @@ $(".trash").click(function (event) {
 });
 
 $(document).ready(function () {
-    // variable
     init_setup();
-    edu_count = 0;
-    exe_count = 0;
-    stu_count = 0;
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".add-new-technique", ".add-technique");
     init_dialog_btn(".new-review-request", ".review-request");
@@ -404,7 +400,7 @@ $(".submit-button").click(function (event) {
     })
 });
 
-var scientificForm = $('#ajax-sci-form');
+let scientificForm = $('#ajax-sci-form');
 scientificForm.submit(function (event) {
     event.preventDefault();
     scientificForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -412,8 +408,8 @@ scientificForm.submit(function (event) {
     scientificForm.find("button[type='reset']").attr("disabled", "true");
     scientificForm.find("label").addClass("progress-cursor");
     scientificForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = scientificForm.attr('url');
-    var data = $(this).serialize().toString();
+    let $thisURL = scientificForm.attr('url');
+    let data = $(this).serialize().toString();
     scientificForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -441,7 +437,7 @@ scientificForm.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             scientificForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             scientificForm.find("button[type='reset']").prop("disabled", false);
@@ -502,7 +498,7 @@ scientificForm.submit(function (event) {
     })
 });
 
-var researchForm = $('.ajax-std-form');
+let researchForm = $('.ajax-std-form');
 researchForm.submit(function (event) {
     event.preventDefault();
     researchForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -510,8 +506,8 @@ researchForm.submit(function (event) {
     researchForm.find("button[type='reset']").attr("disabled", "true");
     researchForm.find("label").addClass("progress-cursor");
     researchForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = researchForm.attr('url');
-    var data = $(this).serialize().toString();
+    let $thisURL = researchForm.attr('url');
+    let data = $(this).serialize().toString();
     researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -538,7 +534,7 @@ researchForm.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             researchForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             researchForm.find("button[type='reset']").prop("disabled", false);
@@ -589,15 +585,15 @@ researchForm.submit(function (event) {
     })
 });
 
-var executive_form = $('.ajax-exe-form');
+let executive_form = $('.ajax-exe-form');
 executive_form.submit(function (event) {
     event.preventDefault();
     executive_form.find("button[type='submit']").addClass("loading-btn").attr("disabled", "true").css("color", "transparent");
     executive_form.find("button[type='reset']").attr("disabled", "true");
     executive_form.find("label").addClass("progress-cursor");
     executive_form.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = executive_form.attr('url');
-    var data = $(this).serialize().toString();
+    let $thisURL = executive_form.attr('url');
+    let data = $(this).serialize().toString();
     executive_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -624,7 +620,7 @@ executive_form.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             executive_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             executive_form.find("button[type='reset']").prop("disabled", false);
@@ -700,7 +696,7 @@ if (window.location.href.indexOf("researcher/technique/") > -1) {
     });
 }
 
-var technique_review = $('#technique_review');
+let technique_review = $('#technique_review');
 technique_review.submit(function (event) {
     event.preventDefault();
     technique_review.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -708,9 +704,9 @@ technique_review.submit(function (event) {
     technique_review.find("button[type='reset']").attr("disabled", "true");
     technique_review.find("label").addClass("progress-cursor");
     technique_review.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = technique_review.attr('url');
-    // var data = $(this).serialize().toString();
-    var data = new FormData(technique_review.get(0));
+    let $thisURL = technique_review.attr('url');
+    // let data = $(this).serialize().toString();
+    let data = new FormData(technique_review.get(0));
     technique_review.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -740,7 +736,7 @@ technique_review.submit(function (event) {
         },
         error: function (data) {
             console.log(data);
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             technique_review.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             technique_review.find("button[type='reset']").prop("disabled", false);
@@ -817,7 +813,7 @@ function show_add_technique_record(title, is_exam) {
         "        </div>" +
         "    </div>" +
         "</div>";
-    $(".techniques-list .no-project-container").remove();
+    $(".techniques-list .empty-page").remove();
     $(".techniques-list").append(newTechnique);
 }
 
@@ -829,7 +825,7 @@ add_technique_form.submit(function (event) {
     add_technique_form.find("label").addClass("progress-cursor");
     add_technique_form.closest(".fixed-back").find(".card").addClass("wait");
     let $thisURL = add_technique_form.attr('url');
-    // var data = $(this).serialize().toString();
+    // let data = $(this).serialize().toString();
     let data = new FormData(add_technique_form.get(0));
     add_technique_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
@@ -862,7 +858,7 @@ add_technique_form.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             add_technique_form.find("button[type='reset']").prop("disabled", false);
@@ -903,7 +899,7 @@ add_technique_form.submit(function (event) {
 });
 
 function addComment(data) {
-    new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
+    let new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
         "<div class='comment-body' dir='ltr'>" +
         "<span class='comment-tools'>"
     // "<i class='fas fa-trash-alt'></i>" +
@@ -931,8 +927,8 @@ comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
-    var $thisURL = comment_form.attr('url');
-    var data = new FormData(comment_form.get(0));
+    let $thisURL = comment_form.attr('url');
+    let data = new FormData(comment_form.get(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -961,7 +957,7 @@ comment_form.submit(function (event) {
             });
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
@@ -980,11 +976,11 @@ comment_form.submit(function (event) {
     });
 });
 
-var apply_form = $(".apply_Project");
+let apply_form = $(".apply_Project");
 apply_form.submit(function (event) {
     event.preventDefault();
-    var url = apply_form.attr('url');
-    var data = $(this).serialize().toString();
+    let url = apply_form.attr('url');
+    let data = $(this).serialize().toString();
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -996,7 +992,7 @@ apply_form.submit(function (event) {
             $(".apply").hide();
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             if (obj.least_hours) {
                 $("#least_hours").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
@@ -1128,8 +1124,8 @@ $("#done-project").click(function (event) {
     //     dataType: 'json',
     //     success: function (data) {
     //         console.log(data);
-    //         var adding = "";
-    //         for (var key in data.project_list) {
+    //         let adding = "";
+    //         for (let key in data.project_list) {
     //             const element = data.project_list[key];
     //             adding = adding + ShowPreviousProject(element);
     //         }
@@ -1166,8 +1162,8 @@ $("#your-project").click(function (event) {
     //     dataType: 'json',
     //     success: function (data) {
     //         console.log(data);
-    //         var adding = "";
-    //         for (var key in data.project_list) {
+    //         let adding = "";
+    //         for (let key in data.project_list) {
     //             const element = data.project_list[key];
     //             adding = adding + ShowMyProject(element);
     //         }
