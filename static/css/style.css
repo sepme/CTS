@@ -663,6 +663,7 @@ img {
 
 .fixed-back .card.side-card {
     padding-right: 180px;
+    min-height: 350px;
 }
 
 .fixed-back .card.side-card .card-side {
@@ -698,6 +699,10 @@ img {
         padding-top: 0px;
     }
 
+}
+
+.fixed-back .card.side-card .card-side.has-image .information{
+    padding: 0 10px;
 }
 
 .fixed-back .card-head {
@@ -1537,6 +1542,7 @@ hr {
     display: block;
     padding: 5px 0;
     border-radius: 0.25em;
+    font-weight: 500;
 }
 
 .dropdown-menu > li > a:hover,
@@ -1870,13 +1876,6 @@ table tbody tr:last-child {
     border-bottom: none;
 }
 
-.expert-resume table thead td {
-    font-weight: 400;
-    color: #707070;
-    font-size: 11px;
-    padding: 5px;
-}
-
 thead {
     background-color: #ffffff;
     color: #3CCD1C;
@@ -1894,13 +1893,6 @@ thead {
 
 .education table, .executive table, .paper table, .research table {
     border: 1px solid rgba(0, 0, 0, 0.125);
-}
-
-/*
- * iziToast
- */
-.iziToast.iziToast-color-green {
-    background-color: #89E076;
 }
 
 td {
@@ -4102,3 +4094,66 @@ pre#question-body {
     display: block;
     margin: 10px auto 0;
 }
+
+.iziToast {
+    box-shadow: 0 0 10px 0 rgba(183, 192, 206, .2);
+}
+
+.iziToast-rtl {
+    font-family: iranyekan, serif;
+    padding: 15px 0 15px 45px;
+    background-color: #ffffff !important;
+    font-weight: 500;
+    color: #707070;
+}
+
+.iziToast > .iziToast-body .iziToast-texts {
+    display: grid;
+}
+
+.iziToast.iziToast-color-green:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -3px;
+    width: 4px;
+    height: 100%;
+    background-color: #3CCD1C;
+    -webkit-border-radius: 0 0.25em 0.25em 0;
+    -moz-border-radius: 0 0.25em 0.25em 0;
+    border-radius: 0 0.25em 0.25em 0;
+}
+
+.iziToast > .iziToast-body .iziToast-icon.ico-success {
+    background: url("../img/circle_tick.svg") center;
+    background-size: contain;
+
+}
+
+/*.iziToast > .iziToast-body .iziToast-icon.ico-success:before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    right: 10px;*/
+/*    width: 50px;*/
+/*    height: 50px*/
+/*}*/
+
+.iziToast.iziToast-color-red:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -3px;
+    width: 4px;
+    height: 100%;
+    background-color: #ff4545;
+    -webkit-border-radius: 0 0.25em 0.25em 0;
+    -moz-border-radius: 0 0.25em 0.25em 0;
+    border-radius: 0 0.25em 0.25em 0;
+}
+
+.iziToast > .iziToast-body .iziToast-icon.ico-error {
+    background: url("../img/circle_close.svg") center;
+    background-size: contain;
+}
+

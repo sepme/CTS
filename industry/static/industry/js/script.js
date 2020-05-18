@@ -193,17 +193,19 @@ function expertResume() {
         close_dialog(".expert-resume");
         load_dialog();
         let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-
         $.ajax({
             method: 'GET',
             url: '/expert/get_resume',
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                $(".expert-resume #expert_name").html(data.name);
+                $(".expert-resume #expert_uni").html(data.university);
+                $(".expert-resume #expert_field").html(data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < sci_record.length; i++) {
+                    for (let i = 0; i < sci_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + sci_record[i].fields.degree + "</td>" +
                             "<td>" + sci_record[i].fields.major + "</td>" +
@@ -213,11 +215,13 @@ function expertResume() {
                             "</tr>";
                         $('.sci_record').html(table_row);
                     }
+                } else {
+                    $("#whole-education-info").css("display", "none");
                 }
                 let executive_record = JSON.parse(data.exe_record);
                 if (executive_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < executive_record.length; i++) {
+                    for (let i = 0; i < executive_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + executive_record[i].fields.executive_post + "</td>" +
                             "<td>" + executive_record[i].fields.date_start_post + "</td>" +
@@ -227,11 +231,13 @@ function expertResume() {
                             "</tr>";
                         $('.executive_record').html(table_row);
                     }
+                } else {
+                    $("#whole-executive-info").css("display", "none");
                 }
                 let research_record = JSON.parse(data.research_record);
                 if (research_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < research_record.length; i++) {
+                    for (let i = 0; i < research_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + research_record[i].fields.research_title + "</td>" +
                             "<td>" + research_record[i].fields.researcher + "</td>" +
@@ -239,11 +245,13 @@ function expertResume() {
                             "</tr>";
                         $('.research_record').html(table_row);
                     }
+                } else {
+                    $("#whole-project-info").css("display", "none");
                 }
                 let paper_record = JSON.parse(data.paper_record);
                 if (paper_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < paper_record.length; i++) {
+                    for (let i = 0; i < paper_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + paper_record[i].fields.research_title + "</td>" +
                             "<td>" + paper_record[i].fields.date_published + "</td>" +
@@ -253,11 +261,21 @@ function expertResume() {
                             "</tr>";
                         $('.paper_record').html(table_row);
                     }
+                } else {
+                    $("#whole-article-info").css("display", "none");
                 }
                 $('.researcher_count').html(data.researcher_count);
                 $('.has_industrial_research').html(data.has_industrial_research);
-                $('.awards').html(data.awards);
-                $('.languages').html(data.languages);
+                if (data.awards === '') {
+                    $("#whole-honors-info").css("display","none");
+                } else {
+                    $('.awards').html(data.awards);
+                }
+                if (data.languages === '') {
+                    $("#whole-other-info").css("display","none");
+                } else {
+                    $('.languages').html(data.languages);
+                }
             },
         });
     });
@@ -890,7 +908,7 @@ $(document).ready(function () {
                         position: 'bottomLeft'
                     });
                     comment_form[0].reset();
-                    comment_form.find("#description").css("height","fit-content");
+                    comment_form.find("#description").css("height", "fit-content");
                     $('.error').remove();
                     $('.file-name').html("");
                     $(".send-comment-container .comment-input").removeClass("attached");
