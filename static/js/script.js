@@ -185,7 +185,6 @@ myForm.submit(function (event) {
             if ($(".account_error").text().length !== 0) {
                 $(".account_error").html("");
             }
-<<<<<<< HEAD
             if (obj.account_type != undefined ){
                 $(".account_error").append("<div class='error'>" +
                     "<span class='error-body'>" +

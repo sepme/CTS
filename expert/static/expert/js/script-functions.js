@@ -863,6 +863,11 @@ function question_dialog_init() {
             success: function (data) {
                 set_answer_true($(this));
                 $(this).closest(".check").removeClass("loading");
+                iziToast.success({
+                    rtl: true,
+                    message: "وضعیت صحیح برای پاسخ ذخیره شد.",
+                    position: 'bottomLeft'
+                });
             },
             error: function (data) {
             },
@@ -880,6 +885,11 @@ function question_dialog_init() {
             success: function (data) {
                 set_answer_wrong($(this));
                 $(this).closest(".check").removeClass("loading");
+                iziToast.success({
+                    rtl: true,
+                    message: "وضعیت نادرست برای پاسخ ذخیره شد.",
+                    position: 'bottomLeft'
+                });
             },
             error: function (data) {
             },
