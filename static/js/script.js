@@ -151,6 +151,7 @@ myForm.submit(function (event) {
     event.preventDefault();
     // let formData = $(this).serialize().toString();
     let $thisURL = myForm.attr('data-url');
+    $(".email .error").remove();
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -172,15 +173,24 @@ myForm.submit(function (event) {
             if ($(".email").find(".error").length > 0) {
                 $(".email").find("div.error").remove();
             }
-            $(".email").append("<div class='error'>" +
+            if (obj.email !== undefined) {
+                $(".email").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.email + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#email").next().css("color", "rgb(255, 69, 69)");
+            }
+            $(".account_error").append("<div class='error'>" +
                 "<span class='error-body'>" +
                 "<ul class='errorlist'>" +
-                "<li>" + obj.email + "</li>" +
+                "<li>" + obj.account_type + "</li>" +
                 "</ul>" +
                 "</span>" +
                 "</div>");
-            $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            $("input#email").next().css("color", "rgb(255, 69, 69)");
         },
     })
 });

@@ -107,7 +107,7 @@ class ExpertInfoForm(forms.ModelForm):
 
     class Meta:
         model = ExpertForm
-        exclude = ['keywords', 'eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
+        exclude = ['photo','keywords', 'eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
         error_messages = {
             'special_field': {
                 'required': 'حوزه تخصصی نمی تواند خالی باشد.'
@@ -295,23 +295,6 @@ class PaperRecordForm(forms.ModelForm):
             raise forms.ValidationError('فاکتور تاثیرگذاری باید عدد باشد.')
 
         return impact_factor
-
-
-class EQTestForm(forms.Form):
-    INT_CHOICE = (
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-        (5, '5'),
-    )
-    team_work = forms.ChoiceField(widget=forms.RadioSelect(attrs={'id': 'group-work'}), choices=INT_CHOICE)
-
-    # def __init__(self, *args, **kwargs):
-    #     super(EQTestForm, self).__init__(*args, **kwargs)
-    #     self.fields['team_work'].widget = forms.RadioSelect(attrs={
-    #         'id': 'group-work'
-    #     })
 
 
 class ResearchQuestionForm(forms.ModelForm):

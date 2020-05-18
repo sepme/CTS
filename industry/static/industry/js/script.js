@@ -434,11 +434,14 @@ function getComments(expert_id, project_id) {
         },
         success: function (data) {
             if (data.applied === false) {
+                $('.request').html("برای مشاهده رزومه استاد بر روی دکمه روبه رو کلیک کنید.");
                 $(".accept-request").hide();
                 $(".accept-request").prop('disabled', true);
                 $(".reject-request").hide();
                 $(".reject-request").prop('disabled', true);
             } else {
+                $('.request').html("درخواستی برای انجام پروژه شما از طرف این استاد دریافت شده است.");
+                $('.request').show();
                 $(".accept-request").show();
                 $(".accept-request").prop('disabled', false);
                 $(".reject-request").show();
@@ -502,7 +505,7 @@ $(document).ready(function () {
 
     $('.accept-request').click(function (data) {
         let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-        let project_id = $(this).closest(".showProject").attr("id");
+        let project_id = $(this).closest(".confirm-request").attr("id");
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -527,7 +530,7 @@ $(document).ready(function () {
 
     $('.reject-request').click(function (data) {
         let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-        let project_id = $(this).closest(".showProject").attr("id");
+        let project_id = $(this).closest(".confirm-request").attr("id");
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -566,6 +569,7 @@ $(document).ready(function () {
                 // }else{
                 //     console.log("not accepted");
                 // }
+                $('.confirm-request').attr('id', id);
                 $('.comment').attr('id', id);
                 localStorage.setItem("project_id", "" + id);
                 localStorage.setItem("replied_text", null);
@@ -581,7 +585,6 @@ $(document).ready(function () {
                 }
                 setMajors(data);
                 setValue(data);
-                console.log(data);
                 if (data.status !== 1 && data.status !== 2) {
                     dialog.find('.add-comment').attr('style', 'display : none');
                     $('.image-btn-circle').prop('disabled', true);
@@ -894,7 +897,6 @@ $(document).ready(function () {
                     $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
                 },
                 error: function (data) {
-                    console.log(data);
                     let obj = JSON.parse(data.responseText);
                     comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                         .prop("disabled", false);

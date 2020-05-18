@@ -18,7 +18,7 @@ ACCOUNT_CHOICE = (
 class RegisterEmailForm(forms.Form):
     email = forms.EmailField(label="ایمیل", error_messages={'required': 'لطفا ایمیل خود را وارد کنید',
                                                             'invalid': 'ایمیل وارد شده نامعتبر است'})
-    # account_type = forms.ChoiceField(choices=ACCOUNT_CHOICE)
+    account_type = forms.CharField(max_length=10, required=True,error_messages={'required': 'لطفانوع حساب کاربری خود را مشخص کنید',})
     #
     # class Meta:
     #     widgets = {
@@ -52,7 +52,6 @@ class RegisterUserForm(forms.Form):
         cleaned_data = super(RegisterUserForm, self).clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
-        print('password: ', password, 'confirm: ', confirm_password)
         if len(password) < 8:
             raise forms.ValidationError('گذرواژه حداقل باید هشت رقم داشته باشد')
         elif password != confirm_password:
@@ -71,11 +70,9 @@ class LoginForm(forms.Form):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        print(username)
         researcher = ResearcherUser.objects.filter(user__username=username)
         expert = ExpertUser.objects.filter(user__username=username)
         industry = IndustryUser.objects.filter(user__username=username)
-        print(researcher, expert, industry)
         if not (researcher or expert or industry):
             raise forms.ValidationError('این نام کابری ثبت نام نشده است')
         return username

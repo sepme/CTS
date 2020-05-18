@@ -165,8 +165,7 @@ class ResearcherProfile(models.Model):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.photo = self.compressImage(self.photo)
+        self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
@@ -196,7 +195,7 @@ class ExecutiveRecord(models.Model):
     post = models.CharField(max_length=300, verbose_name="سمت")
     start = models.CharField(max_length=30, verbose_name="از تاریخ")
     end = models.CharField(max_length=30, verbose_name="تا تاریخ")
-    place = models.CharField(max_length=300, verbose_name="محل خدمت")
+    place = models.CharField(max_length=300, verbose_name="نام مجموعه")
     city = models.CharField(max_length=300, verbose_name="شهر")
 
     def __str__(self):

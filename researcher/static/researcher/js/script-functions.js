@@ -256,7 +256,7 @@ function executive_data_form(exe_count) {
         "</div>" +
         "<div class='row'>" +
         "<div class='col-lg-5'>" +
-        "<label for='workplace" + exe_count + "'>محل خدمت</label>" +
+        "<label for='workplace" + exe_count + "'>نام مجموعه</label>" +
         "<input type='text' id='workplace" + exe_count + "' class='w-100'>" +
         "</div>" +
         "<div class='col-lg-4'>" +
@@ -310,7 +310,7 @@ function show_executive_record(pk) {
             "<thead>" +
             "<tr>" +
             "<td>سمت</td>" +
-            "<td>محل خدمت</td>" +
+            "<td>نام مجموعه</td>" +
             "<td>شهر</td>" +
             "<td>از تاریخ</td>" +
             "<td>تا تاریخ</td>" +

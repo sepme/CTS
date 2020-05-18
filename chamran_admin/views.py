@@ -181,11 +181,9 @@ class SignupEmail(generic.FormView):
 
 def signup_email_ajax(request):
     form = forms.RegisterEmailForm(request.POST)
-    print('is valid: ', form.is_valid())
     if form.is_valid():
         email = form.cleaned_data['email']
-        account_type = request.POST['user-type']
-        # account_type = form.cleaned_data['account_type']
+        account_type = form.cleaned_data['account_type']
         # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
         temp_user = models.TempUser(email=email, account_type=account_type)
         subject = 'تکمیل ثبت نام'
@@ -246,8 +244,8 @@ def login_ajax(request):
             # context = {'form': form,
             #            'error': 'گذرواژه اشتباه است'}
             return JsonResponse({
-                'error': 'گذرواژه اشتباه است'
-            } ,400)
+                'password': 'گذرواژه اشتباه است'
+            } ,status=400)
     else:
         print('form error')
         return JsonResponse(form.errors, status=400)
