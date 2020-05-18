@@ -338,14 +338,13 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
         return render(request, 'industry/userInfo.html', context={'form': form})
 
 
-class NewProject(LoginRequiredMixin, PermissionRequiredMixin, View):
+class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
+    template_name = 'industry/newProject.html'
+    form_class = forms.ProjectForm
     login_url = '/login/'
     permission_required = ('industry.be_industry',)
 
-    def get(self, request):
-        return render(request, 'industry/newProject.html', context={'form': forms.ProjectForm()})
-
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
             project_title_persian = form.cleaned_data['project_title_persian']
@@ -398,7 +397,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, View):
             except TimeoutError:
                 return HttpResponse('Timeout Error!!')
             return HttpResponseRedirect(reverse('industry:index'))
-        return render(request, 'industry/newProject.html', context={'form': form})
+        return super().post(request, *args, **kwargs)
 
 class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     template_name = 'industry/project_list.html'
