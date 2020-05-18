@@ -4079,10 +4079,13 @@ pre#question-body {
     -moz-border-radius: 0;
     border-radius: 0;
     width: 150px;
+    display: block;
+    margin: 0 auto;
 }
 
 .empty-page h5 {
     color: #3CCD1C;
+    margin-top: 10px;
 }
 
 .empty-page pre {
@@ -4091,4 +4094,11 @@ pre#question-body {
     color: #707070;
     margin: 0 auto;
     display: inline-block;
+    max-width: 500px;
+}
+
+.empty-page button {
+    position: relative;
+    display: block;
+    margin: 10px auto 0;
 }
