@@ -181,7 +181,6 @@ class SignupEmail(generic.FormView):
 
 def signup_email_ajax(request):
     form = forms.RegisterEmailForm(request.POST)
-    print('is valid: ', form.is_valid())
     if form.is_valid():
         email = form.cleaned_data['email']
         account_type = form.cleaned_data['account_type']

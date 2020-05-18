@@ -162,11 +162,13 @@ myForm.submit(function (event) {
                     "</div>");
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
-            $(".account_error").append("<span class='error-body'>" +
+            $(".account_error").append("<div class='error'>"+
+                                             "<span class='error-body'>" +
                                              "<ul class='errorlist'>" +
                                              "<li>" + obj.account_type + "</li>" +
                                              "</ul>" +
-                                             "</span>");
+                                             "</span>" +
+                                             "</div>");
         },
     })
 });

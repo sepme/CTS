@@ -52,7 +52,6 @@ class RegisterUserForm(forms.Form):
         cleaned_data = super(RegisterUserForm, self).clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
-        print('password: ', password, 'confirm: ', confirm_password)
         if len(password) < 8:
             raise forms.ValidationError('گذرواژه حداقل باید هشت رقم داشته باشد')
         elif password != confirm_password:
