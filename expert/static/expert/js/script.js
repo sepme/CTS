@@ -158,6 +158,7 @@ $(document).ready(function () {
         }
     });
 
+
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {

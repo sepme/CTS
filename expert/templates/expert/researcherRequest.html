@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}درخواست پژوهشگر{% endblock %}
+{% block title %}درخواست‌های پژوهشگران{% endblock %}
 
 {% block name %}{{ request.user.expertuser.expertform }}{% endblock %}
 
@@ -13,7 +13,7 @@
 {% block content %}
     <div class="row">
         <div class="col-12 text-right">
-            <h3 class="h3 p-top-15 border-bottom">درخواست پژوهشگر</h3>
+            <h3 class="h3 p-top-15 border-bottom">درخواست‌های پژوهشگران</h3>
         </div>
     </div>
     <div class="row">
@@ -76,11 +76,16 @@
                                                     </div>
                                                 </div>
                                             </div>
-    {#                                                   <button class="show-researcher">مشاهده</button>#}
-    {#                                                   <button class="accept-researcher">تایید</button>#}
-    {#                                                   <button class="refuse-researcher">رد</button>#}
-                                            <button class="researcher-card-button-show"  value="{{project.id}}" id="{{ researcher.profile.researcher_user.id }}" data-url="{% url 'expert:show_researcher_preview' %}">مشاهده</button>
-                                            <button class="researcher-card-button-check confirm-researcher" id="{{ researcher.profile.id }}">تایید</button>
+                                            {#                                                   <button class="show-researcher">مشاهده</button>#}
+                                            {#                                                   <button class="accept-researcher">تایید</button>#}
+                                            {#                                                   <button class="refuse-researcher">رد</button>#}
+                                            <button class="researcher-card-button-show" value="{{ project.id }}"
+                                                    id="{{ researcher.profile.researcher_user.id }}"
+                                                    data-url="{% url 'expert:show_researcher_preview' %}">مشاهده
+                                            </button>
+                                            <button class="researcher-card-button-check confirm-researcher"
+                                                    id="{{ researcher.profile.id }}">تایید
+                                            </button>
                                             <div class="close"></div>
                                         </div>
                                     </div>
@@ -114,6 +119,16 @@
                     </div>
                 {% endfor %}
             {% endfor %}
+        {% else %}
+            <div class="col-12 text-center">
+                <div class="empty-page">
+                    <div class="empty-page-container">
+                        <img src="{% static 'img/empty-tray.svg' %}" alt="">
+                        <h5></h5>
+                        <pre>هنوز پژوهشگری برای پروژه‌های شما درخواست نداده است.</pre>
+                    </div>
+                </div>
+            </div>
         {% endif %}
     </div>
 {% endblock %}

@@ -269,9 +269,9 @@ body.notFound {
 
 .user-type-container.error-container .user-type {
     color: #ff4545 !important;
-    -webkit-box-shadow: none!important;
-    -moz-box-shadow: none!important;
-    box-shadow: none!important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 .user-type > img {
@@ -320,15 +320,15 @@ label.user-type.select.researcher:after {
 }
 
 .user-type-container.error-container label.user-type.expert:after {
-    background-image: url("../img/mind_error.svg")!important;
+    background-image: url("../img/mind_error.svg") !important;
 }
 
 .user-type-container.error-container label.user-type.industry:after {
-    background-image: url("../img/setting_error.svg")!important;
+    background-image: url("../img/setting_error.svg") !important;
 }
 
 .user-type-container.error-container label.user-type.researcher:after {
-    background-image: url("../img/research_error.svg")!important;
+    background-image: url("../img/research_error.svg") !important;
 }
 
 input[type="radio"] {
@@ -4059,4 +4059,36 @@ pre#question-body {
 
 .card.registration .loading {
     padding: 65px 0;
+}
+
+.empty-page {
+    position: relative;
+    height: calc(100vh - 300px);
+    width: 100%;
+    display: table;
+}
+
+.empty-page-container {
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.empty-page img {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    width: 150px;
+}
+
+.empty-page h5 {
+    color: #3CCD1C;
+}
+
+.empty-page pre {
+    font-weight: 500;
+    font-size: 14px;
+    color: #707070;
+    margin: 0 auto;
+    display: inline-block;
 }
