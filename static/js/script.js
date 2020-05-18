@@ -133,6 +133,7 @@ myForm.submit(function (event) {
     event.preventDefault();
     // var formData = $(this).serialize().toString();
     var $thisURL = myForm.attr('data-url');
+    $(".email .error").remove();
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -149,24 +150,23 @@ myForm.submit(function (event) {
         },
         error: function (data) {
             $(".loading").css('display', "none");
-            $(".registration").css('display', "block");
-            console.log(data);
+            $(".registration").css('display', "block");            
             var obj = JSON.parse(data.responseText);
-            $(".email").append("<div class='error'>" +
-                "<span class='error-body'>" +
-                "<ul class='errorlist'>" +
-                "<li>" + obj.email + "</li>" +
-                "</ul>" +
-                "</span>" +
-                "</div>");
-            $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            $(".account_error").append("<div class='error'>" +
-                                             "<span class='error-body'>" +
+            if (obj.email != undefined ){
+                $(".email").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.email + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            $(".account_error").append("<span class='error-body'>" +
                                              "<ul class='errorlist'>" +
                                              "<li>" + obj.account_type + "</li>" +
                                              "</ul>" +
-                                             "</span>" +
-                                             "</div>");
+                                             "</span>");
         },
     })
 });
