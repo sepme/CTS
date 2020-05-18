@@ -533,6 +533,34 @@ function show_paper_record(id) {
 }
 
 function show_new_research_question() {
+    if ($(".empty-page").length !== 0) {
+        let container = "<div class=\"col-lg-12 text-right\">\n" +
+            "                <div class=\"project-info-tabs\">\n" +
+            "                    <div class=\"nav flex-column nav-pills\" id=\"v-pills-tab\" role=\"tablist\"\n" +
+            "                         aria-orientation=\"vertical\">\n" +
+            "                        <a class=\"nav-link active fs-15\" id=\"all-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"true\">\n" +
+            "                            همه\n" +
+            "                        </a>\n" +
+            "                        <a class=\"nav-link fs-15\" id=\"active-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"false\">\n" +
+            "                            فعال\n" +
+            "                        </a>\n" +
+            "                        <a class=\"nav-link fs-15\" id=\"check-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"false\">\n" +
+            "                            درحال بررسی\n" +
+            "                        </a>\n" +
+            "                        <a class=\"nav-link fs-15\" id=\"answered-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"false\">\n" +
+            "                            پاسخ داده شده\n" +
+            "                        </a>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "                <div class=\"tab-content cover-page\"></div>" +
+            "</div>";
+        $(".empty-page").closest(".row").html(container);
+        $(".h3").removeClass("border-bottom");
+    }
     let new_question = "<div class='card check-question box flow-root-display w-100'>" +
         "                                <div class='box-header'>" +
         "                                    <h6>" + $("#question-title").val() + "</h6>" +
@@ -662,13 +690,13 @@ function dialog_comment_init() {
 }
 
 function vote_slider_industry(slide_count) {
-    industry_counter = 0;
+    let industry_counter = 0;
     $(".industry-voting .next-button").click(function () {
         alert("industry_counter = " + industry_counter);
         if (industry_counter < slide_count - 1) {
             industry_counter++;
-            progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".industry-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".industry-voting .progress-line").css('width'));
             $(".industry-voting .progress-line").css('width', width + progressWidth);
             $(".industry-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * industry_counter + "%, 0, 0)",
@@ -687,8 +715,8 @@ function vote_slider_industry(slide_count) {
         alert("industry_counter = " + industry_counter);
         if (industry_counter > 0) {
             industry_counter--;
-            progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".industry-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".industry-voting .progress-line").css('width'));
             $(".industry-voting .progress-line").css('width', width - progressWidth);
             $(".industry-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * industry_counter + "%, 0, 0)",
@@ -706,13 +734,13 @@ function vote_slider_industry(slide_count) {
 }
 
 function vote_slider_researcher(slide_count) {
-    researcher_counter = 0;
+    let researcher_counter = 0;
     $(".researcher-voting .next-button").click(function () {
         alert("researcher_counter = " + researcher_counter);
         if (researcher_counter < slide_count - 1) {
             researcher_counter++;
-            progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".researcher-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".researcher-voting .progress-line").css('width'));
             $(".researcher-voting .progress-line").css('width', width + progressWidth);
             $(".researcher-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * researcher_counter + "%, 0, 0)",
@@ -731,8 +759,8 @@ function vote_slider_researcher(slide_count) {
         alert("researcher_counter = " + researcher_counter);
         if (researcher_counter > 0) {
             researcher_counter--;
-            progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".researcher-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".researcher-voting .progress-line").css('width'));
             $(".researcher-voting .progress-line").css('width', width - progressWidth);
             $(".researcher-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * researcher_counter + "%, 0, 0)",

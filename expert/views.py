@@ -478,7 +478,10 @@ def add_research_question(request):
 
 @permission_required('expert.be_expert', login_url='/login/')
 def show_research_question(request):
-    research_question = ResearchQuestion.objects.filter(id=request.GET.get('id')).first()
+    try:
+        research_question = ResearchQuestion.objects.get(id=request.GET.get('id'))
+    except:
+        return JsonResponse(data={},status=400)
 
     answers_list = []
     for answer in research_question.get_answers():

@@ -16,84 +16,102 @@ function signUp() {
     $("button").text("عضویت").removeClass("Enter-btn").addClass("signUp-btn");
 }
 
-function input_focus() {
-    if ($("input,textarea").prop("disabled")) {
-        $(this).each(function () {
-            var inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).css({
-                "font-size": "13px",
-                "top": "3px",
-                "right": "5px",
-                "color": "#8d8d8d"
-            });
-        });
-    }
-    $("input,textarea").each(function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).val() !== '') {
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "3px",
-                "right": "5px",
-                "color": "#6f7285"
-            });
-        }
-        if ($(this).hasClass("error")) {
-            $(inputLabel).css("color", "#ff4545");
-        }
-    }).on("focus", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-            var errorDiv = $(this).next(".error");
-            $(this).on("change", function () {
-                if ($(this).hasClass("error")) {
-                    $(this).removeClass("error");
-                    $(errorDiv).remove();
-                }
-            });
-        } else {
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "3px",
-                "right": "5px",
-                "color": "#3CCD1C"
-            });
-            $(this).css("color", "#3ccd1c");
-        }
-    }).on("focusout", function () {
-        var inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-
-        } else {
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "13px",
-                    "top": "31px",
-                    "right": "10px",
-                    "color": "#6f7285"
-                });
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-        }
-    });
-}
+// function input_focus() {
+//     if ($("input,textarea").prop("disabled")) {
+//         $(this).each(function () {
+//             let inputLabel = "label[for='" + $(this).attr("id") + "']";
+//             $(inputLabel).css({
+//                 "font-size": "13px",
+//                 "top": "3px",
+//                 "right": "5px",
+//                 "color": "#8d8d8d"
+//             });
+//         });
+//     }
+//     $("input,textarea").each(function () {
+//         let inputLabel = "label[for='" + $(this).attr("id") + "']";
+//         if ($(this).val() !== '') {
+//             $(inputLabel).css({
+//                 "font-size": "12px",
+//                 "top": "3px",
+//                 "right": "5px",
+//                 "color": "#6f7285"
+//             });
+//         }
+//         if ($(this).hasClass("error")) {
+//             $(inputLabel).css("color", "#ff4545");
+//         }
+//     }).on("focus", function () {
+//         let inputLabel = "label[for='" + $(this).attr("id") + "']";
+//         if ($(this).hasClass("solid-label")) {
+//             return false;
+//         } else if ($(this).hasClass("error")) {
+//             let errorDiv = $(this).next(".error");
+//             $(this).on("change", function () {
+//                 if ($(this).hasClass("error")) {
+//                     $(this).removeClass("error");
+//                     $(errorDiv).remove();
+//                 }
+//             });
+//         } else {
+//             $(inputLabel).css({
+//                 "font-size": "12px",
+//                 "top": "3px",
+//                 "right": "5px",
+//                 "color": "#3CCD1C"
+//             });
+//             $(this).css("color", "#3ccd1c");
+//         }
+//     }).on("focusout", function () {
+//         let inputLabel = "label[for='" + $(this).attr("id") + "']";
+//         if ($(this).hasClass("solid-label")) {
+//             return false;
+//         } else if ($(this).hasClass("error")) {
+//
+//         } else {
+//             $(inputLabel).css("color", "#6f7285");
+//             if ($(this).val() === '') {
+//                 $(inputLabel).css({
+//                     "font-size": "13px",
+//                     "top": "31px",
+//                     "right": "10px",
+//                     "color": "#6f7285"
+//                 });
+//             } else {
+//                 $(this).css("color", "#8d8d8d");
+//                 $(inputLabel).css("color", "#8d8d8d");
+//             }
+//         }
+//     });
+// }
 
 $(window).on("load", function () {
     input_focus();
 });
 $(document).ready(function () {
-    input_focus();
+    if (window.location.href.indexOf("login") !== -1) {
+        let owl = $('.owl-carousel').owlCarousel({
+            loop: false,
+            margin: 10,
+            nav: false,
+            dots: false,
+            items: 1,
+            touchDrag: false,
+            mouseDrag: false,
+        });
+        $('.next-slide').click(function () {
+            owl.trigger('next.owl.carousel');
+        });
+        $('.prev-slide').click(function () {
+            owl.trigger('prev.owl.carousel');
+        });
+    }
+
+    // input_focus();
     $("input:radio[name='user-type']").change(function () {
-        $user_id = $("input[type='radio']:checked+label").attr("for");
+        let $user_id = $("input[type='radio']:checked+label").attr("for");
         if ($user_id === "researcher") {
-            $(".exper").removeClass("select");
+            $(".expert").removeClass("select");
             $(".industry").removeClass("select");
         } else if ($user_id === "expert") {
             $(".researcher").removeClass("select");
@@ -126,14 +144,13 @@ $(document).ready(function () {
     });
 });
 
-var myForm = $('.sign-up-ajax');
+let myForm = $('.sign-up-ajax');
 myForm.submit(function (event) {
     $(".loading").css('display', "block");
-    $(".registration").css('display', "none");
+    $(".owl-carousel").css('display', "none");
     event.preventDefault();
-    // var formData = $(this).serialize().toString();
-    var $thisURL = myForm.attr('data-url');
-    $(".email .error").remove();
+    // let formData = $(this).serialize().toString();
+    let $thisURL = myForm.attr('data-url');
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -150,9 +167,10 @@ myForm.submit(function (event) {
         },
         error: function (data) {
             $(".loading").css('display', "none");
-            $(".registration").css('display', "block");            
-            var obj = JSON.parse(data.responseText);
-            if (obj.email != undefined ){
+            $(".owl-carousel").css('display', "block");
+            let obj = JSON.parse(data.responseText);
+            $(".email").find("div.error").remove();
+            if (obj.email !== undefined) {
                 $(".email").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
@@ -161,27 +179,40 @@ myForm.submit(function (event) {
                     "</span>" +
                     "</div>");
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#email").next().css("color", "rgb(255, 69, 69)");
             }
+            $(".user-type-container").addClass("error-container");
+            if ($(".account_error").text().length !== 0) {
+                $(".account_error").html("");
+            }
+<<<<<<< HEAD
             if (obj.account_type != undefined ){
-                $(".account_error").append("<div class='error'>"+
-                                                "<span class='error-body'>" +
-                                                "<ul class='errorlist'>" +
-                                                "<li>" + obj.account_type + "</li>" +
-                                                "</ul>" +
-                                                "</span>" +
-                                                "</div>");
+                $(".account_error").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.account_type + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $(".user-type-container").find("label").click(function () {
+                    if ($(this).closest(".user-type-container").hasClass("error-container")) {
+                        $(this).closest(".user-type-container").removeClass("error-container");
+                        $(".account_error").html("");
+                    }
+                });
             }
         },
     })
 });
 
-var loginForm = $('.login-ajax');
+let loginForm = $('.login-ajax');
 loginForm.submit(function (event) {
     $(".loading").css('display', "block");
-    $(".registration").css('display', "none");
+    // $(".registration").css('display', "none");
+    $(".owl-carousel").css('display', "none");
     event.preventDefault();
-    // var formData = $(this).serialize().toString();
-    var $thisURL = loginForm.attr('data-url');
+    // let formData = $(this).serialize().toString();
+    let $thisURL = loginForm.attr('data-url');
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -191,13 +222,19 @@ loginForm.submit(function (event) {
         // contentType: 'application/json; charset=utf-8',
         success: function (data) {
             if (data.success === 'successful') {
-                if (data.next)
-                    window.location.href = data.next;
-                else
-                    window.location.href = "/" + data.type;
+                $('.circle-loader').toggleClass('load-complete');
+                $('.checkmark').toggle();
+                $('.loading h6').html("خوش آمدید!");
+                setTimeout(
+                    function () {
+                        if (data.next)
+                            window.location.href = data.next;
+                        else
+                            window.location.href = "/" + data.type;
+                    }, 1000);
             } else {
                 $(".loading").css('display', "none");
-                $(".registration").css('display', "block");
+                $(".owl-carousel").css('display', "block");
                 $(".password").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
@@ -210,9 +247,9 @@ loginForm.submit(function (event) {
         },
         error: function (data) {
             $(".loading").css('display', "none");
-            $(".registration").css('display', "block");
-            var obj = JSON.parse(data.responseText);
-            if (obj.username != undefined) {
+            $(".owl-carousel").css('display', "block");
+            let obj = JSON.parse(data.responseText);
+            if (obj.username !== undefined) {
                 $(".username").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
@@ -222,7 +259,7 @@ loginForm.submit(function (event) {
                     "</div>");
                 $("input#username").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
-            if (obj.password != undefined) {
+            if (obj.password !== undefined) {
                 $(".password").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
@@ -236,12 +273,12 @@ loginForm.submit(function (event) {
     })
 });
 
-var recoverPassForm = $('.recover-pass');
+let recoverPassForm = $('.recover-pass');
 recoverPassForm.submit(function (event) {
     $(".loading").css('display', "block");
-    $(".registration").css('display', "none");
+    $(".recover-pass-container").css('display', "none");
     event.preventDefault();
-    var $thisURL = recoverPassForm.attr('data-url');
+    let $thisURL = recoverPassForm.attr('data-url');
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -252,12 +289,12 @@ recoverPassForm.submit(function (event) {
         success: function (data) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
-            $('.load-complete h6').html("ایمیل با موفقیت ارسال شد!\nجهت بازیابی رمزعبور ایمیل خود را بررسی کنید!");
+            $('.loading h6').html("ایمیل با موفقیت ارسال شد!\nجهت بازیابی رمزعبور ایمیل خود را بررسی کنید!");
         },
         error: function (data) {
             $(".loading").css('display', "none");
-            $(".registration").css('display', "block");
-            var obj = JSON.parse(data.responseText);
+            $(".recover-pass-container").css('display', "block");
+            let obj = JSON.parse(data.responseText);
             $(".email").append("<div class='error'>" +
                 "<span class='error-body'>" +
                 "<ul class='errorlist'>" +
@@ -271,11 +308,11 @@ recoverPassForm.submit(function (event) {
 });
 
 function getCookie(name) {
-    var cookieValue = null;
+    let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = jQuery.trim(cookies[i]);
             // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -286,7 +323,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-var csrftoken = getCookie('csrftoken');
+let csrftoken = getCookie('csrftoken');
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection

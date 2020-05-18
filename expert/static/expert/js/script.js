@@ -140,7 +140,7 @@ $(document).ready(function () {
     init_dialog_btn(".preview-project.type-2", ".project-details");
     // init_dialog_btn(".preview-project", ".project-details");
     init_dialog_btn(".confirm_project", ".select-technique");
-    init_dialog_btn("#accept-techniques", ".project-details");
+    // init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".add-new-question", ".add-question");
     init_dialog_btn(".education-btn", ".scientific_form");
@@ -157,6 +157,7 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
+
 
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
 
@@ -198,7 +199,7 @@ $(document).ready(function () {
                     }
                     source.push(item);
                 }
-                $(".select-technique").finFd("#fancy-tree").fancytree({
+                $(".select-technique").find("#fancy-tree").fancytree({
                     extensions: ["glyph"],
                     checkbox: false,
                     selectMode: 1,
@@ -287,7 +288,11 @@ $(document).ready(function () {
                     $(".main").removeClass("blur-div");
                 },
                 error: function (data) {
-
+                    iziToast.error({
+                        rtl: true,
+                        message: "اجرای این عملیات با خطا مواجه شد!",
+                        position: 'bottomLeft'
+                    });
                 }
             });
         });
@@ -1419,7 +1424,7 @@ comment_form.submit(function (event) {
         success: function (data) {
             comment_form.find("button[type='submit']").prop("disabled", false);
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-            if($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+            if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
                 $(".project-comment-innerDiv").find(".no-comment").remove();
             }
             let comment_code = addComment(data);
@@ -1435,7 +1440,7 @@ comment_form.submit(function (event) {
             });
 
             comment_form[0].reset();
-            comment_form.find("#description").css("height","fit-content");
+            comment_form.find("#description").css("height", "fit-content");
             $('.error').remove();
             $('.file-name').html("");
             $(".send-comment-container .comment-input").removeClass("attached");
