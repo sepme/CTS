@@ -185,19 +185,21 @@ myForm.submit(function (event) {
             if ($(".account_error").text().length !== 0) {
                 $(".account_error").html("");
             }
-            $(".account_error").append("<div class='error'>" +
-                "<span class='error-body'>" +
-                "<ul class='errorlist'>" +
-                "<li>" + obj.account_type + "</li>" +
-                "</ul>" +
-                "</span>" +
-                "</div>");
-            $(".user-type-container").find("label").click(function () {
-                if ($(this).closest(".user-type-container").hasClass("error-container")) {
-                    $(this).closest(".user-type-container").removeClass("error-container");
-                    $(".account_error").html("");
-                }
-            });
+            if (obj.account_type != undefined ){
+                $(".account_error").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.account_type + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $(".user-type-container").find("label").click(function () {
+                    if ($(this).closest(".user-type-container").hasClass("error-container")) {
+                        $(this).closest(".user-type-container").removeClass("error-container");
+                        $(".account_error").html("");
+                    }
+                });
+            }
         },
     })
 });

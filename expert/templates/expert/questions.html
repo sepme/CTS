@@ -61,7 +61,7 @@
                                                     <div class="date text-center">
                                                         <div class="label">زمان ثبت</div>
                                                         <div class="value">
-                                                            {#                                                            <span>{% calculate_date_past research_question.submitted_date %}</span>#}
+                                                            <span>{% calculate_date_past research_question.submitted_date %}</span>
                                                             <span>قبل</span>
                                                         </div>
                                                     </div>
@@ -98,7 +98,7 @@
                                                     <div class="date text-center">
                                                         <div class="label">زمان ثبت</div>
                                                         <div class="value">
-                                                            {#                                                            <span>{% calculate_date_past research_question.submitted_date %}</span>#}
+                                                            <span>{% calculate_date_past research_question.submitted_date %}</span>
                                                             <span>قبل</span>
                                                         </div>
                                                     </div>
@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                         {% elif research_question.status == "answered" %}
-                            <div class="card close-question flow-root-display w-100">
+                            <div class="card close-question box flow-root-display w-100">
                                 <div class="box-header">
                                     <h6>{{ research_question.question_title }}</h6>
                                     <span class="answered-status"></span>
@@ -135,7 +135,7 @@
                                                     <div class="date text-center">
                                                         <div class="label">زمان ثبت</div>
                                                         <div class="value">
-                                                            {#                                                            <span>{% calculate_date_past research_question.submitted_date %}</span>#}
+                                                            <span>{% calculate_date_past research_question.submitted_date %}</span>
                                                             <span>قبل</span>
                                                         </div>
                                                     </div>
