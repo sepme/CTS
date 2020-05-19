@@ -54,6 +54,28 @@
     <div class="content">
         <div class="container">
             <div id="top"></div>
+            {% if 0 %}
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered warning-modal">
+                        <div class="modal-content">
+                            <div class="modal-body text-right">
+                                <img class="modal-image" src="{% static 'img/warning_sign.svg' %}" alt="">
+                                <h6 class="text-center">درخواست پژوهشگری ثبت نکرده اید!</h6>
+                                <p>
+                                    هنوز درخواست پژوهشگری از طرف شما ثبت نشده است؛ این امکان، برای اساتیدی که پروژه در
+                                    حال اجرا دارند، از طریق صفحه مدیریت پروژه فراهم می‌باشد.
+                                </p>
+                            </div>
+                            <div class="modal-footer center-button">
+                                <button type="button" class="border-button warning-button" data-dismiss="modal">تایید
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             {% block content %}{% endblock %}
         </div>
     </div>
@@ -110,7 +132,7 @@
                 </li>
             </a>
             {% url 'expert:researcherRequest' as researcherRequest_url %}
-            <a href="{{ researcherRequest_url }}">
+            <a href="{{ researcherRequest_url }}" {% if 0 %}data-toggle="modal" data-target="#exampleModal"{% endif %}>
                 <li class="list-group-item text-right {% if request.get_full_path == researcherRequest_url %}active{% endif %}">
                     <div>
                         <span>درخواست‌های پژوهشگران</span>
@@ -165,7 +187,7 @@
     {% csrf_token %}
     <script>
         {#var expert = "{{ expert_info_form.expert_firstname }}";#}
-        var instance = "{{ instance }}";
+        let instance = "{{ instance }}";
         {#var some_text = "{{ some_text }}";#}
         {#var scientific_form = "{{ scientific_form }}";#}
     </script>
