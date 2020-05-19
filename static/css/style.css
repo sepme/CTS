@@ -3055,6 +3055,12 @@ div.no-project > span.disable-border-button {
 
 }
 
+.box .box-header .box-object-left a span.info-text{
+    font-weight: 500;
+    font-size: 11px;
+    padding: 0;
+}
+
 .message-expand {
     visibility: hidden;
 }
