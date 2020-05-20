@@ -279,7 +279,6 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            console.log(id);
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -287,10 +286,9 @@ $(document).ready(function () {
                 data: {technique: data, id: id},
                 dataType: 'json',
                 success: function (data) {
-                    let obj = JSON.parse(data.responseText);
                     iziToast.success({
                         rtl: true,
-                        message: obj.message,
+                        message: data.message,
                         position: 'bottomLeft'
                     });
                     $(".main").removeClass("blur-div");

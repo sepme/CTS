@@ -456,7 +456,6 @@ def accept_project(request):
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
-        print("expert_request saved : ",expert_request)
         text = "درخواست شما برای صنعت ارسال شد."
         comment = Comment(description=text,
                           sender_type="system",
@@ -464,7 +463,6 @@ def accept_project(request):
                           expert_user=expert_user,
                           status='unseen')
         comment.save()
-        print("comment saved : ",comment)
         return JsonResponse({
             'message': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
