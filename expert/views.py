@@ -20,25 +20,26 @@ from researcher.models import ResearcherProfile, Technique, StudiousRecord, Tech
 
 
 def gregorian_to_numeric_jalali(date):
+    if date is None:
+        return "نامشخص"
     j_date = JalaliDate(date)
     return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
 def calculate_deadline(finished, started):
-    try:
-        diff = JalaliDate(finished) - JalaliDate(started)
-        days = diff.days
-        if days < 0:
-            return None
-        elif days < 7:
-            return '{} روز'.format(days)
-        elif days < 30:
-            return '{} هفته'.format(int(days / 7))
-        elif days < 365:
-            return '{} ماه'.format(int(days / 30))
-        else:
-            return '{} سال'.format(int(days / 365))
-    except:
+    if finished is None or started is None:
         return 'تاریخ نامشخص'
+    diff = JalaliDate(finished) - JalaliDate(started)
+    days = diff.days
+    if days < 0:
+        return None
+    elif days < 7:
+        return '{} روز'.format(days)
+    elif days < 30:
+        return '{} هفته'.format(int(days / 7))
+    elif days < 365:
+        return '{} ماه'.format(int(days / 30))
+    else:
+        return '{} سال'.format(int(days / 365))
 
 
 class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -129,7 +130,6 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
         context = {}
         if len(projects_data) != 0:
             context = {'applications': projects_data}
-        # print(context)
         return context    
 
 
@@ -221,11 +221,8 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 if os.path.isfile(expertForm.photo.path):
                     os.remove(expertForm.photo.path)
                 expertForm.photo = photo
-                save_photo = True
-            else:
-                save_photo = False
 
-            expertForm.save(save_photo=save_photo)
+            expertForm.save()
         return super().post(self, request, *args, **kwargs)
     
 
@@ -371,11 +368,9 @@ def show_project_view(request):
     id = request.GET.get('id')
     project = Project.objects.get(id=id)
     data = {}
-    try:
+    if project.expert_accepted is not None:
         if project.expert_accepted.user == request.user:
             ActiveProjcet(request, project, data)
-    except:
-        pass
     return UsualShowProject(request, project, data)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -387,6 +382,7 @@ def UsualShowProject(request, project, data):
         data['applied'] = False
     comments = []
     comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
+    sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
     for comment in comment_list:
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
@@ -400,6 +396,16 @@ def UsualShowProject(request, project, data):
             'pk' : comment.pk,
         })
         if comment.sender_type == "industry":
+            comment.status = "seen"
+            comment.save()
+    for comment in sys_comment:
+        comments.append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'pk' : comment.pk,
+        })
+        if comment.sender_type == "system":
             comment.status = "seen"
             comment.save()
     # data = {
@@ -437,19 +443,20 @@ def accept_project(request):
     project_form = project.project_form
     if expert_user in project.expert_applied.all():
         return JsonResponse({
-            'success': 'درخواست شما قبلا هم ارسال شده است'
-        })
+            'message': 'درخواست شما قبلا هم ارسال شده است',
+        },status=400)
     else:
         technique_list = request.POST.getlist('technique')
         if len(technique_list) == 0:
             return JsonResponse({
-                'success': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.'
-            })
+                'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
+            },status=400)
         expert_request = ExpertRequestedProject.objects.create(expert=expert_user, project=project)
         for technique in technique_list:
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
+        print("expert_request saved : ",expert_request)
         text = "درخواست شما برای صنعت ارسال شد."
         comment = Comment(description=text,
                           sender_type="system",
@@ -457,8 +464,9 @@ def accept_project(request):
                           expert_user=expert_user,
                           status='unseen')
         comment.save()
+        print("comment saved : ",comment)
         return JsonResponse({
-            'success': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
+            'message': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -748,7 +756,6 @@ def ActiveProjcet(request, project, data):
             data['request_status'] = False
     except:
         data['request_status'] = True
-
     return JsonResponse(data=data)
 
 @permission_required('expert.be_expert', login_url='/login/')

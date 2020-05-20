@@ -78,10 +78,16 @@ function showQuestion() {
             data: {id: id},
             success: function (data) {
                 if (data.question_status === "waiting") {
+                    $('.close-answer').hide();
+                    $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("در حال بررسی");
                 } else if (data.question_status === "not_answered") {
+                    $('.close-answer').show();
+                    $('.close-answer').prop('disabled', false);
                     dialog.find(".question-status").html("فعال");
                 } else if (data.question_status === "answered") {
+                    $('.close-answer').hide();
+                    $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("پاسخ داده شده");
                 }
                 dialog.find(".card-head").html(data.question_title);
@@ -273,6 +279,7 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
+            console.log(id);
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -280,17 +287,24 @@ $(document).ready(function () {
                 data: {technique: data, id: id},
                 dataType: 'json',
                 success: function (data) {
+                    let obj = JSON.parse(data.responseText);
                     iziToast.success({
                         rtl: true,
-                        message: data.success,
+                        message: obj.message,
                         position: 'bottomLeft'
                     });
                     $(".main").removeClass("blur-div");
                 },
                 error: function (data) {
+                    let obj = JSON.parse(data.responseText);
+                    let message = ""
+                    if (obj.message != undefined)
+                        message = obj.message;
+                    else
+                        message = "اجرای این عملیات با خطا مواجه شد!";
                     iziToast.error({
                         rtl: true,
-                        message: "اجرای این عملیات با خطا مواجه شد!",
+                        message: message,
                         position: 'bottomLeft'
                     });
                 }
@@ -1093,6 +1107,7 @@ showInfo.click(function (event) {
         dataType: 'json',
         success: function (data) {
             $('.project_id').attr('value', project_id);
+            $('.ajax-select-techniques').attr('id', project_id);
             if (data.status === "non active") {
                 $(".hidden").attr("style", "display : none;");
                 $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);

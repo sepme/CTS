@@ -122,8 +122,9 @@ class ExpertForm(models.Model):
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
 
-    def save(self,save_photo, *args, **kwargs):
-        if save_photo :
+    def save(self, *args, **kwargs):
+        prev = ExpertForm.objects.get(id=self.id)
+        if self.photo.name.split("/")[-1] != prev.photo.name.split("/")[-1] :
             self.photo = self.compressImage(self.photo)
         super(ExpertForm, self).save(*args, **kwargs)
 
