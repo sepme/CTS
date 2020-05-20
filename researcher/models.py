@@ -410,11 +410,7 @@ class ResearchQuestionInstance(models.Model):
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         prev = ResearchQuestionInstance.objects.get(id=self.id)
         if prev.is_correct == "not_seen" and self.is_correct == "correct":
-            message = Message(title="خوش آمدین!",
-                              text="تبریک\n از این به بعد دسترسی شما به سایت فعال شد",
-                              code="100-{0:03d}".format(self.id),
-                              type=0)
-            message.save()
+            message = Message.objects.get(id=2)
             message.receiver.add(self.researcher.user)
             message.save()
             status = self.researcher.status
