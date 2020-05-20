@@ -181,7 +181,7 @@ myForm.submit(function (event) {
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                 $("input#email").next().css("color", "rgb(255, 69, 69)");
             }
-            $(".user-type-container").addClass("error-container");
+            // $(".user-type-container").addClass("error-container");
             if ($(".account_error").text().length !== 0) {
                 $(".account_error").html("");
             }
@@ -199,6 +199,7 @@ myForm.submit(function (event) {
                         $(".account_error").html("");
                     }
                 });
+                $(".user-type-container").addClass("error-container");
             }
         },
     })

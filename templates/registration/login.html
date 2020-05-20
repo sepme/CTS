@@ -39,13 +39,13 @@
                         </label>
                         <h6 class="text-right">ورود به حساب کاربری</h6>
                         <div class="username input-compact">
-                            <label for="id_username">نام کاربری</label>
-                            {{ form.username|attr:"id:id_username"|attr:"class:w-100" }}
+                            <label for="username">نام کاربری</label>
+                            {{ form.username|attr:"id:username"|attr:"class:w-100" }}
                             <i class="fas fa-user-alt fa-lg"></i>
                         </div>
                         <div class="password input-compact">
-                            <label for="id_password">رمز عبور</label>
-                            {{ form.password|attr:"id:id_password"|attr:"class:w-100" }}
+                            <label for="password">رمز عبور</label>
+                            {{ form.password|attr:"id:password"|attr:"class:w-100" }}
                             <i class="fas fa-lock fa-lg"></i>
                         </div>
                         <a href="{% url 'chamran:recover_password' %} " class="forget-pass text-right">
@@ -63,11 +63,11 @@
                           data-url="{% url 'chamran:signup_email' %}">
                         <h6 class="text-right">ساخت حساب کاربری</h6>
                         <div class="user-type-container">
-                            <input type="radio" name="user-type" id="researcher" value="researcher">
+                            <input type="radio" name="account_type" id="researcher" value="researcher">
                             <label for="researcher" class="user-type researcher text-center">پژوهشگر</label>
-                            <input type="radio" name="user-type" id="expert" value="expert">
+                            <input type="radio" name="account_type" id="expert" value="expert">
                             <label for="expert" class="user-type expert text-center">استاد</label>
-                            <input type="radio" name="user-type" id="industry" value="industry">
+                            <input type="radio" name="account_type" id="industry" value="industry">
                             <label for="industry" class="user-type industry text-center">صنعت</label>
                         </div>
                         <div class="account_error"></div>
