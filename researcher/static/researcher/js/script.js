@@ -52,7 +52,6 @@ $(".preview-project").click(function () {
      * end of reset
      */
     let id = $(this).attr("id");
-    console.log("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/show_project/',
@@ -71,7 +70,6 @@ $(".preview-project").click(function () {
                 );
             }
             if (data.status === "waiting" || data.status === "involved") {
-                console.log(data.status);
                 $('.vote').remove();
                 $('.apply').remove();
             }
@@ -385,7 +383,6 @@ $(".submit-button").click(function (event) {
     event.preventDefault();
     let voteForm = $(this).closest("form");
     let data = voteForm.serialize();
-    console.log(data);
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -735,7 +732,6 @@ technique_review.submit(function (event) {
             }
         },
         error: function (data) {
-            console.log(data);
             let obj = JSON.parse(data.responseText);
             technique_review.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
@@ -837,7 +833,6 @@ add_technique_form.submit(function (event) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
             // Todo : Plz send link of techniques for me here Ali Agha! :D
             add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);

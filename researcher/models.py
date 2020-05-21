@@ -1,11 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse, HttpResponseRedirect
 from django.utils.timezone import now
 import os
 import datetime
 import uuid
 from . import persianNumber
+from chamran_admin.models import Message
 
 #for Compress the photo
 import sys
@@ -165,7 +167,9 @@ class ResearcherProfile(models.Model):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
     def save(self, *args, **kwargs):
-        self.photo = self.compressImage(self.photo)
+        perv = ResearcherProfile.objects.get(id=self.id)
+        if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
+            self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
@@ -402,3 +406,19 @@ class ResearchQuestionInstance(models.Model):
 
     def __str__(self):
         return str(self.research_question) + ' - ' + self.researcher.user.username
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        prev = ResearchQuestionInstance.objects.get(id=self.id)
+        if prev.is_correct == "not_seen" and self.is_correct == "correct":
+            message = Message.objects.get(id=2)
+            message.receiver.add(self.researcher.user)
+            message.save()
+            status = self.researcher.status
+            status.status = "free"
+            status.save()
+            user = self.researcher.user
+            ctype = ContentType.objects.get_for_model(ResearcherUser)
+            permission = Permission.objects.get(content_type=ctype, codename='is_active')
+            user.user_permissions.add(permission)
+            user.save()
+        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
