@@ -167,10 +167,12 @@ class ResearcherProfile(models.Model):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
     def save(self, *args, **kwargs):
-        perv = ResearcherProfile.objects.get(id=self.id)
-        if perv is not None:
+        try:
+            perv = ResearcherProfile.objects.get(id=self.id)
             if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
                 self.photo = self.compressImage(self.photo)
+        except:
+            self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
@@ -409,8 +411,8 @@ class ResearchQuestionInstance(models.Model):
         return str(self.research_question) + ' - ' + self.researcher.user.username
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        perv = ResearchQuestionInstance.objects.get(id=self.id)
-        if perv is not None:
+        try:
+            perv = ResearchQuestionInstance.objects.get(id=self.id)
             if perv.is_correct == "not_seen" and self.is_correct == "correct":
                 message = Message.objects.get(id=2)
                 message.receiver.add(self.researcher.user)
@@ -423,4 +425,6 @@ class ResearchQuestionInstance(models.Model):
                 permission = Permission.objects.get(content_type=ctype, codename='is_active')
                 user.user_permissions.add(permission)
                 user.save()
+        except:
+            pass
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
