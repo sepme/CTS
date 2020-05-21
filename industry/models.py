@@ -88,7 +88,10 @@ class IndustryForm(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.photo = self.compressImage(self.photo)
+        perv = IndustryForm.objects.get(id=self.id)
+        if perv is not None:
+            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
 
     def compressImage(self,photo):

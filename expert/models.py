@@ -123,9 +123,10 @@ class ExpertForm(models.Model):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
 
     def save(self, *args, **kwargs):
-        prev = ExpertForm.objects.get(id=self.id)
-        if self.photo.name.split("/")[-1] != prev.photo.name.split("/")[-1] :
-            self.photo = self.compressImage(self.photo)
+        perv = ExpertForm.objects.get(id=self.id)
+        if perv is not None:
+            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                self.photo = self.compressImage(self.photo)
         super(ExpertForm, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
