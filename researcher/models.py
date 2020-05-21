@@ -168,8 +168,9 @@ class ResearcherProfile(models.Model):
 
     def save(self, *args, **kwargs):
         perv = ResearcherProfile.objects.get(id=self.id)
-        if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
-            self.photo = self.compressImage(self.photo)
+        if perv is not None:
+            if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
+                self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
@@ -383,7 +384,7 @@ class TechniqueReview(models.Model):
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
-    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
+    project = models.ForeignKey("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
     date_requested = models.DateField(default=now, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
@@ -408,17 +409,18 @@ class ResearchQuestionInstance(models.Model):
         return str(self.research_question) + ' - ' + self.researcher.user.username
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        prev = ResearchQuestionInstance.objects.get(id=self.id)
-        if prev.is_correct == "not_seen" and self.is_correct == "correct":
-            message = Message.objects.get(id=2)
-            message.receiver.add(self.researcher.user)
-            message.save()
-            status = self.researcher.status
-            status.status = "free"
-            status.save()
-            user = self.researcher.user
-            ctype = ContentType.objects.get_for_model(ResearcherUser)
-            permission = Permission.objects.get(content_type=ctype, codename='is_active')
-            user.user_permissions.add(permission)
-            user.save()
+        perv = ResearchQuestionInstance.objects.get(id=self.id)
+        if perv is not None:
+            if perv.is_correct == "not_seen" and self.is_correct == "correct":
+                message = Message.objects.get(id=2)
+                message.receiver.add(self.researcher.user)
+                message.save()
+                status = self.researcher.status
+                status.status = "free"
+                status.save()
+                user = self.researcher.user
+                ctype = ContentType.objects.get_for_model(ResearcherUser)
+                permission = Permission.objects.get(content_type=ctype, codename='is_active')
+                user.user_permissions.add(permission)
+                user.save()
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
