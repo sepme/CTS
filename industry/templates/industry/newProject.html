@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="margin-top: 5px">
+                        <div class="row mbottom-10" style="margin-top: 5px">
                             <div class="col-lg-12 text-right">
                                 <label for="id_key_words">کلیدواژه ها</label>
                                 {% if form.key_words.erros %}
@@ -68,23 +68,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 text-right">
-                                <span class="sub-header" style="position: relative;top: 15px;">روش تحقیق : </span>
+                            <div class="col-12 text-right">
+                                <span class="sub-header" style="position: relative">روش تحقیق : </span>
                                 <div class="error">
                                         <span class="error-body">{% render_field form.research_methodology.errors %}</span>
                                     </div>
                             </div>
-                            <div class="col-lg-2 text-right">
+                            <div class="col-6 text-left">
                                 <input type="radio" id="id_research_methodology_0" name="research_methodology"
                                        class="label-check-radio" value="0">
-                                <label for="id_research_methodology_0" style="padding: 5px 9px;">کمی</label>
+                                <label for="id_research_methodology_0" style="padding: 5px 9px;position: relative">کمی</label>
                             </div>
-                            <div class="col-lg-2 text-right">
+                            <div class="col-6 text-right">
                                 <input type="radio" id="id_research_methodology_1" name="research_methodology"
                                        class="label-check-radio" value="1">
-                                <label for="id_research_methodology_1">کیفی</label>
+                                <label for="id_research_methodology_1" style="position: relative">کیفی</label>
                             </div>
-                            <div class="col-lg-4"></div>
                         </div>
                     </div>
                 </div>

@@ -259,14 +259,14 @@ class ProjectForm(forms.Form):
 
     def clean_predict_profit(self):
         data = self.cleaned_data["predict_profit"]
-        if not data & (1 << 47):
-            raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
+        # if not data & (1 << 47):
+            # raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
         return data
     
     def clean_required_budget(self):
         data = self.cleaned_data["required_budget"]
-        if not data & (1 << 47):
-            raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
+        # if not data & (1 << 47):
+            # raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
         return data
     
     

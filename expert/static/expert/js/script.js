@@ -71,12 +71,14 @@ function showQuestion() {
     $(".show-btn").click(function () {
         const dialog = $(".show-question");
         let id = $(this).attr("id");
+        console.log(id);
         $.ajax({
             method: 'GET',
             url: '/expert/show_research_question/',
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                console.log(data);
                 if (data.question_status === "waiting") {
                     $('.close-answer').hide();
                     $('.close-answer').prop('disabled', true);

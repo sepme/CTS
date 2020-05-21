@@ -395,11 +395,12 @@ function customAutocomplete(element, arr) {
     });
 }
 
-if ($(document).find("#Uni").length > 0) {
-    console.log("yes");
-    let arr = ["دانشگاه شریف", "دانشگاه تهران"];
-// customAutocomplete($("#Uni"), arr);
-    $("#Uni").autocomplete({
-        source: arr,
-    });
-}
+$(window).on("load", function () {
+    if ($(document).find("#Uni").length > 0) {
+        let arr = ["دانشگاه شریف", "دانشگاه تهران"];
+        $("#Uni").autocomplete({
+            source: arr,
+        });
+         $("#Uni").attr("autocomplete", "on");
+    }
+});
