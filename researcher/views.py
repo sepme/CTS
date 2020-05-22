@@ -374,18 +374,15 @@ def AddTechnique(request):
             technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
                                                     technique=technique,
                                                     evaluat_date=datetime.date.today())
-            technique_instance.save()
-            data = {'success' : 'successful',
-                    'title'   : technique_title,
-                    "is_exam" : method == 'exam',
-                    'link'    : technique.tutorial_link}
-            return JsonResponse(data=data)
-        technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
-                                                    technique=technique,
-                                                    resume=resume)
+        else:
+            technique_instance = models.TechniqueInstance(researcher=request.user.researcheruser,
+                                                        technique=technique,
+                                                        resume=resume)
         technique_instance.save()
         data = {'success' : 'successful',
-                'title'   : technique_title}
+                'title'   : technique_title,
+                "is_exam" : method == 'exam',
+                'link'    : technique.tutorial_link}
         return JsonResponse(data=data)
     return JsonResponse(form.errors ,status=400)
 
@@ -563,7 +560,8 @@ def ShowProject(request):
     json_response['required_technique']=[]
     for tech in project.project_form.required_technique:
         json_response['required_technique'].append(tech.__str__())
-    all_comments = project.get_comments().exclude(researcher_user=None)
+    projects_comments = project.get_comments()
+    all_comments = projects_comments.exclude(researcher_user=None)
     json_response['comments'] = []
     for com in all_comments:
         try:
@@ -578,7 +576,7 @@ def ShowProject(request):
             'attachment'   : url
         }
         json_response['comments'].append(temp)
-        if com.sender_type == expert:
+        if (com.sender_type == 'expert' or com.sender_type == 'system') and com.status == 'not_seen':
             com.status = 'seen'
             com.save()
     json_response['status'] = request.user.researcheruser.status.status

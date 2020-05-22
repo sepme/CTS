@@ -42,8 +42,8 @@ $(".preview-project").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
         return;
-    $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
-    $("#apply_project_id").attr('value', $(".chamran-btn-info").attr("id"));
+    $(".project_id").attr('value', $(".preview-project").attr("id"));
+    $("#apply_project_id").attr('value', $(".preview-project").attr("id"));
     /*
      * reset All data
      */
@@ -354,6 +354,7 @@ $(document).ready(function () {
     } else {
         init_windowSize();
         init_dialog_btn(".preview-project", ".showProject");
+        init_dialog_btn(".my-project", ".showProject");
         // $(".form-submit").click(function () {
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
@@ -772,12 +773,16 @@ technique_review.submit(function (event) {
     })
 });
 
-function show_add_technique_record(title, is_exam) {
+function show_add_technique_record(data) {
     let newTechnique = "" +
         "<div class='card box flow-root-display w-100'>" +
         "    <div class='box-header text-right'>" +
-        "        <h6>" + title + "</h6>" +
-
+        "        <h6>" + data.title + "</h6>" +
+        "        <div class='box-object-left'>" +
+        "           <a href='//" + data.link + "'>" +
+        "            <i class='fas fa-link'></i>" +
+        "           </a>" +
+        "       </div>" +
         "    </div>" +
         "    <div class='box-body'>" +
         "        <div class='row'>" +
@@ -794,7 +799,7 @@ function show_add_technique_record(title, is_exam) {
         "                    <div class='col-6 text-center'>" +
         "                        <div class='label'>سطح تسلط</div>" +
         "                        <div class='value'>";
-        if (is_exam)
+        if (data.is_exam)
             newTechnique += "                            <span>" +
                             "زمان آزمون از طریق تماس با شما هماهنگ خواهد شد" +
                             "                            </span>";
@@ -843,7 +848,7 @@ add_technique_form.submit(function (event) {
             if (data.success === "successful") {
                 $(".add-technique").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_add_technique_record(data.title, data.is_exam);
+                show_add_technique_record(data);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -985,6 +990,11 @@ apply_form.submit(function (event) {
             $("input#most_hours").removeClass("error");
             $("input#least_hours").removeClass("error");
             $(".apply").hide();
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما برای استاد فرستاده شد.",
+                position: 'bottomLeft'
+            });
         },
         error: function (data) {
             let obj = JSON.parse(data.responseText);
@@ -1110,7 +1120,7 @@ function ShowPreviousProject(project) {
 }
 
 $("#done-project").click(function (event) {
-    $(".new-projects").attr("style", "display :none");
+    $(".new-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
     $(".done-project").attr("style", "display :block");
     // $.ajax({
@@ -1148,9 +1158,9 @@ function ShowMyProject(project) {
 }
 
 $("#your-project").click(function (event) {
-    $(".new-projects").attr("style", "display :none");
-    $(".done-project").attr("style", "display :none");
-    $(".your-project").attr("style", "display :block");
+    $(".new-project").attr("style", "display :none;");
+    $(".done-project").attr("style", "display :none;");
+    $(".your-project").attr("style", "display :block;");
     // $.ajax({
     //     method: 'GET',
     //     url: '/researcher/myProject/',
@@ -1228,7 +1238,7 @@ function deleteComment(comment) {
 }
 
 $("#new-projects").click(function (event) {
-    $(".new-projects").attr("style", "display :block");
+    $(".new-project").attr("style", "display :block");
     $(".done-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
 });

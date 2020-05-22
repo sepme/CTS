@@ -278,6 +278,8 @@ recoverPassForm.submit(function (event) {
     $(".loading").css('display', "block");
     $(".recover-pass-container").css('display', "none");
     event.preventDefault();
+    $(".error").html("");
+    $("input#email").removeClass("error");
     let $thisURL = recoverPassForm.attr('data-url');
     $.ajax({
         method: 'POST',
