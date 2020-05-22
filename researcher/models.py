@@ -167,11 +167,11 @@ class ResearcherProfile(models.Model):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
     def save(self, *args, **kwargs):
-        try:
+        if self.id:
             perv = ResearcherProfile.objects.get(id=self.id)
             if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
                 self.photo = self.compressImage(self.photo)
-        except:
+        else:
             self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
