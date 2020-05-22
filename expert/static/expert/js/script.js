@@ -291,14 +291,16 @@ $(document).ready(function () {
                     iziToast.success({
                         rtl: true,
                         message: data.message,
-                        position: 'bottomLeft'
+                        position: 'bottomLeft',
+                        duration: 9999,
                     });
+                    $(".select-technique").removeClass("show");
                     $(".main").removeClass("blur-div");
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);
-                    let message = ""
-                    if (obj.message != undefined)
+                    let message = "";
+                    if (obj.message !== undefined)
                         message = obj.message;
                     else
                         message = "اجرای این عملیات با خطا مواجه شد!";
@@ -1145,7 +1147,7 @@ function deleteComment(comment) {
         dataType: 'json',
         data: {id: $(comment).attr("id")},
         success: function (data) {
-            $(comment).remove()
+            $(comment).remove();
             iziToast.success({
                 rtl: true,
                 message: "پیام با موفقیت پاک شد.",
