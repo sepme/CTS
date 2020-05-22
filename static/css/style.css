@@ -331,10 +331,6 @@ label.user-type.select.researcher:after {
     background-image: url("../img/research_error.svg") !important;
 }
 
-input[type="radio"] {
-    display: none;
-}
-
 input[type="radio"]:checked + label {
     cursor: pointer;
     border: 1px solid #3CCD1C;
@@ -619,7 +615,7 @@ img {
     }
 }
 
-.fixed-back .close,.modal .close {
+.fixed-back .close, .modal .close {
     position: absolute;
     top: 5px;
     left: 5px;
@@ -631,7 +627,7 @@ img {
 }
 
 .fixed-back .close:after, .fixed-back .close:before,
-.modal .close:after, .modal .close:before{
+.modal .close:after, .modal .close:before {
     background-color: #707070;
     content: "";
     display: block;
@@ -642,7 +638,7 @@ img {
     transform-origin: center center;
 }
 
-.fixed-back .close:after,.modal .close:after {
+.fixed-back .close:after, .modal .close:after {
     height: 1.5px;
     width: 70%;
 }
@@ -659,7 +655,7 @@ img {
 }
 
 .fixed-back .close:hover:after, .fixed-back .close:hover:before,
-.modal .close:hover:after, .modal .close:hover:before{
+.modal .close:hover:after, .modal .close:hover:before {
     background-color: #fff;
 }
 
@@ -703,7 +699,7 @@ img {
 
 }
 
-.fixed-back .card.side-card .card-side.has-image .information{
+.fixed-back .card.side-card .card-side.has-image .information {
     padding: 0 10px;
 }
 
@@ -1893,10 +1889,6 @@ thead {
     border: none !important;
 }
 
-.education table, .executive table, .paper table, .research table {
-    border: 1px solid rgba(0, 0, 0, 0.125);
-}
-
 td {
     position: relative;
     padding: 0;
@@ -1911,6 +1903,7 @@ input[type="radio"] {
     display: inline-block;
     position: relative;
     min-width: 30px;
+    min-height: 30px;
 }
 
 .radio-label {
@@ -3057,7 +3050,7 @@ div.no-project > span.disable-border-button {
 
 }
 
-.box .box-header .box-object-left a span.info-text{
+.box .box-header .box-object-left a span.info-text {
     font-weight: 500;
     font-size: 11px;
     padding: 0;
@@ -3642,6 +3635,7 @@ a.top-button i {
     background-color: #FFD700;
     color: #ffffff;
 }
+
 /***
 ****   Question    ****
 ****/
@@ -4177,36 +4171,45 @@ pre#question-body {
 .modal-header, .modal-footer {
     border: none;
 }
+
 .modal-header {
     direction: rtl;
 }
+
 .modal-header .close {
     position: relative;
     margin: 0;
     padding: 0;
 }
+
 .modal-footer {
     direction: rtl;
 }
-.modal-footer.center-button button{
+
+.modal-footer.center-button button {
     margin: auto;
     padding: 5px 20px;
 }
+
 .modal-body {
     font-weight: 500;
     color: #707070;
     direction: rtl;
     padding-bottom: 0;
 }
+
 .modal-body h6 {
     color: #3CCD1C;
 }
+
 .warning-modal .modal-body h6 {
     color: #FFD700;
 }
+
 .modal-body p {
     margin: 0;
 }
+
 .modal-body .modal-image {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
@@ -4215,4 +4218,19 @@ pre#question-body {
     height: 100px;
     display: block;
     margin: 10px auto 20px;
+}
+
+.card-side.has-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+
+.user-personal-info > div:first-child {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    width: 150px;
+    height: 150px;
 }

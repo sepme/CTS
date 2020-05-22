@@ -239,11 +239,6 @@ button:hover, button:focus {
     padding: 0 15px 20px 15px;
 }
 
-table > thead {
-    background-color: #f8fdf7;
-    color: #707070;
-}
-
 table > thead > tr > td {
     border-top: none !important;
 }
