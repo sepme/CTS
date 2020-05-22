@@ -411,7 +411,7 @@ class ResearchQuestionInstance(models.Model):
         return str(self.research_question) + ' - ' + self.researcher.user.username
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        try:
+        if self.id:
             perv = ResearchQuestionInstance.objects.get(id=self.id)
             if perv.is_correct == "not_seen" and self.is_correct == "correct":
                 message = Message.objects.get(id=2)
@@ -425,6 +425,4 @@ class ResearchQuestionInstance(models.Model):
                 permission = Permission.objects.get(content_type=ctype, codename='is_active')
                 user.user_permissions.add(permission)
                 user.save()
-        except:
-            pass
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
