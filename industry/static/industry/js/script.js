@@ -201,7 +201,7 @@ function expertResume() {
             success: function (data) {
                 $(".expert-resume #expert_name").html(data.name);
                 $(".expert-resume #expert_uni").html("دانشگاه " + data.university);
-                $(".expert-resume #expert_field").html("استادیار " + data.special_field);
+                $(".expert-resume #expert_field").html(data.scientific_rank + " " + data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
                     let table_row = "";

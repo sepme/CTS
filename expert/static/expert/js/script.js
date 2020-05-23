@@ -1112,7 +1112,7 @@ showInfo.click(function (event) {
             $('.ajax-select-techniques').attr('id', project_id);
             if (data.status === "non active") {
                 $(".hidden").attr("style", "display : none;");
-                $(".showProject").find(".card-head").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
+                $(".showProject").find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
                 $(".showProject").find(".establish-time .time-body").html(data.date);
                 $(".showProject").find(".time-left .time-body").html(data.deadline);
                 const keys = JSON.parse(data.key_words);
@@ -1388,7 +1388,7 @@ function addComment(data) {
         comment_body_classes += " attached";
     }
     let comment_code = "<div class='my-comment' id='" + data.pk + "' >" +
-        "<div class='" + comment_body_classes + "' dir='ltr'>" +
+        "<div class='comment-profile'></div>" +
         "   <span class='comment-tools'>" +
         "       <div class='btn-group dropdown'>" +
         "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
@@ -1400,15 +1400,17 @@ function addComment(data) {
         // "                   <i class='fas fa-pen'></i>" +
         // "               </div>" +
         "               <div class='dropdown-item'>" +
-        "                   <span>حذف پیام</span>" +
         "                   <i class='fas fa-trash-alt'></i>" +
+        "                   <span>حذف پیام</span>" +
         "               </div>" +
         "           </div>" +
         "       </div>" +
         // "       <i class='fas fa-reply' value=" + data.pk + ">" +
         // "           <div class='reply'></div>" +
         // "       </i>" +
-        "   </span>";
+        "   </span>" +
+        "       <div class='" + comment_body_classes + "'>";
+    comment_code += "<pre>" + data.description + "</pre>";
     if (data.attachment !== "None") {
         comment_code +=
             "<a href='/" + data.attachment + "' class='attached-file'>" +
@@ -1416,7 +1418,7 @@ function addComment(data) {
             "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
             "</a>"
     }
-    comment_code += "<pre>" + data.description + "</pre>" +
+    comment_code += "" +
         "   </div>" +
         "</div>";
     return comment_code;

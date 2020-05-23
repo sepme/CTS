@@ -3410,6 +3410,7 @@ div.no-project > span.disable-border-button {
     border: none;
     padding: 2px 10px;
     background-color: #f7fdf8;
+    box-shadow: 0 0 2px 0 #3CCD1C;
 }
 
 .mix-list li:first-child {
