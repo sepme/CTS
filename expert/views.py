@@ -675,10 +675,11 @@ def GetResume(request):
     expert = get_object_or_404(ExpertUser ,pk=expert_id)
     expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
     data = {
-    'name'          : expert_form.expert_firstname + " " + expert_form.expert_lastname,
-    "university"    : expert_form.university,
-    "special_field" : expert_form.special_field,
-    'exe_record'    : serializers.serialize('json', ExecutiveRecord.objects.filter(
+    'name'            : expert_form.expert_firstname + " " + expert_form.expert_lastname,
+    "university"      : expert_form.university,
+    "scientific_rank" : expert_form.scientific_rank,
+    "special_field"   : expert_form.special_field,
+    'exe_record'      : serializers.serialize('json', ExecutiveRecord.objects.filter(
         expert_form=expert_form)),
 
     'research_record' : serializers.serialize('json', ResearchRecord.objects.filter(
