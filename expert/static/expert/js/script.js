@@ -1130,6 +1130,7 @@ showInfo.click(function (event) {
                     $("#accept-project").attr("disabled", "disabled");
                 }
             } else {
+                $(".project").attr("value", project_id);
                 projectDetail(data);
             }
 
@@ -1510,7 +1511,7 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
             dataType: "json",
             data: {
                 researcher_id: $(this).attr("id"),
-                project_id: $('.div_project_id').attr("id")
+                project_id: $(this).val(),
             },
             success: function (data) {
                 iziToast.success({

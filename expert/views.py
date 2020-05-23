@@ -674,11 +674,24 @@ def GetResume(request):
     expert_id = request.GET['id']
     expert = get_object_or_404(ExpertUser ,pk=expert_id)
     expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
+    if expert_form.scientific_rank == 1:
+        scientific_rank = 'مربی'
+    elif expert_form.scientific_rank == 2 :
+        scientific_rank = 'استادیار'
+    elif expert_form.scientific_rank == 3 :
+        scientific_rank = 'دانشیار'
+    elif expert_form.scientific_rank == 4 :
+        scientific_rank = 'استاد'
+    elif expert_form.scientific_rank == 5 :
+        scientific_rank = 'استاد تمام'
+    elif expert_form.scientific_rank == 6 :
+        scientific_rank = 'پژوهشگر'
     data = {
-    'name'          : expert_form.expert_firstname + " " + expert_form.expert_lastname,
-    "university"    : expert_form.university,
-    "special_field" : expert_form.special_field,
-    'exe_record'    : serializers.serialize('json', ExecutiveRecord.objects.filter(
+    'name'            : expert_form.expert_firstname + " " + expert_form.expert_lastname,
+    "university"      : expert_form.university,
+    "scientific_rank" : scientific_rank,
+    "special_field"   : expert_form.special_field,
+    'exe_record'      : serializers.serialize('json', ExecutiveRecord.objects.filter(
         expert_form=expert_form)),
 
     'research_record' : serializers.serialize('json', ResearchRecord.objects.filter(
