@@ -1032,18 +1032,6 @@ h6.project-title {
     margin-bottom: 15px;
 }
 
-span.border-span {
-    display: inline-block;
-    border: none;
-    padding: 2px 10px;
-    background-color: #f7fdf8;
-    color: #3CCD1C;
-    font-weight: bold;
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: 0.25em;
-}
-
 .row-header {
     text-align: center;
     position: relative;

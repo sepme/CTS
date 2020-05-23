@@ -200,8 +200,8 @@ function expertResume() {
             data: {id: id},
             success: function (data) {
                 $(".expert-resume #expert_name").html(data.name);
-                $(".expert-resume #expert_uni").html(data.university);
-                $(".expert-resume #expert_field").html(data.special_field);
+                $(".expert-resume #expert_uni").html("دانشگاه " + data.university);
+                $(".expert-resume #expert_field").html("استادیار " + data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
                     let table_row = "";
@@ -267,12 +267,12 @@ function expertResume() {
                 $('.researcher_count').html(data.researcher_count);
                 $('.has_industrial_research').html(data.has_industrial_research);
                 if (data.awards === '') {
-                    $("#whole-honors-info").css("display","none");
+                    $("#whole-honors-info").css("display", "none");
                 } else {
                     $('.awards').html(data.awards);
                 }
                 if (data.languages === '') {
-                    $("#whole-other-info").css("display","none");
+                    $("#whole-other-info").css("display", "none");
                 } else {
                     $('.languages').html(data.languages);
                 }
@@ -591,7 +591,7 @@ $(document).ready(function () {
                 $('.comment').attr('id', id);
                 localStorage.setItem("project_id", "" + id);
                 localStorage.setItem("replied_text", null);
-                dialog.find(".card-head").html(data.project_title_persian + " (" + data.project_title_english + ")");
+                dialog.find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
                 dialog.find(".establish-time .time-body").html(data.submission_date);
                 dialog.find(".time-left .time-body").html(data.deadline);
                 for (let i = 0; i < data.key_words.length; i++) {

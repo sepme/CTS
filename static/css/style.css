@@ -451,7 +451,7 @@ img {
     top: 0;
     left: 50%;
     color: #262626;
-    padding: 35px 5px 55px 5px;
+    padding: 65px 5px 55px 5px;
     overflow: hidden;
     border-color: transparent;
     -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
@@ -4233,4 +4233,17 @@ pre#question-body {
     right: 10px;
     width: 150px;
     height: 150px;
+}
+
+span.border-span {
+    display: inline-block;
+    border: none;
+    padding: 2px 10px;
+    background-color: #f7fdf8;
+    color: #3CCD1C;
+    font-weight: bold;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    margin-left: 5px;
 }
