@@ -482,26 +482,41 @@ function getComments(expert_id, project_id) {
 }
 
 function addComment(data) {
-    let new_comment = "<div class='my-comment'>" +
-        "<div class='comment-profile'>" +
-        "</div>" +
-        "<div class='comment-body'>" +
-        "<span class='comment-tools'>"
-        // "<i class='fas fa-pen'>" +
-        // "</i>" +
-        // "<i class='fas fa-reply'><div class='reply'></div>" +
-        // "</i>"
-    ;
+    let comment_body_classes = "comment-body";
     if (data.attachment !== "None") {
-        new_comment += "<a href='/" +
-            data.attachment +
-            "'><i class='fas fa-paperclip'></i></a>";
+        comment_body_classes += " attached";
     }
-    new_comment += "</span>" +
-        "<span>" +
-        data.description +
-        "</span>" +
-        "</div>" +
+    let new_comment = "<div class='my-comment'>" +
+        "<div class='comment-profile'></div>" +
+        "<div class='" + comment_body_classes + "'>" +
+        "       <span class='comment-tools'>" +
+        "               <div class='btn-group dropright'>" +
+        "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+        "                       <i class='fas fa-cog'></i>" +
+        "                   </button>" +
+        "                   <div class='dropdown-menu'>" +
+        // "                       <div class='dropdown-item'>" +
+        // "                           <i class='fas fa-pen'></i>" +
+        // "                           <span>ویرایش پیام</span>" +
+        // "                       </div>" +
+        "                       <div class='dropdown-item'>" +
+        "                           <i class='fas fa-trash-alt'></i>" +
+        "                           <span>حذف پیام</span>" +
+        "                       </div>" +
+        "                   </div>" +
+        "               </div>" +
+        // "               <i class='fas fa-reply'>" +
+        // "                   <div class='reply'></div>" +
+        // "               </i>" +
+        "           </span>";
+    if (data.attachment !== "None") {
+        new_comment += "<a href='/" + data.attachment + "' class='attached-file'>" +
+            "   <i class='fas fa-paperclip'></i>" +
+            "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
+            "</a>";
+    }
+    new_comment += "<pre>" + data.description + "</pre>" +
+        "   </div>" +
         "</div>";
     // let new_comment = "<div class='my-comment'>" +
     //             "<div class='comment-body' dir='ltr'>" +
