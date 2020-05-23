@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'chamran_admin.apps.ChamranAdminConfig',
     'expert.apps.ExpertConfig',
     'researcher.apps.ResearcherConfig',
@@ -139,3 +140,10 @@ EMAIL_HOST_PASSWORD = 'chamranteam98'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
