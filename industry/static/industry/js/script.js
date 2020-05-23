@@ -71,6 +71,7 @@ function setResources(data) {
         "</div>" +
         "<div class='answer'>" +
         numbersComma(data.required_budget) +
+        " ریال" +
         "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
@@ -131,6 +132,7 @@ function setMajors(data) {
         "</div>" +
         "<div class='answer'>" +
         numbersComma(data.predict_profit) +
+        " ریال" +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
@@ -156,9 +158,15 @@ function setValue(data) {
 
 function setTab(data) {
     if (data.expert_messaged.length === 0) {
+        console.log(data.expert_messaged);
         $(".project-comment-innerDiv .add-comment").css("display", "none");
-        let no_comment = "<div class='no-comment'>متاسفانه، هنوز پروژه شما توسط استادی  بررسی نشده است.</div>";
+        let no_comment = "<div class='no-comment'>" +
+            "<img src='../../../../static/img/hourglass.svg' alt=''>" +
+            "<h6>لطفا شکیبا باشید!</h6>" +
+            "<pre>متاسفانه، هنوز پروژه شما توسط استادی بررسی نشده است.</pre>" +
+            "</div>";
         $(".project-comment-innerDiv").append(no_comment);
+        $(".project-comment-innerDiv .no-comment").addClass("show");
         $(".confirm-request").attr("style", "display : none");
         $(".comment").attr("style", "display : none");
         $(".comments").attr("style", "display : none");
@@ -608,7 +616,8 @@ $(document).ready(function () {
                     $('.image-btn-circle').prop('disabled', true);
                     $(".row.add-comment").css("display", "none");
                     dialog.find(".card").addClass("b-x0");
-                    let info_msg = "<div class='message info'>" +
+                    let info_msg = "<div class='message info image-right'>" +
+                        "<img src='../../../../static/img/blue_warning.svg' alt=''>" +
                         "<h5>توجه</h5>" +
                         "<p>پروژه شما در حال بررسی توسط کارشناسان ما می‌باشد تا در صورت نیاز به اصلاح، با شما تماس گرفته شود.</p>" +
                         "<p>این فرآیند، حداکثر <strong>8 ساعت</strong> زمان خواهد برد.</p>" +
