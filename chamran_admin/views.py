@@ -136,7 +136,7 @@ class Home(generic.TemplateView):
 
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
-    template_name = "registration/signup.html"
+    template_name = "buils/index.html"
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -337,7 +337,7 @@ class SignupUser(generic.FormView):
         return super().form_valid(form)
 
 class LoginView(generic.TemplateView):
-    template_name = 'registration/login.html'
+    template_name = 'build/index.html'
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
@@ -495,7 +495,7 @@ def Handler403(request ,exception):
     return render(request ,'403Template.html',context)
 
 class RecoverPassword(generic.TemplateView):
-    template_name = 'registration/recover_pass.html'
+    template_name = 'build/index.html'
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)

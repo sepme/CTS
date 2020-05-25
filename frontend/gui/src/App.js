@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
+import Registration from './containers/registration';
+import RecoverPass from './containers/recocer_pass';
+import Switch from "react-bootstrap/esm/Switch";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <div className="App">
+                <Switch>
+                    <Route path="/login">
+                        <Registration type="login"/>
+                    </Route>
+                    <Route path="/signup">
+                        <Registration type="signup"/>
+                    </Route>
+                    <Route path="/recover_password">
+                        <RecoverPass>
+                            <Link to="/login">
+                                بازگشت به صفحه ورود
+                            </Link>
+                        </RecoverPass>
+                    </Route>
+                </Switch>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
