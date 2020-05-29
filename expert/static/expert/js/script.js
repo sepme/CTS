@@ -1461,6 +1461,7 @@ comment_form.submit(function (event) {
 
             comment_form[0].reset();
             comment_form.find("#description").css("height", "fit-content");
+            $("textarea#description").removeClass("error");
             $('.error').remove();
             $('.file-name').html("");
             $(".send-comment-container .comment-input").removeClass("attached");

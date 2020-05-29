@@ -565,7 +565,7 @@ def ShowProject(request):
     json_response['comments'] = []
     for com in all_comments:
         try:
-            url = com.attachment.url[com.attachment.url.find('media' ,2):]
+            url = com.attachment.url.split("/")[-1]
         except:
             url = "None"
         temp = {
@@ -696,7 +696,7 @@ def AddComment(request):
         if attachment is not None:
             data = {
                 'success' : 'successful',
-                'attachment' : comment.attachment.url[comment.attachment.url.find('media' ,2):],
+                'attachment' : comment.attachment.url.split("/")[-1],
                 'description':description,
                 'pk' : comment.pk,
             }

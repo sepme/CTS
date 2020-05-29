@@ -224,7 +224,18 @@ class Project(models.Model):
 
 
 def upload_comment(instance, file_name):
-    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
+    return os.path.join(instance.project.__str__(), file_name)
+    # if instance.researcher_user is None:
+    #     if instance.sender_type == "expert":
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Industry", "Expert", file_name)
+    #     else:
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Industry", "Industry", file_name)
+    # else:
+    #     if instance.sender_type == "expert":
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Researcher", "Expert", file_name)
+    #     else:
+    #         print("==========-----")
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Researcher", "Reseacher", file_name)
 
 
 class Comment(models.Model):
