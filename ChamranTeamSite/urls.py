@@ -4,9 +4,11 @@ from django.contrib import admin
 from django.urls import path, include
 from . import settings
 from chamran_admin import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('react/', TemplateView.as_view(template_name="build/index.html")),
     path('', include('chamran_admin.urls')),
     path('expert/', include('expert.urls')),
     path('researcher/', include('researcher.urls')),

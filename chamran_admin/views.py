@@ -29,9 +29,7 @@ LOCAL_URL = 'chamranteambot.pythonanywhere.com'
 
 
 def jalali_date(jdate):
-
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
-
 
 
 def get_message_detail(request, message_id):
@@ -51,7 +49,7 @@ def get_message_detail(request, message_id):
     })
 
 
-class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
+class MessagesView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'chamran_admin/messages.html'
     login_url = "/login"
     jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
@@ -81,8 +79,8 @@ class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
                     username=self.request.user.username).exists()))
 
             other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
-                                    message.read_by.filter(
-                                        username=self.request.user.username).exists()))
+                                   message.read_by.filter(
+                                       username=self.request.user.username).exists()))
         context['top_3'] = top_3
         context['other_messages'] = other_messages
         context['account_type'] = find_account_type(self.request.user)
@@ -130,9 +128,10 @@ def get_user_by_unique_id(unique):
 
 class Home(generic.TemplateView):
     template_name = "base.html"
-    
+
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse('chamran:login'))
+
 
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
@@ -245,13 +244,14 @@ def login_ajax(request):
             #            'error': 'گذرواژه اشتباه است'}
             return JsonResponse({
                 'password': 'گذرواژه اشتباه است'
-            } ,status=400)
+            }, status=400)
     else:
         print('form error')
         return JsonResponse(form.errors, status=400)
 
+
 def addGroup(user, group_name):
-    if not Group.objects.filter(name = group_name).exists():
+    if not Group.objects.filter(name=group_name).exists():
         newGroup = Group(name=group_name)
         newGroup.save()
         if group_name == "Researcher":
@@ -266,9 +266,10 @@ def addGroup(user, group_name):
         newGroup.user_set.add(user)
         newGroup.save()
     else:
-        group = Group.objects.get(name = group_name)
+        group = Group.objects.get(name=group_name)
         group.user_set.add(user)
         group.save()
+
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
@@ -314,7 +315,7 @@ class SignupUser(generic.FormView):
             ctype = ContentType.objects.get_for_model(ResearcherUser)
             permission = Permission.objects.get(content_type=ctype, codename='is_active')
             user.user_permissions.add(permission)
-            user.save()    
+            user.save()
             return researcher.get_absolute_url()
 
         elif account_type == 'expert':
@@ -336,8 +337,9 @@ class SignupUser(generic.FormView):
             return industry.get_absolute_url()
         return super().form_valid(form)
 
+
 class LoginView(generic.TemplateView):
-    template_name = 'registration/login.html'
+    template_name = 'build/index.html'
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
@@ -347,16 +349,16 @@ class LoginView(generic.TemplateView):
         except:
             pass
         return super().get(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context['form'] = forms.LoginForm()
         context['register_form'] = forms.RegisterEmailForm()
-        if self.request.GET.get('next') :
+        if self.request.GET.get('next'):
             context['next'] = self.request.GET.get('next')
         return context
-    
+
 
 class LogoutView(generic.TemplateView):
     template_name = 'registration/base.html'
@@ -483,16 +485,19 @@ class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
-def notFound404(request ,exception):
-    context = {'data' : exception}
-    return render(request ,'404Template.html',context)
+def notFound404(request, exception):
+    context = {'data': exception}
+    return render(request, '404Template.html', context)
+
 
 def notFound500(request):
-    return render(request ,'404Template.html',{})
+    return render(request, '404Template.html', {})
 
-def Handler403(request ,exception):
-    context = {'data' : exception}
-    return render(request ,'403Template.html',context)
+
+def Handler403(request, exception):
+    context = {'data': exception}
+    return render(request, '403Template.html', context)
+
 
 class RecoverPassword(generic.TemplateView):
     template_name = 'build/index.html'
@@ -501,6 +506,7 @@ class RecoverPassword(generic.TemplateView):
     #     context = super().get_context_data(**kwargs)
     #     context['form'] = forms.RecoverPasswordForm
     #     return context
+
 
 def RecoverPassword_ajax(request):
     form = forms.RecoverPasswordForm(request.POST)
@@ -515,20 +521,21 @@ def RecoverPassword_ajax(request):
             html_template = get_template('registration/email_template.html')
             email_template = html_template.render({'message': message, 'proper_text': 'بازیابی رمز عبور'})
             msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                            to=[username])
+                                         to=[username])
             msg.attach_alternative(email_template, 'text/html')
-            msg.send()            
+            msg.send()
         except TimeoutError:
             print("Timeout Occure.")
-            return JsonResponse({"error" : "couldn't send email"} ,status=400)
-        response = {"seccessful" :"seccessful"}
+            return JsonResponse({"error": "couldn't send email"}, status=400)
+        response = {"seccessful": "seccessful"}
         return JsonResponse(response)
-    return JsonResponse(form.errors ,status=400)
+    return JsonResponse(form.errors, status=400)
+
 
 def DeleteComment(request):
     try:
-        comment = get_object_or_404(Comment ,pk=request.POST['id'])
+        comment = get_object_or_404(Comment, pk=request.POST['id'])
         comment.delete()
     except:
-        return JsonResponse({} ,400)
-    return JsonResponse({'successful' :"successful"})
+        return JsonResponse({}, 400)
+    return JsonResponse({'successful': "successful"})
