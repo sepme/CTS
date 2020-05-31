@@ -226,77 +226,77 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         return super().post(self, request, *args, **kwargs)
     
 
-class FUserInfo(generic.FormView):
-    template_name = 'expert/userInfo.html'
-    form_class = forms.ExpertInfoForm
+# class FUserInfo(generic.FormView):
+#     template_name = 'expert/userInfo.html'
+#     form_class = forms.ExpertInfoForm
 
-    def get(self, request, *args, **kwargs):
-        instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
-        expert_info_form = forms.ExpertInfoForm(instance=instance)
-        scientific_instance = ScientificRecord.objects.filter(expert_form=instance)
-        executive_instance = ExecutiveRecord.objects.filter(expert_form=instance)
-        research_instance = ResearchRecord.objects.filter(expert_form=instance)
-        paper_instance = PaperRecord.objects.filter(expert_form=instance)
-        context = {'expert_info_form': expert_info_form,
-                   'keywords': instance.get_keywords(),
-                   'scientific_instance': scientific_instance,
-                   'executive_instance': executive_instance,
-                   'research_instance': research_instance,
-                   'paper_instance': paper_instance,
-                   'expert_form': instance,
-                   'scientific_form': forms.ScientificRecordForm(),
-                   'executive_form': forms.ExecutiveRecordForm(),
-                   'research_form': forms.ResearchRecordForm(),
-                   'paper_form': forms.PaperRecordForm()
-                   }
-        return render(request, self.template_name, context)
+#     def get(self, request, *args, **kwargs):
+#         instance = get_object_or_404(ExpertForm, expert_user__user=request.user)
+#         expert_info_form = forms.ExpertInfoForm(instance=instance)
+#         scientific_instance = ScientificRecord.objects.filter(expert_form=instance)
+#         executive_instance = ExecutiveRecord.objects.filter(expert_form=instance)
+#         research_instance = ResearchRecord.objects.filter(expert_form=instance)
+#         paper_instance = PaperRecord.objects.filter(expert_form=instance)
+#         context = {'expert_info_form': expert_info_form,
+#                    'keywords': instance.get_keywords(),
+#                    'scientific_instance': scientific_instance,
+#                    'executive_instance': executive_instance,
+#                    'research_instance': research_instance,
+#                    'paper_instance': paper_instance,
+#                    'expert_form': instance,
+#                    'scientific_form': forms.ScientificRecordForm(),
+#                    'executive_form': forms.ExecutiveRecordForm(),
+#                    'research_form': forms.ResearchRecordForm(),
+#                    'paper_form': forms.PaperRecordForm()
+#                    }
+#         return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
-        expertForm = get_object_or_404(ExpertForm, expert_user__user=request.user)
-        expert_info_form = forms.ExpertInfoForm(request.POST, request.FILES, instance=expertForm)
-        team_work = request.POST.get('team_work', False)
-        creative_thinking = request.POST.get('creative-thinking', False)
-        sacrifice = request.POST.get('sacrifice', False)
-        researching = request.POST.get('researching', False)
-        obligation = request.POST.get('obligation', False)
-        data_collection = request.POST.get('data-collection', False)
-        morale = request.POST.get('morale', False)
-        risk = request.POST.get('risk', False)
-        student_num = request.POST.get('student_num', False)
-        foreign_work = request.POST.get('foreign_work', False)
-        if expert_info_form.is_valid():
-            expert_form = expert_info_form.save(commit=False)
-            expert_form.expert_user = request.user.expertuser
+#     def post(self, request, *args, **kwargs):
+#         expertForm = get_object_or_404(ExpertForm, expert_user__user=request.user)
+#         expert_info_form = forms.ExpertInfoForm(request.POST, request.FILES, instance=expertForm)
+#         team_work = request.POST.get('team_work', False)
+#         creative_thinking = request.POST.get('creative-thinking', False)
+#         sacrifice = request.POST.get('sacrifice', False)
+#         researching = request.POST.get('researching', False)
+#         obligation = request.POST.get('obligation', False)
+#         data_collection = request.POST.get('data-collection', False)
+#         morale = request.POST.get('morale', False)
+#         risk = request.POST.get('risk', False)
+#         student_num = request.POST.get('student_num', False)
+#         foreign_work = request.POST.get('foreign_work', False)
+#         if expert_info_form.is_valid():
+#             expert_form = expert_info_form.save(commit=False)
+#             expert_form.expert_user = request.user.expertuser
 
-            if expertForm.eq_test:
-                eq_test = expertForm.eq_test
-            else:
-                eq_test = EqTest()
-            eq_test.team_work = team_work
-            eq_test.innovation = creative_thinking
-            eq_test.devotion = sacrifice
-            eq_test.productive_research = researching
-            eq_test.national_commitment = obligation
-            eq_test.collecting_information = data_collection
-            eq_test.business_thinking = morale
-            eq_test.risk_averse = risk
-            eq_test.save()
-            expert_form.eq_test = eq_test
+#             if expertForm.eq_test:
+#                 eq_test = expertForm.eq_test
+#             else:
+#                 eq_test = EqTest()
+#             eq_test.team_work = team_work
+#             eq_test.innovation = creative_thinking
+#             eq_test.devotion = sacrifice
+#             eq_test.productive_research = researching
+#             eq_test.national_commitment = obligation
+#             eq_test.collecting_information = data_collection
+#             eq_test.business_thinking = morale
+#             eq_test.risk_averse = risk
+#             eq_test.save()
+#             expert_form.eq_test = eq_test
 
-            if foreign_work and student_num:
-                expert_form.has_industrial_research = foreign_work
-                expert_form.number_of_researcher = student_num
+#             if foreign_work and student_num:
+#                 expert_form.has_industrial_research = foreign_work
+#                 expert_form.number_of_researcher = student_num
 
-            keywords = expert_info_form.cleaned_data['keywords'].split(',')
-            keywords_list = []
-            for word in keywords:
-                keywords_list.append(Keyword.objects.get_or_create(name=word)[0])
-            expert_form.keywords.set(keywords_list)
+#             keywords = expert_info_form.cleaned_data['keywords'].split(',')
+#             keywords_list = []
+#             for word in keywords:
+#                 keywords_list.append(Keyword.objects.get_or_create(name=word)[0])
+#             expert_form.keywords.set(keywords_list)
 
-            expert_form.save()
-            return HttpResponseRedirect(reverse('expert:index'))
+#             expert_form.save()
+#             return HttpResponseRedirect(reverse('expert:index'))
 
-        return render(request, self.template_name, context)
+#         return render(request, self.template_name, context)
 
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -385,7 +385,7 @@ def UsualShowProject(request, project, data):
     sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
     for comment in comment_list:
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            url = comment.attachment.url.split("/")[-1]
         except:
             url = "None"
         comments.append({
@@ -539,8 +539,8 @@ def set_answer_situation(request):
 
 @permission_required('expert.be_expert', login_url='/login/')
 def show_researcher_preview(request):
-    researcher = ResearcherUser.objects.get(id=request.GET.get('id'))
-    researcherProfile = researcher.researcherprofile
+    researcherProfile = ResearcherProfile.objects.get(id=request.GET.get('id'))
+    researcher = researcherProfile.researcher_user
     researcher_information = {
         'photo': researcherProfile.photo.url,
         'name': researcherProfile.__str__(),
@@ -562,7 +562,7 @@ def show_researcher_preview(request):
     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
     for comment in comment_list:
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            url = comment.attachment.url.split("/")[-1]
         except:
             url = "None"
         comments.append({
@@ -582,7 +582,8 @@ def show_researcher_preview(request):
 def CommentForResearcher(request):
     form = forms.CommentForm(request.POST, request.FILES)
     project = Project.objects.get(pk=request.POST['project_id'])
-    researcher = ResearcherUser.objects.get(pk=request.POST['researcher_id'])
+    researcherProfile = ResearcherProfile.objects.get(pk=request.POST['researcher_id'])
+    researcher        = researcherProfile.researcher_user
     if form.is_valid():
         description = form.cleaned_data['description']
         attachment = form.cleaned_data['attachment']
@@ -598,7 +599,7 @@ def CommentForResearcher(request):
             data = {
                 'success'    : 'successful',
                 'pk'         : comment.pk,
-                'attachment' : comment.attachment.url[comment.attachment.url.find('media' ,2):],
+                'attachment' : comment.attachment.url.split("/")[-1],
                 'description': comment.description,
             }
         else:
@@ -631,7 +632,7 @@ def CommentForIndustry(request):
             data = {
                 'success'    : 'successful',
                 'pk'         : new_comment.pk,
-                'attachment' : new_comment.attachment.url[new_comment.attachment.url.find('media' ,2):],
+                'attachment' : new_comment.attachment.url.split("/")[-1],
                 'description': new_comment.description,
             }
         else:

@@ -163,7 +163,7 @@ def GetComment(request):
     response = []
     for comment in comments:
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
+            url = comment.attachment.url.split("/")[-1]
         except:
             url = "None"
         temp = {
@@ -231,7 +231,7 @@ def submit_comment(request):
         if attachment is not None:
             data = {
                 'success' : 'successful',
-                'attachment' : new_comment.attachment.url[new_comment.attachment.url.find('media' ,2):],
+                'attachment' : new_comment.attachment.url.split("/")[-1],
                 'description':description,
             }
         else:
