@@ -9,7 +9,7 @@ class LoginForm extends React.Component {
         super(props);
         this.state = {
             values: {
-                email: "",
+                username: "",
                 password: ""
             },
             isSubmitting: false,
@@ -24,6 +24,7 @@ class LoginForm extends React.Component {
 
     submitForm = (event) => {
         event.preventDefault();
+        console.log(JSON.stringify(this.state.values));
         this.setState({isSubmitting: true});
         fetch('/login_ajax/', {
             method: 'POST',
@@ -48,7 +49,7 @@ class LoginForm extends React.Component {
             <Form className="text-right" onSubmit={this.submitForm} id="login-ajax-form">
                 <h6 className="text-right">ورود به حساب کاربری</h6>
                 <Form.Group controlId="LoginEmail">
-                    <Form.Control type="email" value={this.state.values.email} onChange={this.handleInputChange}/>
+                    <Form.Control type="text" name="username" value={this.state.values.username} onChange={this.handleInputChange}/>
                     <Form.Label>نام کاربری</Form.Label>
                     <span className="form-control-icon">
                                                 <svg className="bi bi-person-fill" width="20px" height="20px"
@@ -60,7 +61,7 @@ class LoginForm extends React.Component {
                                             </span>
                 </Form.Group>
                 <Form.Group controlId="LoginPass">
-                    <Form.Control type="password" value={this.state.values.password} onChange={this.handleInputChange}/>
+                    <Form.Control type="password" name="password" value={this.state.values.password} onChange={this.handleInputChange}/>
                     <Form.Label>کلمه عبور</Form.Label>
                     <span className="form-control-icon">
                                                 <svg className="bi bi-lock-fill" width="20px" height="20px"

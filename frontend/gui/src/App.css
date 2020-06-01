@@ -138,6 +138,12 @@ input:not([type="radio"]) + label {
     font-size: 13px;
 }
 
+input:not([type="radio"]):not([value=""]) + label {
+    top: 8px;
+    right: 25px;
+}
+
+
 input:not([type="radio"]):focus + label {
     top: 8px;
     right: 25px;
@@ -146,6 +152,23 @@ input:not([type="radio"]):focus + label {
 
 input:not([type="radio"]):focus + label + .form-control-icon {
     color: #3CCD1C;
+}
+
+input:not([type="radio"]):not([value=""]) + label:before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    width: -moz-fit-content;
+    width: calc(100% + 10px);
+    height: 2px;
+    background-color: #FEFEFE;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: -1;
 }
 
 input:not([type="radio"]):focus + label:before {
@@ -256,7 +279,7 @@ button.no-border:focus {
 }
 
 .account-type input[type="radio"] + label:hover,
-.account-type input[type="radio"]:checked + label{
+.account-type input[type="radio"]:checked + label {
     cursor: pointer;
     border: 1px solid #3CCD1C;
     color: #3CCD1C !important;
@@ -333,17 +356,17 @@ button.no-border:focus {
 }
 
 .account-type input[type="radio"]#expertAccount + label:hover:after,
-.account-type input[type="radio"]#expertAccount:checked + label:after{
+.account-type input[type="radio"]#expertAccount:checked + label:after {
     background-image: url("images/mind_hover.svg");
 }
 
 .account-type input[type="radio"]#industryAccount + label:hover:after,
-.account-type input[type="radio"]#industryAccount:checked + label:after{
+.account-type input[type="radio"]#industryAccount:checked + label:after {
     background-image: url("images/setting_hover.svg");
 }
 
 .account-type input[type="radio"]#researcherAccount + label:hover:after,
-.account-type input[type="radio"]#researcherAccount:checked + label:after{
+.account-type input[type="radio"]#researcherAccount:checked + label:after {
     background-image: url("images/research_hover.svg");
 }
 
