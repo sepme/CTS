@@ -1,10 +1,10 @@
 function load_dialog() {
     $(".title-back").each(function () {
-        var title_back_width = $(this).prev().outerWidth() + 30;
+        let title_back_width = $(this).prev().outerWidth() + 30;
         $(this).css("width", title_back_width);
     });
     $(".row-header > .header").each(function () {
-        var divWidth = $(this).outerWidth();
+        let divWidth = $(this).outerWidth();
         divWidth = $(this).closest("div").innerWidth() - divWidth;
         $(this).prev().css("width", divWidth / 2 - 10);
         $(this).next().css("width", divWidth / 2 - 10);
@@ -15,8 +15,8 @@ function load_dialog() {
 function init_windowSize() {
     // if ($(window).width() < 575.98) {
     // } else {
-    //     var contentWidth = $(document).innerWidth() - 250;
-    //     var contentMargin = 0.0862 * contentWidth - 54.9655;
+    //     let contentWidth = $(document).innerWidth() - 250;
+    //     let contentMargin = 0.0862 * contentWidth - 54.9655;
     //     $(".info-card").css({
     //         "margin-right": contentMargin,
     //         "margin-left": contentMargin
@@ -95,7 +95,7 @@ function record_edit(className) {
     $(className + " .fa-pen").click(function () {
         if ($(className + " .ch-card-item").length === 0) {
             if (className === '.education') {
-                var count = parseInt($(this).attr('id').replace('edit_edu_', ''));
+                let count = parseInt($(this).attr('id').replace('edit_edu_', ''));
                 $(className).append(education_data_form(count));
                 cancel_add(".education");
                 $("#edu-section" + count).val($(this).closest('tr').children("td:nth-child(1)").text());
@@ -104,7 +104,7 @@ function record_edit(className) {
                 $("#edu-city" + count).val($(this).closest('tr').children("td:nth-child(4)").text());
                 $("#edu-year" + count).val($(this).closest('tr').children("td:nth-child(5)").text());
             } else if (className === '.executive') {
-                var count = parseInt($(this).attr('id').replace('edit_exe_', ''));
+                let count = parseInt($(this).attr('id').replace('edit_exe_', ''));
                 $(className).append(executive_data_form(count));
                 cancel_add(".executive");
                 $("#duty" + count).val($(this).closest('tr').children("td:nth-child(1)").text());
@@ -113,7 +113,7 @@ function record_edit(className) {
                 $("#workplace" + count).val($(this).closest('tr').children("td:nth-child(4)").text());
                 $("#exe-city" + count).vaal($(this).closest('tr').children("td:nth-child(5)").text());
             } else if (className === '.studious') {
-                var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
+                let count = parseInt($(this).attr('id').replace('edit_stu_', ''));
                 $(className).append(studious_data_form(count));
                 cancel_add(".studious");
                 $("#subject" + count).val($(this).closest('tr').children("td:nth-child(1)").text());
@@ -127,13 +127,13 @@ function record_edit(className) {
     // $(className + " .fa-trash-alt").click(function () {
     //     div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
     //     if (className === '.education') {
-    //         var count = parseInt($(this).attr('id').replace('edit_edu_', ''));
+    //         let count = parseInt($(this).attr('id').replace('edit_edu_', ''));
     //         $(this).closest("tr").remove();
     //     } else if (className === '.executive') {
-    //         var count = parseInt($(this).attr('id').replace('edit_exe_', ''));
+    //         let count = parseInt($(this).attr('id').replace('edit_exe_', ''));
     //         $(this).closest("tr").remove();
     //     } else if (className === '.studious') {
-    //         var count = parseInt($(this).attr('id').replace('edit_stu_', ''));
+    //         let count = parseInt($(this).attr('id').replace('edit_stu_', ''));
     //         $(this).closest("tr").remove();
     //     }
     //     if ($(className + " > table > tbody > tr").length === 0) {
@@ -143,7 +143,7 @@ function record_edit(className) {
 }
 
 function education_data_form(edu_count) {
-    div = document.createElement("div");
+    let div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
     $(div).attr("id", edu_count);
     $(div).html("<form action='' method='post'><div class='row'>" +
@@ -192,7 +192,7 @@ function education_record() {
                 $('.education').append(education_data_form(edu_count));
             }
             cancel_add(".education");
-            add_education_record(edu_count);
+            // add_education_record(edu_count);
             input_focus();
             edu_count++;
         }
@@ -200,7 +200,7 @@ function education_record() {
 }
 
 function show_scientific_record(pk) {
-    row = "<tbody class='row-sci-" + pk + "'><tr>" +
+    let row = "<tbody class='row-sci-" + pk + "'><tr>" +
         "<td>" + $("#edu-section").val() + "</td>" +
         "<td>" + $("#edu-subject").val() + "</td>" +
         "<td>" + $("#university").val() + "</td>" +
@@ -212,7 +212,7 @@ function show_scientific_record(pk) {
         "</td>" +
         "</tr></tbody>";
     if (!$(".education > table").hasClass("table")) {
-        table = "<table class='table mtop-lg-25'>" +
+        let table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
             "<tr>" +
             "<td>مقطع تحصیلی</td>" +
@@ -234,7 +234,7 @@ function show_scientific_record(pk) {
 }
 
 function executive_data_form(exe_count) {
-    div = document.createElement("div");
+    let div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
     $(div).attr("id", exe_count);
     $(div).html("<form action='' method='post'><div class='row'>" +
@@ -256,7 +256,7 @@ function executive_data_form(exe_count) {
         "</div>" +
         "<div class='row'>" +
         "<div class='col-lg-5'>" +
-        "<label for='workplace" + exe_count + "'>محل خدمت</label>" +
+        "<label for='workplace" + exe_count + "'>نام مجموعه</label>" +
         "<input type='text' id='workplace" + exe_count + "' class='w-100'>" +
         "</div>" +
         "<div class='col-lg-4'>" +
@@ -294,7 +294,7 @@ function executive_data_form(exe_count) {
 //     });
 // }
 function show_executive_record(pk) {
-    row = "<tbody class='row-exe-" + pk + "'><tr>" +
+    let row = "<tbody class='row-exe-" + pk + "'><tr>" +
         "<td>" + $("#duty").val() + "</td>" +
         "<td>" + $("#workplace").val() + "</td>" +
         "<td>" + $("#exe-city").val() + "</td>" +
@@ -306,11 +306,11 @@ function show_executive_record(pk) {
         "</td>" +
         "</tr></tbody>";
     if (!$(".executive > table").hasClass("table")) {
-        table = "<table class='table mtop-lg-25'>" +
+        let table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
             "<tr>" +
             "<td>سمت</td>" +
-            "<td>محل خدمت</td>" +
+            "<td>نام مجموعه</td>" +
             "<td>شهر</td>" +
             "<td>از تاریخ</td>" +
             "<td>تا تاریخ</td>" +
@@ -328,7 +328,7 @@ function show_executive_record(pk) {
 }
 
 function studious_data_form(stu_count) {
-    div = document.createElement("div");
+    let div = document.createElement("div");
     $(div).addClass('card').addClass('ch-card-item');
     $(div).attr("id", stu_count);
     $(div).html("<form action='' method='post'><div class='row'>" +
@@ -368,26 +368,26 @@ function studious_data_form(stu_count) {
     return div;
 }
 
-function studious_record() {
-    $(".studious-btn > i.fa-plus").click(function () {
-        if ($(".studious .ch-card-item").length === 0) {
-            if ($(".studious > .initial-value").hasClass("initial-value")) {
-                $(".studious").html(studious_data_form(stu_count));
-            } else {
-                $('.studious').append(studious_data_form(stu_count));
-            }
-            cancel_add(".studious");
-            add_studious_record(stu_count);
-            input_focus();
-            stu_count++;
-        }
-    });
-}
+// function studious_record() {
+//     $(".studious-btn > i.fa-plus").click(function () {
+//         if ($(".studious .ch-card-item").length === 0) {
+//             if ($(".studious > .initial-value").hasClass("initial-value")) {
+//                 $(".studious").html(studious_data_form(stu_count));
+//             } else {
+//                 $('.studious').append(studious_data_form(stu_count));
+//             }
+//             cancel_add(".studious");
+//             add_studious_record(stu_count);
+//             input_focus();
+//             stu_count++;
+//         }
+//     });
+// }
 
 function show_research_record(pk) {
     console.log($("#rank").val());
-    if ($("#rank").val() == 1) {
-        row = "<tbody class='row-stu-" + pk + "'><tr>" +
+    if ($("#rank").val() === 1) {
+        let row = "<tbody class='row-stu-" + pk + "'><tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
             "<td>" + $("#liable").val() + "</td>" +
@@ -397,8 +397,8 @@ function show_research_record(pk) {
             "<i class='fas fa-trash-alt delete_stu' value=" + pk + "></i>" +
             "</td>" +
             "</tr></tbody>";
-    } else if ($("#rank").val() == 2) {
-        row = "<tbody class='row-stu-" + pk + "'><tr>" +
+    } else if ($("#rank").val() === 2) {
+        let row = "<tbody class='row-stu-" + pk + "'><tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
             "<td>" + $("#liable").val() + "</td>" +
@@ -408,8 +408,8 @@ function show_research_record(pk) {
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr></tbody>";
-    } else if ($("#rank").val() == 3) {
-        row = "<tbody class='row-stu-" + pk + "'><tr>" +
+    } else if ($("#rank").val() === 3) {
+        let row = "<tbody class='row-stu-" + pk + "'><tr>" +
             "<td>" + $("#subject").val() + "</td>" +
             "<td>" + $("#admin").val() + "</td>" +
             "<td>" + $("#liable").val() + "</td>" +
@@ -421,7 +421,7 @@ function show_research_record(pk) {
             "</tr></tbody>";
     }
     if (!$(".studious > table").hasClass("table")) {
-        table = "<table class='table mtop-lg-25'>" +
+        let table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
             "<tr>" +
             "<td>عنوان طرح پژوهشی</td>" +
@@ -486,13 +486,13 @@ function dialog_comment_init() {
     // });
     // // replay to a comment
     // $(".comment-tools > .fa-reply").click(function () {
-    //     var text = $.trim($(this).closest("div").children(2).text());
+    //     let text = $.trim($(this).closest("div").children(2).text());
     //     $("textarea#comment").closest("div").append("<div class='replay-div'></div>");
     //     $(".replay-div").html("<i class='fa fa-reply fa-lg'></i>" + text + "<i class='fa fa-times'></i>");
     //     $(".replay-div > .fa-times").click(function () {
     //         $(".replay-div").remove();
     //         $("textarea#comment").css("padding-top", "2px").focus().on("focusout", function () {
-    //             var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //             let inputLabel = "label[for='" + $(this).attr("id") + "']";
     //             $(inputLabel).css("color", "#6f7285");
     //             if ($(this).val() === '') {
     //                 $(inputLabel).css({
@@ -508,7 +508,7 @@ function dialog_comment_init() {
     //         });
     //     });
     //     $("textarea#comment").css("padding-top", "35px").focus().on("focusout", function () {
-    //         var inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //         let inputLabel = "label[for='" + $(this).attr("id") + "']";
     //         $(inputLabel).css("color", "#6f7285");
     //         if ($(this).val() === '') {
     //             $(inputLabel).css({
@@ -532,8 +532,8 @@ function dialog_comment_init() {
 }
 
 function vote_dialog_init() {
-    flag = 0;
-    slide_count = 9;
+    let flag = 0;
+    let slide_count = 9;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
             "color": "#3ccd1c",
@@ -574,14 +574,14 @@ function vote_dialog_init() {
 }
 
 function vote_slider(slide_count) {
-    counter = 0;
+    let counter = 0;
 
     function next_button_init() {
         $(".next-button").click(function () {
             if (counter < slide_count - 1) {
                 counter++;
-                progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
-                width = parseFloat($(".progress-line").css('width'));
+                let progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
+                let width = parseFloat($(".progress-line").css('width'));
                 $(".progress-line").css('width', width + progressWidth);
 
                 $(".swiper-wrapper").css({
@@ -606,8 +606,8 @@ function vote_slider(slide_count) {
     $(".prev-button").click(function () {
         if (counter > 0) {
             counter--;
-            progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
-            width = parseFloat($(".progress-line").css('width'));
+            let progressWidth = parseInt($(".vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".progress-line").css('width'));
             $(".progress-line").css('width', width - progressWidth);
 
             $(".swiper-wrapper").css({
@@ -710,7 +710,7 @@ function question() {
     $("input.upload-answer").on("change", function () {
         $(this).closest("div").find("img.upload-img").css("display", "none");
         $(this).next("img.file-img").css("display", "block");
-        var fileName = $(this).val().split("\\").pop();
+        let fileName = $(this).val().split("\\").pop();
         $(this).next().find(".upload-file-text").css("padding-top", "5px")
             .html(fileName);
     });
@@ -718,11 +718,11 @@ function question() {
 }
 
 function getCookie(name) {
-    var cookieValue = null;
+    let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = jQuery.trim(cookies[i]);
             // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -733,7 +733,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-var csrftoken = getCookie('csrftoken');
+let csrftoken = getCookie('csrftoken');
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection

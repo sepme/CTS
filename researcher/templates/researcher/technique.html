@@ -25,10 +25,16 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header text-right">
                             <h6>{{ tech.technique.technique_title }}</h6>
+                            <div class="box-object-left">
+                                <a href="{{ tech.technique.tutorial_link }}">
+                                    <i class="fas fa-film"></i>
+                                    <span class="info-text">ویدیو آموزشی</span>
+                                </a>
+                            </div>
                         </div>
                         <div class="box-body">
                             <div class="row">
-                                <div class="col-md-6 col-8">
+                                <div class="col-md-10 col-10">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="date text-center">
@@ -50,35 +56,63 @@
                                                 </span>
                                             </div>
                                         </div>
+                                        {#                                        <div class="col-md-6 col-6 text-center" style="overflow: hidden" dir="ltr">#}
+                                        {#                                            <div class="label">لینک آموزشی</div>#}
+                                        {#                                            <div class="value">#}
+                                        {#                                                <span>#}
+                                        {#                                                    <a href="{{tech.technique.tutorial_link}}">#}
+                                        {#                                                        {{tech.technique.tutorial_link}}#}
+                                        {#                                                    </a>#}
+                                        {#                                                </span>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-4">
-                                    <button class="default-btn show-btn new-review-request">ارتقا نمره</button>
-                                </div>
+                                {% if tech.level %}
+                                    <div class="col-md-2 col-2">
+                                        <button id={{ tech.id }} class="default-btn show-btn new-review-request">
+                                            ارتقا نمره
+                                        </button>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 {% empty %}
-                    <div class="no-project-container">
-                        <div class="no-project">
-                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
-                            <h4>متاسفانه، هنوز تکنیکی ثبت نکرده اید!</h4>
-                            <p>
-                                تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد
-                                استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از
-                                یک تکنیک هستند.
-                                تکنیک‌های رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما پیشنهاد
-                                می‌شود
-                                که شما تکنیک‌های مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید.
-                                برای افزودن یک تکنیک به حساب کاربری خود، بر روی دکمه
-                            </p>
-                            <span class="disable-border-button">
+
+                    {#                    <div class="no-project-container">#}
+                    {#                        <div class="no-project">#}
+                    {#                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">#}
+                    {#                            <h4>متاسفانه، هنوز تکنیکی ثبت نکرده اید!</h4>#}
+                    {#                            <p>#}
+{#                                                    تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد#}
+{#                                                    استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از#}
+{#                                                    یک تکنیک هستند.#}
+{#                                                    تکنیک‌های رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما پیشنهاد#}
+{#                                                    می‌شود#}
+{#                                                    که شما تکنیک‌های مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید.#}
+{#                                                    برای افزودن یک تکنیک به حساب کاربری خود، بر روی دکمه#}
+                    {#                            </p>#}
+                    {#                            <span class="disable-border-button">#}
+                    {#                                    <i class="fas fa-plus"></i>#}
+                    {#                                    <span>افزودن تکنیک جدید</span>#}
+                    {#                            </span>#}
+                    {#                            <p>#}
+                    {#                                در گوشه بالا سمت چپ کلیک کنید.#}
+                    {#                            </p>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    <div class="col-12 text-center">
+                        <div class="empty-page">
+                            <div class="empty-page-container">
+                                <img src="{% static 'img/empty_technique.svg' %}" alt="">
+                                <h5>اولین تکنیک خود را ثبت کنید!</h5>
+                                <pre>تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از یک تکنیک هستند. تکنیک‌ها رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما پیشنهاد می‌شود که شما تکنیک‌های مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید. برای افزودن یک تکنیک به حساب کاربری خود، بر روی دکمه زیر کلیک کنید.</pre>
+                                <button class="add-new-technique border-button">
                                     <i class="fas fa-plus"></i>
                                     <span>افزودن تکنیک جدید</span>
-                            </span>
-                            <p>
-                                در گوشه بالا سمت چپ کلیک کنید.
-                            </p>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

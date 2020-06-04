@@ -35,7 +35,7 @@
                     </a>
                 </div>
             </div>
-            <div class="tab-content cover-page">
+            <div class="tab-content cover-page new-project">
                 {% for project in new_project_list %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
@@ -104,7 +104,7 @@
                             <p> همچنین با تکمیل رزومه خود از طریق </p>
                             <span>
                                     <i class="fas fa-cog"></i>
-                                    <span>تنظیمات کاربری</span>
+                                    <span>اطلاعات کاربری</span>
                                 </span>
                             <p> می توانید کمک تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>
                         </div>
@@ -131,50 +131,71 @@
             {#                            </div>#}
             {#                        {% endfor %}#}
             {#                    </div>#}
-            {#                    <div class="tab-content your-project" style="display: none;">#}
-            {#                        {% if my_project_list == "None" %}#}
-            {#                            <p>پروژه فعالی برای شما ثبت نشده است.</p>#}
-            {#                        {% else %}#}
-            {#                            {% for project in my_project_list %}#}
-            {#                                <div class="card project-item">#}
-            {#                                    <span class="header">{{ project.project_title }} <span#}
-            {#                                            class="sub-header">( {{ project.started }} قبل )</span></span>#}
-            {#                                    <span>#}
-            {#                            {% for keyword in project.keyword %}#}
-            {#                                <span class="border-span">{{ keyword.name }}</span>#}
-            {#                            {% endfor %}#}
-            {#                        </span>#}
-            {#                                    <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>#}
-            {#                                    <span><i#}
-            {#                                            class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>#}
-            {#                                    <button type="button" class="chamran-btn-info my-project" value="myproject"#}
-            {#                                            id="{{ project.PK }}">مشاهده#}
-            {#                                    </button>#}
-            {#                                </div>#}
-            {#                            {% endfor %}#}
-            {#                        {% endif %}#}
-            {#                    </div>#}
-            {#                    <div class="tab-content done-project" style="display: none;">#}
-            {#                        {% for project in done_project_list %}#}
-            {#                            <div class='card project-item'>#}
-            {#                                <span class='header'>{{ project.project_title }}<span#}
-            {#                                        class='sub-header'> ({{ project.started }} قبل )</span></span>#}
-            {#                                <span><i#}
-            {#                                        class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{ project.date_started }}</span> شروع شده است.</span>#}
-            {#                                <span><i#}
-            {#                                        class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{ project.date_finished }}</span> به پایان رسیده است.</span>#}
-            {#                                <span><i#}
-            {#                                        class='fas fa-hourglass-end'></i>مدت زمان پروژه : <span> {{ project.delta_date }} </span></span>#}
-            {#                                <span><i#}
-            {#                                        class='fas fa-hourglass-end'></i>درأمد : <span> {{ project.income }} </span> کسب کرده اید.</span>#}
-            {#                                <span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده :#}
-            {#                                    {% for technique in project.technique %}#}
-            {#                                        <span> {{ technique }} , </span>#}
-            {#                                    {% endfor %}#}
-            {#                    </span>#}
-            {#                            </div>#}
-            {#                        {% endfor %}#}
-            {#                    </div>#}
+            <div class="tab-content your-project" style="display: none;">
+                {% for project in my_project_list %}
+                    <div class="card project-item">
+                        <span class="header">{{ project.project_title }} <span
+                                class="sub-header">( {{ project.started }} قبل )</span></span>
+                        <span>
+                            {% for keyword in project.keyword %}
+                                <span class="border-span">{{ keyword.name }}</span>
+                            {% endfor %}
+                        </span>
+                        <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>
+                        <span><i
+                                class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>
+                        <button type="button" class="chamran-btn-info my-project" value="myproject"
+                                id="{{ project.PK }}">مشاهده
+                        </button>
+                    </div>
+                {% empty %}
+                    <div class="no-project-container">
+                        <div class="no-project">
+                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
+                            <h4>متاسفانه، هنوز پروژه ای متناسب با تکنیک های ثبت شده شما، ارائه نشده!</h4>
+                            <p>می توانید تکنیک های بیشتر را از طریق</p>
+                            <a href="https://www.aparat.com/chamran_team">
+                                <i class="aparat-ico"></i>
+                                <span>Chamran_Team</span>
+                            </a>
+                            <p>یاد بگیرید و در قسمت </p>
+                            <span>
+                                    <i class="fas fa-file-medical"></i>
+                                    <span>تکنیک ها</span>
+                                </span>
+                            <p>آن را ثبت کنید. با این کار شانس بیشتری برای همکاری با اساتید خواهید داشت. </p>
+                            <br>
+                            <p> همچنین با تکمیل رزومه خود از طریق </p>
+                            <span>
+                                    <i class="fas fa-cog"></i>
+                                    <span>اطلاعات کاربری</span>
+                                </span>
+                            <p> می توانید کمک تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="tab-content done-project" style="display: none;">
+                {% for project in done_project_list %}
+                    <div class='card project-item'>
+                        <span class='header'>{{ project.project_title }}<span
+                                class='sub-header'> ({{ project.started }} قبل )</span></span>
+                        <span><i
+                                class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{ project.date_started }}</span> شروع شده است.</span>
+                        <span><i
+                                class='fas fa-calendar-alt'></i>این پروژه به در تاریخ  <span>{{ project.date_finished }}</span> به پایان رسیده است.</span>
+                        <span><i
+                                class='fas fa-hourglass-end'></i>مدت زمان پروژه : <span> {{ project.delta_date }} </span></span>
+                        <span><i
+                                class='fas fa-hourglass-end'></i>درأمد : <span> {{ project.income }} </span> کسب کرده اید.</span>
+                        <span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده :
+                            {% for technique in project.technique %}
+                                <span> {{ technique }} , </span>
+                            {% endfor %}
+            </span>
+                    </div>
+                {% endfor %}
+            </div>
             {#                </div>#}
             {#            </div>#}
         </div>

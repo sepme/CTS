@@ -62,7 +62,7 @@
                                 <i class="far fa-comment-alt center-abs"></i>
                                 {% getUnseenComments project.pk request.user.expertuser as UnseenComments%}
                                 {% if UnseenComments != 0 %}
-                                    <span> {{UnseenComments}} </span>
+                                    <span class="unseen-comments"> {{UnseenComments}} </span>
                                 {% endif %}
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                             <div class="date text-center">
                                                 <div class="label">مهلت</div>
                                                 <div class="value">
-                                                    {#                                                    <span>{% calculate_date_remaining project.date_finished %}</span>#}
+                                                    <span>{% calculate_date_remaining project.date_finished %}</span>
                                                     <!-- <span>3</span>
                                                     <span>روز</span> -->
                                                 </div>
@@ -109,7 +109,7 @@
                             <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>
                             <span>
                                                         <i class="fas fa-cog"></i>
-                                                        <span>تنظیمات کاربری</span>
+                                                        <span>اطلاعات کاربری</span>
                                                     </span>
                             <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت
                                 و

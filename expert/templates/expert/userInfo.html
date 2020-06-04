@@ -1,7 +1,7 @@
 {% extends "expert/layouts/base_layout.html" %}
 {% load static %}
 {% load widget_tweaks %}
-{% block title %}تنظیمات کاربری{% endblock %}
+{% block title %}اطلاعات کاربری{% endblock %}
 {% block header %}
     <link rel="stylesheet" href="{% static 'expert/css/persian-datepicker.min.css' %}"
           xmlns="http://www.w3.org/1999/html">
@@ -23,7 +23,7 @@
 {% block content %}
     <div class="row">
         <div class="col-12 text-right">
-            <h3 class="h3 border-bottom p-top-15">تنظیمات کاربری</h3>
+            <h3 class="h3 border-bottom p-top-15">اطلاعات کاربری</h3>
         </div>
     </div>
     <div class="row">
@@ -65,13 +65,13 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="Field">حوزه تخصصی</label>
-                                {% if expert_info_form.special_field.errors %}
+                                {% if special_field_error %}
                                     {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{% render_field expert_info_form.special_field.errors %}</span>
+                                    <span class="error-body">{{ special_field_error }}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -91,21 +91,21 @@
                                 {#                                    <option value="5">استاد تمام</option>#}
                                 {#                                    <option value="6">پژوهشگر</option>#}
                                 {#                                </select>#}
-                                {% if expert_info_form.scientific_rank.errors %}
+                                {% if scientific_rank_error %}
                                     {{ expert_info_form.scientific_rank|attr:"id:rank"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.scientific_rank|attr:"id:rank"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{% render_field expert_info_form.scientific_rank.errors %}</span>
+                                    <span class="error-body">{{ scientific_rank_error }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Uni">دانشگاه محل فعالیت</label>
-                                {{ expert_info_form.university|attr:"id:Uni"|attr:"readonly:True"|attr:"class:w-100" }}
-
+                                {{ expert_info_form.university|attr:"id:Uni"|attr:"class:w-100" }}
+{#attr:"readonly:True"|#}
                                 {#                              <i class="fas fa-plus fa-lg"></i>#}
                                 {#                              <div class="selected_uni"></div>#}
                             </div>
@@ -113,37 +113,37 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Address">آدرس</label>
-                                {% if expert_info_form.home_address.errors %}
+                                {% if home_address_error %}
                                     {{ expert_info_form.home_address|attr:"id:Address"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.home_address|attr:"id:Address"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{% render_field expert_info_form.home_address.errors %}</span>
+                                    <span class="error-body">{{ home_address_error }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="HomeNum">تلفن منزل</label>
-                                {% if expert_info_form.phone_number.errors %}
+                                {% if phone_number_error %}
                                     {{ expert_info_form.phone_number|attr:"id:HomeNum"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.phone_number|attr:"id:HomeNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{% render_field expert_info_form.phone_number.errors %}</span>
+                                    <span class="error-body">{{ phone_number_error }}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="PhoneNum">تلفن همراه</label>
-                                {% if expert_info_form.mobile_phone.errors %}
+                                {% if mobile_phone_error %}
                                     {{ expert_info_form.mobile_phone|attr:"id:PhoneNum"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.mobile_phone|attr:"id:PhoneNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{% render_field expert_info_form.mobile_phone.errors %}</span>
+                                    <span class="error-body">{{ mobile_phone_error }}</span>
                                 </div>
                             </div>
                         </div>
@@ -699,28 +699,28 @@
                                 <span class="sub-header">در حال حاضر،چه تعداد دانشجو تحت نظر شما، در حال انجام فعالیت های پژوهشی هستند؟</span>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num0" name="student_num" value="1"
+                                        <input type="radio" id="student_num0" name="number_of_researcher" value="1"
                                                class="label-check-radio"
                                                 {% if expert_form.number_of_researcher == 1 %}
                                                checked="checked" {% endif %}>
                                         <label for="student_num0">1 تا 10 نفر</label>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num1" name="student_num" value="2"
+                                        <input type="radio" id="student_num1" name="number_of_researcher" value="2"
                                                class="label-check-radio"
                                                 {% if expert_form.number_of_researcher == 2 %}
                                                checked="checked" {% endif %}>
                                         <label for="student_num1">11 تا 30 نفر</label>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num2" name="student_num" value="3"
+                                        <input type="radio" id="student_num2" name="number_of_researcher" value="3"
                                                class="label-check-radio"
                                                 {% if expert_form.number_of_researcher == 3 %}
                                                checked="checked" {% endif %}>
                                         <label for="student_num2">31 تا 60 نفر</label>
                                     </div>
                                     <div class="col-lg-3 col-md-3 col-6">
-                                        <input type="radio" id="student_num3" name="student_num" value="4"
+                                        <input type="radio" id="student_num3" name="number_of_researcher" value="4"
                                                class="label-check-radio"
                                                 {% if expert_form.number_of_researcher == 4 %}
                                                checked="checked" {% endif %}>
@@ -734,15 +734,15 @@
                                 <span class="sub-header" style="top: 10px;position: relative;">آیا تا به حال با شرکت های خارج دانشگاه قرارداد پژوهشی داشته اید؟</span>
                             </div>
                             <div class="col-lg-3 col-md-6 col-6 text-center">
-                                <input type="radio" id="foreign_yes" name="foreign_work" value="آری"
+                                <input type="radio" id="foreign_yes" name="has_industrial_research" value="yes"
                                        class="label-check-radio"
-                                       {% if expert_form.has_industrial_research == "آری" %}checked="checked" {% endif %}>
+                                       {% if expert_form.has_industrial_research == "yes" %}checked="checked" {% endif %}>
                                 <label for="foreign_yes">آری</label>
                             </div>
                             <div class="col-lg-3 col-md-6 col-6 text-center">
-                                <input type="radio" id="foreign_no" name="foreign_work" value="خیر"
+                                <input type="radio" id="foreign_no" name="has_industrial_research" value="no"
                                        class="label-check-radio"
-                                       {% if expert_form.has_industrial_research == "خیر" %}checked="checked" {% endif %}>
+                                       {% if expert_form.has_industrial_research == "no" %}checked="checked" {% endif %}>
                                 <label for="foreign_no">خیر</label>
                             </div>
                         </div>

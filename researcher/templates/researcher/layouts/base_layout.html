@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-{% load custom_tags%}
+{% load custom_tags %}
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -8,6 +8,7 @@
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
     <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -39,7 +40,7 @@
             <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
                 <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
                 <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
-                <li class="divider"></li>
+                <hr>
                 <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
         </div>
@@ -89,7 +90,7 @@
                 <li class="list-group-item text-right {% if messages_url == request.get_full_path %}active{% endif %}">
                     <div>
                         {% if UnseenMessages %}
-                            <span class="new-message">{{UnseenMessages}}</span>
+                            <span class="new-message">{{ UnseenMessages }}</span>
                         {% endif %}
                         <span>پیام ها</span>
                         <span class="fas fa-envelope"></span>
@@ -106,10 +107,10 @@
                 </li>
             </a>
             <!-- {% url 'researcher:question-alert' as question_url %} -->
-            {% if question_instance %}
-                {% url 'researcher:question-show' question_id=uuid as question_url %}
+            {% getQuestionUrl request.user.researcheruser as questionId %}
+            {% if questionId %}
+                {% url 'researcher:question-show' question_id=questionId as question_url %}
             {% else %}
-                <h1>{{ question_instance }}</h1>
                 {% url 'researcher:question-alert' as question_url %}
             {% endif %}
             <a href="{{ question_url }}">
@@ -124,7 +125,7 @@
             <a href="{{ userInfo_url }}">
                 <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
                     <div>
-                        <span>تنظیمات کاربری</span>
+                        <span>اطلاعات کاربری</span>
                         <span class="fas fa-cog"></span>
                     </div>
                 </li>
@@ -152,13 +153,13 @@
     </div>
 </div>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 <script type="text/javascript" src="{% static 'js/persianumber.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
 {% block script %}{% endblock %}
-<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>

@@ -13,7 +13,7 @@ function numbersComma(num) {
 }
 
 function setRole(data) {
-    role = "<div>" +
+    let role = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -27,7 +27,7 @@ function setRole(data) {
 }
 
 function setResources(data) {
-    resources = "<div>" +
+    let resources = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -71,13 +71,14 @@ function setResources(data) {
         "</div>" +
         "<div class='answer'>" +
         numbersComma(data.required_budget) +
+        " ریال" +
         "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
 }
 
 function setApproach(data) {
-    approach = "<div>" +
+    let approach = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -97,12 +98,12 @@ function setApproach(data) {
         "</div>" +
         "<div class='answer'>" +
         data.potential_problems +
-        "</div></div>"
+        "</div></div>";
     $(".project-info-content").html(approach);
 }
 
 function setMajors(data) {
-    majors = "<div>" +
+    let majors = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -131,6 +132,7 @@ function setMajors(data) {
         "</div>" +
         "<div class='answer'>" +
         numbersComma(data.predict_profit) +
+        " ریال" +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
@@ -156,9 +158,15 @@ function setValue(data) {
 
 function setTab(data) {
     if (data.expert_messaged.length === 0) {
+        console.log(data.expert_messaged);
         $(".project-comment-innerDiv .add-comment").css("display", "none");
-        let no_comment = "<div class='no-comment'>متاسفانه، هنوز پروژه شما توسط استادی  بررسی نشده است.</div>";
+        let no_comment = "<div class='no-comment'>" +
+            "<img src='../../../../static/img/hourglass.svg' alt=''>" +
+            "<h6>لطفا شکیبا باشید!</h6>" +
+            "<pre>متاسفانه، هنوز پروژه شما توسط استادی بررسی نشده است.</pre>" +
+            "</div>";
         $(".project-comment-innerDiv").append(no_comment);
+        $(".project-comment-innerDiv .no-comment").addClass("show");
         $(".confirm-request").attr("style", "display : none");
         $(".comment").attr("style", "display : none");
         $(".comments").attr("style", "display : none");
@@ -168,7 +176,7 @@ function setTab(data) {
         $(".comments").attr("style", "display : block");
         for (let i = 0; i < data.expert_messaged.length; i++) {
             let tab = "<a class='nav-link' data-toggle='pill'" +
-                "role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
+                " role='tab' aria-controls='v-pills-home' aria-selected='true'>" +
                 "" +
                 data.expert_messaged[i].name +
                 "</a>";
@@ -188,21 +196,24 @@ function setTab(data) {
 function expertResume() {
     $(".show-resume").click(function () {
         $(".showProject").slideUp('slow').delay('slow');
+        $(".expert-resume").addClass("show");
         $(".expert-resume").delay('slow').slideDown('slow');
         close_dialog(".expert-resume");
         load_dialog();
         let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-
         $.ajax({
             method: 'GET',
             url: '/expert/get_resume',
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                $(".expert-resume #expert_name").html(data.name);
+                $(".expert-resume #expert_uni").html("دانشگاه " + data.university);
+                $(".expert-resume #expert_field").html(data.scientific_rank + " " + data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < sci_record.length; i++) {
+                    for (let i = 0; i < sci_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + sci_record[i].fields.degree + "</td>" +
                             "<td>" + sci_record[i].fields.major + "</td>" +
@@ -212,11 +223,13 @@ function expertResume() {
                             "</tr>";
                         $('.sci_record').html(table_row);
                     }
+                } else {
+                    $("#whole-education-info").css("display", "none");
                 }
                 let executive_record = JSON.parse(data.exe_record);
                 if (executive_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < executive_record.length; i++) {
+                    for (let i = 0; i < executive_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + executive_record[i].fields.executive_post + "</td>" +
                             "<td>" + executive_record[i].fields.date_start_post + "</td>" +
@@ -226,11 +239,13 @@ function expertResume() {
                             "</tr>";
                         $('.executive_record').html(table_row);
                     }
+                } else {
+                    $("#whole-executive-info").css("display", "none");
                 }
                 let research_record = JSON.parse(data.research_record);
                 if (research_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < research_record.length; i++) {
+                    for (let i = 0; i < research_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + research_record[i].fields.research_title + "</td>" +
                             "<td>" + research_record[i].fields.researcher + "</td>" +
@@ -238,11 +253,13 @@ function expertResume() {
                             "</tr>";
                         $('.research_record').html(table_row);
                     }
+                } else {
+                    $("#whole-project-info").css("display", "none");
                 }
                 let paper_record = JSON.parse(data.paper_record);
                 if (paper_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < paper_record.length; i++) {
+                    for (let i = 0; i < paper_record.length; i++) {
                         table_row += "<tr>" +
                             "<td>" + paper_record[i].fields.research_title + "</td>" +
                             "<td>" + paper_record[i].fields.date_published + "</td>" +
@@ -252,11 +269,21 @@ function expertResume() {
                             "</tr>";
                         $('.paper_record').html(table_row);
                     }
+                } else {
+                    $("#whole-article-info").css("display", "none");
                 }
                 $('.researcher_count').html(data.researcher_count);
                 $('.has_industrial_research').html(data.has_industrial_research);
-                $('.awards').html(data.awards);
-                $('.languages').html(data.languages);
+                if (data.awards === '') {
+                    $("#whole-honors-info").css("display", "none");
+                } else {
+                    $('.awards').html(data.awards);
+                }
+                if (data.languages === '') {
+                    $("#whole-other-info").css("display", "none");
+                } else {
+                    $('.languages').html(data.languages);
+                }
             },
         });
     });
@@ -432,24 +459,20 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            console.log(data);
-            // if (data.applied == false) {
-            //     // $(".accept-request").attr("style", "display :none");
-            //     // $(".reject-request").attr("style", "display :none");
-            //     // $(".accept-request").hide();
-            //     // $(".reject-request").hide();
-            //     // $(".accept-request").setAttribute("hidden", 'true');
-            //     // $(".reject-request").setAttribute("hidden", 'true');
-            //     $(".accept-request")["hidden"] = true;
-            //     $(".reject-request")["hidden"] = true;
-            // } else if ($(".accept-request").getAttribute("hidden") == "true") {
-            //     $(".accept-request").attr("style", "display :block");
-            //     $(".reject-request").attr("style", "display :block");
-            //     // $(".reject-request").setAttribute("disabled","disabled");
-            //     // $(".reject-request").hide();
-            //     $(".accept-request").setAttribute("hidden", 'false');
-            //     $(".reject-request").setAttribute("hidden", 'false');
-            // }
+            if (data.applied === false) {
+                $('.request').html("برای مشاهده رزومه استاد بر روی دکمه روبه رو کلیک کنید.");
+                $(".accept-request").hide();
+                $(".accept-request").prop('disabled', true);
+                $(".reject-request").hide();
+                $(".reject-request").prop('disabled', true);
+            } else {
+                $('.request').html("درخواستی برای انجام پروژه شما از طرف این استاد دریافت شده است.");
+                $('.request').show();
+                $(".accept-request").show();
+                $(".accept-request").prop('disabled', false);
+                $(".reject-request").show();
+                $(".reject-request").prop('disabled', false);
+            }
             setComment(data);
         },
         error: function (data) {
@@ -459,26 +482,41 @@ function getComments(expert_id, project_id) {
 }
 
 function addComment(data) {
-    let new_comment = "<div class='my-comment'>" +
-        "<div class='comment-profile'>" +
-        "</div>" +
-        "<div class='comment-body'>" +
-        "<span class='comment-tools'>"
-        // "<i class='fas fa-pen'>" +
-        // "</i>" +
-        // "<i class='fas fa-reply'><div class='reply'></div>" +
-        // "</i>"
-    ;
+    let comment_body_classes = "comment-body";
     if (data.attachment !== "None") {
-        new_comment += "<a href='/" +
-            data.attachment +
-            "'><i class='fas fa-paperclip'></i></a>";
+        comment_body_classes += " attached";
     }
-    new_comment += "</span>" +
-        "<span>" +
-        data.description +
-        "</span>" +
-        "</div>" +
+    let new_comment = "<div class='my-comment'>" +
+        "<div class='comment-profile'></div>" +
+        "<div class='" + comment_body_classes + "'>" +
+        "       <span class='comment-tools'>" +
+        "               <div class='btn-group dropright'>" +
+        "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+        "                       <i class='fas fa-cog'></i>" +
+        "                   </button>" +
+        "                   <div class='dropdown-menu'>" +
+        // "                       <div class='dropdown-item'>" +
+        // "                           <i class='fas fa-pen'></i>" +
+        // "                           <span>ویرایش پیام</span>" +
+        // "                       </div>" +
+        "                       <div class='dropdown-item'>" +
+        "                           <i class='fas fa-trash-alt'></i>" +
+        "                           <span>حذف پیام</span>" +
+        "                       </div>" +
+        "                   </div>" +
+        "               </div>" +
+        // "               <i class='fas fa-reply'>" +
+        // "                   <div class='reply'></div>" +
+        // "               </i>" +
+        "           </span>";
+    if (data.attachment !== "None") {
+        new_comment += "<a href='/" + data.attachment + "' class='attached-file'>" +
+            "   <i class='fas fa-paperclip'></i>" +
+            "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
+            "</a>";
+    }
+    new_comment += "<pre>" + data.description + "</pre>" +
+        "   </div>" +
         "</div>";
     // let new_comment = "<div class='my-comment'>" +
     //             "<div class='comment-body' dir='ltr'>" +
@@ -494,7 +532,6 @@ function addComment(data) {
     //             "</span>" +
     //             "</div>" +
     //             "</div>";
-    console.log(new_comment);
     return new_comment;
 }
 
@@ -506,10 +543,10 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
-  
+
     $('.accept-request').click(function (data) {
-        expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-        project_id = $(this).closest(".showProject").attr("id");
+        let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        let project_id = $(this).closest(".confirm-request").attr("id");
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -533,8 +570,8 @@ $(document).ready(function () {
     });
 
     $('.reject-request').click(function (data) {
-        expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-        project_id = $(this).closest(".showProject").attr("id");
+        let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        let project_id = $(this).closest(".confirm-request").attr("id");
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -559,6 +596,7 @@ $(document).ready(function () {
 
     $(".preview-project").click(function () {
         const dialog = $(".showProject");
+        $(this).closest(".card").find('.unseen-comments').html("");
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -566,17 +604,17 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                console.log(data);
-                console.log(data.accepted);
                 // if (data.accepted == "true")
                 //     console.log("accepted");
                 // dialog = $(".project-details");
                 // }else{
                 //     console.log("not accepted");
                 // }
+                $('.confirm-request').attr('id', id);
+                $('.comment').attr('id', id);
                 localStorage.setItem("project_id", "" + id);
                 localStorage.setItem("replied_text", null);
-                dialog.find(".card-head").html(data.project_title_persian + " (" + data.project_title_english + ")");
+                dialog.find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
                 dialog.find(".establish-time .time-body").html(data.submission_date);
                 dialog.find(".time-left .time-body").html(data.deadline);
                 for (let i = 0; i < data.key_words.length; i++) {
@@ -589,8 +627,12 @@ $(document).ready(function () {
                 setMajors(data);
                 setValue(data);
                 if (data.status !== 1 && data.status !== 2) {
+                    dialog.find('.add-comment').attr('style', 'display : none');
+                    $('.image-btn-circle').prop('disabled', true);
+                    $(".row.add-comment").css("display", "none");
                     dialog.find(".card").addClass("b-x0");
-                    let info_msg = "<div class='message info'>" +
+                    let info_msg = "<div class='message info image-right'>" +
+                        "<img src='../../../../static/img/blue_warning.svg' alt=''>" +
                         "<h5>توجه</h5>" +
                         "<p>پروژه شما در حال بررسی توسط کارشناسان ما می‌باشد تا در صورت نیاز به اصلاح، با شما تماس گرفته شود.</p>" +
                         "<p>این فرآیند، حداکثر <strong>8 ساعت</strong> زمان خواهد برد.</p>" +
@@ -602,8 +644,13 @@ $(document).ready(function () {
                         $('.vote').attr('style', "display : block");
                     }
                     $('.add-comment').attr('style', "display : block");
+                    $('.image-btn-circle').prop('disabled', false);
+                    // if (data.status === 1) {
+                    //     $(".row.add-comment").css("display", "none");
+                    // }
                     setTab(data);
                 }
+                modalPreview(".showProject")
             },
             error: function (data) {
 
@@ -641,8 +688,9 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".preview-project", ".showProject");
+        // init_dialog_btn(".preview-project", ".showProject");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+        init_dialog_btn(".show-resume", ".expert-resume");
         expertResume();
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");
@@ -857,7 +905,7 @@ $(document).ready(function () {
             event.preventDefault();
             comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
             comment_form.find("label").addClass("progress-cursor");
-            $("#project_id").attr('value', $(".showProject").attr("id"));
+            $("#project_id").attr('value', $(".comment").attr("id"));
             $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
             let thisUrl = "/industry/submit_comment/";
             let data = new FormData(comment_form.get(0));
@@ -873,7 +921,10 @@ $(document).ready(function () {
                         .prop("disabled", false);
                     comment_form.find("label").removeClass("progress-cursor");
                     comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                    comment_code = addComment(data);
+                    if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                        $(".project-comment-innerDiv").find(".no-comment").remove();
+                    }
+                    let comment_code = addComment(data);
                     $(".project-comment-innerDiv").find(".comments").append(comment_code);
                     iziToast.success({
                         rtl: true,
@@ -881,10 +932,13 @@ $(document).ready(function () {
                         position: 'bottomLeft'
                     });
                     comment_form[0].reset();
+                    comment_form.find("#description").css("height", "fit-content");
+                    $('.error').remove();
+                    $('.file-name').html("");
+                    $(".send-comment-container .comment-input").removeClass("attached");
                     $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
                 },
                 error: function (data) {
-                    console.log(data);
                     let obj = JSON.parse(data.responseText);
                     comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                         .prop("disabled", false);

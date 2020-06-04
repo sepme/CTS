@@ -11,8 +11,12 @@ from django.views import generic, View
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render
-from ChamranTeamSite import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import permission_required
+
 from persiantools.jdatetime import JalaliDate
+
+from ChamranTeamSite import settings
 from industry.models import IndustryForm, Comment
 from expert import models as expert_models
 from . import models ,forms
@@ -36,6 +40,7 @@ def date_dif(start_date, deadline_date):
         return 'امروز'
 
 # is called through an ajax request. returns the comments on a particular project with a particular expert
+@permission_required('industry.be_industry', login_url='/login/')
 def get_comments_with_expert(request):
     comment_list = Comment.objects.filter(project_id=request.GET.get('project_id'),
                                           industry_user=request.user.industryuser,
@@ -49,6 +54,7 @@ def get_comments_with_expert(request):
         })
 
 # is called by an ajax request and returns the necessary information to display the project on the front-end
+@permission_required('industry.be_industry', login_url='/login/')
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     if not project.expert_accepted:
@@ -146,6 +152,7 @@ def show_project_ajax(request):
             pass
         return JsonResponse(json_response)
 
+@permission_required('industry.be_industry', login_url='/login/')
 def GetComment(request):
     expert_id  = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
@@ -156,7 +163,7 @@ def GetComment(request):
     response = []
     for comment in comments:
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media' ,2):]
+            url = comment.attachment.url.split("/")[-1]
         except:
             url = "None"
         temp = {
@@ -182,7 +189,7 @@ def GetComment(request):
             }
     return JsonResponse(data=data)
 
-
+@permission_required('industry.be_industry', login_url='/login/')
 def accept_project(request):
     expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
@@ -195,6 +202,7 @@ def accept_project(request):
     data = {'success' : 'successful'}
     return JsonResponse(data=data)
 
+@permission_required('industry.be_industry', login_url='/login/')
 def refuse_expert(request):
     expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
@@ -204,6 +212,7 @@ def refuse_expert(request):
     return JsonResponse(data=data)
 
 # this function is called when the industry user comments on a project
+@permission_required('industry.be_industry', login_url='/login/')
 def submit_comment(request):
     form = forms.CommentForm(request.POST ,request.FILES)
     if form.is_valid():
@@ -222,7 +231,7 @@ def submit_comment(request):
         if attachment is not None:
             data = {
                 'success' : 'successful',
-                'attachment' : new_comment.attachment.url[new_comment.attachment.url.find('media' ,2):],
+                'attachment' : new_comment.attachment.url.split("/")[-1],
                 'description':description,
             }
         else:
@@ -235,13 +244,13 @@ def submit_comment(request):
     return JsonResponse(data=form.errors ,status=400)
 
 # main page for an industry user
-class Index(generic.TemplateView):
+class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = 'industry/index.html'
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
 
     def get(self, request, *args, **kwargs):
-        if (not request.user.is_authenticated) or (not models.IndustryUser.objects.filter(
-                user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -291,56 +300,51 @@ class Index(generic.TemplateView):
         return render(request, 'industry/index.html', context={'form': form})
 
 
-class UserInfo(View):
-    def get(self, request):
-        if (not request.user.is_authenticated) or (not models.IndustryUser.objects.filter(user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
-        context = {
-            'form': forms.IndustryInfoForm(self.request.user,
+class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView):
+    template_name = 'industry/userInfo.html'
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = forms.IndustryInfoForm(self.request.user,
                                            instance=self.request.user.industryuser.industryform,
                                            initial={
                                                'industry_type':
                                                    self.request.user.industryuser.industryform.industry_type})
-        }
-        return render(request, 'industry/userInfo.html', context=context)
+        return context
 
     def post(self, request):
         form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES,
                                       initial={
                                           'industry_type': self.request.user.industryuser.industryform.industry_type})
         if form.is_valid():
-            model_form = form.save(commit=False)
-            IndustryForm.objects.filter(name=model_form.name).update(
-                industry_user=request.user.industryuser,
-                industry_type=model_form.industry_type,
-                tax_declaration=model_form.tax_declaration,
-                services_products=model_form.services_products,
-                awards_honors=model_form.awards_honors
-            )
-            # if request.user.industryuser.industryform.photo:
-            #     os.remove(os.path.join(settings.MEDIA_ROOT, request.user.industryuser.industryform.name,
-            #                            request.user.industryuser.industryform.photo.name))
-            if model_form.photo:
-                model_form.photo.save(model_form.photo.name, model_form.photo)
-            else:
-                with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
-                          'rb') as image_file:
-                    default_image = image_file.read()
-                    model_form.photo.save('profile.jpg', ContentFile(default_image))
-            IndustryForm.objects.filter(name=model_form.name).update(photo=model_form.photo)
+            # model_form = form.save(commit=False)
+            industryForm = IndustryForm.objects.get(name=form.cleaned_data['name'])
+            industryForm.industry_type=form.cleaned_data['industry_type']
+            industryForm.tax_declaration=form.cleaned_data['tax_declaration']
+            industryForm.services_products=form.cleaned_data['services_products']
+            industryForm.awards_honors=form.cleaned_data['awards_honors']
+            # )
+            if form.cleaned_data['photo']:
+                if os.path.isfile(industryForm.photo.path):
+                    os.remove(industryForm.photo.path)
+                # industryForm.photo.save(form.cleaned_data['photo'].name, form.cleaned_data['photo'])
+                industryForm.photo = form.cleaned_data['photo']
+            industryForm.save()
             return HttpResponseRedirect(reverse('industry:index'))
         else:
             print('the errors are:', form.errors)
         return render(request, 'industry/userInfo.html', context={'form': form})
 
 
-class NewProject(View):
-    def get(self, request):
-        if request.user.is_authenticated and (not models.IndustryUser.objects.filter(user=request.user).count()):
-            return HttpResponseRedirect(reverse('chamran:login'))
-        return render(request, 'industry/newProject.html', context={'form': forms.ProjectForm()})
+class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
+    template_name = 'industry/newProject.html'
+    form_class = forms.ProjectForm
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
             project_title_persian = form.cleaned_data['project_title_persian']
@@ -393,26 +397,21 @@ class NewProject(View):
             except TimeoutError:
                 return HttpResponse('Timeout Error!!')
             return HttpResponseRedirect(reverse('industry:index'))
-        return render(request, 'industry/newProject.html', context={'form': form})
+        return super().post(request, *args, **kwargs)
 
-
-class ProjectListView(generic.ListView):
+class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     template_name = 'industry/project_list.html'
-    model = models.ProjectForm
+    login_url = '/login/'
+    permission_required = ('industry.be_industry',)
 
     def get(self, request, *args, **kwargs):
-        try:
-            self.industry = get_object_or_404(models.IndustryUser, user=request.user)
-        except:
-            return HttpResponseRedirect(reverse('chamran:login'))
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['industry'] = self.industry
-        if self.industry.industryform:
-            context['photo'] = self.industry.industryform.photo
+        industry = get_object_or_404(models.IndustryUser, user=self.request.user)
+        context['industry'] = industry
+        if industry.industryform:
+            context['photo'] = industry.industryform.photo
         return context
-
-class Messages(generic.TemplateView):
-    template_name = 'industry/layouts/project_details.html'

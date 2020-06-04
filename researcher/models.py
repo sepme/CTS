@@ -1,10 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse, HttpResponseRedirect
+from django.utils.timezone import now
 import os
 import datetime
 import uuid
 from . import persianNumber
+from chamran_admin.models import Message
 
 #for Compress the photo
 import sys
@@ -49,25 +52,18 @@ class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
+
+    class Meta:
+        permissions = (
+            ('be_researcher' ,'Be Researcher'),
+            ('is_active' ,'is active'),
+            )
     
     def __str__(self):
         return self.user.get_username()
 
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("researcher:index"))
-    @property
-    def score(self):
-        return self.points*23
-
-    def question_status(self):
-        if self.status.status == "not_answered":
-            deltatime = datetime.date.today() - self.researchquestioninstance.hand_out_date
-            if deltatime.days > 15:
-                self.status.status = 'inactivated'
-                self.status.status.save()
-                return "inactivated"
-            return 'not_answered'
-        return 'free'
 
     @property
     def score(self):
@@ -78,20 +74,25 @@ class Status(models.Model):
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('not_answered', "به سوال پژوهشی پاسخ نداده است."),
-        ('wait_for_answer', "منتظر جواب ادمین"),
+        ('wait_for_result', "منتظر جواب ادمین"),
         ('free', "فعال - بدون پروژه"),
         ('waiting', "فعال - در حال انتظار پروژه"),
         ('involved', "فعال - درگیر پروژه"),
-        ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
+        ('deactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    inactivate_duration_temp = models.DateField(verbose_name="غیرفعال تا تاریخ",default='0001-01-01' , blank=True, null=True)
 
-    def is_inactivate(self):
-        return datetime.datetime.now() < self.inactivate_duration
+    @property
+    def check_activity_status(self):
+        today = datetime.datetime.today().date()
+        if  today > self.inactivate_duration_temp:
+            return True
+        return False
 
     def __str__(self):
-        return '{user}- {status}'.format(user=self.researcher_user, status=self.status)
+        return '{user} - {status}'.format(user=self.researcher_user, status=self.status)
 
 class MembershipFee(models.Model):
     researcher_user = models.OneToOneField('ResearcherUser', verbose_name="حق عضویت", on_delete=models.CASCADE,
@@ -166,7 +167,11 @@ class ResearcherProfile(models.Model):
         return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if self.id:
+            perv = ResearcherProfile.objects.get(id=self.id)
+            if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
+                self.photo = self.compressImage(self.photo)
+        else:
             self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
@@ -197,7 +202,7 @@ class ExecutiveRecord(models.Model):
     post = models.CharField(max_length=300, verbose_name="سمت")
     start = models.CharField(max_length=30, verbose_name="از تاریخ")
     end = models.CharField(max_length=30, verbose_name="تا تاریخ")
-    place = models.CharField(max_length=300, verbose_name="محل خدمت")
+    place = models.CharField(max_length=300, verbose_name="نام مجموعه")
     city = models.CharField(max_length=300, verbose_name="شهر")
 
     def __str__(self):
@@ -381,8 +386,8 @@ class TechniqueReview(models.Model):
 
 class RequestedProject(models.Model):
     researcher = models.ForeignKey("researcher.ResearcherUser", on_delete=models.CASCADE)
-    project = models.OneToOneField("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
-    date_requested = models.DateField(auto_now_add=True, verbose_name='تاریخ درخواست')
+    project = models.ForeignKey("industry.Project", on_delete=models.CASCADE, null=True, blank=True)
+    date_requested = models.DateField(default=now, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
     def __str__(self):
@@ -393,8 +398,8 @@ class ResearchQuestionInstance(models.Model):
                                           verbose_name="سوال پژوهشی")
     researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
                                    blank=True, null=True)
-    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", auto_now_add=True)
-    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True)
+    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", default=now)
+    answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True, blank=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
     is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={
         ('not_seen', 'بررسی نشده'),
@@ -404,3 +409,20 @@ class ResearchQuestionInstance(models.Model):
 
     def __str__(self):
         return str(self.research_question) + ' - ' + self.researcher.user.username
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.id:
+            perv = ResearchQuestionInstance.objects.get(id=self.id)
+            if perv.is_correct == "not_seen" and self.is_correct == "correct":
+                message = Message.objects.get(id=2)
+                message.receiver.add(self.researcher.user)
+                message.save()
+                status = self.researcher.status
+                status.status = "free"
+                status.save()
+                user = self.researcher.user
+                ctype = ContentType.objects.get_for_model(ResearcherUser)
+                permission = Permission.objects.get(content_type=ctype, codename='is_active')
+                user.user_permissions.add(permission)
+                user.save()
+        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)

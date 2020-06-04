@@ -71,17 +71,25 @@ function showQuestion() {
     $(".show-btn").click(function () {
         const dialog = $(".show-question");
         let id = $(this).attr("id");
+        console.log(id);
         $.ajax({
             method: 'GET',
             url: '/expert/show_research_question/',
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                console.log(data);
                 if (data.question_status === "waiting") {
+                    $('.close-answer').hide();
+                    $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("در حال بررسی");
                 } else if (data.question_status === "not_answered") {
+                    $('.close-answer').show();
+                    $('.close-answer').prop('disabled', false);
                     dialog.find(".question-status").html("فعال");
                 } else if (data.question_status === "answered") {
+                    $('.close-answer').hide();
+                    $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("پاسخ داده شده");
                 }
                 dialog.find(".card-head").html(data.question_title);
@@ -136,11 +144,11 @@ $(document).ready(function () {
     // $('*').persiaNumber();
     question_dialog_init();
     question_page_init();
-    init_dialog_btn(".preview-project", ".showProject");
+    // init_dialog_btn(".preview-project", ".showProject");
     init_dialog_btn(".preview-project.type-2", ".project-details");
     // init_dialog_btn(".preview-project", ".project-details");
     init_dialog_btn(".confirm_project", ".select-technique");
-    init_dialog_btn("#accept-techniques", ".project-details");
+    // init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".add-new-question", ".add-question");
     init_dialog_btn(".education-btn", ".scientific_form");
@@ -157,6 +165,7 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
+
 
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
 
@@ -180,7 +189,6 @@ $(document).ready(function () {
             dataType: 'json',
             data: {'id': "None"},
             success: function (data) {
-                console.log(data);
                 let source = [];
                 for (let i = 0; i <= Object.keys(data).length - 1; i++) {
                     let item = {};
@@ -273,7 +281,6 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            // console.log(id);
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -283,13 +290,25 @@ $(document).ready(function () {
                 success: function (data) {
                     iziToast.success({
                         rtl: true,
-                        message: data.success,
-                        position: 'bottomLeft'
+                        message: data.message,
+                        position: 'bottomLeft',
+                        duration: 9999,
                     });
+                    $(".select-technique").removeClass("show");
                     $(".main").removeClass("blur-div");
                 },
                 error: function (data) {
-
+                    let obj = JSON.parse(data.responseText);
+                    let message = "";
+                    if (obj.message !== undefined)
+                        message = obj.message;
+                    else
+                        message = "اجرای این عملیات با خطا مواجه شد!";
+                    iziToast.error({
+                        rtl: true,
+                        message: message,
+                        position: 'bottomLeft'
+                    });
                 }
             });
         });
@@ -323,7 +342,6 @@ $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
         init_windowSize();
-        init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
         // $(".form-submit").click(function () {
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
@@ -367,6 +385,7 @@ $(document).ready(function () {
             }
         });
     }
+    init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
     //****************************************//
     //  Questions Page
     //****************************************//
@@ -431,8 +450,6 @@ $(document).ready(function () {
             let $thisURL = ResearchQuestionForm.attr('data-url');
             let data = new FormData(ResearchQuestionForm.get(0));
             ResearchQuestionForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-            // console.log(data);
-            // console.log($(this).find("input[type='file']").get(0).files.item(0));
             $.ajax({
                 method: 'POST',
                 url: $thisURL,
@@ -655,9 +672,9 @@ function education_record() {
                 myForm.find("label").removeClass("progress-cursor");
                 myForm.closest(".fixed-back").find(".card").removeClass("wait");
                 if (data.success === "successful") {
-                    $(".scientific_form").css("display", "none");
+                    $(".scientific_form").removeClass("show");
                     $(".main").removeClass("blur-div");
-                    show_scientific_record();
+                    show_scientific_record(data.id);
                     iziToast.success({
                         rtl: true,
                         message: "اطلاعات با موفقیت ذخیره شد!",
@@ -755,9 +772,9 @@ executiveForm.submit(function (event) {
             executiveForm.find("label").removeClass("progress-cursor");
             executiveForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".executive_form").css("display", "none");
+                $(".executive_form").removeClass("show");
                 $(".main").removeClass("blur-div");
-                show_executive_record();
+                show_executive_record(data.id);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -854,9 +871,9 @@ researchForm.submit(function (event) {
             researchForm.find("label").removeClass("progress-cursor");
             researchForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".research_form").css("display", "none");
+                $(".research_form").removeClass("show");
                 $(".main").removeClass("blur-div");
-                show_research_record();
+                show_research_record(data.id);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -943,9 +960,9 @@ paperForm.submit(function (event) {
             paperForm.find("label").removeClass("progress-cursor");
             paperForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".paper_form").css("display", "none");
+                $(".paper_form").removeClass("show");
                 $(".main").removeClass("blur-div");
-                show_paper_record();
+                show_paper_record(data.id);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -1025,7 +1042,7 @@ function setDates(date) {
 }
 
 function projectDetail(data) {
-    $(".project-details").find(".card-head").html(data.project_title_persian + ' ( ' + data.project_title_english + ' )');
+    $(".project-details").find(".card-head").html(data.project_title_persian + "<br>" + ' ( ' + data.project_title_english + ' )');
     $(".project-details").find(".establish-time .time-body").html(data.date);
     $(".project-details").find(".time-left .time-body").html(data.deadline);
 
@@ -1081,19 +1098,21 @@ function researcherRequest() {
 
 let showInfo = $('.preview-project');
 showInfo.click(function (event) {
+    let project_id = $(this).attr('id');
+    $(this).closest(".card").find('.unseen-comments').html("");
     $.ajax({
         url: $(this).attr('data-url'),
         method: 'GET',
         data: {
-            id: $(this).attr("id")
+            id: project_id
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            $('.project_id').attr('value', project_id);
+            $('.ajax-select-techniques').attr('id', project_id);
             if (data.status === "non active") {
-                console.log("non active");
                 $(".hidden").attr("style", "display : none;");
-                $(".showProject").find(".card-head").html('(' + data.project_title_english + ') ' + data.project_title_persian);
+                $(".showProject").find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
                 $(".showProject").find(".establish-time .time-body").html(data.date);
                 $(".showProject").find(".time-left .time-body").html(data.deadline);
                 const keys = JSON.parse(data.key_words);
@@ -1105,14 +1124,16 @@ showInfo.click(function (event) {
                 setMajors(data);
                 setValue(data);
                 setComment(data.comments);
-
-                if (data.applied === true){
-                    $("#accept-project").attr("disabled" ,"disabled");
+                vote_dialog_init(".showProject");
+                showModal(".showProject");
+                if (data.applied === true) {
+                    $("#accept-project").attr("disabled", "disabled");
                 }
             } else {
-                console.log("active");
+                $(".project").attr("value", project_id);
                 projectDetail(data);
             }
+
         },
         error: function (data) {
         }
@@ -1127,7 +1148,7 @@ function deleteComment(comment) {
         dataType: 'json',
         data: {id: $(comment).attr("id")},
         success: function (data) {
-            $(comment).remove()
+            $(comment).remove();
             iziToast.success({
                 rtl: true,
                 message: "پیام با موفقیت پاک شد.",
@@ -1290,7 +1311,6 @@ function setComment(data) {
             }
             comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
                 "   <div class='comment-profile'></div>" +
-                "       <div class='" + comment_body_classes + "'>" +
                 "           <span class='comment-tools'>" +
                 "               <div class='btn-group dropright'>" +
                 "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
@@ -1310,14 +1330,16 @@ function setComment(data) {
                 // "               <i class='fas fa-reply'>" +
                 // "                   <div class='reply'></div>" +
                 // "               </i>" +
-                "           </span>";
+                "           </span>" +
+                "       <div class='" + comment_body_classes + "'>";
+            comments_code += "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
-            comments_code += "<pre>" + data[i].text + "</pre>" +
+            comments_code += "" +
                 "   </div>" +
                 "</div>";
         } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
@@ -1329,14 +1351,15 @@ function setComment(data) {
                 "   <div class='" + comment_body_classes + "' dir='ltr'>" +
                 "       <span class='comment-tools'>" +
                 // "           <i class='fas fa-reply'" + data[i].pk + "></i>" +
-                "       </span>";
+                "       </span>" +
+                "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
-            comments_code += "<pre>" + data[i].text + "</pre>" +
+            comments_code += "" +
                 "   </div>" +
                 "</div>";
         } else { //system
@@ -1349,7 +1372,11 @@ function setComment(data) {
                 "</div>";
         }
     }
+    if (comments_code === "") {
+        $(".no-comment").addClass("show");
+    }
     $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+
     $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
         deleteComment($(this).closest('.my-comment'));
     });
@@ -1361,7 +1388,7 @@ function addComment(data) {
         comment_body_classes += " attached";
     }
     let comment_code = "<div class='my-comment' id='" + data.pk + "' >" +
-        "<div class='"+ comment_body_classes +"' dir='ltr'>" +
+        "<div class='comment-profile'></div>" +
         "   <span class='comment-tools'>" +
         "       <div class='btn-group dropdown'>" +
         "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
@@ -1373,15 +1400,17 @@ function addComment(data) {
         // "                   <i class='fas fa-pen'></i>" +
         // "               </div>" +
         "               <div class='dropdown-item'>" +
-        "                   <span>حذف پیام</span>" +
         "                   <i class='fas fa-trash-alt'></i>" +
+        "                   <span>حذف پیام</span>" +
         "               </div>" +
         "           </div>" +
         "       </div>" +
         // "       <i class='fas fa-reply' value=" + data.pk + ">" +
         // "           <div class='reply'></div>" +
         // "       </i>" +
-        "   </span>";
+        "   </span>" +
+        "       <div class='" + comment_body_classes + "'>";
+    comment_code += "<pre>" + data.description + "</pre>";
     if (data.attachment !== "None") {
         comment_code +=
             "<a href='/" + data.attachment + "' class='attached-file'>" +
@@ -1389,7 +1418,7 @@ function addComment(data) {
             "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
             "</a>"
     }
-    comment_code += "<pre>" + data.description + "</pre>" +
+    comment_code += "" +
         "   </div>" +
         "</div>";
     return comment_code;
@@ -1415,6 +1444,9 @@ comment_form.submit(function (event) {
         success: function (data) {
             comment_form.find("button[type='submit']").prop("disabled", false);
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                $(".project-comment-innerDiv").find(".no-comment").remove();
+            }
             let comment_code = addComment(data);
             $(".project-comment-innerDiv").find(".comments").append(comment_code);
             iziToast.success({
@@ -1428,6 +1460,11 @@ comment_form.submit(function (event) {
             });
 
             comment_form[0].reset();
+            comment_form.find("#description").css("height", "fit-content");
+            $("textarea#description").removeClass("error");
+            $('.error').remove();
+            $('.file-name').html("");
+            $(".send-comment-container .comment-input").removeClass("attached");
             $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
 
         },
@@ -1452,27 +1489,47 @@ comment_form.submit(function (event) {
     });
 });
 
-$('.confirm-researcher').click(function () {
-    $.ajax({
-        method: "POST",
-        url: 'confirmResearcher/',
-        dataType: "json",
-        data: {
-            researcher_id: $(this).attr("id"),
-            project_id: $('.div_project_id').attr("id")
-        },
-        success: function (data) {
-            iziToast.success({
-                rtl: true,
-                message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
-                position: 'bottomLeft'
-            });
-        },
-        error: function (data) {
-            console.log("Error");
-        }
+// Researcher Request Page
+if (window.location.href.indexOf("expert/researcher/") > 0) {
+
+    // $.each($(".box.no-border").toArray(), function (key, val) {
+    //     let score = parseInt($(val).find(".box-score .score-amount").text());
+    //     $(val).find(".box-score .score-amount").text(score);
+    //     for (let i = 2; i < 7; i++) {
+    //         let circle = $(val).find(".box-score .circle:nth-child(" + i + ")");
+    //         if (score - 2 >= 0) {
+    //             circle.addClass("fill");
+    //         } else if (score - 2 === -1) {
+    //             circle.addClass("semi-fill");
+    //             break
+    //         }
+    //         score -= 2;
+    //     }
+    // });
+
+    $('.confirm-researcher').click(function () {
+        $.ajax({
+            method: "POST",
+            url: 'confirmResearcher/',
+            dataType: "json",
+            data: {
+                researcher_id: $(this).attr("id"),
+                project_id: $(this).val(),
+            },
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("Error");
+            }
+        });
     });
-});
+}
+
 
 function getCookie(name) {
     let cookieValue = null;

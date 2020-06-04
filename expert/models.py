@@ -12,6 +12,8 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
+import time
+
 def profileUpload(instance, filename):
     return os.path.join('Expert Profile' , instance.expert_user.user.username ,filename)
     
@@ -35,6 +37,11 @@ class ExpertUser(models.Model):
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
+
+    class Meta:
+        permissions = (
+            ('be_expert', 'Be Expert'),
+        )
 
     def __str__(self):
         return self.user.get_username()
@@ -116,7 +123,11 @@ class ExpertForm(models.Model):
         return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if self.id:
+            perv = ExpertForm.objects.get(id=self.id)
+            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                self.photo = self.compressImage(self.photo)
+        else:
             self.photo = self.compressImage(self.photo)
         super(ExpertForm, self).save(*args, **kwargs)
 

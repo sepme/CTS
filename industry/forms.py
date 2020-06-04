@@ -254,8 +254,21 @@ class ProjectForm(forms.Form):
 
     def clean_required_method(self):
         data = self.cleaned_data["required_method"]
-        print(data)
+
         return data
+
+    def clean_predict_profit(self):
+        data = self.cleaned_data["predict_profit"]
+        # if not data & (1 << 47):
+            # raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
+        return data
+    
+    def clean_required_budget(self):
+        data = self.cleaned_data["required_budget"]
+        # if not data & (1 << 47):
+            # raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
+        return data
+    
     
 class CommentForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea ,empty_value="None")

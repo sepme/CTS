@@ -152,18 +152,7 @@ body{
   box-shadow: 0 0 1px 0 #3CCD1C ;
   cursor: pointer;
 }
-.card {
-  width: 400px;
-  padding: 10px 25px 25px 25px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.16);
-}
-.card.login-card{
-  padding: 10px 25px 50px 25px;
-}
+
 img.registration-card-icon {
   width: 105px;
   height: 100px;
@@ -210,34 +199,8 @@ img.registration-card-icon {
 /*  left: 25px;*/
 /*  top: 135px;*/
 /*}*/
-.username, .password , .confirm_password{
-  position: relative;
-}
 .confirm_password > input{
   margin-bottom: 10px;
-}
-input {
-  background-color: #fdfdfd;
-  border: 1px solid #bdbdbd85;
-  color: #6f7285;
-  border-radius: 5px;
-  margin-top: 23px;
-  direction: rtl;
-  padding: 10px;
-  width: 100%;
-}
-label {
-  position: absolute;
-  top: 31px;
-  right: 10px;
-  color: #6f7285;
-  transition: 300ms all ease;
-}
-input:focus {
-  outline: none;
-  border: 1px solid #3CCD1C;
-  color: #3CCD1C;
-  background-color: #fff;
 }
 .username > i , .password > i, .confirm_password > i , .email > i{
   width: 35px;

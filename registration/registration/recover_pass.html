@@ -1,0 +1,49 @@
+{% load widget_tweaks %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
+    <title>بازیابی رمز عبور</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="card registration single-column-card text-center">
+    <div class="col-12 loading">
+        <div class="circle-loader">
+            <div class="checkmark draw"></div>
+        </div>
+        <h6>لطفا صبر کنید ...</h6>
+    </div>
+    <div class="recover-pass-container">
+        <div class="card-center-image">
+            <img src="{% static 'img/close-lock.svg' %}" alt="">
+        </div>
+        <h6>بازیابی رمز عبور</h6>
+        <hr>
+        <form method="post" class="recover-pass" novalidate data-url="{% url 'chamran:recovery_ajax' %}">
+            {% csrf_token %}
+            <div class="email input-compact" style="display: block">
+                <label for="email"></label>
+                <input type="email" class="w-100" name="username" id="email" placeholder="لطفا ایمیل خود را وارد کنید">
+                <!-- {{ form.username|attr:"id:email" }}
+                {{ form.username.errors }} -->
+                <i class="fas fa-at fa-lg"></i>
+            </div>
+            <button type="submit" name="sign_up" class="Enter-btn">بازیابی</button>
+        </form>
+        <a href="{% url 'chamran:login' %}" style="font-weight: 500">بازگشت به صفحه ورود</a>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

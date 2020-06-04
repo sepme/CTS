@@ -42,8 +42,8 @@ $(".preview-project").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
         return;
-    $("#project_id").attr('value', $(".chamran-btn-info").attr("id"));
-    $("#apply_project_id").attr('value', $(".chamran-btn-info").attr("id"));
+    $(".project_id").attr('value', $(".preview-project").attr("id"));
+    $("#apply_project_id").attr('value', $(".preview-project").attr("id"));
     /*
      * reset All data
      */
@@ -51,15 +51,14 @@ $(".preview-project").click(function () {
     /*
      * end of reset
      */
-    var id = $(this).attr("id");
-    console.log("id");
+    let id = $(this).attr("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/show_project/',
         dataType: 'json',
         data: {'id': id},
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
+            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;//[0].split(",");
@@ -70,8 +69,7 @@ $(".preview-project").click(function () {
                     + "</span>"
                 );
             }
-            if (data.status == "waiting" || data.status == "involved") {
-                console.log(data.status);
+            if (data.status === "waiting" || data.status === "involved") {
                 $('.vote').remove();
                 $('.apply').remove();
             }
@@ -86,7 +84,7 @@ $(".preview-project").click(function () {
 });
 
 function setRole(data) {
-    role = "<div>" +
+    let role = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -100,7 +98,7 @@ function setRole(data) {
 }
 
 function setResources(data) {
-    resources = "<div>" +
+    let resources = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -148,7 +146,7 @@ function setResources(data) {
 }
 
 function setApproach(data) {
-    approach = "<div>" +
+    let approach = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -173,7 +171,7 @@ function setApproach(data) {
 }
 
 function setMajors(data) {
-    majors = "<div>" +
+    let majors = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -314,11 +312,7 @@ $(".trash").click(function (event) {
 });
 
 $(document).ready(function () {
-    // variable
     init_setup();
-    edu_count = 0;
-    exe_count = 0;
-    stu_count = 0;
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".add-new-technique", ".add-technique");
     init_dialog_btn(".new-review-request", ".review-request");
@@ -339,7 +333,7 @@ $(document).ready(function () {
         }
     });
     $(".new-review-request").click(function () {
-        $("#technique_name").attr('value', $(this).closest(".active-question").find(".technique-title").html());
+        $("#technique_id").attr('value', $(this).attr('id'));
     });
     $('input#upload-input').change(function (event) {
         $("img.profile").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
@@ -360,6 +354,7 @@ $(document).ready(function () {
     } else {
         init_windowSize();
         init_dialog_btn(".preview-project", ".showProject");
+        init_dialog_btn(".my-project", ".showProject");
         // $(".form-submit").click(function () {
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
@@ -389,7 +384,6 @@ $(".submit-button").click(function (event) {
     event.preventDefault();
     let voteForm = $(this).closest("form");
     let data = voteForm.serialize();
-    console.log(data);
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -404,7 +398,7 @@ $(".submit-button").click(function (event) {
     })
 });
 
-var scientificForm = $('#ajax-sci-form');
+let scientificForm = $('#ajax-sci-form');
 scientificForm.submit(function (event) {
     event.preventDefault();
     scientificForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -412,8 +406,8 @@ scientificForm.submit(function (event) {
     scientificForm.find("button[type='reset']").attr("disabled", "true");
     scientificForm.find("label").addClass("progress-cursor");
     scientificForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = scientificForm.attr('url');
-    var data = $(this).serialize().toString();
+    let $thisURL = scientificForm.attr('url');
+    let data = $(this).serialize().toString();
     scientificForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -429,7 +423,7 @@ scientificForm.submit(function (event) {
             scientificForm.closest(".fixed-back").find(".card").removeClass("wait");
 
             if (data.success === "successful") {
-                $(".scientific_form").css("display", "none");
+                $(".scientific_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_scientific_record(data.pk);
                 iziToast.success({
@@ -441,7 +435,7 @@ scientificForm.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             scientificForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             scientificForm.find("button[type='reset']").prop("disabled", false);
@@ -502,7 +496,7 @@ scientificForm.submit(function (event) {
     })
 });
 
-var researchForm = $('.ajax-std-form');
+let researchForm = $('.ajax-std-form');
 researchForm.submit(function (event) {
     event.preventDefault();
     researchForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -510,8 +504,8 @@ researchForm.submit(function (event) {
     researchForm.find("button[type='reset']").attr("disabled", "true");
     researchForm.find("label").addClass("progress-cursor");
     researchForm.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = researchForm.attr('url');
-    var data = $(this).serialize().toString();
+    let $thisURL = researchForm.attr('url');
+    let data = $(this).serialize().toString();
     researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -526,7 +520,7 @@ researchForm.submit(function (event) {
             researchForm.find("label").removeClass("progress-cursor");
             researchForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".research_form").css("display", "none");
+                $(".research_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_research_record(data.pk);
                 iziToast.success({
@@ -538,7 +532,7 @@ researchForm.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             researchForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             researchForm.find("button[type='reset']").prop("disabled", false);
@@ -589,15 +583,15 @@ researchForm.submit(function (event) {
     })
 });
 
-var executive_form = $('.ajax-exe-form');
+let executive_form = $('.ajax-exe-form');
 executive_form.submit(function (event) {
     event.preventDefault();
     executive_form.find("button[type='submit']").addClass("loading-btn").attr("disabled", "true").css("color", "transparent");
     executive_form.find("button[type='reset']").attr("disabled", "true");
     executive_form.find("label").addClass("progress-cursor");
     executive_form.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = executive_form.attr('url');
-    var data = $(this).serialize().toString();
+    let $thisURL = executive_form.attr('url');
+    let data = $(this).serialize().toString();
     executive_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -612,7 +606,7 @@ executive_form.submit(function (event) {
             executive_form.find("label").removeClass("progress-cursor");
             executive_form.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".executive_form").css("display", "none");
+                $(".executive_form").removeClass("show");
                 $(".main").removeClass("blur-div");
                 show_executive_record();
                 iziToast.success({
@@ -624,7 +618,7 @@ executive_form.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             executive_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             executive_form.find("button[type='reset']").prop("disabled", false);
@@ -700,7 +694,7 @@ if (window.location.href.indexOf("researcher/technique/") > -1) {
     });
 }
 
-var technique_review = $('#technique_review');
+let technique_review = $('#technique_review');
 technique_review.submit(function (event) {
     event.preventDefault();
     technique_review.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
@@ -708,9 +702,9 @@ technique_review.submit(function (event) {
     technique_review.find("button[type='reset']").attr("disabled", "true");
     technique_review.find("label").addClass("progress-cursor");
     technique_review.closest(".fixed-back").find(".card").addClass("wait");
-    var $thisURL = technique_review.attr('url');
-    // var data = $(this).serialize().toString();
-    var data = new FormData(technique_review.get(0));
+    let $thisURL = technique_review.attr('url');
+    // let data = $(this).serialize().toString();
+    let data = new FormData(technique_review.get(0));
     technique_review.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
         method: 'POST',
@@ -739,7 +733,7 @@ technique_review.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             technique_review.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             technique_review.find("button[type='reset']").prop("disabled", false);
@@ -779,11 +773,16 @@ technique_review.submit(function (event) {
     })
 });
 
-function show_add_technique_record(title) {
+function show_add_technique_record(data) {
     let newTechnique = "" +
         "<div class='card box flow-root-display w-100'>" +
         "    <div class='box-header text-right'>" +
-        "        <h6>" + title + "</h6>" +
+        "        <h6>" + data.title + "</h6>" +
+        "        <div class='box-object-left'>" +
+        "           <a href='//" + data.link + "'>" +
+        "            <i class='fas fa-link'></i>" +
+        "           </a>" +
+        "       </div>" +
         "    </div>" +
         "    <div class='box-body'>" +
         "        <div class='row'>" +
@@ -799,20 +798,23 @@ function show_add_technique_record(title) {
         "                    </div>" +
         "                    <div class='col-6 text-center'>" +
         "                        <div class='label'>سطح تسلط</div>" +
-        "                        <div class='value'>" +
-        "                            <span>" +
-        "در حال بررسی...                               " +
-        "                            </span>" +
-        "                        </div>" +
+        "                        <div class='value'>";
+        if (data.is_exam)
+            newTechnique += "                            <span>" +
+                            "زمان آزمون از طریق تماس با شما هماهنگ خواهد شد" +
+                            "                            </span>";
+        else
+            newTechnique += "                            <span>" +
+                            "در حال بررسی...                               " +
+                            "                            </span>" ;
+        newTechnique += "                        </div>" +
         "                    </div>" +
         "                </div>" +
-        "            </div>" +
-        "            <div class='col-md-6 col-4'>" +
-        "                <button class='default-btn show-btn new-review-request'>ارتقا نمره</button>" +
         "            </div>" +
         "        </div>" +
         "    </div>" +
         "</div>";
+    $(".techniques-list .empty-page").remove();
     $(".techniques-list").append(newTechnique);
 }
 
@@ -824,7 +826,7 @@ add_technique_form.submit(function (event) {
     add_technique_form.find("label").addClass("progress-cursor");
     add_technique_form.closest(".fixed-back").find(".card").addClass("wait");
     let $thisURL = add_technique_form.attr('url');
-    // var data = $(this).serialize().toString();
+    // let data = $(this).serialize().toString();
     let data = new FormData(add_technique_form.get(0));
     add_technique_form.find("input").attr("disabled", "true").addClass("progress-cursor");
     $.ajax({
@@ -836,6 +838,7 @@ add_technique_form.submit(function (event) {
         processData: false,
         contentType: false,
         success: function (data) {
+            // Todo : Plz send link of techniques for me here Ali Agha! :D
             add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             add_technique_form.find("button[type='reset']").prop("disabled", false);
@@ -845,7 +848,7 @@ add_technique_form.submit(function (event) {
             if (data.success === "successful") {
                 $(".add-technique").css("display", "none");
                 $(".main").removeClass("blur-div");
-                show_add_technique_record(data.title);
+                show_add_technique_record(data);
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -855,7 +858,7 @@ add_technique_form.submit(function (event) {
             }
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             add_technique_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             add_technique_form.find("button[type='reset']").prop("disabled", false);
@@ -896,7 +899,7 @@ add_technique_form.submit(function (event) {
 });
 
 function addComment(data) {
-    new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
+    let new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
         "<div class='comment-body' dir='ltr'>" +
         "<span class='comment-tools'>"
     // "<i class='fas fa-trash-alt'></i>" +
@@ -919,13 +922,13 @@ function addComment(data) {
     $(".comments").append(new_comment);
 }
 
-var comment_form = $('#comment-form');
+let comment_form = $('#comment-form');
 comment_form.submit(function (event) {
     event.preventDefault();
     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
     comment_form.find("label").addClass("progress-cursor");
-    var $thisURL = comment_form.attr('url');
-    var data = new FormData(comment_form.get(0));
+    let $thisURL = comment_form.attr('url');
+    let data = new FormData(comment_form.get(0));
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -938,6 +941,9 @@ comment_form.submit(function (event) {
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+            if($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                $(".project-comment-innerDiv").find(".no-comment").remove();
+            }
             addComment(data);
             iziToast.success({
                 rtl: true,
@@ -945,12 +951,13 @@ comment_form.submit(function (event) {
                 position: 'bottomLeft'
             });
             comment_form[0].reset();
+            comment_form.find("#description").css("height","fit-content");
             $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
@@ -969,11 +976,11 @@ comment_form.submit(function (event) {
     });
 });
 
-var apply_form = $(".apply_Project");
+let apply_form = $(".apply_Project");
 apply_form.submit(function (event) {
     event.preventDefault();
-    var url = apply_form.attr('url');
-    var data = $(this).serialize().toString();
+    let url = apply_form.attr('url');
+    let data = $(this).serialize().toString();
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -983,9 +990,14 @@ apply_form.submit(function (event) {
             $("input#most_hours").removeClass("error");
             $("input#least_hours").removeClass("error");
             $(".apply").hide();
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما برای استاد فرستاده شد.",
+                position: 'bottomLeft'
+            });
         },
         error: function (data) {
-            var obj = JSON.parse(data.responseText);
+            let obj = JSON.parse(data.responseText);
             if (obj.least_hours) {
                 $("#least_hours").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
@@ -1108,7 +1120,7 @@ function ShowPreviousProject(project) {
 }
 
 $("#done-project").click(function (event) {
-    $(".new-projects").attr("style", "display :none");
+    $(".new-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
     $(".done-project").attr("style", "display :block");
     // $.ajax({
@@ -1117,8 +1129,8 @@ $("#done-project").click(function (event) {
     //     dataType: 'json',
     //     success: function (data) {
     //         console.log(data);
-    //         var adding = "";
-    //         for (var key in data.project_list) {
+    //         let adding = "";
+    //         for (let key in data.project_list) {
     //             const element = data.project_list[key];
     //             adding = adding + ShowPreviousProject(element);
     //         }
@@ -1146,17 +1158,17 @@ function ShowMyProject(project) {
 }
 
 $("#your-project").click(function (event) {
-    $(".new-projects").attr("style", "display :none");
-    $(".done-project").attr("style", "display :none");
-    $(".your-project").attr("style", "display :block");
+    $(".new-project").attr("style", "display :none;");
+    $(".done-project").attr("style", "display :none;");
+    $(".your-project").attr("style", "display :block;");
     // $.ajax({
     //     method: 'GET',
     //     url: '/researcher/myProject/',
     //     dataType: 'json',
     //     success: function (data) {
     //         console.log(data);
-    //         var adding = "";
-    //         for (var key in data.project_list) {
+    //         let adding = "";
+    //         for (let key in data.project_list) {
     //             const element = data.project_list[key];
     //             adding = adding + ShowMyProject(element);
     //         }
@@ -1178,7 +1190,7 @@ $(".my-project").click(function () {
         data: {id: projectId},
         dataType: 'json',
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian + " (" + data.project_title_english + ")");
+            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;
@@ -1226,7 +1238,7 @@ function deleteComment(comment) {
 }
 
 $("#new-projects").click(function (event) {
-    $(".new-projects").attr("style", "display :block");
+    $(".new-project").attr("style", "display :block");
     $(".done-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
 });

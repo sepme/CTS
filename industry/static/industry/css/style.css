@@ -254,19 +254,19 @@ span.title-back {
 /*.nav-pills > .nav-link:nth-child(4)::after {*/
 /*    content: 'قوانین';*/
 /*}*/
-span.border-span {
-    display: inline-block;
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: 0.25em;
-    border: 1px solid #bdbdbd;
-    padding: 2px 5px;
-    background-color: #F8FDF7;
-    color: #707070;
-    font-weight: 300;
-    font-size: 12px;
-    margin: 3px 5px;
-}
+/*span.border-span {*/
+/*    display: inline-block;*/
+/*    -webkit-border-radius: 0.25em;*/
+/*    -moz-border-radius: 0.25em;*/
+/*    border-radius: 0.25em;*/
+/*    border: 1px solid #bdbdbd;*/
+/*    padding: 2px 5px;*/
+/*    background-color: #F8FDF7;*/
+/*    color: #707070;*/
+/*    font-weight: 300;*/
+/*    font-size: 12px;*/
+/*    margin: 3px 5px;*/
+/*}*/
 /*end showProject.html*/
 .selected_keys {
     display: flex;

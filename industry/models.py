@@ -41,6 +41,11 @@ class IndustryUser(models.Model):
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
+    class Meta:
+        permissions = (
+            ('be_industry', 'Be Industry'),
+        )
+
     def __str__(self):
         return self.user.get_username()
 
@@ -83,7 +88,11 @@ class IndustryForm(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if self.id:
+            perv = IndustryForm.objects.get(id=self.id)
+            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                self.photo = self.compressImage(self.photo)
+        else:
             self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
 
@@ -215,7 +224,18 @@ class Project(models.Model):
 
 
 def upload_comment(instance, file_name):
-    return os.path.join(settings.MEDIA_ROOT, instance.project.__str__(), file_name)
+    return os.path.join(instance.project.__str__(), file_name)
+    # if instance.researcher_user is None:
+    #     if instance.sender_type == "expert":
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Industry", "Expert", file_name)
+    #     else:
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Industry", "Industry", file_name)
+    # else:
+    #     if instance.sender_type == "expert":
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Researcher", "Expert", file_name)
+    #     else:
+    #         print("==========-----")
+    #         return os.path.join(instance.project.__str__(), "Comments", "Expert&Researcher", "Reseacher", file_name)
 
 
 class Comment(models.Model):

@@ -6,7 +6,7 @@
         <div class="container">
             <form enctype="multipart/form-data" method="post" url="{% url 'researcher:technique-review' %}" id="technique_review">
                 {% csrf_token %}
-                <input type="text" name="technique_name" id="technique_name" hidden>
+                <input type="text" name="technique_id" id="technique_id" hidden>
                 <div class="row mbottom-lg-25">
                     <div class="col-lg-12">
                         <label for="request-body">توضیحات</label>

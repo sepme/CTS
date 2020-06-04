@@ -4,24 +4,26 @@ from dateutil.relativedelta import relativedelta
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponseRedirect, reverse, get_object_or_404, HttpResponse, Http404, redirect
 from django.views import generic, View
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.conf import settings
+from django.template.loader import get_template
+from django.urls import resolve
+from django.contrib.contenttypes.models import ContentType
+
 from persiantools.jdatetime import JalaliDate
+
 from chamran_admin.models import Message
-from django.http import JsonResponse
 from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment
-from django.template.loader import get_template
-from django.urls import resolve
 
 LOCAL_URL = 'chamranteambot.pythonanywhere.com'
 
@@ -50,7 +52,7 @@ def get_message_detail(request, message_id):
 
 
 class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
-    template_name = 'chamran_admin/messages.html'
+    template_name = '../registration/chamran_admin/messages.html'
     login_url = "/login"
     jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
                      'دی', 'بهمن', 'اسفند')
@@ -127,7 +129,7 @@ def get_user_by_unique_id(unique):
 
 
 class Home(generic.TemplateView):
-    template_name = "base.html"
+    template_name = "../registration/base.html"
     
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse('chamran:login'))
@@ -179,11 +181,9 @@ class SignupEmail(generic.FormView):
 
 def signup_email_ajax(request):
     form = forms.RegisterEmailForm(request.POST)
-    print('is valid: ', form.is_valid())
     if form.is_valid():
         email = form.cleaned_data['email']
-        account_type = request.POST['user-type']
-        # account_type = form.cleaned_data['account_type']
+        account_type = form.cleaned_data['account_type']
         # temp_user = models.TempUser.objects.create(email=email, account_type=account_type)
         temp_user = models.TempUser(email=email, account_type=account_type)
         subject = 'تکمیل ثبت نام'
@@ -237,18 +237,38 @@ def login_ajax(request):
                         data['type'] = 'industry'
                     except IndustryUser.DoesNotExist:
                         raise ValidationError('کابر مربوطه وجود ندارد.')
+            data['next'] = request.POST.get('next')
             return JsonResponse(data)
             # return HttpResponseRedirect(reverse)
         else:
             # context = {'form': form,
             #            'error': 'گذرواژه اشتباه است'}
             return JsonResponse({
-                'error': 'گذرواژه اشتباه است'
-            } ,400)
+                'password': 'گذرواژه اشتباه است'
+            } ,status=400)
     else:
         print('form error')
         return JsonResponse(form.errors, status=400)
 
+def addGroup(user, group_name):
+    if not Group.objects.filter(name = group_name).exists():
+        newGroup = Group(name=group_name)
+        newGroup.save()
+        if group_name == "Researcher":
+            ctype = ContentType.objects.get_for_model(ResearcherUser)
+        elif group_name == "Expert":
+            ctype = ContentType.objects.get_for_model(ExpertUser)
+        else:
+            ctype = ContentType.objects.get_for_model(IndustryUser)
+        permissionName = 'be_' + group_name.lower()
+        permission = Permission.objects.get(content_type=ctype, codename=permissionName)
+        newGroup.permissions.add(permission)
+        newGroup.user_set.add(user)
+        newGroup.save()
+    else:
+        group = Group.objects.get(name = group_name)
+        group.user_set.add(user)
+        group.save()
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
@@ -290,6 +310,11 @@ class SignupUser(generic.FormView):
             new_user = authenticate(self.request, username=username, password=password)
             if new_user is not None:
                 login(self.request, new_user)
+            addGroup(user, "Researcher")
+            ctype = ContentType.objects.get_for_model(ResearcherUser)
+            permission = Permission.objects.get(content_type=ctype, codename='is_active')
+            user.user_permissions.add(permission)
+            user.save()    
             return researcher.get_absolute_url()
 
         elif account_type == 'expert':
@@ -298,6 +323,7 @@ class SignupUser(generic.FormView):
             new_user = authenticate(self.request, username=username, password=password)
             if new_user is not None:
                 login(self.request, new_user)
+            addGroup(new_user, "Expert")
             return expert.get_absolute_url()
 
         elif account_type == 'industry':
@@ -306,6 +332,7 @@ class SignupUser(generic.FormView):
             new_user = authenticate(self.request, username=username, password=password)
             if new_user is not None:
                 login(self.request, new_user)
+            addGroup(new_user, "Industry")
             return industry.get_absolute_url()
         return super().form_valid(form)
 
@@ -315,16 +342,21 @@ class LoginView(generic.TemplateView):
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         try:
-                if request.user.is_authenticated:
-                    return find_user(request.user).get_absolute_url()
+            if request.user.is_authenticated:
+                return find_user(request.user).get_absolute_url()
         except:
             pass
-        login_form = forms.LoginForm()
-        register_form = forms.RegisterEmailForm()
-        context = {'form': login_form,
-                    'register_form': register_form}
-        return render(request, self.template_name, context)
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        context['form'] = forms.LoginForm()
+        context['register_form'] = forms.RegisterEmailForm()
+        if self.request.GET.get('next') :
+            context['next'] = self.request.GET.get('next')
+        return context
+    
 
 class LogoutView(generic.TemplateView):
     template_name = 'registration/base.html'
@@ -451,19 +483,16 @@ class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
-class View(generic.TemplateView):
-    template_name = 'registration/email_template.html'
-
-
-# class notFound(generic.TemplateView):
-#     template_name = '404Template.html'
-
 def notFound404(request ,exception):
     context = {'data' : exception}
-    return render(request ,'404Template.html',context)
+    return render(request, '../registration/404Template.html', context)
 
 def notFound500(request):
-    return render(request ,'404Template.html',{})
+    return render(request, '../registration/404Template.html', {})
+
+def Handler403(request ,exception):
+    context = {'data' : exception}
+    return render(request, '../registration/403Template.html', context)
 
 class RecoverPassword(generic.TemplateView):
     template_name = 'registration/recover_pass.html'

@@ -32,6 +32,24 @@ function init_dialog_btn(element, dialogClass) {
     });
 }
 
+function showModal(dialogClass) {
+    vote_dialog_init(dialogClass);
+    $(".fixed-back").removeClass("show");
+    $(".main").removeClass("blur-div");
+    blur_div_toggle(".main");
+    $(dialogClass).addClass("show");
+    close_dialog(dialogClass);
+    dialog_comment_init();
+    load_dialog();
+    if (dialogClass === ".showProject") {
+        accept_project();
+        $(dialogClass).removeAttr("id");
+        $(dialogClass).attr("id", $(this).attr("id"));
+    } else if (dialogClass === ".select-technique") {
+        $(dialogClass).find("form").attr("id", $(element).closest(".fixed-back").attr("id"));
+    }
+}
+
 function cancel_add(className) {
     div = "<span class='initial-value' style='border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;'>برای افزودن سابقه جدید روی <i class='fas fa-plus'></i>  کلیک کنید!  </span>";
     $(".reject-btn").click(function () {
@@ -83,6 +101,10 @@ function close_dialog(className) {
         } else if (className === ".showProject") {
             $(".showProject .nav .nav-link").removeClass("active");
             $(".showProject .nav .nav-link#v-pills-majors-tab").addClass("active");
+        } else if (className === ".researcher-info-dialog") {
+            $('#researcher_scientific_record').html("<tr></tr>");
+            $('#researcher_executive_record').html("<tr></tr>");
+            $('#researcher_research_record').html("<tr></tr>");
         }
     });
 }
@@ -195,8 +217,9 @@ function education_data_form(edu_count) {
 }
 
 
-function show_scientific_record() {
-    row = "<tr>" +
+function show_scientific_record(id) {
+    row = "<tbody class='row-sci-" + id + "'>" +
+        "<tr>" +
         "<td>" + $("#edu-section").val() + "</td>" +
         "<td>" + $("#edu-subject").val() + "</td>" +
         "<td>" + $("#university").val() + "</td>" +
@@ -206,7 +229,8 @@ function show_scientific_record() {
         "<i class='fas fa-pen' id='edit_edu'></i>" +
         "<i class='fas fa-trash-alt' id='delete_edu'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
 
     if (!$(".education > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
@@ -225,7 +249,7 @@ function show_scientific_record() {
             "</table>";
         $(".education").html(table);
     }
-    $(".education > table > tbody").append(row);
+    $(".education > table").append(row);
     $(".education div#" + $(this).attr("id")).remove();
     record_edit(".education");
 }
@@ -291,8 +315,9 @@ function executive_record() {
     });
 }
 
-function show_executive_record() {
-    row = "<tr>" +
+function show_executive_record(id) {
+    row = "<tbody class='row-exe-" + id + "'>" +
+        "<tr>" +
         "<td>" + $("#duty").val() + "</td>" +
         "<td>" + $("#from").val() + "</td>" +
         "<td>" + $("#until").val() + "</td>" +
@@ -302,7 +327,8 @@ function show_executive_record() {
         "<i class='fas fa-pen' id='edit_exe'></i>" +
         "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
     if (!$(".executive > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -320,7 +346,7 @@ function show_executive_record() {
             "</table>";
         $(".executive").html(table);
     }
-    $(".executive > table > tbody").append(row);
+    $(".executive > table").append(row);
     $(".executive div#" + $(this).attr("id")).remove();
     record_edit(".executive");
 }
@@ -382,8 +408,9 @@ function research_record() {
     });
 }
 
-function show_research_record() {
-    row = "<tr>" +
+function show_research_record(id) {
+    row = "<tbody class='row-research-" + id + "'>" +
+        "<tr>" +
         "<td>" + $("#subject").val() + "</td>" +
         "<td>" + $("#admin").val() + "</td>" +
         "<td>" + $("#liable").val() + "</td>" +
@@ -391,7 +418,8 @@ function show_research_record() {
         "<i class='fas fa-pen' id='edit_stu'></i>" +
         "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
     if (!$(".research > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -407,7 +435,7 @@ function show_research_record() {
             "</table>";
         $(".research").html(table);
     }
-    $(".research > table > tbody").append(row);
+    $(".research > table ").append(row);
     $(".research div#" + $(this).attr("id")).remove();
     record_edit(".research");
 }
@@ -468,9 +496,10 @@ function paper_record() {
     });
 }
 
-function show_paper_record() {
-    row = "<tr>" +
-        "<td>" + $("#paper-name").val() + "</td>" +
+function show_paper_record(id) {
+    row = "<tbody class='row-paper-" + id + "'>" +
+        "<tr>" +
+        "<td>" + $("#article-name").val() + "</td>" +
         "<td>" + $("#publish-date").val() + "</td>" +
         "<td>" + $("#published-at").val() + "</td>" +
         "<td>" + $("#impact-factor").val() + "</td>" +
@@ -479,7 +508,8 @@ function show_paper_record() {
         "<i class='fas fa-pen' id='edit_art'></i>" +
         "<i class='fas fa-trash-alt' id='edit_art'></i>" +
         "</td>" +
-        "</tr>";
+        "</tr>" +
+        "</tbody>";
     if (!$(".paper > table").hasClass("table")) {
         table = "<table class='table mtop-lg-25'>" +
             "<thead>" +
@@ -497,12 +527,40 @@ function show_paper_record() {
             "</table>";
         $(".paper").html(table);
     }
-    $(".paper > table > tbody").append(row);
+    $(".paper > table").append(row);
     $(".paper div#" + $(this).attr("id")).remove();
     record_edit(".paper");
 }
 
 function show_new_research_question() {
+    if ($(".empty-page").length !== 0) {
+        let container = "<div class=\"col-lg-12 text-right\">\n" +
+            "                <div class=\"project-info-tabs\">\n" +
+            "                    <div class=\"nav flex-column nav-pills\" id=\"v-pills-tab\" role=\"tablist\"\n" +
+            "                         aria-orientation=\"vertical\">\n" +
+            "                        <a class=\"nav-link active fs-15\" id=\"all-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"true\">\n" +
+            "                            همه\n" +
+            "                        </a>\n" +
+            "                        <a class=\"nav-link fs-15\" id=\"active-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"false\">\n" +
+            "                            فعال\n" +
+            "                        </a>\n" +
+            "                        <a class=\"nav-link fs-15\" id=\"check-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"false\">\n" +
+            "                            درحال بررسی\n" +
+            "                        </a>\n" +
+            "                        <a class=\"nav-link fs-15\" id=\"answered-questions\" data-toggle=\"pill\"\n" +
+            "                           role=\"tab\" aria-selected=\"false\">\n" +
+            "                            پاسخ داده شده\n" +
+            "                        </a>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "                <div class=\"tab-content cover-page\"></div>" +
+            "</div>";
+        $(".empty-page").closest(".row").html(container);
+        $(".h3").removeClass("border-bottom");
+    }
     let new_question = "<div class='card check-question box flow-root-display w-100'>" +
         "                                <div class='box-header'>" +
         "                                    <h6>" + $("#question-title").val() + "</h6>" +
@@ -632,13 +690,13 @@ function dialog_comment_init() {
 }
 
 function vote_slider_industry(slide_count) {
-    industry_counter = 0;
+    let industry_counter = 0;
     $(".industry-voting .next-button").click(function () {
         alert("industry_counter = " + industry_counter);
         if (industry_counter < slide_count - 1) {
             industry_counter++;
-            progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".industry-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".industry-voting .progress-line").css('width'));
             $(".industry-voting .progress-line").css('width', width + progressWidth);
             $(".industry-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * industry_counter + "%, 0, 0)",
@@ -657,8 +715,8 @@ function vote_slider_industry(slide_count) {
         alert("industry_counter = " + industry_counter);
         if (industry_counter > 0) {
             industry_counter--;
-            progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".industry-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".industry-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".industry-voting .progress-line").css('width'));
             $(".industry-voting .progress-line").css('width', width - progressWidth);
             $(".industry-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * industry_counter + "%, 0, 0)",
@@ -676,13 +734,13 @@ function vote_slider_industry(slide_count) {
 }
 
 function vote_slider_researcher(slide_count) {
-    researcher_counter = 0;
+    let researcher_counter = 0;
     $(".researcher-voting .next-button").click(function () {
         alert("researcher_counter = " + researcher_counter);
         if (researcher_counter < slide_count - 1) {
             researcher_counter++;
-            progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".researcher-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".researcher-voting .progress-line").css('width'));
             $(".researcher-voting .progress-line").css('width', width + progressWidth);
             $(".researcher-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * researcher_counter + "%, 0, 0)",
@@ -701,8 +759,8 @@ function vote_slider_researcher(slide_count) {
         alert("researcher_counter = " + researcher_counter);
         if (researcher_counter > 0) {
             researcher_counter--;
-            progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
-            width = parseFloat($(".researcher-voting .progress-line").css('width'));
+            let progressWidth = parseInt($(".researcher-voting .vote-list > .vote-item").css('width'));
+            let width = parseFloat($(".researcher-voting .progress-line").css('width'));
             $(".researcher-voting .progress-line").css('width', width - progressWidth);
             $(".researcher-voting .swiper-wrapper").css({
                 "transform": "translate3d(-" + 100 * researcher_counter + "%, 0, 0)",
@@ -805,6 +863,11 @@ function question_dialog_init() {
             success: function (data) {
                 set_answer_true($(this));
                 $(this).closest(".check").removeClass("loading");
+                iziToast.success({
+                    rtl: true,
+                    message: "وضعیت صحیح برای پاسخ ذخیره شد.",
+                    position: 'bottomLeft'
+                });
             },
             error: function (data) {
             },
@@ -822,6 +885,11 @@ function question_dialog_init() {
             success: function (data) {
                 set_answer_wrong($(this));
                 $(this).closest(".check").removeClass("loading");
+                iziToast.success({
+                    rtl: true,
+                    message: "وضعیت نادرست برای پاسخ ذخیره شد.",
+                    position: 'bottomLeft'
+                });
             },
             error: function (data) {
             },
@@ -865,12 +933,12 @@ function set_answer_true(item) {
 
 function returnFileType(type) {
     type = type.toLowerCase();
-    if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png" || type === "ppt"
-        || type === "txt" || type === "wmv" || type === "zip") {
+    if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png"
+        || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
         return type;
-    } else {
-        return "unknown";
-    }
+    } else if (type === "jpeg")
+        return "jpg"
+    return "unknown";
 }
 
 function show_question_answers(data) {
@@ -888,7 +956,7 @@ function show_question_answers(data) {
             '       <span class="date">' + data[i].hand_out_date + '</span>' +
             '       <div class="answer-body">' +
             '           <span class="file-type image ' + returnFileType(file_type) + '"></span>' +
-            '           <div class="file-name">' + data[i].answer_attachment.substring(data[i].answer_attachment.lastIndexOf("/") + 1, data[i].answer_attachment.lastIndexOf(".")) + '</div>' +
+            '           <div class="file-name">' + data[i].file_name.substring(0, data[i].file_name.lastIndexOf(".")) + '</div>' +
             '           <span class="file-type text">' + file_type + ' File</span>' +
             '           <a href="' + data[i].answer_attachment + '" class="download">' +
             '               <i class="fas fa-download"></i>' +
@@ -923,6 +991,7 @@ function show_question_answers(data) {
     //     }
     // });
 }
+
 function select_technique(className) {
     // $("li[role='treeitem']").click(function () {
     //     var tree = $("#fancy-tree").fancytree({

@@ -62,29 +62,31 @@
                             <video width="550" height="350" controls>
                                 <source src="/media/VIDEO0041.mp4" type="video/mp4">
                                 Your browser does not support the video tag.
-                            </video>
-                            <p>
-                                اگر برای شروع این مرحله آماده هستید، کافی است روی دکمه زیر کلیک کنید.
-                            </p>
-                            <button class="start-question">
-                                مشاهده سوال
-                            </button>
-                            <div class="question-alert text-right">
-                                <img src="{% static 'img/researcher/warning.svg' %}" alt="warning">
-                                <span>
-                                    دقت داشته باشید که پس از کلیک بر روی این دکمه، مهلت یک هفته‌ای شما آغاز خواهد شد؛ در
-                                    نتیجه،
-                                    قبل از کلیک بر روی دکمه، مطمئن شوید که طی یک هفته جاری، وقت کافی خواهید داشت.
-                                </span>
-                            </div>
-                            <div class="question-alert text-right">
-                                <img src="{% static 'img/researcher/danger.svg' %}" alt="danger">
-                                <span>
-                                    در صورت پایان مهلت یک هفته‌ای و عدم ارسال پاسخ از جانب شما،
-                                    حساب کاربری‌تان تا یک ماه آینده مسدود خواهد بود. پس از پایان این مدت، مجددا
-                                    می‌توانید این مرحله را بگذرانید.
-                                </span>
-                            </div>
+                            </video>                            
+                            {% if not answered %}
+                                <p>
+                                    اگر برای شروع این مرحله آماده هستید، کافی است روی دکمه زیر کلیک کنید.
+                                </p>
+                                <button class="start-question">
+                                    مشاهده سوال
+                                </button>
+                                <div class="question-alert text-right">
+                                    <img src="{% static 'img/researcher/warning.svg' %}" alt="warning">
+                                    <span>
+                                        دقت داشته باشید که پس از کلیک بر روی این دکمه، مهلت یک هفته‌ای شما آغاز خواهد شد؛ در
+                                        نتیجه،
+                                        قبل از کلیک بر روی دکمه، مطمئن شوید که طی یک هفته جاری، وقت کافی خواهید داشت.
+                                    </span>
+                                </div>
+                                <div class="question-alert text-right">
+                                    <img src="{% static 'img/researcher/danger.svg' %}" alt="danger">
+                                    <span>
+                                        در صورت پایان مهلت یک هفته‌ای و عدم ارسال پاسخ از جانب شما،
+                                        حساب کاربری‌تان تا یک ماه آینده مسدود خواهد بود. پس از پایان این مدت، مجددا
+                                        می‌توانید این مرحله را بگذرانید.
+                                    </span>
+                                </div>
+                            {%endif%}
                             <div class="question-alert text-right">
                                 <img src="{% static 'img/researcher/warning.svg' %}" alt="warning">
                                 <span>
