@@ -52,7 +52,7 @@ def get_message_detail(request, message_id):
 
 
 class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
-    template_name = 'chamran_admin/messages.html'
+    template_name = '../registration/chamran_admin/messages.html'
     login_url = "/login"
     jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
                      'دی', 'بهمن', 'اسفند')
@@ -129,7 +129,7 @@ def get_user_by_unique_id(unique):
 
 
 class Home(generic.TemplateView):
-    template_name = "base.html"
+    template_name = "../registration/base.html"
     
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse('chamran:login'))
@@ -485,14 +485,14 @@ class UserPass(generic.TemplateView):
 
 def notFound404(request ,exception):
     context = {'data' : exception}
-    return render(request ,'404Template.html',context)
+    return render(request, '../registration/404Template.html', context)
 
 def notFound500(request):
-    return render(request ,'404Template.html',{})
+    return render(request, '../registration/404Template.html', {})
 
 def Handler403(request ,exception):
     context = {'data' : exception}
-    return render(request ,'403Template.html',context)
+    return render(request, '../registration/403Template.html', context)
 
 class RecoverPassword(generic.TemplateView):
     template_name = 'registration/recover_pass.html'
