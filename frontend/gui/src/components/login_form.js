@@ -22,26 +22,33 @@ class LoginForm extends React.Component {
             values: {...this.state.values, [e.target.name]: e.target.value}
         });
 
-    submitForm = (event) => {
+    submitForm = async event => {
         event.preventDefault();
         console.log(JSON.stringify(this.state.values));
         this.setState({isSubmitting: true});
-        fetch('/login_ajax/', {
+        const res = await fetch('/react_login_ajax/', {
             method: 'POST',
             body: JSON.stringify(this.state.values),
             headers: {
                 "X-CSRFToken": getCookie("csrftoken"),
                 "Content-Type": "application/json"
             }
-        })
-            .then(res => {
-                this.setState({isSubmitting: false});
-                return res;
-            })
-            .then(data => {
-                console.log(data);
-            });
-        console.log("login");
+        });
+        this.setState({isSubmitting: false});
+        const data = res.json();
+        !data.hasOwnProperty("error")
+            ? this.setState({message: data.success})
+            : this.setState({message: data.error, isError: true});
+
+        setTimeout(
+            () =>
+                this.setState({
+                    isError: false,
+                    message: "",
+                    values: {username: "", password: ""}
+                }),
+            5000
+        );
     };
 
     render() {
@@ -49,7 +56,8 @@ class LoginForm extends React.Component {
             <Form className="text-right" onSubmit={this.submitForm} id="login-ajax-form">
                 <h6 className="text-right">ورود به حساب کاربری</h6>
                 <Form.Group controlId="LoginEmail">
-                    <Form.Control type="text" name="username" value={this.state.values.username} onChange={this.handleInputChange}/>
+                    <Form.Control type="text" name="username" value={this.state.values.username}
+                                  onChange={this.handleInputChange}/>
                     <Form.Label>نام کاربری</Form.Label>
                     <span className="form-control-icon">
                                                 <svg className="bi bi-person-fill" width="20px" height="20px"
@@ -61,7 +69,8 @@ class LoginForm extends React.Component {
                                             </span>
                 </Form.Group>
                 <Form.Group controlId="LoginPass">
-                    <Form.Control type="password" name="password" value={this.state.values.password} onChange={this.handleInputChange}/>
+                    <Form.Control type="password" name="password" value={this.state.values.password}
+                                  onChange={this.handleInputChange}/>
                     <Form.Label>کلمه عبور</Form.Label>
                     <span className="form-control-icon">
                                                 <svg className="bi bi-lock-fill" width="20px" height="20px"
@@ -77,6 +86,9 @@ class LoginForm extends React.Component {
                     رمز عبور خود را فراموش کرده اید؟
                 </Link>
                 <Button type="submit" className="w-100 m-b-10">ورود</Button>
+                <div>
+                    { this.state.isSubmitting ? "Submitting" : this.state.message }
+                </div>
             </Form>
         );
     }

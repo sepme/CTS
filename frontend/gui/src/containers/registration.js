@@ -1,8 +1,6 @@
 import React from 'react';
 import {Helmet} from 'react-helmet';
-import {
-    Link
-} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import OwlCarousel from 'react-owl-carousel2';
 import 'react-owl-carousel2/src/owl.carousel.css';
