@@ -1056,7 +1056,7 @@ function projectDetail(data) {
     $(".techniques").html(techniques);
 
     $("#industry-name").html(data.industry_name);
-    $("#enforced-name").html(data.enforced_name);
+    $("#enforcer-name").html(data.enforcer_name);
     $("#executive-info").html(data.executive_info);
     $("#industry_logo").attr("src", data.industry_logo);
     $(".budget-amount").html(data.budget_amount);

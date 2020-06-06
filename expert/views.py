@@ -751,7 +751,7 @@ def ActiveProjcet(request, project, data):
     data["status"]         = "active"
     data["industry_name"]  = industryform.name
     data["industry_logo"]  = industryform.photo.url
-    data['enforced_name']  = str(project.expert_accepted.expertform)
+    data['enforcer_name']  = str(project.expert_accepted.expertform)
     data["executive_info"] = project.executive_info
     data["budget_amount"]  = project.project_form.required_budget
     data['timeScheduling'] = projectDate
