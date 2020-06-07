@@ -738,6 +738,18 @@ def confirmResearcher(request):
         return JsonResponse(data={} ,status=400)
 
 @permission_required('expert.be_expert', login_url='/login/')
+def refuseResearcher(request):
+    try:
+        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(Project, pk=request.POST['project_id'])
+        project.researcher_accepted.remove(researcher)
+        project.researcher_banned.add(researcher)
+        project.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={} ,status=400)
+
+@permission_required('expert.be_expert', login_url='/login/')
 def ActiveProjcet(request, project, data):
     industryform = project.industry_creator.industryform
     projectDate = [

@@ -646,7 +646,7 @@ $(document).ready(function () {
         setMajors(data, "-detail");
         setValue(data, "-detail");
         setTab(data);
-        modalPreview(".project-details")
+        modalPreview(".project-details");
     }
 
     $(".preview-project").click(function () {
@@ -704,7 +704,7 @@ $(document).ready(function () {
                         // }
                         setTab(data);
                     }
-                    modalPreview(".showProject")
+                    modalPreview(".showProject");
                 }
             },
             error: function (data) {

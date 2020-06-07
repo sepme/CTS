@@ -65,13 +65,14 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
-        if self.request.user.researcheruser.status.status == 'deactivated':
+        researcher = self.request.user.researcheruser
+        if researcher.status.status == 'deactivated':
             return context
         all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gte=0)]
         all_projects = Project.objects.filter(id__in=all_projects)
-        my_projects  = all_projects.filter(researcher_applied__in=[self.request.user.researcheruser])
-        new_projects = all_projects.exclude(researcher_applied__in=[self.request.user.researcheruser])
-        technique_title = [str(item.technique) for item in self.request.user.researcheruser.techniqueinstance_set.all()]
+        my_projects  = all_projects.filter(researcher_applied__in=[researcher])
+        new_projects = all_projects.exclude(researcher_applied__in=[researcher])
+        technique_title = [str(item.technique) for item in researcher.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(technique_title__in=technique_title)
         projects = []
         for project in new_projects:
@@ -84,7 +85,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 continue
         new_project_list = []
         for project in projects:
-            if self.request.user.researcheruser in project.researcher_applied.all():
+            if researcher in project.researcher_applied.all():
                 continue
             temp ={
                 'PK'            : project.pk,
@@ -121,6 +122,11 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             my_project_list = []
             for project in my_projects:
                 title = project.project_form.project_title_english
+                status = "در حال بررسی"
+                if researcher in project.researcher_accepted:
+                    status = "قبول"
+                if researcher in project.researcher_banned:
+                    status = "رد شده"
                 temp = {
                     'PK'            : project.pk,
                     'project_title' : project.project_form.project_title_persian,
@@ -128,6 +134,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     'started'       : date_last(datetime.date.today() ,project.date_start),
                     'finished'      : date_last(datetime.date.today() ,project.date_finished),
                     'need_hour'     : project.requestresearcher.least_hour,
+                    'status'        : status,
                 }
                 my_project_list.append(temp)
             context["my_project_list"] = my_project_list
@@ -205,26 +212,26 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             profile.home_number = form.cleaned_data['home_number']
             profile.phone_number = form.cleaned_data['phone_number']
             profile.grade = form.cleaned_data['grade']
-            if form.cleaned_data['team_work'] is not None:
-                profile.team_work = form.cleaned_data['team_work']
-            if form.cleaned_data['creative_thinking'] is not None:
-                profile.creative_thinking = form.cleaned_data['creative_thinking']
-            if form.cleaned_data['interest_in_major'] is not None:
-                profile.interest_in_major = form.cleaned_data['interest_in_major']
-            if form.cleaned_data['motivation'] is not None:
-                profile.motivation = form.cleaned_data['motivation']
-            if form.cleaned_data['sacrifice'] is not None:
-                profile.sacrifice = form.cleaned_data['sacrifice']
-            if form.cleaned_data['diligence'] is not None:
-                profile.diligence = form.cleaned_data['diligence']
-            if form.cleaned_data['interest_in_learn'] is not None:
-                profile.interest_in_learn = form.cleaned_data['interest_in_learn']
-            if form.cleaned_data['punctuality'] is not None:
-                profile.punctuality = form.cleaned_data['punctuality']
-            if form.cleaned_data['data_collection'] is not None:
-                profile.data_collection = form.cleaned_data['data_collection']
-            if form.cleaned_data['project_knowledge'] is not None:
-                profile.project_knowledge = form.cleaned_data['project_knowledge']
+            # if form.cleaned_data['team_work'] is not None:
+            #     profile.team_work = form.cleaned_data['team_work']
+            # if form.cleaned_data['creative_thinking'] is not None:
+            #     profile.creative_thinking = form.cleaned_data['creative_thinking']
+            # if form.cleaned_data['interest_in_major'] is not None:
+            #     profile.interest_in_major = form.cleaned_data['interest_in_major']
+            # if form.cleaned_data['motivation'] is not None:
+            #     profile.motivation = form.cleaned_data['motivation']
+            # if form.cleaned_data['sacrifice'] is not None:
+            #     profile.sacrifice = form.cleaned_data['sacrifice']
+            # if form.cleaned_data['diligence'] is not None:
+            #     profile.diligence = form.cleaned_data['diligence']
+            # if form.cleaned_data['interest_in_learn'] is not None:
+            #     profile.interest_in_learn = form.cleaned_data['interest_in_learn']
+            # if form.cleaned_data['punctuality'] is not None:
+            #     profile.punctuality = form.cleaned_data['punctuality']
+            # if form.cleaned_data['data_collection'] is not None:
+            #     profile.data_collection = form.cleaned_data['data_collection']
+            # if form.cleaned_data['project_knowledge'] is not None:
+            #     profile.project_knowledge = form.cleaned_data['project_knowledge']
             profile.description = form.cleaned_data['description']
 
             profile.save()

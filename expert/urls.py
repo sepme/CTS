@@ -9,6 +9,7 @@ urlpatterns = [
     path('userInfo/', views.UserInfo.as_view(), name="userInfo"),
     path('researcher/', views.ResearcherRequest.as_view(), name="researcherRequest"),
     path('researcher/confirmResearcher/', views.confirmResearcher, name="confirm_researcher"),
+    path('researcher/refuseResearcher/', views.refuseResearcher, name="refuse_researcher"),
     path('messages/', chamran_admin_views.MessagesView.as_view(), name="messages"),
     path('questions/', views.Questions.as_view(), name="questions"),
     path('scientific/', views.scienfic_record_view, name="ajax_scientific"),
