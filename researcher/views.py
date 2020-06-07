@@ -123,9 +123,9 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             for project in my_projects:
                 title = project.project_form.project_title_english
                 status = "در حال بررسی"
-                if researcher in project.researcher_accepted:
+                if researcher in project.researcher_accepted.all():
                     status = "قبول"
-                if researcher in project.researcher_banned:
+                if researcher in project.researcher_banned.all():
                     status = "رد شده"
                 temp = {
                     'PK'            : project.pk,
