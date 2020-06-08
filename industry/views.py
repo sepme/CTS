@@ -195,7 +195,7 @@ def GetComment(request):
                 'accepted' : True,
                 'enforcer' : False
                 }
-    return JsonResponse(data=data)
+        return JsonResponse(data=data)
     if expert in project.expert_applied.all():
         data = {
             'comment' : response,

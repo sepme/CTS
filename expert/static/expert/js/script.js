@@ -281,6 +281,12 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما ارسال شد.",
+                position: 'bottomLeft',
+                duration: 9999,
+            });
             $.ajax({
                 traditional: true,
                 method: 'POST',

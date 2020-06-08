@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
@@ -58,7 +60,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
         if expert_user.status != "signed_up":
             projects = []
-            if expert_user.status == "free":
+            if expert_user.status in ["free", "applied"]:
                 projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
             if expert_user.status == "involved":
                 projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
@@ -376,7 +378,7 @@ def show_project_view(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def UsualShowProject(request, project, data):
     project_form = project.project_form
-    if request.user.expertuser in project.expert_applied.all():
+    if request.user.expertuser.status == "applied":
         data['applied'] = True
     else:
         data['applied'] = False
@@ -456,6 +458,8 @@ def accept_project(request):
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
+        expert_user.status = "applied"
+        expert_user.save()
         text = "درخواست شما برای صنعت ارسال شد."
         comment = Comment(description=text,
                           sender_type="system",
@@ -463,6 +467,32 @@ def accept_project(request):
                           expert_user=expert_user,
                           status='unseen')
         comment.save()
+        try:
+            subjectForAdmin = "درخواست قرار ملاقات"
+            messageForAdmin = """با سلام و احترام\n
+            استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
+            با تشکر
+            """.format(str(expert_user.expertform) ,str(project) ,str(project.industry_creator.industryform))
+            html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
+            msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
+                                         to=[settings.EMAIL_HOST_USER,])
+            msgForAdmin.attach_alternative(email_templateForAdmin, 'text/html')
+            msgForAdmin.send()
+            
+            subjectForExpert = "درخواست قرار ملاقات"
+            messageForExpert = """با سلام و احترام\n
+            درخواست قرار ملاقات شما برای پروژه {} برای ادمین ارسال شد.\n
+            با تشکر
+            """.format(str(project))
+            html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            email_templateForAdmin = html_templateForAdmin.render({'message': messageForExpert})
+            msgForExpert = EmailMultiAlternatives(subject=subjectForExpert, from_email=settings.EMAIL_HOST_USER,
+                                         to=[request.user.get_username(),])
+            msgForExpert.attach_alternative(email_templateForAdmin, 'text/html')
+            msgForExpert.send()
+        except TimeoutError:
+            print("Timeout Occure.")
         return JsonResponse({
             'message': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
