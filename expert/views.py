@@ -203,20 +203,20 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             expertForm.has_industrial_research = request.POST.get('has_industrial_research')
             expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
 
-            if expertForm.eq_test:
-                    eq_test = expertForm.eq_test
-            else:
-                eq_test = EqTest()
+            # if expertForm.eq_test:
+            #         eq_test = expertForm.eq_test
+            # else:
+            #     eq_test = EqTest()
 
-            eq_test.team_work              = request.POST.get('team_work', False)
-            eq_test.innovation             = request.POST.get('creative_thinking', False)
-            eq_test.devotion               = request.POST.get('sacrifice', False)
-            eq_test.productive_research    = request.POST.get('researching', False)
-            eq_test.national_commitment    = request.POST.get('obligation', False)
-            eq_test.collecting_information = request.POST.get('data_collection', False)
-            eq_test.business_thinking      = request.POST.get('morale', False)
-            eq_test.risk_averse            = request.POST.get('risk', False)
-            eq_test.save()
+            # eq_test.team_work              = request.POST.get('team_work', False)
+            # eq_test.innovation             = request.POST.get('creative_thinking', False)
+            # eq_test.devotion               = request.POST.get('sacrifice', False)
+            # eq_test.productive_research    = request.POST.get('researching', False)
+            # eq_test.national_commitment    = request.POST.get('obligation', False)
+            # eq_test.collecting_information = request.POST.get('data_collection', False)
+            # eq_test.business_thinking      = request.POST.get('morale', False)
+            # eq_test.risk_averse            = request.POST.get('risk', False)
+            # eq_test.save()
 
             photo = request.FILES.get('photo')
             if photo is not None:
