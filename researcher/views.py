@@ -54,6 +54,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     def get(self, request, *args, **kwargs):
         researcher = models.ResearcherUser.objects.get(user=request.user)
         status = researcher.status
+        print(researcher)
+        print(status)
         if status.status == 'deactivated':
             if status.check_activity_status:
                 status.status = 'not_answered'
