@@ -1534,6 +1534,28 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
             }
         });
     });
+    $(".refuse-researcher").click(function () {
+        console.log("1"+1);
+        $.ajax({
+            method: "POST",
+            url: 'refuseResearcher/',
+            dataType: "json",
+            data: {
+                researcher_id: $(this).attr("id"),
+                project_id: $(this).val(),
+            },
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "درخواست پژوهشگر با موفقیت رد شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("Error");
+            }
+        });
+    });
 }
 
 

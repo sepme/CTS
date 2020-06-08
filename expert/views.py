@@ -115,9 +115,18 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
                 for researcher_form in researchers_form:
                     techniques = [tech.technique.technique_title for tech in
                                     researcher_form.researcher_user.techniqueinstance_set.all()]
+                    accepted = False
+                    refused  = False
+                    if researcher_form.researcher_user in project.researcher_accepted.all():
+                        accepted = True
+                    elif researcher_form.researcher_user in project.researcher_banned.all():
+                        refused = True
                     researcher_applied = {
-                        'profile': researcher_form,
+                        'id'        : researcher_form.researcher_user.pk,
+                        'profile'   : researcher_form,
                         'techniques': techniques,
+                        'accepted'  : accepted,
+                        'refused'   : refused,
                     }
                     researchers_applied.append(researcher_applied)
                 appending = {
