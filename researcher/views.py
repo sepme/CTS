@@ -75,15 +75,19 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         technique_title = [str(item.technique) for item in researcher.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(technique_title__in=technique_title)
         projects = []
+        missedProjects = []
+        missedTechnique = []
         for project in new_projects:
-            try:
-                for tech in project.project_form.required_technique.all():
-                    if tech not in technique:
-                        raise Exception("TECHNIQUE_NOT_EXIST")
+            missedTechnique = []
+            for tech in project.project_form.required_technique.all():
+                if tech not in technique:
+                    missedTechnique.append(tech.technique_title)
+            if len(missedTechnique):
+                missedProjects.append({'project' :project ,"missedTechnique" : missedTechnique})
+            else:
                 projects.append(project)
-            except Exception:
-                continue
         new_project_list = []
+        missed_project_list = []
         for project in projects:
             if researcher in project.researcher_applied.all():
                 continue
@@ -96,7 +100,18 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'need_hour'     : project.requestresearcher.least_hour,
             }
             new_project_list.append(temp)
+        for project in missedProjects:
+            temp ={
+                'project_title'   : project["project"].project_form.project_title_persian,
+                'keyword'         : project["project"].project_form.key_words.all(),
+                'started'         : date_last(datetime.date.today() ,project["project"].date_start),
+                'finished'        : date_last(datetime.date.today() ,project["project"].date_finished),
+                'need_hour'       : project["project"].requestresearcher.least_hour,
+                'missedTechinque' : project["missedTechnique"],
+            }
+            missed_project_list.append(temp)
         context['new_project_list'] = new_project_list
+        context['missed_project_list'] = missed_project_list
 
         done_projects = models.ResearcherHistory.objects.all()
         done_project_list = []
