@@ -281,6 +281,12 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما ارسال شد.",
+                position: 'bottomLeft',
+                duration: 9999,
+            });
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -1056,7 +1062,7 @@ function projectDetail(data) {
     $(".techniques").html(techniques);
 
     $("#industry-name").html(data.industry_name);
-    $("#enforced-name").html(data.enforced_name);
+    $("#enforcer-name").html(data.enforcer_name);
     $("#executive-info").html(data.executive_info);
     $("#industry_logo").attr("src", data.industry_logo);
     $(".budget-amount").html(data.budget_amount);
@@ -1520,6 +1526,28 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
                 iziToast.success({
                     rtl: true,
                     message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("Error");
+            }
+        });
+    });
+    $(".refuse-researcher").click(function () {
+        console.log("1"+1);
+        $.ajax({
+            method: "POST",
+            url: 'refuseResearcher/',
+            dataType: "json",
+            data: {
+                researcher_id: $(this).attr("id"),
+                project_id: $(this).val(),
+            },
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "درخواست پژوهشگر با موفقیت رد شد.",
                     position: 'bottomLeft'
                 });
             },

@@ -166,6 +166,8 @@ class Project(models.Model):
                                                 related_name="researchers_applied", blank=True)
     researcher_accepted = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران پذبرفته شده",
                                                  related_name="researchers_accepted", blank=True)
+    researcher_banned = models.ManyToManyField('researcher.ResearcherUser', verbose_name="پژوهشگران رد شده",
+                                                 related_name="researchers_banned", blank=True)
     expert_applied = models.ManyToManyField('expert.ExpertUser', through='expert.ExpertRequestedProject',
                                             verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied", blank=True)

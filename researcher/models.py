@@ -347,27 +347,26 @@ class TechniqueInstance(models.Model):
 
     @property
     def date_last(self):
-        days_passed = datetime.datetime.today().day - self.evaluat_date.day
-        months_passed = datetime.datetime.today().month - self.evaluat_date.month
-        years_passed = datetime.datetime.today().year - self.evaluat_date.year
-        days = ""
-        months = ""
-        years = ""
-        if years_passed != 0:
-            years = persianNumber.convert(str(years_passed)) + " سال "
-        if months_passed != 0:
-            if years_passed != 0:
-                months = " و " + persianNumber.convert(str(months_passed)) + " ماه "
+        days_passed = (datetime.datetime.today().date() - self.evaluat_date).days
+        total_passed = ""
+        if days_passed > 364:
+            total_passed = persianNumber.convert(str(days_passed // 365)) + " سال "
+        days_passed = days_passed % 365
+        if days_passed > 30:
+            if total_passed == "" :
+                total_passed = persianNumber.convert(str(days_passed // 30)) + " ماه "
             else:
-                months = persianNumber.convert(str(months_passed)) + " ماه "
-        if days_passed != 0:
-            if months_passed == 0 and years_passed == 0:
-                days = persianNumber.convert(str(days_passed)) + " روز "
-            else:
-                days = " و " + persianNumber.convert(str(days_passed)) + " روز "
-        if days_passed != 0 or months_passed != 0 or years_passed != 0:
-            return years + months + days + " پیش"
-        return "امروز"
+                total_passed += " و " + persianNumber.convert(str(days_passed // 30)) + " ماه "
+        days_passed = days_passed % 30
+        if total_passed == "" :
+            total_passed = persianNumber.convert(str(days_passed)) + " روز "
+        else:
+            total_passed += " و " + persianNumber.convert(str(days_passed)) + " روز "
+        if total_passed == "":
+            total_passed = "امروز"
+        else:
+            total_passed += " پیش"
+        return total_passed
 
     def __str__(self):
         return str(self.researcher) + " - " + str(self.technique)

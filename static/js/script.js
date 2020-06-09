@@ -213,6 +213,7 @@ loginForm.submit(function (event) {
     event.preventDefault();
     // let formData = $(this).serialize().toString();
     let $thisURL = loginForm.attr('data-url');
+    console.log($(this).serialize().toString());
     $.ajax({
         method: 'POST',
         url: $thisURL,

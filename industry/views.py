@@ -24,8 +24,11 @@ from expert.models import ExpertUser
 
 # function name says it all :)
 def gregorian_to_numeric_jalali(date):
-    j_date = JalaliDate(date)
-    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
+    if date :
+        j_date = JalaliDate(date)
+        return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
+    else:
+        return "نا مشخص"
 
 # returns the difference between the two dates. e.g. 3 ruz, 5 sal, ...
 def date_dif(start_date, deadline_date):
@@ -53,104 +56,106 @@ def get_comments_with_expert(request):
             'sender_type': comment.sender_type
         })
 
+def usualShow(request, project):
+    data = model_to_dict(project.project_form)
+    data['deadline'] = 'نا مشخص'
+    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+        data['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
+    else:
+        data['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
+    data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    for ind, value in enumerate(data['key_words']):
+        data['key_words'][ind] = value.__str__()
+    data['required_technique']=[]
+    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+    data['status']     = project.status
+    data['accepted']   = False
+    data['vote']       = False
+
+    data['expert_messaged'] = []
+    for expert in project.expert_messaged.all():
+        data['expert_messaged'].append({
+            'id': expert.id,
+            'name': expert.expertform.__str__(),
+            'applied' : expert in project.expert_applied.all(),
+        })
+    for expert in project.expert_applied.all():
+        if expert not in project.expert_messaged.all():
+            data['expert_messaged'].append({
+                'id': expert.id,
+                'name': expert.expertform.__str__(),
+                'applied' : expert in project.expert_applied.all(),
+            })
+    return data
+
+def ActiveProject(request, project, data):
+    data['accepted'] = True
+    data['comments'] = []
+    for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
+        try:
+            url = comment.attachment.url.split("/")[-1]
+        except:
+            url = "None"
+        data['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment': url,
+            'pk' : comment.pk,
+        })
+        if comment.sender_type == "expert" or comment.sender_type == "system":
+            comment.status = "seen"
+            comment.save()
+    data['deadline'] = 'نا مشخص'
+    data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+    data['status'] = project.status
+    data['vote'] = False
+    try:
+        if datetime.date.today() > project.date_finished:
+            if len(evaluation_history.filter(phase=3)) == 0:
+                data['vote'] = True
+        elif datetime.date.today() > project.date_phase_two_finished:
+            if len(evaluation_history.filter(phase=2)) == 0:
+                data['vote'] = True
+        elif datetime.date.today() > project.date_phase_one_finished:
+            if len(evaluation_history.filter(phase=1)) == 0:
+                data['vote'] = True
+    except:
+        pass
+    
+    industryform = request.user.industryuser.industryform
+    projectDate = [
+        gregorian_to_numeric_jalali(project.date_start),
+        gregorian_to_numeric_jalali(project.date_project_started),
+        gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+        gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+        gregorian_to_numeric_jalali(project.date_finished),
+    ]
+    data['timeScheduling'] = projectDate
+    # data = {
+    data["industry_name"]  = industryform.name
+    data["industry_logo"]  = industryform.photo.url
+    data['enforcer_name']  = str(project.expert_accepted.expertform)
+    data['enforcer_id']    = project.expert_accepted.pk
+    data["executive_info"] = project.executive_info
+    data["budget_amount"]  = project.project_form.required_budget
+    data["techniques"]     = []
+    # }
+    projectRequest = expert_models.ExpertRequestedProject.objects.filter(project=project).filter(expert=project.expert_accepted).first()
+    for technique in projectRequest.required_technique.all():
+        data["techniques"].append(technique.__str__())
+
+    return data
+
 # is called by an ajax request and returns the necessary information to display the project on the front-end
 @permission_required('industry.be_industry', login_url='/login/')
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
-    if not project.expert_accepted:
-        json_response = model_to_dict(project.project_form)
-        json_response['accepted'] = 'false'
-        json_response['expert_messaged'] = []
-        for expert in project.expert_messaged.all():
-            json_response['expert_messaged'].append({
-                'id': expert.id,
-                'name': expert.expertform.__str__(),
-                'applied' : expert in project.expert_applied.all(),
-            })
-        for expert in project.expert_applied.all():
-            if expert not in project.expert_messaged.all():
-                json_response['expert_messaged'].append({
-                    'id': expert.id,
-                    'name': expert.expertform.__str__(),
-                    'applied' : expert in project.expert_applied.all(),
-                })
-        json_response['deadline'] = 'نا مشخص'
-        if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-            json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
-        else:
-            json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-        json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-        for ind, value in enumerate(json_response['key_words']):
-            json_response['key_words'][ind] = value.__str__()
-        try:
-            json_response['required_technique']=[]
-            for tech in project.project_form.required_technique:
-                json_response['required_technique'].append(tech.__str__())
-        except:
-            pass
-        evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
-        json_response['status'] = project.status
-        json_response['vote'] = "false"
-        try:
-            if datetime.date.today() > project.date_finished:
-                if len(evaluation_history.filter(phase=3)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_two_finished:
-                if len(evaluation_history.filter(phase=2)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_one_finished:
-                if len(evaluation_history.filter(phase=1)) == 0:
-                    json_response['vote'] = "true"
-        except:
-            pass
-        return JsonResponse(json_response)
-    else:
-        json_response = model_to_dict(project.project_form)
-        json_response['accepted'] = 'true'
-        json_response['expert_messaged'] = []
-        for expert in project.expert_messaged.all():
-            json_response['expert_messaged'].append({
-                'id': expert.id,
-                'name': expert.expertform.__str__(),
-                'applied' : expert in project.expert_applied.all(),
-            })
-        for expert in project.expert_applied.all():
-            if expert not in project.expert_messaged.all():
-                json_response['expert_messaged'].append({
-                    'id': expert.id,
-                    'name': expert.expertform.__str__(),
-                    'applied' : expert in project.expert_applied.all(),
-                })
-        json_response['deadline'] = 'نا مشخص'
-        if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-            json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
-        else:
-            json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-        json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-        for ind, value in enumerate(json_response['key_words']):
-            json_response['key_words'][ind] = value.__str__()
-        try:
-            json_response['required_technique']=[]
-            for tech in project.project_form.required_technique:
-                json_response['required_technique'].append(tech.__str__())
-        except:
-            pass
-        evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
-        json_response['status'] = project.status
-        json_response['vote'] = "false"
-        try:
-            if datetime.date.today() > project.date_finished:
-                if len(evaluation_history.filter(phase=3)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_two_finished:
-                if len(evaluation_history.filter(phase=2)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_one_finished:
-                if len(evaluation_history.filter(phase=1)) == 0:
-                    json_response['vote'] = "true"
-        except:
-            pass
-        return JsonResponse(json_response)
+    data = usualShow(request, project)
+    if project.expert_accepted:
+        ActiveProject(request, project, data)
+    return JsonResponse(data)
 
 @permission_required('industry.be_industry', login_url='/login/')
 def GetComment(request):
@@ -177,14 +182,30 @@ def GetComment(request):
         if comment.sender_type == 'expert' or comment.sender_type == 'system':
             comment.status = "seen"
             comment.save()
+    if project.expert_accepted :
+        if project.expert_accepted == expert:
+            data = {
+            'comment'  : response,
+            'accepted' : True,
+            'enforcer' : True
+            }
+        else:
+            data = {
+                'comment'  : response,
+                'accepted' : True,
+                'enforcer' : False
+                }
+        return JsonResponse(data=data)
     if expert in project.expert_applied.all():
         data = {
             'comment' : response,
+            'accepted' : False,
             'applied' : True
             }
     else:
         data = {
             'comment' : response,
+            'accepted' : False,
             'applied' : False
             }
     return JsonResponse(data=data)

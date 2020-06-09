@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
@@ -58,7 +60,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
         if expert_user.status != "signed_up":
             projects = []
-            if expert_user.status == "free":
+            if expert_user.status in ["free", "applied"]:
                 projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
             if expert_user.status == "involved":
                 projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
@@ -113,9 +115,18 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
                 for researcher_form in researchers_form:
                     techniques = [tech.technique.technique_title for tech in
                                     researcher_form.researcher_user.techniqueinstance_set.all()]
+                    accepted = False
+                    refused  = False
+                    if researcher_form.researcher_user in project.researcher_accepted.all():
+                        accepted = True
+                    elif researcher_form.researcher_user in project.researcher_banned.all():
+                        refused = True
                     researcher_applied = {
-                        'profile': researcher_form,
+                        'id'        : researcher_form.researcher_user.pk,
+                        'profile'   : researcher_form,
                         'techniques': techniques,
+                        'accepted'  : accepted,
+                        'refused'   : refused,
                     }
                     researchers_applied.append(researcher_applied)
                 appending = {
@@ -201,20 +212,20 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             expertForm.has_industrial_research = request.POST.get('has_industrial_research')
             expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
 
-            if expertForm.eq_test:
-                    eq_test = expertForm.eq_test
-            else:
-                eq_test = EqTest()
+            # if expertForm.eq_test:
+            #         eq_test = expertForm.eq_test
+            # else:
+            #     eq_test = EqTest()
 
-            eq_test.team_work              = request.POST.get('team_work', False)
-            eq_test.innovation             = request.POST.get('creative_thinking', False)
-            eq_test.devotion               = request.POST.get('sacrifice', False)
-            eq_test.productive_research    = request.POST.get('researching', False)
-            eq_test.national_commitment    = request.POST.get('obligation', False)
-            eq_test.collecting_information = request.POST.get('data_collection', False)
-            eq_test.business_thinking      = request.POST.get('morale', False)
-            eq_test.risk_averse            = request.POST.get('risk', False)
-            eq_test.save()
+            # eq_test.team_work              = request.POST.get('team_work', False)
+            # eq_test.innovation             = request.POST.get('creative_thinking', False)
+            # eq_test.devotion               = request.POST.get('sacrifice', False)
+            # eq_test.productive_research    = request.POST.get('researching', False)
+            # eq_test.national_commitment    = request.POST.get('obligation', False)
+            # eq_test.collecting_information = request.POST.get('data_collection', False)
+            # eq_test.business_thinking      = request.POST.get('morale', False)
+            # eq_test.risk_averse            = request.POST.get('risk', False)
+            # eq_test.save()
 
             photo = request.FILES.get('photo')
             if photo is not None:
@@ -376,7 +387,7 @@ def show_project_view(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def UsualShowProject(request, project, data):
     project_form = project.project_form
-    if request.user.expertuser in project.expert_applied.all():
+    if request.user.expertuser.status == "applied":
         data['applied'] = True
     else:
         data['applied'] = False
@@ -456,6 +467,8 @@ def accept_project(request):
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
+        expert_user.status = "applied"
+        expert_user.save()
         text = "درخواست شما برای صنعت ارسال شد."
         comment = Comment(description=text,
                           sender_type="system",
@@ -463,6 +476,32 @@ def accept_project(request):
                           expert_user=expert_user,
                           status='unseen')
         comment.save()
+        try:
+            subjectForAdmin = "درخواست قرار ملاقات"
+            messageForAdmin = """با سلام و احترام\n
+            استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
+            با تشکر
+            """.format(str(expert_user.expertform) ,str(project) ,str(project.industry_creator.industryform))
+            html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
+            msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
+                                         to=[settings.EMAIL_HOST_USER,])
+            msgForAdmin.attach_alternative(email_templateForAdmin, 'text/html')
+            msgForAdmin.send()
+            
+            subjectForExpert = "درخواست قرار ملاقات"
+            messageForExpert = """با سلام و احترام\n
+            درخواست قرار ملاقات شما برای پروژه {} برای ادمین ارسال شد.\n
+            با تشکر
+            """.format(str(project))
+            html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            email_templateForAdmin = html_templateForAdmin.render({'message': messageForExpert})
+            msgForExpert = EmailMultiAlternatives(subject=subjectForExpert, from_email=settings.EMAIL_HOST_USER,
+                                         to=[request.user.get_username(),])
+            msgForExpert.attach_alternative(email_templateForAdmin, 'text/html')
+            msgForExpert.send()
+        except TimeoutError:
+            print("Timeout Occure.")
         return JsonResponse({
             'message': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
@@ -738,6 +777,18 @@ def confirmResearcher(request):
         return JsonResponse(data={} ,status=400)
 
 @permission_required('expert.be_expert', login_url='/login/')
+def refuseResearcher(request):
+    try:
+        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(Project, pk=request.POST['project_id'])
+        project.researcher_accepted.remove(researcher)
+        project.researcher_banned.add(researcher)
+        project.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={} ,status=400)
+
+@permission_required('expert.be_expert', login_url='/login/')
 def ActiveProjcet(request, project, data):
     industryform = project.industry_creator.industryform
     projectDate = [
@@ -751,7 +802,7 @@ def ActiveProjcet(request, project, data):
     data["status"]         = "active"
     data["industry_name"]  = industryform.name
     data["industry_logo"]  = industryform.photo.url
-    data['enforced_name']  = str(project.expert_accepted.expertform)
+    data['enforcer_name']  = str(project.expert_accepted.expertform)
     data["executive_info"] = project.executive_info
     data["budget_amount"]  = project.project_form.required_budget
     data['timeScheduling'] = projectDate

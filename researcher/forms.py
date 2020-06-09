@@ -606,25 +606,26 @@ class CommentForm(forms.Form):
         return data
 
 class ApplyForm(forms.Form):
-    least_hours = forms.CharField(max_length=10, required=False)
     most_hours = forms.CharField(max_length=10, required=False)
+    least_hours = forms.CharField(max_length=10, required=False)
 
     def clean_least_hours(self):
         data = self.cleaned_data["least_hours"]
+        most_hour = self.cleaned_data.get('most_hours')
         if data == '':
             raise ValidationError(_("لطفا حداقل ساعت را وارد کنید."))
         if not completely_numeric(data):
             raise ValidationError(_("لطفا فقط عدد وارد کنید."))
+        if most_hour is not None:
+            if int(most_hour) < int(data):
+                raise ValidationError(_("حداقل ساعت از حداکثر ساعت بیشتر است."))
         return data
     
     def clean_most_hours(self):
         data = self.cleaned_data["most_hours"]
-        least_hour = self.cleaned_data.get('least_hours')
         if data == '':
             raise ValidationError(_("لطفا حداکثر ساعت را وارد کنید."))
         if not completely_numeric(data):            
             raise ValidationError(_("لطفا فقط عدد وارد کنید."))
-        if least_hour > data:
-            raise ValidationError(_("حداقل ساعت از حداکثر ساعت بیشتر است."))
         return data
     

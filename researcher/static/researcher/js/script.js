@@ -42,8 +42,9 @@ $(".preview-project").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
         return;
+    let id = $(this).attr("id");
     $(".project_id").attr('value', $(".preview-project").attr("id"));
-    $("#apply_project_id").attr('value', $(".preview-project").attr("id"));
+    $("#apply_project_id").attr('value', id);
     /*
      * reset All data
      */
@@ -51,7 +52,6 @@ $(".preview-project").click(function () {
     /*
      * end of reset
      */
-    let id = $(this).attr("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/show_project/',
@@ -981,6 +981,10 @@ apply_form.submit(function (event) {
     event.preventDefault();
     let url = apply_form.attr('url');
     let data = $(this).serialize().toString();
+    $("input#most_hours").removeClass("error");
+    $("input#least_hours").removeClass("error");
+    $("#least_hours").closest("div").find(".error").remove();
+    $("#most_hours").closest("div").find(".error").remove();
     $.ajax({
         method: "POST",
         dataType: "json",
