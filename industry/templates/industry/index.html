@@ -4,13 +4,15 @@
 {% block title %}پروژه ها{% endblock %}
 
 {% block dialog %}
+    {% comment %} {% include 'industry/layouts/project_details.html' %} {% endcomment %}
+    {% include 'industry/layouts/vote_dialog.html' %}
+    {% include 'industry/layouts/expertResume.html' %}
+{% endblock %}
+{% block modals %}
     {% if user.industryuser.status == 'signed_up' %}
         {% include 'industry/layouts/initial_information.html' %}
     {% endif %}
-    {% include 'industry/layouts/showProject.html' %}
-    {% include 'industry/layouts/project_details.html' %}
-    {% include 'industry/layouts/vote_dialog.html' %}
-    {% include 'industry/layouts/expertResume.html' %}
+    {% include 'industry/layouts/show_project.html' %}
 {% endblock %}
 
 {% block name %}{{ request.user.industryuser.industryform }}{% endblock %}
@@ -37,7 +39,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                            مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -75,7 +78,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                            مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -142,7 +146,8 @@
                                 </div>
                                 <div class="col-md-6 col-4">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                            مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -212,7 +217,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                            مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -283,7 +289,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                            مشاهده
                                     </button>
                                 </div>
                             </div>

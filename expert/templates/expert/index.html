@@ -7,8 +7,14 @@
 {% block name %} {{ request.user.expertuser.expertform }}{% endblock %}
 
 {% block dialog %}
-    {% include 'expert/layouts/initial_information.html' %}
-
+    {% include 'expert/layouts/vote_dialog_industry.html' %}
+    {% include 'expert/layouts/vote_dialog_researcher.html' %}
+    {% include 'expert/layouts/select_techniques.html' %}
+{% endblock %}
+{% block modals %}
+    {% if request.user.expertuser.status == 'signed_up' %}
+        {% include 'expert/layouts/initial_information.html' %}
+    {% endif %}
     {% with projects|first as project %}
         {% if project.status == 2 %}
             {% include 'expert/layouts/project_details.html' %}
@@ -16,10 +22,6 @@
             {% include 'expert/layouts/showProject.html' %}
         {% endif %}
     {% endwith %}
-
-    {% include 'expert/layouts/vote_dialog_industry.html' %}
-    {% include 'expert/layouts/vote_dialog_researcher.html' %}
-    {% include 'expert/layouts/select_techniques.html' %}
 {% endblock %}
 
 {% block content %}
@@ -60,9 +62,9 @@
                             </div>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
-                                {% getUnseenComments project.pk request.user.expertuser as UnseenComments%}
+                                {% getUnseenComments project.pk request.user.expertuser as UnseenComments %}
                                 {% if UnseenComments != 0 %}
-                                    <span class="unseen-comments"> {{UnseenComments}} </span>
+                                    <span class="unseen-comments"> {{ UnseenComments }} </span>
                                 {% endif %}
                             </div>
                         </div>

@@ -23,11 +23,12 @@
     <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
     {#    <link rel="stylesheet" href="{% static 'expert/css/style_xs.css' %}">#}
 </head>
-<body>
+<body class="{% if request.user.expertuser.status == 'signed_up' %}modal-open{% endif %}">
 {% getUnseenMessages request.user as UnseenMessages %}
 {#  {% include 'expert/layouts/pageLoader.html' %}#}
 {% block dialog %}{% endblock %}
-<div class="main {% if request.user.expertuser.status == "signed_up" %} blur-div {% endif %}">
+{% block modals %}{% endblock %}
+<div class="main">
     <div class="top-bar">
         <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
         <div class="dropdown">
@@ -186,14 +187,14 @@
 <form action='{% url 'expert:userInfo' %}' method='post'>
     {% csrf_token %}
     <script>
-        {#var expert = "{{ expert_info_form.expert_firstname }}";#}
         let instance = "{{ instance }}";
-        {#var some_text = "{{ some_text }}";#}
-        {#var scientific_form = "{{ scientific_form }}";#}
     </script>
 </form>
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'expert/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
+{% if request.user.expertuser.status == "signed_up" %}
+    <div class="modal-backdrop fade show" style="user-select: auto;"></div>
+{% endif %}
 </body>
 </html>

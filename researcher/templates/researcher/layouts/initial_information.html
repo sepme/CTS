@@ -1,6 +1,191 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back initial-information {% if request.user.researcheruser.status.status == 'signed_up' %}show{% endif %}">
+<div class="modal fade show" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     data-backdrop="static" aria-modal="true" style="user-select: auto; display: block; padding-right: 15px;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title default" id="exampleModalLabel">اطلاعات اولیه</h6>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="divide__line text-right">
+                        <span class="w__title">اطلاعات شخصی</span>
+                        <span class="__line"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="FirstName">نام و نام خانوادگی</label>
+                                {% if form.first_name.errors %}
+                                    {{ form.first_name|attr:"id:FirstName"|attr:"class:error w-100" }}
+                                {% else %}
+                                    {{ form.first_name|attr:"id:FirstName"|attr:"class:w-100" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.first_name.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="MelliCode">کد ملی</label>
+                                {% if form.national_code.errors %}
+                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100"|attr:"type:number"|attr:"placeholder:449****841" }}
+                                {% else %}
+                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100"|attr:"type:number"|attr:"placeholder:449****841" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.national_code.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Address">آدرس</label>
+                                {% if form.address.errors %}
+                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}
+                                {% else %}
+                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.address.errors %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group text-center">
+                                <label for="upload-input" class="upload text-center">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </label>
+                                <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="profile"
+                                    width="150px" height="150px">
+                                {{ form.photo|attr:"id:upload-input"| attr:"accept: image/png, image/jpeg" }}
+                                <div class="col-lg-7 text-center">    
+                                    <div class="error">
+                                        <span class="error-body">{% render_field form.photo.errors %} </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divide__line text-right">
+                        <span class="w__title">اطلاعات تحصیلی</span>
+                        <span class="__line"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="Field">رشته تحصیلی</label>
+                                {% if form.major.errors %}
+                                    {{ form.major|attr:"id:Field"|attr:"class:error w-100" }}
+                                {% else %}
+                                    {{ form.major|attr:"id:Field"|attr:"class:w-100" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.major.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="student-num">شماره دانشجویی</label>
+                                {% if form.student_number.errors %}
+                                    {{ form.student_number|attr:"id:student-num"|attr:"class:error w-100" }}
+                                {% else %}
+                                    {{ form.student_number|attr:"id:student-num"|attr:"class:w-100" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.student_number.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="enter-date">سال ورود</label>
+                                {% if form.entry_year.errors %}
+                                    {{ form.entry_year|attr:"id:enter-date"|attr:"class:error w-100" }}
+                                {% else %}
+                                    {{ form.entry_year|attr:"id:enter-date"|attr:"class:w-100" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.entry_year.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="rankLabel" for="rank">آخرین مقطع تحصیلی</label>
+                                <select id="rank" name="grade">
+                                    <option selected dir="rtl" disabled>انتخاب کنید ...</option>
+                                    <option value="1">کارشناسی</option>
+                                    <option value="2">کارشناسی ارشد</option>
+                                    <option value="3">دکتری</option>
+                                    <option value="4">دکتری حرفه ای</option>
+                                </select>
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.grade.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Uni">دانشگاه محل تحصیل</label>
+                                {% if form.university.errors %}
+                                    {{ form.university|attr:"id:Uni"|attr:"class:error w-100" }}
+                                {% else %}
+                                    {{ form.university|attr:"id:Uni"|attr:"class:w-100" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.university.errors %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="divide__line text-right">
+                        <span class="w__title">اطلاعات تماس</span>
+                        <span class="__line"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="HomeNum">تلفن منزل</label>
+                                {% if form.home_number.errors %}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100"|attr:"placeholder:021*******"|attr:"type:number" }}
+                                {% else %}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100"|attr:"placeholder:021*******"|attr:"type:number" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.home_number.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="PhoneNum">تلفن همراه</label>
+                                {% if form.phone_number.errors %}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100"|attr:"placeholder:09*********"|attr:"type:number" }}
+                                {% else %}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100"|attr:"placeholder:09*********"|attr:"type:number" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.phone_number.errors %}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Email">پست الکترونیکی</label>
+                                {% if form.email.errors %}
+                                    {{ form.email|attr:"id:Email"|attr:"class:error w-100" }}
+                                {% else %}
+                                    {{ form.email|attr:"id:Email"|attr:"class:w-100" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.email.errors %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">ثبت تغییرات</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} <div class="fixed-back initial-information {% if request.user.researcheruser.status.status == 'signed_up' %}show{% endif %}">
     <div class="card text-right">
         <div class="card-head">اطلاعات اولیه</div>
         <div class="container">
@@ -177,4 +362,4 @@
             </form>
         </div>
     </div>
-</div>
+</div> {% endcomment %}

@@ -26,25 +26,29 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-lg-6">
-                                <label for="id_project_title_persian">عنوان پروژه (به فارسی)</label>
-                                {% if form.project_title_persian.errors %}
-                                    {% render_field form.project_title_persian class="error w-100" %}
-                                {% else %}
-                                    {% render_field form.project_title_persian class="w-100" %}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.project_title_persian.errors %}</span>
-                                </div> 
+                                <div class="form-group">
+                                    <label for="id_project_title_persian">عنوان پروژه (به فارسی)</label>
+                                    {% if form.project_title_persian.errors %}
+                                        {% render_field form.project_title_persian class="error w-100" %}
+                                    {% else %}
+                                        {% render_field form.project_title_persian class="w-100" %}
+                                    {% endif %}
+                                    <div class="error">
+                                        <span class="error-body">{% render_field form.project_title_persian.errors %}</span>
+                                    </div> 
+                                </div>
                             </div>
                             <div class="col-lg-6">
-                                <label for="id_project_title_english">عنوان پروژه (به لاتین)</label>
-                                {% if forms.project_title_english.errors %}
-                                    {% render_field form.project_title_english class="error w-100" %}
-                                {% else %}
-                                    {% render_field form.project_title_english class="w-100" %}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field forms.project_title_english.errors %}</span>
+                                <div class="form-group">
+                                    <label for="id_project_title_english">عنوان پروژه (به لاتین)</label>
+                                    {% if forms.project_title_english.errors %}
+                                        {% render_field form.project_title_english class="error w-100" %}
+                                    {% else %}
+                                        {% render_field form.project_title_english class="w-100" %}
+                                    {% endif %}
+                                    <div class="error">
+                                        <span class="error-body">{% render_field forms.project_title_english.errors %}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -97,9 +101,9 @@
                                 <br>
                                 <span class="sub-header">لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.</span>
                                 {%if form.main_problem_and_importance.errors %}
-                                    {% render_field form.main_problem_and_importance class="error w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.main_problem_and_importance class="error w-100" rows="5" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.main_problem_and_importance class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.main_problem_and_importance class="w-100" rows="5" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.main_problem_and_importance.errors %}</span>
@@ -110,9 +114,9 @@
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟</span>
                                 {% if form.progress_profitability.errors %}
-                                    {% render_field form.progress_profitability class="error w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.progress_profitability class="error w-100" rows="5" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.progress_profitability class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.progress_profitability class="w-100" rows="5" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                         <span class="error-body">{% render_field form.progress_profitability.errors %}</span>
@@ -123,9 +127,9 @@
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">برآورد شما از سود مالی این پروژه چگونه است؟</span>
                                 {% if form.predict_profit.errors %}
-                                    {% render_field form.predict_profit class="error w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.predict_profit class="error w-100" rows="5" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.predict_profit class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.predict_profit class="w-100" rows="5" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.predict_profit.errors %}</span>
@@ -145,9 +149,9 @@
                                 <span class="sub-header">لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید.</span>
                                 
                                 {% if form.approach.errors %}
-                                    {% render_field form.approach class="error w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.approach class="error w-100" rows="7" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.approach class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.approach class="w-100" rows="7" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.approach.errors %} </span>
@@ -158,9 +162,9 @@
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header"> این راه حل چه مشکلاتی می‌تواند داشته باشد؟</span>
                                 {% if form.potential_problems.errors %}
-                                {% render_field form.potential_problems class="error w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                {% render_field form.potential_problems class="error w-100" rows="7" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.potential_problems class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.potential_problems class="w-100" rows="7" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body"> {% render_field form.potential_problems.errors %}</span>
@@ -182,9 +186,9 @@
                                 <span class="sub-header">جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟</span>
                                 
                                 {% if form.required_lab_equipment.errors %}                                    
-                                    {% render_field form.required_lab_equipment class="error w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.required_lab_equipment class="error w-100" rows="4" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.required_lab_equipment class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.required_lab_equipment class="w-100" rows="4" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body"> {% render_field form.required_lab_equipment.errors %}</span>
@@ -195,9 +199,9 @@
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟</span>
                                 {% if form.required_method.errors %}                                    
-                                    {% render_field form.required_method class="error w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top:0" %}
+                                    {% render_field form.required_method class="error w-100" rows="4" dir="rtl"  style="margin-top:0" %}
                                 {% else %}
-                                    {% render_field form.required_method class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top:0" %}
+                                    {% render_field form.required_method class="w-100" rows="4" dir="rtl"  style="margin-top:0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body"> {% render_field form.required_method.errors %}</span>
@@ -209,9 +213,9 @@
                                 <span class="sub-header">لطفا مراحل انجام پروژه خود را مشخص کنید.</span>
                                 
                                 {% if form.project_phase.errors %}
-                                    {% render_field form.project_phase class="error w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.project_phase class="error w-100" rows="4" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.project_phase class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.project_phase class="w-100" rows="4" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body"> {% render_field form.project_phase.errors %}</span>
@@ -222,9 +226,9 @@
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">پروژه شما به چه مقدار بودجه نیاز دارد؟</span>
                                 {% if form.required_budget.errors %}
-                                    {% render_field form.required_budget class="error w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.required_budget class="error w-100" rows="4" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.required_budget class="w-100" rows="4" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.required_budget class="w-100" rows="4" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body"> {% render_field form.required_budget.errors %} </span>
@@ -243,9 +247,9 @@
                                 <br>
                                 <span class="sub-header">از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟</span>
                                 {% if form.policy.errors %} 
-                                    {% render_field form.policy class="error w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.policy class="error w-100" rows="7" dir="rtl"  style="margin-top: 0" %}
                                 {% else %}
-                                    {% render_field form.policy class="w-100" rows="7" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field form.policy class="w-100" rows="7" dir="rtl"  style="margin-top: 0" %}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body"> {% render_field form.policy.errors %} </span>

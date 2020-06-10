@@ -1,5 +1,81 @@
 {% load static %}
-<div class="fixed-back showProject">
+<div class="modal fade" id="showProject" tabindex="-1" role="dialog" aria-labelledby="showProjectLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title text-right" id="showProjectLabel"></h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container text-right">
+            <div class="row">
+                <div class="col-lg-12 techniques"></div>
+            </div>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6 text-left">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="establish-time">
+                                <div class="time-head">ثبت</div>
+                                <div class="time-body"></div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="time-left">
+                                <div class="time-head">مهلت</div>
+                                <div class="time-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">اطلاعات پروژه</span>
+                    <div class="project-info-tabs">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                             aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-majors-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-majors"
+                               aria-selected="true">
+                                شاخص ها
+                            </a>
+                            <a class="nav-link" id="v-pills-approaches-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-approaches"
+                               aria-selected="false">
+                                راهکار ها
+                            </a>
+                            <a class="nav-link" id="v-pills-resources-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-resources"
+                               aria-selected="false">
+                                منابع مورد نیاز
+                            </a>
+                            <a class="nav-link" id="v-pills-roles-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-roles"
+                               aria-selected="false">
+                                قوانین
+                            </a>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="project-info-innerDiv">
+                            <div class="project-info-content-preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row add-comment">
+                <div class="col-lg-12 text-right">
+                    {% include 'industry/layouts/comment.html' %}
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% comment %} <div class="fixed-back showProject">
     <div class="card text-right stick-footer">
         <div class="close"></div>
         <div class="vote">
@@ -126,4 +202,4 @@
             {#            </div>#}
         </div>
     </div>
-</div>
+</div> {% endcomment %}

@@ -20,10 +20,11 @@
     <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->
 </head>
-<body>
+<body class="{% if request.user.researcheruser.status.status == 'signed_up' %}modal-open{% endif %}">
 {% getUnseenMessages request.user as UnseenMessages %}
 {% block dialog %}{% endblock %}
-<div class="main  {% if request.user.researcheruser.status.status == 'signed_up' %} blur-div {% endif %}">
+{% block modals %}{% endblock %}
+<div class="main">
     <div class="top-bar">
         <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">
         <div class="dropdown">
@@ -163,5 +164,8 @@
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>
+{% if request.user.researcheruser.status.status == "signed_up" %}
+    <div class="modal-backdrop fade show" style="user-select: auto;"></div>
+{% endif %}
 </body>
 </html>

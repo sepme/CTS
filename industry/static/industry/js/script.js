@@ -650,7 +650,8 @@ $(document).ready(function () {
     }
 
     $(".preview-project").click(function () {
-        const dialog = $(".showProject");
+        console.log("preview");
+        const dialog = $("#showProject");
         $(this).closest(".card").find('.unseen-comments').html("");
         let id = $(this).attr("id");
         $.ajax({
@@ -666,7 +667,7 @@ $(document).ready(function () {
                     $('.comment').attr('id', id);
                     localStorage.setItem("project_id", "" + id);
                     localStorage.setItem("replied_text", null);
-                    dialog.find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
+                    dialog.find(".modal-header .modal-title").html(data.project_title_persian + "<br>" +  data.project_title_english);
                     dialog.find(".establish-time .time-body").html(data.submission_date);
                     dialog.find(".time-left .time-body").html(data.deadline);
                     for (let i = 0; i < data.key_words.length; i++) {

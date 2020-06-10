@@ -19,11 +19,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
 </head>
-<body>
+<body class="{% if user.industryuser.status == 'signed_up' %}modal-open{% endif %}">
 {% getUnseenMessages request.user as UnseenMessages %}
 {% block dialog %}{% endblock %}
-<div class="main
-        {% if user.industryuser.status == 'signed_up' %} blur-div {% endif %}">
+{% block modals %}{% endblock %}
+<div class="main">
     <div class="top-bar">
         <img src="{% static 'industry/img/logoName.png' %}" alt="chamranTeam">
         <div class="dropdown">
@@ -174,5 +174,8 @@
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'industry/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'industry/js/script.js' %}"></script>
+{% if user.industryuser.status == 'signed_up' %}
+    <div class="modal-backdrop fade show" style="user-select: auto;"></div>
+{% endif %}
 </body>
 </html>
