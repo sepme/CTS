@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for news in object_list %}
+        {{news.title}}
+    {% endfor %}
+{% endblock content %}

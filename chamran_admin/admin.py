@@ -8,3 +8,7 @@ from . import models
 @admin.register(models.TempUser)
 class TempUser(admin.ModelAdmin):
     pass
+
+@admin.register(models.News)
+class News(admin.ModelAdmin):
+    pass

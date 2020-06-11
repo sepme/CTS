@@ -292,7 +292,7 @@ recoverPassForm.submit(function (event) {
         success: function (data) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
-            $('.loading h6').html("ایمیل با موفقیت ارسال شد!\nجهت بازیابی رمزعبور ایمیل خود را بررسی کنید!");
+            $('.loading h6').html("ایمیل با موفقیت ارسال شد!<br>جهت بازیابی رمزعبور ایمیل خود را بررسی کنید!");
         },
         error: function (data) {
             $(".loading").css('display', "none");
