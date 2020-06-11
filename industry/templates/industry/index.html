@@ -6,13 +6,13 @@
 {% block dialog %}
     {% comment %} {% include 'industry/layouts/project_details.html' %} {% endcomment %}
     {% include 'industry/layouts/vote_dialog.html' %}
-    {% include 'industry/layouts/expertResume.html' %}
 {% endblock %}
 {% block modals %}
     {% if user.industryuser.status == 'signed_up' %}
         {% include 'industry/layouts/initial_information.html' %}
     {% endif %}
     {% include 'industry/layouts/show_project.html' %}
+    {% include 'industry/layouts/expertResume.html' %}
 {% endblock %}
 
 {% block name %}{{ request.user.industryuser.industryform }}{% endblock %}

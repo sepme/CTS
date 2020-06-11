@@ -388,6 +388,10 @@ span.new-comment-tools {
     background-color: #cacbcd70;
 }
 
+.send-comment-container .comment-input textarea:focus {
+    color: #262626 !important;
+}
+
 .send-comment-container .comment-input.attached {
     padding-bottom: 25px;
 }

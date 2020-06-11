@@ -195,11 +195,17 @@ function setTab(data) {
 
 function expertResume() {
     $(".show-resume").click(function () {
-        $(".showProject").slideUp('slow').delay('slow');
-        $(".expert-resume").addClass("show");
-        $(".expert-resume").delay('slow').slideDown('slow');
-        close_dialog(".expert-resume");
-        load_dialog();
+        $('#showProject').modal('toggle');
+        $('#expertResume').modal('toggle');
+        $('#expertResume .close__redirect').click(function () {
+            $('#expertResume').modal('toggle');
+            $('#showProject').modal('toggle');
+        });
+        // $(".showProject").slideUp('slow').delay('slow');
+        // $(".expert-resume").addClass("show");
+        // $(".expert-resume").delay('slow').slideDown('slow');
+        // close_dialog(".expert-resume");
+        // load_dialog();
         let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         $.ajax({
             method: 'GET',
@@ -207,9 +213,9 @@ function expertResume() {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                $(".expert-resume #expert_name").html(data.name);
-                $(".expert-resume #expert_uni").html("دانشگاه " + data.university);
-                $(".expert-resume #expert_field").html(data.scientific_rank + " " + data.special_field);
+                $("#expertResume .modal-header .modal-title").html(data.name);
+                $("#expertResume #expert_uni").html("دانشگاه " + data.university);
+                $("#expertResume #expert_field").html(data.scientific_rank + " " + data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
                     let table_row = "";
@@ -646,7 +652,7 @@ $(document).ready(function () {
         setMajors(data, "-detail");
         setValue(data, "-detail");
         setTab(data);
-        modalPreview(".project-details");
+        // modalPreview(".project-details");
     }
 
     $(".preview-project").click(function () {
@@ -700,12 +706,13 @@ $(document).ready(function () {
 
                         $('.add-comment').attr('style', "display : block");
                         $('.image-btn-circle').prop('disabled', false);
+                        dialog_comment_init();
                         // if (data.status === 1) {
                         //     $(".row.add-comment").css("display", "none");
                         // }
                         setTab(data);
                     }
-                    modalPreview(".showProject");
+                    // modalPreview(".showProject");
                 }
             },
             error: function (data) {
@@ -744,9 +751,9 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".preview-project", ".project-details");
+        // init_dialog_btn(".preview-project", ".project-details");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-        init_dialog_btn(".show-resume", ".expert-resume");
+        // init_dialog_btn(".show-resume", ".expert-resume");
         expertResume();
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");

@@ -78,10 +78,10 @@ function close_dialog(className) {
             $(className).find(".message").remove();
             $(className).find(".message.info").remove();
         }
-        if (className === ".expert-resume") {
-            $(".expert-resume").slideUp('slow').delay('slow');
-            $(".showProject").delay('slow').slideDown('slow');
-        }
+        // if (className === ".expert-resume") {
+        //     $(".expert-resume").slideUp('slow').delay('slow');
+        //     $(".showProject").delay('slow').slideDown('slow');
+        // }
         $(className).find(".no-comment").remove();
         $(className).find(".comment-tabs .nav").html("");
     });

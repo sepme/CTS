@@ -2353,6 +2353,7 @@ ul.fancytree-container {
     background-color: inherit;
     font-family: iranyekan, serif;
     margin-bottom: 0 !important;
+    padding-right: 0;
 }
 
 ul.fancytree-container ul {
@@ -4398,13 +4399,18 @@ input[type="number"]{
     box-shadow: 0 0 0 0.2rem rgba(50, 177, 22,.5);
 }
 .modal {
+    overflow-y:auto;
     background-color: rgba(8,25,43,0.85);
-}
+} 
 body > * {
     transition: filter .15s linear;
 }
-.modal-open > *:not(.modal) {
+.modal-open > *:not(.modal):not(.modal-backdrop):not(.iziToast-wrapper) {
     -webkit-filter: blur(5px);
     filter: blur(5px);
     /* background: white; */
+ }
+ .modal-backdrop.fade.show {
+    background-color: rgba(8,25,43,0.85);
+    opacity: 1;
  }

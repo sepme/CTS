@@ -145,9 +145,9 @@ $(document).ready(function () {
     question_dialog_init();
     question_page_init();
     // init_dialog_btn(".preview-project", ".showProject");
-    init_dialog_btn(".preview-project.type-2", ".project-details");
+    // init_dialog_btn(".preview-project.type-2", ".project-details");
     // init_dialog_btn(".preview-project", ".project-details");
-    init_dialog_btn(".confirm_project", ".select-technique");
+    // init_dialog_btn(".confirm_project", ".select-technique");
     // init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     init_dialog_btn(".add-new-question", ".add-question");
@@ -183,6 +183,12 @@ $(document).ready(function () {
     tag_input_label("id_key_words");
 
     $(".confirm_project").click(function () {
+        $('#showProject').modal('toggle');
+        $('#selectTechniques').modal('toggle');
+        $('#selectTechniques .close__redirect').click(function () {
+            $('#selectTechniques').modal('toggle');
+            $('#showProject').modal('toggle');
+        });
         $.ajax({
             method: 'GET',
             url: '/expert/show_technique/',
@@ -207,7 +213,7 @@ $(document).ready(function () {
                     }
                     source.push(item);
                 }
-                $(".select-technique").find("#fancy-tree").fancytree({
+                $("#selectTechniques").find("#fancy-tree").fancytree({
                     extensions: ["glyph"],
                     checkbox: false,
                     selectMode: 1,
@@ -251,7 +257,7 @@ $(document).ready(function () {
                         }
                     },
                 });
-                select_technique(".select-technique");
+                select_technique("#selectTechniques");
             },
         });
         $('#tags').tagsInput({
@@ -266,7 +272,8 @@ $(document).ready(function () {
             $(this).css("width", "fit-content");
         });
         tag_input_label("tags");
-        let techniquesForm = $('.ajax-select-techniques');
+    });
+    let techniquesForm = $('.ajax-select-techniques');
         $(techniquesForm).on('keyup keypress', function (e) {
             let keyCode = e.keyCode || e.which;
             if (keyCode === 13) {
@@ -281,12 +288,12 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
-            iziToast.success({
-                rtl: true,
-                message: "درخواست شما ارسال شد.",
-                position: 'bottomLeft',
-                duration: 9999,
-            });
+            // iziToast.success({
+            //     rtl: true,
+            //     message: "درخواست شما ارسال شد.",
+            //     position: 'bottomLeft',
+            //     duration: 9999,
+            // });
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -298,10 +305,8 @@ $(document).ready(function () {
                         rtl: true,
                         message: data.message,
                         position: 'bottomLeft',
-                        duration: 9999,
                     });
-                    $(".select-technique").removeClass("show");
-                    $(".main").removeClass("blur-div");
+                    $('#selectTechniques').modal('toggle');
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);
@@ -318,7 +323,6 @@ $(document).ready(function () {
                 }
             });
         });
-    });
     if ($(window).width() < 767) {
         // toggle slide-bar => all views
         $(".main").removeClass("blur-div");
@@ -1118,9 +1122,9 @@ showInfo.click(function (event) {
             $('.ajax-select-techniques').attr('id', project_id);
             if (data.status === "non active") {
                 $(".hidden").attr("style", "display : none;");
-                $(".showProject").find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
-                $(".showProject").find(".establish-time .time-body").html(data.date);
-                $(".showProject").find(".time-left .time-body").html(data.deadline);
+                $("#showProject").find(".modal-header .modal-title").html(data.project_title_persian + "<br>" + data.project_title_english);
+                $("#showProject").find(".establish-time .time-body").html(data.date);
+                $("#showProject").find(".time-left .time-body").html(data.deadline);
                 const keys = JSON.parse(data.key_words);
                 let keys_code = '';
                 for (let i = 0; i < keys.length; i++) {
@@ -1130,8 +1134,7 @@ showInfo.click(function (event) {
                 setMajors(data);
                 setValue(data);
                 setComment(data.comments);
-                vote_dialog_init(".showProject");
-                showModal(".showProject");
+                // vote_dialog_init(".showProject");
                 if (data.applied === true) {
                     $("#accept-project").attr("disabled", "disabled");
                 }
