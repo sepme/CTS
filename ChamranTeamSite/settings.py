@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'researcher.apps.ResearcherConfig',
     'industry.apps.IndustryConfig',
     'widget_tweaks',
+    'captcha',
 ]
+
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

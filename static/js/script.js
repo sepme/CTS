@@ -85,9 +85,9 @@ function signUp() {
 //     });
 // }
 
-$(window).on("load", function () {
-    input_focus();
-});
+// $(window).on("load", function () {
+//     input_focus();
+// });
 $(document).ready(function () {
     if (window.location.href.indexOf("login") !== -1) {
         let owl = $('.owl-carousel').owlCarousel({
@@ -339,4 +339,19 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
+});
+
+// $('.js-captcha-refresh').click(function(){
+$('.captcha').click(function(){
+    console.log("CAPTCHA");
+    $form = $(this).parents('form');
+
+    $.getJSON("/captcha/refresh/", {}, function(result) {
+        // This should update your captcha image src and captcha hidden input
+        $('.captcha').attr('src', result['image_url']);
+        $('#id_captcha_0').val(result['key']);
+        console.log(result);
+    });
+
+    return false;
 });

@@ -544,12 +544,3 @@ def DeleteComment(request):
 class News(generic.ListView):
     template_name = "chamranteam/news_list.html"
     model = models.News
-
-    def get_context_data(self,):
-        pass
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        print(context)
-        return context
-    

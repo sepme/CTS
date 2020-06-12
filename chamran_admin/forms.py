@@ -3,6 +3,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from captcha.fields import CaptchaField
+
 from . import models
 from researcher.models import ResearcherUser
 from expert.models import ExpertUser
@@ -19,6 +21,7 @@ class RegisterEmailForm(forms.Form):
     email = forms.EmailField(label="ایمیل", error_messages={'required': 'لطفا ایمیل خود را وارد کنید',
                                                             'invalid': 'ایمیل وارد شده نامعتبر است'})
     account_type = forms.CharField(max_length=10, required=True,error_messages={'required': 'لطفانوع حساب کاربری خود را مشخص کنید',})
+    captcha = CaptchaField()
     #
     # class Meta:
     #     widgets = {
