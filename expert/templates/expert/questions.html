@@ -6,7 +6,7 @@
 
 {% block name %}{{ request.user.expertuser.expertform }}{% endblock %}
 
-{% block dialog %}
+{% block modals %}
     {% include 'expert/layouts/add_new_question.html' %}
     {% include 'expert/layouts/show_question.html' %}
 {% endblock %}
@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-12 text-right">
             <h3 class="h3 p-top-15 {% if not research_questions %}border-bottom{% endif %}">سوالات پژوهشی</h3>
-            <button class="add-new-question top-page-button border-button">
+            <button class="add-new-question top-page-button border-button" data-toggle="modal" data-target="#addNewQuestion">
                 <i class="fas fa-plus"></i>
                 <span>ثبت سوال جدید</span>
             </button>
@@ -78,7 +78,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-3">
-                                            <button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده
+                                            <button class="default-btn show-btn" id="{{ research_question.id }}" data-toggle="modal" data-target="#showQuestion">
+                                                مشاهده
                                             </button>
                                         </div>
                                     </div>
@@ -115,7 +116,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-3">
-                                            <button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده
+                                            <button class="default-btn show-btn" id="{{ research_question.id }}" data-toggle="modal" data-target="#showQuestion">
+                                                مشاهده
                                             </button>
                                         </div>
                                     </div>
@@ -152,7 +154,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-3">
-                                            <button class="default-btn show-btn" id="{{ research_question.id }}">مشاهده
+                                            <button class="default-btn show-btn" id="{{ research_question.id }}" data-toggle="modal" data-target="#showQuestion">
+                                                مشاهده
                                             </button>
                                         </div>
                                     </div>
@@ -169,7 +172,7 @@
                         <img src="{% static 'img/empty_question.svg' %}" alt="">
                         <h5>اولین سوال خود را طرح کنید!</h5>
                         <pre>با کلیک بر روی دکمه زیر می توانید اولین سوال پژوهشی خود را به آسانی بسازید.</pre>
-                        <button class="add-new-question border-button">
+                        <button class="add-new-question border-button" data-toggle="modal" data-target="#addNewQuestion">
                             <i class="fas fa-plus"></i>
                             <span>ثبت سوال جدید</span>
                         </button>

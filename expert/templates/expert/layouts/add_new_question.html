@@ -1,6 +1,64 @@
 {% load static%}
 {% load widget_tweaks %}
-<div class="fixed-back add-question">
+<div class="modal fade" id="addNewQuestion" tabindex="-1" role="dialog" aria-labelledby="addNewQuestionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="addNewQuestionLabel">ثبت سوال جدید</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="ajax-new-rq-form" data-url="{% url 'expert:new_research_question' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="question-title">عنوان سوال</label>
+                                {{ research_question_form.question_title|attr:"id:question-title"|attr:"class:w-100" }}
+        {#                        <input id="question-title" name="question_title" value="" class="w-100">#}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="question-body">توضیح سوال</label>
+                                {{ research_question_form.question_text|attr:"id:question-body"|attr:"class:w-100"|attr:"dir:rtl" |attr:"rows:15"}}
+        {#                        <textarea dir="rtl" rows="15" class="w-100" id="question-body" name="question_body"></textarea>#}
+                            </div>
+                            <div class="question-attach text-left">
+                                <ul class="inline-list">
+                                    <li class="list-item">
+    {#                                    {{ research_question_form.attachment|attr:"id:attach"|attr:"hidden"}}#}
+                                        <input type="file" name="attachment" id="attach" hidden>
+                                        <button class="attach-btn" type="button">
+                                            <label for="attach">
+                                                <span class="attach-icon"></span>
+    {#                                            <img src="{% static 'expert/img/attachment(2).png' %}" alt="attachment" width="15px" style="border-radius: 0">#}
+                                                <span>ضمیمه</span>
+                                            </label>
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="info-text warning">
+                                    <span class="star warning"></span>
+                                    <p class="text-right">
+                                        در صورتی که بیش از یک فایل برای باگذاری مدّ نظر دارید، لطفا آن‌ها را به صورت یک فایل zip و یا rar بسته‌بندی کرده و بارگذاری نمایید.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn reject-btn" type="reset" data-dismiss="modal">لغو</button>
+                    <button class="btn btn-primary save-btn" type="submit">افزودن</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% comment %} <div class="fixed-back add-question">
     <div class="card text-right b-x2">
         <div class="close"></div>
         <div class="card-head">ثبت سوال جدید</div>
@@ -49,4 +107,4 @@
             </form>
         </div>
     </div>
-</div>
+</div> {% endcomment %}

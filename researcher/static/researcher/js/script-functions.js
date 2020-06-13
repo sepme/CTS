@@ -631,51 +631,51 @@ function vote_slider(slide_count) {
 
 if (window.location.href.indexOf("researcher/technique/") > -1) {
     function slide_up() {
-        $(".fixed-back .all-techniques").slideUp('slow');
+        $(".modal .all-techniques").slideUp('slow');
         return $.Deferred().resolve(false);
     }
 
     function remove_class() {
-        $(".fixed-back input#technique-name").removeClass("expand");
+        $(".modal input#technique-name").removeClass("expand");
     }
 
     function expand() {
-        $(".fixed-back .all-techniques").slideDown('slow');
-        $(".fixed-back input#technique-name").addClass("expand");
-        $(".fixed-back .select-technique i").removeClass("fa-plus").addClass("fa-search");
-        $(".fixed-back label[for='technique-name']").html("جستجو تکنیک");
+        $(".modal .all-techniques").slideDown('slow');
+        $(".modal input#technique-name").addClass("expand");
+        $(".modal .select-technique i").removeClass("fa-plus").addClass("fa-search");
+        $(".modal label[for='technique-name']").html("جستجو تکنیک");
 
     }
 
     function express() {
         slide_up().done(remove_class());
-        $(".fixed-back .select-technique i").removeClass("fa-search").addClass("fa-plus");
-        $(".fixed-back label[for='technique-name']").html("نام تکنیک");
+        $(".modal .select-technique i").removeClass("fa-search").addClass("fa-plus");
+        $(".modal label[for='technique-name']").html("نام تکنیک");
     }
 
-    $(".fixed-back .select-technique").click(function () {
-        if ($(".fixed-back input#technique-name").hasClass("expand")) {
+    $(".modal .select-technique").click(function () {
+        if ($(".modal input#technique-name").hasClass("expand")) {
             express();
         } else {
             expand();
         }
 
     });
-    $(".fixed-back input.upload-resume").next().hover(function () {
+    $(".modal input.upload-resume").next().hover(function () {
         $(this).find("svg").find("path").attr("fill", "#3ccd1c");
     }, function () {
         $(this).find("svg").find("path").attr("fill", "#bdbdbd");
     });
 
-    $(".fixed-back .confirmation .upload-file").click(function () {
+    $(".modal .confirmation .upload-file").click(function () {
         $(this).closest("form").find("input.upload-resume").next().slideDown("slow").closest("div.col-12").css("padding-bottom", "15px");
     });
 
-    $(".fixed-back .confirmation .close-upload").click(function () {
+    $(".modal .confirmation .close-upload").click(function () {
         $(this).closest("form").find("input.upload-resume").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
     });
 
-    $(".fixed-back input.upload-resume").on("change", function () {
+    $(".modal input.upload-resume").on("change", function () {
         $(this).closest("div").find("img.upload-img").css("display", "none");
         $(this).closest("div").find("img.file-img").css("display", "block");
         let fileName = $(this).val().split("\\").pop();

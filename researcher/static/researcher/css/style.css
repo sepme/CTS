@@ -986,18 +986,18 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
 * Message Dialog
  */
 
-.fixed-back .confirmation {
+.modal .confirmation {
     padding-top: 10px;
 }
 
-.fixed-back .confirmation .title {
+.modal .confirmation .title {
     position: relative;
     padding: 0;
     top: 0;
     right: 0;
 }
 
-.fixed-back .confirmation label {
+.modal .confirmation label {
     position: relative;
     border: 1px solid #bdbdbd;
     width: 100% !important;
@@ -1011,12 +1011,12 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     background-color: #FDFDFD;
 }
 
-.fixed-back .confirmation label:hover {
+.modal .confirmation label:hover {
     cursor: pointer;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.16);
 }
 
-.fixed-back .upload-resume + label {
+.modal .upload-resume + label {
     position: relative;
     border: 1px dashed #bdbdbd;
     top: 0;
@@ -1035,7 +1035,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     display: none;
 }
 
-.fixed-back .upload-resume + label img {
+.modal .upload-resume + label img {
     width: 50px;
     right: 50%;
     -webkit-border-radius: 0;
@@ -1047,11 +1047,11 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     display: block;
 }
 
-.fixed-back .upload-resume + label img.file-img {
+.modal .upload-resume + label img.file-img {
     display: none;
 }
 
-.fixed-back .upload-resume + label:hover {
+.modal .upload-resume + label:hover {
     cursor: pointer;
     border-color: #3ccd1c;
     color: #3ccd1c;
@@ -1096,17 +1096,17 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     background-color: #F8FDF7;
 }
 
-.fixed-back .confirmation .form-group {
+.modal .confirmation .form-group {
     margin: 0;
 }
 
-.fixed-back .confirmation input:checked + label {
+.modal .confirmation input:checked + label {
     border-color: #3ccd1c;
     box-shadow: 0 4px 10px 0 rgba(60, 205, 28, 0.16);
     color: #3ccd1c !important;
 }
 
-.fixed-back .confirmation label .title {
+.modal .confirmation label .title {
     position: absolute;
     top: 50%;
     left: 0;
@@ -1121,7 +1121,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     color: inherit;
 }
 
-.fixed-back .confirmation label:before {
+.modal .confirmation label:before {
     content: '';
     position: absolute;
     top: 5px;
@@ -1133,15 +1133,15 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     border: 1px solid #bdbdbd;
 }
 
-.fixed-back .confirmation label:hover:before {
+.modal .confirmation label:hover:before {
 
 }
 
-.fixed-back .confirmation input:checked + label:before {
+.modal .confirmation input:checked + label:before {
     border-color: #3ccd1c;
 }
 
-.fixed-back .confirmation input:checked + label:after {
+.modal .confirmation input:checked + label:after {
     content: '';
     position: absolute;
     top: 9px;
@@ -1153,7 +1153,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     border: 1px solid #3ccd1c;
 }
 
-.fixed-back .confirmation .radio-group {
+.modal .confirmation .radio-group {
     /*margin-bottom: 25px;*/
 }
 
@@ -1459,7 +1459,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     float: left;
 }
 
-.fixed-back .select-technique {
+.modal .select-technique {
     position: absolute;
     top: 25px;
     left: 20px;
@@ -1470,7 +1470,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     background-color: transparent;
 }
 
-.fixed-back .select-technique i {
+.modal .select-technique i {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1486,13 +1486,13 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     transition: all 0.3s ease-in-out;
 }
 
-.fixed-back .select-technique:focus,
-.fixed-back .select-technique:active {
+.modal .select-technique:focus,
+.modal .select-technique:active {
     background-color: #CACBCD !important;
     outline: none;
 }
 
-.fixed-back .select-technique:hover {
+.modal .select-technique:hover {
     background-color: #E0E1E2;
     outline: none;
 }
@@ -1503,7 +1503,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     border-bottom-right-radius: 0;
 }
 
-.fixed-back .all-techniques {
+.modal .all-techniques {
     display: none;
     position: relative;
     background-color: #fdfdfd;
@@ -1515,7 +1515,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     padding: 10px 0;
 }
 
-.fixed-back .all-techniques:before {
+.modal .all-techniques:before {
     content: '';
     border-top: 1px solid #bdbdbd;
     position: absolute;
