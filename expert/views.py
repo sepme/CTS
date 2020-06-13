@@ -384,46 +384,44 @@ def show_project_view(request):
             ActiveProjcet(request, project, data)
     return UsualShowProject(request, project, data)
 
-@permission_required('expert.be_expert', login_url='/login/')
 def UsualShowProject(request, project, data):
     project_form = project.project_form
     if request.user.expertuser.status == "applied":
         data['applied'] = True
     else:
         data['applied'] = False
-    comments = []
-    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
-    sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
-    for comment in comment_list:
-        try:
-            url = comment.attachment.url.split("/")[-1]
-        except:
-            url = "None"
-        comments.append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type,
-            'attachment': url,
-            'pk' : comment.pk,
-        })
-        if comment.sender_type == "industry":
-            comment.status = "seen"
-            comment.save()
-    for comment in sys_comment:
-        comments.append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type,
-            'pk' : comment.pk,
-        })
-        if comment.sender_type == "system":
-            comment.status = "seen"
-            comment.save()
-    # data = {
     if "status" not in data.keys():
         data["status"] = "non active"
         data['techniques_list']= Technique.get_technique_list()
-    data['comments']= comments
+        comments = []
+        comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
+        sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
+        for comment in comment_list:
+            try:
+                url = comment.attachment.url.split("/")[-1]
+            except:
+                url = "None"
+            comments.append({
+                'id': comment.id,
+                'text': comment.description,
+                'sender_type': comment.sender_type,
+                'attachment': url,
+                'pk' : comment.pk,
+            })
+            if comment.sender_type == "industry":
+                comment.status = "seen"
+                comment.save()
+        for comment in sys_comment:
+            comments.append({
+                'id': comment.id,
+                'text': comment.description,
+                'sender_type': comment.sender_type,
+                'pk' : comment.pk,
+            })
+            if comment.sender_type == "system":
+                comment.status = "seen"
+                comment.save()
+        data['comments']= comments
     data['date']= JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d")
     data['key_words']= serializers.serialize('json', project_form.key_words.all())
     data['main_problem_and_importance']= project_form.main_problem_and_importance
@@ -441,7 +439,6 @@ def UsualShowProject(request, project, data):
     data['project_phase']= project_form.project_phase
     data['predict_profit']= project_form.predict_profit 
     data['success']= 'successful'
-    # }
     # data['required_technique']=[]
     # for tech in project.project_form.required_technique:
     #     data['required_technique'].append(tech.__str__())
@@ -788,7 +785,6 @@ def refuseResearcher(request):
     except:
         return JsonResponse(data={} ,status=400)
 
-@permission_required('expert.be_expert', login_url='/login/')
 def ActiveProjcet(request, project, data):
     industryform = project.industry_creator.industryform
     projectDate = [
@@ -819,6 +815,24 @@ def ActiveProjcet(request, project, data):
             data['request_status'] = False
     except:
         data['request_status'] = True
+    expert = project.expert_accepted
+    # all_researchers = Comment.objects.filter(project=project).filter(expert_user=expert).filter(sender_type="researcher").values('researcher_user').distinct()
+    # data['researcher_comment'] = []    
+    # for researcher in all_researchers:
+    #     researcherInfo = {
+    #         'id'   : researcher['researcher_user'],
+    #         "name" : str(ResearcherProfile.objects.get(researcher_user=researcher['researcher_user'])),
+    #     }
+    #     data['researcher_comment'].append(researcherInfo)
+
+    data['researcher_accepted'] = []
+    for researcher in project.researcher_accepted.all():
+        researcherInfo = {
+            'id'      : researcher.pk,
+            "name"    : str(researcher.researcherprofile),
+            "profile" : researcher.researcherprofile.photo,
+        }
+        data['researcher_accepted'].append(researcherInfo)
     return JsonResponse(data=data)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -876,3 +890,26 @@ def ExpertRequestResearcher(request):
     
     return JsonResponse({"successfull" : "successfull"})
 
+# @permission_required('expert.be_expert', login_url='/login/')
+# def GetResearcherComment(request):
+#     project_id    = request.GET['project_id']
+#     researcher_id = request.GET['researcher_id']
+#     comments = Comment.objects.filter(project=project_id).filter(researcher_user=researcher_id).exclude(sender_type="system")
+#     data = {'comments' : []}
+#     for comment in comments:
+#         try:
+#             url = comment.attachment.url.split("/")[-1]
+#         except:
+#             url = "None"
+#         commentInfo = {
+#             'id': comment.id,
+#             'text': comment.description,
+#             'sender_type': comment.sender_type,
+#             'attachment': url,
+#         }
+#         if comment.sender_type == "researcher":
+#             comment.status = "seen"
+#             comment.save()
+#         data['comments'].append(commentInfo)
+    
+#     return JsonResponse(data=data)

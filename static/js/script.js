@@ -85,9 +85,9 @@ function signUp() {
 //     });
 // }
 
-$(window).on("load", function () {
-    input_focus();
-});
+// $(window).on("load", function () {
+//     input_focus();
+// });
 $(document).ready(function () {
     if (window.location.href.indexOf("login") !== -1) {
         let owl = $('.owl-carousel').owlCarousel({
@@ -292,7 +292,7 @@ recoverPassForm.submit(function (event) {
         success: function (data) {
             $('.circle-loader').toggleClass('load-complete');
             $('.checkmark').toggle();
-            $('.loading h6').html("ایمیل با موفقیت ارسال شد!\nجهت بازیابی رمزعبور ایمیل خود را بررسی کنید!");
+            $('.loading h6').html("ایمیل با موفقیت ارسال شد!<br>جهت بازیابی رمزعبور ایمیل خود را بررسی کنید!");
         },
         error: function (data) {
             $(".loading").css('display', "none");
@@ -339,4 +339,15 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
+});
+
+$('.captcha').click(function(){
+    $form = $(this).parents('form');
+
+    $.getJSON("/captcha/refresh/", {}, function(result) {
+        $('.captcha').attr('src', result['image_url']);
+        $('#id_captcha_0').val(result['key']);
+    });
+
+    return false;
 });

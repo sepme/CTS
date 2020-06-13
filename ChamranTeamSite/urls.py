@@ -11,6 +11,8 @@ urlpatterns = [
     path('expert/', include('expert.urls')),
     path('researcher/', include('researcher.urls')),
     path('industry/', include('industry.urls')),
+    path('captcha/', include('captcha.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     # path('', include('django.contrib.auth.urls')),
 ]
 

@@ -3,6 +3,8 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 import uuid
 
@@ -11,6 +13,12 @@ from ChamranTeamSite import settings
 
 def upload_to(instance, file_name):
     return os.path.join(settings.MEDIA_ROOT, 'message_attachments', file_name)
+
+def newsAttach(instance, file_name):
+    return os.path.join(settings.MEDIA_ROOT, 'news', instance.title[:15], file_name)
+
+def newsPicture(instance, file_name):
+    return os.path.join(settings.MEDIA_ROOT, 'news', instance.news.title[:15], file_name)
 
 
 class Message(models.Model):
@@ -46,9 +54,9 @@ class Message(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
-    text = models.TextField(verbose_name="متن خبر")
-    picture = models.ImageField(upload_to=None, verbose_name="تصویر خبر")
-    attachment = models.FileField(upload_to=None, verbose_name="ضمیمه", blank=True, null=True)
+    # text = models.TextField(verbose_name="متن خبر")
+    text = RichTextUploadingField()
+    attachment = models.FileField(upload_to=newsAttach, verbose_name="ضمیمه", blank=True, null=True)
     link = models.CharField(max_length=128, verbose_name="لینک خبر")
     writer = models.CharField(max_length=32, verbose_name="نویسنده")
     date_submitted = models.DateField(auto_now_add=True)
@@ -58,6 +66,13 @@ class News(models.Model):
 
     def get_absolute_url(self):
         return 'news/' + self.link
+
+class Picture(models.Model):
+    news = models.ForeignKey(News, verbose_name="خبر", on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to=newsPicture, verbose_name="تصویر خبر")
+
+    def __str__(self):
+        return str(self.news)
 
 
 class TempUser(models.Model):

@@ -11,10 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.template.loader import get_template
-from django.urls import resolve
 from django.contrib.contenttypes.models import ContentType
 
 from persiantools.jdatetime import JalaliDate
@@ -447,20 +446,25 @@ class RecoverPasswordConfirm(generic.FormView):
         path = request.path
         uuid = path.split('/')[-2]
         try:
-            user = ExpertUser.objects.get(unique__exact=uuid)
+            self.user = ExpertUser.objects.get(unique__exact=uuid)
         except ExpertUser.DoesNotExist:
             try:
-                user = IndustryUser.objects.get(unique__exact=uuid)
+                self.user = IndustryUser.objects.get(unique__exact=uuid)
             except IndustryUser.DoesNotExist:
                 try:
-                    user = ResearcherUser.objects.get(unique__exact=uuid)
+                    self.user = ResearcherUser.objects.get(unique__exact=uuid)
                 except ResearcherUser.DoesNotExist:
                     raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
-        return render(request, self.template_name, {'form': forms.RegisterUserForm(),
-                                                    'username': user.user.username})
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['username'] = "username"
+        if self.user:
+            context['username'] = self.user.user.get_username()
+        return context
 
     def post(self, request, *args, **kwargs):
-        # print('recover: \nuser: ', self.recover, self.user)
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
         user = get_user_by_unique_id(unique_id)
@@ -497,7 +501,7 @@ def Handler403(request, exception):
 
 
 class RecoverPassword(generic.TemplateView):
-    template_name = 'build/index.html'
+    template_name = 'registration/recover_pass.html'
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -536,3 +540,12 @@ def DeleteComment(request):
     except:
         return JsonResponse({}, 400)
     return JsonResponse({'successful': "successful"})
+
+class News(generic.ListView):
+    template_name = "chamran_admin/news_list.html"
+    model = models.News
+
+class NewsForm(generic.FormView):
+    template_name = "chamran_admin/newsForm.html"
+    form_class = forms.NewsForm
+    

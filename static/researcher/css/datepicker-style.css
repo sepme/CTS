@@ -1,0 +1,15 @@
+@font-face {
+  font-family: Shabnam;
+  src: url(../font/Shabnam.ttf);
+}
+@font-face {
+  font-family: Shabnam-Bold;
+  src: url(../font/Shabnam-Bold.ttf);
+}
+@font-face {
+  font-family: Shabnam-Light;
+  src: url(../font/Shabnam-Light.ttf);
+}
+.pdp-default{
+    font-family: Shabnam;
+}

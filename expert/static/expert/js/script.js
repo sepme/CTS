@@ -1539,7 +1539,6 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
         });
     });
     $(".refuse-researcher").click(function () {
-        console.log("1"+1);
         $.ajax({
             method: "POST",
             url: 'refuseResearcher/',
