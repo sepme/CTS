@@ -9,6 +9,14 @@ from . import models
 class TempUser(admin.ModelAdmin):
     pass
 
+
+class Picture(admin.StackedInline):
+    model = models.Picture
+    extra = 1
+
 @admin.register(models.News)
 class News(admin.ModelAdmin):
-    pass
+    
+    inlines = [
+        Picture,
+    ]

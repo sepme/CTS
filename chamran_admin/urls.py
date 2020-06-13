@@ -22,4 +22,5 @@ urlpatterns = [
     path('message_detail/<int:message_id>/', views.get_message_detail, name='message_detail'),
     path('deleteComment/' ,views.DeleteComment ,name='delete_comment'),
     path('news/', views.News.as_view()),
+    path('newsForm/', views.NewsForm.as_view()),
 ]

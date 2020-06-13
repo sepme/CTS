@@ -41,7 +41,21 @@ INSTALLED_APPS = [
     'industry.apps.IndustryConfig',
     'widget_tweaks',
     'captcha',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 300,
+    },
+    'awesome_ckeditor': {
+        'toolbar': 'Basic',
+    },
+}
+AWS_QUERYSTRING_AUTH = False
 
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
@@ -122,6 +136,22 @@ USE_TZ = True
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
+
+def get_path(request):
+    print("path")
+    return 'uploads/'
+
+
+CKEDITOR_UPLOAD_PATH = "get_path"
+
+def get_filename(filename):
+    # print(request)
+    # print(request.POST)
+    print("FUCK U")
+    return filename.upper()
+
+# from . import utils
+# CKEDITOR_FILENAME_GENERATOR = utils.get_filename(filename)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

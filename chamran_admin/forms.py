@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from captcha.fields import CaptchaField
+from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.widgets import CKEditorWidget
 
 from . import models
 from researcher.models import ResearcherUser
@@ -118,3 +120,8 @@ class RecoverPasswordForm(forms.Form):
         if not user:
             raise forms.ValidationError('کاربر با این نام کاربری ثبت نام نشده است.')
         return username
+
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = models.News
+        fields = ['title', 'text', 'attachment', 'link', 'writer'] 

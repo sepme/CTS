@@ -542,5 +542,10 @@ def DeleteComment(request):
     return JsonResponse({'successful': "successful"})
 
 class News(generic.ListView):
-    template_name = "chamranteam/news_list.html"
+    template_name = "chamran_admin/news_list.html"
     model = models.News
+
+class NewsForm(generic.FormView):
+    template_name = "chamran_admin/newsForm.html"
+    form_class = forms.NewsForm
+    
