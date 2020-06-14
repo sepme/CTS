@@ -6,6 +6,12 @@ from django.shortcuts import reverse
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
+#for Compress the news' photo
+import sys
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 import uuid
 
 from ChamranTeamSite import settings
@@ -18,7 +24,7 @@ def newsAttach(instance, file_name):
     return os.path.join(settings.MEDIA_ROOT, 'news', instance.title[:15], file_name)
 
 def newsPicture(instance, file_name):
-    return os.path.join(settings.MEDIA_ROOT, 'news', instance.news.title[:15], file_name)
+    return os.path.join(settings.MEDIA_ROOT, 'News Pictures', instance.news.title[:15], file_name)
 
 
 class Message(models.Model):
@@ -62,7 +68,7 @@ class News(models.Model):
     date_submitted = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return self.title[: 15]
 
     def get_absolute_url(self):
         return 'news/' + self.link
@@ -73,6 +79,19 @@ class Picture(models.Model):
 
     def __str__(self):
         return str(self.news)
+    
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.picture = self.compressImage(self.picture)
+        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+    
+    def compressImage(self,photo):
+        imageTemproary = Image.open(photo).convert('RGB')
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
+        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
 
 
 class TempUser(models.Model):

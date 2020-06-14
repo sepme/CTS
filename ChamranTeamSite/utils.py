@@ -1,3 +1,2 @@
-def get_filename(filename):
-    print("-=-=-=-=-=-==============")
-    return filename.upper()
+def get_filename(upload_name, request):
+    return upload_name.upper()
