@@ -98,6 +98,7 @@ $(document).ready(function () {
             items: 1,
             touchDrag: false,
             mouseDrag: false,
+            autoHeight:true,
         });
         $('.next-slide').click(function () {
             owl.trigger('next.owl.carousel');
