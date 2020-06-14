@@ -60,7 +60,7 @@ class IndustryUser(models.Model):
 
 
 def profileUpload(instance, file_name):
-    return os.path.join('Industry Profile' , instance.industry_user.user.username ,file_name)
+    return os.path.join('Industry Profile' , instance.industry_user.user.username ,'com-'+file_name)
 
 class IndustryForm(models.Model):
     industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
@@ -100,7 +100,7 @@ class IndustryForm(models.Model):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
         outputIoStream.seek(0)
         uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
