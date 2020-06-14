@@ -1,5 +1,64 @@
 {% load static%}
-<div class="fixed-back show-question">
+<div class="modal fade" id="showQuestion" tabindex="-1" role="dialog" aria-labelledby="showQuestionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="showQuestionLabel"></h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="question-info">
+                                    <div class="status active">
+                                        <span class="question-status">فعال</span>
+                                    </div>
+                                    <div class="date">
+                                        <span>تاریخ:</span>
+                                        <span class="question-date"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-right">
+                            <div class="col-lg-12">
+                                <div class="pre-header">
+                                    <span>متن سوال</span>
+                                </div>
+                                <pre dir="rtl" class="w-100" id="question-body"></pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="question-attach text-left">
+                                    <ul class="inline-list">
+                                        <li class="list-item">
+                                            <a href="#" class="attach-file">
+                                                <span class="attachment"></span>
+                                                <span class="attach-name">ضمیمه ای وجود ندارد</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-right">
+                            <div class="col-lg-12">
+                                <span class="section-title">پاسخ ها</span>
+                                <button class="default-btn close-answer">بستن پاسخ جدید</button>
+                                <div class="section">
+                                    <div class="row all-answers"></div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+{% comment %} <div class="fixed-back show-question">
     <div class="card text-right">
         <div class="close"></div>
         <div class="card-head">عنوان سوال پژوهشی</div>
@@ -50,4 +109,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> {% endcomment %}

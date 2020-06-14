@@ -852,8 +852,9 @@ function question_dialog_init() {
         // $(this).closest(".check").find(".wrong button").css("max-width", "0");
         //
         // $(this).closest(".check").find(".wrong").css("max-width", "0");
-        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").addClass("loading").css("display", "block");
         $(this).closest(".check").find("button").attr("disabled", "true");
+        let This = $(this);
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -861,8 +862,11 @@ function question_dialog_init() {
             dataType: 'json',
             data: {id: id, type: true},
             success: function (data) {
-                set_answer_true($(this));
-                $(this).closest(".check").removeClass("loading");
+                This.closest(".check").removeClass("loading").addClass("correct-ans");
+                This.closest(".check").find("loading");
+                This.closest(".check").find(".wrong").remove();
+                This.closest(".answer").attr("is-correct", "true");
+                set_answer_true(This);
                 iziToast.success({
                     rtl: true,
                     message: "وضعیت صحیح برای پاسخ ذخیره شد.",
@@ -874,8 +878,9 @@ function question_dialog_init() {
         });
     });
     $(".answer .check .wrong button").click(function () {
-        $(this).closest(".check").addClass("loading");
+        $(this).closest(".check").addClass("loading").css("display", "block");
         $(this).closest(".check").find("button").attr("disabled", "true");
+        let This = $(this);
         let id = $(this).attr("id");
         $.ajax({
             method: 'GET',
@@ -883,8 +888,8 @@ function question_dialog_init() {
             dataType: 'json',
             data: {id: id, type: false},
             success: function (data) {
-                set_answer_wrong($(this));
-                $(this).closest(".check").removeClass("loading");
+                This.closest(".check").removeClass("loading");
+                set_answer_wrong(This);
                 iziToast.success({
                     rtl: true,
                     message: "وضعیت نادرست برای پاسخ ذخیره شد.",
@@ -951,7 +956,12 @@ function show_question_answers(data) {
         }
         answer = answer +
             '<div class="col-lg-12 mbottom-10">' +
-            '   <div class="answer ' + divider_line + '" is-correct="' + data[i].is_correct + '">' +
+            '   <div class="answer ' + divider_line ;
+        if (data[i].is_correct !== "not_seen") {
+            answer = answer + ' answered';    
+        }
+        answer = answer +
+            '" is-correct="' + data[i].is_correct + '">' +
             '       <span class="title">' + data[i].researcher_name + '</span>' +
             '       <span class="date">' + data[i].hand_out_date + '</span>' +
             '       <div class="answer-body">' +
@@ -963,20 +973,39 @@ function show_question_answers(data) {
             '           </a>' +
             '       </div>' +
             '       <div class="check">' +
-            '           <span class="wait-load"></span>' +
-            '           <div class="correct">' +
-            '               <button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
-            '                   <i class="fas fa-check"></i>' +
-            '                   <span>درست</span>' +
-            '               </button>' +
-            '           </div>' +
-            '           <div class="wrong">' +
-            '               <button type="button" title="نادرست" id="' + data[i].answer_id + '">' +
-            '                   <i class="fas fa-times"></i>' +
-            '                   <span>نادرست</span>' +
-            '               </button>' +
-            '           </div>' +
-            '           <div class="status"></div>' +
+            '           <span class="wait-load"></span>' ;
+        if (data[i].is_correct === "not_seen") {
+                answer = answer + 
+                '           <div class="correct">' +
+                '               <button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
+                '                   <i class="fas fa-check"></i>' +
+                '                   <span>درست</span>' +
+                '               </button>' + 
+                '           </div>' +
+                '           <div class="wrong">' +
+                '               <button type="button" title="نادرست" id="' + data[i].answer_id + '">' +
+                '                   <i class="fas fa-times"></i>' +
+                '                   <span>نادرست</span>' +
+                '               </button>' + 
+                '           </div>' ; 
+            }
+            if(data[i].is_correct === "correct") {
+                answer = answer + 
+                '           <div class="status correct-answer" style="display: inline-table;">' + 
+                '               <span>پاسخ صحیح</span>' +
+                '               <i class="fas fa-check"></i>' + 
+                '           </div>' ;
+            }else if(data[i].is_correct === "wrong") {
+                answer = answer + 
+                '           <div class="status wrong-answer" style="display: inline-table;">' + 
+                '               <span>پاسخ نادرست</span>' +
+                '               <i class="fas fa-times"></i>' +
+                '           </div>' ;
+            }else {
+                answer = answer + 
+                '           <div class="status" style="display: block;"></div>' ;
+            }
+            answer = answer +
             '       </div>' +
             '   </div>' +
             '</div>';
