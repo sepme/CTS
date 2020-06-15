@@ -16,7 +16,7 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 def profileUpload(instance, filename):
-    return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,filename)
+    return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,'com-'+filename)
     # ext = filename.split('.')[-1]
     # filename = '{}.{}'.format('profile', ext)
 
@@ -179,7 +179,7 @@ class ResearcherProfile(models.Model):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
         outputIoStream.seek(0)
         uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
