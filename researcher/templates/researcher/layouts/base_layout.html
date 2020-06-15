@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/comments.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->
+{#    <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->#}
 </head>
 <body class="{% if request.user.researcheruser.status.status == 'signed_up' %}modal-open{% endif %}">
 {% getUnseenMessages request.user as UnseenMessages %}

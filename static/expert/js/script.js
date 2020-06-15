@@ -69,7 +69,7 @@ function newItem_label() {
 
 function showQuestion() {
     $(".show-btn").click(function () {
-        const dialog = $(".show-question");
+        const dialog = $("#showQuestion");
         let id = $(this).attr("id");
         console.log(id);
         $.ajax({
@@ -92,7 +92,7 @@ function showQuestion() {
                     $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("پاسخ داده شده");
                 }
-                dialog.find(".card-head").html(data.question_title);
+                dialog.find(".modal-header .modal-title").html(data.question_title);
                 dialog.find(".question-date").html(data.question_date);
                 dialog.find("pre#question-body").html(data.question_body);
                 dialog.find(".close-answer").attr("id", id);
@@ -142,7 +142,7 @@ $(document).ready(function () {
     input_focus();
     showQuestion();
     // $('*').persiaNumber();
-    question_dialog_init();
+    // question_dialog_init();
     question_page_init();
     // init_dialog_btn(".preview-project", ".showProject");
     // init_dialog_btn(".preview-project.type-2", ".project-details");
@@ -150,7 +150,7 @@ $(document).ready(function () {
     // init_dialog_btn(".confirm_project", ".select-technique");
     // init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".add-new-question", ".add-question");
+    // init_dialog_btn(".add-new-question", ".add-question");
     init_dialog_btn(".education-btn", ".scientific_form");
     init_dialog_btn(".executive-btn", ".executive_form");
     init_dialog_btn(".research-btn", ".research_form");
@@ -400,7 +400,7 @@ $(document).ready(function () {
     //  Questions Page
     //****************************************//
     if (window.location.href.indexOf('questions') > -1) {
-        init_dialog_btn(".show-btn", ".show-question");
+        // init_dialog_btn(".show-btn", ".show-question");
 
         function getAllQuestions() {
             return $(".tab-content div.card").toArray();
@@ -440,7 +440,7 @@ $(document).ready(function () {
             } else if ($(element).attr("id") === "all-questions") {
                 $(".tab-content").html(questions);
             }
-            init_dialog_btn(".show-btn", ".show-question");
+            // init_dialog_btn(".show-btn", ".show-question");
             showQuestion();
         }
 
@@ -492,6 +492,7 @@ $(document).ready(function () {
                         });
                         ResearchQuestionForm[0].reset();
                     }
+                    $('#addNewQuestion').modal('toggle');
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);

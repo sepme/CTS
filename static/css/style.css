@@ -136,6 +136,13 @@ body.notFound {
     border-radius: 0;
     width: 100px;
     margin-bottom: 10px;
+    position: relative;
+    top: 0;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+    -o-transform: none;
+    transform: none;
 }
 
 .card.registration img {
@@ -2365,10 +2372,6 @@ ul.fancytree-container {
     padding-right: 0;
 }
 
-ul.fancytree-container ul {
-    padding: .3em 1em 0 0;
-}
-
 img.fancytree-icon, span.fancytree-checkbox, span.fancytree-icon {
     margin-left: 0;
     margin-right: 3px;
@@ -4411,7 +4414,7 @@ input[type="number"] {
 
 .modal {
     overflow-y: auto;
-    background-color: rgba(8, 25, 43, 0.85);
+    /*background-color: rgba(8, 25, 43, 0.85);*/
 }
 
 body > * {

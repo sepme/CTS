@@ -1,8 +1,8 @@
-.fixed-back .question-attach {
+.modal .question-attach {
     margin-bottom: 10px;
 }
 
-.fixed-back .question-attach .attach-btn {
+.modal .question-attach .attach-btn {
     border: 1px dashed #707070;
     background-color: #FDFDFD;
     outline: none;
@@ -11,7 +11,7 @@
     padding: 0;
 }
 
-.fixed-back .question-attach .attach-btn label {
+.modal .question-attach .attach-btn label {
     margin: 0;
     position: relative;
     top: 0;
@@ -22,28 +22,28 @@
     padding: 5px 25px 5px 15px;
 }
 
-.fixed-back .question-attach .attach-btn label span:last-child {
+.modal .question-attach .attach-btn label span:last-child {
     direction: ltr;
     display: block;
 }
 
-.fixed-back .question-attach .attach-btn label:hover,
-.fixed-back .question-attach .attach-btn label:focus {
+.modal .question-attach .attach-btn label:hover,
+.modal .question-attach .attach-btn label:focus {
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.fixed-back .question-attach .inline-list {
+.modal .question-attach .inline-list {
     list-style: none;
     transition: 0.3s;
     margin-bottom: 5px;
 }
 
-.fixed-back .question-attach .inline-list .list-item {
+.modal .question-attach .inline-list .list-item {
     display: inline-block;
 }
 
-.fixed-back .question-attach .inline-list .attach-file {
+.modal .question-attach .inline-list .attach-file {
     background-color: rgba(0, 0, 0, 0.05);
     border: none;
     color: #707070;
@@ -56,13 +56,13 @@
     direction: ltr;
 }
 
-.fixed-back .question-attach .inline-list .attach-file:hover,
-.fixed-back .question-attach .inline-list .attach-file:focus {
+.modal .question-attach .inline-list .attach-file:hover,
+.modal .question-attach .inline-list .attach-file:focus {
     background-color: #CDCDCD;
     text-decoration: none;
 }
 
-.fixed-back .question-attach .attach-icon {
+.modal .question-attach .attach-icon {
     background-image: url("../img/attachment(2).png");
     background-size: cover;
     position: absolute;
@@ -77,7 +77,7 @@
     height: 15px;
 }
 
-.fixed-back .question-attach .pdf-file {
+.modal .question-attach .pdf-file {
     background-image: url("../img/pdf.png");
     background-size: cover;
     position: absolute;
@@ -92,7 +92,7 @@
     height: 15px;
 }
 
-.fixed-back .question-attach .png-file {
+.modal .question-attach .png-file {
     background-image: url("../img/png.png");
     background-size: cover;
     position: absolute;
@@ -107,7 +107,7 @@
     height: 15px;
 }
 
-.fixed-back .question-attach .jpg-file {
+.modal .question-attach .jpg-file {
     background-image: url("../img/jpg.png");
     background-size: cover;
     position: absolute;
@@ -122,7 +122,7 @@
     height: 15px;
 }
 
-.fixed-back .question-attach .attach-file .doc-file {
+.modal .question-attach .attach-file .doc-file {
     background-image: url("../img/doc.png");
     background-size: cover;
     position: absolute;
@@ -138,25 +138,25 @@
 }
 
 
-.fixed-back .question-info {
+.modal .question-info {
     text-align: left;
     float: left;
 }
 
-.fixed-back .question-info .status,
-.fixed-back .question-info .date {
+.modal .question-info .status,
+.modal .question-info .date {
     border: none;
     background-color: #F8FDF7;
     padding: 5px 15px;
     border-radius: 0.25em;
 }
 
-.fixed-back .question-info .status {
+.modal .question-info .status {
     margin-left: 5px;
     padding-left: 25px;
 }
 
-.fixed-back .question-info .status.active:after {
+.modal .question-info .status.active:after {
     content: '';
     height: 15px;
     width: 15px;
@@ -170,7 +170,7 @@
     border-radius: 50%;
 }
 
-.fixed-back .question-info .date {
+.modal .question-info .date {
 
 }
 
@@ -191,22 +191,22 @@
     background-color: #FDFDFD;
 }
 
-.fixed-back.show-question .answer {
+.modal#showQuestion .answer {
     padding: 0 20px 0 80px;
     min-height: 70px;
 }
 
 @media (max-width: 767px) {
-    .fixed-back.show-question .answer {
+    .modal#showQuestion .answer {
         padding-bottom: 60px;
     }
 }
 
-.fixed-back .answer.divider-top {
+.modal .answer.divider-top {
 
 }
 
-.fixed-back .answer.divider-top:after {
+.modal .answer.divider-top:after {
     /*content: "";*/
     /*position: absolute;*/
     /*top: 0;*/
@@ -217,11 +217,11 @@
     /*background-color: #BDBDBD;*/
 }
 
-/*.fixed-back .answer:hover{*/
+/*.modal .answer:hover{*/
 /*    background-color: rgba(0, 0, 0, 0.05);*/
 /*    cursor: default;*/
 /*}*/
-.fixed-back .answer .title {
+.modal .answer .title {
     font-weight: 400;
     position: relative;
     top: 0;
@@ -230,16 +230,16 @@
     color: #262626;
 }
 
-.fixed-back .answer .date {
+.modal .answer .date {
     font-size: 12px;
     color: #707070;
 }
 
-.fixed-back .answer .answer-body {
+.modal .answer .answer-body {
     text-align: justify;
 }
 
-.fixed-back .answer .answer-body .file-type.image {
+.modal .answer .answer-body .file-type.image {
     position: absolute;
     top: 5px;
     left: 30px;
@@ -249,66 +249,66 @@
     background-size: cover;
 }
 
-.fixed-back .answer .answer-body .file-type.image.pdf {
+.modal .answer .answer-body .file-type.image.pdf {
     background-image: url("../../../../static/img/pdf.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.doc {
+.modal .answer .answer-body .file-type.image.doc {
     background-image: url("../../../../static/img/doc.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.gif {
+.modal .answer .answer-body .file-type.image.gif {
     background-image: url("../../../../static/img/gif.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.jpg {
+.modal .answer .answer-body .file-type.image.jpg {
     background-image: url("../../../../static/img/jpg.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.png {
+.modal .answer .answer-body .file-type.image.png {
     background-image: url("../../../../static/img/png.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.ppt {
+.modal .answer .answer-body .file-type.image.ppt {
     background-image: url("../../../../static/img/ppt.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.txt {
+.modal .answer .answer-body .file-type.image.txt {
     background-image: url("../../../../static/img/txt.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.unknown {
+.modal .answer .answer-body .file-type.image.unknown {
     background-image: url("../../../../static/img/unknown.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.wmv {
+.modal .answer .answer-body .file-type.image.wmv {
     background-image: url("../../../../static/img/wmv.svg");
 }
 
-.fixed-back .answer .answer-body .file-type.image.zip {
+.modal .answer .answer-body .file-type.image.zip {
     background-image: url("../../../../static/img/zip.svg");
 }
 
 
-.fixed-back .answer .answer-body .file-type.text {
+.modal .answer .answer-body .file-type.text {
     position: absolute;
     bottom: 5px;
     left: 95px;
 }
 
 @media (max-width: 767px) {
-    .fixed-back .answer .answer-body .file-type.text {
+    .modal .answer .answer-body .file-type.text {
         bottom: 40px;
     }
 }
 
-.fixed-back .answer .answer-body .file-name {
+.modal .answer .answer-body .file-name {
     text-align: left;
     font-weight: 500;
     font-size: 14px;
 }
 
-.fixed-back .answer .download {
+.modal .answer .download {
     position: absolute;
     bottom: 5px;
     right: 185px;
@@ -326,16 +326,16 @@
     transition: all ease 0.2s;
 }
 
-.fixed-back .answer.answered .download {
+.modal .answer.answered .download {
     right: 140px;
 }
 
-.fixed-back .answer .download:hover {
+.modal .answer .download:hover {
     color: #ffffff;
     background-color: #3CCD1C;
 }
 
-.fixed-back .answer .download i {
+.modal .answer .download i {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -353,14 +353,14 @@
     transform: translateX(-50%);
 }
 
-.fixed-back .answer .check {
+.modal .answer .check {
     position: absolute;
     height: 30px;
     bottom: 5px;
     right: 20px;
 }
 
-.fixed-back .answer .check:after {
+.modal .answer[is-correct="not_seen"] .check:after {
     content: "یا";
     text-align: center;
     font-weight: 500;
@@ -382,13 +382,13 @@
     background-color: #ffffff;
 }
 
-.fixed-back .answer .check.loading:after {
+.modal .answer .check.loading:after {
     content: "";
     -webkit-transition: all 0s linear, opacity .1s ease;
     transition: all 0s linear, opacity .1s ease;
 }
 
-.fixed-back .answer .check.loading .wait-load:after {
+.modal .answer .check.loading .wait-load:after {
     position: absolute;
     content: '';
     top: 50%;
@@ -406,7 +406,7 @@
     background-color: #ffffff;
 }
 
-.fixed-back .answer .check.loading .wait-load {
+.modal .answer .check.loading .wait-load {
     position: absolute;
     content: '';
     top: 50%;
@@ -443,19 +443,19 @@
     }
 }
 
-.fixed-back .answer.answered .check:after {
+.modal .answer.answered .check:after {
     content: "";
     background-color: transparent;
 }
 
-.fixed-back .answer .check .wrong,
-.fixed-back .answer .check .correct,
-.fixed-back .answer .check .status {
+.modal .answer .check .wrong,
+.modal .answer .check .correct,
+.modal .answer .check .status {
     display: inline-block;
 }
 
-.fixed-back .answer .check .wrong button,
-.fixed-back .answer .check .correct button {
+.modal .answer .check .wrong button,
+.modal .answer .check .correct button {
     border: none;
     outline: none;
     color: #ffffff;
@@ -469,12 +469,12 @@
     transition: all ease 0.2s;
 }
 
-.fixed-back .answer .check.loading .wrong button:hover,
-.fixed-back .answer .check.loading .correct button:hover {
+.modal .answer .check.loading .wrong button:hover,
+.modal .answer .check.loading .correct button:hover {
     cursor: not-allowed;
 }
 
-.fixed-back .answer .check .wrong button {
+.modal .answer .check .wrong button {
     background-color: #ff4545;
     padding-right: 15px;
     -webkit-border-radius: 0.25em 0 0 0.25em;
@@ -482,15 +482,15 @@
     border-radius: 0.25em 0 0 0.25em;
 }
 
-.fixed-back .answer .check .wrong button:hover {
+.modal .answer .check .wrong button:hover {
     background-color: #ff2c2c;
 }
 
-.fixed-back .answer .check.loading .wrong button:hover {
+.modal .answer .check.loading .wrong button:hover {
     background-color: #ff4545;
 }
 
-.fixed-back .answer .check .correct button {
+.modal .answer .check .correct button {
     padding-left: 15px;
     background-color: #3ccd1c;
     -webkit-border-radius: 0 0.25em 0.25em 0;
@@ -498,16 +498,16 @@
     border-radius: 0 0.25em 0.25em 0;
 }
 
-.fixed-back .answer .check .correct button:hover {
+.modal .answer .check .correct button:hover {
     background-color: #35b719;
 }
 
-.fixed-back .answer .check.loading .correct button:hover {
+.modal .answer .check.loading .correct button:hover {
     background-color: #3CCD1C;
 }
 
-.fixed-back .answer .check .correct i,
-.fixed-back .answer .check .wrong i {
+.modal .answer .check .correct i,
+.modal .answer .check .wrong i {
     /*position: absolute;*/
     /*top: 50%;*/
     /*left: 50%;*/
@@ -518,7 +518,7 @@
     /*transform: translate(-50%, -50%);*/
 }
 
-.fixed-back .answer .check .status {
+.modal .answer .check .status {
     position: absolute;
     top: 0;
     right: 0;
@@ -532,23 +532,23 @@
     direction: ltr;
 }
 
-.fixed-back .answer .check .status.correct-answer {
+.modal .answer .check .status.correct-answer {
     background-color: #f8fdf7;
     color: #3ccd1c;
     border: 1px solid #3CCD1C;
 }
 
-.fixed-back .answer .check .status.wrong-answer {
+.modal .answer .check .status.wrong-answer {
     background-color: #fdf8f8;
     color: #ff4545;
     border: 1px solid #ff4545;
 }
 
-.fixed-back .answer .check .status span {
+.modal .answer .check .status span {
     margin-right: 10px;
 }
 
-.fixed-back .close-answer {
+.modal .close-answer {
     background-color: transparent;
     color: #ff4545;
     position: absolute;
@@ -561,7 +561,7 @@
     transition: all ease 0.2s;
 }
 
-.fixed-back .close-answer:hover {
+.modal .close-answer:hover {
     background-color: #ff4545;
     color: #ffffff;
 }

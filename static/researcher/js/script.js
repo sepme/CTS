@@ -314,7 +314,7 @@ $(".trash").click(function (event) {
 $(document).ready(function () {
     init_setup();
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".add-new-technique", ".add-technique");
+    // init_dialog_btn(".add-new-technique", ".add-technique");
     init_dialog_btn(".new-review-request", ".review-request");
     init_dialog_btn(".send-answer", ".thanks_response");
     init_dialog_btn(".start-question", ".confirmation");
@@ -722,8 +722,7 @@ technique_review.submit(function (event) {
             technique_review.find("label").removeClass("progress-cursor");
             technique_review.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".fixed-back").css("display", "none");
-                $(".main").removeClass("blur-div");
+                $('#reviewRequest').modal('toggle');
                 iziToast.success({
                     rtl: true,
                     message: "اطلاعات با موفقیت ذخیره شد!",
@@ -740,6 +739,9 @@ technique_review.submit(function (event) {
             technique_review.find("input").prop("disabled", false).removeClass("progress-cursor");
             technique_review.find("label").removeClass("progress-cursor");
             technique_review.closest(".fixed-back").find(".card").removeClass("wait");
+            technique_review.find(".error:not(input)").remove();
+            $("input#request-body").removeClass("error");
+            $("input#upload-new-resume").removeClass("error");
             if (obj.request_body) {
                 $("#request-body").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
@@ -780,7 +782,8 @@ function show_add_technique_record(data) {
         "        <h6>" + data.title + "</h6>" +
         "        <div class='box-object-left'>" +
         "           <a href='//" + data.link + "'>" +
-        "            <i class='fas fa-link'></i>" +
+        "            <i class='fas fa-film'/>" +
+        "            <span class='info-text'>ویدیو آموزشی</span>" +
         "           </a>" +
         "       </div>" +
         "    </div>" +
@@ -846,8 +849,7 @@ add_technique_form.submit(function (event) {
             add_technique_form.find("label").removeClass("progress-cursor");
             add_technique_form.closest(".fixed-back").find(".card").removeClass("wait");
             if (data.success === "successful") {
-                $(".add-technique").css("display", "none");
-                $(".main").removeClass("blur-div");
+                $('#addNewTechnique').modal('toggle');
                 show_add_technique_record(data);
                 iziToast.success({
                     rtl: true,
@@ -864,7 +866,10 @@ add_technique_form.submit(function (event) {
             add_technique_form.find("button[type='reset']").prop("disabled", false);
             add_technique_form.find("input").prop("disabled", false).removeClass("progress-cursor");
             add_technique_form.find("label").removeClass("progress-cursor");
-            add_technique_form.closest(".fixed-back").find(".card").removeClass("wait");
+            add_technique_form.closest(".modal").find(".card").removeClass("wait");
+            add_technique_form.find(".error:not(input)").remove();
+            $("input#resume").removeClass("error");
+            $("input#technique-name").removeClass("error")
             if (obj.technique) {
                 $("#technique-name").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
@@ -1057,6 +1062,7 @@ $(".add-new-technique").click(function (event) {
                 checkbox: false,
                 selectMode: 1,
                 checkboxAutoHide: true,
+                rtl: true,
                 clickFolderMode: 2,
                 lazyLoad: function (event, data) {
                     data.result = {url: 'https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json'};
@@ -1188,6 +1194,7 @@ $("#your-project").click(function (event) {
 $(".my-project").click(function () {
     const dialog = $(".showProject");
     let projectId = $(this).attr("id");
+    console.log("Dsdsd");
     $.ajax({
         method: 'GET',
         url: '/researcher/myProject/',
@@ -1228,7 +1235,7 @@ function deleteComment(comment) {
         dataType: 'json',
         data: {id: $(comment).attr("id")},
         success: function (data) {
-            $(comment).remove()
+            $(comment).remove();
             iziToast.success({
                 rtl: true,
                 message: "پیام با موفقیت پاک شد.",
