@@ -250,43 +250,43 @@
 }
 
 .modal .answer .answer-body .file-type.image.pdf {
-    background-image: url("../../../../static/img/pdf.svg");
+    background-image: url("../../../static/img/pdf.svg");
 }
 
 .modal .answer .answer-body .file-type.image.doc {
-    background-image: url("../../../../static/img/doc.svg");
+    background-image: url("../../../static/img/doc.svg");
 }
 
 .modal .answer .answer-body .file-type.image.gif {
-    background-image: url("../../../../static/img/gif.svg");
+    background-image: url("../../../static/img/gif.svg");
 }
 
 .modal .answer .answer-body .file-type.image.jpg {
-    background-image: url("../../../../static/img/jpg.svg");
+    background-image: url("../../../static/img/jpg.svg");
 }
 
 .modal .answer .answer-body .file-type.image.png {
-    background-image: url("../../../../static/img/png.svg");
+    background-image: url("../../../static/img/png.svg");
 }
 
 .modal .answer .answer-body .file-type.image.ppt {
-    background-image: url("../../../../static/img/ppt.svg");
+    background-image: url("../../../static/img/ppt.svg");
 }
 
 .modal .answer .answer-body .file-type.image.txt {
-    background-image: url("../../../../static/img/txt.svg");
+    background-image: url("../../../static/img/txt.svg");
 }
 
 .modal .answer .answer-body .file-type.image.unknown {
-    background-image: url("../../../../static/img/unknown.svg");
+    background-image: url("../../../static/img/unknown.svg");
 }
 
 .modal .answer .answer-body .file-type.image.wmv {
-    background-image: url("../../../../static/img/wmv.svg");
+    background-image: url("../../../static/img/wmv.svg");
 }
 
 .modal .answer .answer-body .file-type.image.zip {
-    background-image: url("../../../../static/img/zip.svg");
+    background-image: url("../../../static/img/zip.svg");
 }
 
 
