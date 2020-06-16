@@ -76,8 +76,9 @@
                             {{ register_form.email|attr:"id:email"|attr:"class:w-100" }}
                             <i class="fas fa-at fa-lg"></i>
                         </div>
-                        <div class="captcha-test col-md-6">
-                            {{ register_form.captcha | attr:"class:w-100"}}
+                        <div class="captcha-test">
+{#                            <label for="id_captcha_1">کد کپچا</label>#}
+                            {{ register_form.captcha | attr:"class:w-100"| attr:"placeholder:کد را وارد کنید"}}
                         </div>
                         <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
                         <hr>

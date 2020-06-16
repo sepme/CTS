@@ -136,12 +136,28 @@ body.notFound {
     border-radius: 0;
     width: 100px;
     margin-bottom: 10px;
+    position: relative;
+    top: 0;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+    -o-transform: none;
+    transform: none;
 }
 
 .card.registration img {
+    position: absolute;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 @media (max-width: 767px) {
@@ -2356,10 +2372,6 @@ ul.fancytree-container {
     padding-right: 0;
 }
 
-ul.fancytree-container ul {
-    padding: .3em 1em 0 0;
-}
-
 img.fancytree-icon, span.fancytree-checkbox, span.fancytree-icon {
     margin-left: 0;
     margin-right: 3px;
@@ -4372,13 +4384,13 @@ span.border-span {
     margin-top: 0;
 }
 
-input[type="number"]{
+input[type="number"] {
     direction: ltr;
     letter-spacing: 1px;
 }
 
 .btn {
-    
+
 }
 
 .btn-primary {
@@ -4388,29 +4400,55 @@ input[type="number"]{
 }
 
 .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active,
- .btn-primary:not(:disabled):not(.disabled):active,
-  .show>.btn-primary.dropdown-toggle {
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
     color: #fff;
     background-color: rgb(50, 177, 22);
     border-color: transparent;
     outline: none;
 }
+
 .btn-primary.focus, .btn-primary:focus {
-    box-shadow: 0 0 0 0.2rem rgba(50, 177, 22,.5);
+    box-shadow: 0 0 0 0.2rem rgba(50, 177, 22, .5);
 }
+
 .modal {
-    overflow-y:auto;
-    background-color: rgba(8,25,43,0.85);
-} 
+    overflow-y: auto;
+    /*background-color: rgba(8, 25, 43, 0.85);*/
+}
+
 body > * {
     transition: filter .15s linear;
 }
+
 .modal-open > *:not(.modal):not(.modal-backdrop):not(.iziToast-wrapper) {
     -webkit-filter: blur(5px);
     filter: blur(5px);
     /* background: white; */
- }
- .modal-backdrop.fade.show {
-    background-color: rgba(8,25,43,0.85);
+}
+
+.modal-backdrop.fade.show {
+    background-color: rgba(8, 25, 43, 0.85);
     opacity: 1;
- }
+}
+
+.captcha-test {
+    display: flex;
+    direction: rtl;
+    margin-top: 20px
+}
+
+.captcha-test input {
+    margin-top: 12px;
+}
+
+.captcha-test img {
+    margin-left: 20px;
+    max-height: 60px;
+    position: relative!important;
+    -webkit-transform: none!important;
+    -moz-transform: none!important;
+    -ms-transform: none!important;
+    -o-transform: none!important;
+    transform: none!important;
+}

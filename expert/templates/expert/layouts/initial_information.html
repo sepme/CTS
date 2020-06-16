@@ -39,17 +39,17 @@
                                     <span class="error-body">{% render_field form.melli_code.errors %}</span>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="Address">آدرس</label>
-                                {% if form.address.errors %}
-                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}
-                                {% else %}
-                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.address.errors %}</span>
-                                </div>
-                            </div>
+{#                            <div class="form-group">#}
+{#                                <label for="Address">آدرس</label>#}
+{#                                {% if form.address.errors %}#}
+{#                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+{#                                {% else %}#}
+{#                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+{#                                {% endif %}#}
+{#                                <div class="error">#}
+{#                                    <span class="error-body">{% render_field form.address.errors %}</span>#}
+{#                                </div>#}
+{#                            </div>#}
                         </div>
                         <div class="col-md-4">
                             <div class="form-group text-center">

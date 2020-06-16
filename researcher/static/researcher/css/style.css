@@ -619,8 +619,8 @@ input.vote-select + label {
 
 input.vote-select.l + {
     position: relative;
-    top: 0%;
-    left: 0%;
+    top: 0;
+    left: 0;
     /*-webkit-transform: translate(-50%, -50%);*/
     /*-moz-transform: translate(-50%, -50%);*/
     /*-ms-transform: translate(-50%, -50%);*/
@@ -977,7 +977,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
 .search-message input.search_message {
     -webkit-transition: ease 0.5s;
     -moz-transition: ease 0.5s;
-    -ms-transition: ease 0.5s;
+    /*-ms-transition: ease 0.5s;*/
     -o-transition: ease 0.5s;
     transition: ease 0.5s;
 }
@@ -1481,7 +1481,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     transform: translate(-50%, -50%);
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
-    -ms-transition: all 0.3s ease-in-out;
+    /*-ms-transition: all 0.3s ease-in-out;*/
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
 }
@@ -1492,7 +1492,7 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
     outline: none;
 }
 
-.modal .select-technique:hover {
+.modal .select -technique:hover {
     background-color: #E0E1E2;
     outline: none;
 }
