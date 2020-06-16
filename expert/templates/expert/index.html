@@ -35,14 +35,14 @@
             <div class="project-info-tabs">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                      aria-orientation="vertical">
-                     {% if projects.first.status == 2 %}
+                    {% if projects.first.status == 2 %}
                         <a class="nav-link active fs-15" id="new-projects" data-toggle="pill"
-                        role="tab" aria-selected="true">
-                            پروژه در حال انجام                            
+                           role="tab" aria-selected="true">
+                            پروژه در حال انجام
                         </a>
-                     {% else %}
+                    {% else %}
                         <a class="nav-link active fs-15" id="new-projects" data-toggle="pill"
-                        role="tab" aria-selected="true">
+                           role="tab" aria-selected="true">
                             جدیدترین پروژه ها
                         </a>
                     {% endif %}
@@ -58,188 +58,220 @@
             </div>
             <div class="tab-content cover-page">
                 {% if projects.first.status == 2 %}
-                        <div class="row" style="direction: ltr!important">
-                            <div class="col-md-3">
-                                <div class="project-progress step-2 mbottom-lg-25">
-                                    <div class="step-container active">
+                    <div class="card box flow-root-display w-100">
+                        <div class="box-body">
+                            <div class="row" style="direction: ltr!important">
+                                <div class="col-lg-4 col-xs-3">
+                                    <div class="project-progress step-2 mbottom-lg-25">
+                                        <div class="step-container active">
                                         <span class="step-date">
                                             <div class="start">1399/01/12</div>
                                             </span>
-                                        <span class="step-name">شروع پروژه</span>
-                                    </div>
-                                    <div class="step-container active">
+                                            <span class="step-name">شروع پروژه</span>
+                                        </div>
+                                        <div class="step-container active">
                                         <span class="step-date">
                                             <div class="first_phase">1399/01/12</div>
                                         </span>
-                                        <span class="step-name">فاز اول</span>
-                                    </div>
-                                    <div class="step-container">
+                                            <span class="step-name">فاز اول</span>
+                                        </div>
+                                        <div class="step-container">
                                         <span class="step-date">
                                             <div class="second_phase">1399/01/12</div>
                                         </span>
-                                        <span class="step-name">فاز دوم</span>
-                                    </div>
-                                    <div class="step-container">
+                                            <span class="step-name">فاز دوم</span>
+                                        </div>
+                                        <div class="step-container">
                                         <span class="step-date">
                                             <div class="third_phase">1399/01/12</div>
                                         </span>
-                                        <span class="step-name">فاز سوم</span>
-                                    </div>
-                                    <div class="step-container">
+                                            <span class="step-name">فاز سوم</span>
+                                        </div>
+                                        <div class="step-container">
                                         <span class="step-date">
                                             <div class="date_finished">1399/01/12</div>
                                         </span>
-                                        <span class="step-name">اتمام پروژه</span>
-                                    </div>
-                                    <div class="line-100">
-                                        <div class="arrow"></div>
+                                            <span class="step-name">اتمام پروژه</span>
+                                        </div>
+                                        <div class="line-100">
+                                            <div class="arrow"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="row mbottom-lg-25">
-                                    <div class="col-lg-12 text-right">
-                                        <span class="section-title">اطلاعات پروژه</span>
-                                        <div class="section">
-                                            <div class="row">
-                                                <div class="col-md-9">
-                                                    <div class="row m-top-10">
-                                                        <div class="col-md-6">
-                                                            <div class="pre-header">
-                                                                <span>کارفرما</span>
+                                <div class="col-lg-8 col-xs-9">
+                                    <div class="row mbottom-lg-25">
+                                        <div class="col-lg-12 text-right">
+                                            <h6>پروژه سایتومتری</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row mbottom-lg-25">
+                                        <div class="col-lg-12 text-right">
+                                            <span class="section-title">مشخصات پروژه</span>
+                                            <div class="section">
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <div class="row m-top-10">
+                                                            <div class="col-md-6">
+                                                                <div class="pre-header">
+                                                                    <span>کارفرما</span>
+                                                                </div>
+                                                                <div id="industry-name">
+                                                                    {{ projects.first.industry_creator }}
+                                                                </div>
                                                             </div>
-                                                            <div id="industry-name">
-                                                                {{ projects.first.industry_creator }}
+                                                            <div class="col-md-6">
+                                                                <div class="pre-header">
+                                                                    <span>مجری</span>
+                                                                </div>
+                                                                <div id="enforcer-name">
+                                                                    استاد فلانی
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 budget-text">
+                                                                <div class="pre-header">
+                                                                    <span>بودجه</span>
+                                                                </div>
+                                                                <div id="budget-content">
+                                                                    <span class="budget-amount">5,000,000</span>
+                                                                    <span>ریال</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="pre-header">
-                                                                <span>مجری</span>
-                                                            </div>
-                                                            <div id="enforcer-name">
-                                                                استاد فلانی
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12 budget-text">
-                                                            <div class="pre-header">
-                                                                <span>بودجه</span>
-                                                            </div>
-                                                            <div id="budget-content">
-                                                                <span class="budget-amount">5,000,000</span>
-                                                                <span>ریال</span>
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="pre-header">
+                                                                    <span>توضیحات اجرایی</span>
+                                                                </div>
+                                                                <pre id="executive-info"></pre>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="pre-header">
-                                                                <span>توضیحات اجرایی</span>
+                                                    <div class="col-md-3">
+                                                        <div class="industry-logo-preview">
+                                                            <img id="industry_logo"
+                                                                 src="{% static 'expert/img/industry.jpg' %}"
+                                                                 alt="industry-logo">
+                                                        </div>
+                                                        <div class="budget-section">
+                                                            <div class="budget">
+                                                                <div class="budget-header">بودجه</div>
+                                                                <div class="budget-content">
+                                                                    <div class="budget-amount">5,000,000</div>
+                                                                    <div>ریال</div>
+                                                                </div>
                                                             </div>
-                                                            <pre id="executive-info"></pre>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="industry-logo-preview">
-                                                        <img id="industry_logo" src="{% static 'expert/img/industry.jpg' %}"
-                                                            alt="industry-logo">
-                                                    </div>
-                                                    <div class="budget-section">
-                                                        <div class="budget">
-                                                            <div class="budget-header">بودجه</div>
-                                                            <div class="budget-content">
-                                                                <div class="budget-amount">5,000,000</div>
-                                                                <div>ریال</div>
+                                                <div class="row mbottom-lg-25">
+                                                    <div class="col-lg-12 text-right">
+                                                        <span class="section-title">اطلاعات پروژه</span>
+                                                        <div class="project-info-tabs">
+                                                            <div class="nav flex-column nav-pills" id="v-pills-tab"
+                                                                 role="tablist"
+                                                                 aria-orientation="vertical">
+                                                                <a class="nav-link active" id="v-pills-majors-tab"
+                                                                   data-toggle="pill"
+                                                                   role="tab" aria-controls="v-pills-majors"
+                                                                   aria-selected="true">
+                                                                    شاخص ها
+                                                                </a>
+                                                                <a class="nav-link" id="v-pills-approaches-tab"
+                                                                   data-toggle="pill"
+                                                                   role="tab" aria-controls="v-pills-approaches"
+                                                                   aria-selected="false">
+                                                                    راهکار ها
+                                                                </a>
+                                                                <a class="nav-link" id="v-pills-resources-tab"
+                                                                   data-toggle="pill"
+                                                                   role="tab" aria-controls="v-pills-resources"
+                                                                   aria-selected="false">
+                                                                    منابع مورد نیاز
+                                                                </a>
+                                                                <a class="nav-link" id="v-pills-roles-tab"
+                                                                   data-toggle="pill"
+                                                                   role="tab" aria-controls="v-pills-roles"
+                                                                   aria-selected="false">
+                                                                    قوانین
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="section">
+                                                            <div class="project-info-innerDiv">
+                                                                <div class="project-info-content">
+                                                                    <div>
+                                                                        <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                            لطفا مشکل اصلی که پروژه به حل آن پرداخته را
+                                                                            توضیح و اهمیت آن را
+                                                                            تبیین کنید.
+                                                                        </div>
+                                                                        <div class="answer"></div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                            در صورت حل این مشکل، چه پیشرفتی در شیوه های
+                                                                            درمانی / تجهیزات پزشکی /
+                                                                            خدمات
+                                                                            درمانی یا ... حاصل می شود؟
+                                                                        </div>
+                                                                        <div class="answer"></div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                            برآورد شما از سود مالی این پروژه چگونه است؟
+                                                                        </div>
+                                                                        <div class="answer"></div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row mbottom-lg-25">
-                                                <div class="col-12">
-                                                    <div class="pre-header">
-                                                        <span>درخواست پژوهشگر</span>
-                                                    </div>
-                                                    <div class="researcher-request">
-                                                        <form id="researcher-request-ajax" method="post" action="">
-                                                            <input type="text" class="project" name="project_id" hidden>
+                                                <div class="row mbottom-lg-25">
+                                                    <div class="col-12">
+                                                        <span class="section-title">پژوهشگران</span>
+                                                        <div class="section">
                                                             <div class="row">
-                                                                <div class="col-md-5 col-6">
-                                                                    <label for="researcher-number">حداکثر تعداد</label>
-                                                                    <input type="number" class="w-100" id="researcher-number" name="reseacherCount" required>
-                                                                </div>
-                                                                <div class="col-md-5 col-6">
-                                                                    <label for="researcher-time">ساعت کار <span class="fs-10">(ساعت)</span></label>
-                                                                    <input type="number" class="w-100" id="researcher-time" name="hour" required>
-                                                                </div>
-                                                                <div class="col-md-2 col-12">
-                                                                    <button class="default-btn w-100" type="submit">تایید</button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row mbottom-lg-25">
-                                                <div class="col-lg-12 text-right">
-                                                    <span class="section-title">اطلاعات پروژه</span>
-                                                    <div class="project-info-tabs">
-                                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
-                                                            aria-orientation="vertical">
-                                                            <a class="nav-link active" id="v-pills-majors-tab" data-toggle="pill"
-                                                            role="tab" aria-controls="v-pills-majors"
-                                                            aria-selected="true">
-                                                                شاخص ها
-                                                            </a>
-                                                            <a class="nav-link" id="v-pills-approaches-tab" data-toggle="pill"
-                                                            role="tab" aria-controls="v-pills-approaches"
-                                                            aria-selected="false">
-                                                                راهکار ها
-                                                            </a>
-                                                            <a class="nav-link" id="v-pills-resources-tab" data-toggle="pill"
-                                                            role="tab" aria-controls="v-pills-resources"
-                                                            aria-selected="false">
-                                                                منابع مورد نیاز
-                                                            </a>
-                                                            <a class="nav-link" id="v-pills-roles-tab" data-toggle="pill"
-                                                            role="tab" aria-controls="v-pills-roles"
-                                                            aria-selected="false">
-                                                                قوانین
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="section">
-                                                        <div class="project-info-innerDiv">
-                                                            <div class="project-info-content">
-                                                                <div>
-                                                                    <div class="question">
-                                                            <span class="question-mark">
-                                                                <i class="far fa-question-circle"></i>
-                                                            </span>
-                                                                        لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را
-                                                                        تبیین کنید.
-                                                                    </div>
-                                                                    <div class="answer"></div>
-                                                                </div>
-                                                                <div>
-                                                                    <div class="question">
-                                                            <span class="question-mark">
-                                                                <i class="far fa-question-circle"></i>
-                                                            </span>
-                                                                        در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی /
-                                                                        خدمات
-                                                                        درمانی یا ... حاصل می شود؟
-                                                                    </div>
-                                                                    <div class="answer"></div>
-                                                                </div>
-                                                                <div>
-                                                                    <div class="question">
-                                                            <span class="question-mark">
-                                                                <i class="far fa-question-circle"></i>
-                                                            </span>
-                                                                        برآورد شما از سود مالی این پروژه چگونه است؟
-                                                                    </div>
-                                                                    <div class="answer"></div>
+                                                                <div class="researcher-request">
+                                                                    <form id="researcher-request-ajax" method="post"
+                                                                          action="">
+                                                                        <input type="text" class="project"
+                                                                               name="project_id"
+                                                                               hidden>
+                                                                        <div class="row">
+                                                                            <div class="col-md-5 col-6">
+                                                                                <label for="researcher-number">حداکثر
+                                                                                    تعداد</label>
+                                                                                <input type="number" class="w-100"
+                                                                                       id="researcher-number"
+                                                                                       name="reseacherCount"
+                                                                                       required>
+                                                                            </div>
+                                                                            <div class="col-md-5 col-6">
+                                                                                <label for="researcher-time">ساعت کار
+                                                                                    <span
+                                                                                            class="fs-10">(ساعت)</span></label>
+                                                                                <input type="number" class="w-100"
+                                                                                       id="researcher-time" name="hour"
+                                                                                       required>
+                                                                            </div>
+                                                                            <div class="col-md-2 col-12">
+                                                                                <button class="default-btn w-100"
+                                                                                        type="submit">
+                                                                                    تایید
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -249,10 +281,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-12">
+                                    {% include 'expert/layouts/comment.html' %}
+                                </div>
                             </div>
                         </div>
+                    </div>
                 {% else %}
-                        {% for project in projects %}
+                    {% for project in projects %}
                         <div class="card box flow-root-display w-100">
                             <div class="box-header">
                                 <h6>
@@ -298,7 +334,8 @@
                                     <div class="col-md-6 col-3">
                                         <button class="default-btn preview-project type-{{ project.status }}"
                                                 id={{ project.pk }}
-                                                        data-url="{% url 'expert:show_project' %}"  data-toggle="modal" data-target="#showProject">
+                                                        data-url="{% url 'expert:show_project' %}" data-toggle="modal"
+                                                data-target="#showProject">
                                             مشاهده
                                         </button>
                                     </div>
@@ -320,7 +357,7 @@
                                     اطمینان کامل، پروژه شان را به شما بسپارند.</p>
                             </div>
                         </div>
-                    {% endfor %}    
+                    {% endfor %}
                 {% endif %}
             </div>
             {#                {% for p in projects %}#}

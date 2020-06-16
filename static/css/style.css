@@ -853,7 +853,7 @@ img {
     color: #3ccd1c;
 }
 
-.modal .no-comment {
+.no-comment {
     width: fit-content;
     text-align: center;
     -webkit-border-radius: 0.25em;
@@ -864,12 +864,12 @@ img {
     display: none;
 }
 
-.modal .no-comment h6 {
+.no-comment h6 {
     color: #3CCD1C;
     margin-top: 10px;
 }
 
-.modal .no-comment pre {
+.no-comment pre {
     font-weight: 500;
     font-size: 14px;
     color: #707070;
@@ -882,7 +882,7 @@ img {
     display: block;
 }
 
-.modal .no-comment img {
+.no-comment img {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
