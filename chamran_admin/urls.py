@@ -23,4 +23,5 @@ urlpatterns = [
     path('deleteComment/' ,views.DeleteComment ,name='delete_comment'),
     path('news/', views.News.as_view()),
     path('newsForm/', views.NewsForm.as_view()),
+    path('contactUs/', views.ContactUS.as_view() ,name='contactUs'),
 ]
