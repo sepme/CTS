@@ -72,6 +72,8 @@ function showQuestion() {
         const dialog = $("#showQuestion");
         let id = $(this).attr("id");
         console.log(id);
+        dialog.css("display", "none");
+        mBackdrop = setTimeout("haveBackdrop()", 100);
         $.ajax({
             method: 'GET',
             url: '/expert/show_research_question/',
@@ -121,7 +123,8 @@ function showQuestion() {
                 }
 
                 question_dialog_init();
-
+                $(".modal-backdrop div.lds-roller").css("display", "none");
+                dialog.css("display", "block");
             },
             error: function (data) {
 
@@ -274,55 +277,55 @@ $(document).ready(function () {
         tag_input_label("tags");
     });
     let techniquesForm = $('.ajax-select-techniques');
-        $(techniquesForm).on('keyup keypress', function (e) {
-            let keyCode = e.keyCode || e.which;
-            if (keyCode === 13) {
-                e.preventDefault();
-                return false;
+    $(techniquesForm).on('keyup keypress', function (e) {
+        let keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    techniquesForm.submit(function (event) {
+        event.preventDefault();
+        let data = [];
+        let id = $(this).attr("id");
+        $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
+            data[index] = $(this).find("span").text();
+        });
+        // iziToast.success({
+        //     rtl: true,
+        //     message: "درخواست شما ارسال شد.",
+        //     position: 'bottomLeft',
+        //     duration: 9999,
+        // });
+        $.ajax({
+            traditional: true,
+            method: 'POST',
+            url: $(this).attr('data-url'),
+            data: {technique: data, id: id},
+            dataType: 'json',
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: data.message,
+                    position: 'bottomLeft',
+                });
+                $('#selectTechniques').modal('toggle');
+            },
+            error: function (data) {
+                let obj = JSON.parse(data.responseText);
+                let message = "";
+                if (obj.message !== undefined)
+                    message = obj.message;
+                else
+                    message = "اجرای این عملیات با خطا مواجه شد!";
+                iziToast.error({
+                    rtl: true,
+                    message: message,
+                    position: 'bottomLeft'
+                });
             }
         });
-        techniquesForm.submit(function (event) {
-            event.preventDefault();
-            let data = [];
-            let id = $(this).attr("id");
-            $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
-                data[index] = $(this).find("span").text();
-            });
-            // iziToast.success({
-            //     rtl: true,
-            //     message: "درخواست شما ارسال شد.",
-            //     position: 'bottomLeft',
-            //     duration: 9999,
-            // });
-            $.ajax({
-                traditional: true,
-                method: 'POST',
-                url: $(this).attr('data-url'),
-                data: {technique: data, id: id},
-                dataType: 'json',
-                success: function (data) {
-                    iziToast.success({
-                        rtl: true,
-                        message: data.message,
-                        position: 'bottomLeft',
-                    });
-                    $('#selectTechniques').modal('toggle');
-                },
-                error: function (data) {
-                    let obj = JSON.parse(data.responseText);
-                    let message = "";
-                    if (obj.message !== undefined)
-                        message = obj.message;
-                    else
-                        message = "اجرای این عملیات با خطا مواجه شد!";
-                    iziToast.error({
-                        rtl: true,
-                        message: message,
-                        position: 'bottomLeft'
-                    });
-                }
-            });
-        });
+    });
     if ($(window).width() < 767) {
         // toggle slide-bar => all views
         $(".main").removeClass("blur-div");
@@ -395,7 +398,7 @@ $(document).ready(function () {
             }
         });
     }
-    init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
+    // init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
     //****************************************//
     //  Questions Page
     //****************************************//

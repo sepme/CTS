@@ -39,8 +39,8 @@ function CountDown(min, hour, day) {
 
 CountDown();
 $(".preview-project").click(function () {
-    const dialog = $(".showProject");
-    if ($(this).attr('value') == "myproject")
+    const dialog = $("#showProject");
+    if ($(this).attr('value') === "myproject")
         return;
     let id = $(this).attr("id");
     $(".project_id").attr('value', $(".preview-project").attr("id"));
@@ -58,7 +58,7 @@ $(".preview-project").click(function () {
         dataType: 'json',
         data: {'id': id},
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
+            dialog.find(".modal-header .modal-title").html(data.project_title_persian + "<br>" + data.project_title_english);
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;//[0].split(",");
@@ -69,6 +69,7 @@ $(".preview-project").click(function () {
                     + "</span>"
                 );
             }
+            console.log(data.status);
             if (data.status === "waiting" || data.status === "involved") {
                 $('.vote').remove();
                 $('.apply').remove();
@@ -80,6 +81,15 @@ $(".preview-project").click(function () {
         error: function (data) {
             console.log("error");
         },
+    });
+});
+
+$("#accept-project").click(function () {
+    $('#showProject').modal('toggle');
+    $('#projectRequest').modal('toggle');
+    $('#projectRequest .close__redirect').click(function () {
+        $('#projectRequest').modal('toggle');
+        $('#showProject').modal('toggle');
     });
 });
 
@@ -130,17 +140,6 @@ function setResources(data) {
         "<div class='answer'>" +
         data.project_phase +
         "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.required_budget +
-        "</div>" +
         "</div>";
     $(".project-info-content").html(resources);
 }
@@ -166,7 +165,7 @@ function setApproach(data) {
         "</div>" +
         "<div class='answer'>" +
         data.potential_problems +
-        "</div></div>"
+        "</div></div>";
     $(".project-info-content").html(approach);
 }
 
@@ -190,16 +189,6 @@ function setMajors(data) {
         "</div>" +
         "<div class='answer'>" +
         data.progress_profitability +
-        "</div></div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "برآورد شما از سود مالی این پروژه چگونه است؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.predict_profit +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
@@ -221,6 +210,9 @@ function setValue(data) {
 
 function setComment(data) {
     let comments_code = "";
+    if (data.length === 0) {
+        $(".no-comment").css("display", "block");
+    }
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert
             let comment_body_classes = "comment-body";
@@ -280,7 +272,7 @@ function setComment(data) {
                 "   </div>" +
                 "</div>";
         } else { //system
-            comments_code += "<div class='my-comment'>" +
+            comments_code += "<div class='system-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<pre>" +
                 data[i].description +
@@ -290,6 +282,7 @@ function setComment(data) {
         }
     }
     $('.comments').html(comments_code);
+    dialog_comment_init();
     $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
         deleteComment($(this).closest('.my-comment'));
     });
@@ -353,8 +346,8 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        init_dialog_btn(".preview-project", ".showProject");
-        init_dialog_btn(".my-project", ".showProject");
+        // init_dialog_btn(".preview-project", ".showProject");
+        // init_dialog_btn(".my-project", ".showProject");
         // $(".form-submit").click(function () {
         //     blur_div_toggle(".top-bar");
         //     blur_div_toggle(".side-bar");
@@ -802,15 +795,15 @@ function show_add_technique_record(data) {
         "                    <div class='col-6 text-center'>" +
         "                        <div class='label'>سطح تسلط</div>" +
         "                        <div class='value'>";
-        if (data.is_exam)
-            newTechnique += "                            <span>" +
-                            "زمان آزمون از طریق تماس با شما هماهنگ خواهد شد" +
-                            "                            </span>";
-        else
-            newTechnique += "                            <span>" +
-                            "در حال بررسی...                               " +
-                            "                            </span>" ;
-        newTechnique += "                        </div>" +
+    if (data.is_exam)
+        newTechnique += "                            <span>" +
+            "زمان آزمون از طریق تماس با شما هماهنگ خواهد شد" +
+            "                            </span>";
+    else
+        newTechnique += "                            <span>" +
+            "در حال بررسی...                               " +
+            "                            </span>";
+    newTechnique += "                        </div>" +
         "                    </div>" +
         "                </div>" +
         "            </div>" +
@@ -907,11 +900,11 @@ function addComment(data) {
     let new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
         "<div class='comment-body' dir='ltr'>" +
         "<span class='comment-tools'>"
-    // "<i class='fas fa-trash-alt'></i>" +
-    // "<i class='fas fa-pen'>" +
-    // "</i>" +
-    // "<i class='fas fa-reply'><div class='reply'></div>" +
-    // "</i>"
+        // "<i class='fas fa-trash-alt'></i>" +
+        // "<i class='fas fa-pen'>" +
+        // "</i>" +
+        // "<i class='fas fa-reply'><div class='reply'></div>" +
+        // "</i>"
     ;
     if (data.attachment !== "None") {
         new_comment += "<a href='/" +
@@ -946,7 +939,7 @@ comment_form.submit(function (event) {
                 .prop("disabled", false);
             comment_form.find("label").removeClass("progress-cursor");
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-            if($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+            if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
                 $(".project-comment-innerDiv").find(".no-comment").remove();
             }
             addComment(data);
@@ -956,7 +949,7 @@ comment_form.submit(function (event) {
                 position: 'bottomLeft'
             });
             comment_form[0].reset();
-            comment_form.find("#description").css("height","fit-content");
+            comment_form.find("#description").css("height", "fit-content");
             $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
                 deleteComment($(this).closest('.my-comment'));
             });
@@ -980,7 +973,27 @@ comment_form.submit(function (event) {
         },
     });
 });
-
+// Custom project_request.html number type inputs arrows
+$(".apply_Project .input-group-text").click(function () {
+    let value = $(this).closest(".form-group").find(".form-control").val();
+    if (isNaN(parseInt(value, 10))) {
+        value = 0;
+    }
+    if ($(this).closest("div").hasClass("input-group-prepend")) {
+        value -= 1;
+        if (value < 0) {
+            value = 0;
+        }
+        $(this).closest(".form-group").find(".form-control").val(value);
+    } else if ($(this).closest("div").hasClass("input-group-append")) {
+        value = parseInt(value) + 1;
+        if (value > 168) {
+            value = 168;
+        }
+        $(this).closest(".form-group").find(".form-control").val(value);
+    }
+});
+// End
 let apply_form = $(".apply_Project");
 apply_form.submit(function (event) {
     event.preventDefault();
@@ -1027,6 +1040,7 @@ apply_form.submit(function (event) {
                     "</div>");
                 $("input#most_hours").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
+            display_error(apply_form);
         }
     })
 });
@@ -1201,7 +1215,7 @@ $(".my-project").click(function () {
         data: {id: projectId},
         dataType: 'json',
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
+            dialog.find(".project-title").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;

@@ -4,6 +4,7 @@
 
 {% block dialog %}
     {% include 'researcher/layouts/showProject.html' %}
+    {% include 'researcher/layouts/project_requset.html' %}
     {% include 'researcher/layouts/vote_dialog.html' %}
 {% endblock %}
 {% block modals %}
@@ -31,7 +32,7 @@
                     </a>
                     <a class="nav-link fs-15" id="your-project" data-toggle="pill"
                        role="tab" aria-selected="false">
-                        پروژه های مرتبط
+                        پروژه‌های حذف شده
                     </a>
                     <a class="nav-link fs-15" id="done-project" data-toggle="pill"
                        role="tab" aria-selected="false">
@@ -73,7 +74,7 @@
                                             <div class="status text-center">
                                                 <div class="label">زمان لازم</div>
                                                 <div class="value">
-                                                    <span>{{project.need_hour}} ساعت</span>
+                                                    <span>{{ project.need_hour }} ساعت</span>
                                                     <span>در هفته</span>
                                                 </div>
                                             </div>
@@ -81,7 +82,8 @@
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="default-btn preview-project" id="{{ project.PK }}">
+                                    <button type="button" class="default-btn preview-project" id="{{ project.PK }}"
+                                            data-toggle="modal" data-target="#showProject">
                                         مشاهده
                                     </button>
                                 </div>

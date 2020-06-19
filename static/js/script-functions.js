@@ -7,6 +7,52 @@ function init_setup() {
 
 }
 
+let mBackdrop;
+
+function haveBackdrop() {
+    if ($('.modal-backdrop').length > 0) {
+        $('.modal-backdrop').html(`
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>`);
+        clearTimeout(mBackdrop);
+        return true;
+    }
+    return false;
+}
+
+
+function display_error(form) {
+    $.each(form.find("input.error"), function () {
+        let input = $(this);
+        let value = $(this).val();
+        console.log(value);
+        switch (input.attr("type")) {
+            case "number":
+                input.on("keyup", function () {
+                    if (input.val() === value) {
+                        input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                        input.closest("div").find("div.error").removeAttr("style");
+                    } else {
+                        input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                        input.closest("div").find("div.error").css("top", "33px");
+                    }
+                });
+                break;
+
+            default:
+                break;
+        }
+    });
+}
+
 function init_windowSize() {
     // if ($(window).width() < 575.98) {
     // } else {
@@ -401,6 +447,6 @@ $(window).on("load", function () {
         $("#Uni").autocomplete({
             source: arr,
         });
-         $("#Uni").attr("autocomplete", "on");
+        $("#Uni").attr("autocomplete", "on");
     }
 });

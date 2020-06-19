@@ -43,6 +43,7 @@
     width: fit-content;
     float: left;
     margin-bottom: -20px;
+    bottom: -20px;
     direction: ltr;
     color: rgba(0, 0, 0, 0.6);
     background-color: #cacbcd70;
