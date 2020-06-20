@@ -564,21 +564,9 @@ class TechniqueInstanceForm(forms.Form):
         return data
 
 class TechniqueReviewFrom(forms.Form):
-    request_body = forms.CharField(widget=forms.Textarea)
-    request_confirmation_method = forms.CharField(max_length=100 ,required=False)
+    request_body = forms.CharField(widget=forms.Textarea, error_messages={'required' : 'توضیحات نمی تواند خالی باشد.'})
+    request_confirmation_method = forms.CharField(max_length=100, error_messages={'required' : 'یکی از راه های ارتفا را انتخاب کنید.'})
     new_resume = forms.FileField(required=False)
-
-    def clean_request_body(self):
-        data = self.cleaned_data["request_body"]        
-        if data == "":
-            raise ValidationError(_("توضیحات نمی تواند خالی باشد."))
-        return data
-
-    def clean_request_confirmation_method(self):
-        data = self.cleaned_data["request_confirmation_method"]
-        if data == '':
-            raise ValidationError(_("یکی از راه های ارتفا را انتخاب کنید."))
-        return data
 
     def clean_new_resume(self):
         data = self.cleaned_data["new_resume"]

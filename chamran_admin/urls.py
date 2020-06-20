@@ -24,4 +24,5 @@ urlpatterns = [
     path('news/', views.News.as_view()),
     path('newsForm/', views.NewsForm.as_view()),
     path('contactUs/', views.ContactUS.as_view() ,name='contactUs'),
+    path("opinion", views.AddOpinion ,name="addOpinion"),
 ]

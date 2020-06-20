@@ -109,3 +109,14 @@ class TempUser(models.Model):
 
     def get_absolute_url(self):
         return reverse("chamran:home")
+
+class FeedBack(models.Model):
+    email       = models.EmailField(max_length=254, null=True, blank=True)
+    opinion     = models.CharField(max_length=1000)
+    user        = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user_type   = models.CharField(max_length=20)
+    user_info   = models.CharField(max_length=100)
+    time_create = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user + " - " + str(self.time_create)

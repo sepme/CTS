@@ -63,7 +63,10 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             if expert_user.status in ["free", "applied"]:
                 projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
             if expert_user.status == "involved":
-                projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
+                project  = Project.objects.filter(status=2).get(expert_accepted=expert_user)
+                comments = Comment.objects.filter(project=project).filter(researcher_user=None).filter(expert_user=expert_user)
+                context['project'] = project
+                context['comment'] = comments
             context['projects'] = projects
         return context
     

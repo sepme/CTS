@@ -565,3 +565,18 @@ class ContactUS(generic.FormView):
         msg.attach_alternative(email_template, "text/html")
         msg.send()
         return super().form_valid(form)
+
+def AddOpinion(request):
+    if request.POST:
+        form = forms.FeedBackForm(request.POST)
+        if form.is_valid():
+            user_type = find_account_type(request.user)
+            feedBack = models.FeedBack(email=request.POST['email'],
+                                       opinion=request.POST['opinion'],
+                                       user_type=user_type,
+                                       user_info=request.META['HTTP_USER_AGENT'],
+                                       )
+            feedBack.user = request.user
+            feedBack.save()
+            return HttpResponseRedirect(reverse('chamran:login'))
+    return render(request, "feedBack.html", {"form" : forms.FeedBackForm})

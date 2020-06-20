@@ -130,3 +130,13 @@ class ContactForm(forms.Form):
     fullName = forms.CharField(label="نام و نام خانوادگی", max_length=150, required=True, error_messages={'required': 'لطفا نام و نام خانوادگی خود را وارد کنید.',})
     email = forms.EmailField(label="ایمیل", required=True, error_messages={'required': 'لطفا ایمیل خود را وارد کنید.',})
     text = forms.CharField(label="پیام", max_length=1000, widget=forms.Textarea(), required=True ,error_messages={'required': 'لطفا پیام خود را وارد کنید.',})
+
+class FeedBackForm(forms.ModelForm):
+    captcha = CaptchaField()
+    
+    class Meta:
+        model = models.FeedBack
+        fields = ['email', 'opinion']
+        widgets = {
+            'opinion': forms.Textarea(),
+        }

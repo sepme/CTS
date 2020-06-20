@@ -55,3 +55,10 @@ def calculate_deadline(finished, started):
         return '{} ماه'.format(int(days / 30))
     else:
         return '{} سال'.format(int(days / 365))
+
+@register.simple_tag
+def gregorian_to_numeric_jalali(date):
+    if date is None:
+        return "نامشخص"
+    j_date = JalaliDate(date)
+    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
