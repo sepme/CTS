@@ -23,7 +23,8 @@ class RegisterEmailForm(forms.Form):
     email = forms.EmailField(label="ایمیل", error_messages={'required': 'لطفا ایمیل خود را وارد کنید',
                                                             'invalid': 'ایمیل وارد شده نامعتبر است'})
     account_type = forms.CharField(max_length=10, required=True,error_messages={'required': 'لطفانوع حساب کاربری خود را مشخص کنید',})
-    captcha = CaptchaField()
+    captcha = CaptchaField( error_messages={'required': 'لطفا کد امنیتی را وارد کنید.',
+                                            'invalid' : 'کد امنیتی وارد شده نامعتبر است.'})
     #
     # class Meta:
     #     widgets = {
@@ -132,7 +133,8 @@ class ContactForm(forms.Form):
     text = forms.CharField(label="پیام", max_length=1000, widget=forms.Textarea(), required=True ,error_messages={'required': 'لطفا پیام خود را وارد کنید.',})
 
 class FeedBackForm(forms.ModelForm):
-    captcha = CaptchaField()
+    captcha = CaptchaField( error_messages={'required': 'لطفا کد امنیتی را وارد کنید.',
+                                            'invalid' : 'کد امنیتی وارد شده نامعتبر است.'})
     
     class Meta:
         model = models.FeedBack

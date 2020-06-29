@@ -150,6 +150,11 @@ myForm.submit(function (event) {
     $(".loading").css('display', "block");
     $(".owl-carousel").css('display', "none");
     event.preventDefault();
+    $(".email").find("div.error").remove();
+    $("input#email").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#email").next().css("color", "");
+    $(".captcha-error").html("");
+
     // let formData = $(this).serialize().toString();
     let $thisURL = myForm.attr('data-url');
     $.ajax({
@@ -167,10 +172,10 @@ myForm.submit(function (event) {
                 "<span>جهت تکمیل ثبت نام ایمیل خود را بررسی کنید!</span>");
         },
         error: function (data) {
+            console.log(data);
             $(".loading").css('display', "none");
             $(".owl-carousel").css('display', "block");
             let obj = JSON.parse(data.responseText);
-            $(".email").find("div.error").remove();
             if (obj.email !== undefined) {
                 $(".email").append("<div class='error'>" +
                     "<span class='error-body'>" +
@@ -182,6 +187,7 @@ myForm.submit(function (event) {
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                 $("input#email").next().css("color", "rgb(255, 69, 69)");
             }
+            
             // $(".user-type-container").addClass("error-container");
             if ($(".account_error").text().length !== 0) {
                 $(".account_error").html("");
@@ -201,6 +207,18 @@ myForm.submit(function (event) {
                     }
                 });
                 $(".user-type-container").addClass("error-container");
+            }
+            $("#id_captcha_1").find("div.error").remove();
+            if (obj.captcha !== undefined) {
+                $(".captcha-error").append("<div class='error'>" +
+                "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.captcha + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("input#id_captcha_1").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#id_captcha_1").next().css("color", "rgb(255, 69, 69)");
             }
         },
     })

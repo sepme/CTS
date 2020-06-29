@@ -207,7 +207,7 @@ def signup_email_ajax(request):
             return JsonResponse({'Error': 'Timeout Error!'})
         return JsonResponse(data)
     else:
-        print('form error')
+        print(form.errors)
         return JsonResponse(form.errors, status=400)
 
 
