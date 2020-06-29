@@ -48,14 +48,13 @@ def date_last(date1 ,date2):
 class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     template_name = 'researcher/index.html'
     form_class = forms.InitialInfoForm
+    success_url = "/researcher/"
     login_url = '/login/'
     permission_required = ('researcher.be_researcher',)
 
     def get(self, request, *args, **kwargs):
         researcher = models.ResearcherUser.objects.get(user=request.user)
-        status = researcher.status
-        print(researcher)
-        print(status)
+        status = researcher.status        
         if status.status == 'deactivated':
             if status.check_activity_status:
                 status.status = 'not_answered'
@@ -159,22 +158,18 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             context["my_project_list"] = "None"
         return context
 
-    def post(self, request, *args, **kwargs):
-        researcher = get_object_or_404(models.ResearcherUser, user=request.user)
-        form = forms.InitialInfoForm(request.POST, request.FILES)
-        if form.is_valid():
-            researcher_profile = form.save(commit=False)
-            researcher_profile.researcher_user = researcher
-            researcher_profile.save()
-            if request.FILES.get('photo'):
-                photo = request.FILES.get('photo')
-                researcher_profile.photo.save(photo.name, photo)
-            status = models.Status.objects.get(researcher_user=researcher)
-            status.status = 'not_answered'
-            status.save()
-            return HttpResponseRedirect(reverse('researcher:index'))
-
-        return super().post(self, request, *args, **kwargs)
+    def form_valid(self, form):
+        researcher = get_object_or_404(models.ResearcherUser, user=self.request.user)
+        researcher_profile = form.save(commit=False)
+        researcher_profile.researcher_user = researcher
+        researcher_profile.save()
+        if self.request.FILES.get('photo'):
+            photo = self.request.FILES.get('photo')
+            researcher_profile.photo.save(photo.name, photo)
+        status = models.Status.objects.get(researcher_user=researcher)
+        status.status = 'not_answered'
+        status.save()
+        return super().form_valid(form)
 
 class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView):
     template_name = 'researcher/userInfo.html'

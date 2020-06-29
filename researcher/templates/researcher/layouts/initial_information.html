@@ -19,14 +19,14 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label for="FirstName">نام و نام خانوادگی</label>
-                                {% if form.first_name.errors %}
-                                    {{ form.first_name|attr:"id:FirstName"|attr:"class:error w-100" }}
-                                {% else %}
-                                    {{ form.first_name|attr:"id:FirstName"|attr:"class:w-100" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.first_name.errors %}</span>
-                                </div>
+                                {% if form.fullname.errors %}
+                                {{ form.fullname|attr:"id:Fullname"|attr:"class:error w-100" }}
+                            {% else %}
+                                {{ form.fullname|attr:"id:Fullname"|attr:"class:w-100" }}
+                            {% endif %}
+                            <div class="error">
+                                <span class="error-body">{% render_field form.fullname.errors %}</span>
+                            </div>
                             </div>
                             <div class="form-group">
                                 <label for="MelliCode">کد ملی</label>
@@ -163,17 +163,6 @@
                                     <span class="error-body">{% render_field form.phone_number.errors %}</span>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="Email">پست الکترونیکی</label>
-                                {% if form.email.errors %}
-                                    {{ form.email|attr:"id:Email"|attr:"class:error w-100" }}
-                                {% else %}
-                                    {{ form.email|attr:"id:Email"|attr:"class:w-100" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.email.errors %}</span>
-                                </div>
-                            </div>
                         </div>
                         <div class="col-md-4"></div>
                     </div>
@@ -212,14 +201,14 @@
                 {% endif %}
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="FirstName">نام</label>
-                        {% if form.first_name.errors %}
-                            {{ form.first_name|attr:"id:FirstName"|attr:"class:error w-100" }}
+                        <label for="Fullname">نام</label>
+                        {% if form.fullname.errors %}
+                            {{ form.fullname|attr:"id:Fullname"|attr:"class:error w-100" }}
                         {% else %}
-                            {{ form.first_name|attr:"id:FirstName"|attr:"class:w-100" }}
+                            {{ form.fullname|attr:"id:Fullname"|attr:"class:w-100" }}
                         {% endif %}
                         <div class="error">
-                            <span class="error-body">{% render_field form.first_name.errors %}</span>
+                            <span class="error-body">{% render_field form.fullname.errors %}</span>
                         </div>
                     </div>
                     <div class="col-md-6">

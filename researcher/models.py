@@ -107,7 +107,7 @@ class MembershipFee(models.Model):
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
                                            on_delete=models.CASCADE, blank=True, null=True)
-    fullname = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی", default='FULLNAME')
+    fullname = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
@@ -163,7 +163,7 @@ class ResearcherProfile(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
+        return self.fullname
 
     def save(self, *args, **kwargs):
         if self.id:
@@ -239,7 +239,7 @@ class ResearcherHistory(models.Model):
     involve_tech = models.ManyToManyField('Technique', verbose_name="تکنیک های استفاده شده")
 
     def __str__(self):
-        return "history of " + self.researcher_profile.first_name
+        return "history of " + self.researcher_profile.fullname
 
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)

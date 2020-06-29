@@ -252,7 +252,7 @@ class InitialInfoForm(forms.ModelForm):
         #            'motivation', 'sacrifice', 'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
         #            'project_knowledge', 'description', 'researcher_user']
         fields = ['photo', 'fullname', 'major', 'national_code', 'grade', 'university',
-                  'entry_year', 'address', 'home_number', 'phone_number', 'student_number']
+                  'entry_year', 'home_number', 'phone_number', 'student_number']
         error_messages = {
             'fullname': {'required': "نام و نام خانوادگی نمی تواند خالی باشد."},
             'major': {'required': "رشته تحصیلی نمی تواند خالی باشد."},
@@ -261,7 +261,6 @@ class InitialInfoForm(forms.ModelForm):
             'entry_year': {'required': "سال ورود نمی تواند خالی باشد."},
             'grade': {'required': 'مقطع تحصیلی نمی تواند خالی باشد'},
             'university': {'required': "دانشگاه نمی تواند خالی باشد."},
-            'address': {'required': "آدرس نمی تواند خالی باشد."},
             'phone_number': {'required': "شماره تلفن همراه نمی تواند خالی باشد."},
             'home_number': {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
             # 'email': {'required': 'پست الکترونیکی نمی تواند خالی باشد.',
@@ -281,7 +280,6 @@ class InitialInfoForm(forms.ModelForm):
         if has_number(fullname):
             raise forms.ValidationError('نام و نام خانوادگی نباید شامل عدد باشد.')
         return fullname
-
 
     # def clean_email(self):
     #     current_email = self.cleaned_data.get('email')

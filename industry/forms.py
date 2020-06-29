@@ -14,14 +14,13 @@ class IndustryBasicInfoForm(forms.ModelForm):
     date_of_foundation = forms.CharField(max_length=50, required=False)
     research_field = forms.CharField(max_length=300, required=False )
     industry_type = forms.IntegerField(required=False)
-    industry_address = forms.CharField(max_length=3000 ,widget=forms.Textarea(), required=False)
     phone_number = forms.CharField(max_length=15, required=False)
     email_address = forms.EmailField(required=False)
 
     class Meta:
         model = models.IndustryForm
         fields = ['photo', 'name', 'registration_number', 'date_of_foundation', 'research_field'
-                 ,'industry_type', 'industry_address', 'phone_number', 'email_address'] 
+                 ,'industry_type', 'phone_number', 'email_address'] 
         
         # error_massages = {
         #     'name' : {'required' : 'نام نمی تواند خالی باشد.'},
@@ -87,12 +86,6 @@ class IndustryBasicInfoForm(forms.ModelForm):
         data = self.cleaned_data["industry_type"]                
         if data == -1:
             raise ValidationError(_("نوع شرکت نمی تواند خالی باشد."))
-        return data
-
-    def clean_industry_address(self):
-        data = self.cleaned_data["industry_address"]
-        if data == "":
-            raise ValidationError(_("نشانی نمی تواند خالی باشد."))
         return data
 
     def clean_phone_number(self):

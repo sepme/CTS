@@ -295,7 +295,6 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
             date_of_foundation = form.cleaned_data['date_of_foundation']
             research_field = form.cleaned_data['research_field']
             industry_type = form.cleaned_data['industry_type']
-            industry_address = form.cleaned_data['industry_address']
             phone_number = form.cleaned_data['phone_number']
             email_address = form.cleaned_data['email_address']
             industry_user = request.user.industryuser
@@ -305,7 +304,6 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
                                                 date_of_foundation=date_of_foundation,
                                                 research_field=research_field,
                                                 industry_type=industry_type,
-                                                industry_address=industry_address,
                                                 phone_number=phone_number,
                                                 email_address=email_address)            
             industry_info.photo.save(photo.name, photo)
