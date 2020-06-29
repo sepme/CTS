@@ -3,12 +3,12 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from expert.forms import is_numeric
+from expert.forms import has_number
 from . import models,views
 
 from datetime import date
 
-def is_numeric(string):
+def has_number(string):
     for ch in string:
         if ch in '0123456789':
             return True
@@ -288,13 +288,13 @@ class InitialInfoForm(forms.ModelForm):
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
-        if is_numeric(first_name):
+        if has_number(first_name):
             raise forms.ValidationError('نام نباید شامل عدد باشد.')
         return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')
-        if is_numeric(last_name):
+        if has_number(last_name):
             raise forms.ValidationError('نام خانوادگی نباید شامل عدد باشد.')
         return last_name
 
@@ -380,25 +380,25 @@ class ScientificRecordForm(forms.ModelForm):
 
     def clean_grade(self):
         grade = self.cleaned_data.get('grade')
-        if is_numeric(grade):
+        if has_number(grade):
             raise ValidationError(_("مقطع تحصیلی نمی تواند شامل عدد باشد."))
         return grade
 
     def clean_major(self):
         data = self.cleaned_data["major"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("رشته تحصیلی نمی تواند شامل عدد باشد."))
         return data
 
     def clean_university(self):
         data = self.cleaned_data["university"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("دانشگاه نمی تواند شامل عدد باشد."))
         return data
     
     def clean_place(self):
         data = self.cleaned_data["place"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("شهر نمی تواند شامل عدد باشد."))
         return data
     
@@ -435,7 +435,7 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_post(self):
         data = self.cleaned_data["post"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("سمت نمی تواند شامل عدد باشد."))
         return data
     
@@ -479,13 +479,13 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_place(self):
         data = self.cleaned_data["place"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("نام مجموعه نمی تواند شامل عدد باشد."))
         return data
     
     def clean_city(self):
         data = self.cleaned_data["city"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("شهر نمی تواند شامل عدد باشد."))
         return data
 
@@ -503,19 +503,19 @@ class StudiousRecordForm(forms.ModelForm):
 
     def clean_title(self):
         data = self.cleaned_data["title"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("عنوان طرح پژوهشی نمی تواند شامل عدد باشد."))
         return data
     
     def clean_presenter(self):
         data = self.cleaned_data["presenter"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("مجری نمی تواند شامل عدد باشد."))
         return data
     
     def clean_responsible(self):
         data = self.cleaned_data["responsible"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("مسئول اجرا / همکار نمی تواند شامل عدد باشد."))
         return data
     

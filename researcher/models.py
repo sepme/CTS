@@ -16,7 +16,7 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 def profileUpload(instance, filename):
-    return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,'com-'+filename)
+    return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,filename)
     # ext = filename.split('.')[-1]
     # filename = '{}.{}'.format('profile', ext)
 

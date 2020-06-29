@@ -60,7 +60,7 @@ class IndustryUser(models.Model):
 
 
 def profileUpload(instance, file_name):
-    return os.path.join('Industry Profile' , instance.industry_user.user.username ,'com-'+file_name)
+    return os.path.join('Industry Profile' , instance.industry_user.user.username ,file_name)
 
 class IndustryForm(models.Model):
     industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
