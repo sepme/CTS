@@ -26,13 +26,12 @@ class InitailForm(forms.ModelForm):
     class Meta:
         model = models.ResearcherProfile
         fields = [
-            'first_name', 'last_name', 'photo', 'address', 'national_code', 'entry_year', 'grade',
+            'fullname', 'photo', 'address', 'national_code', 'entry_year', 'grade',
             'university', 'major', 'home_number', 'phone_number', 'email', 'student_number'
         ]
         widgets = {
             'photo': forms.FileInput(attrs={'id': "upload-input", 'accept': "image/png, image/jpeg"}),
-            'first_name': forms.TextInput(attrs={'id': "FirstName", 'class': "w-100"}),
-            'last_name': forms.TextInput(attrs={'id': "LastName", 'class': "w-100"}),
+            'fullname': forms.TextInput(attrs={'id': "FirstName", 'class': "w-100"}),
             'major': forms.TextInput(attrs={'id': "Field", 'class': "w-100"}),
             'national_code': forms.TextInput(attrs={'id': "nationalCode", 'class': "w-100"}),
             'student_number': forms.TextInput(attrs={'id': "student-num", 'class': "w-100"}),
@@ -104,13 +103,9 @@ class InitailForm(forms.ModelForm):
         university = self.cleaned_data.get('university')
         return university
 
-    def clean_first_name(self):
-        first_name = self.cleaned_data.get('first_name')
-        return first_name
-
-    def clean_last_name(self):
-        data = self.cleaned_data["last_name"]
-        return data
+    def clean_fullname(self):
+        fullname = self.cleaned_data.get('fullname')
+        return fullname
 
     def clean_email(self):
         data = self.cleaned_data["email"]
@@ -124,7 +119,7 @@ class InitailForm(forms.ModelForm):
 class ResearcherProfileForm(forms.ModelForm):
     class Meta:
         model = models.ResearcherProfile
-        fields = ['first_name', 'last_name', 'major', 'national_code', 'grade', 'university',
+        fields = ['fullname', 'major', 'national_code', 'grade', 'university',
                   'entry_year', 'student_number', 'address', 'home_number', 'phone_number',
                   'team_work', 'creative_thinking', 'interest_in_major', 'motivation',
                   'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
@@ -145,12 +140,8 @@ class ResearcherProfileForm(forms.ModelForm):
     
         return email
 
-    def clean_first_name(self):
-        data = self.cleaned_data["first_name"]
-        return data
-
-    def clean_last_name(self):
-        data = self.cleaned_data["last_name"]
+    def clean_fullname(self):
+        data = self.cleaned_data["fullname"]
         return data
 
     def clean_major(self):
@@ -260,11 +251,10 @@ class InitialInfoForm(forms.ModelForm):
         # exclude = ['birth_year', 'team_work', 'creative_thinking', 'interest_in_major',
         #            'motivation', 'sacrifice', 'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
         #            'project_knowledge', 'description', 'researcher_user']
-        fields = ['photo', 'first_name', 'last_name', 'major', 'national_code', 'grade', 'university',
+        fields = ['photo', 'fullname', 'major', 'national_code', 'grade', 'university',
                   'entry_year', 'address', 'home_number', 'phone_number', 'student_number']
         error_messages = {
-            'first_name': {'required': "نام نمی تواند خالی باشد."},
-            'last_name': {'required': "نام خانوادگی نمی تواند خالی باشد."},
+            'fullname': {'required': "نام و نام خانوادگی نمی تواند خالی باشد."},
             'major': {'required': "رشته تحصیلی نمی تواند خالی باشد."},
             'national_code': {'required': "کد ملی نمی تواند خالی باشد."},
             'student_number': {'required': "شماره دانشجویی نمی تواند خالی باشد."},
@@ -286,23 +276,18 @@ class InitialInfoForm(forms.ModelForm):
         return data
     
 
-    def clean_first_name(self):
-        first_name = self.cleaned_data.get('first_name')
-        if has_number(first_name):
-            raise forms.ValidationError('نام نباید شامل عدد باشد.')
-        return first_name
+    def clean_fullname(self):
+        fullname = self.cleaned_data.get('fullname')
+        if has_number(fullname):
+            raise forms.ValidationError('نام و نام خانوادگی نباید شامل عدد باشد.')
+        return fullname
 
-    def clean_last_name(self):
-        last_name = self.cleaned_data.get('last_name')
-        if has_number(last_name):
-            raise forms.ValidationError('نام خانوادگی نباید شامل عدد باشد.')
-        return last_name
 
     # def clean_email(self):
     #     current_email = self.cleaned_data.get('email')
     #     email = models.ResearcherProfile.objects.filter(email=current_email)
     #     if email.exists():
-    #         raise forms.ValidationError('کاربر با این ایمیل قبلا ثبت نام شده است')
+    #         raise forms.ValidationError('کاربر با این ایمیل قبلا ثبت نام و نام خانوادگی شده است')
 
     #     return current_email
 
@@ -429,7 +414,7 @@ class ExecutiveRecordForm(forms.ModelForm):
             'post': {'required': "سمت نمی تواند خالی باشد."},
             'start': {'required': "تارخ شروع نمی تواند خالی باشد."},
             'end': {'required': "تارخ پایان نمی تواند خالی باشد."},
-            'place': {'required': "نام مجموعه نمی تواند خالی باشد."},
+            'place': {'required': "نام و نام خانوادگی مجموعه نمی تواند خالی باشد."},
             'city': {'required': "شهر نمی تواند خالی باشد."},
             }
     
@@ -480,7 +465,7 @@ class ExecutiveRecordForm(forms.ModelForm):
     def clean_place(self):
         data = self.cleaned_data["place"]
         if has_number(data):
-            raise ValidationError(_("نام مجموعه نمی تواند شامل عدد باشد."))
+            raise ValidationError(_("نام و نام خانوادگی مجموعه نمی تواند شامل عدد باشد."))
         return data
     
     def clean_city(self):
@@ -496,7 +481,7 @@ class StudiousRecordForm(forms.ModelForm):
 
         error_messages = {
         'title': {'required': "عنوان طرح پژوهشی نمی تواند خالی باشد."},
-        'presenter': {'required': "نام مجری نمی تواند خالی باشد."},
+        'presenter': {'required': "نام و نام خانوادگی مجری نمی تواند خالی باشد."},
         'responsible': {'required': "مسئول اجرا / همکار نمی تواند خالی باشد."},
         'status': {'required': "وضعیت طرح پژوهشی نمی تواند خالی باشد."},
         }

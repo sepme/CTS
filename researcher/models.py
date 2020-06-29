@@ -107,8 +107,7 @@ class MembershipFee(models.Model):
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
                                            on_delete=models.CASCADE, blank=True, null=True)
-    first_name = models.CharField(max_length=300, verbose_name="نام")
-    last_name = models.CharField(max_length=300, verbose_name="نام خانوادگی")
+    fullname = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی", default='FULLNAME')
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
