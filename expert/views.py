@@ -70,26 +70,29 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             context['projects'] = projects
         return context
     
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
+
     def form_valid(self, form):
+        print("form is validated")
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
 
         photo = form.cleaned_data['photo']
-        first_name = form.cleaned_data['first_name']
-        last_name = form.cleaned_data['last_name']
+        fullname = form.cleaned_data['fullname']
         special_field = form.cleaned_data['special_field']
         melli_code = form.cleaned_data['melli_code']
         scientific_rank = form.cleaned_data['scientific_rank']
         university = form.cleaned_data['university']
-        address = form.cleaned_data['address']
         home_number = form.cleaned_data['home_number']
         phone_number = form.cleaned_data['phone_number']
         email = form.cleaned_data['email_address']
         expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
-                                                expert_firstname=first_name, expert_lastname=last_name,
-                                                special_field=special_field, national_code=melli_code,
-                                                scientific_rank=scientific_rank, university=university,
-                                                phone_number=home_number, home_address=address,
-                                                mobile_phone=phone_number, email_address=expert_user.user.get_username())
+                                                fullname=fullname, special_field=special_field,
+                                                national_code=melli_code, scientific_rank=scientific_rank,
+                                                university=university, phone_number=home_number,
+                                                mobile_phone=phone_number,
+                                                email_address=expert_user.user.get_username())
         expert_user.status = 'free'
         expert_user.save()
         expert_form.save()
@@ -168,16 +171,11 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     login_url = '/login/'
     success_url = "/"
     permission_required = ('expert.be_expert',)
-    form = forms.ExpertInfoForm()
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         expertForm = get_object_or_404(ExpertForm, expert_user__user=self.request.user)
-        expert_info_form = forms.ExpertInfoForm(instance=expertForm)
-        context['expert_info_form']    = expert_info_form
+        context['expert_info_form']    = self.form_class(instance=expertForm)
         context['scientific_instance'] = ScientificRecord.objects.filter(expert_form=expertForm)
         context['executive_instance']  = ExecutiveRecord.objects.filter(expert_form=expertForm)
         context['research_instance']   = ResearchRecord.objects.filter(expert_form=expertForm)
@@ -188,56 +186,96 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['executive_form']      = forms.ExecutiveRecordForm()
         context['research_form']       = forms.ResearchRecordForm()
         context['paper_form']          = forms.PaperRecordForm()
-        for error in self.form.errors:
-            context[error+"_error"] = self.form.errors[error]
+        print(context['keywords'])
         return context
 
-    def post(self, request, *args, **kwargs):
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
         expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
-        self.form = forms.ExpertInfoForm(request.POST, request.FILES)
-        if self.form.is_valid():
-            expertForm.university   = self.form.cleaned_data['university']
-            expertForm.home_address = self.form.cleaned_data['home_address']
-            expertForm.phone_number = self.form.cleaned_data['phone_number']
-            expertForm.mobile_phone = self.form.cleaned_data['mobile_phone']
-            if self.form.cleaned_data['awards']:
-                expertForm.awards = self.form.cleaned_data['awards']
+        expertForm.university   = form.cleaned_data['university']
+        expertForm.home_address = form.cleaned_data['home_address']
+        expertForm.phone_number = form.cleaned_data['phone_number']
+        expertForm.mobile_phone = form.cleaned_data['mobile_phone']
+        if form.cleaned_data['awards']:
+            expertForm.awards = form.cleaned_data['awards']
+        
+        if form.cleaned_data['number_of_grants']:
+            expertForm.number_of_grants = form.cleaned_data['number_of_grants']
+        
+        if form.cleaned_data['languages']:
+            expertForm.languages = form.cleaned_data['languages']
+
+        if form.cleaned_data['method_of_introduction']:
+            expertForm.method_of_introduction = form.cleaned_data['method_of_introduction']
+
+        if form.cleaned_data['has_industrial_research']:
+            expertForm.has_industrial_research = form.cleaned_data['has_industrial_research']
+
+        if form.cleaned_data['number_of_researcher']:
+            expertForm.number_of_researcher = form.cleaned_data['number_of_researcher']
+
+        photo = self.request.FILES.get('photo')
+        if photo is not None:
+            if os.path.isfile(expertForm.photo.path):
+                os.remove(expertForm.photo.path)
+            expertForm.photo = photo
+
+        expertForm.save()
+        for word in self.request.POST['keywords'].split(','):
+            expertForm.keywords.add(Keyword.objects.get_or_create(name=word)[0])
+        return super().form_valid(form)
+
+    # def post(self, request, *args, **kwargs):
+    #     expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
+    #     self.form = forms.ExpertInfoForm(request.POST, request.FILES)
+    #     if self.form.is_valid():
+    #         expertForm.university   = self.form.cleaned_data['university']
+    #         expertForm.home_address = self.form.cleaned_data['home_address']
+    #         expertForm.phone_number = self.form.cleaned_data['phone_number']
+    #         expertForm.mobile_phone = self.form.cleaned_data['mobile_phone']
+    #         if self.form.cleaned_data['awards']:
+    #             expertForm.awards = self.form.cleaned_data['awards']
             
-            if self.form.cleaned_data['number_of_grants']:
-                expertForm.number_of_grants = self.form.cleaned_data['number_of_grants']
+    #         if self.form.cleaned_data['number_of_grants']:
+    #             expertForm.number_of_grants = self.form.cleaned_data['number_of_grants']
             
-            if self.form.cleaned_data['languages']:
-                expertForm.languages = self.form.cleaned_data['languages']
+    #         if self.form.cleaned_data['languages']:
+    #             expertForm.languages = self.form.cleaned_data['languages']
 
-            if self.form.cleaned_data['method_of_introduction']:
-                expertForm.method_of_introduction = self.form.cleaned_data['method_of_introduction']
+    #         if self.form.cleaned_data['method_of_introduction']:
+    #             expertForm.method_of_introduction = self.form.cleaned_data['method_of_introduction']
 
-            expertForm.has_industrial_research = request.POST.get('has_industrial_research')
-            expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
+    #         expertForm.has_industrial_research = request.POST.get('has_industrial_research')
+    #         expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
 
-            # if expertForm.eq_test:
-            #         eq_test = expertForm.eq_test
-            # else:
-            #     eq_test = EqTest()
+    #         # if expertForm.eq_test:
+    #         #         eq_test = expertForm.eq_test
+    #         # else:
+    #         #     eq_test = EqTest()
 
-            # eq_test.team_work              = request.POST.get('team_work', False)
-            # eq_test.innovation             = request.POST.get('creative_thinking', False)
-            # eq_test.devotion               = request.POST.get('sacrifice', False)
-            # eq_test.productive_research    = request.POST.get('researching', False)
-            # eq_test.national_commitment    = request.POST.get('obligation', False)
-            # eq_test.collecting_information = request.POST.get('data_collection', False)
-            # eq_test.business_thinking      = request.POST.get('morale', False)
-            # eq_test.risk_averse            = request.POST.get('risk', False)
-            # eq_test.save()
+    #         # eq_test.team_work              = request.POST.get('team_work', False)
+    #         # eq_test.innovation             = request.POST.get('creative_thinking', False)
+    #         # eq_test.devotion               = request.POST.get('sacrifice', False)
+    #         # eq_test.productive_research    = request.POST.get('researching', False)
+    #         # eq_test.national_commitment    = request.POST.get('obligation', False)
+    #         # eq_test.collecting_information = request.POST.get('data_collection', False)
+    #         # eq_test.business_thinking      = request.POST.get('morale', False)
+    #         # eq_test.risk_averse            = request.POST.get('risk', False)
+    #         # eq_test.save()
 
-            photo = request.FILES.get('photo')
-            if photo is not None:
-                if os.path.isfile(expertForm.photo.path):
-                    os.remove(expertForm.photo.path)
-                expertForm.photo = photo
+    #         photo = request.FILES.get('photo')
+    #         if photo is not None:
+    #             if os.path.isfile(expertForm.photo.path):
+    #                 os.remove(expertForm.photo.path)
+    #             expertForm.photo = photo
 
-            expertForm.save()
-        return super().post(self, request, *args, **kwargs)
+    #         expertForm.save()
+    #         expert.status = "free"
+    #         expert.save()
+    #     return super().post(self, request, *args, **kwargs)
     
 
 # class FUserInfo(generic.FormView):
@@ -326,6 +364,7 @@ def scienfic_record_view(request):
             }
         return JsonResponse(data)
     else:
+        print(scientific_form.errors)
         print('form error occured')
         return JsonResponse(scientific_form.errors, status=400)
 
@@ -342,7 +381,7 @@ def executive_record_view(request):
             }
         return JsonResponse(data)
     else:
-        print('form error occured')
+        print('executive form error occured')
         return JsonResponse(executive_form.errors, status=400)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -358,7 +397,9 @@ def research_record_view(request):
             }
         return JsonResponse(data)
     else:
-        print('form error occured')
+        if 'status' in research_form.errors.keys():
+            research_form.errors['status'] = "وضعیت نمی تواند خالی باشد."
+        print('research record form error occured')
         return JsonResponse(research_form.errors, status=400)
 
 @permission_required('expert.be_expert', login_url='/login/')

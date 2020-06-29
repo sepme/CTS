@@ -15,7 +15,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import time
 
 def profileUpload(instance, filename):
-    return os.path.join('Expert Profile' , instance.expert_user.user.username ,'com-'+filename)
+    return os.path.join('Expert Profile' , instance.expert_user.user.username ,filename)
     
     # ext = filename.split('.')[-1]
     # filename = '{}.{}'.format('profile', ext)
@@ -75,8 +75,7 @@ class EqTest(models.Model):
 class ExpertForm(models.Model):
     expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
                                        null=True, blank=True)
-    expert_firstname = models.CharField(max_length=32, verbose_name="نام")
-    expert_lastname = models.CharField(max_length=32, verbose_name="نام خانوادگی")
+    fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی", default='FULLNUME')
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
     national_code = models.CharField(max_length=15, verbose_name="کد ملی")
     scientific_rank_choice = (
@@ -121,7 +120,7 @@ class ExpertForm(models.Model):
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
+        return self.fullname
 
     def save(self, *args, **kwargs):
         if self.id:

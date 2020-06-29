@@ -671,6 +671,14 @@ function education_record() {
         let $thisURL = myForm.attr('data-url');
         let data = $(this).serialize();
         myForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+        $("input#edu-city").removeClass("error").css("color", "").prev().css("color", "");
+        $("input#edu-year").removeClass("error").css("color", "").prev().css("color", "");
+        $("input#edu-section").removeClass("error").css("color", "").prev().css("color", "");
+        $("input#edu-subject").removeClass("error").css("color", "").prev().css("color", "");
+        $("input#university").removeClass("error").css("color", "").prev().css("color", "");
+        $('.error').remove();
+
         $.ajax({
             method: 'POST',
             url: $thisURL,
@@ -771,6 +779,14 @@ executiveForm.submit(function (event) {
     let $thisURL = executiveForm.attr('data-url');
     let data = $(this).serialize().toString();
     executiveForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+    $("input#exe-city").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#from").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#until").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#duty").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#workplace").removeClass("error").css("color", "").prev().css("color", "");
+    $(".error").remove();
+
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -815,21 +831,21 @@ executiveForm.submit(function (event) {
                     "</div>");
                 $("input#exe-city").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
-            if (obj.data_end_post) {
+            if (obj.date_end_post) {
                 $("#until").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
-                    "<li>" + obj.data_end_post + "</li>" +
+                    "<li>" + obj.date_end_post + "</li>" +
                     "</ul>" +
                     "</span>" +
                     "</div>");
                 $("input#until").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
-            if (obj.data_start_post) {
+            if (obj.date_start_post) {
                 $("#from").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
-                    "<li>" + obj.city + "</li>" +
+                    "<li>" + obj.date_start_post + "</li>" +
                     "</ul>" +
                     "</span>" +
                     "</div>");
@@ -870,6 +886,13 @@ researchForm.submit(function (event) {
     let $thisURL = researchForm.attr('data-url');
     let data = $(this).serialize().toString();
     researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+    $("input#liable").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#subject").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#admin").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#rank").removeClass("error").css("color", "").prev().css("color", "");
+    $('.error').remove();
+
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -915,14 +938,14 @@ researchForm.submit(function (event) {
                 $("input#liable").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
             if (obj.research_title) {
-                $("#research_title").closest("div").append("<div class='error'>" +
+                $("#subject").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
                     "<li>" + obj.research_title + "</li>" +
                     "</ul>" +
                     "</span>" +
                     "</div>");
-                $("input#research_title").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                $("input#subject").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
             if (obj.researcher) {
                 $("#admin").closest("div").append("<div class='error'>" +
@@ -959,6 +982,14 @@ paperForm.submit(function (event) {
     let $thisURL = paperForm.attr('data-url');
     let data = $(this).serialize().toString();
     paperForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+    $("input#referring-num").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#publish-date").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#published-at").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#article-name").removeClass("error").css("color", "").prev().css("color", "");
+    $("input#impact-factor").removeClass("error").css("color", "").prev().css("color", "");
+    $('.error').remove();
+
     $.ajax({
         method: 'POST',
         url: $thisURL,

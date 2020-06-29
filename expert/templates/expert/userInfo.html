@@ -53,25 +53,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6">
-                                <label for="FirstName">نام</label>
-                                {{ expert_info_form.expert_firstname|attr:"id:FirstName"|attr:"readonly:True"|attr:"class:w-100" }}
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="LastName">نام خانوادگی</label>
-                                {{ expert_info_form.expert_lastname|attr:"id:LastName"|attr:"readonly:True"|attr:"class:w-100" }}
+                            <div class="col-lg-12">
+                                <label for="Fullname">نام و نام خانوادگی</label>
+                                {{ expert_info_form.fullname|attr:"id:Fullname"|attr:"readonly:True"|attr:"class:w-100" }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="Field">حوزه تخصصی</label>
-                                {% if special_field_error %}
+                                {% if form.special_field.errors %}
                                     {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{{ special_field_error }}</span>
+                                    <span class="error-body">{{ form.special_field.errors }}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -91,13 +87,13 @@
                                 {#                                    <option value="5">استاد تمام</option>#}
                                 {#                                    <option value="6">پژوهشگر</option>#}
                                 {#                                </select>#}
-                                {% if scientific_rank_error %}
+                                {% if form.scientific_rank.errors %}
                                     {{ expert_info_form.scientific_rank|attr:"id:rank"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.scientific_rank|attr:"id:rank"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{{ scientific_rank_error }}</span>
+                                    <span class="error-body">{{ form.scientific_rank.errors }}</span>
                                 </div>
                             </div>
                         </div>
@@ -113,37 +109,37 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Address">آدرس</label>
-                                {% if home_address_error %}
+                                {% if form.home_address.errors %}
                                     {{ expert_info_form.home_address|attr:"id:Address"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.home_address|attr:"id:Address"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{{ home_address_error }}</span>
+                                    <span class="error-body">{{ form.home_address.errors }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="HomeNum">تلفن منزل</label>
-                                {% if phone_number_error %}
+                                {% if form.phone_number.errors %}
                                     {{ expert_info_form.phone_number|attr:"id:HomeNum"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.phone_number|attr:"id:HomeNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{{ phone_number_error }}</span>
+                                    <span class="error-body">{{form.phone_number.errors }}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="PhoneNum">تلفن همراه</label>
-                                {% if mobile_phone_error %}
+                                {% if form.mobile_phone.errors %}
                                     {{ expert_info_form.mobile_phone|attr:"id:PhoneNum"|attr:"class:error w-100" }}
                                 {% else %}
                                     {{ expert_info_form.mobile_phone|attr:"id:PhoneNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{{ mobile_phone_error }}</span>
+                                    <span class="error-body">{{ form.mobile_phone.errors }}</span>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +161,7 @@
                             <div class="col-lg-12 text-right">
                                 <label for="id_key_words">کلیدواژه ها</label>
                                 {#                                {{ expert_info_form.keywords|attr:"id:id_key_words"|attr:"class:w-100"|attr:"value:اولی,دومی," }}#}
-                                <input type="text" name="expert_info-keywords" id="id_key_words" class="w-100"
+                                <input type="text" name="keywords" id="id_key_words" class="w-100"
                                        value="{{ keywords }}">
                             </div>
                         </div>
@@ -751,7 +747,16 @@
                                 <span class="sub-header">مجموعاً، تا به حال چند بار موفق به دریافت گرنت شده اید؟</span>
                                 {#                                <textarea dir="rtl" class="w-100" rows="4" placeholder="اینجا وارد کنید ..."#}
                                 {#                                          style="margin-top: 0;"></textarea>#}
-                                {{ expert_info_form.number_of_grants|attr:"dir:rtl"|attr:"class:w-100"|attr:"rows:4"|attr:"placeholder:اینجا وارد کنید ..."|attr:"style:margin-top: 0;" }}
+                                
+                                {% if form.number_of_grants.errors %}
+                                    {{ expert_info_form.number_of_grants|attr:"dir:rtl"|attr:"class:error w-100"|attr:"rows:4"|attr:"placeholder:اینجا وارد کنید ..."|attr:"style:margin-top: 0;" }}
+                                {% else %}
+                                    {{ expert_info_form.number_of_grants|attr:"dir:rtl"|attr:"class:w-100"|attr:"rows:4"|attr:"placeholder:اینجا وارد کنید ..."|attr:"style:margin-top: 0;" }}
+                                {% endif %}
+                                    
+                                <div class="error">
+                                    <span class="error-body">{{ form.number_of_grants.errors }}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
