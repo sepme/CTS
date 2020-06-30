@@ -30,26 +30,50 @@ function haveBackdrop() {
 
 
 function display_error(form) {
-    $.each(form.find("input.error"), function () {
+    $.each(form.find("input.error, select.error"), function () {
         let input = $(this);
         let value = $(this).val();
-        console.log(value);
-        switch (input.attr("type")) {
-            case "number":
-                input.on("keyup", function () {
-                    if (input.val() === value) {
-                        input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                        input.closest("div").find("div.error").removeAttr("style");
-                    } else {
-                        input.removeClass("error").removeAttr("style").prev().removeAttr("style");
-                        input.closest("div").find("div.error").css("top", "33px");
-                    }
-                });
-                break;
+        // console.log($(this).prop('nodeName'));
+        if ($(this).prop("nodeName") === "INPUT") {
+            switch (input.attr("type")) {
+                case "number":
+                    input.on("keyup", function () {
+                        if (input.val() === value) {
+                            input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                            input.closest("div").find("div.error").removeAttr("style");
+                        } else {
+                            input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                            input.closest("div").find("div.error").css("top", "33px");
+                        }
+                    });
+                    break;
 
-            default:
-                break;
+                default:
+                    console.log("default case");
+                    input.on("keyup", function () {
+                        if (input.val() === value) {
+                            input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                            input.closest("div").find("div.error").removeAttr("style");
+                        } else {
+                            input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                            input.closest("div").find("div.error").css("top", "33px");
+                        }
+                    });
+                    break;
+            }
+        } else if ($(this).prop("nodeName") === "SELECT") {
+            value = input.find(":selected").text();
+            input.change(function () {
+                if (input.find(":selected").text() === value) {
+                    input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    input.closest("div").find("div.error").removeAttr("style");
+                } else {
+                    input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                    input.closest("div").find("div.error").css("top", "33px");
+                }
+            });
         }
+
     });
 }
 

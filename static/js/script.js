@@ -98,7 +98,7 @@ $(document).ready(function () {
             items: 1,
             touchDrag: false,
             mouseDrag: false,
-            autoHeight:true,
+            autoHeight: true,
         });
         $('.next-slide').click(function () {
             owl.trigger('next.owl.carousel');
@@ -187,12 +187,12 @@ myForm.submit(function (event) {
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                 $("input#email").next().css("color", "rgb(255, 69, 69)");
             }
-            
+
             // $(".user-type-container").addClass("error-container");
             if ($(".account_error").text().length !== 0) {
                 $(".account_error").html("");
             }
-            if (obj.account_type != undefined ){
+            if (obj.account_type != undefined) {
                 $(".account_error").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
@@ -211,7 +211,7 @@ myForm.submit(function (event) {
             $("#id_captcha_1").find("div.error").remove();
             if (obj.captcha !== undefined) {
                 $(".captcha-error").append("<div class='error'>" +
-                "<span class='error-body'>" +
+                    "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
                     "<li>" + obj.captcha + "</li>" +
                     "</ul>" +
@@ -220,6 +220,7 @@ myForm.submit(function (event) {
                 $("input#id_captcha_1").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                 $("input#id_captcha_1").next().css("color", "rgb(255, 69, 69)");
             }
+            display_error(myForm);
         },
     })
 });
@@ -289,6 +290,7 @@ loginForm.submit(function (event) {
                     "</div>");
                 $("input#password").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
+            display_error(loginForm);
         },
     })
 });
@@ -325,6 +327,7 @@ recoverPassForm.submit(function (event) {
                 "</span>" +
                 "</div>");
             $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            display_error(recoverPassForm);
         },
     })
 });
@@ -360,10 +363,10 @@ $.ajaxSetup({
     }
 });
 
-$('.captcha').click(function(){
+$('.captcha').click(function () {
     $form = $(this).parents('form');
 
-    $.getJSON("/captcha/refresh/", {}, function(result) {
+    $.getJSON("/captcha/refresh/", {}, function (result) {
         $('.captcha').attr('src', result['image_url']);
         $('#id_captcha_0').val(result['key']);
     });

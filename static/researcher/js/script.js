@@ -1012,6 +1012,7 @@ apply_form.submit(function (event) {
             $("input#most_hours").removeClass("error");
             $("input#least_hours").removeClass("error");
             $(".apply").hide();
+            $('#projectRequest').modal('toggle');
             iziToast.success({
                 rtl: true,
                 message: "درخواست شما برای استاد فرستاده شد.",

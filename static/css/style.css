@@ -1093,7 +1093,7 @@ label.fix {
     color: #8d8d8d;
 }
 
-input.error, textarea.error {
+input.error, textarea.error ,select.error{
     background-color: #fdf7f8;
     border: 1px solid #ff4545;
     color: #ff4545;
@@ -4375,6 +4375,7 @@ span.border-span {
 }
 
 .form-group {
+    position: relative;
     text-align: right;
 }
 
@@ -4486,7 +4487,7 @@ img.center-head {
     margin-right: -1px;
     position: absolute;
     top: 22px;
-    left: 16px;
+    left: 0;
     z-index: 2;
 }
 
@@ -4494,7 +4495,7 @@ img.center-head {
     margin-left: -1px;
     position: absolute;
     top: 22px;
-    right: 52px;
+    right: 36px;
     z-index: 2;
 }
 

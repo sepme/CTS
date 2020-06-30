@@ -63,7 +63,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
-                                <select id="id_industry_type" name="industry_type" class="w-100">
+                                <select id="id_industry_type" name="industry_type" class="w-100 {% if form.industry_type.errors %}error{% endif %}">
                                     <option dir="rtl" value="-1">انتخاب کنید ...</option>
                                     <option value="0">خصوصی</option>
                                     <option value="1">دولتی</option>

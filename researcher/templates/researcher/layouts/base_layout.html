@@ -166,6 +166,10 @@
 <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>
 {% if request.user.researcheruser.status.status == "signed_up" %}
     <div class="modal-backdrop fade show" style="user-select: auto;"></div>
+    <script type="text/javascript">
+        $("input.error, select.error").prev().css("color", "rgb(255,69,69)");
+        display_error($("#exampleModal form"));
+    </script>
 {% endif %}
 </body>
 </html>

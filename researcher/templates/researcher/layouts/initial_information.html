@@ -109,7 +109,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="rankLabel" for="rank">آخرین مقطع تحصیلی</label>
-                                <select id="rank" name="grade">
+                                <select id="rank" name="grade" class="{% if form.grade.errors %}error{% endif %}">
                                     <option selected dir="rtl" disabled>انتخاب کنید ...</option>
                                     <option value="1">کارشناسی</option>
                                     <option value="2">کارشناسی ارشد</option>
