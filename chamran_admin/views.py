@@ -300,6 +300,13 @@ class SignupUser(generic.FormView):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
+        context= """با عرض سلام و احترام
+        \t هيأت مدیره شرکت چمران تیم ورود شما را به خانواده بزرگ شرکت گرامی می دارد. """
+        message = Message(title="خوش آمدگویی",
+                          text=context,
+                          type=0)
+        message.save() 
+        message.receiver.add(user)
         if account_type == 'researcher':
             researcher = ResearcherUser.objects.create(user=user)
             Status.objects.create(researcher_user=researcher)
