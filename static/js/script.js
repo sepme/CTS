@@ -185,14 +185,13 @@ myForm.submit(function (event) {
                     "</span>" +
                     "</div>");
                 $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                $("input#email").next().css("color", "rgb(255, 69, 69)");
             }
 
             // $(".user-type-container").addClass("error-container");
             if ($(".account_error").text().length !== 0) {
                 $(".account_error").html("");
             }
-            if (obj.account_type != undefined) {
+            if (obj.account_type !== undefined) {
                 $(".account_error").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +

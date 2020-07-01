@@ -189,7 +189,7 @@ body.notFound {
 .card.registration .input-compact {
     position: relative;
     padding: 0 15px;
-    margin: 0 -15px;
+    margin: 10px -15px;
 }
 
 .card.registration .input-compact input {
@@ -206,6 +206,7 @@ body.notFound {
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
     color: #bdbdbd;
+    z-index: 2;
 }
 
 .card.registration .forget-pass {
@@ -229,7 +230,7 @@ body.notFound {
 }
 
 .card.registration .login-ajax .Enter-btn {
-    margin-top: 50px;
+    margin-top: 35px;
 }
 
 .card.registration .Enter-btn:hover {
@@ -1008,6 +1009,8 @@ input, textarea, select, div.tagsinput {
 
 div.tagsinput {
     padding: 10px 10px 0;
+    height: fit-content !important;
+    /*overflow: unset;*/
 }
 
 div.tagsinput input {
@@ -1093,7 +1096,7 @@ label.fix {
     color: #8d8d8d;
 }
 
-input.error, textarea.error ,select.error{
+input.error, textarea.error, select.error {
     background-color: #fdf7f8;
     border: 1px solid #ff4545;
     color: #ff4545;
@@ -2068,7 +2071,7 @@ span.star-warning:after {
 
 .label-check-radio + label {
     position: absolute;
-    top: 10px;
+    top: -10px;
     padding: 5px;
     min-width: 100px;
     text-align: center;
@@ -4442,7 +4445,7 @@ body > * {
     transition: filter .15s linear;
 }
 
-.modal-open > *:not(.modal):not(.modal-backdrop):not(.iziToast-wrapper) {
+.modal-open > *:not(.modal):not(.modal-backdrop):not(.iziToast-wrapper):not(.tooltip) {
     -webkit-filter: blur(5px);
     filter: blur(5px);
     /* background: white; */
@@ -4454,24 +4457,46 @@ body > * {
 }
 
 .captcha-test {
-    display: flex;
+    position: relative;
     direction: rtl;
     margin-top: 20px
 }
 
 .captcha-test input {
-    margin-top: 12px;
+    margin-top: 10px;
 }
 
 .captcha-test img {
-    margin-left: 20px;
-    max-height: 60px;
     position: relative !important;
     -webkit-transform: none !important;
     -moz-transform: none !important;
     -ms-transform: none !important;
     -o-transform: none !important;
     transform: none !important;
+    width: 50% !important;
+    height: 60px;
+    margin: auto;
+}
+
+.captcha-test #refresh-captcha {
+    position: absolute;
+    border-radius: 10px;
+    top: 37px;
+    right: 65px;
+    font-size: large;
+    z-index: 2;
+    padding: 5px;
+    background-color: #ffffff;
+    color: #3ccd1c;
+    transform: rotateZ(-90deg);
+}
+
+.captcha-test #refresh-captcha:hover {
+    cursor: pointer;
+}
+
+.captcha-error {
+    position: relative;
 }
 
 img.center-head {
@@ -4652,4 +4677,10 @@ img.center-head {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    color: #fff;
+    background-color: #3CCD1C;
+    border-color: #3CCD1C;
 }
