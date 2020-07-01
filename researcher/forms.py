@@ -31,7 +31,7 @@ class InitailForm(forms.ModelForm):
         ]
         widgets = {
             'photo': forms.FileInput(attrs={'id': "upload-input", 'accept': "image/png, image/jpeg"}),
-            'fullname': forms.TextInput(attrs={'id': "FirstName", 'class': "w-100"}),
+            'fullname': forms.TextInput(attrs={'id': "FUllName", 'class': "w-100"}),
             'major': forms.TextInput(attrs={'id': "Field", 'class': "w-100"}),
             'national_code': forms.TextInput(attrs={'id': "nationalCode", 'class': "w-100"}),
             'student_number': forms.TextInput(attrs={'id': "student-num", 'class': "w-100"}),

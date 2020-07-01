@@ -752,9 +752,14 @@ def ShowTechnique(request):
 
 @permission_required([],login_url='/login/')
 def GetResume(request):
+    print("GETRESUME")
+    print(request.GET)
     expert_id = request.GET['id']
+    print(expert_id)
     expert = get_object_or_404(ExpertUser ,pk=expert_id)
+    print(expert)
     expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
+    print(expert)
     if expert_form.scientific_rank == 1:
         scientific_rank = 'مربی'
     elif expert_form.scientific_rank == 2 :
@@ -768,7 +773,7 @@ def GetResume(request):
     elif expert_form.scientific_rank == 6 :
         scientific_rank = 'پژوهشگر'
     data = {
-    'name'            : expert_form.expert_firstname + " " + expert_form.expert_lastname,
+    'name'            : expert_form.fullname,
     "university"      : expert_form.university,
     "scientific_rank" : scientific_rank,
     "special_field"   : expert_form.special_field,
