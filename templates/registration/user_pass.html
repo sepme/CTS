@@ -1,4 +1,4 @@
-	{% load widget_tweaks %}
+{% load widget_tweaks %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -35,8 +35,13 @@
                 <i class="fas fa-user-alt fa-lg"></i>
             </div>
             <div class="password input-compact">
-                <label for="id_password">رمز عبور</label>
-                {{ form.password|attr:'class:w-100' }}
+                {% if form.non_field_errors %}
+                    <label for="id_password" style="color: rgb(255, 69, 69);">رمز عبور</label>
+                    {{ form.password|attr:'class:w-100 error' }}
+                {% else %}
+                    <label for="id_password">رمز عبور</label>
+                    {{ form.password|attr:'class:w-100' }}
+                {% endif %}
                 <div class="error">
                     {{ form.non_field_errors }}
                 </div>
@@ -56,5 +61,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% if form.non_field_errors %}
+    <script type="text/javascript">
+        display_error($("#user-pass-form"));
+    </script>
+{% endif %}
 </body>
 </html>

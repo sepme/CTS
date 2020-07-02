@@ -656,7 +656,7 @@ $(document).ready(function () {
     }
 
     $(".preview-project").click(function () {
-        console.log("preview");
+        console.log("preview1");
         const dialog = $("#showProject");
         $(this).closest(".card").find('.unseen-comments').html("");
         let id = $(this).attr("id");
@@ -666,6 +666,7 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                console.log(data);
                 if (data.accepted){
                     projectDetail(data);
                 }else{

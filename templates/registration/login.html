@@ -77,7 +77,9 @@
                             <i class="fas fa-at fa-lg"></i>
                         </div>
                         <div class="captcha-test">
-{#                            <label for="id_captcha_1">کد کپچا</label>#}
+                            <span id="refresh-captcha">
+                                <i class="fas fa-sync-alt"></i>
+                            </span>
                             {{ register_form.captcha | attr:"class:w-100"| attr:"placeholder:کد را وارد کنید"}}
                         </div>
                         <div class="captcha-error"></div>

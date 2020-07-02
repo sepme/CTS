@@ -420,7 +420,7 @@ function tag_input_label(tag_input) {
     $("#" + tag_input + "_tag").on("focus", function () {
         $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
             "font-size": "12px",
-            "top": "12px",
+            "top": "11px",
             "right": "30px",
             "padding": "0 10px",
             "color": "#3ccd1c"
@@ -433,7 +433,7 @@ function tag_input_label(tag_input) {
         if ($(".tagsinput").find(".tag").length) {
             $("label[for='" + tag_input + "']").addClass("full-focus-out").css({
                 "font-size": "12px",
-                "top": "12px",
+                "top": "11px",
                 "right": "30px",
                 "padding": "0 10px",
                 "color": "#6f7285"

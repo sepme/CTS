@@ -1147,6 +1147,7 @@ function ShowPreviousProject(project) {
 $("#done-project").click(function (event) {
     $(".new-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
+    $(".missed-project").attr("style", "display :none");
     $(".done-project").attr("style", "display :block");
     // $.ajax({
     //     method: 'GET',
@@ -1182,9 +1183,10 @@ function ShowMyProject(project) {
     return show_project;
 }
 
-$("#your-project").click(function (event) {
+$("#active-project").click(function (event) {
     $(".new-project").attr("style", "display :none;");
     $(".done-project").attr("style", "display :none;");
+    $(".missed-project").attr("style", "display :none;");
     $(".your-project").attr("style", "display :block;");
     // $.ajax({
     //     method: 'GET',
@@ -1267,4 +1269,12 @@ $("#new-projects").click(function (event) {
     $(".new-project").attr("style", "display :block");
     $(".done-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
+    $(".missed-project").attr("style", "display :none");
+});
+
+$("#missed-project").click(function (event) {
+    $(".missed-project").attr("style", "display :block");
+    $(".done-project").attr("style", "display :none");
+    $(".your-project").attr("style", "display :none");
+    $(".new-project").attr("style", "display :none");
 });

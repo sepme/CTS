@@ -1153,6 +1153,16 @@ showInfo.click(function (event) {
         },
         dataType: 'json',
         success: function (data) {
+            if (data.applied === true) {
+                $("#accept-project").attr("disabled", "disabled").css("pointer-events", "none");
+                let btn = $("#accept-project").closest(".modal-footer").html();
+                $("#accept-project").closest(".modal-footer").html(
+                    `<span tabindex="0" data-toggle="tooltip" title="یه چیز بگین بذارم">
+                        ${btn}
+                    </span>`
+                );
+                $('#accept-project').closest("span").tooltip();
+            }
             $('.project_id').attr('value', project_id);
             $('.ajax-select-techniques').attr('id', project_id);
             if (data.status === "non active") {
@@ -1170,9 +1180,6 @@ showInfo.click(function (event) {
                 setValue(data);
                 setComment(data.comments);
                 // vote_dialog_init(".showProject");
-                if (data.applied === true) {
-                    $("#accept-project").attr("disabled", "disabled");
-                }
             } else {
                 $(".project").attr("value", project_id);
                 projectDetail(data);
@@ -1347,6 +1354,7 @@ function setValue(data) {
 
 function setComment(data) {
     let comments_code = "";
+    console.log(data);
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "expert") { //expert
             let comment_body_classes = "comment-body";
@@ -1552,6 +1560,7 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
     // });
 
     $('.confirm-researcher').click(function () {
+        const thisBtn = $(this);
         $.ajax({
             method: "POST",
             url: 'confirmResearcher/',
@@ -1566,6 +1575,19 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
                     message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
                     position: 'bottomLeft'
                 });
+                $(thisBtn).closest(".card").closest("div.col-12").remove();
+                if ($(".container > .row:nth-child(3)").find("div").length === 0) {
+                    $(".container > .row:nth-child(3)").html(
+                        `<div class="col-12 text-center">
+                            <div class="empty-page">
+                                <div class="empty-page-container">
+                                    <img src="../../static/img/empty-tray.svg" alt="">
+                                    <pre>هنوز پژوهشگری برای پروژه‌های شما درخواست نداده است.</pre>
+                                </div>
+                            </div>
+                        </div>`
+                    );
+                }
             },
             error: function (data) {
                 console.log("Error");
@@ -1573,6 +1595,7 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
         });
     });
     $(".refuse-researcher").click(function () {
+        const thisBtn = $(this);
         $.ajax({
             method: "POST",
             url: 'refuseResearcher/',
@@ -1587,6 +1610,19 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
                     message: "درخواست پژوهشگر با موفقیت رد شد.",
                     position: 'bottomLeft'
                 });
+                $(thisBtn).closest(".card").closest("div.col-12").remove();
+                if ($(".container > .row:nth-child(3)").find("div").length === 0) {
+                    $(".container > .row:nth-child(3)").html(
+                        `<div class="col-12 text-center">
+                            <div class="empty-page">
+                                <div class="empty-page-container">
+                                    <img src="../../static/img/empty-tray.svg" alt="">
+                                    <pre>هنوز پژوهشگری برای پروژه‌های شما درخواست نداده است.</pre>
+                                </div>
+                            </div>
+                        </div>`
+                    );
+                }
             },
             error: function (data) {
                 console.log("Error");

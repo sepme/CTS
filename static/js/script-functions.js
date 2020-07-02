@@ -74,8 +74,39 @@ function display_error(form) {
             });
         }
 
+        if (input.attr("id") === "id_captcha_1") {
+            input.change(function () {
+                console.log(value);
+                if (input.text() === value) {
+                    input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    input.closest("form").find(".captcha-error div.error").removeAttr("style");
+                } else {
+                    input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                    input.closest("form").find(".captcha-error div.error").css("top", "33px");
+                }
+            });
+        }
+
     });
 }
+
+function close_modal() {
+    if ($(".modal").length > 0) {
+        $(".modal").each(function () {
+            $(this).on('hidden.bs.modal', function (e) {
+                if ($(this).find(".keywords").length > 0) {
+                    $(this).find(".keywords").html("");
+                }
+                if ($(this).find(".comment-tabs").length > 0) {
+                    $(this).find(".comment-tabs .nav").html("");
+                }
+            })
+        });
+    }
+}
+
+close_modal();
+
 
 function init_windowSize() {
     // if ($(window).width() < 575.98) {
