@@ -396,7 +396,7 @@ class ResearchQuestionInstance(models.Model):
                                           verbose_name="سوال پژوهشی")
     researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
                                    blank=True, null=True)
-    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", default=now)
+    hand_out_date = models.DateTimeField(verbose_name="تاریخ واگذاری", default=now)
     answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True, blank=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
     is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={

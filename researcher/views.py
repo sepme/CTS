@@ -461,8 +461,10 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
         if self.request.user.researcheruser.status.status != "not_answered":
             return HttpResponseRedirect(reverse("researcher:question-alert"))
         question = request.user.researcheruser.researchquestioninstance_set.all().reverse().first()        
-        delta = datetime.date.today() - question.hand_out_date
-        if delta.days < 8:
+        deadLine = question.hand_out_date + datetime.timedelta(days=+7)
+        deadLine = deadLine.replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
+        now = datetime.datetime.now(datetime.timezone.utc)
+        if now < deadLine:
             if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.save()
@@ -484,7 +486,6 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse().first()
-        deltatime = datetime.date.today() - question.hand_out_date
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question_text
         context['attachment'] = question.research_question.attachment
@@ -493,10 +494,13 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
         if self.request.user.researcheruser.status.status != "not_answered":
             context['answer'] = question.answer            
             return context
-        delta = datetime.date.today() - question.hand_out_date
-        context['day']  = 8 - delta.days
-        context['hour'] = 23 - datetime.datetime.now().hour
-        context['minute'] = 59 - datetime.datetime.now().minute
+        deadLine = question.hand_out_date + datetime.timedelta(days=+7)
+        now = datetime.datetime.now(datetime.timezone.utc)
+        delta = deadLine - now        
+        context['day']  = delta.days
+        context['hour'] = delta.seconds//3600
+        context['minute'] = (delta.seconds%3600)//60
+        context['second'] = delta.seconds%60
         return context
     
     def post(self ,request ,*args, **kwargs):
@@ -507,7 +511,7 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
             question.is_answered = True
             subject = 'Research Question Validation'
             message ="""با عرض سلام و خسته نباشید.
-            پژوهشگر {} به نام {} {} به سوال پژوهشی {} پاسخ داده است.
+            پژوهشگر {} به نام {} به سوال پژوهشی {} پاسخ داده است.
             لطفا پاسخ پژوهشگر را ارزیابی نمایید.
             با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.fullname,
                             question.research_question.question_title)
