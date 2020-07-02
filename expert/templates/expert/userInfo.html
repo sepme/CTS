@@ -122,24 +122,24 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="HomeNum">تلفن منزل</label>
-                                {% if form.phone_number.errors %}
-                                    {{ expert_info_form.phone_number|attr:"id:HomeNum"|attr:"class:error w-100" }}
+                                {% if form.home_number.errors %}
+                                    {{ expert_info_form.home_number|attr:"id:HomeNum"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {{ expert_info_form.phone_number|attr:"id:HomeNum"|attr:"class:w-100" }}
+                                    {{ expert_info_form.home_number|attr:"id:HomeNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{{form.phone_number.errors }}</span>
+                                    <span class="error-body">{{form.home_number.errors }}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="PhoneNum">تلفن همراه</label>
-                                {% if form.mobile_phone.errors %}
-                                    {{ expert_info_form.mobile_phone|attr:"id:PhoneNum"|attr:"class:error w-100" }}
+                                {% if form.phone_number.errors %}
+                                    {{ expert_info_form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100" }}
                                 {% else %}
-                                    {{ expert_info_form.mobile_phone|attr:"id:PhoneNum"|attr:"class:w-100" }}
+                                    {{ expert_info_form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100" }}
                                 {% endif %}
                                 <div class="error">
-                                    <span class="error-body">{{ form.mobile_phone.errors }}</span>
+                                    <span class="error-body">{{ form.phone_number.errors }}</span>
                                 </div>
                             </div>
                         </div>

@@ -71,31 +71,16 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         return context
     
     def form_invalid(self, form):
-        print(form.errors)
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        print("form is validated")
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
-
-        photo = form.cleaned_data['photo']
-        fullname = form.cleaned_data['fullname']
-        special_field = form.cleaned_data['special_field']
-        melli_code = form.cleaned_data['melli_code']
-        scientific_rank = form.cleaned_data['scientific_rank']
-        university = form.cleaned_data['university']
-        home_number = form.cleaned_data['home_number']
-        phone_number = form.cleaned_data['phone_number']
-        email = form.cleaned_data['email_address']
-        expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
-                                                fullname=fullname, special_field=special_field,
-                                                national_code=melli_code, scientific_rank=scientific_rank,
-                                                university=university, phone_number=home_number,
-                                                mobile_phone=phone_number,
-                                                email_address=expert_user.user.get_username())
+        expert_form = form.save(commit=False)
+        expert_form.expert_user = expert_user
+        expert_form.email = expert_user.user.get_username()
+        expert_form.save()
         expert_user.status = 'free'
         expert_user.save()
-        expert_form.save()
         return HttpResponseRedirect(reverse('expert:index'))
 
 
