@@ -774,6 +774,7 @@ def GetResume(request):
         scientific_rank = 'پژوهشگر'
     data = {
     'name'            : expert_form.fullname,
+    'photo'           : expert_form.photo.url,
     "university"      : expert_form.university,
     "scientific_rank" : scientific_rank,
     "special_field"   : expert_form.special_field,
@@ -807,6 +808,7 @@ def GetResume(request):
     if expert_form.number_of_researcher == 4:
         data['researcher_count'] = '+60'
 
+    print(data['photo'])
     return JsonResponse(data=data)
 
 @permission_required('expert.be_expert', login_url='/login/')

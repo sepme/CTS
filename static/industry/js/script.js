@@ -214,7 +214,8 @@ function expertResume() {
             data: {id: id},
             success: function (data) {
                 $("#expertResume .modal-header .modal-title").html(data.name);
-                $("#expertResume #expert_uni").html("دانشگاه " + data.university);
+                $("#expertResume #expert_photo").attr("src", data.photo);
+                $("#expertResume #expert_uni").attr('dir', 'rtl').html("دانشگاه : " + data.university);
                 $("#expertResume #expert_field").html(data.scientific_rank + " " + data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
