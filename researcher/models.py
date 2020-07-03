@@ -347,6 +347,8 @@ class TechniqueInstance(models.Model):
     @property
     def date_last(self):
         days_passed = (datetime.datetime.today().date() - self.evaluat_date).days
+        if days_passed == 0:
+            return "امروز"
         total_passed = ""
         if days_passed > 364:
             total_passed = persianNumber.convert(str(days_passed // 365)) + " سال "
@@ -361,10 +363,7 @@ class TechniqueInstance(models.Model):
             total_passed = persianNumber.convert(str(days_passed)) + " روز "
         else:
             total_passed += " و " + persianNumber.convert(str(days_passed)) + " روز "
-        if total_passed == "":
-            total_passed = "امروز"
-        else:
-            total_passed += " پیش"
+        total_passed += " پیش"
         return total_passed
 
     def __str__(self):
