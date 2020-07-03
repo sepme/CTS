@@ -160,6 +160,7 @@ $(document).ready(function () {
     init_dialog_btn(".paper-btn", ".paper_form");
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
+    researcherRequest();
 
     $('.content').scroll(function () {
         if ($(".content").scrollTop() > 300) {
@@ -1119,6 +1120,9 @@ function researcherRequest() {
         $(".project").attr("value", $('.showProject').attr('id'));
         let thisUrl = "request_researcher/";
         let form = new FormData(requestForm.get(0));
+        $("#id_least_hour").removeClass("error").css("color", "").prev().css("color", "");
+        $("#id_researcher_count").removeClass("error").css("color", "").prev().css("color", "");
+        $('.error').remove();
         $.ajax({
             method: 'POST',
             url: thisUrl,
@@ -1134,8 +1138,27 @@ function researcherRequest() {
                 });
             },
             error: function (data) {
-
-                requestForm[0].reset();
+                let obj = JSON.parse(data.responseText);
+                if (obj.least_hour) {
+                    $("#id_least_hour").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.least_hour + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("#id_least_hour").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+                if (obj.researcher_count) {
+                    $("#id_researcher_count").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.researcher_count + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("#id_researcher_count").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
             },
         });
     });

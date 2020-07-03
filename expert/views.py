@@ -64,9 +64,17 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
             if expert_user.status == "involved":
                 project  = Project.objects.filter(status=2).get(expert_accepted=expert_user)
-                comments = Comment.objects.filter(project=project).filter(researcher_user=None).filter(expert_user=expert_user)
+                comments = project.get_comments().filter(researcher_user=None).filter(expert_user=expert_user)
                 context['project'] = project
                 context['comment'] = comments
+                context['requestResearcherForm'] = forms.RequestResearcherForm()
+                context['researcher_accepted'] = []
+                for researcher in project.researcher_accepted.all():
+                    researcher = {
+                        "id" : researcher.pk,
+                        "fullname" : researcher.researcherprofile.fullname
+                    }
+                    context['researcher_accepted'].append(researcher)
             context['projects'] = projects
         return context
     
@@ -910,21 +918,27 @@ def DeletePaperRecord(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def ExpertRequestResearcher(request):
     project = Project.objects.get(id=request.POST['project_id'])
-    expert = request.user.expertuser
-    try:
-        researcher_request = RequestResearcher.objects.get(project=project)
-        researcher_request.researcher_count += int(request.POST['reseacherCount'])
-        researcher_request.least_hour = int(request.POST['hour'])
-        researcher_request.save()
-    except:
-        researcher_request = RequestResearcher(project=project
-                                                ,expert=expert
-                                                ,researcher_count=int(request.POST['reseacherCount'])
-                                                ,least_hour=int(request.POST['hour']))
+    form = forms.RequestResearcherForm(request.POST)
+    if form.is_valid():
+        expert = request.user.expertuser
+        least_hour       = form.cleaned_data['least_hour']
+        researcher_count = form.cleaned_data['researcher_count']
+        try:
+            researcher_request = RequestResearcher.objects.get(project=project)
+            researcher_request.researcher_count += researcher_count
+            researcher_request.least_hour = least_hour
+            researcher_request.save()
+        except:
+            researcher_request = RequestResearcher(project=project
+                                                  ,expert=expert
+                                                  ,researcher_count=researcher_count
+                                                  ,least_hour=least_hour)
 
-        researcher_request.save()
-    
-    return JsonResponse({"successfull" : "successfull"})
+            researcher_request.save()
+
+        return JsonResponse({"successfull" : "successfull"})
+    else:
+        return JsonResponse(data=form.errors, status=400)
 
 # @permission_required('expert.be_expert', login_url='/login/')
 # def GetResearcherComment(request):

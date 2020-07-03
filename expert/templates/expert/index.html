@@ -244,25 +244,27 @@
                                                                 <div class="researcher-request">
                                                                     <form id="researcher-request-ajax" method="post"
                                                                           action="">
+                                                                          {% csrf_token %}
                                                                         <input type="text" class="project"
                                                                                name="project_id"
+                                                                               value="{{ project.pk }}"
                                                                                hidden>
                                                                         <div class="row">
                                                                             <div class="col-md-5 col-6">
                                                                                 <label for="researcher-number">حداکثر
                                                                                     تعداد</label>
-                                                                                <input type="number" class="w-100"
-                                                                                       id="researcher-number"
-                                                                                       name="reseacherCount"
-                                                                                       required>
+                                                                                    {{ requestResearcherForm.researcher_count }}
+{#                                                                                <input type="number" class="w-100"#}
+{#                                                                                       id="researcher-number"#}
+{#                                                                                       name="reseacherCount">#}
                                                                             </div>
                                                                             <div class="col-md-5 col-6">
                                                                                 <label for="researcher-time">ساعت کار
                                                                                     <span
                                                                                             class="fs-10">(ساعت)</span></label>
-                                                                                <input type="number" class="w-100"
-                                                                                       id="researcher-time" name="hour"
-                                                                                       required>
+                                                                                    {{ requestResearcherForm.least_hour }}
+{#                                                                                <input type="number" class="w-100"#}
+{#                                                                                       id="researcher-time" name="hour">#}
                                                                             </div>
                                                                             <div class="col-md-2 col-12">
                                                                                 <button class="default-btn w-100"

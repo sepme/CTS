@@ -341,3 +341,23 @@ class CommentForm(forms.Form):
     def clean_attachment(self):
         data = self.cleaned_data["attachment"]
         return data
+
+class RequestResearcherForm(forms.Form):
+    least_hour       = forms.IntegerField(required=False)
+    researcher_count = forms.IntegerField(required=False)
+    
+    def clean_least_hour(self):
+        data = self.cleaned_data["least_hour"]
+        if data is None:
+            raise ValidationError('حداقل ساعت نمی تواند خالی باشد.')
+        if data < 1:
+            raise ValidationError("مقدار حداقل ساعت وارد شده نامعتر می باشد.")
+        return data
+    
+    def clean_researcher_count(self):
+        data = self.cleaned_data["researcher_count"]
+        if data is None:
+            raise ValidationError('تعداد دانشجو نمی تواند خالی باشد.')
+        if data < 1:
+            raise ValidationError("تعداد دانشجو وارد شده نامعتر می باشد.")
+        return data
