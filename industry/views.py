@@ -265,58 +265,28 @@ def submit_comment(request):
     return JsonResponse(data=form.errors ,status=400)
 
 # main page for an industry user
-class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     template_name = 'industry/index.html'
+    form_class = forms.IndustryBasicInfoForm
     login_url = '/login/'
+    success_url = '/'
     permission_required = ('industry.be_industry',)
-
-    def get(self, request, *args, **kwargs):
-
-        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated and \
-                models.IndustryUser.objects.filter(user=self.request.user).count() and \
-                self.request.user.industryuser.status == 'signed_up':
-            context['form'] = forms.IndustryBasicInfoForm(self.request.user)
-        else:
+        if self.request.user.industryuser.status != 'signed_up':
             industry_user = self.request.user.industryuser
             context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
         return context
 
-    # submitting the initial info form
-    def post(self, request, *args, **kwargs):
-        form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
-        if form.is_valid():
-            photo = form.cleaned_data['photo']
-            name = form.cleaned_data['name']
-            registration_number = form.cleaned_data['registration_number']
-            date_of_foundation = form.cleaned_data['date_of_foundation']
-            research_field = form.cleaned_data['research_field']
-            industry_type = form.cleaned_data['industry_type']
-            phone_number = form.cleaned_data['phone_number']
-            email_address = form.cleaned_data['email_address']
-            industry_user = request.user.industryuser
-            industry_info = models.IndustryForm(industry_user=industry_user,
-                                                name=name,
-                                                registration_number=registration_number,
-                                                date_of_foundation=date_of_foundation,
-                                                research_field=research_field,
-                                                industry_type=industry_type,
-                                                phone_number=phone_number,
-                                                email_address=email_address)            
-            industry_info.photo.save(photo.name, photo)
-            industry_info.save()
-            if not industry_info.photo:
-                with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
-                          'rb') as image_file:
-                    default_image = image_file.read()
-                    industry_info.photo.save('profile.jpg', ContentFile(default_image))
-            industry_user.status = 'free'
-            industry_user.save()
-            return HttpResponseRedirect(reverse('industry:index'))
-        return render(request, 'industry/index.html', context={'form': form})
+    def form_valid(self, form):
+        industryForm = form.save(commit=False)
+        industry_user = self.request.user.industryuser
+        industryForm.industry_user = industry_user
+        industryForm.save()
+        industry_user.status = 'free'
+        industry_user.save()
+        return super().form_valid(form)
 
 
 class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView):

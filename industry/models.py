@@ -66,8 +66,8 @@ class IndustryForm(models.Model):
     industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
                                     verbose_name="صنعت")
     name                 = models.CharField(max_length=64, verbose_name="نام شرکت")
-    registration_number  = models.IntegerField(verbose_name="شماره ثبت")
-    date_of_foundation   = models.IntegerField(verbose_name="تاریخ تاسیس")
+    registration_number  = models.CharField(max_length=10, verbose_name="شماره ثبت")
+    date_of_foundation   = models.CharField(max_length=4, verbose_name="تاریخ تاسیس")
     research_field       = models.CharField(max_length=32, verbose_name="حوزه فعالیت")
     industry_type_choice = (
         (0, 'خصوصی'),
@@ -81,7 +81,6 @@ class IndustryForm(models.Model):
     # turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
     services_products = models.TextField(null=True, blank=True, verbose_name="خدمات/محصولات")
     awards_honors     = models.TextField(null=True, blank=True, verbose_name="افتخارات")
-    email_address     = models.EmailField(max_length=254, verbose_name="ادرس")
     photo             = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
 
     def __str__(self):
