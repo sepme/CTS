@@ -7,12 +7,12 @@ from django.contrib.auth.models import User
 from . import models
 
 
-class IndustryBasicInfoForm(forms.ModelForm):
+class RandDBasicInfoForm(forms.ModelForm):
 
     class Meta:
-        model = models.IndustryForm
+        model = models.RandDProfile
         fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
-                  'research_field', 'industry_type', 'phone_number')
+                  'research_field', 'RandD_type', 'phone_number')
         
         # error_messages = {
         #     'photo'               : { 'required' : 'عکس نمی تواند خالی باشد.'}, 
@@ -45,7 +45,7 @@ class IndustryBasicInfoForm(forms.ModelForm):
         name = self.cleaned_data.get('name')
         if name is None or name == '':
             raise ValidationError(_("نام نمی تواند خالی باشد."))
-        check_name = models.IndustryForm.objects.filter(name=name).count()
+        check_name = models.RandDProfile.objects.filter(name=name).count()
         if check_name > 0:
             raise ValidationError(_("نام انتخابی شما قبلاانتخاب شده است."))
         return name
@@ -98,6 +98,88 @@ class IndustryBasicInfoForm(forms.ModelForm):
             raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
         return data
 
+class RandDInfoForm(forms.ModelForm):
+
+    class Meta:
+        model = models.RandDProfile
+        fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
+                  'research_field', 'RandD_type', 'address', 'phone_number',
+                  'tax_declaration', 'services_products', 'awards_honors')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].required  = False
+        self.fields['photo'].required = False
+        self.fields['registration_number'].required = False
+        self.fields['date_of_foundation'].required  = False
+        self.fields['research_field'].required      = False
+        self.fields['industry_type'].required       = False
+        self.fields['address'].required             = False
+        self.fields['tax_declaration'].required     = False
+        self.fields['services_products'].required   = False
+        self.fields['awards_honors'].required       = False 
+
+
+class ResearchGroupInfoForm(forms.ModelForm):
+
+    class Meta:
+        model = models.ResearchGroupProfile
+        exclude = ['industry_user', 'interfacePerson',]
+
+
+
+
+class ResearchGroupBasicInfoForm(forms.ModelForm):
+
+    class Meta:
+        model = models.ResearchGroupProfile
+        exclude = ['industry_user', 'interfacePerson', 'address']
+
+        error_messages = {
+            'name'       : {'required' : "نام نمی تواند خالی باشد."},
+            'photo'      : {'required' : "عکس نمی تواند خالی باشد."},
+            'type_group' : {'required' : "نوع شرکت نمی تواند خالی باشد."},
+            'subordinateResearch' : {'required' : "نام پژوهشکده تابعه نمی تواند خالی باشد."},
+        }
+
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].required = False
+        self.fields['photo'].required = False
+        self.fields['type_group'].required = False
+        self.fields['subordinateResearch'].required = False
+
+    def clean_name(self):
+        data = self.cleaned_data["name"]
+        if data == "":
+            raise ValidationError("نام نمی تواند خالی باشد.")
+        return data
+    
+    def clean_photo(self):
+        data = self.cleaned_data["photo"]
+        if data is None:
+            raise ValidationError("عکس نمی تواند خالی باشد.")
+        return data
+
+    def clean_phone_number(self):
+        data = self.cleaned_data["phone_number"]
+        if data == "":
+            raise ValidationError("شماره تلفن نمی تواند خالی باشد.")
+        return data
+    
+
+    def clean_type_group(self):
+        data = self.cleaned_data["type_group"]
+        if data == "":
+            raise ValidationError("نوع شرکت نمی تواند خالی باشد.")
+        return data
+    
+    def clean_subordinateResearch(self):
+        data = self.cleaned_data["subordinateResearch"]
+        if data == "":
+            raise ValidationError("نام پژوهشکده تابعه نمی تواند خالی باشد.")
+        return data
+
 class IndustryInfoForm(forms.ModelForm):
     # photo = forms.FileField(required=False)
     # name = forms.CharField()
@@ -136,7 +218,6 @@ class IndustryInfoForm(forms.ModelForm):
 
     def clean_industry_type(self):
         industry_type = self.cleaned_data.get('industry_type')
-        print('the type is ', industry_type)
         if industry_type != 0 and industry_type != 1:
             raise ValidationError(_('لطفا نوع شرکت را انتخاب نمایید.'))
 
@@ -271,3 +352,60 @@ class CommentForm(forms.Form):
     def clean_attachment(self):
         data = self.cleaned_data["attachment"]
         return data
+
+class InterfacePersonForm(forms.ModelForm):
+    industry_type = forms.CharField(max_length=15, required=False)
+
+    class Meta:
+        model = models.InterfacePerson
+        exclude = ['']
+
+        # error_messages = {
+        #     'fullname'     : {'required' : 'نام و نام خانوادگی نمی تواند خالی باشد.'},
+        #     'position'     : {'required' : 'سمت نمی تواند خالی باشد.'},
+        #     'phone_number' : {'required' : 'شماره همراه نمی تواند خالی باشد.'},
+        #     'email'        : {'required' : "پست الکترونیکی نمی تواند خالی باشد."} ,
+        # }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['fullname'].required     = False
+        self.fields['position'].required     = False
+        self.fields['phone_number'].required = False
+        self.fields['email'].required        = False
+
+    def clean_fullname(self):
+        data = self.cleaned_data["fullname"]
+        if data == "":
+            raise ValidationError("نام و نام خانوادگی نمی تواند خالی باشد.")
+        return data
+    
+    def clean_industry_type(self):
+        data = self.cleaned_data["industry_type"]
+        if data == "":
+            raise ValidationError("نوع شرکت نمی تواند خالی باشد.")
+        return data
+
+    def clean_phone_number(self):
+        data = self.cleaned_data["phone_number"]
+        if data == "":
+            raise ValidationError(_('تلفن نمی تواند خالی باشد.'))
+        try:
+            int(data)
+        except ValueError:
+            raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
+        if len(data) != 11:
+            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
+        return data
+
+    def clean_position(self):
+        data = self.cleaned_data["position"]
+        if data == "":
+            raise ValidationError("سمت نمی تواند خالی باشد.")
+        return data
+    
+    def clean_email(self):
+        data = self.cleaned_data["email"]
+        if data == "":
+            raise ValidationError("پست الکترونیکی نمی تواند خالی باشد.")
+        return data
+    

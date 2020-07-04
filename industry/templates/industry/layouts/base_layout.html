@@ -29,14 +29,14 @@
         <div class="dropdown">
             <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
                 <img
-                        {% if user.industryuser.industryform.photo %}
-                            src="{{ user.industryuser.industryform.photo.url }}"
+                        {% if user.industryuser.profile.photo %}
+                            src="{{ user.industryuser.profile.photo.url }}"
                         {% else %}
                             src="{% static 'industry/img/profile.jpg' %}"
                         {% endif %}
                             alt="profile" class="dropdown-img profile" height="45px">
-                <!-- {% if request.user.industryuser.industryform.photo %}
-                    <img src="{{ request.user.industryuser.industryform.photo.url }}" alt="profile"
+                <!-- {% if request.user.industryuser.profile.photo %}
+                    <img src="{{ request.user.industryuser.profile.photo.url }}" alt="profile"
                          class="dropdown-img profile"
                          height="45px">
                 {% else %}
@@ -63,14 +63,14 @@
         <div class="topMargin"></div>
         <div class="expert-icon"></div>
         <img
-                {% if user.industryuser.industryform.photo %}
-                    src="{{ user.industryuser.industryform.photo.url }}"
+                {% if user.industryuser.profile.photo %}
+                    src="{{ user.industryuser.profile.photo.url }}"
                 {% else %}
                     src="{% static 'industry/img/profile.jpg' %}"
                 {% endif %}
                     alt="profile" class="profile" width="150px" height="150px">
-        <!-- {% if request.user.industryuser.industryform.photo %}
-            <img src="{{ request.user.industryuser.industryform.photo.url }}" alt="profile"
+        <!-- {% if request.user.industryuser.profile.photo %}
+            <img src="{{ request.user.industryuser.profile.photo.url }}" alt="profile"
                     class="dropdown-img profile"
                     height="45px">
         {% else %}

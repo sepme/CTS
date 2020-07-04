@@ -124,7 +124,7 @@ def ActiveProject(request, project, data):
     except:
         pass
     
-    industryform = request.user.industryuser.industryform
+    industryform = request.user.industryuser.profile
     projectDate = [
         gregorian_to_numeric_jalali(project.date_start),
         gregorian_to_numeric_jalali(project.date_project_started),
@@ -268,7 +268,7 @@ def submit_comment(request):
 # main page for an industry user
 class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     template_name = 'industry/index.html'
-    form_class = forms.IndustryBasicInfoForm
+    form_class = forms.InterfacePersonForm
     login_url = '/login/'
     success_url = '/'
     permission_required = ('industry.be_industry',)
@@ -278,15 +278,49 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         if self.request.user.industryuser.status != 'signed_up':
             industry_user = self.request.user.industryuser
             context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
+        else:
+            context['RandD_form']         = forms.RandDBasicInfoForm
+            context['researchGroup_form'] = forms.ResearchGroupBasicInfoForm
         return context
 
     def form_valid(self, form):
-        industryForm = form.save(commit=False)
-        industry_user = self.request.user.industryuser
-        industryForm.industry_user = industry_user
-        industryForm.save()
-        industry_user.status = 'free'
-        industry_user.save()
+        industry_user = models.IndustryUser.objects.get(user=self.request.user)
+        if form.cleaned_data["industry_type"] == 'group':
+            groupForm = forms.ResearchGroupBasicInfoForm(self.request.POST, self.request.FILES)
+            if groupForm.is_valid():
+                interfacePerson = form.save()
+                groupProfile = groupForm.save(commit=False)
+                groupProfile.industry_user = industry_user
+                groupProfile.interfacePerson = interfacePerson
+                groupProfile.save()
+                industry_user.status='free'
+                industry_user.save()
+            else:
+                print("Group Form Invalid")
+                context = self.get_context_data()
+                context['researchGroup_form'] = groupForm
+                return render(request=self.request, template_name=self.template_name, context=context )
+        else:
+            RandDForm = forms.RandDBasicInfoForm(self.request.POST, self.request.FILES)
+            if RandDForm.is_valid():
+                interfacePerson = form.save()
+                RandDProfile = RandDForm.save(commit=False)
+                RandDProfile.industry_user = industry_user
+                RandDProfile.interfacePerson = interfacePerson
+                RandDProfile.save()
+                industry_user.status='free'
+                industry_user.save()
+            else:
+                print("RandD Form Invalid")
+                context = self.get_context_data()
+                context['RandD_form'] = RandDForm
+                return render(request=self.request, template_name=self.template_name, context=context )
+        # industryForm = form.save(commit=False)
+        # industry_user = self.request.user.industryuser
+        # industryForm.industry_user = industry_user
+        # industryForm.save()
+        # industry_user.status = 'free'
+        # industry_user.save()
         return super().form_valid(form)
 
 
@@ -297,35 +331,54 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = forms.IndustryInfoForm(self.request.user,
-                                           instance=self.request.user.industryuser.industryform,
-                                           initial={
-                                               'industry_type':
-                                                   self.request.user.industryuser.industryform.industry_type})
+        industry_user = models.IndustryUser.objects.get(user=self.request.user)
+        profile = industry_user.profile
+        context['interface_form'] = forms.InterfacePersonForm(instance=profile.interfacePerson,)
+        if type(profile) == models.RandDProfile:
+            context['type_form'] = "R&D"
+            context['RandD_form'] = forms.RandDInfoForm(instance=profile,
+                                           initial={'RandD_type': profile.RandD_type})
+        else:
+            context['type_form'] = "group"
+            context['researchgroup_form'] = forms.ResearchGroupInfoForm(instance=profile,
+                                                       initial={'type_group': profile.type_group})
         return context
 
     def post(self, request):
-        form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES,
-                                      initial={
-                                          'industry_type': self.request.user.industryuser.industryform.industry_type})
-        if form.is_valid():
-            # model_form = form.save(commit=False)
-            industryForm = IndustryForm.objects.get(name=form.cleaned_data['name'])
-            industryForm.industry_type=form.cleaned_data['industry_type']
-            industryForm.tax_declaration=form.cleaned_data['tax_declaration']
-            industryForm.services_products=form.cleaned_data['services_products']
-            industryForm.awards_honors=form.cleaned_data['awards_honors']
-            # )
-            if form.cleaned_data['photo']:
-                if os.path.isfile(industryForm.photo.path):
-                    os.remove(industryForm.photo.path)
-                # industryForm.photo.save(form.cleaned_data['photo'].name, form.cleaned_data['photo'])
-                industryForm.photo = form.cleaned_data['photo']
-            industryForm.save()
-            return HttpResponseRedirect(reverse('industry:index'))
+        # form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES,
+        #                               initial={
+        #                                   'industry_type': self.request.user.industryuser.industryform.industry_type})
+        industry_user = models.IndustryUser.objects.get(user=self.request.user)
+        profile = industry_user.profile
+        industryForm = self.request.user.industry_user.profile
+        if type(profile) == models.RandDProfile:
+            form = forms.RandDInfoForm(request.POST, request.FILES)
+            if form.is_valid():
+                industryForm.address    = form.cleaned_data['address']
+                industryForm.RandD_type = form.cleaned_data['RandD_type']
+                industryForm.tax_declaration   = form.cleaned_data['tax_declaration']
+                industryForm.services_products = form.cleaned_data['services_products']
+                industryForm.awards_honors     = form.cleaned_data['awards_honors']
+            else:
+                print('the R&D errors are:', form.errors)
+                context = self.get_context_data()
+                context['RandD_form'] = form
+                return render(request=request, template_name=self.template_name, context=context)
         else:
-            print('the errors are:', form.errors)
-        return render(request, 'industry/userInfo.html', context={'form': form})
+            form = forms.ResearchGroupInfoForm(request.POST, request.FILES)
+            if form.is_valid():
+                industryForm.address = form.cleaned_data['address']
+            else:
+                print('the ResearchGroup errors are:', form.errors)
+                context = self.get_context_data()
+                context['researchGroup_form'] = form
+                return render(request=request, template_name=self.template_name, context=context)
+        if form.cleaned_data['photo']:
+            if os.path.isfile(industryForm.photo.path):
+                os.remove(industryForm.photo.path)
+            industryForm.photo = form.cleaned_data['photo']
+        industryForm.save()
+        return HttpResponseRedirect(reverse('industry:index'))
 
 
 class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -402,6 +455,6 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
         context = super().get_context_data(**kwargs)
         industry = get_object_or_404(models.IndustryUser, user=self.request.user)
         context['industry'] = industry
-        if industry.industryform:
-            context['photo'] = industry.industryform.photo
+        if industry.profile:
+            context['photo'] = industry.profile.photo
         return context

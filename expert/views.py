@@ -515,7 +515,7 @@ def accept_project(request):
             messageForAdmin = """با سلام و احترام\n
             استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
             با تشکر
-            """.format(str(expert_user.expertform) ,str(project) ,str(project.industry_creator.industryform))
+            """.format(str(expert_user.expertform) ,str(project) ,str(project.industry_creator.profile))
             html_templateForAdmin = get_template('registration/projectRequest_template.html')
             email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
             msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
@@ -830,7 +830,7 @@ def refuseResearcher(request):
         return JsonResponse(data={} ,status=400)
 
 def ActiveProjcet(request, project, data):
-    industryform = project.industry_creator.industryform
+    industryform = project.industry_creator.profile
     projectDate = [
         gregorian_to_numeric_jalali(project.date_start),
         gregorian_to_numeric_jalali(project.date_project_started),

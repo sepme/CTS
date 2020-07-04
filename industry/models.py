@@ -51,6 +51,19 @@ class IndustryUser(models.Model):
 
     def get_absolute_url(self):
         return HttpResponseRedirect(reverse("industry:index"))
+    
+    def get_name(self):
+        try:
+            return self.randdprofile.name
+        except:
+            return self.researchgroupprofile.name
+    
+    @property
+    def profile(self):
+        try:
+            return self.randdprofile
+        except:
+            return self.researchgroupprofile
 
     @property
     def score(self):
@@ -94,6 +107,94 @@ class IndustryForm(models.Model):
         else:
             self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
+
+    def compressImage(self,photo):
+        imageTemproary = Image.open(photo).convert('RGB')
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
+        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
+
+class InterfacePerson(models.Model):
+    fullname     = models.CharField(max_length=150, verbose_name='نام و نام خانوادگی')
+    position     = models.CharField(verbose_name="سمت", max_length=150)
+    phone_number = models.CharField(verbose_name="شماره همراه", max_length=11)
+    email        = models.EmailField(verbose_name="پست الکترونیکی", max_length=254)
+
+    def __str__(self):
+        return self.fullname
+
+class RandDProfile(models.Model):
+    industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
+                                    verbose_name="صنعت")
+    interfacePerson      = models.OneToOneField("InterfacePerson", verbose_name='شخص رابط', on_delete=models.CASCADE)
+    name                 = models.CharField(max_length=64, verbose_name="نام شرکت")
+    photo                = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
+    registration_number  = models.CharField(max_length=10, verbose_name="شماره ثبت")
+    date_of_foundation   = models.CharField(max_length=4, verbose_name="تاریخ تاسیس")
+    research_field       = models.CharField(max_length=32, verbose_name="حوزه فعالیت")
+    RandD_type_choice = (
+        (0, 'خصوصی'),
+        (1, 'دولتی'),
+    )
+    RandD_type        = models.IntegerField(choices=RandD_type_choice, blank=False, null=False, verbose_name="نوع شرکت")
+    address           = models.TextField(verbose_name="ادرس شرکت")
+    phone_number      = models.CharField(max_length=15, verbose_name="شماره تلفن")
+    # international_activities = models.TextField(null=True, verbose_name="سابقه فعالیت بین المللی")
+    tax_declaration   = models.FileField(null=True, blank=True, upload_to=profileUpload, verbose_name="اظهارنامه مالیاتی")
+    # turn_over = models.FloatField(null=True, verbose_name="گردش مالی")
+    services_products = models.TextField(null=True, blank=True, verbose_name="خدمات/محصولات")
+    awards_honors     = models.TextField(null=True, blank=True, verbose_name="افتخارات")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            perv = RandDProfile.objects.get(id=self.id)
+            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                self.photo = self.compressImage(self.photo)
+        else:
+            self.photo = self.compressImage(self.photo)
+        super(RandDProfile, self).save(*args, **kwargs)
+
+    def compressImage(self,photo):
+        imageTemproary = Image.open(photo).convert('RGB')
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
+        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
+        outputIoStream.seek(0)
+        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        return uploadedImage
+
+class ResearchGroupProfile(models.Model):
+    industry_user = models.OneToOneField(IndustryUser, verbose_name="کاربر صنعت", on_delete=models.CASCADE)
+    interfacePerson = models.OneToOneField(InterfacePerson, verbose_name="فرد رابط", on_delete=models.CASCADE)
+    name    = models.CharField("نام مرکز", max_length=150)
+    photo   = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
+    address = models.TextField(verbose_name="ادرس", max_length=1000)
+    phone_number = models.CharField(verbose_name="شماره تلفن", max_length=11)
+    subordinateResearch = models.CharField(verbose_name="پژوهشکده تابعه", max_length=150)
+    TYPE_GROUP = (
+        ('community', 'انجمن پژوهشی'),
+        ('council', 'شورای پژوهشی'),
+        ('center', 'مرکز تحقیقاتی'),
+    )
+    type_group = models.CharField(max_length=10, verbose_name="نوع مرکز")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            perv = ResearchGroupProfile.objects.get(id=self.id)
+            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                self.photo = self.compressImage(self.photo)
+        else:
+            self.photo = self.compressImage(self.photo)
+        super(ResearchGroupProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
         imageTemproary = Image.open(photo).convert('RGB')
