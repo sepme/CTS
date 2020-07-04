@@ -435,14 +435,14 @@ def UsualShowProject(request, project, data):
         sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
         for comment in comment_list:
             try:
-                url = comment.attachment.url.split("/")[-1]
+                url = comment.attachment.url[comment.attachment.url.find('media', 2):]
             except:
                 url = "None"
             comments.append({
                 'id': comment.id,
                 'text': comment.description,
                 'sender_type': comment.sender_type,
-                'attachment': url,
+                'attachment' : url,
                 'pk' : comment.pk,
             })
             if comment.sender_type == "industry":
@@ -635,14 +635,14 @@ def show_researcher_preview(request):
     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
     for comment in comment_list:
         try:
-            url = comment.attachment.url.split("/")[-1]
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:
             url = "None"
         comments.append({
             'id': comment.id,
             'text': comment.description,
             'sender_type': comment.sender_type,
-            'attachment': url,
+            'attachment' : url,
             'pk' : comment.pk,
         })
         if comment.sender_type == 'researcher':
@@ -940,26 +940,26 @@ def ExpertRequestResearcher(request):
     else:
         return JsonResponse(data=form.errors, status=400)
 
-# @permission_required('expert.be_expert', login_url='/login/')
-# def GetResearcherComment(request):
-#     project_id    = request.GET['project_id']
-#     researcher_id = request.GET['researcher_id']
-#     comments = Comment.objects.filter(project=project_id).filter(researcher_user=researcher_id).exclude(sender_type="system")
-#     data = {'comments' : []}
-#     for comment in comments:
-#         try:
-#             url = comment.attachment.url.split("/")[-1]
-#         except:
-#             url = "None"
-#         commentInfo = {
-#             'id': comment.id,
-#             'text': comment.description,
-#             'sender_type': comment.sender_type,
-#             'attachment': url,
-#         }
-#         if comment.sender_type == "researcher":
-#             comment.status = "seen"
-#             comment.save()
-#         data['comments'].append(commentInfo)
-    
-#     return JsonResponse(data=data)
+@permission_required('expert.be_expert', login_url='/login/')
+def GetResearcherComment(request):
+    project_id    = request.GET['project_id']
+    researcher_id = request.GET['researcher_id']
+    comments = Comment.objects.filter(project=project_id).filter(researcher_user=researcher_id).exclude(sender_type="system")
+    data = {'comments' : []}
+    for comment in comments:
+        try:
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+        except:
+            url = "None"
+        commentInfo = {
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment' : url,
+        }
+        if comment.sender_type == "researcher":
+            comment.status = "seen"
+            comment.save()
+        data['comments'].append(commentInfo)
+        
+    return JsonResponse(data=data)

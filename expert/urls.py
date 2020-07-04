@@ -32,5 +32,6 @@ urlpatterns = [
     path('delete_executive/' ,views.DeleteExecutiveRecord ,name='delete_executive'),
     path('delete_research/' ,views.DeleteResearchRecord ,name='delete_research'),
     path('delete_paper/' ,views.DeletePaperRecord ,name='delete_research'),
-    path('request_researcher/', views.ExpertRequestResearcher ,name="request_researcher"),
+    path('request_researcher/', views.ExpertRequestResearcher, name="request_researcher"),
+    path('get_researcher_comment', views.GetResearcherComment, name="getResearcherComment")
 ]

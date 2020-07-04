@@ -93,7 +93,7 @@ def ActiveProject(request, project, data):
     data['comments'] = []
     for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
         try:
-            url = comment.attachment.url.split("/")[-1]
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:
             url = "None"
         data['comments'].append({
@@ -168,15 +168,15 @@ def GetComment(request):
     response = []
     for comment in comments:
         try:
-            url = comment.attachment.url.split("/")[-1]
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:
             url = "None"
         temp = {
-            'pk'           : comment.pk,
+            'pk'    : comment.pk,
             'text'  : comment.description,
             'replied_text' : comment.replied_text,
             'sender_type'  : comment.sender_type,
-            'attachment'   : url
+            'attachment'   : url,
         }
         response.append(temp)    
         if comment.sender_type == 'expert' or comment.sender_type == 'system':
@@ -250,9 +250,10 @@ def submit_comment(request):
                                              status='unseen')
         new_comment.save()
         if attachment is not None:
+            url  = new_comment.attachment.url[new_comment.attachment.url.find('media', 2):]
             data = {
                 'success' : 'successful',
-                'attachment' : new_comment.attachment.url.split("/")[-1],
+                'attachment'  : url,
                 'description':description,
             }
         else:

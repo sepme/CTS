@@ -587,15 +587,15 @@ def ShowProject(request):
     json_response['comments'] = []
     for com in all_comments:
         try:
-            url = com.attachment.url.split("/")[-1]
+            url  = com.attachment.url[com.attachment.url.find('media', 2):]
         except:
-            url = "None"
+            url  = "None"
         temp = {
             'pk'           : com.pk,
             'description'  : com.description,
             'replied_text' : com.replied_text,
             'sender_type'  : com.sender_type,
-            'attachment'   : url
+            'attachment' : url,
         }
         json_response['comments'].append(temp)
         if (com.sender_type == 'expert' or com.sender_type == 'system') and com.status == 'not_seen':
@@ -716,9 +716,10 @@ def AddComment(request):
                          ,status='unseen')
         comment.save()
         if attachment is not None:
+            url  = comment.attachment.url[comment.attachment.url.find('media', 2):]
             data = {
                 'success' : 'successful',
-                'attachment' : comment.attachment.url.split("/")[-1],
+                'attachment' : url,
                 'description':description,
                 'pk' : comment.pk,
             }
