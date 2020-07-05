@@ -589,8 +589,12 @@ $(document).ready(function () {
                 }
                 let tech = "";
                 for (let index = 0; index < data.techniques.length; index++)
-                    tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
-                $("#researcher_techniques").html(tech)
+                    tech += `<div class="technique-item">
+                                <span class="technique-name">${data.techniques[index]}</span>
+                                <span class="grade grade__A"></span>
+                             </div>`;
+                // tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
+                $("#technique-list").html(tech);
                 $('#researcher_university').html(data.university);
                 $('#researcher_entry_year').html(data.entry_year);
 
@@ -604,10 +608,12 @@ $(document).ready(function () {
                             "<td>" + scientific_record[i].fields.university + "</td>" +
                             "<td>" + scientific_record[i].fields.place + "</td>" +
                             "<td>" + scientific_record[i].fields.graduated_year + "</td>" +
-                            "</tr>"
+                            "</tr>";
                         $('#researcher_scientific_record').html(table_row)
                     }
-                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+                } else {
+                    $('#researcher_scientific_record').html(`<tr><td>هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
 
                 let executive_record = JSON.parse(data.executive_record);
                 if (executive_record.length !== 0) {
@@ -619,10 +625,12 @@ $(document).ready(function () {
                             "<td>" + executive_record[i].fields.city + "</td>" +
                             "<td>" + executive_record[i].fields.start + "</td>" +
                             "<td>" + executive_record[i].fields.end + "</td>" +
-                            "</tr>"
+                            "</tr>";
                         $('#researcher_executive_record').html(table_row)
                     }
-                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+                } else {
+                    $('#researcher_executive_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
 
                 let research_record = JSON.parse(data.research_record);
                 if (research_record.length !== 0) {
@@ -645,10 +653,12 @@ $(document).ready(function () {
                             "<td>" + research_record[i].fields.presenter + "</td>" +
                             "<td>" + research_record[i].fields.responsible + "</td>" +
                             "<td>" + status + "</td>" +
-                            "</tr>"
+                            "</tr>";
                         $('#researcher_research_record').html(table_row)
                     }
-                } //TODO: Add a message saying "هیچ اطلاعاتی توسط کاربر ثبت نشده"
+                } else {
+                    $('#researcher_research_record').html(`<tr><td colspan="4">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
                 setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
@@ -1295,7 +1305,7 @@ function setApproach(data) {
         "</div>" +
         "<div class='answer'>" +
         data.potential_problems +
-        "</div></div>"
+        "</div></div>";
     $(".project-info-content").html(approach);
 }
 
@@ -1352,87 +1362,6 @@ function setValue(data) {
     });
 }
 
-function setComment(data) {
-    let comments_code = "";
-    console.log(data);
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === "expert") { //expert
-            let comment_body_classes = "comment-body";
-            if (data[i].attachment !== "None") {
-                comment_body_classes += " attached";
-            }
-            comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
-                "   <div class='comment-profile'></div>" +
-                "           <span class='comment-tools'>" +
-                "               <div class='btn-group dropright'>" +
-                "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
-                "                       <i class='fas fa-cog'></i>" +
-                "                   </button>" +
-                "                   <div class='dropdown-menu'>" +
-                // "                       <div class='dropdown-item'>" +
-                // "                           <i class='fas fa-pen'></i>" +
-                // "                           <span>ویرایش پیام</span>" +
-                // "                       </div>" +
-                "                       <div class='dropdown-item'>" +
-                "                           <i class='fas fa-trash-alt'></i>" +
-                "                           <span>حذف پیام</span>" +
-                "                       </div>" +
-                "                   </div>" +
-                "               </div>" +
-                // "               <i class='fas fa-reply'>" +
-                // "                   <div class='reply'></div>" +
-                // "               </i>" +
-                "           </span>" +
-                "       <div class='" + comment_body_classes + "'>";
-            comments_code += "<pre>" + data[i].text + "</pre>";
-            if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
-                    "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
-                    "</a>";
-            }
-            comments_code += "" +
-                "   </div>" +
-                "</div>";
-        } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
-            let comment_body_classes = "comment-body";
-            if (data[i].attachment !== "None") {
-                comment_body_classes += " attached";
-            }
-            comments_code += "<div class='your-comment'>" +
-                "   <div class='" + comment_body_classes + "' dir='ltr'>" +
-                "       <span class='comment-tools'>" +
-                // "           <i class='fas fa-reply'" + data[i].pk + "></i>" +
-                "       </span>" +
-                "<pre>" + data[i].text + "</pre>";
-            if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
-                    "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
-                    "</a>";
-            }
-            comments_code += "" +
-                "   </div>" +
-                "</div>";
-        } else { //system
-            comments_code += "<div class='system-comment'>" +
-                "<div class='comment-body' dir='ltr'>" +
-                "<pre>" +
-                data[i].text +
-                "</pre>" +
-                "</div>" +
-                "</div>";
-        }
-    }
-    if (comments_code === "") {
-        $(".no-comment").addClass("show");
-    }
-    $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
-
-    $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
-        deleteComment($(this).closest('.my-comment'));
-    });
-}
 
 function addComment(data) {
     let comment_body_classes = "comment-body";
@@ -1461,8 +1390,8 @@ function addComment(data) {
         // "           <div class='reply'></div>" +
         // "       </i>" +
         "   </span>" +
-        "       <div class='" + comment_body_classes + "'>";
-    comment_code += "<pre>" + data.description + "</pre>";
+        "       <div class='" + comment_body_classes + "'>" +
+        "<pre>" + data.description + "</pre>";
     if (data.attachment !== "None") {
         comment_code +=
             "<a href='/" + data.attachment + "' class='attached-file'>" +
@@ -1485,7 +1414,11 @@ comment_form.submit(function (event) {
         thisUrl = "/expert/industry_comment/";
     else
         thisUrl = "/expert/researcher_comment/";
-    $(".project_id").attr('value', $('.showProject').attr("id"));
+    if (comment_form.closest(".showProject").length > 0) {
+        $(".project_id").attr('value', $('.showProject').attr("id"));
+    } else {
+        $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
+    }
     let form = new FormData(comment_form.get(0));
     $.ajax({
         method: 'POST',
@@ -1521,6 +1454,7 @@ comment_form.submit(function (event) {
 
         },
         error: function (data) {
+            console.log(data);
             let obj = JSON.parse(data.responseText);
             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                 .prop("disabled", false);

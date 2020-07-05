@@ -213,9 +213,9 @@ function expertResume() {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                $("#expertResume .modal-header .modal-title").html(data.name);
-                $("#expertResume #expert_uni").html("دانشگاه " + data.university);
-                $("#expertResume #expert_field").html(data.scientific_rank + " " + data.special_field);
+                $("#expert_name").html(data.name);
+                $("#expert_uni").html(data.university);
+                $("#expert_field").html(data.scientific_rank + " " + data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
                     let table_row = "";
@@ -227,10 +227,10 @@ function expertResume() {
                             "<td>" + sci_record[i].fields.city + "</td>" +
                             "<td>" + sci_record[i].fields.date_of_graduation + "</td>" +
                             "</tr>";
-                        $('.sci_record').html(table_row);
+                        $('#expert_scientific_record').html(table_row);
                     }
                 } else {
-                    $("#whole-education-info").css("display", "none");
+                    $('#expert_scientific_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
                 let executive_record = JSON.parse(data.exe_record);
                 if (executive_record.length !== 0) {
@@ -243,10 +243,10 @@ function expertResume() {
                             "<td>" + executive_record[i].fields.organization + "</td>" +
                             "<td>" + executive_record[i].fields.city + "</td>" +
                             "</tr>";
-                        $('.executive_record').html(table_row);
+                        $('#expert-executive-info').html(table_row);
                     }
                 } else {
-                    $("#whole-executive-info").css("display", "none");
+                    $('#expert-executive-info').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
                 let research_record = JSON.parse(data.research_record);
                 if (research_record.length !== 0) {
@@ -257,10 +257,10 @@ function expertResume() {
                             "<td>" + research_record[i].fields.researcher + "</td>" +
                             "<td>" + research_record[i].fields.co_researcher + "</td>" +
                             "</tr>";
-                        $('.research_record').html(table_row);
+                        $('#expert_research_record').html(table_row);
                     }
                 } else {
-                    $("#whole-project-info").css("display", "none");
+                     $('#expert_research_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
                 let paper_record = JSON.parse(data.paper_record);
                 if (paper_record.length !== 0) {
@@ -273,20 +273,20 @@ function expertResume() {
                             "<td>" + paper_record[i].fields.impact_factor + "</td>" +
                             "<td>" + paper_record[i].fields.citation + "</td>" +
                             "</tr>";
-                        $('.paper_record').html(table_row);
+                        $('#expert_paper_record').html(table_row);
                     }
                 } else {
-                    $("#whole-article-info").css("display", "none");
+                    $('#expert_paper_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
                 $('.researcher_count').html(data.researcher_count);
                 $('.has_industrial_research').html(data.has_industrial_research);
                 if (data.awards === '') {
-                    $("#whole-honors-info").css("display", "none");
+                    $('.awards').closest("li").css("display", "none");
                 } else {
                     $('.awards').html(data.awards);
                 }
                 if (data.languages === '') {
-                    $("#whole-other-info").css("display", "none");
+                    $(".foreign-lang").closest("li").css("display", "none");
                 } else {
                     $('.languages').html(data.languages);
                 }
@@ -356,14 +356,15 @@ function setComment(data) {
                 // "               <i class='fas fa-reply'>" +
                 // "                   <div class='reply'></div>" +
                 // "               </i>" +
-                "           </span>";
+                "           </span>" +
+                "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
-            comments_code += "<pre>" + data[i].text + "</pre>" +
+            comments_code += "" +
                 "   </div>" +
                 "</div>";
         } else if (data[i].sender_type === "expert") { //expert
@@ -375,14 +376,15 @@ function setComment(data) {
                 "<div class='" + comment_body_classes + "' dir='ltr'>" +
                 "<span class='comment-tools'>" +
                 // "   <i class='fas fa-reply'" + data[i].pk + "></i>" +
-                "</span>";
+                "</span>" +
+                "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
             }
-            comments_code += "<pre>" + data[i].text + "</pre>" +
+            comments_code += "" +
                 "   </div>" +
                 "</div>";
         } else { //system
@@ -530,14 +532,15 @@ function addComment(data) {
         // "               <i class='fas fa-reply'>" +
         // "                   <div class='reply'></div>" +
         // "               </i>" +
-        "           </span>";
+        "           </span>" +
+        "<pre>" + data.description + "</pre>";
     if (data.attachment !== "None") {
         new_comment += "<a href='/" + data.attachment + "' class='attached-file'>" +
             "   <i class='fas fa-paperclip'></i>" +
             "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
             "</a>";
     }
-    new_comment += "<pre>" + data.description + "</pre>" +
+    new_comment += "" +
         "   </div>" +
         "</div>";
     // let new_comment = "<div class='my-comment'>" +
@@ -656,7 +659,7 @@ $(document).ready(function () {
     }
 
     $(".preview-project").click(function () {
-        console.log("preview");
+        console.log("preview1");
         const dialog = $("#showProject");
         $(this).closest(".card").find('.unseen-comments').html("");
         let id = $(this).attr("id");
@@ -666,9 +669,12 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                console.log("get data");
                 if (data.accepted){
+                     console.log("1");
                     projectDetail(data);
                 }else{
+                    console.log("2");
                     $('.confirm-request').attr('id', id);
                     $('.comment').attr('id', id);
                     localStorage.setItem("project_id", "" + id);
@@ -685,6 +691,7 @@ $(document).ready(function () {
                     }
                     setMajors(data, "-preview");
                     setValue(data, "-preview");
+                    console.log("state");
                     if (data.status !== 1 && data.status !== 2) {
                         dialog.find('.add-comment').attr('style', 'display : none');
                         $('.image-btn-circle').prop('disabled', true);
@@ -706,11 +713,12 @@ $(document).ready(function () {
 
                         $('.add-comment').attr('style', "display : block");
                         $('.image-btn-circle').prop('disabled', false);
+                        console.log("state2");
+                        setTab(data);
                         dialog_comment_init();
                         // if (data.status === 1) {
                         //     $(".row.add-comment").css("display", "none");
                         // }
-                        setTab(data);
                     }
                     // modalPreview(".showProject");
                 }
@@ -963,63 +971,7 @@ $(document).ready(function () {
             $(".dialog-main").css("display", "block");
             close_dialog();
         });
-        let comment_form = $('#comment-form');
-        comment_form.submit(function (event) {
-            event.preventDefault();
-            comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
-            comment_form.find("label").addClass("progress-cursor");
-            $("#project_id").attr('value', $(".comment").attr("id"));
-            $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
-            let thisUrl = "/industry/submit_comment/";
-            let data = new FormData(comment_form.get(0));
-            $.ajax({
-                method: 'POST',
-                url: thisUrl,
-                data: data,
-                type: "ajax",
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                        .prop("disabled", false);
-                    comment_form.find("label").removeClass("progress-cursor");
-                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                    if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                        $(".project-comment-innerDiv").find(".no-comment").remove();
-                    }
-                    let comment_code = addComment(data);
-                    $(".project-comment-innerDiv").find(".comments").append(comment_code);
-                    iziToast.success({
-                        rtl: true,
-                        message: "پیام با موفقیت ارسال شد!",
-                        position: 'bottomLeft'
-                    });
-                    comment_form[0].reset();
-                    comment_form.find("#description").css("height", "fit-content");
-                    $('.error').remove();
-                    $('.file-name').html("");
-                    $(".send-comment-container .comment-input").removeClass("attached");
-                    $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
-                },
-                error: function (data) {
-                    let obj = JSON.parse(data.responseText);
-                    comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                        .prop("disabled", false);
-                    comment_form.find("label").removeClass("progress-cursor");
-                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                    if (obj.description) {
-                        $("#description").closest("div").append("<div class='error'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + obj.description + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
-                        $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                    }
-                },
-            });
-        });
+
         // $(".chamran_btn").click(function () {
         //     let comment_obj = $("#comment");
         //     let comment_description = comment_obj.val();

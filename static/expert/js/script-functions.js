@@ -942,7 +942,7 @@ function returnFileType(type) {
         || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
         return type;
     } else if (type === "jpeg")
-        return "jpg"
+        return "jpg";
     return "unknown";
 }
 
@@ -1187,3 +1187,86 @@ $("#delete_paper").click(function () {
         },
     });
 });
+
+function setComment(data) {
+    let comments_code = "";
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].sender_type === "expert") { //expert
+            let comment_body_classes = "comment-body";
+            if (data[i].attachment !== "None") {
+                comment_body_classes += " attached";
+            }
+            comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
+                "   <div class='comment-profile'></div>" +
+                "           <span class='comment-tools'>" +
+                "               <div class='btn-group dropright'>" +
+                "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+                "                       <i class='fas fa-cog'></i>" +
+                "                   </button>" +
+                "                   <div class='dropdown-menu'>" +
+                // "                       <div class='dropdown-item'>" +
+                // "                           <i class='fas fa-pen'></i>" +
+                // "                           <span>ویرایش پیام</span>" +
+                // "                       </div>" +
+                "                       <div class='dropdown-item'>" +
+                "                           <i class='fas fa-trash-alt'></i>" +
+                "                           <span>حذف پیام</span>" +
+                "                       </div>" +
+                "                   </div>" +
+                "               </div>" +
+                // "               <i class='fas fa-reply'>" +
+                // "                   <div class='reply'></div>" +
+                // "               </i>" +
+                "           </span>" +
+                "       <div class='" + comment_body_classes + "'>" +
+                "<pre>" + data[i].text + "</pre>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                    "   <i class='fas fa-paperclip'></i>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+                    "</a>";
+            }
+            comments_code += "" +
+                "   </div>" +
+                "</div>";
+        } else if (data[i].sender_type === "researcher" || data[i].sender_type === "industry") { //researcher or industry
+            let comment_body_classes = "comment-body";
+            if (data[i].attachment !== "None") {
+                comment_body_classes += " attached";
+            }
+            comments_code += "<div class='your-comment'>" +
+                "   <div class='" + comment_body_classes + "' dir='ltr'>" +
+                "       <span class='comment-tools'>" +
+                // "           <i class='fas fa-reply'" + data[i].pk + "></i>" +
+                "       </span>" +
+                "<pre>" + data[i].text + "</pre>" ;
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                    "   <i class='fas fa-paperclip'></i>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+                    "</a>";
+            }
+            comments_code += "" +
+                "   </div>" +
+                "</div>";
+        } else { //system
+            comments_code += "<div class='system-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<pre>" +
+                data[i].text +
+                "</pre>" +
+                "</div>" +
+                "</div>";
+        }
+    }
+    if (comments_code === "") {
+        $(".no-comment").addClass("show");
+    }
+    $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+
+    $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+        deleteComment($(this).closest('.my-comment'));
+    });
+    dialog_comment_init();
+}

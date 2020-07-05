@@ -1260,6 +1260,7 @@ span.add-researcher.hover > span {
 
 .project-progress {
     width: 100%;
+    height: 100%;
     padding: 10px 10px 10px 0;
     text-align: center !important;
     position: relative;
@@ -1331,7 +1332,17 @@ span.add-researcher.hover > span {
 
 .project-progress .step-container {
     flex-direction: column-reverse;
-    min-height: 120px;
+    /*min-height: 120px;*/
+    position: absolute;
+    width: 100%;
+}
+
+.project-progress .step-container:first-child {
+    top: 5%;
+}
+
+.project-progress .step-container:nth-child(5) {
+    top: 93%;
 }
 
 @media (max-width: 992px) {
@@ -1424,7 +1435,7 @@ span.add-researcher.hover > span {
     position: absolute;
     height: 16px;
     width: 16px;
-    left: 0;
+    left: 1px;
     top: 0;
     -webkit-transform: translate(-50%, calc(-50% - 16px));
     -moz-transform: translate(-50%, calc(-50% - 16px));
@@ -1570,7 +1581,7 @@ span.add-researcher.hover > span {
     -moz-transform: translate(0, -50%);
     -ms-transform: translate(0, -50%);
     -o-transform: translate(0, -50%);
-    transform: translate(0, -50%);
+    transform: translate(1px, -50%);
 }
 
 .project-progress .step-container:not(.active) span.step-name:before {
@@ -1586,7 +1597,7 @@ span.add-researcher.hover > span {
     -moz-transform: translate(0, -50%);
     -ms-transform: translate(0, -50%);
     -o-transform: translate(0, -50%);
-    transform: translate(1px, -50%);
+    transform: translate(2px, -50%);
     z-index: 1;
 }
 
@@ -1756,11 +1767,11 @@ span.add-researcher.hover > span {
     width: 4px;
     left: 50%;
     top: 0;
-    -webkit-transform: translate(-10px, 0);
-    -moz-transform: translate(-10px, 0);
-    -ms-transform: translate(-10px, 0);
-    -o-transform: translate(-10px, 0);
-    transform: translate(-10px, 0);
+    -webkit-transform: translate(-12px, 0);
+    -moz-transform: translate(-12px, 0);
+    -ms-transform: translate(-12px, 0);
+    -o-transform: translate(-12px, 0);
+    transform: translate(-12px, 0);
     background-color: #B0E9A4;
     z-index: 1;
 }
@@ -2434,4 +2445,20 @@ ul.nav-tabs {
 .green-btn:hover {
     background-color: #3ccd1c;
     color: #ffffff;
+}
+
+.horizontal-avatar-list {
+    display: flex;
+}
+
+.horizontal-avatar-list .avatar-item {
+    margin-left: 5px;
+}
+
+.horizontal-avatar-list .avatar-item:hover {
+
+}
+
+.horizontal-avatar-list .avatar-item img {
+    width: 160px;
 }

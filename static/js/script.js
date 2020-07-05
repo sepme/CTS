@@ -106,6 +106,7 @@ $(document).ready(function () {
         $('.prev-slide').click(function () {
             owl.trigger('prev.owl.carousel');
         });
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     // input_focus();

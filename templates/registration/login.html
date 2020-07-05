@@ -73,15 +73,14 @@
                         <div class="account_error"></div>
                         <div class="email input-compact">
                             <label for="email">پست الکترونیکی</label>
-                            {{ register_form.email|attr:"id:email"|attr:"class:w-100"|attr:"placeholder:example@domain.com" }}
+                            {{ register_form.email|attr:"id:email"|attr:"class:w-100"|attr:"placeholder:example@domain.com"|attr:"data-toggle:tooltip"|attr:"data-html:true"|attr:"title:<h6>توجه!</h6>پس از ثبت نام این ایمیل نام کاربری شما خواهد بود و به هیچ وجه قابل تغییر نیست، فلذا ایمیل معتبری را در اینجا وارد کنید. <p></p>" }}
                             <i class="fas fa-at fa-lg"></i>
                         </div>
                         <div class="captcha-test">
                             <span id="refresh-captcha">
                                 <i class="fas fa-sync-alt"></i>
                             </span>
-                            {{ register_form.captcha | attr:"class:w-100"| attr:"placeholder:کد را وارد کنید"}}
-                        </div>
+                            {{ register_form.captcha | attr:"class:w-100"| attr:"placeholder:کد را وارد کنید" }}
                         <div class="captcha-error"></div>
                         <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
                         <hr>

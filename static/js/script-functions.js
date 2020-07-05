@@ -94,11 +94,17 @@ function close_modal() {
     if ($(".modal").length > 0) {
         $(".modal").each(function () {
             $(this).on('hidden.bs.modal', function (e) {
+                if ($(this).find(".techniques").length > 0) {
+                    $(this).find(".techniques").html("");
+                }
                 if ($(this).find(".keywords").length > 0) {
                     $(this).find(".keywords").html("");
                 }
                 if ($(this).find(".comment-tabs").length > 0) {
                     $(this).find(".comment-tabs .nav").html("");
+                }
+                if ($(this).find(".no-comment").length > 0) {
+                    $(this).find(".no-comment").html("");
                 }
             })
         });

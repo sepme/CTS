@@ -10,6 +10,7 @@
 
 .comment-body {
     width: fit-content;
+    width: -moz-fit-content;
     position: relative;
     padding: 5px 10px;
     text-align: right;
@@ -43,7 +44,7 @@
     width: fit-content;
     float: left;
     margin-bottom: -20px;
-    bottom: -20px;
+    bottom: 0;
     direction: ltr;
     color: rgba(0, 0, 0, 0.6);
     background-color: #cacbcd70;
@@ -64,7 +65,9 @@
 
 .comments {
     max-height: 300px;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
+    direction: rtl;
 }
 
 .my-comment, .your-comment {
@@ -72,6 +75,7 @@
     margin-top: 5px;
     margin-bottom: 5px;
     width: fit-content;
+    width: -moz-fit-content;
     max-width: 75%;
 }
 

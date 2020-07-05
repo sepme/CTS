@@ -31,17 +31,17 @@ function init_dialog_btn(element, dialogClass) {
 
 function modalPreview(modalClass) {
     vote_dialog_init(modalClass);
-        $(".fixed-back").removeClass("show");
-        $(".main").removeClass("blur-div");
-        blur_div_toggle(".main");
-        $(modalClass).addClass("show");
-        close_dialog(modalClass);
-        dialog_comment_init();
-        load_dialog();
-        if (modalClass === ".showProject") {
-            $(modalClass).removeAttr("id");
-            $(modalClass).attr("id", $(this).attr("id"));
-        }
+    $(".fixed-back").removeClass("show");
+    $(".main").removeClass("blur-div");
+    blur_div_toggle(".main");
+    $(modalClass).addClass("show");
+    close_dialog(modalClass);
+    dialog_comment_init();
+    load_dialog();
+    if (modalClass === ".showProject") {
+        $(modalClass).removeAttr("id");
+        $(modalClass).attr("id", $(this).attr("id"));
+    }
 }
 
 // function cancel_add(className) {
@@ -86,6 +86,7 @@ function close_dialog(className) {
         $(className).find(".comment-tabs .nav").html("");
     });
 }
+
 //
 // function addComment(comment) {
 //     let newPost = "<div class=\"my-comment\" style='display: none'><div class=\"comment-profile\"></div><div class=\"comment-body\" dir=\"ltr\"><span class=\"comment-tools\"><i class=\"fas fa-trash-alt\"></i><i class=\"fas fa-reply\"></i><i class=\"fas fa-pen\"></i></span><span>" + comment + "</span></div></div>";
@@ -104,6 +105,65 @@ function dialog_comment_init() {
             $(".send-comment-container .comment-input input#comment-attach").val("");
             $(".send-comment-container .comment-input .attachment span").html("");
             $(".send-comment-container .comment-input").removeClass("attached");
+        });
+    });
+    let comment_form = $('#comment-form');
+    $(comment_form).off("submit");
+    comment_form.submit(function (event) {
+        event.preventDefault();
+        comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+        comment_form.find("label").addClass("progress-cursor");
+        $("#project_id").attr('value', $(this).closest(".row").find(".comment").attr("id"));
+        $("#expert_id").attr('value', $(this).closest(".row").find(".comment-tabs .active").attr("id")
+            .replace("v-pills-expert-", ""));
+        let thisUrl = "/industry/submit_comment/";
+        let data = new FormData(comment_form.get(0));
+        $.ajax({
+            method: 'POST',
+            url: thisUrl,
+            data: data,
+            type: "ajax",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                    .prop("disabled", false);
+                comment_form.find("label").removeClass("progress-cursor");
+                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                    $(".project-comment-innerDiv").find(".no-comment").remove();
+                }
+                let comment_code = addComment(data);
+                $(".project-comment-innerDiv").find(".comments").append(comment_code);
+                iziToast.success({
+                    rtl: true,
+                    message: "پیام با موفقیت ارسال شد!",
+                    position: 'bottomLeft'
+                });
+                comment_form[0].reset();
+                comment_form.find("#description").css("height", "fit-content");
+                $('.error').remove();
+                $('.file-name').html("");
+                $(".send-comment-container .comment-input").removeClass("attached");
+                $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+            },
+            error: function (data) {
+                let obj = JSON.parse(data.responseText);
+                comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                    .prop("disabled", false);
+                comment_form.find("label").removeClass("progress-cursor");
+                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                if (obj.description) {
+                    $("#description").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.description + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+            },
         });
     });
     // add emoji to comment

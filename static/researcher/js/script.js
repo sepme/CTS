@@ -208,86 +208,6 @@ function setValue(data) {
     });
 }
 
-function setComment(data) {
-    let comments_code = "";
-    if (data.length === 0) {
-        $(".no-comment").css("display", "block");
-    }
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].sender_type === "expert") { //expert
-            let comment_body_classes = "comment-body";
-            if (data[i].attachment !== "None") {
-                comment_body_classes += " attached";
-            }
-            comments_code += "<div class='expert-comment' dir='ltr' id='" + data[i].pk + "' >" +
-                "<div class='" + comment_body_classes + "'>" +
-                "   <span class='comment-tools'>" +
-                // "       <i class='fas fa-reply'>" +
-                // "           <div class='reply'></div>" +
-                // "       </i>" +
-                "</span>";
-            if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
-                    "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
-                    "</a>";
-            }
-            comments_code += "<pre>" + data[i].description + "</pre>" +
-                "   </div>" +
-                "</div>";
-        } else if (data[i].sender_type === "researcher") { //researcher
-            let comment_body_classes = "comment-body";
-            if (data[i].attachment !== "None") {
-                comment_body_classes += " attached";
-            }
-            comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
-                "<div class='" + comment_body_classes + "' dir='ltr'>" +
-                "   <span class='comment-tools'>" +
-                "       <div class='btn-group dropright'>" +
-                "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
-                "               <i class='fas fa-cog'></i>" +
-                "           </button>" +
-                "           <div class='dropdown-menu'>" +
-                // "               <div class='dropdown-item'>" +
-                // "                   <i class='fas fa-pen'></i>" +
-                // "                   <span>ویرایش پیام</span>" +
-                // "               </div>" +
-                "               <div class='dropdown-item'>" +
-                "                   <i class='fas fa-trash-alt'></i>" +
-                "                   <span>حذف پیام</span>" +
-                "               </div>" +
-                "           </div>" +
-                "       </div>" +
-                // "       <i class='fas fa-reply'>" +
-                // "           <div class='reply'></div>" +
-                // "       </i>" +
-                "   </span>";
-            if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
-                    "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
-                    "</a>";
-            }
-            comments_code += "<pre>" + data[i].description + "</pre>" +
-                "   </div>" +
-                "</div>";
-        } else { //system
-            comments_code += "<div class='system-comment'>" +
-                "<div class='comment-body' dir='ltr'>" +
-                "<pre>" +
-                data[i].description +
-                "</pre>" +
-                "</div>" +
-                "</div>";
-        }
-    }
-    $('.comments').html(comments_code);
-    dialog_comment_init();
-    $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
-        deleteComment($(this).closest('.my-comment'));
-    });
-}
-
 $(".trash").click(function (event) {
     let comment_id = $(this).attr('id');
     $.ajax({
@@ -872,6 +792,7 @@ add_technique_form.submit(function (event) {
                     "</span>" +
                     "</div>");
                 $("input#technique-name").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                display_error(add_technique_form);
             }
             if (obj.resume) {
                 $("#resume").closest("div").append("<div class='error'>" +
@@ -896,27 +817,204 @@ add_technique_form.submit(function (event) {
     })
 });
 
-function addComment(data) {
-    let new_comment = "<div class='my-comment' id='" + data.pk + "' >" +
-        "<div class='comment-body' dir='ltr'>" +
-        "<span class='comment-tools'>"
-        // "<i class='fas fa-trash-alt'></i>" +
-        // "<i class='fas fa-pen'>" +
-        // "</i>" +
-        // "<i class='fas fa-reply'><div class='reply'></div>" +
-        // "</i>"
-    ;
-    if (data.attachment !== "None") {
-        new_comment += "<a href='/" +
-            data.attachment +
-            "'><i class='fas fa-paperclip'></i></a>";
+function setComment(data) {
+    // let comments_code = "";
+    // if (data.length === 0) {
+    //     $(".no-comment").css("display", "block");
+    // }
+    // for (let i = 0; i < data.length; i++) {
+    //     if (data[i].sender_type === "expert") { //expert
+    //         let comment_body_classes = "comment-body";
+    //         if (data[i].attachment !== "None") {
+    //             comment_body_classes += " attached";
+    //         }
+    //         comments_code += "<div class='expert-comment' dir='ltr' id='" + data[i].pk + "' >" +
+    //             "<div class='" + comment_body_classes + "'>" +
+    //             "   <span class='comment-tools'>" +
+    //             // "       <i class='fas fa-reply'>" +
+    //             // "           <div class='reply'></div>" +
+    //             // "       </i>" +
+    //             "</span>";
+    //         if (data[i].attachment !== "None") {
+    //             comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+    //                 "   <i class='fas fa-paperclip'></i>" +
+    //                 "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+    //                 "</a>";
+    //         }
+    //         comments_code += "<pre>" + data[i].description + "</pre>" +
+    //             "   </div>" +
+    //             "</div>";
+    //     } else if (data[i].sender_type === "researcher") { //researcher
+    //         let comment_body_classes = "comment-body";
+    //         if (data[i].attachment !== "None") {
+    //             comment_body_classes += " attached";
+    //         }
+    //         comments_code += "<div class='my-comment' id='" + data[i].pk + "' >" +
+    //             "<div class='" + comment_body_classes + "' dir='ltr'>" +
+    //             "   <span class='comment-tools'>" +
+    //             "       <div class='btn-group dropright'>" +
+    //             "           <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+    //             "               <i class='fas fa-cog'></i>" +
+    //             "           </button>" +
+    //             "           <div class='dropdown-menu'>" +
+    //             // "               <div class='dropdown-item'>" +
+    //             // "                   <i class='fas fa-pen'></i>" +
+    //             // "                   <span>ویرایش پیام</span>" +
+    //             // "               </div>" +
+    //             "               <div class='dropdown-item'>" +
+    //             "                   <i class='fas fa-trash-alt'></i>" +
+    //             "                   <span>حذف پیام</span>" +
+    //             "               </div>" +
+    //             "           </div>" +
+    //             "       </div>" +
+    //             // "       <i class='fas fa-reply'>" +
+    //             // "           <div class='reply'></div>" +
+    //             // "       </i>" +
+    //             "   </span>";
+    //         if (data[i].attachment !== "None") {
+    //             comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+    //                 "   <i class='fas fa-paperclip'></i>" +
+    //                 "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+    //                 "</a>";
+    //         }
+    //         comments_code += "<pre>" + data[i].description + "</pre>" +
+    //             "   </div>" +
+    //             "</div>";
+    //     } else { //system
+    //         comments_code += "<div class='system-comment'>" +
+    //             "<div class='comment-body' dir='ltr'>" +
+    //             "<pre>" +
+    //             data[i].description +
+    //             "</pre>" +
+    //             "</div>" +
+    //             "</div>";
+    //     }
+    // }
+    // $('.comments').html(comments_code);
+    // dialog_comment_init();
+    // $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+    //     deleteComment($(this).closest('.my-comment'));
+    // });
+    let comments_code = "";
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].sender_type === "researcher") { //researcher
+            let comment_body_classes = "comment-body";
+            let attachment = "";
+            if (data[i].attachment !== "None") {
+                comment_body_classes += " attached";
+                attachment = `
+                    <a href='/${data[i].attachment}' class='attached-file'>
+                        <i class='fas fa-paperclip'></i>
+                        <span>${data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1)}</span>
+                    </a>
+                `;
+            }
+            comments_code += `
+                            <div class='my-comment' id='${data[i].pk}'>
+                                <div class='comment-profile'></div>
+                                <div class='${comment_body_classes}'>
+                                    <span class='comment-tools'>
+                                        <div class='btn-group dropright'>
+                                            <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                                                <i class='fas fa-cog'></i>
+                                            </button>
+                                            <div class='dropdown-menu'>
+                                                <div class='dropdown-item'>
+                                                    <i class='fas fa-trash-alt'></i>
+                                                    <span>حذف پیام</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <pre>${data[i].description}</pre>
+                                    ${
+                data[i].attachment !== "None" ?
+                    attachment
+                    :
+                    ""
+                }
+                                </div>
+                            </div>
+            `;
+        } else if (data[i].sender_type === "expert") { //expert
+            let comment_body_classes = "comment-body";
+            if (data[i].attachment !== "None") {
+                comment_body_classes += " attached";
+            }
+            comments_code += "<div class='your-comment'>" +
+                "   <div class='" + comment_body_classes + "' dir='ltr'>" +
+                "       <span class='comment-tools'>" +
+                "       </span>" +
+                "<pre>" + data[i].description + "</pre>";
+            if (data[i].attachment !== "None") {
+                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                    "   <i class='fas fa-paperclip'></i>" +
+                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
+                    "</a>";
+            }
+            comments_code += "" +
+                "   </div>" +
+                "</div>";
+        } else { //system
+            comments_code += "<div class='system-comment'>" +
+                "<div class='comment-body' dir='ltr'>" +
+                "<pre>" +
+                data[i].description +
+                "</pre>" +
+                "</div>" +
+                "</div>";
+        }
     }
-    new_comment += "</span>" +
-        "<span>" +
-        data.description +
-        "</span>" +
-        "</div>" +
-        "</div>";
+    if (comments_code === "") {
+        $(".no-comment").addClass("show");
+    }
+    $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+    dialog_comment_init();
+    $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+        deleteComment($(this).closest('.my-comment'));
+    });
+}
+
+function addComment(data) {
+    let comment_body_classes = "comment-body";
+    let attachment = "";
+    if (data.attachment !== "None") {
+        comment_body_classes += " attached";
+        attachment = `
+                    <a href='/${data.attachment}' class='attached-file'>
+                        <i class='fas fa-paperclip'></i>
+                        <span>${data.attachment.substring(data.attachment.lastIndexOf("/") + 1)}</span>
+                    </a>
+                `;
+    }
+    let new_comment = `
+                            <div class='my-comment' id='${data.pk}'>
+                                <div class='comment-profile'></div>
+                                <div class='${comment_body_classes}'>
+                                    <span class='comment-tools'>
+                                        <div class='btn-group dropright'>
+                                            <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                                                <i class='fas fa-cog'></i>
+                                            </button>
+                                            <div class='dropdown-menu'>
+                                                <div class='dropdown-item'>
+                                                    <i class='fas fa-trash-alt'></i>
+                                                    <span>حذف پیام</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <pre>${data.description}</pre>
+                                    ${
+        data.attachment !== "None" ?
+            attachment
+            :
+            ""
+        }       
+                                </div>
+                            </div>
+            `;
     $(".comments").append(new_comment);
 }
 
@@ -1170,7 +1268,7 @@ $("#done-project").click(function (event) {
 });
 
 function ShowMyProject(project) {
-    show_project = "<div class='card project-item'>" +
+    let show_project = "<div class='card project-item'>" +
         "<span class='header'>" +
         project.project_title +
         "<span class='sub-header'>(" +

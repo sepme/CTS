@@ -1462,12 +1462,13 @@ input.vote-select[value='5'] + label:hover, input.vote-select[value='5']:checked
 .modal .select-technique {
     position: absolute;
     top: 25px;
-    left: 20px;
+    left: 10px;
     width: 30px;
     height: 30px;
     border: none;
     border-radius: 50%;
     background-color: transparent;
+    z-index: 1;
 }
 
 .modal .select-technique i {

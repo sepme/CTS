@@ -1,4 +1,5 @@
 {% load static %}
+{% load comment_tags %}
 <span class="section-title">گفتگو</span>
 <div class="section">
     <div class="project-comment-innerDiv">
@@ -9,8 +10,61 @@
                 در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.
             </p>
         </div>
-        <div class="comments"></div>
-        <div class="add-comment">
+        <div class="comments">
+            {% if comments %}
+                {% for comment in comments %}
+                    {% if comment.sender_type == "expert" %}
+                        <div class='my-comment' id='{{ comment.pk }}'>
+                            <div class='comment-profile'></div>
+                            <span class='comment-tools'>
+                            <div class='btn-group dropright'>
+                                <button type='button' class='dropdown-toggle' data-toggle='dropdown'
+                                        aria-haspopup='true'
+                                        aria-expanded='false'>
+                                       <i class='fas fa-cog'></i>
+                                </button>
+                                <div class='dropdown-menu'>
+                                    <div class='dropdown-item'>
+                                        <i class='fas fa-trash-alt'></i>
+                                        <span>حذف پیام</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                            <div class='comment-body {% if comment.attachment %}attached{% endif %}'>
+                                {% if comment.attachment %}
+                                    <a href='/{{ comment.attachment }}' class='attached-file'>
+                                        <i class='fas fa-paperclip'></i>
+                                        <span>{% file_name comment.attachment %}</span>
+                                    </a>
+                                {% endif %}
+                                <pre>{{ comment.description }}</pre>
+                            </div>
+                        </div>
+                    {% elif comment.sender_type == "industry" %}
+                        <div class='your-comment'>
+                            <div class='comment-body {% if comment.attachment %}attached{% endif %}'>
+                                <span class='comment-tools'></span>
+                                {% if comment.attachment %}
+                                    <a href='/{{ comment.attachment }}' class='attached-file'>
+                                        <i class='fas fa-paperclip'></i>
+                                        <span>{% file_name comment.attachment %}</span>
+                                    </a>
+                                {% endif %}
+                                <pre>{{ comment.description }}</pre>
+                            </div>
+                        </div>
+                    {% elif comment.sender_type == "system" %}
+                        <div class='system-comment'>
+                            <div class='comment-body' dir='ltr'>
+                                <pre>{{ comment.description }}</pre>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="add-comment" id="{% if project %}{{ project.pk }}{% endif %}">
             <form action="" method="POST" enctype="multipart/form-data" id="comment_form">
                 {% csrf_token %}
                 <div class="row">

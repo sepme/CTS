@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/comments.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
-{#    <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->#}
+    {#    <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->#}
 </head>
 <body class="{% if request.user.researcheruser.status.status == 'signed_up' %}modal-open{% endif %}">
 {% getUnseenMessages request.user as UnseenMessages %}
@@ -77,14 +77,18 @@
         </div>
         <div class="hr"></div>
         <ul class="list-group">
-            {% url "researcher:index" as index_url %}
-            <a href="{{ index_url }}">
-                <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
-                    <div>
-                        <span>پروژه ها</span>
-                        <span class="fas fa-list-ul"></span>
-                    </div>
-                </li>
+            {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+                <a href="#" class="forbidden__access">
+            {% else %}
+                {% url "researcher:index" as index_url %}
+                <a href="{{ index_url }}">
+            {% endif %}
+            <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
+                <div>
+                    <span>پروژه ها</span>
+                    <span class="fas fa-list-ul"></span>
+                </div>
+            </li>
             </a>
             {% url 'researcher:messages' as messages_url %}
             <a href="{{ messages_url }}">
@@ -98,38 +102,50 @@
                     </div>
                 </li>
             </a>
-            {% url 'researcher:technique' as technique_url %}
-            <a href="{{ technique_url }}">
-                <li class="list-group-item text-right {% if request.get_full_path ==  technique_url %}active{% endif %}">
-                    <div>
-                        <span>تکنیک ها</span>
-                        <span class="fas fa-file-medical"></span>
-                    </div>
-                </li>
+            {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+                <a href="#" class="forbidden__access">
+            {% else %}
+                {% url 'researcher:technique' as technique_url %}
+                <a href="{{ technique_url }}">
+            {% endif %}
+            <li class="list-group-item text-right {% if request.get_full_path ==  technique_url %}active{% endif %}">
+                <div>
+                    <span>تکنیک ها</span>
+                    <span class="fas fa-file-medical"></span>
+                </div>
+            </li>
             </a>
             <!-- {% url 'researcher:question-alert' as question_url %} -->
-            {% getQuestionUrl request.user.researcheruser as questionId %}
-            {% if questionId %}
-                {% url 'researcher:question-show' question_id=questionId as question_url %}
+            {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+                {% getQuestionUrl request.user.researcheruser as questionId %}
+                {% if questionId %}
+                    {% url 'researcher:question-show' question_id=questionId as question_url %}
+                {% else %}
+                    {% url 'researcher:question-alert' as question_url %}
+                {% endif %}
+                <a href="{{ question_url }}">
             {% else %}
-                {% url 'researcher:question-alert' as question_url %}
+                <a href="#" class="forbidden__access">
             {% endif %}
-            <a href="{{ question_url }}">
-                <li class="list-group-item text-right {% if request.get_full_path ==  question_url %}active{% endif %}">
-                    <div>
-                        <span>سوالات پژوهشی</span>
-                        <span class="fas fa-question"></span>
-                    </div>
-                </li>
+            <li class="list-group-item text-right {% if request.get_full_path ==  question_url %}active{% endif %}">
+                <div>
+                    <span>سوالات پژوهشی</span>
+                    <span class="fas fa-question"></span>
+                </div>
+            </li>
             </a>
-            {% url 'researcher:userInfo' as userInfo_url %}
-            <a href="{{ userInfo_url }}">
-                <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
-                    <div>
-                        <span>اطلاعات کاربری</span>
-                        <span class="fas fa-cog"></span>
-                    </div>
-                </li>
+            {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+                <a href="#" class="forbidden__access">
+            {% else %}
+                {% url 'researcher:userInfo' as userInfo_url %}
+                <a href="{{ userInfo_url }}">
+            {% endif %}
+            <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
+                <div>
+                    <span>اطلاعات کاربری</span>
+                    <span class="fas fa-cog"></span>
+                </div>
+            </li>
             </a>
         </ul>
         <div class="hr display-sm"></div>
@@ -171,5 +187,14 @@
         display_error($("#exampleModal form"));
     </script>
 {% endif %}
+<script type="text/javascript">
+    $(".forbidden__access").click(function () {
+        iziToast.error({
+            rtl: true,
+            message: "متاسفانه، شما اجازه دسترسی به این قسمت را ندارید!",
+            position: 'bottomLeft'
+        });
+    });
+</script>
 </body>
 </html>
