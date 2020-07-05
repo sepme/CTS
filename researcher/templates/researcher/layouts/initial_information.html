@@ -31,9 +31,9 @@
                             <div class="form-group">
                                 <label for="MelliCode">کد ملی</label>
                                 {% if form.national_code.errors %}
-                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100"|attr:"type:number"|attr:"placeholder:449****841" }}
+                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100"|attr:"placeholder:449****841" }}
                                 {% else %}
-                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100"|attr:"type:number"|attr:"placeholder:449****841" }}
+                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100"|attr:"placeholder:449****841" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.national_code.errors %}</span>
@@ -111,10 +111,11 @@
                                 <label class="rankLabel" for="rank">مقطع تحصیلی فعلی</label>
                                 <select id="rank" name="grade" class="{% if form.grade.errors %}error{% endif %}">
                                     <option selected dir="rtl" disabled>انتخاب کنید ...</option>
-                                    <option value="1">کارشناسی</option>
-                                    <option value="2">کارشناسی ارشد</option>
-                                    <option value="3">دکتری</option>
-                                    <option value="4">دکتری حرفه ای</option>
+                                    {% for option in form.grade %}
+                                        {% if not forloop.first %}
+                                            {{option}}
+                                        {% endif %}
+                                    {% endfor %}
                                 </select>
                                 <div class="error">
                                     <span class="error-body">{% render_field form.grade.errors %}</span>
@@ -144,9 +145,9 @@
                             <div class="form-group">
                                 <label for="HomeNum">تلفن منزل</label>
                                 {% if form.home_number.errors %}
-                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100"|attr:"placeholder:021*******"|attr:"type:number" }}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100"|attr:"placeholder:021*******" }}
                                 {% else %}
-                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100"|attr:"placeholder:021*******"|attr:"type:number" }}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100"|attr:"placeholder:021*******" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.home_number.errors %}</span>
@@ -155,9 +156,9 @@
                             <div class="form-group">
                                 <label for="PhoneNum">تلفن همراه</label>
                                 {% if form.phone_number.errors %}
-                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100"|attr:"placeholder:09*********"|attr:"type:number" }}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100"|attr:"placeholder:09*********" }}
                                 {% else %}
-                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100"|attr:"placeholder:09*********"|attr:"type:number" }}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100"|attr:"placeholder:09*********" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.phone_number.errors %}</span>

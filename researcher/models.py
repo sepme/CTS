@@ -347,6 +347,8 @@ class TechniqueInstance(models.Model):
     @property
     def date_last(self):
         days_passed = (datetime.datetime.today().date() - self.evaluat_date).days
+        if days_passed == 0:
+            return "امروز"
         total_passed = ""
         if days_passed > 364:
             total_passed = persianNumber.convert(str(days_passed // 365)) + " سال "
@@ -361,10 +363,7 @@ class TechniqueInstance(models.Model):
             total_passed = persianNumber.convert(str(days_passed)) + " روز "
         else:
             total_passed += " و " + persianNumber.convert(str(days_passed)) + " روز "
-        if total_passed == "":
-            total_passed = "امروز"
-        else:
-            total_passed += " پیش"
+        total_passed += " پیش"
         return total_passed
 
     def __str__(self):
@@ -396,7 +395,7 @@ class ResearchQuestionInstance(models.Model):
                                           verbose_name="سوال پژوهشی")
     researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
                                    blank=True, null=True)
-    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", default=now)
+    hand_out_date = models.DateTimeField(verbose_name="تاریخ واگذاری", default=now)
     answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True, blank=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
     is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={

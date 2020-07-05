@@ -552,6 +552,46 @@ class News(generic.ListView):
     template_name = "chamran_admin/news_list.html"
     model = models.News
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        news_list = []
+        for news in context["object_list"]:
+            news_list.append({
+                "uuid"    : news.uuid,
+                "title"   : news.title,
+                'text'    : news.text,
+                'summary' : news.summary,
+                'link'    : news.link,
+                'writer'  : news.writer,
+                'topPicture' : news.topPicture.url[news.topPicture.url.find('media', 2)-1:],
+                'attachment' : news.attachment,
+                'date_submitted' : jalali_date(JalaliDate(news.date_submitted)),
+            })
+        context['news_list'] = news_list
+        return context
+    
+
+class NewsDetail(generic.DetailView):
+    template_name = 'chamran_admin/news_detail.html'
+    model = models.News
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        news = context['news']
+        context["news"] = {
+                "uuid"    : news.uuid,
+                "title"   : news.title,
+                'text'    : news.text,
+                'summary' : news.summary,
+                'link'    : news.link,
+                'writer'  : news.writer,
+                'topPicture' : news.topPicture.url[news.topPicture.url.find('media', 2)-1:],
+                'attachment' : news.attachment,
+                'date_submitted' : jalali_date(JalaliDate(news.date_submitted)),
+            }
+        return context
+    
+
 class NewsForm(generic.FormView):
     template_name = "chamran_admin/newsForm.html"
     form_class = forms.NewsForm

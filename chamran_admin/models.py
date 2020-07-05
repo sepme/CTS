@@ -24,7 +24,10 @@ def newsAttach(instance, file_name):
     return os.path.join(settings.MEDIA_ROOT, 'news', instance.title[:15], file_name)
 
 def newsPicture(instance, file_name):
-    return os.path.join(settings.MEDIA_ROOT, 'News Pictures', instance.news.title[:15], file_name)
+    if type(instance) == News:
+        return os.path.join(settings.MEDIA_ROOT, 'News Pictures', instance.title[:15], file_name)
+    elif type(instance) == Picture:
+        return os.path.join(settings.MEDIA_ROOT, 'News Pictures', instance.news.title[:15], file_name)
 
 
 class Message(models.Model):
@@ -59,19 +62,22 @@ class Message(models.Model):
 
 
 class News(models.Model):
+    uuid = models.UUIDField(verbose_name="کد خبر", primary_key=True, default=uuid.uuid4)
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
     # text = models.TextField(verbose_name="متن خبر")
-    text = RichTextUploadingField()
+    text = RichTextUploadingField(verbose_name="متن خبر")
+    summary = models.CharField(max_length=500, verbose_name="خلاصه خبر")
+    topPicture = models.ImageField(upload_to=newsPicture, max_length=255, null=True)
     attachment = models.FileField(upload_to=newsAttach, verbose_name="ضمیمه", blank=True, null=True)
     link = models.CharField(max_length=128, verbose_name="لینک خبر")
     writer = models.CharField(max_length=32, verbose_name="نویسنده")
     date_submitted = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.title[: 15]
+        return self.title[: 16]
 
     def get_absolute_url(self):
-        return 'news/' + self.link
+        return 'news/' + str(self.uuid)
 
 class Picture(models.Model):
     news = models.ForeignKey(News, verbose_name="خبر", on_delete=models.CASCADE)

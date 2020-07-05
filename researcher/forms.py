@@ -332,9 +332,6 @@ class InitialInfoForm(forms.ModelForm):
         except ValueError:
             raise forms.ValidationError('شماره دانشجویی باید یک عدد باشد.')
 
-        if len(number) != 8:
-            raise forms.ValidationError('شماره دانشجویی باید هشت رقمی باشد.')
-
         return number
 
     def clean_entry_year(self):

@@ -2,7 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block title %}اطلاعات کاربری{% endblock %}
-{% block name %}{{ request.user.industryuser.industryform }}{% endblock %}
+{% block name %}{{ request.user.industryuser.profile }}{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-12 text-right">
@@ -24,8 +24,8 @@
                                     <i class="fas fa-pencil-alt"></i>
                                 </label>
                                 <img
-                                        {% if user.industryuser.industryform.photo %}
-                                            src="/media/{{ user.industryuser.industryform.photo.name }}"
+                                        {% if user.industryuser.profile.photo %}
+                                            src="/media/{{ user.industryuser.profile.photo.name }}"
                                         {% else %}
                                             src="{% static 'industry/img/profile.jpg' %}"
                                         {% endif %}

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for news in object_list %}
+    {% for news in news_list %}
+    <div class="row">
     <h5>----------</h5>
         {{news.media}}
         {{news.title}}
+        <img src="{{news.topPicture}}">
         {{news.text | safe}}<br>
         {{news.writer}}
+    </div>  
     {% endfor %}
 {% endblock content %}

@@ -67,6 +67,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
         researcher = self.request.user.researcheruser
+        context['status'] = researcher.status.status
         if researcher.status.status == 'deactivated':
             return context
         all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gte=0)]
@@ -191,6 +192,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['status'] = self.request.user.researcheruser.status.status
         context["form"] = forms.ResearcherProfileForm(self.request.user,
                                            instance=self.researcherProfile,
                                            initial={
@@ -305,13 +307,6 @@ def ajax_StudiousRecord(request):
     else:
         return JsonResponse(form.errors ,status=400)
 
-def signup(request, username):
-    user = get_object_or_404(User, username=username)
-    researcher = models.ResearcherUser(user=user)
-    researcher.save()
-    return HttpResponseRedirect(reverse('researcher:index'))
-
-
 class Technique(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = 'researcher/technique.html'
     login_url = '/login/'
@@ -327,6 +322,7 @@ class Technique(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateVie
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
+        context['status'] = self.request.user.researcheruser.status.status
         context['technique_list'] = self.request.user.researcheruser.techniqueinstance_set.all()
         return context
 
@@ -368,7 +364,7 @@ def AddTechnique(request):
         else:
             method_fa = "مقاله"
         subject = 'Technique Validation'
-        message ="""کاربر به نام کاربری {} و به نام {} {} ، تکنیک {} را افزوده است.
+        message ="""کاربر به نام کاربری {} و به نام {} ، تکنیک {} را افزوده است.
         برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام نمایید.
         با تشکر""".format(request.user.username ,request.user.researcheruser.researcherprofile.fullname,
                         technique_title ,method_fa ,request.user.username)
@@ -426,6 +422,7 @@ class Question(LoginRequiredMixin,PermissionRequiredMixin, generic.TemplateView)
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['status'] = self.request.user.researcheruser.status.status
         if self.request.user.researcheruser.status.status == "wait_for_result":
             question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse().first()
             answer = question.answer
@@ -461,8 +458,9 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
         if self.request.user.researcheruser.status.status != "not_answered":
             return HttpResponseRedirect(reverse("researcher:question-alert"))
         question = request.user.researcheruser.researchquestioninstance_set.all().reverse().first()        
-        delta = datetime.date.today() - question.hand_out_date
-        if delta.days < 8:
+        deadLine = question.hand_out_date + datetime.timedelta(days=+7)
+        now = datetime.datetime.now(datetime.timezone.utc)
+        if now < deadLine:
             if question.is_correct == "correct" :
                 request.user.researcheruser.status.status = 'free'
                 request.user.researcheruser.status.save()
@@ -483,8 +481,8 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['status'] = self.request.user.researcheruser.status.status
         question = models.ResearchQuestionInstance.objects.filter(researcher=self.request.user.researcheruser).reverse().first()
-        deltatime = datetime.date.today() - question.hand_out_date
         context['question_title'] = question.research_question.question_title
         context['question'] = question.research_question.question_text
         context['attachment'] = question.research_question.attachment
@@ -493,39 +491,45 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
         if self.request.user.researcheruser.status.status != "not_answered":
             context['answer'] = question.answer            
             return context
-        delta = datetime.date.today() - question.hand_out_date
-        context['day']  = 8 - delta.days
-        context['hour'] = 23 - datetime.datetime.now().hour
-        context['minute'] = 59 - datetime.datetime.now().minute
+        deadLine = question.hand_out_date + datetime.timedelta(days=+7)
+        now = datetime.datetime.now(datetime.timezone.utc)
+        delta = deadLine - now        
+        context['day']  = delta.days
+        context['hour'] = delta.seconds//3600
+        context['minute'] = (delta.seconds%3600)//60
+        context['second'] = delta.seconds%60
         return context
     
     def post(self ,request ,*args, **kwargs):
         question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse().first()
         uuid_id = question.research_question.uniqe_id
-        if 'answer' in request.FILES:
-            question.answer = request.FILES['answer']
-            question.is_answered = True
-            subject = 'Research Question Validation'
-            message ="""با عرض سلام و خسته نباشید.
-            پژوهشگر {} به نام {} {} به سوال پژوهشی {} پاسخ داده است.
-            لطفا پاسخ پژوهشگر را ارزیابی نمایید.
-            با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.fullname,
-                            question.research_question.question_title)
-            email = question.research_question.expert.user.username
-            try:
-                send_mail(  
-                    subject=subject,
-                    message=message, 
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[email, "a.jafarzadeh1998@gmail.com"],
-                )
-            except TimeoutError:
-                return HttpResponse('Timeout Error!!')
-            question.save()
-            request.user.researcheruser.status.status = 'wait_for_result'
-            request.user.researcheruser.status.save()
-        else:
-            print(request.FILES)
+        deadLine = question.hand_out_date + datetime.timedelta(days=+7)
+        now = datetime.datetime.now(datetime.timezone.utc)
+        if now < deadLine:
+            if 'answer' in request.FILES:
+                question.answer = request.FILES['answer']
+                question.is_answered = True
+                subject = 'Research Question Validation'
+                message ="""با عرض سلام و خسته نباشید.
+                پژوهشگر {} به نام {} به سوال پژوهشی {} پاسخ داده است.
+                لطفا پاسخ پژوهشگر را ارزیابی نمایید.
+                با تشکر""".format(self.request.user.username ,self.request.user.researcheruser.researcherprofile.fullname,
+                                question.research_question.question_title)
+                email = question.research_question.expert.user.username
+                try:
+                    send_mail(  
+                        subject=subject,
+                        message=message, 
+                        from_email=settings.EMAIL_HOST_USER,
+                        recipient_list=[email, "a.jafarzadeh1998@gmail.com"],
+                    )
+                except TimeoutError:
+                    return HttpResponse('Timeout Error!!')
+                question.save()
+                request.user.researcheruser.status.status = 'wait_for_result'
+                request.user.researcheruser.status.save()
+            else:
+                print(request.FILES)
         return HttpResponseRedirect(reverse("researcher:question-show" ,kwargs={"question_id" :uuid_id}))
 
 @permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
@@ -534,7 +538,7 @@ def ajax_Technique_review(request):
     if form.is_valid():
         description = form.cleaned_data['request_body']
         method = form.cleaned_data['request_confirmation_method']
-        technique = request.user.researcheruser.techniqueinstance_set.all().filter(technique__pk=request.POST['technique_id']).first()
+        technique = request.user.researcheruser.techniqueinstance_set.all().filter(pk=request.POST['technique_id']).first()
         if method != "exam":
             resume = form.cleaned_data['new_resume']
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,
@@ -542,6 +546,8 @@ def ajax_Technique_review(request):
         else:
             technique_review = models.TechniqueReview(technique_instance = technique,description=description,
                                                       method=method)
+        technique.level = None
+        technique.save()
         technique_review.save()
         subject = 'Research Question Validation'
         message ="""با عرض سلام و خسته نباشید.
@@ -581,15 +587,15 @@ def ShowProject(request):
     json_response['comments'] = []
     for com in all_comments:
         try:
-            url = com.attachment.url.split("/")[-1]
+            url  = com.attachment.url[com.attachment.url.find('media', 2):]
         except:
-            url = "None"
+            url  = "None"
         temp = {
             'pk'           : com.pk,
             'description'  : com.description,
             'replied_text' : com.replied_text,
             'sender_type'  : com.sender_type,
-            'attachment'   : url
+            'attachment' : url,
         }
         json_response['comments'].append(temp)
         if (com.sender_type == 'expert' or com.sender_type == 'system') and com.status == 'not_seen':
@@ -710,9 +716,10 @@ def AddComment(request):
                          ,status='unseen')
         comment.save()
         if attachment is not None:
+            url  = comment.attachment.url[comment.attachment.url.find('media', 2):]
             data = {
                 'success' : 'successful',
-                'attachment' : comment.attachment.url.split("/")[-1],
+                'attachment' : url,
                 'description':description,
                 'pk' : comment.pk,
             }

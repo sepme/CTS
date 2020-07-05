@@ -64,38 +64,31 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
             if expert_user.status == "involved":
                 project  = Project.objects.filter(status=2).get(expert_accepted=expert_user)
-                comments = Comment.objects.filter(project=project).filter(researcher_user=None).filter(expert_user=expert_user)
+                comments = project.get_comments().filter(researcher_user=None).filter(expert_user=expert_user)
                 context['project'] = project
                 context['comment'] = comments
+                context['requestResearcherForm'] = forms.RequestResearcherForm()
+                context['researcher_accepted'] = []
+                for researcher in project.researcher_accepted.all():
+                    researcher = {
+                        "id" : researcher.pk,
+                        "fullname" : researcher.researcherprofile.fullname
+                    }
+                    context['researcher_accepted'].append(researcher)
             context['projects'] = projects
         return context
     
     def form_invalid(self, form):
-        print(form.errors)
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        print("form is validated")
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
-
-        photo = form.cleaned_data['photo']
-        fullname = form.cleaned_data['fullname']
-        special_field = form.cleaned_data['special_field']
-        melli_code = form.cleaned_data['melli_code']
-        scientific_rank = form.cleaned_data['scientific_rank']
-        university = form.cleaned_data['university']
-        home_number = form.cleaned_data['home_number']
-        phone_number = form.cleaned_data['phone_number']
-        email = form.cleaned_data['email_address']
-        expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
-                                                fullname=fullname, special_field=special_field,
-                                                national_code=melli_code, scientific_rank=scientific_rank,
-                                                university=university, phone_number=home_number,
-                                                mobile_phone=phone_number,
-                                                email_address=expert_user.user.get_username())
+        expert_form = form.save(commit=False)
+        expert_form.expert_user = expert_user
+        expert_form.email = expert_user.user.get_username()
+        expert_form.save()
         expert_user.status = 'free'
         expert_user.save()
-        expert_form.save()
         return HttpResponseRedirect(reverse('expert:index'))
 
 
@@ -442,14 +435,14 @@ def UsualShowProject(request, project, data):
         sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
         for comment in comment_list:
             try:
-                url = comment.attachment.url.split("/")[-1]
+                url = comment.attachment.url[comment.attachment.url.find('media', 2):]
             except:
                 url = "None"
             comments.append({
                 'id': comment.id,
                 'text': comment.description,
                 'sender_type': comment.sender_type,
-                'attachment': url,
+                'attachment' : url,
                 'pk' : comment.pk,
             })
             if comment.sender_type == "industry":
@@ -522,7 +515,7 @@ def accept_project(request):
             messageForAdmin = """با سلام و احترام\n
             استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
             با تشکر
-            """.format(str(expert_user.expertform) ,str(project) ,str(project.industry_creator.industryform))
+            """.format(str(expert_user.expertform) ,str(project) ,str(project.industry_creator.profile))
             html_templateForAdmin = get_template('registration/projectRequest_template.html')
             email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
             msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
@@ -642,14 +635,14 @@ def show_researcher_preview(request):
     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
     for comment in comment_list:
         try:
-            url = comment.attachment.url.split("/")[-1]
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:
             url = "None"
         comments.append({
             'id': comment.id,
             'text': comment.description,
             'sender_type': comment.sender_type,
-            'attachment': url,
+            'attachment' : url,
             'pk' : comment.pk,
         })
         if comment.sender_type == 'researcher':
@@ -774,6 +767,7 @@ def GetResume(request):
         scientific_rank = 'پژوهشگر'
     data = {
     'name'            : expert_form.fullname,
+    'photo'           : expert_form.photo.url,
     "university"      : expert_form.university,
     "scientific_rank" : scientific_rank,
     "special_field"   : expert_form.special_field,
@@ -807,6 +801,7 @@ def GetResume(request):
     if expert_form.number_of_researcher == 4:
         data['researcher_count'] = '+60'
 
+    print(data['photo'])
     return JsonResponse(data=data)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -835,7 +830,7 @@ def refuseResearcher(request):
         return JsonResponse(data={} ,status=400)
 
 def ActiveProjcet(request, project, data):
-    industryform = project.industry_creator.industryform
+    industryform = project.industry_creator.profile
     projectDate = [
         gregorian_to_numeric_jalali(project.date_start),
         gregorian_to_numeric_jalali(project.date_project_started),
@@ -923,42 +918,48 @@ def DeletePaperRecord(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def ExpertRequestResearcher(request):
     project = Project.objects.get(id=request.POST['project_id'])
-    expert = request.user.expertuser
-    try:
-        researcher_request = RequestResearcher.objects.get(project=project)
-        researcher_request.researcher_count += int(request.POST['reseacherCount'])
-        researcher_request.least_hour = int(request.POST['hour'])
-        researcher_request.save()
-    except:
-        researcher_request = RequestResearcher(project=project
-                                                ,expert=expert
-                                                ,researcher_count=int(request.POST['reseacherCount'])
-                                                ,least_hour=int(request.POST['hour']))
+    form = forms.RequestResearcherForm(request.POST)
+    if form.is_valid():
+        expert = request.user.expertuser
+        least_hour       = form.cleaned_data['least_hour']
+        researcher_count = form.cleaned_data['researcher_count']
+        try:
+            researcher_request = RequestResearcher.objects.get(project=project)
+            researcher_request.researcher_count += researcher_count
+            researcher_request.least_hour = least_hour
+            researcher_request.save()
+        except:
+            researcher_request = RequestResearcher(project=project
+                                                  ,expert=expert
+                                                  ,researcher_count=researcher_count
+                                                  ,least_hour=least_hour)
 
-        researcher_request.save()
-    
-    return JsonResponse({"successfull" : "successfull"})
+            researcher_request.save()
 
-# @permission_required('expert.be_expert', login_url='/login/')
-# def GetResearcherComment(request):
-#     project_id    = request.GET['project_id']
-#     researcher_id = request.GET['researcher_id']
-#     comments = Comment.objects.filter(project=project_id).filter(researcher_user=researcher_id).exclude(sender_type="system")
-#     data = {'comments' : []}
-#     for comment in comments:
-#         try:
-#             url = comment.attachment.url.split("/")[-1]
-#         except:
-#             url = "None"
-#         commentInfo = {
-#             'id': comment.id,
-#             'text': comment.description,
-#             'sender_type': comment.sender_type,
-#             'attachment': url,
-#         }
-#         if comment.sender_type == "researcher":
-#             comment.status = "seen"
-#             comment.save()
-#         data['comments'].append(commentInfo)
-    
-#     return JsonResponse(data=data)
+        return JsonResponse({"successfull" : "successfull"})
+    else:
+        return JsonResponse(data=form.errors, status=400)
+
+@permission_required('expert.be_expert', login_url='/login/')
+def GetResearcherComment(request):
+    project_id    = request.GET['project_id']
+    researcher_id = request.GET['researcher_id']
+    comments = Comment.objects.filter(project=project_id).filter(researcher_user=researcher_id).exclude(sender_type="system")
+    data = {'comments' : []}
+    for comment in comments:
+        try:
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+        except:
+            url = "None"
+        commentInfo = {
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment' : url,
+        }
+        if comment.sender_type == "researcher":
+            comment.status = "seen"
+            comment.save()
+        data['comments'].append(commentInfo)
+        
+    return JsonResponse(data=data)

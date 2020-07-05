@@ -634,6 +634,7 @@ technique_review.submit(function (event) {
             technique_review.find("input").prop("disabled", false).removeClass("progress-cursor");
             technique_review.find("label").removeClass("progress-cursor");
             technique_review.closest(".fixed-back").find(".card").removeClass("wait");
+            technique_review.closest('.date').find(".value").html("امروز")
             if (data.success === "successful") {
                 $('#reviewRequest').modal('toggle');
                 iziToast.success({

@@ -173,7 +173,7 @@
                                                     <div class="col-md-3">
                                                         <div class="industry-logo-preview">
                                                             <img id="industry_logo"
-                                                                 src="{{ project.industry_creator.industryform.photo.url }}"
+                                                                 src="{{ project.industry_creator.profile.photo.url}}"
                                                                  alt="industry-logo">
                                                         </div>
                                                         <div class="budget-section">
@@ -281,25 +281,27 @@
 {#                                                                <div class="researcher-request">#}
 {#                                                                    <form id="researcher-request-ajax" method="post"#}
 {#                                                                          action="">#}
+{#                                                                          {% csrf_token %}#}
 {#                                                                        <input type="text" class="project"#}
 {#                                                                               name="project_id"#}
+{#                                                                               value="{{ project.pk }}"#}
 {#                                                                               hidden>#}
 {#                                                                        <div class="row">#}
 {#                                                                            <div class="col-md-5 col-6">#}
 {#                                                                                <label for="researcher-number">حداکثر#}
 {#                                                                                    تعداد</label>#}
+{#                                                                                    {{ requestResearcherForm.researcher_count }}#}
 {#                                                                                <input type="number" class="w-100"#}
 {#                                                                                       id="researcher-number"#}
-{#                                                                                       name="reseacherCount"#}
-{#                                                                                       required>#}
+{#                                                                                       name="reseacherCount">#}
 {#                                                                            </div>#}
 {#                                                                            <div class="col-md-5 col-6">#}
 {#                                                                                <label for="researcher-time">ساعت کار#}
 {#                                                                                    <span#}
 {#                                                                                            class="fs-10">(ساعت)</span></label>#}
+{#                                                                                    {{ requestResearcherForm.least_hour }}#}
 {#                                                                                <input type="number" class="w-100"#}
-{#                                                                                       id="researcher-time" name="hour"#}
-{#                                                                                       required>#}
+{#                                                                                       id="researcher-time" name="hour">#}
 {#                                                                            </div>#}
 {#                                                                            <div class="col-md-2 col-12">#}
 {#                                                                                <button class="default-btn w-100"#}

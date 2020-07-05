@@ -75,7 +75,7 @@ class EqTest(models.Model):
 class ExpertForm(models.Model):
     expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
                                        null=True, blank=True)
-    fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی", default='FULLNUME')
+    fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
     national_code = models.CharField(max_length=15, verbose_name="کد ملی")
     scientific_rank_choice = (
@@ -90,8 +90,8 @@ class ExpertForm(models.Model):
     scientific_rank = models.IntegerField(choices=scientific_rank_choice, verbose_name="مرتبه علمی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه محل فعالیت")
     home_address = models.CharField(max_length=512, verbose_name="ادرس منزل")
-    phone_number = models.CharField(max_length=15, verbose_name="شماره منزل")
-    mobile_phone = models.CharField(max_length=15, verbose_name="شماره تلفن همراه")
+    home_number = models.CharField(max_length=15, verbose_name="شماره منزل", null=True)
+    phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن همراه", null=True)
     email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
     keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
     eq_test = models.OneToOneField(EqTest, on_delete=models.SET_NULL, verbose_name="تست EQ", blank=True, null=True)
@@ -117,7 +117,7 @@ class ExpertForm(models.Model):
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=255)
 
     def __str__(self):
         return self.fullname
