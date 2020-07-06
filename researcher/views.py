@@ -17,6 +17,9 @@ from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project ,Comment
 
+def get_url(rawUrl):
+    return rawUrl[rawUrl.find('media', 2):]
+
 def gregorian_to_numeric_jalali(date):
     j_date = JalaliDate(date)
     return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
@@ -226,6 +229,8 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             profile.home_number = form.cleaned_data['home_number']
             profile.phone_number = form.cleaned_data['phone_number']
             profile.grade = form.cleaned_data['grade']
+            if form.cleaned_data['resume'] is not None:
+                profile.resume = form.cleaned_data['resume']
             # if form.cleaned_data['team_work'] is not None:
             #     profile.team_work = form.cleaned_data['team_work']
             # if form.cleaned_data['creative_thinking'] is not None:
@@ -759,6 +764,49 @@ def DeleteStudiousRecord(request):
         return JsonResponse({"errors" :"Studious record isn't found"} ,status=400)
     stu_rec.delete()
     return JsonResponse({"successfull" :"Studious record is deleted"})
+
+@permission_required([], login_url='/login/')
+def show_resume_preview(request):
+    researcherProfile = models.ResearcherProfile.objects.get(id=request.GET.get('id'))
+    researcher = researcherProfile.researcher_user
+    researcher_information = {
+        'photo': researcherProfile.photo.url,
+        'name': researcherProfile.__str__(),
+        'major': researcherProfile.major,
+        'grade': researcherProfile.grade,
+        'university': researcherProfile.university,
+        'entry_year': researcherProfile.entry_year,
+        'resume'    : researcherProfile.resume.url,
+        'techniques': [],
+        'scientific_record': serialize('json', models.ScientificRecord.objects.filter(
+            researcherProfile=researcherProfile)),
+        'executive_record': serialize('json', models.ExecutiveRecord.objects.filter(
+            researcherProfile=researcherProfile)),
+        'research_record': serialize('json', models.StudiousRecord.objects.filter(researcherProfile=researcherProfile)),
+    }
+    for tech in models.TechniqueInstance.objects.filter(researcher=researcher):
+        researcher_information['techniques'].append(tech.technique.technique_title)
+    project = get_object_or_404(Project ,pk=request.GET["project_id"])
+    comments = []
+    comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
+    for comment in comment_list:
+        try:
+            url = get_url(comment.attachment.url)
+        except:
+            url = "None"
+        comments.append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment' : url,
+            'pk' : comment.pk,
+        })
+        if comment.sender_type == 'researcher':
+            comment.status = 'seen'
+            comment.save()
+    researcher_information['comments'] = comments
+    return JsonResponse(researcher_information)
+
 
 TECHNIQUES = {
     'Polymerase Chain Reaction' :'Molecular Biology',

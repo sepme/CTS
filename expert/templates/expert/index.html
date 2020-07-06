@@ -51,6 +51,7 @@
         </div>
     </div>
     <div class="row">
+    {% if request.user.expertuser.status != 'signed_up' %}
         <div class="col-lg-12 text-right">
             <div class="project-info-tabs">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
@@ -499,6 +500,7 @@
             {#                {% endfor %}#}
         </div>
         {#        <div class="col-lg-3">col-lg-3</div>#}
+    {% endif %}
     </div>
     <a href="#top" class="top-button">
         <i class="fas fa-angle-up"></i>

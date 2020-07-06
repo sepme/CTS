@@ -117,7 +117,9 @@ class ExpertForm(models.Model):
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo = models.ImageField(upload_to=profileUpload, max_length=255)
+    photo  = models.ImageField(upload_to=profileUpload, max_length=255)
+    resume = models.FileField(verbose_name="رزومه استاد", upload_to=profileUpload, max_length=511,
+                              null=True, blank=True)
 
     def __str__(self):
         return self.fullname

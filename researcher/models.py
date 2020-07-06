@@ -161,6 +161,8 @@ class ResearcherProfile(models.Model):
                                             , blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
+    resume      = models.FileField(verbose_name="رزومه دانشجو", upload_to=profileUpload, max_length=511,
+                                   null=True, blank=True)
 
     def __str__(self):
         return self.fullname
