@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{news.media}}
+{{news.title}}
+<img src="{{news.topPicture}}">
+{{news.text | safe}}<br>
+{{news.writer}}
+{% endblock content %}

@@ -21,8 +21,9 @@ urlpatterns = [
     path('recover_password/<uuid:unique_id>/', views.RecoverPasswordConfirm.as_view(), name='recover_password_confirm'),
     path('message_detail/<int:message_id>/', views.get_message_detail, name='message_detail'),
     path('deleteComment/' ,views.DeleteComment ,name='delete_comment'),
-    path('news/', views.News.as_view()),
-    path('newsForm/', views.NewsForm.as_view()),
+    path('news/', views.News.as_view(), name='newsList'),
+    path('news/<uuid:pk>/', views.NewsDetail.as_view(), name='newsDetail'),
+    path('newsForm/', views.NewsForm.as_view(), name='createNews'),
     path('contactUs/', views.ContactUS.as_view() ,name='contactUs'),
     path("opinion", views.AddOpinion ,name="addOpinion"),
 ]
