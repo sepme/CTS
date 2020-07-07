@@ -23,5 +23,6 @@ urlpatterns = [
     path('applyProject/' ,views.ApplyProject, name="apply_project"),
     path('comment/' ,views.AddComment ,name='comment'),
     path('myProject/' ,views.MyProject ,name="my_project"),
+    path('show_resume_preview/', views.show_resume_preview, name="show_resume_preview"),
     # path('doneProject/' ,views.DoneProjects ,name="done_project"),
 ]

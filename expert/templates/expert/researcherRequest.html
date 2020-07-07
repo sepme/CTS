@@ -81,7 +81,7 @@
                                             {#                                                   <button class="refuse-researcher">رد</button>#}
                                             {#                                            <button class="researcher-card-button-show" value="{{ project.id }}"#}
                                             {#                                                    id="{{ researcher.profile.researcher_user.id }}"#}
-                                            {#                                                    data-url="{% url 'expert:show_researcher_preview' %}">مشاهده#}
+                                            {#                                                    data-url="{% url 'researcher:show_researcher_preview' %}">مشاهده#}
                                             {#                                            </button>#}
                                             {#                                            <button class="researcher-card-button-check confirm-researcher"#}
                                             {#                                                    id="{{ researcher.profile.id }}">تایید#}
@@ -122,7 +122,7 @@
                                                 <button class="default-btn researcher-card-button-show"
                                                         value="{{ project.id }}"
                                                         id="{{ researcher.profile.id }}"
-                                                        data-url="{% url 'expert:show_researcher_preview' %}"
+                                                        data-url="{% url 'researcher:show_researcher_preview' %}"
                                                         data-toggle="modal" data-target="#researcherInfo">
                                                     مشاهده رزومه
                                                 </button>

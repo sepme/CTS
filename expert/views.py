@@ -21,6 +21,9 @@ from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance
 
 
+def get_url(rawUrl):
+    return rawUrl[rawUrl.find('media', 2):]
+
 def gregorian_to_numeric_jalali(date):
     if date is None:
         return "نامشخص"
@@ -179,7 +182,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['executive_form']      = forms.ExecutiveRecordForm()
         context['research_form']       = forms.ResearchRecordForm()
         context['paper_form']          = forms.PaperRecordForm()
-        print(context['keywords'])
+        context['resume'] = expertForm.resume
         return context
 
     def form_invalid(self, form):
@@ -190,8 +193,8 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
         expertForm.university   = form.cleaned_data['university']
         expertForm.home_address = form.cleaned_data['home_address']
-        expertForm.phone_number = form.cleaned_data['phone_number']
-        expertForm.mobile_phone = form.cleaned_data['mobile_phone']
+        expertForm.home_number  = form.cleaned_data['home_number']
+        expertForm.phone_number = form.cleaned_data['phone_number'] 
         if form.cleaned_data['awards']:
             expertForm.awards = form.cleaned_data['awards']
         
@@ -209,6 +212,9 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
         if form.cleaned_data['number_of_researcher']:
             expertForm.number_of_researcher = form.cleaned_data['number_of_researcher']
+
+        if form.cleaned_data['resume']:
+            expertForm.resume = form.cleaned_data['resume']
 
         photo = self.request.FILES.get('photo')
         if photo is not None:
@@ -435,7 +441,7 @@ def UsualShowProject(request, project, data):
         sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
         for comment in comment_list:
             try:
-                url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+                url = get_url(comment.attachment.url)
             except:
                 url = "None"
             comments.append({
@@ -610,46 +616,47 @@ def set_answer_situation(request):
         'success': 'successful'
     })
 
-@permission_required('expert.be_expert', login_url='/login/')
-def show_researcher_preview(request):
-    researcherProfile = ResearcherProfile.objects.get(id=request.GET.get('id'))
-    researcher = researcherProfile.researcher_user
-    researcher_information = {
-        'photo': researcherProfile.photo.url,
-        'name': researcherProfile.__str__(),
-        'major': researcherProfile.major,
-        'grade': researcherProfile.grade,
-        'university': researcherProfile.university,
-        'entry_year': researcherProfile.entry_year,
-        'techniques': [],
-        'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(
-            researcherProfile=researcherProfile)),
-        'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(
-            researcherProfile=researcherProfile)),
-        'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcherProfile)),
-    }
-    for tech in TechniqueInstance.objects.filter(researcher=researcher):
-        researcher_information['techniques'].append(tech.technique.technique_title)
-    project = get_object_or_404(Project ,pk=request.GET["project_id"])
-    comments = []
-    comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
-    for comment in comment_list:
-        try:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
-        except:
-            url = "None"
-        comments.append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type,
-            'attachment' : url,
-            'pk' : comment.pk,
-        })
-        if comment.sender_type == 'researcher':
-            comment.status = 'seen'
-            comment.save()
-    researcher_information['comments'] = comments
-    return JsonResponse(researcher_information)
+# @permission_required('expert.be_expert', login_url='/login/')
+# def show_researcher_preview(request):
+#     researcherProfile = ResearcherProfile.objects.get(id=request.GET.get('id'))
+#     researcher = researcherProfile.researcher_user
+#     researcher_information = {
+#         'photo': researcherProfile.photo.url,
+#         'name': researcherProfile.__str__(),
+#         'major': researcherProfile.major,
+#         'grade': researcherProfile.grade,
+#         'university': researcherProfile.university,
+#         'entry_year': researcherProfile.entry_year,
+#         'resume'    : researcherProfile.resume.url,
+#         'techniques': [],
+#         'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(
+#             researcherProfile=researcherProfile)),
+#         'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(
+#             researcherProfile=researcherProfile)),
+#         'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcherProfile)),
+#     }
+#     for tech in TechniqueInstance.objects.filter(researcher=researcher):
+#         researcher_information['techniques'].append(tech.technique.technique_title)
+#     project = get_object_or_404(Project ,pk=request.GET["project_id"])
+#     comments = []
+#     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
+#     for comment in comment_list:
+#         try:
+#             url = get_url(comment.attachment.url)
+#         except:
+#             url = "None"
+#         comments.append({
+#             'id': comment.id,
+#             'text': comment.description,
+#             'sender_type': comment.sender_type,
+#             'attachment' : url,
+#             'pk' : comment.pk,
+#         })
+#         if comment.sender_type == 'researcher':
+#             comment.status = 'seen'
+#             comment.save()
+#     researcher_information['comments'] = comments
+#     return JsonResponse(researcher_information)
 
 @permission_required('expert.be_expert', login_url='/login/')
 def CommentForResearcher(request):
@@ -745,14 +752,9 @@ def ShowTechnique(request):
 
 @permission_required([],login_url='/login/')
 def GetResume(request):
-    print("GETRESUME")
-    print(request.GET)
     expert_id = request.GET['id']
-    print(expert_id)
     expert = get_object_or_404(ExpertUser ,pk=expert_id)
-    print(expert)
     expert_form = get_object_or_404(ExpertForm ,expert_user=expert)
-    print(expert)
     if expert_form.scientific_rank == 1:
         scientific_rank = 'مربی'
     elif expert_form.scientific_rank == 2 :
@@ -785,6 +787,7 @@ def GetResume(request):
 
     "awards"    : expert_form.awards,
     'languages' : expert_form.languages,
+    'resume'    : expert_form.resume.url,
     }
 
     if expert_form.has_industrial_research == 'yes':
@@ -948,7 +951,7 @@ def GetResearcherComment(request):
     data = {'comments' : []}
     for comment in comments:
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            url = get_url(comment.attachment.url)
         except:
             url = "None"
         commentInfo = {
