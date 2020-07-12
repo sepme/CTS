@@ -440,7 +440,26 @@ function show_research_record(pk) {
     $(".studious div#" + $(this).attr("id")).remove();
     record_edit(".studious");
 }
+function isOverflow(element) {
+    element.each(function () {
+        let element = $(this).find("ul");
+        console.log(element);
 
+        console.log("offsetHeight ", element.outerHeight());
+        console.log("scrollHeight ", element.scrollHeight);
+        console.log("offsetWidth  ", element.offsetWidth);
+        console.log("scrollWidth  ", element.scrollWidth);
+
+        if (element.offsetHeight < element.scrollHeight ||
+            element.offsetWidth < element.scrollWidth) {
+            // your element have overflow
+            console.log("overflow");
+        } else {
+            // your element doesn't have overflow
+            console.log("no overflow");
+        }
+    });
+}
 function dialog_comment_init() {
     $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
         let fileName = $(this).val().split("\\").pop();

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}اخبار و رویدادها{% endblock %}
+{% block content %}
+    <br/>
+    <br/>
+    <br/>
+    <div class="home-news">
+        <div class="container">
+{#            <h2>{{$post->title}}</h2>#}
+            <div class="archive">
+{#                {!! jDate::forge($post->created_at)->format('d %B Y') !!}#}
+            </div>
+            <div class="page-body">
+                <div class="page-info">
+                    <div class="row" style="padding: 10px">
+                        <div class="col-md-5 offset-md-1">
+                            <div class="page-img">
+{#                                <img src="{{$post->pic->md}}" alt="{{$post->title}}">#}
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="page-date">
+                            </div>
+                            <div class="page-description" style="margin-top: 10px">
+{#                                {!! $post->description !!}#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{#                {!! $post->content !!}#}
+            </div>
+        </div>
+    </div>
+{% endblock %}

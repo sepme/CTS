@@ -176,9 +176,9 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 <script type="text/javascript" src="{% static 'js/persianumber.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
-{% block script %}{% endblock %}
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>
+{% block script %}{% endblock %}
 <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>
 {% if request.user.researcheruser.status.status == "signed_up" %}
     <div class="modal-backdrop fade show" style="user-select: auto;"></div>

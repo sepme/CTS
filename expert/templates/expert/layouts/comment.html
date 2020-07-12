@@ -32,26 +32,26 @@
                             </div>
                         </span>
                             <div class='comment-body {% if comment.attachment %}attached{% endif %}'>
+                                <pre>{{ comment.description }}</pre>
                                 {% if comment.attachment %}
                                     <a href='/{{ comment.attachment }}' class='attached-file'>
                                         <i class='fas fa-paperclip'></i>
                                         <span>{% file_name comment.attachment %}</span>
                                     </a>
                                 {% endif %}
-                                <pre>{{ comment.description }}</pre>
                             </div>
                         </div>
                     {% elif comment.sender_type == "industry" %}
                         <div class='your-comment'>
                             <div class='comment-body {% if comment.attachment %}attached{% endif %}'>
                                 <span class='comment-tools'></span>
+                                <pre>{{ comment.description }}</pre>
                                 {% if comment.attachment %}
                                     <a href='/{{ comment.attachment }}' class='attached-file'>
                                         <i class='fas fa-paperclip'></i>
                                         <span>{% file_name comment.attachment %}</span>
                                     </a>
                                 {% endif %}
-                                <pre>{{ comment.description }}</pre>
                             </div>
                         </div>
                     {% elif comment.sender_type == "system" %}
