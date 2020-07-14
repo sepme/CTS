@@ -180,6 +180,36 @@
         $("input.error, select.error").prev().css("color", "rgb(255,69,69)");
         display_error($("#exampleModal form"));
     </script>
+    <script type="text/javascript">
+        $(window).on("load", function () {
+            $('#selectUsage').modal('toggle');
+            $("#selectUsage .modal-footer button").click(function () {
+                if ($('#selectUsage').find("input[type='radio']:checked").val() === "industry") {
+                    $('#selectUsage').modal('toggle');
+                    $('#initialInformation').modal('toggle');
+                    $('#initialInformation form').find("input[name='industry_type']").attr("value", "industry");
+                    $(".RandD__form-item").css("display", "block");
+                } else if ($('#selectUsage').find("input[type='radio']:checked").val() === "research_group") {
+                    $('#selectUsage').modal('toggle');
+                    $('#initialInformation').modal('toggle');
+                    $('#initialInformation form').find("input[name='industry_type']").attr("value", "group");
+                    $(".RGroup__form-item").css("display", "block");
+                } else {
+                    iziToast.error({
+                        rtl: true,
+                        message: "لطفا یکی از گزینه های بالا را انتخاب کنید!",
+                        position: 'bottomLeft'
+                    });
+                }
+                $('#initialInformation .close__redirect').click(function () {
+                    $('#initialInformation').modal('toggle');
+                    $('#selectUsage').modal('toggle');
+                    $(".RandD__form-item").css("display", "none");
+                    $(".RGroup__form-item").css("display", "none");
+                });
+            });
+        })
+    </script>
 {% endif %}
 </body>
 </html>

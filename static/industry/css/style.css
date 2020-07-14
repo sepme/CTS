@@ -605,3 +605,8 @@ div.inputTags-list span.inputTags-item {
 div.row.cover-page {
     min-height: 80vh;
 }
+
+#initialInformation .RandD__form-item,
+#initialInformation .RGroup__form-item {
+    display: none;
+}

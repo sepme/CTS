@@ -9,6 +9,7 @@
 {% endblock %}
 {% block modals %}
     {% if user.industryuser.status == 'signed_up' %}
+        {% include 'industry/layouts/select_usage.html' %}
         {% include 'industry/layouts/initial_information.html' %}
     {% endif %}
     {% include 'industry/layouts/show_project.html' %}

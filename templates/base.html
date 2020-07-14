@@ -16,37 +16,44 @@
 <body id="top">
 
 <header>
-	<div class="container">
-	    <div class="navicon" id="navicon">
-			<i class="fas fa-bars"></i>
-		</div>
-		<div class="logo">
-			<a href="/">
-				<img src="{% static 'theme-ct/images/logo.png' %}" alt="ChamranTeam Logo">
-			</a>
-		</div>
-		<div class="enter_icon" id="enter_icon">
-		    <a href="http://chamranteambot.pythonanywhere.com/login/">
-		        <i class="fas fa-user"></i>
-		    </a>
-		</div>
-		<nav id="nav">
-			<ul>
-				<li class="goToDiv" data-div="top" data-next="AboutUs">
+    <div class="container">
+        <div class="navicon" id="navicon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="logo">
+            <a href="/">
+                <img src="{% static 'theme-ct/images/logo.png' %}" alt="ChamranTeam Logo">
+            </a>
+        </div>
+        <div class="enter_icon" id="enter_icon">
+            <a href="http://chamranteambot.pythonanywhere.com/login/">
+                <i class="fas fa-user"></i>
+            </a>
+        </div>
+        <nav id="nav">
+            <ul>
+                <li class="goToDiv" data-div="top" data-next="AboutUs">
                     <a href="{% if request.path == "/" %}#top{% endif %}">صفحه اصلی</a>
                 </li>
-				<li class="goToDiv" data-div="AboutUs" data-next="whyUs"><a href="/#AboutUs">درباره ما</a></li>
-				<li class="goToDiv" data-div="whyUs" data-next="Cooperation"><a href="/#whyUs">مزایای عضویت</a></li>
-				<li class="goToDiv" data-div="Cooperation" data-next="contactUs"><a href="/#Cooperation">تقاضای همکاری با ما</a></li>
-				<li class="goToDiv" data-div="contactUs" data-next="footer"><a href="/#contactUs">تماس با ما</a></li>
-			</ul>
-		</nav>
-		<div class="enter">
-			<a href="{% url 'chamran:login' %}">
-		ورود | عضویت
-			</a>
-		</div>
-	</div>
+                <li class="goToDiv" data-div="AboutUs" data-next="whyUs"><a href="/#AboutUs">درباره ما</a></li>
+                <li class="goToDiv" data-div="whyUs" data-next="Cooperation"><a href="/#whyUs">مزایای عضویت</a></li>
+                <li class="goToDiv" data-div="Cooperation" data-next="contactUs"><a href="/#Cooperation">تقاضای همکاری
+                    با ما</a></li>
+                <li class="goToDiv" data-div="contactUs" data-next="footer"><a href="/#contactUs">تماس با ما</a></li>
+            </ul>
+        </nav>
+        <div class="enter">
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'chamran:login' %}">
+                    داشبورد
+                </a>
+            {% else %}
+                <a href="{% url 'chamran:login' %}">
+                    ورود | عضویت
+                </a>
+            {% endif %}
+        </div>
+    </div>
 </header>
 
 {% block content %}{% endblock %}
