@@ -53,10 +53,10 @@
                             </div>
                             <div class="form-group RandD__form-item">
                                 <label for="id_registration_number">شماره ثبت</label>
-                                {% if RandD_form.registration_number.errors %}
-                                    {{ RandD_form.registration_number }}
+                                {% if form.registration_number.errors %}
+                                    {{ form.registration_number }}
                                 {% else %}
-                                   {{ RandD_form.registration_number }}
+                                   {{ form.registration_number }}
                                 {% endif %}
                                 <div class="error">
                                     {% render_field form.registration_number.errors %}

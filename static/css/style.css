@@ -1463,6 +1463,16 @@ hr {
     box-shadow: none;
 }
 
+.top-bar > .feed-back {
+    width: 45px;
+    position: absolute;
+    top: 50%;
+    left: 100px;
+    transform: translate(0, -50%);
+    color: #707070;
+    font-size: 20px;
+}
+
 .top-bar > .dropdown {
     width: 45px;
     position: absolute;
