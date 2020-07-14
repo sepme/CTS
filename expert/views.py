@@ -165,7 +165,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = forms.ExpertInfoForm
     model = ExpertForm
     login_url = '/login/'
-    success_url = "/"
+    success_url = "/expert/"
     permission_required = ('expert.be_expert',)
     
     def get_context_data(self, **kwargs):

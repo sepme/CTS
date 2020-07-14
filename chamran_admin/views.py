@@ -128,7 +128,7 @@ def get_user_by_unique_id(unique):
 class Home(generic.TemplateView):
     template_name = "index.html"
 
-    # def get(self, request, *args, **kwargs):
+    # def get(self, request, *args,g **kwargs):
         # return HttpResponseRedirect(reverse('chamran:login'))
 
 class SignupEmail(generic.FormView):
@@ -369,7 +369,7 @@ class LogoutView(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             logout(request)
-        return HttpResponseRedirect(reverse("chamran:home"))
+        return HttpResponseRedirect(reverse("chamran:login"))
 
 
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
