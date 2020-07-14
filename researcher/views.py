@@ -17,6 +17,8 @@ from . import models ,forms ,persianNumber
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project ,Comment
 
+ACCELERATOR = "0Rho8g"
+
 def get_url(rawUrl):
     return rawUrl[rawUrl.find('media', 2):]
 
@@ -444,6 +446,12 @@ class Question(LoginRequiredMixin,PermissionRequiredMixin, generic.TemplateView)
 
     def post(self, request, *args, **kwargs):
         question_list = ResearchQuestion.objects.filter(status='not_answered')
+        researcherStatus = request.user.researcheruser.status
+        if 'accelerator' in request.POST.keys() and researcherStatus.status != 'deactivated':
+            if request.POST['accelerator'] == ACCELERATOR:
+                researcherStatus.status = 'free'
+                researcherStatus.save()
+                return HttpResponseRedirect(reverse('researcher:index'))
         if len(question_list) == 0:
             return HttpResponseRedirect(reverse('researcher:index'))
         question = question_list[random.randint(0 ,len(question_list)-1)]
@@ -506,6 +514,12 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
         return context
     
     def post(self ,request ,*args, **kwargs):
+        researcherStatus = request.user.researcheruser.status
+        if 'accelerator' in request.POST.keys() and researcherStatus.status != 'deactivated':
+            if request.POST['accelerator'] == ACCELERATOR:
+                researcherStatus.status = 'free'
+                researcherStatus.save()
+                return HttpResponseRedirect(reverse('researcher:index'))
         question = self.request.user.researcheruser.researchquestioninstance_set.all().reverse().first()
         uuid_id = question.research_question.uniqe_id
         deadLine = question.hand_out_date + datetime.timedelta(days=+7)
