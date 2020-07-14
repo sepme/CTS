@@ -270,7 +270,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     template_name = 'industry/index.html'
     form_class = forms.InterfacePersonForm
     login_url = '/login/'
-    success_url = '/'
+    success_url = '/industry'
     permission_required = ('industry.be_industry',)
 
     def get_context_data(self, **kwargs):
@@ -282,6 +282,18 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             context['RandD_form']         = forms.RandDBasicInfoForm
             context['researchGroup_form'] = forms.ResearchGroupBasicInfoForm
         return context
+    
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        if self.request.POST['industry_type'] == "group":
+            researchGroup_form = forms.ResearchGroupBasicInfoForm(self.request.POST, self.request.FILES)
+            context['researchGroup_form'] = researchGroup_form
+        else:
+            RandD_form = forms.RandDBasicInfoForm(self.request.POST, self.request.FILES)
+            context['RandD_form']         = RandD_form
+        context['form'] = form
+        return render(request=self.request, template_name=self.template_name, context=context )
+        # return super().form_invalid(form)
 
     def form_valid(self, form):
         industry_user = models.IndustryUser.objects.get(user=self.request.user)

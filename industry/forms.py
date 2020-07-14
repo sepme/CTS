@@ -11,12 +11,12 @@ class RandDBasicInfoForm(forms.ModelForm):
 
     class Meta:
         model = models.RandDProfile
-        fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
+        fields = ('photo', 'RandDname', 'registration_number', 'date_of_foundation',
                   'research_field', 'RandD_type', 'phone_number')
         
         # error_messages = {
         #     'photo'               : { 'required' : 'عکس نمی تواند خالی باشد.'}, 
-        #     'name'                : { 'required' : 'نام نمی تواند خالی باشد.'},
+        #     'RandDname'                : { 'required' : 'نام نمی تواند خالی باشد.'},
         #     'registration_number' : { 'required' : 'شماره ثبت نمی تواند خالی باشد.'},
         #     'date_of_foundation'  : { 'required' : 'شماره تاسیس نمی تواند خالی باشد.'},
         #     'research_field'      : { 'required' : 'حوزه فعالیت را وارد کنید.'},
@@ -26,12 +26,12 @@ class RandDBasicInfoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].required = False
+        self.fields['RandDname'].required = False
         self.fields['photo'].required = False
         self.fields['registration_number'].required = False
         self.fields['date_of_foundation'].required = False
         self.fields['research_field'].required = False
-        self.fields['industry_type'].required = False
+        self.fields['RandD_type'].required = False
         self.fields['phone_number'].required = False
 
 
@@ -41,14 +41,14 @@ class RandDBasicInfoForm(forms.ModelForm):
             raise ValidationError(_("عکس نمی تواند خالی باشد."))
         return data
 
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-        if name is None or name == '':
+    def clean_RandDname(self):
+        RandDname = self.cleaned_data.get('RandDname')
+        if RandDname is None or RandDname == '':
             raise ValidationError(_("نام نمی تواند خالی باشد."))
-        check_name = models.RandDProfile.objects.filter(name=name).count()
-        if check_name > 0:
+        check_RandDname = models.RandDProfile.objects.filter(RandDname=RandDname).count()
+        if check_RandDname > 0:
             raise ValidationError(_("نام انتخابی شما قبلاانتخاب شده است."))
-        return name
+        return RandDname
 
     def clean_registration_number(self):
         data = self.cleaned_data["registration_number"]
@@ -80,8 +80,8 @@ class RandDBasicInfoForm(forms.ModelForm):
             raise ValidationError(_("حوزه فعالیت نمی تواند خالی باشد."))
         return data
 
-    def clean_industry_type(self):
-        data = self.cleaned_data["industry_type"]                
+    def clean_RandD_type(self):
+        data = self.cleaned_data["RandD_type"]                
         if data == "":
             raise ValidationError(_("نوع شرکت نمی تواند خالی باشد."))
         return data
@@ -102,18 +102,18 @@ class RandDInfoForm(forms.ModelForm):
 
     class Meta:
         model = models.RandDProfile
-        fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
+        fields = ('photo', 'RandDname', 'registration_number', 'date_of_foundation',
                   'research_field', 'RandD_type', 'address', 'phone_number',
                   'tax_declaration', 'services_products', 'awards_honors')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].required  = False
+        self.fields['RandDname'].required  = False
         self.fields['photo'].required = False
         self.fields['registration_number'].required = False
         self.fields['date_of_foundation'].required  = False
         self.fields['research_field'].required      = False
-        self.fields['industry_type'].required       = False
+        self.fields['RandD_type'].required          = False
         self.fields['address'].required             = False
         self.fields['tax_declaration'].required     = False
         self.fields['services_products'].required   = False

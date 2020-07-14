@@ -130,7 +130,7 @@ class RandDProfile(models.Model):
     industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
                                     verbose_name="صنعت")
     interfacePerson      = models.OneToOneField("InterfacePerson", verbose_name='شخص رابط', on_delete=models.CASCADE)
-    name                 = models.CharField(max_length=64, verbose_name="نام شرکت")
+    RandDname            = models.CharField(max_length=64, verbose_name="نام شرکت")
     photo                = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     registration_number  = models.CharField(max_length=10, verbose_name="شماره ثبت")
     date_of_foundation   = models.CharField(max_length=4, verbose_name="تاریخ تاسیس")
@@ -149,7 +149,7 @@ class RandDProfile(models.Model):
     awards_honors     = models.TextField(null=True, blank=True, verbose_name="افتخارات")
 
     def __str__(self):
-        return self.name
+        return self.RandDname
 
     def save(self, *args, **kwargs):
         if self.id:
@@ -182,7 +182,7 @@ class ResearchGroupProfile(models.Model):
         ('council', 'شورای پژوهشی'),
         ('center', 'مرکز تحقیقاتی'),
     )
-    type_group = models.CharField(max_length=10, verbose_name="نوع مرکز")
+    type_group = models.CharField(max_length=10, verbose_name="نوع مرکز", choices=TYPE_GROUP)
 
     def __str__(self):
         return self.name

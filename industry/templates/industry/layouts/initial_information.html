@@ -14,17 +14,188 @@
                     <label>
                         <input type="text" value="" name="industry_type" hidden>
                     </label>
+                    <div class='RandD__form-item'>
+                        <div class="divide__line text-right">
+                            <span class="w__title RandD__form-item">اطلاعات شرکت</span>
+                            <span class="__line"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="id_RandDname" class="RandD__form-item">نام شرکت</label>
+                                    <div class='RandD__form-item'>
+                                        {% if RandD_form.RandDname.errors %}
+                                            {% render_field RandD_form.RandDname class+="w-100 error" %}
+                                        {% else %}
+                                            {% render_field RandD_form.RandDname class+="w-100" %}
+                                        {% endif %}
+                                        <div class="error">
+                                            {% render_field RandD_form.RandDname.errors %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group RandD__form-item">
+                                    <label for="id_registration_number">شماره ثبت</label>
+                                    {% if RandD_form.registration_number.errors %}
+                                        {% render_field RandD_form.registration_number class+="w-100 error" %}
+                                    {% else %}
+                                    {% render_field RandD_form.registration_number class+="w-100" %}
+                                    {% endif %}
+                                    <div class="error">
+                                        {% render_field RandD_form.registration_number.errors %}
+                                    </div>
+                                </div>
+                                <div class="form-group RandD__form-item">
+                                    <label for="id_date_of_foundation">سال تاسیس</label>
+                                    {% if RandD_form.date_of_foundation.errors %}
+                                        {% render_field RandD_form.date_of_foundation class+="w-100 error" %}
+                                    {% else %}
+                                        {% render_field RandD_form.date_of_foundation class+="w-100" %}
+                                    {% endif %}
+                                    <div class="error">
+                                        {% render_field RandD_form.date_of_foundation.errors %}
+                                    </div>
+                                </div>
+                                <div class="form-group RandD__form-item">
+                                    <label for="id_research_field">حوزه فعالیت</label>
+                                    {% if RandD_form.research_field.errors %}
+                                        {% render_field RandD_form.research_field class+="w-100 error" %}
+                                    {% else %}
+                                        {% render_field RandD_form.research_field class+="w-100" %}
+                                    {% endif %}
+                                    <div class="error">
+                                        {% render_field RandD_form.research_field.errors %}
+                                    </div>
+                                </div>
+                                <div class="form-group RandD__form-item">
+                                    <label class="rankLabel" for="id_RandD_type">نوع شرکت</label>
+                                    <select id="id_RandD_type" name="RandD_type"
+                                            class="w-100 {% if RandD_form.RandD_type.errors %}error{% endif %}">
+                                        <option selected dir="rtl" value="" disabled>انتخاب کنید ...</option>
+                                        {% for option in RandD_form.RandD_type %}
+                                            {% if not forloop.first %}
+                                                {{ option }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <div class="error">
+                                        {% render_field RandD_form.RandD_type.errors %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group text-center RandD__form-item">
+                                    <label for="upload-input" class="upload text-center">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </label>
+                                    <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile"
+                                        width="150px" height="150px">
+                                    {% render_field RandD_form.photo id="upload-input" accept="image/png, image/jpeg" %}
+                                    <div class="col-lg-7 text-center">
+                                        <div class="error">
+                                            {% render_field RandD_form.photo.errors %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divide__line text-right RandD__form-item">
+                            <span class="w__title">اطلاعات تماس</span>
+                            <span class="__line"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-5">
+                                <div class="form-group RandD__form-item">
+                                    <label for="id_phone_number">تلفن</label>
+                                    {% if RandD_form.phone_number.errors %}
+                                        {% render_field RandD_form.phone_number class+="w-100 error" %}
+                                    {% else %}
+                                        {% render_field RandD_form.phone_number class+="w-100" %}
+                                    {% endif %}
+                                    <div class="error">
+                                        {% render_field RandD_form.phone_number.errors %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='RGroup__form-item'>
+                        <div class="divide__line text-right">
+                            <span class="w__title RGroup__form-item">اطلاعات مجموعه پژوهشی</span>
+                            <span class="__line"></span>
+                        </div>
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="id_name" class="RGroup__form-item">نام مجموعه</label>
+                                        <div class='RGroup__form-item'>
+                                            {% if researchGroup_form.name.errors %}
+                                                {% render_field researchGroup_form.name class+="w-100 error" %}
+                                            {% else %}
+                                                {% render_field researchGroup_form.name class+="w-100" %}
+                                            {% endif %}
+                                            <div class="error">
+                                                {% render_field researchGroup_form.name.errors %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group RGroup__form-item">
+                                        <label class="rankLabel" for="id_type_group">نوع مرکز</label>
+                                        <select id="id_type_group" name="type_group"
+                                                class="w-100 {% if researchGroup_form.type_group.errors %}error{% endif %}">
+                                            <option selected dir="rtl" value="" disabled>انتخاب کنید ...</option>
+                                            {% for option in researchGroup_form.type_group %}
+                                                {% if not forloop.first %}
+                                                    {{ option }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <div class="error">
+                                            {% render_field researchGroup_form.type_group.errors %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group RGroup__form-item">
+                                        <label for="id_phone_number">نام پژوهشکده تابعه</label>
+                                        {% if researchGroup_form.subordinateResearch.errors %}
+                                            {% render_field researchGroup_form.subordinateResearch class+="w-100 error" %}
+                                        {% else %}
+                                            {% render_field researchGroup_form.subordinateResearch class+="w-100" %}
+                                        {% endif %}
+                                        <div class="error">
+                                            {% render_field researchGroup_form.subordinateResearch.errors %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group text-center RGroup__form-item">
+                                        <label for="upload-input" class="upload text-center">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </label>
+                                        <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile"
+                                            width="150px" height="150px">
+                                        {% render_field researchGroup_form.photo id="upload-input" accept="image/png, image/jpeg" %}
+                                        <div class="col-lg-7 text-center">
+                                            <div class="error">
+                                                {% render_field researchGroup_form.photo.errors %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="divide__line text-right">
-                        <span class="w__title RandD__form-item">اطلاعات شرکت</span>
-                        <span class="w__title RGroup__form-item">اطلاعات مجموعه پژوهشی</span>
+                        <span class="w__title">اطلاعات فرد رابط</span>
                         <span class="__line"></span>
                     </div>
                     <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-5">
                             <div class="form-group">
-                                <label for="id_fullname" class="RandD__form-item">نام شرکت</label>
-                                <label for="id_fullname" class="RGroup__form-item">نام مجموعه</label>
+                                <label for="id_fullname" class="form-item">نام و خانوادگی</label>
                                 {% if form.fullname.errors %}
                                     {% render_field form.fullname class+="w-100 error" %}
                                 {% else %}
@@ -34,110 +205,19 @@
                                     {% render_field form.fullname.errors %}
                                 </div>
                             </div>
-                            <div class="form-group RandD__form-item">
-                                <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
-                                <select id="id_industry_type" name="industry_type"
-                                        class="w-100 {% if form.industry_type.errors %}error{% endif %}">
-                                    <option selected dir="rtl" value="">انتخاب کنید ...</option>
-                                    {% for option in form.industry_type %}
-                                        {% if not forloop.first %}
-                                            {{ option }}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {#                                  <option value="0">خصوصی</option>#}
-                                    {#                                  <option value="1">دولتی</option>#}
-                                </select>
-                                <div class="error">
-                                    {% render_field form.industry_type.errors %}
-                                </div>
-                            </div>
-                            <div class="form-group RandD__form-item">
-                                <label for="id_registration_number">شماره ثبت</label>
-                                {% if RandD_form.registration_number.errors %}
-                                    {{ RandD_form.registration_number }}
-                                {% else %}
-                                   {{ RandD_form.registration_number }}
-                                {% endif %}
-                                <div class="error">
-                                    {% render_field form.registration_number.errors %}
-                                </div>
-                            </div>
-                            <div class="form-group RandD__form-item">
-                                <label for="id_date_of_foundation">سال تاسیس</label>
-                                {% if form.date_of_foundation.errors %}
-                                    {% render_field form.date_of_foundation class+="w-100 error" %}
-                                {% else %}
-                                    {% render_field form.date_of_foundation class+="w-100" %}
-                                {% endif %}
-                                <div class="error">
-                                    {% render_field form.date_of_foundation.errors %}
-                                </div>
-                            </div>
-                            <div class="form-group RandD__form-item">
-                                <label for="id_research_field">حوزه فعالیت</label>
-                                {% if form.research_field.errors %}
-                                    {% render_field form.research_field class+="w-100 error" %}
-                                {% else %}
-                                    {% render_field form.research_field class+="w-100" %}
-                                {% endif %}
-                                <div class="error">
-                                    {% render_field form.research_field.errors %}
-                                </div>
-                            </div>
-                            <div class="form-group RandD__form-item">
-                                <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
-                                <select id="id_industry_type" name="industry_type"
-                                        class="w-100 {% if form.industry_type.errors %}error{% endif %}">
-                                    <option selected dir="rtl" value="">انتخاب کنید ...</option>
-                                    {% for option in form.industry_type %}
-                                        {% if not forloop.first %}
-                                            {{ option }}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {#                                  <option value="0">خصوصی</option>#}
-                                    {#                                  <option value="1">دولتی</option>#}
-                                </select>
-                                <div class="error">
-                                    {% render_field form.industry_type.errors %}
-                                </div>
-                            </div>
-                            {#                            <div class="form-group">#}
-                            {#                                <label for="id_industry_address">نشانی</label>#}
-                            {#                                {% if form.industry_address.errors %}#}
-                            {#                                    {% render_field form.industry_address class+="w-100 error" rows="3" dir="rtl" %}#}
-                            {#                                {% else %}#}
-                            {#                                    {% render_field form.industry_address class+="w-100" rows="3" dir="rtl" %}#}
-                            {#                                {% endif %}#}
-                            {#                                <div class="error">#}
-                            {#                                    {% render_field form.industry_address.errors %}#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group text-center">
-                                <label for="upload-input" class="upload text-center">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </label>
-                                <img src="{% static 'industry/img/profile.jpg' %}" alt="profile" class="profile"
-                                     width="150px" height="150px">
-                                {% render_field form.photo id="upload-input" accept="image/png, image/jpeg" %}
-                                <div class="col-lg-7 text-center">
-                                    <div class="error">
-                                        {% render_field form.photo.errors %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divide__line text-right">
-                        <span class="w__title">اطلاعات تماس</span>
-                        <span class="__line"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-5">
                             <div class="form-group">
-                                <label for="id_phone_number">تلفن</label>
+                                <label for="id_position" class="form-item">سمت</label>
+                                {% if form.position.errors %}
+                                    {% render_field form.position class+="w-100 error" %}
+                                {% else %}
+                                    {% render_field form.position class+="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    {% render_field form.position.errors %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_phone_number"> تلفن همراه</label>
                                 {% if form.phone_number.errors %}
                                     {% render_field form.phone_number class+="w-100 error" %}
                                 {% else %}
@@ -159,7 +239,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">ثبت تغییرات</button>
