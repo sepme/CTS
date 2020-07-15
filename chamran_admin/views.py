@@ -596,22 +596,38 @@ class NewsForm(generic.FormView):
     template_name = "chamran_admin/newsForm.html"
     form_class = forms.NewsForm
     
-class ContactUS(generic.FormView):
-    template_name = 'chamran_admin/contactUs.html'
-    form_class = forms.ContactForm
-    success_url = "/"
-
-
-    def form_valid(self, form):
-        subject = "تماس با ما - " + form.cleaned_data['fullName']
-        message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(form.cleaned_data['fullName'] ,form.cleaned_data['email'], form.cleaned_data['text'])
+def ContactUS(request):
+    form = forms.ContactForm(request.POST)
+    if form.is_valid():
+        contact = form.save()
+        subject = "تماس با ما - " + contact.fullname
+        message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(contact.fullname ,contact.email, contact.context)
         html_template = get_template('registration/contactUs_sendEmail.html')
         email_template = html_template.render({"message" : message})
         msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
                                         to=[settings.EMAIL_HOST_USER])
         msg.attach_alternative(email_template, "text/html")
         msg.send()
-        return super().form_valid(form)
+        return JsonResponse(data={"success": 'success'})
+    else:
+        return JsonResponse(data=form.errors, status=400)
+
+# class ContactUS(generic.FormView):
+#     template_name = 'chamran_admin/contactUs.html'
+#     form_class = forms.ContactForm
+#     success_url = "/"
+
+
+    # def form_valid(self, form):
+    #     subject = "تماس با ما - " + form.cleaned_data['fullName']
+    #     message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(form.cleaned_data['fullName'] ,form.cleaned_data['email'], form.cleaned_data['text'])
+    #     html_template = get_template('registration/contactUs_sendEmail.html')
+    #     email_template = html_template.render({"message" : message})
+    #     msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+    #                                     to=[settings.EMAIL_HOST_USER])
+    #     msg.attach_alternative(email_template, "text/html")
+    #     msg.send()
+    #     return super().form_valid(form)
 
 def AddOpinion(request):
     form = forms.FeedBackForm(request.POST)
@@ -625,5 +641,5 @@ def AddOpinion(request):
         feedBack.user = request.user
         feedBack.save()
         return JsonResponse(data={"success" : "success"})
-    return JsonResponse(data={"error" : form.errors}, status=400)
+    return JsonResponse(data=form.errors, status=400)
         

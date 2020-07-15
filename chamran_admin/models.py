@@ -126,3 +126,11 @@ class FeedBack(models.Model):
 
     def __str__(self):
         return str(self.user) + " - " + str(self.time_create)
+
+class ContactUs(models.Model):
+    fullname = models.CharField(max_length=100, verbose_name="نام و نام خانوادگی")
+    email    = models.EmailField(verbose_name="ایمیل", max_length=254)
+    context  = models.TextField(verbose_name="متن نظر" ,max_length=1000)
+
+    def __str__(self):
+        return self.fullname
