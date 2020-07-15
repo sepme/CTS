@@ -125,4 +125,4 @@ class FeedBack(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user + " - " + str(self.time_create)
+        return str(self.user) + " - " + str(self.time_create)

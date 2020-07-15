@@ -133,8 +133,8 @@ class ContactForm(forms.Form):
     text = forms.CharField(label="پیام", max_length=1000, widget=forms.Textarea(), required=True ,error_messages={'required': 'لطفا پیام خود را وارد کنید.',})
 
 class FeedBackForm(forms.ModelForm):
-    captcha = CaptchaField( error_messages={'required': 'لطفا کد امنیتی را وارد کنید.',
-                                            'invalid' : 'کد امنیتی وارد شده نامعتبر است.'})
+    # captcha = CaptchaField( error_messages={'required': 'لطفا کد امنیتی را وارد کنید.',
+    #                                         'invalid' : 'کد امنیتی وارد شده نامعتبر است.'})
     
     class Meta:
         model = models.FeedBack
