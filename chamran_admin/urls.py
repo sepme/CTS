@@ -24,6 +24,6 @@ urlpatterns = [
     path('news/', views.News.as_view(), name='newsList'),
     path('news/<uuid:pk>/', views.NewsDetail.as_view(), name='newsDetail'),
     path('newsForm/', views.NewsForm.as_view(), name='createNews'),
-    path('contactUs/', views.ContactUS.as_view() ,name='contactUs'),
+    path('contactUs/', views.ContactUS ,name='contactUs'),
     path("opinion", views.AddOpinion ,name="addOpinion"),
 ]

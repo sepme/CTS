@@ -125,4 +125,12 @@ class FeedBack(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user + " - " + str(self.time_create)
+        return str(self.user) + " - " + str(self.time_create)
+
+class ContactUs(models.Model):
+    fullname = models.CharField(max_length=100, verbose_name="نام و نام خانوادگی")
+    email    = models.EmailField(verbose_name="ایمیل", max_length=254)
+    context  = models.TextField(verbose_name="متن نظر" ,max_length=1000)
+
+    def __str__(self):
+        return self.fullname

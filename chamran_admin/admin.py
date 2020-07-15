@@ -23,3 +23,4 @@ class News(admin.ModelAdmin):
 
 
 admin.site.register(models.FeedBack)
+admin.site.register(models.ContactUs)
