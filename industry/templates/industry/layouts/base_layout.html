@@ -23,6 +23,33 @@
 {% getUnseenMessages request.user as UnseenMessages %}
 {% block dialog %}{% endblock %}
 {% block modals %}{% endblock %}
+<div class="modal fade" id="feedbackModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feedbackModalLabel">ثبت بازخورد</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'chamran:addOpinion' %}" id="feedback_ajax_form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="feedbackEmail">پست الکترونیکی</label>
+                        <input type="email" name='email' class="form-control" id="feedbackEmail"
+                               aria-describedby="emailHelp">
+                    </div>
+                    <div class="form-group">
+                        <label for="feedbackOpinion">متن مشکل</label>
+                        <textarea name='opinion' class="form-control" id="feedbackOpinion" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">ارسال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="main">
     <div class="top-bar">
         <img src="{% static 'industry/img/logoName.png' %}" alt="chamranTeam">
@@ -50,6 +77,11 @@
                 <hr>
                 <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
+        </div>
+        <div class="feed-back">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#feedbackModal">
+                <i class="fas fa-edit"></i>
+            </button>
         </div>
         <a href="#" id="toggle"><span></span></a>
     </div>
@@ -211,5 +243,31 @@
         })
     </script>
 {% endif %}
+<script type="text/javascript">
+    $("form#feedback_ajax_form").submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+            method: "POST",
+            url: $(this).attr("action"),
+            data: $(this).serialize(),
+            success: function (data) {
+                console.log(data);
+                iziToast.success({
+                    rtl: true,
+                    message: "بازخورد شما با موفقیت ارسال شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log(data);
+                iziToast.error({
+                    rtl: true,
+                    message: "ارسال بازخورد با خطا مواجه شد!",
+                    position: 'bottomLeft'
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>

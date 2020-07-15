@@ -5,9 +5,9 @@ html,body {
 	background-color: #fff;
     color: #636b6f;
     font-family: iranyekan, serif;
-    font-weight: 100;
     height: 100vh;
     margin: 0;
+    font-size: 0.95rem;
 }
 
 a {
@@ -247,6 +247,7 @@ nav ul li a:hover,nav ul .active a {
 	margin-top: 50px;
 	text-align: justify;
 	color: #6d6d6d;
+	direction: rtl;
 }
 .home-about-content p {
 	margin-bottom: 20px;

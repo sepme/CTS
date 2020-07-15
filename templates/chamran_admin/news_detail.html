@@ -1,9 +1,37 @@
 {% extends "base.html" %}
-
+{% load static %}
+{% block title %}{{ news.title }}{% endblock %}
 {% block content %}
-{{news.media}}
-{{news.title}}
-<img src="{{news.topPicture}}">
-{{news.text | safe}}<br>
-{{news.writer}}
+    <br/>
+    <br/>
+    <br/>
+    <div class="home-news">
+        <div class="container">
+            <h2>{{ news.title }}</h2>
+            <div class="archive">
+                {{ news.date_submitted }}
+            </div>
+            <div class="page-body">
+                <div class="page-info">
+                    <div class="row" style="padding: 10px">
+                        <div class="col-md-5 offset-md-1">
+                            <div class="page-img">
+                                <img src="{{ news.topPicture }}" alt="{{ news.title }}">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="page-date">
+                            </div>
+                            <div class="page-description" style="margin-top: 10px">
+                                {{ news.summary }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    {{ news.text|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
