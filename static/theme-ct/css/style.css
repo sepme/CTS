@@ -537,6 +537,7 @@ nav ul li a:hover,nav ul .active a {
 	box-shadow: 0 0 20px rgba(0,0,0,0.08);
 }
 .home-news .news-item .news-item-body .cont {
+	text-align: right;
 	padding: 0 12px 12px;
 }
 .home-news .news-item .img {
