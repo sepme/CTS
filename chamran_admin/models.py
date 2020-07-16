@@ -68,10 +68,13 @@ class News(models.Model):
     text = RichTextUploadingField(verbose_name="متن خبر")
     summary = models.CharField(max_length=500, verbose_name="خلاصه خبر")
     topPicture = models.ImageField(upload_to=newsPicture, max_length=255, null=True)
-    attachment = models.FileField(upload_to=newsAttach, verbose_name="ضمیمه", blank=True, null=True)
+    attachment = models.FileField(upload_to=newsAttach, verbose_name="ضمیمه", blank=True, null=True, max_length=511)
     link = models.CharField(max_length=128, verbose_name="لینک خبر")
     writer = models.CharField(max_length=32, verbose_name="نویسنده")
     date_submitted = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date_submitted']
 
     def __str__(self):
         return self.title[: 16]
@@ -81,7 +84,7 @@ class News(models.Model):
 
 class Picture(models.Model):
     news = models.ForeignKey(News, verbose_name="خبر", on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to=newsPicture, verbose_name="تصویر خبر")
+    picture = models.ImageField(upload_to=newsPicture, verbose_name="تصویر خبر", max_length=255)
 
     def __str__(self):
         return str(self.news)
