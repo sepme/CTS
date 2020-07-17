@@ -214,6 +214,10 @@
     </script>
     <script type="text/javascript">
         $(window).on("load", function () {
+            $('#selectUsage .form-check label').click(function () {
+               $("#selectUsage svg > g").attr("fill", "#808080");
+               $(this).find("svg > g").attr("fill", "#3ccd1c");
+            });
             $('#selectUsage').modal('toggle');
             $("#selectUsage .modal-footer button").click(function () {
                 if ($('#selectUsage').find("input[type='radio']:checked").val() === "industry") {

@@ -610,3 +610,71 @@ div.row.cover-page {
 #initialInformation .RGroup__form-item {
     display: none;
 }
+
+#selectUsage {
+
+}
+
+#selectUsage .radio-group {
+    display: flex;
+}
+
+#selectUsage .radio-group .form-check {
+    display: block;
+    width: 50%;
+    padding: 0;
+}
+
+#selectUsage .radio-group .form-check label {
+    position: relative;
+    top: unset;
+    right: unset;
+    color: #6f7285;
+    z-index: 0;
+    transition: 200ms top ease, 200ms hover ease;
+    text-align: center;
+    padding: 180px 30px 30px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    min-width: 179px;
+    width: fit-content;
+    width: -moz-fit-content;
+}
+
+#selectUsage .radio-group .form-check label {
+    position: relative;
+    top: unset;
+    right: unset;
+    color: #6f7285;
+    z-index: 0;
+    transition: 200ms top ease, 200ms hover ease;
+    text-align: center;
+    padding: 180px 30px 30px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    min-width: 179px;
+    width: fit-content;
+    width: -moz-fit-content;
+}
+
+#selectUsage .radio-group .form-check label svg {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
