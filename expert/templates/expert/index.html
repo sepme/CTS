@@ -280,86 +280,26 @@
                                                                 <div class="row">
                                                                     <div class="col-12">
                                                                         <div class="horizontal-avatar-list owl-carousel owl-theme">
-                                                                            <div class="item">
-                                                                                <div class="avatar-item">
-                                                                                    <img src="{% static 'img/photo_2019-11-03_00-03-04.jpg' %}"
-                                                                                         alt="">
-                                                                                    <div class="info">
-                                                                                        <h3>رضا باسره</h3>
-                                                                                        <button value="{{ project.pk }}"
-                                                                                                id="{{ researcher.profile.id }}"
-                                                                                                {# data-url="{% url 'researcher:show_researcher_preview' %}"#}
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#researcherInfo">
-                                                                                            رزومه
-                                                                                        </button>
+                                                                            {% for researcher in researcher_accepted %}
+                                                                                <div class="item">
+                                                                                    <div class="avatar-item">
+                                                                                        <img src="/media/{{ researcher.photo }}"
+                                                                                             alt="{{ researcher.fullname }}پروفایل ">
+                                                                                        <div class="info">
+                                                                                            <h3>{{ researcher.fullname }}</h3>
+                                                                                            <button value="{{ project.pk }}"
+                                                                                                    id="{{ researcher.id }}"
+                                                                                                     data-url="{% url 'researcher:show_resume_preview' %}"
+                                                                                                    data-toggle="modal"
+                                                                                                    data-target="#researcherInfo">
+                                                                                                رزومه
+                                                                                            </button>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="item">
-                                                                                <div class="avatar-item">
-                                                                                    <img src="{% static 'img/photo_2019-11-03_00-03-04.jpg' %}"
-                                                                                         alt="">
-                                                                                    <div class="info">
-                                                                                        <h3>رضا باسره</h3>
-                                                                                        <button value="{{ project.pk }}"
-                                                                                                id="{{ researcher.profile.id }}"
-                                                                                                {# data-url="{% url 'researcher:show_researcher_preview' %}"#}
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#researcherInfo">
-                                                                                            رزومه
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="item">
-                                                                                <div class="avatar-item">
-                                                                                    <img src="{% static 'img/photo_2019-11-03_00-03-04.jpg' %}"
-                                                                                         alt="">
-                                                                                    <div class="info">
-                                                                                        <h3>رضا باسره</h3>
-                                                                                        <button value="{{ project.pk }}"
-                                                                                                id="{{ researcher.profile.id }}"
-                                                                                                {# data-url="{% url 'researcher:show_researcher_preview' %}"#}
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#researcherInfo">
-                                                                                            رزومه
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="item">
-                                                                                <div class="avatar-item">
-                                                                                    <img src="{% static 'img/photo_2019-11-03_00-03-04.jpg' %}"
-                                                                                         alt="">
-                                                                                    <div class="info">
-                                                                                        <h3>رضا باسره</h3>
-                                                                                        <button value="{{ project.pk }}"
-                                                                                                id="{{ researcher.profile.id }}"
-                                                                                                {# data-url="{% url 'researcher:show_researcher_preview' %}"#}
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#researcherInfo">
-                                                                                            رزومه
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="item">
-                                                                                <div class="avatar-item">
-                                                                                    <img src="{% static 'img/photo_2019-11-03_00-03-04.jpg' %}"
-                                                                                         alt="">
-                                                                                    <div class="info">
-                                                                                        <h3>رضا باسره</h3>
-                                                                                        <button value="{{ project.pk }}"
-                                                                                                id="{{ researcher.profile.id }}"
-                                                                                                {# data-url="{% url 'researcher:show_researcher_preview' %}"#}
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#researcherInfo">
-                                                                                            رزومه
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
+                                                                            {% empty %}
+
+                                                                            {% endfor %}
                                                                         </div>
                                                                     </div>
                                                                 </div>

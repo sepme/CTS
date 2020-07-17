@@ -559,16 +559,20 @@ $(document).ready(function () {
     /*
     Show researchers information for expert
      */
-    $(".researcher-card-button-show").click(function () {
+    $("button[data-target='#researcherInfo']").click(function () {
         let id = $(this).attr("id");
         let url = $(this).attr("data-url");
         let project_id = $(this).attr("value");
+        console.log("id ", id);
+        console.log("url ", url);
+        console.log("p_id ", project_id);
         $.ajax({
             method: 'GET',
             url: url,
             dataType: 'json',
             data: {id: id, project_id: project_id},
             success: function (data) {
+                console.log(data);
                 $(".researcher_id").attr("value", id);
                 $(".project_id").attr("value", project_id);
                 $('#researcher_photo').attr("src", data.photo);
