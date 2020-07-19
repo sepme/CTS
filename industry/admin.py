@@ -12,5 +12,6 @@ from . import models
 @admin.register(models.ResearchGroupProfile)
 @admin.register(models.IndustryUser)
 @admin.register(models.ExpertEvaluateIndustry)
+@admin.register(models.InterfacePerson)
 class IndustryAdmin(admin.ModelAdmin):
     pass
