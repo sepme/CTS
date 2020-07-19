@@ -617,7 +617,7 @@ $(document).ready(function () {
                         $('#researcher_scientific_record').html(table_row)
                     }
                 } else {
-                    $('#researcher_scientific_record').html(`<tr><td>هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                    $('#researcher_scientific_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
 
                 let executive_record = JSON.parse(data.executive_record);

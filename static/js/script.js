@@ -206,6 +206,7 @@ myForm.submit(function (event) {
                         $(".account_error").html("");
                     }
                 });
+                $(".user-type").find("svg > g").attr("fill", "#ff4545");
                 $(".user-type-container").addClass("error-container");
             }
             $("#id_captcha_1").find("div.error").remove();
