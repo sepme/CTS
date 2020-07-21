@@ -12,6 +12,23 @@
     {% if request.user.researcheruser.status.status == 'signed_up' %}
         {% include 'researcher/layouts/initial_information.html' %}
     {% endif %}
+    <div class="modal fade" id="previewKeywords" tabindex="-1" role="dialog" aria-labelledby="previewKeywordsLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewKeywordsLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}
@@ -189,7 +206,7 @@
                                             {% for keyword in project.keyword %}
                                                 <span>{{ keyword.name }}</span>
                                             {% endfor %}
-                                            <span class="show-all">همه</span>
+                                            <span class="show-all" data-toggle="modal" data-target="#previewKeywords">همه</span>
                                         </div>
                                     </div>
                                 </div>
@@ -377,19 +394,4 @@
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
-    <script type="text/javascript">
-        $(window).on("load", function () {
-            console.log("span ", $('.project-techniques').find("span").length);
-            console.log("scrollHeight ", $('.project-techniques').innerHeight());
-            console.log("scrollHeight ", $('.project-techniques'));
-            console.log("scrollHeight ", $('.project-techniques').find("div"));
-            console.log("clientHeight ", $('.project-techniques').clientHeight);
-            if ($('.project-techniques').prop('scrollHeight') > $('.project-techniques').prop('clientHeight')) {
-                console.log("overflow");
-            } else {
-                console.log("no overflow");
-            }
-            {#isOverflow($(".project-techniques"));#}
-        });
-    </script>
 {% endblock %}

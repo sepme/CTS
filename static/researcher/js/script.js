@@ -1243,31 +1243,6 @@ function ShowPreviousProject(project) {
     return show_project;
 }
 
-$("#done-project").click(function (event) {
-    $(".new-project").attr("style", "display :none");
-    $(".your-project").attr("style", "display :none");
-    $(".missed-project").attr("style", "display :none");
-    $(".done-project").attr("style", "display :block");
-    // $.ajax({
-    //     method: 'GET',
-    //     url: '/researcher/doneProject/',
-    //     dataType: 'json',
-    //     success: function (data) {
-    //         console.log(data);
-    //         let adding = "";
-    //         for (let key in data.project_list) {
-    //             const element = data.project_list[key];
-    //             adding = adding + ShowPreviousProject(element);
-    //         }
-    //         console.log(adding);
-    //         $(".done-project").html(adding);
-    //     },
-    //     error: function (data) {
-    //         console.log('You don\'t have any project.');
-    //     },
-    // });
-});
-
 function ShowMyProject(project) {
     let show_project = "<div class='card project-item'>" +
         "<span class='header'>" +
@@ -1282,35 +1257,9 @@ function ShowMyProject(project) {
     return show_project;
 }
 
-$("#active-project").click(function (event) {
-    $(".new-project").attr("style", "display :none;");
-    $(".done-project").attr("style", "display :none;");
-    $(".missed-project").attr("style", "display :none;");
-    $(".your-project").attr("style", "display :block;");
-    // $.ajax({
-    //     method: 'GET',
-    //     url: '/researcher/myProject/',
-    //     dataType: 'json',
-    //     success: function (data) {
-    //         console.log(data);
-    //         let adding = "";
-    //         for (let key in data.project_list) {
-    //             const element = data.project_list[key];
-    //             adding = adding + ShowMyProject(element);
-    //         }
-    //         $(".your-project").html(adding);
-    //         // $(".your-project").append(adding);
-    //     },
-    //     error: function (data) {
-    //         console.log('You don\'t have any project.');
-    //     },
-    // });
-});
-
 $(".my-project").click(function () {
     const dialog = $(".showProject");
     let projectId = $(this).attr("id");
-    console.log("Dsdsd");
     $.ajax({
         method: 'GET',
         url: '/researcher/myProject/',
@@ -1364,16 +1313,78 @@ function deleteComment(comment) {
     });
 }
 
-$("#new-projects").click(function (event) {
+function isOverflow(element) {
+    return (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)
+}
+
+$("#active-project").click(function () {
+    $(".new-project").attr("style", "display :none;");
+    $(".done-project").attr("style", "display :none;");
+    $(".missed-project").attr("style", "display :none;");
+    $(".your-project").attr("style", "display :block;");
+    $(".your-project .card.box").each(function () {
+        if (isOverflow($(this).find(".project-techniques")[0])) {
+            $(this).find(".project-techniques").addClass("do-not-touch");
+            while (isOverflow($(this).find(".project-techniques")[0])) {
+                $(this).find(".project-techniques span:nth-last-child(2)").remove();
+            }
+        } else {
+            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+        }
+
+    });
+});
+
+$("#new-projects").click(function () {
     $(".new-project").attr("style", "display :block");
     $(".done-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
     $(".missed-project").attr("style", "display :none");
+    $(".new-project .card.box").each(function () {
+        if (isOverflow($(this).find(".project-techniques")[0])) {
+            $(this).find(".project-techniques").addClass("do-not-touch");
+            while (isOverflow($(this).find(".project-techniques")[0])) {
+                $(this).find(".project-techniques span:nth-last-child(2)").remove();
+            }
+        } else {
+            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+        }
+
+    })
 });
 
-$("#missed-project").click(function (event) {
+$("#missed-project").click(function () {
     $(".missed-project").attr("style", "display :block");
     $(".done-project").attr("style", "display :none");
     $(".your-project").attr("style", "display :none");
     $(".new-project").attr("style", "display :none");
+    $(".missed-project .card.box").each(function () {
+        if (isOverflow($(this).find(".project-techniques")[0])) {
+            $(this).find(".project-techniques").addClass("do-not-touch");
+            while (isOverflow($(this).find(".project-techniques")[0])) {
+                $(this).find(".project-techniques span:nth-last-child(2)").remove();
+            }
+        } else {
+            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+        }
+
+    })
+});
+
+$("#done-project").click(function () {
+    $(".new-project").attr("style", "display :none");
+    $(".your-project").attr("style", "display :none");
+    $(".missed-project").attr("style", "display :none");
+    $(".done-project").attr("style", "display :block");
+    $(".done-project .card.box").each(function () {
+        if (isOverflow($(this).find(".project-techniques")[0])) {
+            $(this).find(".project-techniques").addClass("do-not-touch");
+            while (isOverflow($(this).find(".project-techniques")[0])) {
+                $(this).find(".project-techniques span:nth-last-child(2)").remove();
+            }
+        } else {
+            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+        }
+
+    })
 });
