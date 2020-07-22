@@ -206,6 +206,7 @@ myForm.submit(function (event) {
                         $(".account_error").html("");
                     }
                 });
+                $(".user-type").find("svg > g").attr("fill", "#ff4545");
                 $(".user-type-container").addClass("error-container");
             }
             $("#id_captcha_1").find("div.error").remove();
@@ -363,12 +364,14 @@ $.ajaxSetup({
     }
 });
 
-$('.captcha').click(function () {
-    $form = $(this).parents('form');
-
+$('#refresh-captcha').click(function () {
+    let $form = $(this).parents('form');
+    let thisElement = $(this);
+    thisElement.find(".fa-sync-alt").addClass("fa-spin");
     $.getJSON("/captcha/refresh/", {}, function (result) {
         $('.captcha').attr('src', result['image_url']);
         $('#id_captcha_0').val(result['key']);
+        thisElement.find(".fa-sync-alt").removeClass("fa-spin");
     });
 
     return false;

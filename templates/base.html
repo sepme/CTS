@@ -23,19 +23,19 @@
             <i class="fas fa-bars"></i>
         </div>
         <div class="logo">
-            <a href="/">
+            <a href="{% url 'chamran:home' %}">
                 <img src="{% static 'theme-ct/images/logo.png' %}" alt="ChamranTeam Logo">
             </a>
         </div>
         <div class="enter_icon" id="enter_icon">
-            <a href="http://chamranteambot.pythonanywhere.com/login/">
+            <a href="{% url 'chamran:login' %}">
                 <i class="fas fa-user"></i>
             </a>
         </div>
         <nav id="nav">
             <ul>
                 <li class="goToDiv" data-div="top" data-next="AboutUs">
-                    <a href="{% if request.path == "/" %}#top{% endif %}">صفحه اصلی</a>
+                    <a href="{% if request.path == "/" %}#top{% else %}{% url 'chamran:home' %}{% endif %}">صفحه اصلی</a>
                 </li>
                 <li class="goToDiv" data-div="AboutUs" data-next="whyUs"><a href="/#AboutUs">درباره ما</a></li>
                 <li class="goToDiv" data-div="whyUs" data-next="Cooperation"><a href="/#whyUs">مزایای عضویت</a></li>

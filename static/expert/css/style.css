@@ -1191,6 +1191,13 @@ span.add-researcher.hover > span {
     border: 1px solid #bdbdbd;
 }
 
+@media (max-width: 1200px) and  (min-width: 992px) {
+    .industry-logo-preview > img {
+        min-width: 112px;
+        margin-right: -35px;
+    }
+}
+
 .budget-section {
     margin-top: 5px;
     text-align: -webkit-left;
@@ -1213,6 +1220,13 @@ span.add-researcher.hover > span {
 
 .budget {
     width: 120px;
+}
+
+@media (max-width: 1200px) and  (min-width: 992px) {
+    .budget {
+        width: 112px;
+        margin-right: -35px;
+    }
 }
 
 .budget-header {

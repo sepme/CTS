@@ -3,7 +3,7 @@
 <span class="section-title">گفتگو</span>
 <div class="section">
     <div class="project-comment-innerDiv">
-        <div class="no-comment">
+        <div class="no-comment" style="{% if not comments %}display:block;{% endif %}">
             <img class="no comment" src="{% static 'img/no_message.svg' %}" alt="no message">
             <h5>نظری درباره این پروژه ثبت نشده!</h5>
             <p>

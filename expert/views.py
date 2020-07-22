@@ -75,7 +75,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 for researcher in project.researcher_accepted.all():
                     researcher = {
                         "id" : researcher.pk,
-                        "fullname" : researcher.researcherprofile.fullname
+                        "fullname" : researcher.researcherprofile.fullname,
+                        "photo": researcher.researcherprofile.photo
                     }
                     context['researcher_accepted'].append(researcher)
             context['projects'] = projects

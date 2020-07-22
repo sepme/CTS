@@ -34,6 +34,10 @@
     padding-bottom: 40px;
 }
 
+p {
+    direction: rtl;
+}
+
 .p-bottom-0 {
     padding-bottom: 0 !important;
 }
@@ -161,7 +165,7 @@ body.notFound {
 }
 
 @media (max-width: 767px) {
-    .card.registration img {
+    .card.registration img:not(.captcha) {
         display: none;
     }
 }
@@ -263,13 +267,13 @@ body.notFound {
     left: 0;
     width: 100px;
     height: 100px;
-    margin-left: 25px;
+    margin-left: 2px;
     border: 1px solid #bdbdbd;
     color: #bdbdbd;
     border-radius: 5px;
     box-shadow: none;
     background-color: #ffffff;
-    padding-top: 75px;
+    padding-top: 10px;
 }
 
 .user-type.researcher {
@@ -284,6 +288,10 @@ body.notFound {
     box-shadow: 0 0 5px 0 #6aff49;
 }
 
+.user-type-container.error-container .user-type:hover {
+    background-color: #ff454516;
+}
+
 .user-type-container.error-container .user-type {
     color: #ff4545 !important;
     -webkit-box-shadow: none !important;
@@ -296,57 +304,62 @@ body.notFound {
     height: 62px;
 }
 
-label.user-type:after {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
+.user-type svg {
     width: 62px;
     height: 62px;
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 
-label.user-type.expert:after {
-    background-image: url("../img/mind.svg");
-}
+/*label.user-type:after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 10px;*/
+/*    left: 50%;*/
+/*    -webkit-transform: translateX(-50%);*/
+/*    -moz-transform: translateX(-50%);*/
+/*    -ms-transform: translateX(-50%);*/
+/*    -o-transform: translateX(-50%);*/
+/*    transform: translateX(-50%);*/
+/*    width: 62px;*/
+/*    height: 62px;*/
+/*    background-repeat: no-repeat;*/
+/*    background-size: cover;*/
+/*}*/
 
-label.user-type.industry:after {
-    background-image: url("../img/setting.svg");
-}
+/*label.user-type.expert:after {*/
+/*    background-image: url("../img/mind.svg");*/
+/*}*/
 
-label.user-type.researcher:after {
-    background-image: url("../img/researcher.svg");
-}
+/*label.user-type.industry:after {*/
+/*    background-image: url("../img/setting.svg");*/
+/*}*/
 
-label.user-type.select.expert:after {
-    background-image: url("../img/mind_hover.svg");
-}
+/*label.user-type.researcher:after {*/
+/*    background-image: url("../img/researcher.svg");*/
+/*}*/
 
-label.user-type.select.industry:after {
-    background-image: url("../img/setting_hover.svg");
-}
+/*label.user-type.select.expert:after {*/
+/*    background-image: url("../img/mind_hover.svg");*/
+/*}*/
 
-label.user-type.select.researcher:after {
-    background-image: url("../img/research_hover.svg");
-}
+/*label.user-type.select.industry:after {*/
+/*    background-image: url("../img/setting_hover.svg");*/
+/*}*/
 
-.user-type-container.error-container label.user-type.expert:after {
-    background-image: url("../img/mind_error.svg") !important;
-}
+/*label.user-type.select.researcher:after {*/
+/*    background-image: url("../img/research_hover.svg");*/
+/*}*/
 
-.user-type-container.error-container label.user-type.industry:after {
-    background-image: url("../img/setting_error.svg") !important;
-}
+/*.user-type-container.error-container label.user-type.expert:after {*/
+/*    background-image: url("../img/mind_error.svg") !important;*/
+/*}*/
 
-.user-type-container.error-container label.user-type.researcher:after {
-    background-image: url("../img/research_error.svg") !important;
-}
+/*.user-type-container.error-container label.user-type.industry:after {*/
+/*    background-image: url("../img/setting_error.svg") !important;*/
+/*}*/
+
+/*.user-type-container.error-container label.user-type.researcher:after {*/
+/*    background-image: url("../img/research_error.svg") !important;*/
+/*}*/
 
 input[type="radio"]:checked + label {
     cursor: pointer;
@@ -2925,6 +2938,7 @@ div.no-project > span.disable-border-button {
 .h1, .h2, .h3, .h4, .h5 {
     color: #484848 !important;
     font-weight: bold !important;
+    direction: rtl;
 }
 
 @media (max-width: 767px) {

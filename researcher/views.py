@@ -814,6 +814,7 @@ def DeleteStudiousRecord(request):
 def show_resume_preview(request):
     researcherProfile = models.ResearcherProfile.objects.get(id=request.GET.get('id'))
     researcher = researcherProfile.researcher_user
+    # TODO: Plz check resume key when it is none! I[Reza :)] comment that because of error type 500
     researcher_information = {
         'photo': researcherProfile.photo.url,
         'name': researcherProfile.__str__(),
@@ -821,7 +822,7 @@ def show_resume_preview(request):
         'grade': researcherProfile.grade,
         'university': researcherProfile.university,
         'entry_year': researcherProfile.entry_year,
-        'resume': researcherProfile.resume.url,
+        # 'resume': researcherProfile.resume.url,
         'techniques': [],
         'scientific_record': serialize('json', models.ScientificRecord.objects.filter(
             researcherProfile=researcherProfile)),

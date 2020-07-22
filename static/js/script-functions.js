@@ -34,7 +34,12 @@ function display_error(form) {
         let input = $(this);
         let value = $(this).val();
         // console.log($(this).prop('nodeName'));
-        if ($(this).prop("nodeName") === "INPUT") {
+        if (input.attr("id") === "id_captcha_1") {
+            input.on("keyup", function () {
+                input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                input.closest("form").find(".captcha-error div.error").css("top", "-35px");
+            });
+        } else if ($(this).prop("nodeName") === "INPUT") {
             switch (input.attr("type")) {
                 case "number":
                     input.on("keyup", function () {
@@ -70,19 +75,6 @@ function display_error(form) {
                 } else {
                     input.removeClass("error").removeAttr("style").prev().removeAttr("style");
                     input.closest("div").find("div.error").css("top", "33px");
-                }
-            });
-        }
-
-        if (input.attr("id") === "id_captcha_1") {
-            input.change(function () {
-                console.log(value);
-                if (input.text() === value) {
-                    input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                    input.closest("form").find(".captcha-error div.error").removeAttr("style");
-                } else {
-                    input.removeClass("error").removeAttr("style").prev().removeAttr("style");
-                    input.closest("form").find(".captcha-error div.error").css("top", "33px");
                 }
             });
         }
