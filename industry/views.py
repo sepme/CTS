@@ -327,12 +327,12 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 context = self.get_context_data()
                 context['RandD_form'] = RandDForm
                 return render(request=self.request, template_name=self.template_name, context=context )
-        # industryForm = form.save(commit=False)
-        # industry_user = self.request.user.industryuser
-        # industryForm.industry_user = industry_user
-        # industryForm.save()
-        # industry_user.status = 'free'
-        # industry_user.save()
+        industryForm = form.save(commit=False)
+        industry_user = self.request.user.industryuser
+        industryForm.industry_user = industry_user
+        industryForm.save()
+        industry_user.status = 'free'
+        industry_user.save()
         return super().form_valid(form)
 
 
