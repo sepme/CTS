@@ -98,15 +98,15 @@
 
         <h5>{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}</h5>
         <h6>پژوهشگر</h6>
-        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ request.user.researcheruser.points|default:0 }}</span>/10
-        </p>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar"
-                 aria-valuenow="{{ request.user.researcheruser.score|default:0 }}" aria-valuemin="0"
-                 aria-valuemax="100" style="width: {{ request.user.researcheruser.score }}px">
-                <span class="sr-only">{{ request.user.researcheruser.score|default:0 }}% completed</span>
-            </div>
-        </div>
+{#        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ request.user.researcheruser.points|default:0 }}</span>/10#}
+{#        </p>#}
+{#        <div class="progress">#}
+{#            <div class="progress-bar" role="progressbar"#}
+{#                 aria-valuenow="{{ request.user.researcheruser.score|default:0 }}" aria-valuemin="0"#}
+{#                 aria-valuemax="100" style="width: {{ request.user.researcheruser.score }}px">#}
+{#                <span class="sr-only">{{ request.user.researcheruser.score|default:0 }}% completed</span>#}
+{#            </div>#}
+{#        </div>#}
         <div class="hr"></div>
         <ul class="list-group">
             {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}

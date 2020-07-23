@@ -145,7 +145,7 @@ $(document).ready(function () {
     input_focus();
     showQuestion();
     // $('*').persiaNumber();
-    // question_dialog_init();
+    question_dialog_init();
     question_page_init();
     // init_dialog_btn(".preview-project", ".showProject");
     // init_dialog_btn(".preview-project.type-2", ".project-details");

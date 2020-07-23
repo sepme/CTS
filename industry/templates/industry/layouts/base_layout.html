@@ -117,15 +117,15 @@
                 مجموعه پژوهشی
             {% endif %}
         </h6>
-        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ user.industryuser.industry_points|default:0 }}</span>/10
-        </p>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{ user.industryuser.score|default:0 }}"
-                 aria-valuemin="0"
-                 aria-valuemax="100" style="width: {{ user.industryuser.score }}px">
-                <span class="sr-only">{{ user.industryuser.score|default:0 }}% completed</span>
-            </div>
-        </div>
+{#        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ user.industryuser.industry_points|default:0 }}</span>/10#}
+{#        </p>#}
+{#        <div class="progress">#}
+{#            <div class="progress-bar" role="progressbar" aria-valuenow="{{ user.industryuser.score|default:0 }}"#}
+{#                 aria-valuemin="0"#}
+{#                 aria-valuemax="100" style="width: {{ user.industryuser.score }}px">#}
+{#                <span class="sr-only">{{ user.industryuser.score|default:0 }}% completed</span>#}
+{#            </div>#}
+{#        </div>#}
         <div class="hr"></div>
         <ul class="list-group">
             {% url "industry:index" as index %}
