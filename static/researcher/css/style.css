@@ -1899,18 +1899,24 @@ button.start-question {
 .dots-timer .timer-item .circle .circle-dot.blink {
     border: 1px solid #3CCD1C;
     background-color: #3CCD1C;
-  -webkit-animation-name: blinker;
-  -webkit-animation-duration: 1s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: ease-in-out;
-  -webkit-animation-direction: alternate;
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-direction: alternate;
 }
 
 @-webkit-keyframes blinker {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.main.forbid-background {
+    background-image: url("../img/forbid_img.svg");
+    background-size: cover;
+
 }
