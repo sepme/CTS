@@ -68,16 +68,16 @@
                                 </div>
                                 <div class="col-lg-6 rankDiv">
                                     <div class="form-group">
-                                        <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
-                                        <select id="id_industry_type" name="industry_type" class="w-100">
+                                        <label class="rankLabel" for="id_RandD_type">نوع شرکت</label>
+                                        <select id="id_RandD_type" name="RandD_type" class="w-100">
                                             <option value="0" {% if RandD_form.industr_type.value == 0 %} selected
                                             {% endif %}>خصوصی
                                             </option>
-                                            <option value="1" {% if RandD_form.industry_type.value == 1 %} selected
+                                            <option value="1" {% if RandD_form.RandD_type.value == 1 %} selected
                                             {% endif %}>دولتی
                                             </option>
                                         </select>
-                                        {% render_field RandD_form.industry_type.errors %}
+                                        {% render_field RandD_form.RandD_type.errors %}
                                     </div>
                                 </div>
                             </div>

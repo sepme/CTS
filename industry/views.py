@@ -361,9 +361,10 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
         #                               initial={
         #                                   'industry_type': self.request.user.industryuser.industryform.industry_type})
         industry_user = models.IndustryUser.objects.get(user=self.request.user)
-        profile = industry_user.profile
-        industryForm = self.request.user.industry_user.profile
-        if type(profile) == models.RandDProfile:
+        # profile = industry_user.profile
+        # industryForm = self.request.user.industry_user.profile
+        industryForm = industry_user.profile
+        if type(industryForm) == models.RandDProfile:
             form = forms.RandDInfoForm(request.POST, request.FILES)
             if form.is_valid():
                 industryForm.address    = form.cleaned_data['address']
