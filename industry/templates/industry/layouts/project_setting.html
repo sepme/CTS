@@ -1,0 +1,37 @@
+{% load static %}
+<div class="modal fade" id="projectSetting" tabindex="-1" role="dialog" aria-labelledby="projectSettingLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectSettingLabel">تنظیمات</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="divide__line text-right mb-4">
+                        <span class="w__title RandD__form-item">درخواست استاد</span>
+                        <span class="__line"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 d-md-block d-none"></div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="searchExpert">نام/id استاد</label>
+                                <div>
+                                    <input type="text" class="w-100 auto-complete-input" id="searchExpert"
+                                           name="search_expert">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">ثبت</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

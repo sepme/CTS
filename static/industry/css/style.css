@@ -678,3 +678,39 @@ div.row.cover-page {
     -o-transform: translateX(-50%);
     transform: translateX(-50%);
 }
+
+.selected-expert {
+    display: flex;
+    border: 1px solid #bdbdbd;
+    background-color: #F8FDF7;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+}
+
+.selected-expert img {
+    padding: 7px;
+}
+
+.selected-expert .selected-expert__details {
+    margin: auto 0;
+    padding-right: 10px;
+}
+
+.selected-expert .selected-expert__status {
+    margin: auto auto auto 0;
+}
+
+.selected-expert .selected-expert__delete-item {
+    margin: auto 10px;
+    font-size: 18px;
+    color: #bdbdbd;
+    background-color: transparent;
+    border: none;
+}
+
+.selected-expert .selected-expert__delete-item:hover,
+.selected-expert .selected-expert__delete-item:focus {
+    outline: none;
+    color: #484848;
+}

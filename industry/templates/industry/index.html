@@ -14,6 +14,7 @@
     {% endif %}
     {% include 'industry/layouts/show_project.html' %}
     {% include 'industry/layouts/expertResume.html' %}
+    {% include 'industry/layouts/project_setting.html' %}
 {% endblock %}
 
 {% block name %}{{ request.user.industryuser.profile }}{% endblock %}
@@ -41,7 +42,7 @@
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
                                             id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
-                                            مشاهده
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -62,6 +63,9 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
                             <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <div class="project-setting">
+                                <i class="fas fa-cog"></i>
+                            </div>
                             <span class="active-status">
                                 <i class="fas fa-spinner fc-white center-abs"></i>
                             </span>
@@ -80,7 +84,7 @@
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
                                             id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
-                                            مشاهده
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -111,6 +115,9 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
                             <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
+                                <i class="fas fa-cog"></i>
+                            </div>
                             <span class="active-status"></span>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
@@ -148,7 +155,7 @@
                                 <div class="col-md-6 col-4">
                                     <button class="preview-project default-btn" type="button"
                                             id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
-                                            مشاهده
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -219,7 +226,7 @@
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
                                             id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
-                                            مشاهده
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -291,7 +298,7 @@
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
                                             id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
-                                            مشاهده
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -332,6 +339,6 @@
                 </div>
             {% endfor %}
         </div>
-{#        <div class="col-lg-3"></div>#}
+        {#        <div class="col-lg-3"></div>#}
     </div>
 {% endblock %}

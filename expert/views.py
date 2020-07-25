@@ -183,7 +183,8 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['executive_form']      = forms.ExecutiveRecordForm()
         context['research_form']       = forms.ResearchRecordForm()
         context['paper_form']          = forms.PaperRecordForm()
-        context['resume'] = expertForm.resume
+        if expertForm.resume:
+            context['resume'] = expertForm.resume
         return context
 
     def form_invalid(self, form):

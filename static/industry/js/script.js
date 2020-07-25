@@ -568,6 +568,71 @@ $(document).ready(function () {
         }
     });
 
+    // Project Setting Auto Search
+    function selecting_expert (element) {
+        element.on("keyup", function () {
+            const thisElement = $(this);
+
+            let availableTags = [
+                {
+                    "value": "رضا باسره",
+                    "id": "@rezabasereh",
+                    "photo": "/media/Industry%20Profile/industry%40gmail.com/10531480996275599700.jpg",
+                    "label": `
+                          <span><div>رضا باسره</div><div>@rezabasereh</div></span>
+                          <img src='/media/Industry%20Profile/industry%40gmail.com/10531480996275599700.jpg' alt='no image' width='70px'>`
+                }
+            ];
+            $(this).autocomplete({
+                source: availableTags,
+                minWidth: 1,
+                open: function (event, ui) {
+                    thisElement.addClass("remove-border-bottom");
+                    console.log("open");
+                },
+                close: function (event, ui) {
+                    thisElement.removeClass("remove-border-bottom");
+                    console.log("close");
+                },
+                select: function (event, ui) {
+                    let expert = `<div class="selected-expert">
+                    <img src="${ui.item.photo}" alt="${ui.item.value}" width="60px">
+                    <div class="selected-expert__details text-right">
+                        <div>${ui.item.value}</div>
+                        <div dir="ltr">${ui.item.id}</div>
+                    </div>
+                    <div class="selected-expert__status text-warning">
+                        در انتظار تایید
+                    </div>
+                    <button type="button" class="selected-expert__delete-item">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>`;
+                    thisElement.closest(".form-group").closest("div.col-md-10").html(expert);
+                    $(".selected-expert .selected-expert__delete-item").click(function () {
+                        let select_expert = `<div class="form-group">
+                                            <label for="searchExpert">نام/id استاد</label>
+                                            <div>
+                                                <input type="text" class="w-100 auto-complete-input" id="searchExpert"
+                                                    name="search_expert">
+                                            </div>
+                                        </div>`;
+                        $(this).closest(".selected-expert").closest("div.col-md-10").html(select_expert);
+                        selecting_expert($("#searchExpert"));
+                    });
+                }
+            }).data("ui-autocomplete")._renderItem = function (ul, item) {
+                return $("<li class='ui-autocomplete-row'></li>")
+                    .data("item.autocomplete", item)
+                    .append(item.label)
+                    .appendTo(ul);
+            };
+            $(".ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front").addClass("item-has-img");
+        });
+    }
+    selecting_expert($("#searchExpert"));
+
+
     $('.accept-request').click(function (data) {
         let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         let project_id = $(this).closest(".confirm-request").attr("id");
