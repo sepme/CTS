@@ -130,6 +130,12 @@ class Home(generic.TemplateView):
 
     # def get(self, request, *args,g **kwargs):
         # return HttpResponseRedirect(reverse('chamran:login'))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["top_news"] = models.News.objects.all()[:3]
+        return context
+    
 
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm

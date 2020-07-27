@@ -125,6 +125,10 @@ class ResearchGroupInfoForm(forms.ModelForm):
     class Meta:
         model = models.ResearchGroupProfile
         exclude = ['industry_user', 'interfacePerson',]
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['address'].required = False
 
 
 
@@ -353,7 +357,7 @@ class CommentForm(forms.Form):
         data = self.cleaned_data["attachment"]
         return data
 
-class InterfacePersonForm(forms.ModelForm):
+class basicInterfacePersonForm(forms.ModelForm):
     industry_type = forms.CharField(max_length=15, required=False)
 
     class Meta:
@@ -385,6 +389,49 @@ class InterfacePersonForm(forms.ModelForm):
             raise ValidationError("نوع شرکت نمی تواند خالی باشد.")
         return data
 
+    def clean_phone_number(self):
+        data = self.cleaned_data["phone_number"]
+        if data == "":
+            raise ValidationError(_('تلفن نمی تواند خالی باشد.'))
+        try:
+            int(data)
+        except ValueError:
+            raise ValidationError(_("شماره وارد شده معتبر نمی باشد."))
+        if len(data) != 11:
+            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
+        return data
+
+    def clean_position(self):
+        data = self.cleaned_data["position"]
+        if data == "":
+            raise ValidationError("سمت نمی تواند خالی باشد.")
+        return data
+    
+    def clean_email(self):
+        data = self.cleaned_data["email"]
+        if data == "":
+            raise ValidationError("پست الکترونیکی نمی تواند خالی باشد.")
+        return data
+    
+
+class interfacePersonForm(forms.ModelForm):
+    class Meta:
+        model = models.InterfacePerson
+        exclude = ['']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['fullname'].required     = False
+        self.fields['position'].required     = False
+        self.fields['phone_number'].required = False
+        self.fields['email'].required        = False
+
+    def clean_fullname(self):
+        data = self.cleaned_data["fullname"]
+        if data == "":
+            raise ValidationError("نام و نام خانوادگی نمی تواند خالی باشد.")
+        return data
+    
     def clean_phone_number(self):
         data = self.cleaned_data["phone_number"]
         if data == "":

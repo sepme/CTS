@@ -68,16 +68,8 @@
                                 </div>
                                 <div class="col-lg-6 rankDiv">
                                     <div class="form-group">
-                                        <label class="rankLabel" for="id_industry_type">نوع شرکت</label>
-                                        <select id="id_industry_type" name="industry_type" class="w-100">
-                                            <option value="0" {% if RandD_form.industr_type.value == 0 %} selected
-                                            {% endif %}>خصوصی
-                                            </option>
-                                            <option value="1" {% if RandD_form.industry_type.value == 1 %} selected
-                                            {% endif %}>دولتی
-                                            </option>
-                                        </select>
-                                        {% render_field RandD_form.industry_type.errors %}
+                                        <label class="rankLabel" for="id_RandD_type">نوع شرکت</label>
+                                        {% render_field RandD_form.RandD_type.errors %}
                                     </div>
                                 </div>
                             </div>
@@ -133,22 +125,27 @@
                                 </div>
                                 <div class="col-lg-6 rankDiv">
                                     <div class="form-group">
-                                        <label class="rankLabel" for="id_industry_type">نوع مجموعه</label>
-                                        <select id="id_industry_type" name="industry_type" class="w-100">
-                                            <option value="0"
+                                        <label class="rankLabel" for="id_type_group">نوع مجموعه</label>
+                                        <select id="id_type_group" name="type_group" class="w-100">
+                                            {% for option in researchgroup_form.type_group %}
+                                                {% if not forloop.first %}
+                                                {{ option }}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% comment %} <option value="0"
                                                     {% if researchgroup_form.industr_type.value == 0 %}
                                                     selected
                                                     {% endif %}>
                                                 خصوصی
                                             </option>
                                             <option value="1"
-                                                    {% if researchgroup_form.industry_type.value == 1 %}
+                                                    {% if researchgroup_form.type_group.value == 1 %}
                                                     selected
                                                     {% endif %}>
                                                 دولتی
-                                            </option>
+                                            </option> {% endcomment %}
                                         </select>
-                                        {% render_field researchgroup_form.industry_type.errors %}
+                                        {% render_field researchgroup_form.type_group.errors %}
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +162,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="id_industry_address">نشانی محل استقرار</label>
-                                        {% render_field researchgroup_form.address dir="rtl" rows="3" class="w-100" readonly="true" %}
+                                        {% render_field researchgroup_form.address dir="rtl" rows="3" class="w-100" %}
                                     </div>
                                 </div>
                             </div>
@@ -257,14 +254,14 @@
                                 <div class="col-lg-12 text-right">
                                     <span class="sub-header">لطفا چند نمونه از خدمات / محصولاتی را که توسط شرکت شما ارائه می شود، ذکر بفرمایید.</span>
                                     {#                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>#}
-                                    {% render_field form.services_products class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ...." style="margin-top: 0" %}
+                                    {% render_field RandD_form.services_products class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ...." style="margin-top: 0" %}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 text-right">
                                     <span class="sub-header">لطفا چند نمونه از افتخارات شرکت مربوطه را نام ببرید.</span>
                                     {#                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>#}
-                                    {% render_field form.awards_honors class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
+                                    {% render_field RandD_form.awards_honors class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
                                 </div>
                             </div>
                             <div class="row">
