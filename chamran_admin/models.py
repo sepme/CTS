@@ -13,6 +13,7 @@ from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 import uuid
+import datetime
 
 from ChamranTeamSite import settings
 
@@ -69,12 +70,12 @@ class News(models.Model):
     summary = models.CharField(max_length=500, verbose_name="خلاصه خبر")
     topPicture = models.ImageField(upload_to=newsPicture, max_length=255, null=True)
     attachment = models.FileField(upload_to=newsAttach, verbose_name="ضمیمه", blank=True, null=True, max_length=511)
-    link = models.CharField(max_length=128, verbose_name="لینک خبر")
+    link = models.CharField(max_length=128, verbose_name="لینک خبر", null=True, blank=True)
     writer = models.CharField(max_length=32, verbose_name="نویسنده")
-    date_submitted = models.DateField(auto_now_add=True)
+    date_submitted = models.DateField(default=datetime.date.today(), verbose_name="تاریخ ثبت خبر")
 
     class Meta:
-        ordering = ['date_submitted']
+        ordering = ['-date_submitted']
 
     def __str__(self):
         return self.title[: 16]

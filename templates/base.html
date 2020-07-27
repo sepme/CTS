@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'theme-ct/css/res.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
     {#	<link rel="shortcut icon" href="{{$setting->icon}}"/>#}
     {% block head %}{% endblock %}
 </head>
@@ -164,6 +165,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 <script type="text/javascript">
     $('#navicon').click(function () {
         $('#nav').slideToggle();
@@ -255,11 +258,11 @@
             data: $(this).serialize().toString(),
             success: function(data){
                 contactForm[0].reset();
-                {% comment %} iziToast.success({
+                iziToast.success({
                     rtl: true,
                     message: "پیام شما با موفقیت ارسال شد.",
                     position: 'bottomLeft'
-                }); {% endcomment %}
+                });
             },
             error: function(data){
                 $(".loading").css('display', "none");
