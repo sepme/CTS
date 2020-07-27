@@ -2499,9 +2499,9 @@ span.title-back {
 }
 
 .education-btn, .executive-btn, .research-btn, .paper-btn, .technique {
-    position: absolute;
-    top: -46px;
-    left: 0;
+    /*position: absolute;*/
+    /*top: -46px;*/
+    /*left: 0;*/
 }
 
 /*showProject dialog style*/
@@ -4126,7 +4126,7 @@ pre#question-body {
     display: flex;
 }
 
-.ui-menu.ui-autocomplete.item-has-img li:hover{
+.ui-menu.ui-autocomplete.item-has-img li:hover {
     background-color: #EFF0F2;
 }
 
@@ -4871,4 +4871,21 @@ img.center-head {
 .section-button {
     display: block;
     margin: -30px auto 5px 0;
+}
+
+.upload-dash-box {
+    border: 1px dashed #bdbdbd;
+    background-color: #f7fdf8;
+    padding: 0.9rem 5rem;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: 0.25em;
+    color: #6f7285;
+}
+
+.upload-dash-box:hover {
+    cursor: pointer;
+    border-color: #3CCD1C;
+    background-color: #f7fdf8;
+    color: #3CCD1C;
 }

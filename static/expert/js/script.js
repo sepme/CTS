@@ -399,6 +399,23 @@ $(document).ready(function () {
             }
         });
     }
+    //****************************************//
+    //  User Info
+    //****************************************//
+
+    if (window.location.href.indexOf('/expert/userInfo/') > -1) {
+        $("input#uploadResume[type='file']").on('change', function () {
+            let fileType = $(this).val().split('.').pop().toLowerCase();
+            let fileName = $(this).val().split('\\').pop();
+            $(this).closest(".col-md-8").html(`<div class=""></div>`);
+        });
+    }
+
+    //****************************************//
+    //  End User Info
+    //****************************************//
+
+
     // init_dialog_btn(".researcher-card-button-show", ".researcher-info-dialog");
     //****************************************//
     //  Questions Page
