@@ -133,7 +133,20 @@ class Home(generic.TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["top_news"] = models.News.objects.all()[:3]
+        top_news = []
+        for news in models.News.objects.all()[:3]:
+            top_news.append({
+                "uuid": news.uuid,
+                "title": news.title,
+                'text': news.text,
+                'summary': news.summary,
+                'link': news.link,
+                'writer': news.writer,
+                'topPicture': news.topPicture.url[news.topPicture.url.find('media', 2) - 1:],
+                'attachment': news.attachment,
+                'date_submitted': jalali_date(JalaliDate(news.date_submitted)),
+            })
+        context['top_news'] = top_news
         return context
     
 
