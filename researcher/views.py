@@ -13,6 +13,8 @@ from persiantools.jdatetime import JalaliDate
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import permission_required
 
+from django.utils import timezone
+
 from . import models, forms, persianNumber
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
@@ -143,10 +145,10 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             done_project_list.append(temp)
         context['done_project_list'] = done_project_list
 
+        my_project_list = []
         if len(my_projects) != 0:
             evaluation_history = models.ResearcherEvaluation.objects.filter(
                 project_title=my_projects[0].project_form.project_title_english)
-            my_project_list = []
             for project in my_projects:
                 title = project.project_form.project_title_english
                 status = "در حال بررسی"
@@ -164,9 +166,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     'status': status,
                 }
                 my_project_list.append(temp)
-            context["my_project_list"] = my_project_list
-        else:
-            context["my_project_list"] = "None"
+        context["my_project_list"] = my_project_list
         return context
 
     def form_valid(self, form):
