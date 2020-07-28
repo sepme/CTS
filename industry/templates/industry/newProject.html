@@ -41,13 +41,13 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="id_project_title_english">عنوان پروژه (به لاتین)</label>
-                                    {% if forms.project_title_english.errors %}
+                                    {% if form.project_title_english.errors %}
                                         {% render_field form.project_title_english class="error w-100" %}
                                     {% else %}
                                         {% render_field form.project_title_english class="w-100" %}
                                     {% endif %}
                                     <div class="error">
-                                        <span class="error-body">{% render_field forms.project_title_english.errors %}</span>
+                                        <span class="error-body">{% render_field form.project_title_english.errors %}</span>
                                     </div>
                                 </div>
                             </div>
