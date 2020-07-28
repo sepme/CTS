@@ -378,6 +378,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
                 form = forms.ResearchGroupInfoForm(request.POST, request.FILES)
                 if form.is_valid():
                     industryForm.address = form.cleaned_data['address']
+                    industryForm.type_group = form.cleaned_data['type_group']
                 else:
                     print('the ResearchGroup errors are:', form.errors)
                     context = self.get_context_data()

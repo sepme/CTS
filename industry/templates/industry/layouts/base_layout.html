@@ -261,12 +261,12 @@
             url: $(this).attr("action"),
             data: $(this).serialize(),
             success: function (data) {
-                console.log(data);
                 iziToast.success({
                     rtl: true,
                     message: "بازخورد شما با موفقیت ارسال شد!",
                     position: 'bottomLeft'
                 });
+                $("form#feedback_ajax_form")[0].reset()
             },
             error: function (data) {
                 console.log(data);
