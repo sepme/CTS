@@ -143,6 +143,7 @@ class InterfacePerson(models.Model):
 class RandDProfile(models.Model):
     industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
                                          verbose_name="صنعت")
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True)
     interfacePerson = models.OneToOneField("InterfacePerson", verbose_name='شخص رابط', on_delete=models.CASCADE)
     RandDname = models.CharField(max_length=64, verbose_name="نام شرکت")
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
@@ -168,10 +169,14 @@ class RandDProfile(models.Model):
     def save(self, *args, **kwargs):
         if self.id:
             perv = RandDProfile.objects.get(id=self.id)
-            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+            if perv.photo.name:
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+                    self.photo = self.compressImage(self.photo)
+            else:
                 self.photo = self.compressImage(self.photo)
         else:
-            self.photo = self.compressImage(self.photo)
+            if self.photo.name:
+                self.photo = self.compressImage(self.photo)
         super(RandDProfile, self).save(*args, **kwargs)
 
     def compressImage(self, photo):
@@ -187,6 +192,7 @@ class RandDProfile(models.Model):
 
 class ResearchGroupProfile(models.Model):
     industry_user = models.OneToOneField(IndustryUser, verbose_name="کاربر صنعت", on_delete=models.CASCADE)
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True)
     interfacePerson = models.OneToOneField(InterfacePerson, verbose_name="فرد رابط", on_delete=models.CASCADE)
     name = models.CharField("نام مرکز", max_length=150)
     photo = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
@@ -206,10 +212,14 @@ class ResearchGroupProfile(models.Model):
     def save(self, *args, **kwargs):
         if self.id:
             perv = ResearchGroupProfile.objects.get(id=self.id)
-            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+            if perv.photo.name:
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+                    self.photo = self.compressImage(self.photo)
+            else:
                 self.photo = self.compressImage(self.photo)
         else:
-            self.photo = self.compressImage(self.photo)
+            if self.photo.name:
+                self.photo = self.compressImage(self.photo)
         super(ResearchGroupProfile, self).save(*args, **kwargs)
 
     def compressImage(self, photo):

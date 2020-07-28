@@ -174,9 +174,10 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         researcher_profile = form.save(commit=False)
         researcher_profile.researcher_user = researcher
         researcher_profile.save()
-        if self.request.FILES.get('photo'):
-            photo = self.request.FILES.get('photo')
-            researcher_profile.photo.save(photo.name, photo)
+        if "photo" in self.request.FILES.keys():
+            if self.request.FILES.get('photo'):
+                photo = self.request.FILES.get('photo')
+                researcher_profile.photo.save(photo.name, photo)
         status = models.Status.objects.get(researcher_user=researcher)
         status.status = 'not_answered'
         status.save()

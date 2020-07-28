@@ -183,6 +183,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['executive_form']      = forms.ExecutiveRecordForm()
         context['research_form']       = forms.ResearchRecordForm()
         context['paper_form']          = forms.PaperRecordForm()
+        context['email']               = self.request.user.get_username()
         if expertForm.resume:
             context['resume'] = expertForm.resume
         return context
@@ -220,11 +221,13 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
         photo = self.request.FILES.get('photo')
         if photo is not None:
-            if os.path.isfile(expertForm.photo.path):
-                os.remove(expertForm.photo.path)
+            if expertForm.photo:
+                if os.path.isfile(expertForm.photo.path):
+                    os.remove(expertForm.photo.path)
             expertForm.photo = photo
 
         expertForm.save()
+        print(expertForm.home_address)
         for word in self.request.POST['keywords'].split(','):
             expertForm.keywords.add(Keyword.objects.get_or_create(name=word)[0])
         return super().form_valid(form)

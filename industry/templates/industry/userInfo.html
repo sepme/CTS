@@ -69,6 +69,13 @@
                                 <div class="col-lg-6 rankDiv">
                                     <div class="form-group">
                                         <label class="rankLabel" for="id_RandD_type">نوع شرکت</label>
+                                        <select id="id_type_group" name="RandD_type" class="w-100">
+                                            {% for option in RandD_form.RandD_type %}
+                                                {% if not forloop.first %}
+                                                {{ option }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
                                         {% render_field RandD_form.RandD_type.errors %}
                                     </div>
                                 </div>

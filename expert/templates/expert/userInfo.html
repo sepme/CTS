@@ -146,7 +146,8 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="Email">پست الکترونیکی</label>
-                                {{ expert_info_form.email_address|attr:"id:Email"|attr:"readonly:True"|attr:"class:w-100" }}
+                                <input type='email' id="Email" name="email_address" class="w-100" value={{email}} readonly=True>
+                                {% comment %} {{ expert_info_form.email_address|attr:"id:Email"|attr:"readonly:True"|attr:"class:w-100" }} {% endcomment %}
 
                             </div>
                         </div>
