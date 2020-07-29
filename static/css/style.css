@@ -4825,6 +4825,24 @@ img.center-head {
     text-align: left;
     direction: ltr;
     position: relative;
+    height: 25px;
+}
+
+.modal-resume .technique-item .technique-name {
+    display: inline-block;
+    width: calc(100% - 85px);
+    height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modal-resume .technique-item .technique-name:hover {
+        position: absolute;
+    overflow: initial;
+    background-color: #fff;
+    width: fit-content;
+    padding-right: 5px;
 }
 
 .modal-resume .technique-item .grade {
@@ -4833,7 +4851,7 @@ img.center-head {
     background-color: #3ccd1c;
     min-height: 4px;
     margin-right: 60px;
-    float: inline-end;
+    float: right;
     margin-top: 7px;
 }
 
