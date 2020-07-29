@@ -12,6 +12,31 @@
 
 {% block name %}{{ request.user.expertuser.expertform }}{% endblock %}
 
+{% block modals %}
+
+    <div class="modal fade" id="waitToGet" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="waitToGetLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+                <div class="modal-body text-center">
+                    <div class="col-12 loading d-block">
+                        <div class="circle-loader">
+                            <div class="checkmark draw"></div>
+                        </div>
+                        <h6>لطفا شکیبا باشید</h6>
+                    </div>
+                    <p>در حال تلاش برای جمع آوری اطلاعات</p>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'expert/layouts/resume_validation.html' %}
+
+{% endblock %}
+
 {% block dialog %}
     {% include 'expert/layouts/dialog.html' %}
     {% include 'expert/layouts/scientific_form.html' %}
@@ -186,7 +211,8 @@
                                                 <label class="w-75">
                                                     <input class="w-100" dir="ltr" name="resume_link">
                                                 </label>
-                                                <button type="button" class="btn btn-primary">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#waitToGet">
                                                     به روز رسانی
                                                 </button>
                                             </div>
