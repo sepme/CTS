@@ -854,6 +854,10 @@ def show_resume_preview(request):
     researcher_information['comments'] = comments
     return JsonResponse(researcher_information)
 
+def checkUserId(request, userId):
+    if models.ResearcherProfile.objects.filter(userId=userId).count():
+        return False
+    return True
 
 TECHNIQUES = {
     'Polymerase Chain Reaction': 'Molecular Biology',

@@ -476,3 +476,11 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
         if industry.profile:
             context['photo'] = industry.profile.photo
         return context
+
+
+def checkUserId(request, userId):
+    if models.RandDProfile.objects.filter(userId=userId).count():
+        return False
+    if models.ResearchGroupProfile.objects.filter(userId=userId).count():
+        return False
+    return True
