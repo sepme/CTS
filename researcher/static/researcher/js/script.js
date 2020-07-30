@@ -190,19 +190,20 @@ function setMajors(data) {
         "</div>" +
         "<div class='answer'>" +
         data.progress_profitability +
-        "</div></div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "برآورد شما از سود مالی این پروژه چگونه است؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.predict_profit +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
+
+        // "<div>" +
+        // "<div class='question'>" +
+        // "<span class='question-mark'>" +
+        // "<i class='far fa-question-circle'></i>" +
+        // "</span>" +
+        // "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        // "</div>" +
+        // "<div class='answer'>" +
+        // data.predict_profit +
+        // "</div></div>";
 
 function setValue(data) {
     $("#v-pills-settings-tab").click(function () {

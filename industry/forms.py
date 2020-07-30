@@ -294,7 +294,7 @@ class ProjectForm(forms.Form):
     main_problem_and_importance = forms.CharField(widget=forms.Textarea)
     approach = forms.CharField(required=False ,widget=forms.Textarea)
     progress_profitability = forms.CharField(widget=forms.Textarea)
-    predict_profit = forms.IntegerField()
+    # predict_profit = forms.IntegerField()
     required_lab_equipment = forms.CharField(widget=forms.Textarea)
     required_method = forms.CharField(widget=forms.Textarea)
     project_phase = forms.CharField(widget=forms.Textarea)
@@ -305,9 +305,10 @@ class ProjectForm(forms.Form):
         fields = [
             'project_title_persian', 'project_title_english', 'key_words', 'research_methodology',
             'main_problem_and_importance', 'progress_profitability', 'required_lab_equipment',
-            'predict_profit', 'approach', 'policy', 'project_phase', 'required_budget', 'required_method',
+            'approach', 'policy', 'project_phase', 'required_budget', 'required_method',
             'potential_problems',
         ]
+    # 'predict_profit',
 
     def clean_project_title_persian(self):
         data = self.cleaned_data["project_title_persian"]
@@ -330,11 +331,11 @@ class ProjectForm(forms.Form):
 
         return data
 
-    def clean_predict_profit(self):
-        data = self.cleaned_data["predict_profit"]
-        # if not data & (1 << 47):
-            # raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
-        return data
+    # def clean_predict_profit(self):
+    #     data = self.cleaned_data["predict_profit"]
+    #     # if not data & (1 << 47):
+    #         # raise ValidationError(_("مقدار وارد شده بیش از حد مجاز است."))
+    #     return data
     
     def clean_required_budget(self):
         data = self.cleaned_data["required_budget"]

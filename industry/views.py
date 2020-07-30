@@ -407,12 +407,13 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def post(self, request, *args, **kwargs):
         form = forms.ProjectForm(request.POST)
+        # expertUserId = request.POST.get("expertUserId")
         if form.is_valid():
             project_title_persian = form.cleaned_data['project_title_persian']
             project_title_english = form.cleaned_data['project_title_english']
             research_methodology = form.cleaned_data['research_methodology']
             main_problem_and_importance = form.cleaned_data['main_problem_and_importance']
-            predict_profit = form.cleaned_data['predict_profit']
+            # predict_profit = form.cleaned_data['predict_profit']
             required_lab_equipment = form.cleaned_data['required_lab_equipment']
             approach = form.cleaned_data['approach']
             policy = form.cleaned_data['policy']
@@ -426,7 +427,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                                                   project_title_english=project_title_english,
                                                   research_methodology=research_methodology,
                                                   main_problem_and_importance=main_problem_and_importance,
-                                                  predict_profit=predict_profit,
+                                                #   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
                                                   required_method=required_method,
                                                   approach=approach,
@@ -438,6 +439,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                                                   )
             key_words = form.cleaned_data['key_words'].split(',')
             new_project_form.save()
+            
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
