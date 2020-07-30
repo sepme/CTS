@@ -3207,7 +3207,7 @@ div.no-project > span.disable-border-button {
     }
 }
 
-.box .box-header div.project-techniques {
+.box .box-header div.project-techniques, .custom-techniques {
     margin-left: 5px;
     float: left;
 }
@@ -3578,7 +3578,7 @@ div.no-project > span.disable-border-button {
 
 }
 
-.box .box-body .project-techniques {
+.box .box-body .project-techniques, .custom-techniques {
     /*margin-bottom: 10px;*/
     /*margin-right: 10px;*/
     /*margin-left: 10px;*/
@@ -3594,12 +3594,12 @@ div.no-project > span.disable-border-button {
     padding: 0;
 }
 
-.box .box-body .project-techniques div {
+.box .box-body .project-techniques div, .custom-techniques div {
     width: fit-content;
     width: -moz-fit-content;
 }
 
-.box .box-body .project-techniques span {
+.box .box-body .project-techniques span, .custom-techniques span {
     display: inline-block;
     background-color: #f7fdf8;
     color: #484848;
@@ -3610,7 +3610,7 @@ div.no-project > span.disable-border-button {
     border-radius: 5px;
 }
 
-.box .box-body .project-techniques span.show-all {
+.box .box-body .project-techniques span.show-all, .custom-techniques span.show-all {
     display: inline-block;
     background-color: transparent;
     color: #3CCD1C;
@@ -3622,7 +3622,7 @@ div.no-project > span.disable-border-button {
     border-radius: 0;
 }
 
-.box .box-body .project-techniques span.show-all:hover {
+.box .box-body .project-techniques span.show-all:hover , .custom-techniques span.show-all:hover{
     cursor: pointer;
 }
 
