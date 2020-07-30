@@ -117,15 +117,15 @@
                 مجموعه پژوهشی
             {% endif %}
         </h6>
-{#        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ user.industryuser.industry_points|default:0 }}</span>/10#}
-{#        </p>#}
-{#        <div class="progress">#}
-{#            <div class="progress-bar" role="progressbar" aria-valuenow="{{ user.industryuser.score|default:0 }}"#}
-{#                 aria-valuemin="0"#}
-{#                 aria-valuemax="100" style="width: {{ user.industryuser.score }}px">#}
-{#                <span class="sr-only">{{ user.industryuser.score|default:0 }}% completed</span>#}
-{#            </div>#}
-{#        </div>#}
+        {#        <p dir="rtl" class="scoreDiv text-right">امتیاز: <span>{{ user.industryuser.industry_points|default:0 }}</span>/10#}
+        {#        </p>#}
+        {#        <div class="progress">#}
+        {#            <div class="progress-bar" role="progressbar" aria-valuenow="{{ user.industryuser.score|default:0 }}"#}
+        {#                 aria-valuemin="0"#}
+        {#                 aria-valuemax="100" style="width: {{ user.industryuser.score }}px">#}
+        {#                <span class="sr-only">{{ user.industryuser.score|default:0 }}% completed</span>#}
+        {#            </div>#}
+        {#        </div>#}
         <div class="hr"></div>
         <ul class="list-group">
             {% url "industry:index" as index %}
@@ -220,21 +220,35 @@
     </script>
     <script type="text/javascript">
         $(window).on("load", function () {
-            $('#selectUsage .form-check label').click(function () {
-                $("#selectUsage svg > g").attr("fill", "#808080");
+            const initialInformation = $('#initialInformation');
+            const selectUsage = $(".select-usage");
+            const industryForm = $(".industry-form");
+            $('.select-usage .form-check label.form-check-label').click(function () {
+                $(".select-usage svg > g").attr("fill", "#808080");
                 $(this).find("svg > g").attr("fill", "#3ccd1c");
+                $(".select-usage button").prop("disabled", false);
             });
-            $('#selectUsage').modal('toggle');
-            $("#selectUsage .modal-footer button").click(function () {
-                if ($('#selectUsage').find("input[type='radio']:checked").val() === "industry") {
-                    $('#selectUsage').modal('toggle');
-                    $('#initialInformation').modal('toggle');
-                    $('#initialInformation form').find("input[name='industry_type']").attr("value", "industry");
+
+            initialInformation.modal('toggle');
+
+            $(".select-usage button").click(function () {
+                if (selectUsage.find("input[type='radio']:checked").val() === "industry") {
+                    {#$('#selectUsage').modal('toggle');#}
+                    {#$('#initialInformation').modal('toggle');#}
+                    {#$('#initialInformation form').find("input[name='industry_type']").attr("value", "industry");#}
+                    $(".select-usage").addClass("d-none");
+                    $(".industry-form").removeClass("d-none");
                     $(".RandD__form-item").css("display", "block");
-                } else if ($('#selectUsage').find("input[type='radio']:checked").val() === "research_group") {
-                    $('#selectUsage').modal('toggle');
-                    $('#initialInformation').modal('toggle');
-                    $('#initialInformation form').find("input[name='industry_type']").attr("value", "group");
+                    initialInformation.find(".initial-step-dots div").removeClass("active");
+                    initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");
+                } else if (selectUsage.find("input[type='radio']:checked").val() === "research_group") {
+                    {#$('#selectUsage').modal('toggle');#}
+                    {#$('#initialInformation').modal('toggle');#}
+                    {#$('#initialInformation form').find("input[name='industry_type']").attr("value", "group");#}
+                    $(".select-usage").addClass("d-none");
+                    $(".industry-form").removeClass("d-none");
+                    initialInformation.find(".initial-step-dots div").removeClass("active");
+                    initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");
                     $(".RGroup__form-item").css("display", "block");
                 } else {
                     iziToast.error({
@@ -243,14 +257,43 @@
                         position: 'bottomLeft'
                     });
                 }
-                $('#initialInformation .close__redirect').click(function () {
-                    $('#initialInformation').modal('toggle');
-                    $('#selectUsage').modal('toggle');
+            });
+
+            $('#initialInformation .back-step').click(function () {
+                if ($(".industry-form").hasClass("state-2")) {
                     $(".RandD__form-item").css("display", "none");
                     $(".RGroup__form-item").css("display", "none");
-                });
+                    $(".select-usage").removeClass("d-none");
+                    $(".industry-form").addClass("d-none");
+                    initialInformation.find(".initial-step-dots div").removeClass("active");
+                    initialInformation.find(".initial-step-dots div:first-child").addClass("active");
+                } else if ($(".industry-form").hasClass("state-3")) {
+                    industryForm.addClass("state-2");
+                    industryForm.removeClass("state-3");
+                    $('#initialInformation .next-step').removeClass("d-none");
+                    industryForm.find("button[type='submit']").addClass("d-none");
+                    $(".third-step-view").addClass("d-none");
+                    $(".second-step-view").removeClass("d-none");
+                    initialInformation.find(".initial-step-dots div").removeClass("active");
+                    initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");
+                }
             });
-        })
+
+            $('#initialInformation .next-step').click(function () {
+                if (industryForm.hasClass("state-2")) {
+                    industryForm.addClass("state-3");
+                    industryForm.removeClass("state-2");
+                    $('#initialInformation .next-step').addClass("d-none");
+                    industryForm.find("button[type='submit']").removeClass("d-none");
+                    $(".third-step-view").removeClass("d-none");
+                    $(".second-step-view").addClass("d-none");
+                    initialInformation.find(".initial-step-dots div").removeClass("active");
+                    initialInformation.find(".initial-step-dots div:last-child").addClass("active");
+                }
+            });
+
+        });
+
     </script>
 {% endif %}
 <script type="text/javascript">
