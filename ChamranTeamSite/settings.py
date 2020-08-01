@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import logging
+from django.conf.global_settings import DATA_UPLOAD_MAX_MEMORY_SIZE
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'rj@5yk@^&q&ecfrd=x1@&$k(j99w0!hq#)&$%s2o-z5e)kmbg2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['chamranteambot.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['chamranteam.ir', '127.0.0.1']
 
 # Application definition
 
@@ -188,6 +189,11 @@ LOGGING = {
             'level': 'DEBUG',  # change debug level as appropiate
             'propagate': False,
         },
+        'django.request': {
+            'handlers': ['file-debug', 'file-info', 'file-warning'],
+            'level': 'INFO',  # change debug level as appropiate
+            'propagate': False,
+        },
     },
 }
 
@@ -262,11 +268,11 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# EMAIL_HOST = 'mail.chamranteam.ir'
-# EMAIL_HOST_USER = 'noreply@chamranteam.ir'
+EMAIL_HOST = 'mail.chamranteam.ir'
+EMAIL_HOST_USER = 'noreply@chamranteam.ir'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'chamranteam.info@gmail.com'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'chamranteam.info@gmail.com'
 EMAIL_HOST_PASSWORD = 'chamranteam98'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
