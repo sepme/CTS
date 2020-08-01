@@ -973,6 +973,6 @@ def GetResearcherComment(request):
     return JsonResponse(data=data)
 
 def checkUserId(request, userId):
-    if ExpertForm.objects.filter(userId=userId).count():
+    if ExpertUser.objects.filter(userId=userId).count():
         return False
     return True

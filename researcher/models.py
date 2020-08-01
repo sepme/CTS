@@ -50,6 +50,7 @@ def get_resumeFile_path(instance, filename):
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    userId = models.CharField(verbose_name="ID کاربر", max_length=50 ,blank=True, null=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
@@ -81,15 +82,26 @@ class Status(models.Model):
         ('deactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
-    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
-    inactivate_duration_temp = models.DateField(verbose_name="غیرفعال تا تاریخ",default='0001-01-01' , blank=True, null=True)
+    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True, verbose_name="غیرفعال تا تاریخ")
+    # inactivate_duration_temp = models.DateField(default='0001-01-01' , blank=True, null=True)
 
     @property
-    def check_activity_status(self):
-        today = datetime.datetime.today().date()
-        if  today > self.inactivate_duration_temp:
-            return True
-        return False
+    def is_deactivated(self):
+        today = datetime.datetime.now(datetime.timezone.utc)
+        if  today > self.inactivate_duration:
+            return False
+        return True
+    
+    @property
+    def remainingTime(self):
+        now = datetime.datetime.now(datetime.timezone.utc)
+        delta = self.inactivate_duration - now
+        remaining = {}
+        remaining['day'] = delta.days
+        remaining['hour'] = delta.seconds // 3600
+        remaining['minute'] = (delta.seconds % 3600) // 60
+        remaining['second'] = delta.seconds % 60
+        return remaining
 
     def __str__(self):
         return '{user} - {status}'.format(user=self.researcher_user, status=self.status)
@@ -107,7 +119,6 @@ class MembershipFee(models.Model):
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
                                            on_delete=models.CASCADE, blank=True, null=True)
-    userId = models.CharField(verbose_name="ID کاربر", max_length=50, unique=True ,blank=True)
     fullname = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)

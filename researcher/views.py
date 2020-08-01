@@ -67,7 +67,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         researcher = models.ResearcherUser.objects.get(user=request.user)
         status = researcher.status
         if status.status == 'deactivated':
-            if status.check_activity_status:
+            if status.is_deactivated:
                 status.status = 'not_answered'
                 status.save()
         STATUS = ['wait_for_result', 'not_answered']
@@ -855,7 +855,7 @@ def show_resume_preview(request):
     return JsonResponse(researcher_information)
 
 def checkUserId(request, userId):
-    if models.ResearcherProfile.objects.filter(userId=userId).count():
+    if models.ResearcherUser.objects.filter(userId=userId).count():
         return False
     return True
 

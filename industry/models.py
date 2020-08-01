@@ -33,6 +33,7 @@ delete the Project object and only keep its main information in a ProjectHistory
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True, null=True)
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
@@ -143,7 +144,6 @@ class InterfacePerson(models.Model):
 class RandDProfile(models.Model):
     industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
                                          verbose_name="صنعت")
-    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True)
     interfacePerson = models.OneToOneField("InterfacePerson", verbose_name='شخص رابط', on_delete=models.CASCADE)
     RandDname = models.CharField(max_length=64, verbose_name="نام شرکت")
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
@@ -192,7 +192,6 @@ class RandDProfile(models.Model):
 
 class ResearchGroupProfile(models.Model):
     industry_user = models.OneToOneField(IndustryUser, verbose_name="کاربر صنعت", on_delete=models.CASCADE)
-    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True)
     interfacePerson = models.OneToOneField(InterfacePerson, verbose_name="فرد رابط", on_delete=models.CASCADE)
     name = models.CharField("نام مرکز", max_length=150)
     photo = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
@@ -268,6 +267,7 @@ class ProjectForm(models.Model):
     required_budget = models.IntegerField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
     # predict_profit = models.IntegerField(verbose_name='سود مالی')
+    techniques = models.ManyToManyField(Technique, verbose_name="تکنیک های مورد نیاز")
 
     def __str__(self):
         return self.project_title_english

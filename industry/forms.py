@@ -124,7 +124,7 @@ class ResearchGroupInfoForm(forms.ModelForm):
 
     class Meta:
         model = models.ResearchGroupProfile
-        exclude = ['industry_user', 'interfacePerson', "userId"]
+        exclude = ['industry_user', 'interfacePerson']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

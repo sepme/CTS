@@ -27,7 +27,8 @@ def get_attachment_path(instance, filename):
 
 
 class ExpertUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
+    user   = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True, null=True)
     expert_point = models.FloatField(verbose_name="امتیاز استاد", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
@@ -37,6 +38,7 @@ class ExpertUser(models.Model):
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
+    autoAddProject = models.BooleanField(verbose_name="اضافه شدن خودکار به پروژه", default=False)
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     class Meta:
@@ -75,7 +77,6 @@ class EqTest(models.Model):
 class ExpertForm(models.Model):
     expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
                                        null=True, blank=True)
-    userId        = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True)
     fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
     national_code = models.CharField(max_length=15, verbose_name="کد ملی")
