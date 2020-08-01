@@ -235,7 +235,7 @@
                 if (selectUsage.find("input[type='radio']:checked").val() === "industry") {
                     {#$('#selectUsage').modal('toggle');#}
                     {#$('#initialInformation').modal('toggle');#}
-                    {#$('#initialInformation form').find("input[name='industry_type']").attr("value", "industry");#}
+                    $('.industry-form form').find("input[name='industry_type']").attr("value", "industry");
                     $(".select-usage").addClass("d-none");
                     $(".industry-form").removeClass("d-none");
                     $(".RandD__form-item").css("display", "block");
@@ -244,7 +244,7 @@
                 } else if (selectUsage.find("input[type='radio']:checked").val() === "research_group") {
                     {#$('#selectUsage').modal('toggle');#}
                     {#$('#initialInformation').modal('toggle');#}
-                    {#$('#initialInformation form').find("input[name='industry_type']").attr("value", "group");#}
+                    $('.industry-form form').find("input[name='industry_type']").attr("value", "group");
                     $(".select-usage").addClass("d-none");
                     $(".industry-form").removeClass("d-none");
                     initialInformation.find(".initial-step-dots div").removeClass("active");
