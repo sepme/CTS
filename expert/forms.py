@@ -25,7 +25,7 @@ class InitialInfoForm(forms.ModelForm):
         fields = ['photo', 'fullname', 'special_field', 'national_code', 'scientific_rank',
                   'university', 'home_number', 'phone_number']
         error_messages = {
-            'photo'           : {'required': "عکس نمی تواند خالی باشد."} ,
+            # 'photo'           : {'required': "عکس نمی تواند خالی باشد."} ,
             'fullname'        : {'required': "نام و نام خانوادگی نمی تواند خالی باشد."},
             'special_field'   : {'required': "حوزه تخصصی نمی تواند خالی باشد."},
             'national_code'   : {'required': "کد ملی نمی تواند خالی باشد."},
@@ -93,17 +93,17 @@ class ExpertInfoForm(forms.ModelForm):
 
     class Meta:
         model = ExpertForm
-        exclude = ['expert_user', 'photo','keywords', 'eq_test', 'lab_equipment']
+        exclude = ['expert_user', 'photo','keywords', 'eq_test', 'lab_equipment', 'userId']
         error_messages = {
             'special_field': {
                 'required': 'حوزه تخصصی نمی تواند خالی باشد.'
             },
-            'home_address': {
-                'required': 'آدرس نمی تواند خالی باشد.'
-            },
             'scientific_rank': {
                 'required': 'مرتبه علمی نمی تواند خالی باشد'
-            }
+            },
+            # 'home_address': {
+            #     'required': 'آدرس نمی تواند خالی باشد.'
+            # },
         }
 
         widgets = {

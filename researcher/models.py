@@ -107,6 +107,7 @@ class MembershipFee(models.Model):
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
                                            on_delete=models.CASCADE, blank=True, null=True)
+    userId = models.CharField(verbose_name="ID کاربر", max_length=50, unique=True ,blank=True)
     fullname = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
@@ -170,10 +171,14 @@ class ResearcherProfile(models.Model):
     def save(self, *args, **kwargs):
         if self.id:
             perv = ResearcherProfile.objects.get(id=self.id)
-            if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
+            if perv.photo.name: 
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+                    self.photo = self.compressImage(self.photo)
+            else:
                 self.photo = self.compressImage(self.photo)
         else:
-            self.photo = self.compressImage(self.photo)
+            if self.photo.name: 
+                self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):

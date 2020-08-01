@@ -35,11 +35,11 @@ class RandDBasicInfoForm(forms.ModelForm):
         self.fields['phone_number'].required = False
 
 
-    def clean_photo(self):
-        data = self.cleaned_data["photo"]
-        if data is None:
-            raise ValidationError(_("عکس نمی تواند خالی باشد."))
-        return data
+    # def clean_photo(self):
+    #     data = self.cleaned_data["photo"]
+    #     if data is None:
+    #         raise ValidationError(_("عکس نمی تواند خالی باشد."))
+    #     return data
 
     def clean_RandDname(self):
         RandDname = self.cleaned_data.get('RandDname')
@@ -124,7 +124,7 @@ class ResearchGroupInfoForm(forms.ModelForm):
 
     class Meta:
         model = models.ResearchGroupProfile
-        exclude = ['industry_user', 'interfacePerson',]
+        exclude = ['industry_user', 'interfacePerson', "userId"]
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -159,11 +159,11 @@ class ResearchGroupBasicInfoForm(forms.ModelForm):
             raise ValidationError("نام نمی تواند خالی باشد.")
         return data
     
-    def clean_photo(self):
-        data = self.cleaned_data["photo"]
-        if data is None:
-            raise ValidationError("عکس نمی تواند خالی باشد.")
-        return data
+    # def clean_photo(self):
+    #     data = self.cleaned_data["photo"]
+    #     if data is None:
+    #         raise ValidationError("عکس نمی تواند خالی باشد.")
+    #     return data
 
     def clean_phone_number(self):
         data = self.cleaned_data["phone_number"]

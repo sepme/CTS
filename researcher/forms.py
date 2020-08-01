@@ -268,11 +268,11 @@ class InitialInfoForm(forms.ModelForm):
 
         }
 
-    def clean_photo(self):
-        data = self.cleaned_data["photo"]
-        if data is None:
-            raise forms.ValidationError('عکس نمی تواند خالی باشد.')
-        return data
+    # def clean_photo(self):
+    #     data = self.cleaned_data["photo"]
+    #     if data is None:
+    #         raise forms.ValidationError('عکس نمی تواند خالی باشد.')
+    #     return data
     
 
     def clean_fullname(self):

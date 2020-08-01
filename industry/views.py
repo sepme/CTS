@@ -380,13 +380,15 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
                     industryForm.address = form.cleaned_data['address']
                     industryForm.type_group = form.cleaned_data['type_group']
                 else:
+                    # print(form.)
                     print('the ResearchGroup errors are:', form.errors)
                     context = self.get_context_data()
                     context['researchGroup_form'] = form
                     return render(request=request, template_name=self.template_name, context=context)
             if form.cleaned_data['photo']:
-                if os.path.isfile(industryForm.photo.path):
-                    os.remove(industryForm.photo.path)
+                if industryForm.photo:
+                    if os.path.isfile(industryForm.photo.path):
+                        os.remove(industryForm.photo.path)
                 industryForm.photo = form.cleaned_data['photo']
             industryForm.save()
         else:
@@ -474,3 +476,11 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
         if industry.profile:
             context['photo'] = industry.profile.photo
         return context
+
+
+def checkUserId(request, userId):
+    if models.RandDProfile.objects.filter(userId=userId).count():
+        return False
+    if models.ResearchGroupProfile.objects.filter(userId=userId).count():
+        return False
+    return True

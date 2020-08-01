@@ -15,4 +15,5 @@ urlpatterns = [
     path('get_comment/', views.GetComment),
     path('accept_request/', views.accept_project),
     path('refuse_request/', views.refuse_expert),
+    path("checkUserId", views.checkUserId, name="checkUserId"),
 ]

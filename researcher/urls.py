@@ -25,6 +25,7 @@ urlpatterns = [
     path('myProject/', views.MyProject, name="my_project"),
     path('show_resume_preview/', views.show_resume_preview, name="show_resume_preview"),
     # path('doneProject/' ,views.DoneProjects ,name="done_project"),
+    path("checkUserId", views.checkUserId, name="checkUserId"),
 
     path('forbidden_access/', views.forbidden_access, name="forbidden_access"),
 ]

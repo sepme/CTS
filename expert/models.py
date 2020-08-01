@@ -75,6 +75,7 @@ class EqTest(models.Model):
 class ExpertForm(models.Model):
     expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
                                        null=True, blank=True)
+    userId        = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True)
     fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
     national_code = models.CharField(max_length=15, verbose_name="کد ملی")
@@ -89,10 +90,9 @@ class ExpertForm(models.Model):
     )
     scientific_rank = models.IntegerField(choices=scientific_rank_choice, verbose_name="مرتبه علمی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه محل فعالیت")
-    home_address = models.CharField(max_length=512, verbose_name="ادرس منزل")
+    home_address = models.CharField(max_length=512, verbose_name="ادرس منزل", blank=True)
     home_number = models.CharField(max_length=15, verbose_name="شماره منزل", null=True)
     phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن همراه", null=True)
-    email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
     keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
     eq_test = models.OneToOneField(EqTest, on_delete=models.SET_NULL, verbose_name="تست EQ", blank=True, null=True)
     awards = models.TextField(blank=True, verbose_name="افتخارات", null=True)
@@ -117,7 +117,7 @@ class ExpertForm(models.Model):
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo  = models.ImageField(upload_to=profileUpload, max_length=255)
+    photo  = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
     resume = models.FileField(verbose_name="رزومه استاد", upload_to=profileUpload, max_length=511,
                               null=True, blank=True)
 
@@ -127,10 +127,14 @@ class ExpertForm(models.Model):
     def save(self, *args, **kwargs):
         if self.id:
             perv = ExpertForm.objects.get(id=self.id)
-            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+            if perv.photo.name:
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                    self.photo = self.compressImage(self.photo)
+            else:
                 self.photo = self.compressImage(self.photo)
         else:
-            self.photo = self.compressImage(self.photo)
+            if self.photo.name:
+                self.photo = self.compressImage(self.photo)
         super(ExpertForm, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
