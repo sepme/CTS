@@ -834,7 +834,7 @@ $(document).ready(function () {
         // });
         $("i.fa-plus").click(function () {
             if ($("input#Uni").val() !== '') {
-                div = document.createElement("div");
+                let div = document.createElement("div");
                 $(div).addClass("uni-item");
                 $(div).html("<i class='fas fa-times'></i><span>" + $("input#Uni").val() + "</span>");
                 $(".selected_uni").append(div);
@@ -848,7 +848,7 @@ $(document).ready(function () {
             $("img.profile").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
         });
         $(".chamran_btn.education-btn").click(function () {
-            div = document.createElement("div");
+            let div = document.createElement("div");
             $(div).addClass('card').addClass('ch-card-item');
             $(div).attr("id", edu_count);
             $(div).html("<div class='row'>" +
@@ -892,7 +892,7 @@ $(document).ready(function () {
             edu_count++;
         });
         $(".chamran_btn.executive-btn").click(function () {
-            div = document.createElement("div");
+            let div = document.createElement("div");
             $(div).addClass('card').addClass('ch-card-item');
             $(div).attr("id", exe_count);
             $(div).html("<div class='row'>" +
@@ -940,7 +940,7 @@ $(document).ready(function () {
             exe_count++;
         });
         $(".chamran_btn.studious-btn").click(function () {
-            div = document.createElement("div");
+            let div = document.createElement("div");
             $(div).addClass('card').addClass('ch-card-item');
             $(div).attr("id", stu_count);
             $(div).html("<div class='row'>" +
@@ -984,7 +984,7 @@ $(document).ready(function () {
             stu_count++;
         });
         $(".chamran_btn.article-btn").click(function () {
-            div = document.createElement("div");
+            let div = document.createElement("div");
             $(div).addClass('card').addClass('ch-card-item');
             $(div).attr("id", art_count);
             $(div).html("<div class='row'>" +

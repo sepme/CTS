@@ -611,21 +611,22 @@ div.row.cover-page {
     display: none;
 }
 
-#selectUsage {
-
+.select-usage {
+    text-align: center;
 }
 
-#selectUsage .radio-group {
+.select-usage .radio-group {
     display: flex;
+    place-content: center;
 }
 
-#selectUsage .radio-group .form-check {
+.select-usage .radio-group .form-check {
     display: block;
-    width: 50%;
+    /*width: 50%;*/
     padding: 0;
 }
 
-#selectUsage .radio-group .form-check label {
+.select-usage .radio-group .form-check label {
     position: relative;
     top: unset;
     right: unset;
@@ -644,7 +645,7 @@ div.row.cover-page {
     width: -moz-fit-content;
 }
 
-#selectUsage .radio-group .form-check label {
+.select-usage .radio-group .form-check label {
     position: relative;
     top: unset;
     right: unset;
@@ -661,9 +662,15 @@ div.row.cover-page {
     min-width: 179px;
     width: fit-content;
     width: -moz-fit-content;
+    border: 1px solid #bdbdbd;
 }
 
-#selectUsage .radio-group .form-check label svg {
+.select-usage .radio-group .form-check .form-check-input:checked + label {
+    background-color: #f7fdf8;
+    border-color: #3CCD1C;
+}
+
+.select-usage .radio-group .form-check label svg {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -677,6 +684,40 @@ div.row.cover-page {
     -ms-transform: translateX(-50%);
     -o-transform: translateX(-50%);
     transform: translateX(-50%);
+}
+
+.select-usage .radio-group .form-check label:hover {
+    cursor: pointer;
+    background-color: #f7fdf8;
+    border-color: #3CCD1C;
+    color: #3CCD1C;
+    /*box-shadow: ;*/
+}
+
+.select-usage .radio-group .form-check label:hover svg > g {
+    fill: #3CCD1C;
+}
+
+.initial-step-dots {
+    display: flex;
+    place-content: center;
+}
+
+.initial-step-dots .dot-item {
+    min-width: 12px;
+    min-height: 12px;
+    background-color: #c9c9c9;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 6px;
+}
+
+.initial-step-dots .dot-item:hover {
+
+}
+
+.initial-step-dots .dot-item.active {
+    background-color: #3CCD1C;
 }
 
 .selected-expert {

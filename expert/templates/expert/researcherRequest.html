@@ -93,11 +93,11 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="project-techniques">
-                                            <ul class="mix-list hover">
+                                            <div>
                                                 {% for tech in researcher.techniques %}
-                                                    <li>{{ tech }}</li>
+                                                    <span>{{ tech }}</span>
                                                 {% endfor %}
-                                            </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -122,7 +122,7 @@
                                                 <button class="default-btn researcher-card-button-show"
                                                         value="{{ project.id }}"
                                                         id="{{ researcher.profile.id }}"
-                                                        data-url="{% url 'researcher:show_researcher_preview' %}"
+                                                        data-url="{% url 'researcher:show_resume_preview' %}"
                                                         data-toggle="modal" data-target="#researcherInfo">
                                                     مشاهده رزومه
                                                 </button>

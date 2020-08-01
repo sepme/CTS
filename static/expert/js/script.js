@@ -409,6 +409,11 @@ $(document).ready(function () {
             let fileName = $(this).val().split('\\').pop();
             $(this).closest(".col-md-8").html(`<div class=""></div>`);
         });
+
+        $("#waitToGet").click(function (event) {
+            $(this).modal("hide");
+            $("#resumeValidation").modal("show");
+        });
     }
 
     //****************************************//
