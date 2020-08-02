@@ -1,0 +1,25 @@
+{% load static %}
+<div class="modal fade" id="skipQuestion" tabindex="-1" role="dialog" aria-labelledby="skipQuestionLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="skipQuestionLabel">پریدن از این مرحله</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <p class="text-justify mb-4" dir="rtl">در صورتی که کد عبور از این قسمت را در اختیار دارید می توانید با وارد کردن آن در قسمت زیر از این
+                        مرحله بگذرید.</p>
+                    <div class="form-group w-50 text-right ml-auto mr-auto">
+                        <label for="skipCode">رمز</label>
+                        <input type="text" class="w-100" name="skip_code" id="skipCode">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3 mb-3">
+                        اعتبارسنجی
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
