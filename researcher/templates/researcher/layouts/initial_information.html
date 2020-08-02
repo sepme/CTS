@@ -31,9 +31,9 @@
                             <div class="form-group">
                                 <label for="MelliCode">کد ملی</label>
                                 {% if form.national_code.errors %}
-                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100"|attr:"placeholder:449****841" }}
+                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100d dir-ltr"|attr:"placeholder:449****841" }}
                                 {% else %}
-                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100"|attr:"placeholder:449****841" }}
+                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100 dir-ltr"|attr:"placeholder:449****841" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.national_code.errors %}</span>
@@ -88,9 +88,9 @@
                             <div class="form-group">
                                 <label for="student-num">شماره دانشجویی</label>
                                 {% if form.student_number.errors %}
-                                    {{ form.student_number|attr:"id:student-num"|attr:"class:error w-100" }}
+                                    {{ form.student_number|attr:"id:student-num"|attr:"class:error w-100 dir-ltr" }}
                                 {% else %}
-                                    {{ form.student_number|attr:"id:student-num"|attr:"class:w-100" }}
+                                    {{ form.student_number|attr:"id:student-num"|attr:"class:w-100 dir-ltr" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.student_number.errors %}</span>
@@ -99,9 +99,9 @@
                             <div class="form-group">
                                 <label for="enter-date">سال ورود</label>
                                 {% if form.entry_year.errors %}
-                                    {{ form.entry_year|attr:"id:enter-date"|attr:"class:error w-100" }}
+                                    {{ form.entry_year|attr:"id:enter-date"|attr:"class:error w-100 dir-ltr" }}
                                 {% else %}
-                                    {{ form.entry_year|attr:"id:enter-date"|attr:"class:w-100" }}
+                                    {{ form.entry_year|attr:"id:enter-date"|attr:"class:w-100 dir-ltr" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.entry_year.errors %}</span>
@@ -145,9 +145,9 @@
                             <div class="form-group">
                                 <label for="HomeNum">تلفن منزل</label>
                                 {% if form.home_number.errors %}
-                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100"|attr:"placeholder:021*******" }}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100 dir-ltr"|attr:"placeholder:021*******" }}
                                 {% else %}
-                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100"|attr:"placeholder:021*******" }}
+                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100 dir-ltr"|attr:"placeholder:021*******" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.home_number.errors %}</span>
@@ -156,9 +156,9 @@
                             <div class="form-group">
                                 <label for="PhoneNum">تلفن همراه</label>
                                 {% if form.phone_number.errors %}
-                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100"|attr:"placeholder:09*********" }}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100 dir-ltr"|attr:"placeholder:09*********" }}
                                 {% else %}
-                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100"|attr:"placeholder:09*********" }}
+                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100 dir-ltr"|attr:"placeholder:09*********" }}
                                 {% endif %}
                                 <div class="error">
                                     <span class="error-body">{% render_field form.phone_number.errors %}</span>

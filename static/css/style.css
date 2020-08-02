@@ -4941,3 +4941,11 @@ img.center-head {
     background-color: #f7fdf8;
     color: #3CCD1C;
 }
+
+.dir-ltr {
+    direction: ltr !important;
+}
+
+.dir-rtl {
+    direction: rtl !important;
+}
