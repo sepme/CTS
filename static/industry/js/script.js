@@ -569,7 +569,7 @@ $(document).ready(function () {
     });
 
     // Project Setting Auto Search
-    function selecting_expert (element) {
+    function selecting_expert(element) {
         element.on("keyup", function () {
             const thisElement = $(this);
 
@@ -630,6 +630,7 @@ $(document).ready(function () {
             $(".ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front").addClass("item-has-img");
         });
     }
+
     selecting_expert($("#searchExpert"));
 
 
@@ -1120,6 +1121,151 @@ $(document).ready(function () {
             }
         });
     }
+
+    //# Project Setting Technique Selection
+
+    let projectSettingForm = $('#ajax-project-setting');
+    //## get techniques list via ajax request
+    $("[data-target='#projectSetting']").click(function () {
+        console.log(projectSettingForm.attr("action"));
+        $.ajax({
+            method: 'GET',
+            url: projectSettingForm.attr("action"),
+            dataType: 'json',
+            data: {'id': "None"},
+            success: function (data) {
+
+                let source = [];
+                for (let i = 0; i <= Object.keys(data).length - 1; i++) {
+                    let item = {};
+                    item["title"] = Object.keys(data)[i];
+                    item["key"] = i + 1;
+                    if (Object.values(data)[i].length) {
+                        item["folder"] = true;
+                        let children = [];
+                        for (let j = 0; j < Object.values(data)[i].length; j++) {
+                            let child_item = {};
+                            child_item["title"] = Object.values(data)[i][j];
+                            child_item["key"] = i + "." + j;
+                            children.push(child_item);
+                        }
+                        item["children"] = children;
+                    }
+                    source.push(item);
+                }
+                console.log("source ", source);
+
+                $("#projectSetting").find("#fancy-tree").fancytree({
+                    extensions: ["glyph"],
+                    checkbox: false,
+                    selectMode: 1,
+                    checkboxAutoHide: true,
+                    clickFolderMode: 2,
+                    lazyLoad: function (event, data) {
+                        data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
+                    },
+                    activate: function (event, data) {
+                        $('#tags').addTag(data.node.title);
+                    },
+                    select: function (event, data) {
+
+                    },
+                    source: source,
+                    glyph: {
+                        preset: "awesome5",
+                        map: {
+                            _addClass: "",
+                            checkbox: "fas fa-square",
+                            checkboxSelected: "fas fa-check-square",
+                            checkboxUnknown: "fas fa-square",
+                            radio: "fas fa-circle",
+                            radioSelected: "fas fa-circle",
+                            radioUnknown: "fas fa-dot-circle",
+                            dragHelper: "fas fa-arrow-right",
+                            dropMarker: "fas fa-long-arrow-right",
+                            error: "fas fa-exclamation-triangle",
+                            expanderClosed: "fas fa-chevron-left",
+                            expanderLazy: "fas fa-angle-right",
+                            expanderOpen: "fas fa-chevron-down",
+                            loading: "fas fa-spinner fa-pulse",
+                            nodata: "fas fa-meh",
+                            noExpander: "",
+                            // Default node icons.
+                            // (Use tree.options.icon callback to define custom icons based on node data)
+                            doc: "fas fa-screwdriver",
+                            docOpen: "fas fa-screwdriver",
+                            folder: "fas fa-folder",
+                            folderOpen: "fas fa-folder-open"
+                        }
+                    },
+                });
+                // select_technique("#projectSetting");
+            },
+        });
+        // initial selected teqniques tagInput
+        $('#projectSetting #tags').tagsInput({
+            'height': 'FIT-CONTENT',
+            'width': '100%',
+            'defaultText': '',
+            'onAddTag': newItem_label,
+            'onRemoveTag': newItem_label
+        });
+        // change default border and focus event of this tagInput
+        $("#projectSetting #tags #tags_tagsinput").css("border", "none");
+        $("#projectSetting #tags #tags_tagsinput").find("#tags_tag").on("focus", function () {
+            $(this).css("width", "fit-content");
+        });
+        tag_input_label("tags");
+    });
+
+    //## ignore submit form on press Enter key
+    projectSettingForm.on('keyup keypress', function (e) {
+        let keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    //## submitting project setting form
+    projectSettingForm.submit(function (event) {
+        event.preventDefault();
+        let data = [];
+        let id = $(this).attr("id");
+        $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
+            data[index] = $(this).find("span").text();
+        });
+        $.ajax({
+            traditional: true,
+            method: 'POST',
+            url: $(this).attr('data-url'),
+            data: {technique: data, id: id},
+            dataType: 'json',
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: data.message,
+                    position: 'bottomLeft',
+                });
+                $('#projectSetting').modal('hide');
+            },
+            error: function (data) {
+                let obj = JSON.parse(data.responseText);
+                let message = "";
+                if (obj.message !== undefined)
+                    message = obj.message;
+                else
+                    message = "اجرای این عملیات با خطا مواجه شد!";
+                iziToast.error({
+                    rtl: true,
+                    message: message,
+                    position: 'bottomLeft'
+                });
+            }
+        });
+    });
+
+    //End Project Setting Technique Selection
 
     function getCookie(name) {
         let cookieValue = null;

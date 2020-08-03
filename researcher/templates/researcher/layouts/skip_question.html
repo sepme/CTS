@@ -9,11 +9,26 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <p class="text-justify mb-4" dir="rtl">در صورتی که کد عبور از این قسمت را در اختیار دارید می توانید با وارد کردن آن در قسمت زیر از این
+                    <p class="text-justify mb-4" dir="rtl">در صورتی که کد عبور از این قسمت را در اختیار دارید می توانید
+                        با وارد کردن آن در قسمت زیر از این
                         مرحله بگذرید.</p>
-                    <div class="form-group w-50 text-right ml-auto mr-auto">
-                        <label for="skipCode">رمز</label>
-                        <input type="text" class="w-100" name="skip_code" id="skipCode">
+                    <div class="form-group text-right ml-auto mr-auto">
+                        <label for="skipCode"></label>
+                        <input type="text" name="skip_code" value="      " id="skipCode" hidden>
+                        <label class="c-digit-container text-center w-100">
+                            <input type="text" class="text-center code c-digit c-digit-1"
+                                   min="0" max="1" pattern="[0-9]{1}" maxlength="1" size="1" placeholder="1">
+                            <input type="text" class="text-center code c-digit c-digit-2"
+                                   min="0" max="1" pattern="[0-9]{1}" maxlength="1" size="1" placeholder="2">
+                            <input type="text" class="text-center code c-digit c-digit-3"
+                                   min="0" max="1" pattern="[0-9]{1}" maxlength="1" size="1" placeholder="3">
+                            <input type="text" class="text-center code c-digit c-digit-4"
+                                   min="0" max="1" pattern="[0-9]{1}" maxlength="1" size="1" placeholder="4">
+                            <input type="text" class="text-center code c-digit c-digit-5"
+                                   min="0" max="1" pattern="[0-9]{1}" maxlength="1" size="1" placeholder="5">
+                            <input type="text" class="text-center code c-digit c-digit-6"
+                                   min="0" max="1" pattern="[0-9]{1}" maxlength="1" size="1" placeholder="6">
+                        </label>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3 mb-3">
                         اعتبارسنجی
