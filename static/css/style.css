@@ -4582,15 +4582,21 @@ body > * {
     transition: filter .15s linear;
 }
 
-.modal-open > *:not(.modal):not(.modal-backdrop):not(.iziToast-wrapper):not(.tooltip):not(#gtx-trans):not(.jfk-bubble.gtx-bubble) {
+/*.modal-open > *:not(.modal):not(.modal-backdrop):not(.iziToast-wrapper):not(.tooltip):not(#gtx-trans):not(.jfk-bubble.gtx-bubble) {*/
+/*    -webkit-filter: blur(5px);*/
+/*    filter: blur(5px);*/
+/*    !* background: white; *!*/
+/*}*/
+
+.modal-open .main > * {
     -webkit-filter: blur(5px);
     filter: blur(5px);
     /* background: white; */
 }
-
 .modal-backdrop.fade.show {
-    background-color: rgba(8, 25, 43, 0.85);
-    opacity: 1;
+    background-color: rgb(0 0 0);
+    opacity: 0.51;
+    filter: brightness(0.5);
 }
 
 .captcha-test {
