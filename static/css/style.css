@@ -4950,26 +4950,45 @@ img.center-head {
     direction: rtl !important;
 }
 
-.code {
-    font-size: 2em;
-    border: none;
+.code-input {
     height: unset;
+    font-size: 2em;
     line-height: 2em;
+    border: none;
     border-bottom: 2px solid #bdbdbd;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+    letter-spacing: 0.5rem!important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
-.code:focus {
+.code-input:focus {
     border: none;
-    border-bottom: 2px solid #3CCD1C;
+    border-bottom: 2px solid #3ccd1c;
 }
 
-.c-digit-container {
-direction: ltr;
-}
+/*.code {*/
+/*    font-size: 2em;*/
+/*    border: none;*/
+/*    height: unset;*/
+/*    line-height: 2em;*/
+/*    border-bottom: 2px solid #bdbdbd;*/
+/*    border-bottom-right-radius: 0;*/
+/*    border-bottom-left-radius: 0;*/
+/*}*/
 
-.code.c-digit {
-    width: 3rem;
+/*.code:focus {*/
+/*    border: none;*/
+/*    border-bottom: 2px solid #3CCD1C;*/
+/*}*/
 
-}
+/*.c-digit-container {*/
+/*    direction: ltr;*/
+/*}*/
+
+/*.code.c-digit {*/
+/*    width: 3rem;*/
+/*    direction: ltr;*/
+/*}*/
