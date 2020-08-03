@@ -2493,11 +2493,11 @@ span.title-back {
     position: relative;
 }
 
-.education-btn > i, .executive-btn > i, .research-btn > i, .paper-btn > i {
-    position: absolute;
-    top: 5px;
-    left: 15px;
-}
+/*.education-btn > i, .executive-btn > i, .research-btn > i, .paper-btn > i {*/
+/*    position: absolute;*/
+/*    top: 5px;*/
+/*    left: 15px;*/
+/*}*/
 
 .education-btn > i:hover, .executive-btn > i:hover, .research-btn > i:hover, .paper-btn > i:hover {
     color: #3ccd1c;
@@ -3129,6 +3129,17 @@ div.no-project > span.disable-border-button {
     border: 1px solid #3CCD1C;
     background-color: #3CCD1C;
     color: #ffffff;
+}
+
+.box .box-header button.button-link {
+    float: left;
+    border: none;
+    background: transparent;
+    padding: 0.25em;
+}
+
+.box .box-header button.button-link i.fas {
+    padding: 0.8em 0;
 }
 
 .message-expand {
@@ -4537,6 +4548,12 @@ input[type="number"] {
 
 }
 
+.btn:hover, .btn:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
 .btn-primary {
     background-color: #3CCD1C;
     border: none;
@@ -4958,7 +4975,7 @@ img.center-head {
     border-bottom: 2px solid #bdbdbd;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-    letter-spacing: 0.5rem!important;
+    letter-spacing: 0.5rem !important;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
