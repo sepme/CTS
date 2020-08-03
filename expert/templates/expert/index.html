@@ -258,7 +258,7 @@
                                                                             </div>
                                                                             <div class="answer">{{ project.project_form.progress_profitability }}</div>
                                                                         </div>
-                                                                        <div>
+                                                                        {% comment %} <div>
                                                                             <div class="question">
                                                             <span class="question-mark">
                                                                 <i class="far fa-question-circle"></i>
@@ -267,7 +267,7 @@
                                                                                 است؟
                                                                             </div>
                                                                             <div class="answer">{{ project.project_form.predict_profit }}</div>
-                                                                        </div>
+                                                                        </div> {% endcomment %}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -616,20 +616,20 @@
                     "</div>" +
                     "<div class='answer'>" +
                     "{{ project.project_form.progress_profitability }}" +
-                    "</div></div>" +
-                    "<div>" +
-                    "<div class='question'>" +
-                    "<span class='question-mark'>" +
-                    "<i class='far fa-question-circle'></i>" +
-                    "</span>" +
-                    "برآورد شما از سود مالی این پروژه چگونه است؟" +
-                    "</div>" +
-                    "<div class='answer'>" +
-                    numbersComma("{{ project.project_form.predict_profit }}") + " ریال" +
                     "</div></div>";
                 $(".project-info-content").html(majors);
                 $('*').persiaNumber();
             });
+            //"<div>" +
+            //        "<div class='question'>" +
+            //        "<span class='question-mark'>" +
+            //        "<i class='far fa-question-circle'></i>" +
+            //        "</span>" +
+            //        "برآورد شما از سود مالی این پروژه چگونه است؟" +
+            //        "</div>" +
+            //        "<div class='answer'>" +
+            //        numbersComma("{{ project.project_form.predict_profit }}") + " ریال" +
+            //        "</div></div>";
         </script>
         <script type="text/javascript">
             $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {

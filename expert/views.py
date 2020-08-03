@@ -485,7 +485,7 @@ def UsualShowProject(request, project, data):
     data['required_budget']= project_form.required_budget
     data['required_method']= project_form.required_method
     data['project_phase']= project_form.project_phase
-    data['predict_profit']= project_form.predict_profit 
+    # data['predict_profit']= project_form.predict_profit 
     data['success']= 'successful'
     # data['required_technique']=[]
     # for tech in project.project_form.required_technique:
@@ -973,6 +973,6 @@ def GetResearcherComment(request):
     return JsonResponse(data=data)
 
 def checkUserId(request, userId):
-    if ExpertForm.objects.filter(userId=userId).count():
+    if ExpertUser.objects.filter(userId=userId).count():
         return False
     return True

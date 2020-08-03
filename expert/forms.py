@@ -93,7 +93,7 @@ class ExpertInfoForm(forms.ModelForm):
 
     class Meta:
         model = ExpertForm
-        exclude = ['expert_user', 'photo','keywords', 'eq_test', 'lab_equipment', 'userId']
+        exclude = ['expert_user', 'photo','keywords', 'eq_test', 'lab_equipment']
         error_messages = {
             'special_field': {
                 'required': 'حوزه تخصصی نمی تواند خالی باشد.'

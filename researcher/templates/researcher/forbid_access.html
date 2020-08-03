@@ -51,19 +51,19 @@
             <div class="dots-timer row" style="direction: ltr!important;">
                 <div class="30-dot-circle timer-item col-md-4" id="day">
                     <div class="circle">
-                        <span class="circle-value"></span>
+                        <span class="circle-value day">{{day}}</span>
                     </div>
                     <span class="circle-label">روز</span>
                 </div>
                 <div class="24-dot-circle timer-item col-md-4" id="hour">
                     <div class="circle">
-                        <span class="circle-value"></span>
+                        <span class="circle-value hour">{{hour}}</span>
                     </div>
                     <span class="circle-label">ساعت</span>
                 </div>
                 <div class="60-dot-circle timer-item col-md-4" id="min">
                     <div class="circle">
-                        <span class="circle-value"></span>
+                        <span class="circle-value minute">{{minute}}</span>
                     </div>
                     <span class="circle-label">دقیقه</span>
                 </div>
@@ -77,9 +77,9 @@
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
 <script type="text/javascript">
-    let day = 5;
-    let hour = 12;
-    let min = 5;
+    let day = $('.day').html();
+    let hour = $('.hour').html();
+    let min = $('.minute').html();
     $(".dots-timer div.timer-item").each(function () {
         let active_dots = 0;
         if ($(this).attr("id") === "day") {

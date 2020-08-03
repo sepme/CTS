@@ -123,7 +123,7 @@
                                     </div>
                             </div>
                         </div>
-                        <div class="row">
+                        {% comment %} <div class="row">
                             <div class="col-lg-12 text-right">
                                 <span class="sub-header">برآورد شما از سود مالی این پروژه چگونه است؟</span>
                                 {% if form.predict_profit.errors %}
@@ -135,7 +135,7 @@
                                     <span class="error-body">{% render_field form.predict_profit.errors %}</span>
                                 </div> 
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
                 <div class="card box flow-root-display w-100">

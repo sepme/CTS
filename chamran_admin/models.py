@@ -3,6 +3,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
+from django.utils import timezone
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -72,7 +73,7 @@ class News(models.Model):
     attachment = models.FileField(upload_to=newsAttach, verbose_name="ضمیمه", blank=True, null=True, max_length=511)
     link = models.CharField(max_length=128, verbose_name="لینک خبر", null=True, blank=True)
     writer = models.CharField(max_length=32, verbose_name="نویسنده")
-    date_submitted = models.DateField(default=datetime.date.today(), verbose_name="تاریخ ثبت خبر")
+    date_submitted = models.DateField(default=timezone.now().date(), verbose_name="تاریخ ثبت خبر")
 
     class Meta:
         ordering = ['-date_submitted']

@@ -21,6 +21,7 @@ from industry.models import IndustryForm, Comment
 from expert import models as expert_models
 from . import models ,forms
 from expert.models import ExpertUser
+from researcher.models import Technique
 
 # function name says it all :)
 def gregorian_to_numeric_jalali(date):
@@ -412,7 +413,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             project_title_english = form.cleaned_data['project_title_english']
             research_methodology = form.cleaned_data['research_methodology']
             main_problem_and_importance = form.cleaned_data['main_problem_and_importance']
-            predict_profit = form.cleaned_data['predict_profit']
+            # predict_profit = form.cleaned_data['predict_profit']
             required_lab_equipment = form.cleaned_data['required_lab_equipment']
             approach = form.cleaned_data['approach']
             policy = form.cleaned_data['policy']
@@ -426,7 +427,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                                                   project_title_english=project_title_english,
                                                   research_methodology=research_methodology,
                                                   main_problem_and_importance=main_problem_and_importance,
-                                                  predict_profit=predict_profit,
+                                                #   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
                                                   required_method=required_method,
                                                   approach=approach,
@@ -438,6 +439,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                                                   )
             key_words = form.cleaned_data['key_words'].split(',')
             new_project_form.save()
+            
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
@@ -479,8 +481,29 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
 
 
 def checkUserId(request, userId):
-    if models.RandDProfile.objects.filter(userId=userId).count():
-        return False
-    if models.ResearchGroupProfile.objects.filter(userId=userId).count():
+    if models.IndustryUser.objects.filter(userId=userId).count():
         return False
     return True
+
+def ProjectSetting(request):
+    technique_list = request.POST.getlist('technique')
+    if len(technique_list) == 0:
+        return JsonResponse({
+            'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
+        },status=400)
+    project = models.Project.objects.filter(pk=request.POST['projectId'])
+    for technique in technique_list:
+        project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
+        project.projectform.techniques.add(project_technique[0])
+    project.projectform.save()
+    expertId = request.POST['expertId']
+    expert = ExpertUser.objects.filter(userId=expertId)
+    project.expert_accepted = expert
+    project.save()
+    return JsonResponse(data={})
+
+def searchUserId(request):
+    searchKey = request.POST['searchKey']
+    suggestedExperts = ExpertUser.objects.filter(userId__contain=searchKey).values('userId')
+    data = {"expertId": suggestedExperts}
+    return JsonResponse(data=data)

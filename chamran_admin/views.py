@@ -522,6 +522,19 @@ def notFound500(request):
 
 
 def Handler403(request, exception):
+    if not request.user.has_perm('researcher.is_active'):
+        researcher = request.user.researcheruser
+        if researcher.status.is_deactivated :
+            remaining = researcher.status.remainingTime
+            context = {'day'    : remaining['day'],
+                       'hour'   : remaining['hour'],
+                       'minute' : remaining['minute'],
+                       'second' : remaining['second'],
+                      }        
+            return render(request=request, template_name='researcher/forbid_access.html', context=context)
+        else:
+            "not_answered"
+            return HttpResponseRedirect(request.path)
     context = {'data': exception}
     return render(request, '403Template.html', context)
 
