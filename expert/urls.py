@@ -35,4 +35,7 @@ urlpatterns = [
     path('request_researcher/', views.ExpertRequestResearcher, name="request_researcher"),
     path('get_researcher_comment', views.GetResearcherComment, name="getResearcherComment"),
     path("checkUserId", views.checkUserId, name="checkUserId"),
+    path("collect_data/", views.CollectData),
+    path("submit_data/", views.submitData),
+    # path("testPhoto", views.testPhoto),
 ]
