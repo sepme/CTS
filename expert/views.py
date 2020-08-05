@@ -731,7 +731,7 @@ def CommentForIndustry(request):
     else:
         return JsonResponse(form.errors, status=400)
 
-@permission_required('expert.be_expert', login_url='/login/')
+@permission_required([], login_url='/login/')
 def ShowTechnique(request):
     TYPE = (
         'molecular_biology',

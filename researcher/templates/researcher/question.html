@@ -8,10 +8,24 @@
     {% include 'researcher/layouts/confirmation.html' %}
 {% endblock %}
 
+{% block modals %}
+    {% include 'researcher/layouts/skip_question.html' %}
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-12 text-right">
             <h3 class="h3 border-bottom p-top-15">سوال پژوهشی</h3>
+            <button class="add-new-technique top-page-button border-button" data-toggle="modal"
+                    data-target="#skipQuestion">
+                <span>پریدن از این مرحله</span>
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-skip-backward-fill" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M.5 3.5A.5.5 0 0 0 0 4v8a.5.5 0 0 0 1 0V4a.5.5 0 0 0-.5-.5z"></path>
+                    <path d="M.904 8.697l6.363 3.692c.54.313 1.233-.066 1.233-.697V4.308c0-.63-.692-1.01-1.233-.696L.904 7.304a.802.802 0 0 0 0 1.393z"></path>
+                    <path d="M8.404 8.697l6.363 3.692c.54.313 1.233-.066 1.233-.697V4.308c0-.63-.693-1.01-1.233-.696L8.404 7.304a.802.802 0 0 0 0 1.393z"></path>
+                </svg>
+            </button>
         </div>
     </div>
     <div class="row">
@@ -59,10 +73,10 @@
                                 پیشنهاد می‌شود جهت یادگیری «نحوه جستجوی هدفمند مقالات در بانک مقالات» ویدیوی زیر را
                                 مشاهده نمایید.
                             </p>
-{#                            <video width="550" height="350" controls>#}
-{#                                <source src="/media/VIDEO0041.mp4" type="video/mp4">#}
-{#                                Your browser does not support the video tag.#}
-{#                            </video>                            #}
+                            {#                            <video width="550" height="350" controls>#}
+                            {#                                <source src="/media/VIDEO0041.mp4" type="video/mp4">#}
+                            {#                                Your browser does not support the video tag.#}
+                            {#                            </video>                            #}
                             {% if not answered %}
                                 <p>
                                     اگر برای شروع این مرحله آماده هستید، کافی است روی دکمه زیر کلیک کنید.
@@ -86,11 +100,11 @@
                                         می‌توانید این مرحله را بگذرانید.
                                     </span>
                                 </div>
-                            {%endif%}
+                            {% endif %}
                             <div class="question-alert text-right">
                                 <img src="{% static 'img/researcher/warning.svg' %}" alt="warning">
                                 <span>
-                                    در صورت بروز هر گونه مشکل، می‌توانید با شماره تلفن 28422245 (داخلی 230) تماس حاصل
+                                    در صورت بروز هر گونه مشکل، می‌توانید با شماره تلفن <a href="tel:09102143451">09102143451</a> تماس حاصل
                                     فرمایید.
                                 </span>
                             </div>

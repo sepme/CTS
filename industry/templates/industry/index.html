@@ -63,7 +63,7 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
                             <h6>{{ project.project_form.project_title_persian }}</h6>
-                            <div class="project-setting">
+                            <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
                                 <i class="fas fa-cog"></i>
                             </div>
                             <span class="active-status">
@@ -341,4 +341,8 @@
         </div>
         {#        <div class="col-lg-3"></div>#}
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
 {% endblock %}

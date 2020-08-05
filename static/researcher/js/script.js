@@ -245,6 +245,61 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
+
+    function auto_focus_code(element) {
+        console.log("auto focus not working correctly\nNeEd To FiX!");
+        // if (element.is(":first-child")) {
+        //     console.log("Yes");
+        //     element.focus();
+        //     return true
+        // } else {
+        //     console.log("No");
+        //     if (element.prev().val() === "") {
+        //         auto_focus_code(element.prev());
+        //         console.log("=>");
+        //     } else {
+        //         console.log("||");
+        //         element.focus();
+        //     }
+        // }
+    }
+
+    // if ($(".c-digit-container").length !== 0) {
+    //     $(".c-digit-container .code.c-digit").bind("paste", function (e) {
+    //         let pastedData = e.originalEvent.clipboardData.getData('text');
+    //         let idx = $(this).index();
+    //         let newData = pastedData.substring(0, 5 - idx);
+    //         console.log("idx ", idx);
+    //         for (let i = idx; i <= 5; i++) {
+    //             console.log("i ", i);
+    //             if (i === 0) {
+    //                 $(".c-digit-container .code.c-digit:first-child").attr("value", pastedData.charAt(i - idx));
+    //             } else {
+    //                 let child_num = i + 1;
+    //                 $(".c-digit-container .code.c-digit:nth-child(" + child_num + ")").attr("value", pastedData.charAt(i - idx));
+    //             }
+    //
+    //         }
+    //         console.log(newData);
+    //     }).on("focus", function () {
+    //         auto_focus_code($(this));
+    //
+    //     }).on("keyup", function () {
+    //         if ($(this).val() === "") {
+    //             if(!$(this).is(":first-child")) {
+    //                 $(this).prev().focus();
+    //             }
+    //         } else {
+    //             let mainInput = $(this).closest(".form-group").find("input[name='skip_code']");
+    //             let last_val = mainInput.val();
+    //             let idx = $(this).index();
+    //             mainInput.attr("value", last_val.substring(0, idx) + ($(this).val() === "" ? " " : $(this).val()) + last_val.substring(idx + 1));
+    //             if (!$(this).is(":last-child")) {
+    //                 $(this).next().focus();
+    //             }
+    //         }
+    //     });
+    // }
     $(".new-review-request").click(function () {
         $("#technique_id").attr('value', $(this).attr('id'));
     });

@@ -755,3 +755,17 @@ div.row.cover-page {
     outline: none;
     color: #484848;
 }
+
+#projectSetting  #fancy-tree {
+    margin-top: 0;
+    border: none;
+}
+
+.select-technique div.tagsinput {
+    border-radius: 0.25em;
+    padding: 5px 5px 0;
+}
+
+.select-technique div.tagsinput div {
+    display: none;
+}
