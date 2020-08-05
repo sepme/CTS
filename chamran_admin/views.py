@@ -521,8 +521,8 @@ def notFound500(request):
     return render(request, '404Template.html', {})
 
 
-def Handler403(request, exception):
-    if not request.user.has_perm('researcher.is_active'):
+def Handler403(request, exception):    
+    if not request.user.has_perm('researcher.is_active') and request.user.groups.filter(name="Researcher").exists():
         researcher = request.user.researcheruser
         if researcher.status.is_deactivated :
             remaining = researcher.status.remainingTime
