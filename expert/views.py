@@ -12,7 +12,7 @@ from persiantools.jdatetime import JalaliDate
 from datetime import datetime
 import json
 
-from . import forms
+from . import forms, webScraping
 from .models import *
 
 from industry.models import *
@@ -976,3 +976,46 @@ def checkUserId(request, userId):
     if ExpertUser.objects.filter(userId=userId).count():
         return False
     return True
+
+
+def collectData(request):
+    link = request.POST['link']
+    collectedData = webScraping.webScraping(link=link)
+    scientific_rank = ""
+    special_field = ""
+    if "پژوهشگر"       in collectedData['information'][0]:
+        scientific_rank = "پژوهشگر"
+        special_field   = collectedData['information'][0][collectedData['information'][0].find("پژوهشگر"):]
+    elif "استاد ممتاز" in collectedData['information'][0]:
+        scientific_rank = "استاد ممتاز"
+        special_field   = collectedData['information'][0][collectedData['information'][0].find("استاد ممتاز"):]
+    elif "استادیار"    in collectedData['information'][0]:
+        scientific_rank = "استادیار"
+        special_field   = collectedData['information'][0][collectedData['information'][0].find("استادیار"):]
+    elif "استاد"       in collectedData['information'][0]:
+        scientific_rank = "استاد"
+        special_field   = collectedData['information'][0][collectedData['information'][0].find("استاد"):]
+    elif "دانشیار"     in collectedData['information'][0]:
+        scientific_rank = "دانشیار"
+        special_field   = collectedData['information'][0][collectedData['information'][0].find("دانشیار"):]
+    elif "مربی"        in collectedData['information'][0]:
+        scientific_rank = "مربی"
+        special_field   = collectedData['information'][0][collectedData['information'][0].find("مربی"):]
+    data = {
+        "scientific_rank" : scientific_rank,
+        "special_field" : special_field,
+        "university"    : collectedData['information'][-1],
+        "keywords"      : collectedData['keywords'],
+    }
+
+import io, urllib.request
+from django.core.files import File
+
+def testPhoto(request):
+    t = Test(name="img")
+    t.save()
+    photo_in_byte = urllib.request.urlopen("https://isid.research.ac.ir/repo/Person/gxunjcqd5f10sana.jpg").read()
+    img_io = io.BytesIO(photo_in_byte)
+    t.photo.save("filename.jpg", File(img_io))
+    t.save()
+    return render(request, "expert/testPhoto.html",{})
