@@ -17,4 +17,5 @@ urlpatterns = [
     path('refuse_request/', views.refuse_expert),
     path("checkUserId", views.checkUserId, name="checkUserId"),
     path("search_user_id", views.searchUserId, name="searchUserId"),
+    path("preview", views.preview_project, name="preview"),
 ]

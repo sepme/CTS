@@ -4593,6 +4593,7 @@ body > * {
     filter: blur(5px);
     /* background: white; */
 }
+
 .modal-backdrop.fade.show {
     background-color: rgb(0 0 0);
     opacity: 0.51;
@@ -5015,3 +5016,17 @@ img.center-head {
 /*    width: 3rem;*/
 /*    direction: ltr;*/
 /*}*/
+nav[aria-label="breadcrumb"] {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+nav[aria-label="breadcrumb"] ol {
+    background-color: transparent;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    /*content:url(data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgc3R5bGU9ImNvbG9yOiM2Yzc1N2QiIGZvY3VzYWJsZT0iZmFsc2UiIGRhdGEtcHJlZml4PSJmYXMiIGRhdGEtaWNvbj0iY2hldnJvbi1sZWZ0IiBjbGFzcz0ic3ZnLWlubGluZS0tZmEgZmEtY2hldnJvbi1sZWZ0IGZhLXctMTAiIHJvbGU9ImltZyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMzIwIDUxMiI+PHBhdGggZmlsbD0iY3VycmVudENvbG9yIiBkPSJNMzQuNTIgMjM5LjAzTDIyOC44NyA0NC42OWM5LjM3LTkuMzcgMjQuNTctOS4zNyAzMy45NCAwbDIyLjY3IDIyLjY3YzkuMzYgOS4zNiA5LjM3IDI0LjUyLjA0IDMzLjlMMTMxLjQ5IDI1NmwxNTQuMDIgMTU0Ljc1YzkuMzQgOS4zOCA5LjMyIDI0LjU0LS4wNCAzMy45bC0yMi42NyAyMi42N2MtOS4zNyA5LjM3LTI0LjU3IDkuMzctMzMuOTQgMEwzNC41MiAyNzIuOTdjLTkuMzctOS4zNy05LjM3LTI0LjU3IDAtMzMuOTR6Ij48L3BhdGg+PC9zdmc+);*/
+    padding-left: 0.5rem;
+}
+
