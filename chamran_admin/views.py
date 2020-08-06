@@ -24,7 +24,7 @@ from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment
 
-LOCAL_URL = 'chamranteambot.pythonanywhere.com'
+LOCAL_URL = 'chamranteam.ir'
 
 
 def jalali_date(jdate):
