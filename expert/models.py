@@ -79,7 +79,7 @@ class ExpertForm(models.Model):
                                        null=True, blank=True)
     fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
-    national_code = models.CharField(max_length=15, verbose_name="کد ملی")
+    national_code = models.CharField(max_length=15, verbose_name="کد ملی", blank=True, null=True)
     scientific_rank_choice = (
         (1, 'مربی'),
         (2, 'استادیار'),
@@ -363,3 +363,24 @@ class RequestResearcher(models.Model):
         if self.researcher_count > 0:
             return True
         return False
+class TempExpertForm(models.Model):
+    expertUser      = models.OneToOneField(ExpertUser, verbose_name="استاد", on_delete=models.CASCADE)
+    photo           = models.ImageField(upload_to="tempExpertForm", height_field=None, width_field=None, max_length=None, null=True, blank=True)
+    special_field   = models.CharField(max_length=100, null=True, blank=True)
+    scientific_rank = models.IntegerField(verbose_name="مرتبه علمی", null=True, blank=True)
+    university      = models.CharField(max_length=100, null=True, blank=True)
+    keywords        = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
+
+    def __str__(self):
+        return str(self.expertUser)
+    
+class TempPaperRecord(models.Model):
+    tempExpertForm = models.ForeignKey(TempExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
+    research_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")
+    date_published = models.CharField(max_length=15, verbose_name="تاریخ انتشار")
+    published_at = models.CharField(max_length=32, verbose_name="محل انتشار")
+    impact_factor = models.FloatField(verbose_name="impact factor")
+    citation = models.CharField(max_length=5, verbose_name="تعداد ارجاع")
+
+    def __str__(self):
+        return str(self.tempExpertForm)
