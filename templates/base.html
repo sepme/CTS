@@ -72,7 +72,7 @@
             {#            {!! Form::open(['url'=>route('contact-us-post'),'id'=>'contact-us-post']) !!}#}
             <form id="contactUs_form" method="POST">
                 {% csrf_token %}
-                <div class="contact-us">
+                <div class="contact-us text-right">
                     <h2>تماس با ما</h2>
                     <div class='fullname'></div>
                         <input type="text" name="fullname" id='fullname' class="form-control" placeholder="نام و نام خانوادگی">

@@ -1,15 +1,8 @@
+@import "../../css/fontiran.css";
+@import "../../css/fontStyle.css";
 @font-face {
     font-family: 'at9';
     src: url(../fonts/at10.eot);
-    src: url(../fonts/at10.eot?#iefix) format("embedded-opentype"), url(..../fonts/at10.woff) format("woff"), url(../fonts/at10.ttf) format("truetype"), url(../fonts/at10.svg#at10) format("svg")
-}
-
-@font-face {
-    font-family: "yekan";
-    src: url(../fonts/Yekan.eot);
-    src: url(../fonts/Yekan.eot?#iefix) format("embedded-opentype"), url(../fonts/Yekan.woff) format("woff"), url(../fonts/Yekan.ttf) format("truetype"), url(../fonts/Yekan.svg#BYekan) format("svg");
-    font-weight: normal;
-    font-style: normal
 }
 
 html, body {
@@ -246,7 +239,7 @@ a:hover {
 
 .home-about-heading {
     text-align: center;
-    font-family: 'yekan', 'tahoma';
+    font-family: iranyekan, 'tahoma';
 }
 
 .home-about-heading h2 {
@@ -320,7 +313,7 @@ a:hover {
 #home-why h2 {
     text-align: center;
     font-size: 42px;
-    font-family: 'yekan', 'tahoma';
+    font-family: iranyekan, 'tahoma';
 }
 
 .home-why-body {
@@ -417,7 +410,7 @@ a:hover {
 
 #home-news h2 {
     text-align: center;
-    font-family: 'yekan', 'tahoma';
+    font-family: iranyekan, 'tahoma';
     font-size: 36px;
 }
 
