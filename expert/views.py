@@ -19,6 +19,7 @@ from industry.models import *
 from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance
+from chamran_admin.models import Message
 
 
 def get_url(rawUrl):
@@ -612,10 +613,43 @@ def terminate_research_question(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def set_answer_situation(request):
     answer = ResearchQuestionInstance.objects.filter(id=request.GET.get('id')).first()
+    title = ""
+    text = ""
+    messageType = 0
     if request.GET.get('type') == 'true':
         answer.is_correct = 'correct'
+        title = "تایید سوال پژوهشی"
+        text =  """با سلام،
+پژوهشگر گرامی، پاسخ سوال پژوهشی شما پذیرفته شد.
+به این ترتیب، پیوستن شما به مجموعه پژوهشگران «چمران‌تیم» را تبریک می‌گوییم و امیدواریم شاهد پیشرفت شما در زمینه پژوهش باشیم.
+از این پس می‌توانید از طریق قسمت «پروژه‌ها» برای شرکت در پروژه‌های تعریف‌شده توسط مجموعه‌های پژوهشی، درخواست ارسال کنید. 
+البته در نظر داشته باشید که برای شرکت در هر پروژه‌ای، لازم است مهارت‌های پژوهشی آن پروژه را قبلا کسب کرده باشید. به همین خاطر، توصیه می‌کنیم به قسمت «مهارت‌های پژوهشی» حساب کاربری‌تان هم سر بزنید و با افزایش تعداد مهارت‌های‌تان، شانس خود را برای شرکت در پروژه‌ها افزایش دهید.
+همچنین، با تکمیل یا بارگذاری رزومه علمی‌تان از طریق قسمت «اطلاعات کاربری»، می‌توانید توانمندی‌های خود را در هنگام انتخاب شدن‌تان توسط استاد و یا مجموعه پژوهشی، نشان دهید.
+با آرزوی موفقیت، 
+چمران‌تیم"""
+        messageType = 0
     else:
         answer.is_correct = 'wrong'
+        title = "رد سوال پژوهشی"
+        text = """با سلام،
+پژوهشگر گرامی، متاسفانه پاسخ شما به سوال پژوهشی (در مهلت یک هفته‌ای ارسال نشد / به دلیل نداشتن کیفیت مناسب، مورد قبول واقع نشد).
+علی‌رغم میل درونی، حساب کاربری شما به مدت دو هفته به حالت تعلیق در خواهد آمد و پس از آن، مجددا می‌توانید در یک سوال پژوهشی شرکت نمایید.
+امیدواریم دو هفته‌ی دیگر هم شما را ببینیم.
+در ضمن، در صورتی که فکر می‌کنید این پیام به اشتباه ارسال شده است، می‌توانید مراتب اعتراض خود را از طریق شماره تلفن ۰۹۱۰۲۱۴۳۴۵۱ و یا فرم ارسال گزارش (با کلیک بر روی تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) ارسال فرمایید.
+با آرزوی موفقیت،
+چمران‌تیم"""
+        messageType = 1
+    message = Message(title=title,
+                      text=text,
+                      type=messageType)
+    message.receiver.add(answer.researcher.user)
+    message.save()
+    html_templateForAdmin = get_template('registration/projectRequest_template.html')
+    email_templateForAdmin = html_templateForAdmin.render({'message': text})
+    email = EmailMultiAlternatives(subject=title, from_email=settings.EMAIL_HOST_USER,
+                                to=[answer.researcher.user.get_username(),])
+    email.attach_alternative(email_templateForAdmin, 'text/html')
+    email.send()
     answer.save(update_fields=['is_correct'])
     return JsonResponse({
         'success': 'successful'
