@@ -33,7 +33,7 @@ delete the Project object and only keep its main information in a ProjectHistory
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
-    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True, null=True)
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", blank=True, null=True)
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),

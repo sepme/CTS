@@ -28,7 +28,7 @@ def get_attachment_path(instance, filename):
 
 class ExpertUser(models.Model):
     user   = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
-    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True, null=True)
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", blank=True, null=True)
     expert_point = models.FloatField(verbose_name="امتیاز استاد", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
