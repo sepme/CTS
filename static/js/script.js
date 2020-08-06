@@ -107,6 +107,9 @@ $(document).ready(function () {
             owl.trigger('prev.owl.carousel');
         });
         $('[data-toggle="tooltip"]').tooltip();
+        if (window.location.href.indexOf("/login/#signup") !== -1) {
+            owl.trigger('next.owl.carousel');
+        }
     }
 
     // input_focus();
@@ -234,7 +237,6 @@ loginForm.submit(function (event) {
     event.preventDefault();
     // let formData = $(this).serialize().toString();
     let $thisURL = loginForm.attr('data-url');
-    console.log($(this).serialize().toString());
     $.ajax({
         method: 'POST',
         url: $thisURL,
