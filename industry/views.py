@@ -4,7 +4,7 @@ import os
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 from django.core import serializers
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.files.base import ContentFile
 from django.forms import model_to_dict
 from django.views import generic, View
@@ -13,6 +13,7 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
+from django.template.loader import get_template
 
 from persiantools.jdatetime import JalaliDate
 
@@ -22,6 +23,7 @@ from expert import models as expert_models
 from . import models, forms
 from expert.models import ExpertUser
 from researcher.models import Technique
+from chamran_admin.models import Message
 
 
 # function name says it all :)
@@ -511,7 +513,42 @@ def ProjectSetting(request):
     project.projectform.save()
     expertId = request.POST['expertId']
     expert = ExpertUser.objects.filter(userId=expertId)
-    project.expert_accepted = expert
+    data = {}
+    if expert.autoAddProject:
+        project.expert_accepted = expert
+        data['addExpert'] = True
+        message="""با سلام
+مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
+با توجه به این که قابلیت پیوستن شما به پروژه‌ها (تنها با / بدون) اجازه شما فراهم است، (از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید / شما به این پروژه اضافه شدید). 
+لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
+در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
+با آرزوی موفقیت، 
+چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
+                    "projectName"  : project.project_title_persian})
+        subject = 'تقاضای پیوستن به پروژه'
+        html_templateForAdmin = get_template('registration/projectRequest_template.html')
+        email_templateForAdmin = html_templateForAdmin.render({'message': message})
+        email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                    to=[expert.user.get_username(), "sepehr.metanat@gmail.com"])
+        email.attach_alternative(email_templateForAdmin, 'text/html')
+        email.send()
+        # try:
+        #     send_mail(
+        #         subject=subject,
+        #         message=message,
+        #         from_email=settings.EMAIL_HOST_USER,
+        #         recipient_list=[expert.user.get_username(), "sepehr.metanat@gmail.com", ],
+        #         fail_silently=False
+        #     )
+        # except TimeoutError:
+        #     return HttpResponse('Timeout Error!!')
+        newMessage = Message(title=subject,
+                            text=message,
+                            type=0)
+        newMessage.save()
+        newMessage.receiver.add(expert)
+    else: 
+        data['addExpert'] = False
     project.save()
     return JsonResponse(data={})
 
