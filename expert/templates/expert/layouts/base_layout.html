@@ -44,7 +44,8 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="feedbackEmail">پست الکترونیکی</label>
-                        <input type="email" name='email' class="form-control" id="feedbackEmail" aria-describedby="emailHelp">
+                        <input type="email" name='email' class="form-control" id="feedbackEmail"
+                               aria-describedby="emailHelp">
                     </div>
                     <div class="form-group">
                         <label for="feedbackOpinion">متن مشکل</label>
@@ -60,7 +61,8 @@
 </div>
 <div class="main">
     <div class="top-bar">
-        <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam">
+        <img src="{% static 'expert/img/logoName.png' %}" alt="chamranTeam" id="maxLogo">
+        <img src="{% static 'img/logo.png' %}" alt="chamranTeam" id="minLogo">
         <div class="dropdown">
             <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
                 {% if request.user.expertuser.expertform.photo %}
@@ -81,8 +83,14 @@
             </ul>
         </div>
         <div class="feed-back">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#feedbackModal">
-                <i class="fas fa-edit"></i>
+            <button type="button" class="btn" data-toggle="modal" data-target="#feedbackModal">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-left-text" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"></path>
+                    <path fill-rule="evenodd"
+                          d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"></path>
+                </svg>
             </button>
         </div>
         <a href="#" id="toggle"><span></span></a>
@@ -126,14 +134,14 @@
                  height="150px">
         {% endif %}
         <h5>{% block name %}{% endblock %}</h5>
-{#        <p dir="rtl" class="scoreDiv text-right">امتیاز:#}
-{#            <span>{{ request.user.expertuser.expert_point|default:0 }}</span>/10</p>#}
-{#        <div class="progress">#}
-{#            <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0"#}
-{#                 aria-valuemax="100" style="width: {{ request.user.expertuser.score }}px">#}
-{#                <span class="sr-only">{{ score|default:0 }}% completed</span>#}
-{#            </div>#}
-{#        </div>#}
+        {#        <p dir="rtl" class="scoreDiv text-right">امتیاز:#}
+        {#            <span>{{ request.user.expertuser.expert_point|default:0 }}</span>/10</p>#}
+        {#        <div class="progress">#}
+        {#            <div class="progress-bar" role="progressbar" aria-valuenow="{{ score|default:0 }}" aria-valuemin="0"#}
+        {#                 aria-valuemax="100" style="width: {{ request.user.expertuser.score }}px">#}
+        {#                <span class="sr-only">{{ score|default:0 }}% completed</span>#}
+        {#            </div>#}
+        {#        </div>#}
         <div class="hr"></div>
         <ul class="list-group">
             {% url 'expert:index' as index_url %}

@@ -1468,10 +1468,21 @@ hr {
     transition: 0.2s ease all;
 }
 
+.top-bar > img#minLogo {
+    display: none;
+}
+
 @media (max-width: 767px) {
-    .top-bar > img {
+    .top-bar > img#minLogo {
         right: auto;
         left: 10px;
+        display: block;
+        height: 62px;
+        width: 65px;
+    }
+
+    .top-bar > img#maxLogo {
+        display: none;
     }
 }
 
@@ -1489,6 +1500,18 @@ hr {
     transform: translate(0, -50%);
     color: #707070;
     font-size: 20px;
+}
+
+.top-bar > .feed-back button {
+    font-size: 1.25rem;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.top-bar > .feed-back button:hover {
+    background-color: #F8FDF7;
+    color: #3ccd1c;
 }
 
 .top-bar > .dropdown {
