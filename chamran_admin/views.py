@@ -320,7 +320,13 @@ class SignupUser(generic.FormView):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
-        context= """با سلام،
+        try:            
+            message = Message.objects.filter(title="خوش آمدگویی")
+        except:
+            message = None
+        if message is None:
+
+            context= """با سلام،
 به چمران‌تیم خوش آمدید.
 امیدواریم در کنار شما، بتوانیم قدمی هر چند کوچک برداریم برای کاربردی و صنعتی شدن پژوهش‌ها در کشور.
 لطفا برای آشنایی بیشتر با امکانات حساب کاربری‌تان، قسمت‌های مختلف آن را از طریق منوی سمت راست، بررسی بفرمایید.
@@ -328,11 +334,13 @@ class SignupUser(generic.FormView):
 به همین منظور، می‌توانید برای انتقال تجربیات کاربری و یا پیشنهادهای‌تان، می‌توانید از طریق شماره تلفن 09102143451 و یا فرم ارسال گزارش (تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) با ما در ارتباط باشید.
 با آرزوی موفیت،
 چمران‌تیم """
-        message = Message(title="خوش آمدگویی",
-                          text=context,
-                          type=0)
-        message.save() 
-        message.receiver.add(user)
+            message = Message(title="خوش آمدگویی",
+                            text=context,
+                            type=0)
+            message.save() 
+        else:
+            message.receiver.add(user)
+            message.save()
         if account_type == 'researcher':
             researcher = ResearcherUser.objects.create(user=user)
             Status.objects.create(researcher_user=researcher)

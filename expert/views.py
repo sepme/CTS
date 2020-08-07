@@ -639,9 +639,15 @@ def set_answer_situation(request):
 با آرزوی موفقیت،
 چمران‌تیم"""
         messageType = 1
-    message = Message(title=title,
-                      text=text,
-                      type=messageType)
+    try:
+        message = Message.objects.filter(title=title)
+    except:
+        message = None
+    if message is None:
+        message = Message(title=title,
+                          text=text,
+                          type=messageType)
+        message.save()
     message.receiver.add(answer.researcher.user)
     message.save()
     html_templateForAdmin = get_template('registration/projectRequest_template.html')
