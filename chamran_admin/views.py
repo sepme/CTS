@@ -39,6 +39,7 @@ def get_message_detail(request, message_id):
     if message.attachment:
         attachment = message.attachment.url[message.attachment.url.find('media', 2):]
     return JsonResponse({
+        'id' : message.id,
         'text': message.text,
         'date': jalali_date(JalaliDate(message.date)),
         'title': message.title,

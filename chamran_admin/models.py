@@ -33,7 +33,7 @@ def newsPicture(instance, file_name):
 
 
 class Message(models.Model):
-    code  = models.UUIDField(verbose_name='کد پیام', default=uuid.uuid4, primary_key=True)
+    code  = models.UUIDField(verbose_name='کد پیام', default=uuid.uuid4, unique=True)
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
     text  = models.TextField(verbose_name="متن پیام")
     date  = models.DateField(auto_now_add=True, null=True)
