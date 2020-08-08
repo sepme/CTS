@@ -640,7 +640,7 @@ def set_answer_situation(request):
 چمران‌تیم"""
         messageType = 1
     try:
-        message = Message.objects.filter(title=title)
+        message = Message.objects.filter(title=title).first()
     except:
         message = None
     if message is None:

@@ -321,7 +321,7 @@ class SignupUser(generic.FormView):
         user.set_password(password)
         user.save()
         try:            
-            message = Message.objects.filter(title="خوش آمدگویی")
+            message = Message.objects.filter(title="خوش آمدگویی").first()
         except:
             message = None
         if message is None:
