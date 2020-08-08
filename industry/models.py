@@ -114,12 +114,16 @@ class IndustryForm(models.Model):
     def save(self, *args, **kwargs):
         if self.id:
             perv = IndustryForm.objects.get(id=self.id)
-            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
-                self.photo = self.compressImage(self.photo)
-        else:
-            self.photo = self.compressImage(self.photo)
+            if perv.photo.name:
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+                    self.photo = self.compressImage(self.photo)
+                else:
+                    self.photo = self.compressImage(self.photo)
+            else:
+                if self.photo.name:
+                    self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
-
+ 
     def compressImage(self, photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
