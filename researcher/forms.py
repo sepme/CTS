@@ -123,41 +123,16 @@ class ResearcherProfileForm(forms.ModelForm):
                   'entry_year', 'student_number', 'address', 'home_number', 'phone_number',
                   'team_work', 'creative_thinking', 'interest_in_major', 'motivation',
                   'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
-                  'project_knowledge', 'description', 'photo','sacrifice','email',
+                  'project_knowledge', 'description', 'photo','sacrifice','email','resume'
                   ]
         # error_messages= {}
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['address'].required = False
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]
-        return data
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-    
-        return email
-
-    def clean_fullname(self):
-        data = self.cleaned_data["fullname"]
-        return data
-
-    def clean_major(self):
-        major = self.cleaned_data.get('major')
-        return major
-
-    def clean_national_code(self):
-        data = self.cleaned_data["national_code"]
-        return data
-
-    def clean_grade(self):
-        data = self.cleaned_data["grade"]
-        return data
-
-    def clean_university(self):
-        data = self.cleaned_data["university"]
         return data
 
     def clean_entry_year(self):
@@ -169,12 +144,12 @@ class ResearcherProfileForm(forms.ModelForm):
             raise ValidationError(_("سال را اشتباه وارد کرده اید."))
         return data
 
-    def clean_address(self):
-        data = self.cleaned_data["address"]
-        return data
-
     def clean_student_number(self):
         data = self.cleaned_data["student_number"]
+        try:
+            int(data)
+        except ValueError:
+            raise forms.ValidationError('شماره دانشجویی باید یک عدد باشد.')
         return data
 
     def clean_home_number(self):
@@ -199,50 +174,6 @@ class ResearcherProfileForm(forms.ModelForm):
         if len(phone_number) != 11:
             raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
         return phone_number
-
-    def clean_team_work(self):
-        data = self.cleaned_data["team_work"]
-        return data
-
-    def clean_creative_thinking(self):
-        data = self.cleaned_data["creative_thinking"]
-        return data
-
-    def clean_interest_in_major(self):
-        data = self.cleaned_data["interest_in_major"]
-        return data
-
-    def clean_motivation(self):
-        data = self.cleaned_data["motivation"]
-        return data
-
-    def clean_sacrifice(self):
-        data = self.cleaned_data["sacrifice"]
-        return data
-
-    def clean_diligence(self):
-        data = self.cleaned_data["diligence"]
-        return data
-
-    def clean_interest_in_learn(self):
-        data = self.cleaned_data["interest_in_learn"]
-        return data
-
-    def clean_punctuality(self):
-        data = self.cleaned_data["punctuality"]
-        return data
-
-    def clean_data_collection(self):
-        data = self.cleaned_data["data_collection"]
-        return data
-
-    def clean_project_knowledge(self):
-        data = self.cleaned_data["project_knowledge"]
-        return data
-
-    def clean_description(self):
-        data = self.cleaned_data["description"]
-        return data
 
 
 class InitialInfoForm(forms.ModelForm):
@@ -498,11 +429,7 @@ class StudiousRecordForm(forms.ModelForm):
         if has_number(data):
             raise ValidationError(_("مسئول اجرا / همکار نمی تواند شامل عدد باشد."))
         return data
-    
-    def clean_status(self):
-        data = self.cleaned_data["status"]
-        
-        return data
+
 
 class TechniqueInstanceForm(forms.Form):
     technique = forms.CharField(max_length=100 ,empty_value='None')

@@ -377,6 +377,21 @@ scientificForm.submit(function (event) {
     let $thisURL = scientificForm.attr('url');
     let data = $(this).serialize().toString();
     scientificForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+    $("input#edu-section").removeClass("error").css("color", "").prev().css("color", "");
+    $(".edu-section").find("div.error").remove();
+
+    $("input#edu-subject").removeClass("error").css("color", "").prev().css("color", "");
+    $(".edu-subject").find("div.error").remove();
+
+    $("input#university").removeClass("error").css("color", "").prev().css("color", "");
+    $(".university").find("div.error").remove();
+
+    $("input#edu-city").removeClass("error").css("color", "").prev().css("color", "");
+    $(".edu-city").find("div.error").remove();
+
+    $("input#year").removeClass("error").css("color", "").prev().css("color", "");
+    $(".year").find("div.error").remove();
+
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -475,6 +490,19 @@ researchForm.submit(function (event) {
     let $thisURL = researchForm.attr('url');
     let data = $(this).serialize().toString();
     researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+    $("input#liable").removeClass("error").css("color", "").prev().css("color", "");
+    $(".liable").find("div.error").remove();
+
+    $("input#subject").removeClass("error").css("color", "").prev().css("color", "");
+    $(".subject").find("div.error").remove();
+
+    $("input#admin").removeClass("error").css("color", "").prev().css("color", "");
+    $(".admin").find("div.error").remove();
+
+    $("input#rank").removeClass("error").css("color", "").prev().css("color", "");
+    $(".rank").find("div.error").remove();
+
     $.ajax({
         method: 'POST',
         url: $thisURL,
@@ -538,7 +566,7 @@ researchForm.submit(function (event) {
                 $("input#admin").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
             }
             if (obj.status) {
-                $("#rank").closest("div").append("<div class='error'>" +
+                $("#rank").closest("div").append("<div class='rank error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
                     "<li>" + obj.status + "</li>" +
@@ -561,6 +589,21 @@ executive_form.submit(function (event) {
     let $thisURL = executive_form.attr('url');
     let data = $(this).serialize().toString();
     executive_form.find("input").attr("disabled", "true").addClass("progress-cursor");
+    $("input#duty").removeClass("error").css("color", "").prev().css("color", "");
+    $(".duty").find("div.error").remove();
+
+    $("input#from").removeClass("error").css("color", "").prev().css("color", "");
+    $(".from").find("div.error").remove();
+
+    $("input#until").removeClass("error").css("color", "").prev().css("color", "");
+    $(".until").find("div.error").remove();
+
+    $("input#workplace").removeClass("error").css("color", "").prev().css("color", "");
+    $(".workplace").find("div.error").remove();
+
+    $("input#exe-city").removeClass("error").css("color", "").prev().css("color", "");
+    $(".exe-city").find("div.error").remove();
+    
     $.ajax({
         method: 'POST',
         url: $thisURL,

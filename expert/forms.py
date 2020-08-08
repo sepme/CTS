@@ -53,6 +53,8 @@ class InitialInfoForm(forms.ModelForm):
 
     def clean_national_code(self):
         national_code = self.cleaned_data.get('national_code')
+        if national_code is None:
+            raise forms.ValidationError("کد ملی نمی تواند خالی باشد.")
         try:
             int(national_code)
         except ValueError:
@@ -111,28 +113,28 @@ class ExpertInfoForm(forms.ModelForm):
         }
 
     def clean_phone_number(self):
-        home_number = self.cleaned_data.get('phone_number')
-        try:
-            int(home_number)
-        except ValueError:
-            raise forms.ValidationError('شماره تلفن همراه باید یک عدد باشد.')
-
-        if len(home_number) != 11:
-            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
-
-        return home_number
-
-    def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
         try:
             int(phone_number)
         except ValueError:
-            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
+            raise forms.ValidationError('شماره تلفن همراه باید یک عدد باشد.')
 
         if len(phone_number) != 11:
-            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
+            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
 
         return phone_number
+
+    def clean_home_number(self):
+        home_number = self.cleaned_data.get('home_number')
+        try:
+            int(home_number)
+        except ValueError:
+            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
+
+        if len(home_number) != 11:
+            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
+
+        return home_number
     
     def clean_number_of_grants(self):
         data = self.cleaned_data["number_of_grants"]

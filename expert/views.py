@@ -228,7 +228,6 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             expertForm.photo = photo
 
         expertForm.save()
-        print(expertForm.home_address)
         for word in self.request.POST['keywords'].split(','):
             expertForm.keywords.add(Keyword.objects.get_or_create(name=word)[0])
         return super().form_valid(form)

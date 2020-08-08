@@ -376,6 +376,11 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
         industryForm = industry_user.profile
         interface_form = forms.interfacePersonForm(request.POST)
         if interface_form.is_valid():
+            industryForm.interfacePerson.fullname = interface_form.cleaned_data['fullname']
+            industryForm.interfacePerson.position = interface_form.cleaned_data['position']
+            industryForm.interfacePerson.phone_number = interface_form.cleaned_data['phone_number']
+            industryForm.interfacePerson.email = interface_form.cleaned_data['email']
+            industryForm.interfacePerson.save()
             if type(industryForm) == models.RandDProfile:
                 form = forms.RandDInfoForm(request.POST, request.FILES)
                 if form.is_valid():
