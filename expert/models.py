@@ -132,7 +132,8 @@ class ExpertForm(models.Model):
                 if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
                     self.photo = self.compressImage(self.photo)
             else:
-                self.photo = self.compressImage(self.photo)
+                if self.photo.name:
+                    self.photo = self.compressImage(self.photo)
         else:
             if self.photo.name:
                 self.photo = self.compressImage(self.photo)
