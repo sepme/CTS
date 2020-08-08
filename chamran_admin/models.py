@@ -33,7 +33,6 @@ def newsPicture(instance, file_name):
 
 
 class Message(models.Model):
-    code  = models.UUIDField(verbose_name='کد پیام', default=uuid.uuid4, unique=True)
     title = models.CharField(max_length=128, verbose_name="عنوان", default="بدون عنوان")
     text  = models.TextField(verbose_name="متن پیام")
     date  = models.DateField(auto_now_add=True, null=True)
@@ -48,6 +47,7 @@ class Message(models.Model):
     type = models.IntegerField(default=0, choices=MESSAGE_TYPES, verbose_name="نوع")
     attachment = models.FileField(upload_to=upload_to, blank=True, null=True, verbose_name="ضمیمه")
     receiver = models.ManyToManyField(User, verbose_name="گیرندگان")
+    code  = models.UUIDField(verbose_name='کد پیام', default=uuid.uuid4, unique=True)
 
     def __str__(self):
         return self.title
