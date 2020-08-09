@@ -1853,6 +1853,9 @@ button.start-question {
 .dots-timer .timer-item {
     min-width: 300px;
     min-height: 300px;
+    max-width: 300px;
+    max-height: 300px;
+    margin: 0 auto;
 }
 
 .dots-timer .timer-item .circle {
@@ -1873,6 +1876,13 @@ button.start-question {
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+.dots-timer .timer-item .circle-label {
+    font-size: 20px;
+    font-weight: 900;
+    margin-top: -40px;
+    display: block;
 }
 
 .dots-timer .timer-item .circle .circle-dot {
@@ -1916,7 +1926,8 @@ button.start-question {
 }
 
 .main.forbid-background {
-    background-image: url("../img/forbid_img.svg");
-    background-size: cover;
-
+    background-image: url(../img/forbid_img.svg);
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: 1% 97%;
 }
