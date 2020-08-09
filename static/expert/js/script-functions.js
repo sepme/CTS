@@ -612,6 +612,7 @@ function dialog_comment_init() {
     // });
     // attach file to comment
     $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
+        console.log("f-e-615");
         let fileName = $(this).val().split("\\").pop();
         $(".send-comment-container .comment-input .attachment span").html(fileName);
         $(".send-comment-container .comment-input").addClass("attached");

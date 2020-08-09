@@ -29,6 +29,16 @@ function init_windowSize() {
     // }
 }
 
+function returnFileType(type) {
+    type = type.toLowerCase();
+    if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png"
+        || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
+        return type;
+    } else if (type === "jpeg")
+        return "jpg";
+    return "unknown";
+}
+
 function init_dialog_btn(element, dialogClass) {
     $(element).click(function () {
         $(".fixed-back").removeClass("show");
@@ -440,6 +450,7 @@ function show_research_record(pk) {
     $(".studious div#" + $(this).attr("id")).remove();
     record_edit(".studious");
 }
+
 function isOverflow(element) {
     element.each(function () {
         let element = $(this).find("ul");
@@ -460,6 +471,7 @@ function isOverflow(element) {
         }
     });
 }
+
 function dialog_comment_init() {
     $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
         let fileName = $(this).val().split("\\").pop();
