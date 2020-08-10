@@ -185,6 +185,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['research_form']       = forms.ResearchRecordForm()
         context['paper_form']          = forms.PaperRecordForm()
         context['email']               = self.request.user.get_username()
+        context['autoAddProject']      = expertForm.expert_user.autoAddProject
         if expertForm.resume:
             context['resume'] = expertForm.resume
         return context
@@ -195,6 +196,11 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def form_valid(self, form):
         expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
+        if self.request.POST.get('autoAddProject'):
+            expertForm.expert_user.autoAddProject = True
+        else:
+            expertForm.expert_user.autoAddProject = False
+        expertForm.expert_user.save()
         expertForm.university   = form.cleaned_data['university']
         expertForm.home_address = form.cleaned_data['home_address']
         expertForm.home_number  = form.cleaned_data['home_number']

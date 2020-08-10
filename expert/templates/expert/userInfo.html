@@ -133,7 +133,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-5">
                                         <div class="form-group">
                                             <label for="Uni">دانشگاه محل فعالیت</label>
                                             {{ expert_info_form.university|attr:"id:Uni"|attr:"class:w-100" }}
@@ -142,7 +142,7 @@
                                             {#                              <div class="selected_uni"></div>#}
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 rankDiv">
+                                    <div class="col-lg-3 rankDiv">
                                         <div class="form-group">
                                             <label class="rankLabel" for="rank">مرتبه علمی</label>
                                             {#                                <select id="rank" name="scientific_rank">#}
@@ -162,6 +162,14 @@
                                             <div class="error">
                                                 <span class="error-body">{{ form.scientific_rank.errors }}</span>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 autoAddProjectDiv">
+                                        <div class="form-group">
+                                            <div class="text-right">
+                                                <span class="sub-header" style="top: 10px;position: relative;">اضافه شدن خودکار به پروژه</span>
+                                            </div>
+                                            <input type="checkbox" id="autoAddProject" name="autoAddProject" class="w-100" value=1 {% if autoAddProject %}checked{% endif %}>
                                         </div>
                                     </div>
                                 </div>
