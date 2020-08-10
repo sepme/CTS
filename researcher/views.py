@@ -842,7 +842,8 @@ def show_resume_preview(request):
         'grade': researcherProfile.grade,
         'university': researcherProfile.university,
         'entry_year': researcherProfile.entry_year,
-        # 'resume': researcherProfile.resume.url,
+        'resume': researcherProfile.resume.url,
+        'resume_name': researcherProfile.resume.name,
         'techniques': [],
         'scientific_record': serialize('json', models.ScientificRecord.objects.filter(
             researcherProfile=researcherProfile)),
