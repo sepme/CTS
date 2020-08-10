@@ -41,7 +41,7 @@
         </div>
         <a href="#" id="toggle"><span></span></a>
     </div>
-    <div class="container text-center" style="margin: auto">
+    <div class="container text-center" style="margin: auto;overflow: auto;height: 100vh;padding-top: 120px;">
         <div class="forbidden-access">
             <h1 style="color: #E8505B">شما دسترسی به حساب خود ندارید</h1>
             <p style="color: #484848">
@@ -49,21 +49,21 @@
                 خواهشمندیم تا پایان این زمان شکیبا باشید
             </p>
             <div class="dots-timer row" style="direction: ltr!important;">
-                <div class="30-dot-circle timer-item col-md-4" id="day">
+                <div class="30-dot-circle timer-item col-12 col-md-4" id="day">
                     <div class="circle">
-                        <span class="circle-value day">{{day}}</span>
+                        <span class="circle-value day">{{ day }}</span>
                     </div>
                     <span class="circle-label">روز</span>
                 </div>
-                <div class="24-dot-circle timer-item col-md-4" id="hour">
+                <div class="24-dot-circle timer-item col-12 col-md-4" id="hour">
                     <div class="circle">
-                        <span class="circle-value hour">{{hour}}</span>
+                        <span class="circle-value hour">{{ hour }}</span>
                     </div>
                     <span class="circle-label">ساعت</span>
                 </div>
-                <div class="60-dot-circle timer-item col-md-4" id="min">
+                <div class="60-dot-circle timer-item col-12 col-md-4" id="min">
                     <div class="circle">
-                        <span class="circle-value minute">{{minute}}</span>
+                        <span class="circle-value minute">{{ minute }}</span>
                     </div>
                     <span class="circle-label">دقیقه</span>
                 </div>
@@ -145,7 +145,7 @@
         }
     }
 
-    setInterval(update_timer, 60*1000);
+    setInterval(update_timer, 60 * 1000);
 </script>
 </body>
 </html>

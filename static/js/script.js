@@ -88,6 +88,87 @@ function signUp() {
 // $(window).on("load", function () {
 //     input_focus();
 // });
+function sha256(ascii) {
+    function rightRotate(value, amount) {
+        return (value >>> amount) | (value << (32 - amount));
+    }
+
+    let mathPow = Math.pow;
+    let maxWord = mathPow(2, 32);
+    let lengthProperty = 'length';
+    let i, j;
+    let result = '';
+
+    let words = [];
+    let asciiBitLength = ascii[lengthProperty] * 8;
+
+    let hash = sha256.h = sha256.h || [];
+    let k = sha256.k = sha256.k || [];
+    let primeCounter = k[lengthProperty];
+
+    let isComposite = {};
+    for (let candidate = 2; primeCounter < 64; candidate++) {
+        if (!isComposite[candidate]) {
+            for (i = 0; i < 313; i += candidate) {
+                isComposite[i] = candidate;
+            }
+            hash[primeCounter] = (mathPow(candidate, .5) * maxWord) | 0;
+            k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+        }
+    }
+
+    ascii += '\x80';
+    while (ascii[lengthProperty] % 64 - 56) ascii += '\x00';
+    for (i = 0; i < ascii[lengthProperty]; i++) {
+        j = ascii.charCodeAt(i);
+        if (j >> 8) return;
+        words[i >> 2] |= j << ((3 - i) % 4) * 8;
+    }
+    words[words[lengthProperty]] = ((asciiBitLength / maxWord) | 0);
+    words[words[lengthProperty]] = (asciiBitLength);
+
+    for (j = 0; j < words[lengthProperty];) {
+        let w = words.slice(j, j += 16);
+        let oldHash = hash;
+        hash = hash.slice(0, 8);
+
+        for (i = 0; i < 64; i++) {
+            let i2 = i + j;
+            let w15 = w[i - 15], w2 = w[i - 2];
+
+            let a = hash[0], e = hash[4];
+            let temp1 = hash[7]
+                + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25))
+                + ((e & hash[5]) ^ ((~e) & hash[6]))
+                + k[i]
+                + (w[i] = (i < 16) ? w[i] : (
+                    w[i - 16]
+                    + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)
+                        + w[i - 7]
+                        + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))
+                    ) | 0
+                ));
+            let temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22))
+                + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+
+            hash = [(temp1 + temp2) | 0].concat(hash);
+            hash[4] = (hash[4] + temp1) | 0;
+        }
+
+        for (i = 0; i < 8; i++) {
+            hash[i] = (hash[i] + oldHash[i]) | 0;
+        }
+    }
+
+    for (i = 0; i < 8; i++) {
+        for (j = 3; j + 1; j--) {
+            let b = (hash[i] >> (j * 8)) & 255;
+            result += ((b < 16) ? 0 : '') + b.toString(16);
+        }
+    }
+    return result;
+}
+
 $(document).ready(function () {
     if (window.location.href.indexOf("login") !== -1) {
         let owl = $('.owl-carousel').owlCarousel({
@@ -149,84 +230,101 @@ $(document).ready(function () {
     });
 });
 
-let myForm = $('.sign-up-ajax');
-myForm.submit(function (event) {
-    $(".loading").css('display', "block");
-    $(".owl-carousel").css('display', "none");
+let signupForm = $('.sign-up-ajax');
+signupForm.submit(function (event) {
     event.preventDefault();
-    $(".email").find("div.error").remove();
-    $("input#email").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#email").next().css("color", "");
-    $(".captcha-error").html("");
+    $(".owl-carousel").css('display', "none");
+    $(".check-verification-code").css("display", "block");
+});
 
-    // let formData = $(this).serialize().toString();
-    let $thisURL = myForm.attr('data-url');
-    $.ajax({
-        method: 'POST',
-        url: $thisURL,
-        dataType: 'json',
-        data: $(this).serialize().toString(),
-        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        // contentType: 'application/json; charset=utf-8',
-        success: function (data) {
-            $('.circle-loader').toggleClass('load-complete');
-            $('.checkmark').toggle();
-            $('.loading h6').html("<span class='green'>ایمیل با موفقیت ارسال شد!</span>" +
-                "<br><br>" +
-                "<span>جهت تکمیل ثبت نام ایمیل خود را بررسی کنید!</span>");
-        },
-        error: function (data) {
-            console.log(data);
-            $(".loading").css('display', "none");
-            $(".owl-carousel").css('display', "block");
-            let obj = JSON.parse(data.responseText);
-            if (obj.email !== undefined) {
-                $(".email").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.email + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
+$("#verificationBtn").click(function () {
+    if (sha256($("input#IntroductionCode").val()) === "1e74c3aed9796ffe939afea37b5d5f00c35e14be634c0c06d970a902b55d2c25") {
+        $(".check-verification-code").css("display", "none");
+        $(".loading").css('display', "block");
+        $(".email").find("div.error").remove();
+        $("input#email").removeClass("error").css("color", "").prev().css("color", "");
+        $("input#email").next().css("color", "");
+        $(".captcha-error").html("");
+        let formData = signupForm.serialize().toString();
+        let $thisURL = signupForm.attr('data-url');
+        $.ajax({
+            method: 'POST',
+            url: $thisURL,
+            dataType: 'json',
+            data: signupForm.serialize().toString(),
+            // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            // contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $('.circle-loader').toggleClass('load-complete');
+                $('.checkmark').toggle();
+                $('.loading h6').html("<span class='green'>ایمیل با موفقیت ارسال شد!</span>" +
+                    "<br><br>" +
+                    "<span>جهت تکمیل ثبت نام ایمیل خود را بررسی کنید!</span>");
+            },
+            error: function (data) {
+                console.log(data);
+                $(".loading").css('display', "none");
+                $(".owl-carousel").css('display', "block");
+                let obj = JSON.parse(data.responseText);
+                if (obj.email !== undefined) {
+                    $(".email").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.email + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
 
-            // $(".user-type-container").addClass("error-container");
-            if ($(".account_error").text().length !== 0) {
-                $(".account_error").html("");
-            }
-            if (obj.account_type !== undefined) {
-                $(".account_error").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.account_type + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $(".user-type-container").find("label").click(function () {
-                    if ($(this).closest(".user-type-container").hasClass("error-container")) {
-                        $(this).closest(".user-type-container").removeClass("error-container");
-                        $(".account_error").html("");
-                    }
-                });
-                $(".user-type").find("svg > g").attr("fill", "#ff4545");
-                $(".user-type-container").addClass("error-container");
-            }
-            $("#id_captcha_1").find("div.error").remove();
-            if (obj.captcha !== undefined) {
-                $(".captcha-error").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.captcha + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#id_captcha_1").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                $("input#id_captcha_1").next().css("color", "rgb(255, 69, 69)");
-            }
-            display_error(myForm);
-        },
-    })
+                // $(".user-type-container").addClass("error-container");
+                if ($(".account_error").text().length !== 0) {
+                    $(".account_error").html("");
+                }
+                if (obj.account_type !== undefined) {
+                    $(".account_error").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.account_type + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $(".user-type-container").find("label").click(function () {
+                        if ($(this).closest(".user-type-container").hasClass("error-container")) {
+                            $(this).closest(".user-type-container").removeClass("error-container");
+                            $(".account_error").html("");
+                        }
+                    });
+                    $(".user-type").find("svg > g").attr("fill", "#ff4545");
+                    $(".user-type-container").addClass("error-container");
+                }
+                $("#id_captcha_1").find("div.error").remove();
+                if (obj.captcha !== undefined) {
+                    $(".captcha-error").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.captcha + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#id_captcha_1").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    $("input#id_captcha_1").next().css("color", "rgb(255, 69, 69)");
+                }
+                display_error(signupForm);
+            },
+        });
+    } else {
+        iziToast.error({
+            rtl: true,
+            message: "کد وارد شده اشتباه است!",
+            position: 'bottomLeft'
+        });
+    }
+});
+
+$("#backToSignup").click(function () {
+    $(".owl-carousel").css('display', "block");
+    $(".check-verification-code").css("display", "none");
 });
 
 let loginForm = $('.login-ajax');
