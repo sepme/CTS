@@ -58,7 +58,7 @@ $(".preview-project").click(function () {
         dataType: 'json',
         data: {'id': id},
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
+            dialog.find(".project-title").html(data.persian_title  + "<br>" + " (" + data.english_title + ")");
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;//[0].split(",");
@@ -1195,7 +1195,7 @@ $(".my-project").click(function () {
         data: {id: projectId},
         dataType: 'json',
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
+            dialog.find(".project-title").html(data.persian_title  + "<br>" + " (" + data.english_title + ")");
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;

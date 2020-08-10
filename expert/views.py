@@ -134,7 +134,7 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
                     }
                     researchers_applied.append(researcher_applied)
                 appending = {
-                    'project': project.project_form.project_title_persian,
+                    'project': project.project_form.persian_title,
                     'id': project.pk,
                     "researchers_applied": researchers_applied
                 }
@@ -483,8 +483,8 @@ def UsualShowProject(request, project, data):
     data['required_lab_equipment']= project_form.required_lab_equipment
     data['approach']= project_form.approach
     data['deadline']= calculate_deadline(project.date_finished, project.date_submitted_by_industry)
-    data['project_title_persian']= project_form.project_title_persian
-    data['project_title_english']= project_form.project_title_english
+    data['persian_title']= project_form.persian_title
+    data['english_title']= project_form.english_title
     data['research_methodology']= project_form.research_methodology
     data['policy']= project_form.policy
     data['potential_problems']= project_form.potential_problems

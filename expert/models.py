@@ -203,7 +203,7 @@ class PaperRecord(models.Model):
 
 
 class ExpertProjectHistory(models.Model):
-    project_title_english = models.CharField(max_length=128, verbose_name="عنوان مقاله")
+    english_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")
     key_words = models.ManyToManyField('industry.Keyword', verbose_name="کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name="اولویت پروژه")
     project_start_date = models.CharField(max_length=15, verbose_name="تاریخ شروع")
@@ -219,7 +219,7 @@ class ExpertProjectHistory(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
 
     def __str__(self):
-        return "history of " + self.project_title_english
+        return "history of " + self.english_title
 
 
 class IndustryEvaluateExpert(models.Model):

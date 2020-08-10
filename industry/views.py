@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.exceptions import PermissionDenied
 from django.core.files.base import ContentFile
 from django.forms import model_to_dict
 from django.views import generic, View
@@ -98,6 +99,25 @@ def usualShow(request, project):
 
 def ActiveProject(request, project, data):
     data['accepted'] = True
+    industryform = request.user.industryuser.profile
+    data['projectForm'] = model_to_dict(project.project_form)
+    projectDate = {
+     "start":   gregorian_to_numeric_jalali(project.date_start),
+     "firstPhase":   gregorian_to_numeric_jalali(project.date_project_started),
+     "secondPhase":   gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+     "thirdPhase":  gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+     "finished":   gregorian_to_numeric_jalali(project.date_finished),
+    }
+    data['timeScheduling'] = projectDate
+    data['title'] = project.project_form.persian_title
+    data["industry_name"] = industryform.name
+    if industryform.photo:
+        data["industry_logo"] = industryform.photo.url
+    data['enforcer_name'] = str(project.expert_accepted.expertform)
+    data['enforcer_id'] = project.expert_accepted.pk
+    data["executive_info"] = project.executive_info
+    data["budget_amount"] = project.project_form.required_budget
+
     data['comments'] = []
     for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
         try:
@@ -132,27 +152,11 @@ def ActiveProject(request, project, data):
     except:
         pass
 
-    industryform = request.user.industryuser.profile
-    projectDate = [
-        gregorian_to_numeric_jalali(project.date_start),
-        gregorian_to_numeric_jalali(project.date_project_started),
-        gregorian_to_numeric_jalali(project.date_phase_two_deadline),
-        gregorian_to_numeric_jalali(project.date_phase_three_deadline),
-        gregorian_to_numeric_jalali(project.date_finished),
-    ]
-    data['timeScheduling'] = projectDate
-    # data = {
-    data["industry_name"] = industryform.name
-    data["industry_logo"] = industryform.photo.url
-    data['enforcer_name'] = str(project.expert_accepted.expertform)
-    data['enforcer_id'] = project.expert_accepted.pk
-    data["executive_info"] = project.executive_info
-    data["budget_amount"] = project.project_form.required_budget
     data["techniques"] = []
     # }
-    projectRequest = expert_models.ExpertRequestedProject.objects.filter(project=project).filter(
-        expert=project.expert_accepted).first()
-    for technique in projectRequest.required_technique.all():
+    # projectRequest = expert_models.ExpertRequestedProject.objects.filter(project=project).filter(
+    #     expert=project.expert_accepted).first()
+    for technique in project.project_form.techniques.all():
         data["techniques"].append(technique.__str__())
 
     return data
@@ -162,10 +166,11 @@ def ActiveProject(request, project, data):
 @permission_required('industry.be_industry', login_url='/login/')
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
-    data = usualShow(request, project)
-    if project.expert_accepted:
-        ActiveProject(request, project, data)
-    return JsonResponse(data)
+    if project.status == 1 or project.status == 0:
+        data = usualShow(request, project)
+        return JsonResponse(data)
+    else:
+        return JsonResponse(data={"error": "This porjct is accepted by an expert."}, status=400)
 
 
 @permission_required('industry.be_industry', login_url='/login/')
@@ -428,8 +433,8 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     def post(self, request, *args, **kwargs):
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
-            project_title_persian = form.cleaned_data['project_title_persian']
-            project_title_english = form.cleaned_data['project_title_english']
+            persian_title = form.cleaned_data['persian_title']
+            english_title = form.cleaned_data['english_title']
             research_methodology = form.cleaned_data['research_methodology']
             main_problem_and_importance = form.cleaned_data['main_problem_and_importance']
             # predict_profit = form.cleaned_data['predict_profit']
@@ -442,8 +447,8 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             required_method = form.cleaned_data['required_method']
             progress_profitability = form.cleaned_data['progress_profitability']
             potential_problems = form.cleaned_data['potential_problems']
-            new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
-                                                  project_title_english=project_title_english,
+            new_project_form = models.ProjectForm(persian_title=persian_title,
+                                                  english_title=english_title,
                                                   research_methodology=research_methodology,
                                                   main_problem_and_importance=main_problem_and_importance,
                                                   #   predict_profit=predict_profit,
@@ -467,7 +472,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             message = """با سلام و احترام
             کاربر صنعت با نام کاربری {}
             پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
-            با تشکر""".format(request.user.username, project_title_persian, JalaliDate(datetime.date.today()))
+            با تشکر""".format(request.user.username, persian_title, JalaliDate(datetime.date.today()))
             try:
                 send_mail(
                     subject=subject,
@@ -529,7 +534,7 @@ def ProjectSetting(request):
 در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
 با آرزوی موفقیت، 
 چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
-                    "projectName"  : project.project_title_persian})
+                    "projectName"  : project.persian_title})
         subject = 'تقاضای پیوستن به پروژه'
         html_templateForAdmin = get_template('registration/projectRequest_template.html')
         email_templateForAdmin = html_templateForAdmin.render({'message': message})
@@ -564,5 +569,24 @@ def searchUserId(request):
     data = {"expertId": suggestedExperts}
     return JsonResponse(data=data)
 
-def preview_project(request):
-    return render(request, 'industry/preview_project.html', {})
+class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+    template_name = "industry/preview_project.html"
+    permission_required = ('industry.be_industry',)
+    login_url = "/login/"
+
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(models.Project, code=kwargs["code"])
+        if project.industry_creator.user != request.user:
+            raise PermissionDenied
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = get_object_or_404(models.Project, code=kwargs["code"])
+        context = ActiveProject(request=self.request, project=project, data=context)
+        return context
+    
+
+# def show_active_project(request, code):
+#     project = get_object_or_404(models.Project, code=kwargs["code"])
+#     ActiveProject(request)

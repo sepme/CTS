@@ -698,7 +698,7 @@ $(document).ready(function () {
             $(".vote").attr('style', "display: block;");
         else
             $(".vote").attr('style', "display: none;");
-        $(".project-details").find(".card-head").html(data.project_title_persian + "<br>" + ' ( ' + data.project_title_english + ' )');
+        $(".project-details").find(".card-head").html(data.persian_title + "<br>" + ' ( ' + data.english_title + ' )');
         $(".project-details").find(".establish-time .time-body").html(data.date);
         $(".project-details").find(".time-left .time-body").html(data.deadline);
 
@@ -742,7 +742,7 @@ $(document).ready(function () {
                     $('.comment').attr('id', id);
                     localStorage.setItem("project_id", "" + id);
                     localStorage.setItem("replied_text", null);
-                    dialog.find(".modal-header .modal-title").html(data.project_title_persian + "<br>" + data.project_title_english);
+                    dialog.find(".modal-header .modal-title").html(data.persian_title + "<br>" + data.english_title);
                     dialog.find(".establish-time .time-body").html(data.submission_date);
                     dialog.find(".time-left .time-body").html(data.deadline);
                     for (let i = 0; i < data.key_words.length; i++) {

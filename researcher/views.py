@@ -107,7 +107,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 continue
             temp = {
                 'PK': project.pk,
-                'project_title': project.project_form.project_title_persian,
+                'project_title': project.project_form.persian_title,
                 'keyword': project.project_form.key_words.all(),
                 'started': date_last(datetime.date.today(), project.date_start),
                 'finished': date_last(datetime.date.today(), project.date_finished),
@@ -116,7 +116,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             new_project_list.append(temp)
         for project in missedProjects:
             temp = {
-                'project_title': project["project"].project_form.project_title_persian,
+                'project_title': project["project"].project_form.persian_title,
                 'keyword': project["project"].project_form.key_words.all(),
                 'started': date_last(datetime.date.today(), project["project"].date_start),
                 'finished': date_last(datetime.date.today(), project["project"].date_finished),
@@ -149,9 +149,9 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         my_project_list = []
         if len(my_projects) != 0:
             evaluation_history = models.ResearcherEvaluation.objects.filter(
-                project_title=my_projects[0].project_form.project_title_english)
+                project_title=my_projects[0].project_form.english_title)
             for project in my_projects:
-                title = project.project_form.project_title_english
+                title = project.project_form.english_title
                 status = "در حال بررسی"
                 if researcher in project.researcher_accepted.all():
                     status = "قبول"
@@ -159,7 +159,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     status = "رد شده"
                 temp = {
                     'PK': project.pk,
-                    'project_title': project.project_form.project_title_persian,
+                    'project_title': project.project_form.persian_title,
                     'keyword': project.project_form.key_words.all(),
                     'started': date_last(datetime.date.today(), project.date_start),
                     'finished': date_last(datetime.date.today(), project.date_finished),
@@ -732,7 +732,7 @@ def MyProject(request):
             'attachment': url
         }
         json_response['comments'].append(temp)
-    title = project.project_form.project_title_english
+    title = project.project_form.english_title
     evaluation_history = models.ResearcherEvaluation.objects.filter(project_title=title)
     json_response['vote'] = "false"
     if datetime.date.today() > project.date_finished:
