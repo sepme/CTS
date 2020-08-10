@@ -24,7 +24,7 @@ from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment
 
-LOCAL_URL = 'chamranteambot.pythonanywhere.com'
+LOCAL_URL = 'chamranteam.ir'
 
 
 def jalali_date(jdate):
@@ -39,6 +39,7 @@ def get_message_detail(request, message_id):
     if message.attachment:
         attachment = message.attachment.url[message.attachment.url.find('media', 2):]
     return JsonResponse({
+        'id' : message.id,
         'text': message.text,
         'date': jalali_date(JalaliDate(message.date)),
         'title': message.title,
@@ -319,13 +320,27 @@ class SignupUser(generic.FormView):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
-        context= """با عرض سلام و احترام
-        \t هيأت مدیره شرکت چمران تیم ورود شما را به خانواده بزرگ شرکت گرامی می دارد. """
-        message = Message(title="خوش آمدگویی",
-                          text=context,
-                          type=0)
-        message.save() 
-        message.receiver.add(user)
+        try:            
+            message = Message.objects.filter(title="خوش آمدگویی").first()
+        except:
+            message = None
+        if message is None:
+
+            context= """با سلام،
+به چمران‌تیم خوش آمدید.
+امیدواریم در کنار شما، بتوانیم قدمی هر چند کوچک برداریم برای کاربردی و صنعتی شدن پژوهش‌ها در کشور.
+لطفا برای آشنایی بیشتر با امکانات حساب کاربری‌تان، قسمت‌های مختلف آن را از طریق منوی سمت راست، بررسی بفرمایید.
+با توجه به این که نسخه فعلی این سامانه، نسخه آزمایشی‌ست، برای ارتقای هر چه بیشتر قابلیت‌ها و امکانات، نیازمند حضور گرم و پرشور شما هستیم.
+به همین منظور، می‌توانید برای انتقال تجربیات کاربری و یا پیشنهادهای‌تان، می‌توانید از طریق شماره تلفن 09102143451 و یا فرم ارسال گزارش (تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) با ما در ارتباط باشید.
+با آرزوی موفیت،
+چمران‌تیم """
+            message = Message(title="خوش آمدگویی",
+                            text=context,
+                            type=0)
+            message.save() 
+        else:
+            message.receiver.add(user)
+            message.save()
         if account_type == 'researcher':
             researcher = ResearcherUser.objects.create(user=user)
             Status.objects.create(researcher_user=researcher)

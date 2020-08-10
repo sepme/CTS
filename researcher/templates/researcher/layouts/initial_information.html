@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <label for="MelliCode">کد ملی</label>
                                 {% if form.national_code.errors %}
-                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100d dir-ltr"|attr:"placeholder:449****841" }}
+                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100 dir-ltr"|attr:"placeholder:449****841" }}
                                 {% else %}
                                     {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100 dir-ltr"|attr:"placeholder:449****841" }}
                                 {% endif %}

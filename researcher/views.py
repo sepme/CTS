@@ -18,8 +18,9 @@ from django.utils import timezone
 from . import models, forms, persianNumber
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
+from chamran_admin.models import Message
 
-ACCELERATOR = "0Rho8g"
+ACCELERATOR = "384025"
 
 
 def get_url(rawUrl):
@@ -204,8 +205,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status'] = self.request.user.researcheruser.status.status
-        context["form"] = forms.ResearcherProfileForm(self.request.user,
-                                                      instance=self.researcherProfile,
+        context["form"] = forms.ResearcherProfileForm(instance=self.researcherProfile,
                                                       initial={
                                                           'grade':
                                                               self.researcherProfile.grade,
@@ -218,7 +218,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
         return context
 
     def post(self, request, *args, **kwargs):
-        form = forms.ResearcherProfileForm(self.request.user, request.POST, request.FILES,
+        form = forms.ResearcherProfileForm(request.POST, request.FILES,
                                            #    initial={
                                            #        'grade':
                                            #            self.request.user.researcheruser.researcherprofile.grade})
@@ -304,7 +304,7 @@ def ajax_ExecutiveRecord(request):
         }
         return JsonResponse(data)
     else:
-        print("error happened")
+        print("error happened in Executive Form")
         return JsonResponse(form.errors, status=400)
 
 
@@ -464,6 +464,27 @@ class Question(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
         researcherStatus = request.user.researcheruser.status
         if 'accelerator' in request.POST.keys() and researcherStatus.status != 'deactivated':
             if request.POST['accelerator'] == ACCELERATOR:
+                title = "تایید سوال پژوهشی"
+                text =  """با سلام،
+پژوهشگر گرامی، پاسخ سوال پژوهشی شما پذیرفته شد.
+به این ترتیب، پیوستن شما به مجموعه پژوهشگران «چمران‌تیم» را تبریک می‌گوییم و امیدواریم شاهد پیشرفت شما در زمینه پژوهش باشیم.
+از این پس می‌توانید از طریق قسمت «پروژه‌ها» برای شرکت در پروژه‌های تعریف‌شده توسط مجموعه‌های پژوهشی، درخواست ارسال کنید. 
+البته در نظر داشته باشید که برای شرکت در هر پروژه‌ای، لازم است مهارت‌های پژوهشی آن پروژه را قبلا کسب کرده باشید. به همین خاطر، توصیه می‌کنیم به قسمت «مهارت‌های پژوهشی» حساب کاربری‌تان هم سر بزنید و با افزایش تعداد مهارت‌های‌تان، شانس خود را برای شرکت در پروژه‌ها افزایش دهید.
+همچنین، با تکمیل یا بارگذاری رزومه علمی‌تان از طریق قسمت «اطلاعات کاربری»، می‌توانید توانمندی‌های خود را در هنگام انتخاب شدن‌تان توسط استاد و یا مجموعه پژوهشی، نشان دهید.
+با آرزوی موفقیت، 
+چمران‌تیم"""
+                messageType = 0
+                try:
+                    message = Message.objects.filter(title=title).first()
+                except:
+                    message = None
+                if message is None:
+                    message = Message(title=title,
+                                      text=text,
+                                      type=messageType)
+                    message.save()
+                message.receiver.add(request.user)
+                message.save()
                 researcherStatus.status = 'free'
                 researcherStatus.save()
                 return HttpResponseRedirect(reverse('researcher:index'))
@@ -566,8 +587,6 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
                 question.save()
                 request.user.researcheruser.status.status = 'wait_for_result'
                 request.user.researcheruser.status.save()
-            else:
-                print(request.FILES)
         return HttpResponseRedirect(reverse("researcher:question-show", kwargs={"question_id": uuid_id}))
 
 

@@ -28,7 +28,7 @@ def get_attachment_path(instance, filename):
 
 class ExpertUser(models.Model):
     user   = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
-    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True, null=True)
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", blank=True, null=True)
     expert_point = models.FloatField(verbose_name="امتیاز استاد", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
@@ -132,7 +132,8 @@ class ExpertForm(models.Model):
                 if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
                     self.photo = self.compressImage(self.photo)
             else:
-                self.photo = self.compressImage(self.photo)
+                if self.photo.name:
+                    self.photo = self.compressImage(self.photo)
         else:
             if self.photo.name:
                 self.photo = self.compressImage(self.photo)

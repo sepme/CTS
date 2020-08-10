@@ -33,7 +33,7 @@ delete the Project object and only keep its main information in a ProjectHistory
 
 class IndustryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر صنعت")
-    userId = models.CharField(max_length=50, verbose_name="ID کاربر", unique=True, blank=True, null=True)
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", blank=True, null=True)
     industry_points = models.FloatField(verbose_name="امتیاز صنعت", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
@@ -114,12 +114,17 @@ class IndustryForm(models.Model):
     def save(self, *args, **kwargs):
         if self.id:
             perv = IndustryForm.objects.get(id=self.id)
-            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
-                self.photo = self.compressImage(self.photo)
+            if perv.photo.name:
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+                    self.photo = self.compressImage(self.photo)
+            else:
+                if self.photo.name:
+                    self.photo = self.compressImage(self.photo)
         else:
-            self.photo = self.compressImage(self.photo)
+            if self.photo.name:
+                self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
-
+ 
     def compressImage(self, photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
@@ -173,7 +178,8 @@ class RandDProfile(models.Model):
                 if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
                     self.photo = self.compressImage(self.photo)
             else:
-                self.photo = self.compressImage(self.photo)
+                if self.photo.name:
+                    self.photo = self.compressImage(self.photo)
         else:
             if self.photo.name:
                 self.photo = self.compressImage(self.photo)
@@ -215,7 +221,8 @@ class ResearchGroupProfile(models.Model):
                 if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
                     self.photo = self.compressImage(self.photo)
             else:
-                self.photo = self.compressImage(self.photo)
+                if self.photo.name:
+                    self.photo = self.compressImage(self.photo)
         else:
             if self.photo.name:
                 self.photo = self.compressImage(self.photo)
