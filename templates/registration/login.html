@@ -16,6 +16,23 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     {#    <link rel="stylesheet" href="{% static 'css/style1.css' %}">#}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #EAEDF0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B3C0CE;
+        }
+    </style>
 </head>
 <body>
 {#{% include 'registration/loading.html' %}#}
@@ -30,6 +47,24 @@
                     <div class="checkmark draw"></div>
                 </div>
                 <h6>لطفا صبر کنید ...</h6>
+            </div>
+            <div class="col-12 check-verification-code">
+                <h6 class="text-right mb-3">کد معرفی</h6>
+                <p class="text-right">
+                    برای تکمیل ثبت نام لازم است ابتدا کد معرفی خود را در این قسمت وارد کنید.
+                </p>
+                <div class="form-group text-center ml-auto mr-auto">
+                    <label for="IntroductionCode"></label>
+                    <input type="text" class="code-input text-center w-100" id="IntroductionCode" placeholder="abcdef"
+                           maxlength="6">
+                </div>
+                <button class="Enter-btn" id="verificationBtn">
+                    <span>اعتبارسنجی</span>
+                </button>
+                <hr>
+                <div id="backToSignup">
+                    بازگشت
+                </div>
             </div>
             <div class="owl-carousel owl-theme">
                 <div class="item">
@@ -63,7 +98,8 @@
                           data-url="{% url 'chamran:signup_email' %}">
                         <h6 class="text-right">ساخت حساب کاربری</h6>
                         <div class="user-type-container">
-                            <input type="radio" name="account_type" id="researcher" value="researcher">
+                            <input class="d-none" type="radio" name="account_type" id="researcher" value="researcher"
+                                   required>
                             <label for="researcher" class="user-type researcher text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="512px" viewBox="-78 0 1168 1168.7498"
                                      width="512px" style="user-select: auto;">
@@ -81,7 +117,7 @@
                                 </svg>
                                 <span>پژوهشگر</span>
                             </label>
-                            <input type="radio" name="account_type" id="expert" value="expert">
+                            <input class="d-none" type="radio" name="account_type" id="expert" value="expert" required>
                             <label for="expert" class="user-type expert text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="512px" viewBox="-78 0 1168 1168.7498"
                                      width="512px" style="user-select: auto;">
@@ -102,7 +138,8 @@
                                 </svg>
                                 <span>استاد</span>
                             </label>
-                            <input type="radio" name="account_type" id="industry" value="industry">
+                            <input class="d-none" type="radio" name="account_type" id="industry" value="industry"
+                                   required>
                             <label for="industry" class="user-type industry text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                      version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 512 512"
@@ -148,20 +185,21 @@
                         <div class="account_error"></div>
                         <div class="email input-compact">
                             <label for="email">پست الکترونیکی</label>
-                            {{ register_form.email|attr:"id:email"|attr:"class:w-100"|attr:"placeholder:example@domain.com"|attr:"data-toggle:tooltip"|attr:"data-html:true"|attr:"title:<h6 dir='rtl'>توجه!</h6><p style='text-align: justify;direction:rtl'>پس از ثبت نام این ایمیل نام کاربری شما خواهد بود و به هیچ وجه قابل تغییر نیست، فلذا ایمیل معتبری را در اینجا وارد کنید</p>" }}
+                            {{ register_form.email|attr:"id:email"|attr:"class:w-100"|attr:"placeholder:example@domain.com"|attr:"data-toggle:tooltip"|attr:"data-html:true"|attr:"title:<h6 dir='rtl'>توجه!</h6><p style='text-align: justify;direction:rtl'>پس از ثبت نام این ایمیل نام کاربری شما خواهد بود و به هیچ وجه قابل تغییر نیست، فلذا ایمیل معتبری را در اینجا وارد کنید</p>"|attr:"required" }}
                             <i class="fas fa-at fa-lg"></i>
                         </div>
                         <div class="captcha-test">
                             <span id="refresh-captcha">
                                 <i class="fas fa-sync-alt"></i>
                             </span>
-                            {{ register_form.captcha | attr:"class:w-100"| attr:"placeholder:کد را وارد کنید" }}
+                            {{ register_form.captcha | attr:"class:w-100"| attr:"placeholder:کد را وارد کنید"|attr:"required" }}
                             <div class="captcha-error"></div>
                             <button type="submit" name="sign_up" class="Enter-btn">عضویت</button>
                             <hr>
                             <div class="prev-slide">
                                 وارد شوید
                             </div>
+                        </div>
                     </form>
                 </div>
             </div>
