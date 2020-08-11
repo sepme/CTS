@@ -2890,9 +2890,11 @@ div.no-project {
 }
 
 div.no-project p {
-    font-size: 13px;
     display: inline;
     line-height: 30px;
+    font-weight: 500;
+    font-size: 1.1em;
+    color: #707070;
 }
 
 div.no-project h4 {
@@ -3730,6 +3732,11 @@ div.no-project > span.disable-border-button {
 
 .box .box-body .project-techniques span.show-all:hover, .custom-techniques span.show-all:hover {
     cursor: pointer;
+}
+
+.box .box-body .project-techniques span.missed-technique {
+    background-color: #ff4545;
+    color: #ffffff;
 }
 
 @media (min-width: 992px) {

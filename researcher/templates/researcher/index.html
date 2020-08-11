@@ -41,7 +41,7 @@
     </div>
     <div class="row">
         <div class="col-lg-12 text-right">
-            <div class="project-info-tabs">
+            <div class="project-info-tabs mb-3">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                      aria-orientation="vertical">
                     <a class="nav-link active fs-15" id="new-projects" data-toggle="pill"
@@ -54,7 +54,7 @@
                     </a>
                     <a class="nav-link fs-15" id="missed-project" data-toggle="pill"
                        role="tab" aria-selected="false">
-                        پروژه‌های غیرقابل‌‌دسترسی
+                        پروژه‌های غیرقابل‌‌دسترس
                     </a>
                     <a class="nav-link fs-15" id="done-project" data-toggle="pill"
                        role="tab" aria-selected="false">
@@ -235,28 +235,13 @@
                     {#                        </button>#}
                     {#                    </div>#}
                 {% empty %}
-                    <div class="no-project-container">
-                        <div class="no-project">
-                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
-                            <h4>متاسفانه، هنوز پروژه ای متناسب با تکنیک های ثبت شده شما، ارائه نشده!</h4>
-                            <p>می توانید تکنیک های بیشتر را از طریق</p>
-                            <a href="https://www.aparat.com/chamran_team">
-                                <i class="aparat-ico"></i>
-                                <span>Chamran_Team</span>
-                            </a>
-                            <p>یاد بگیرید و در قسمت </p>
-                            <span>
-                                    <i class="fas fa-file-medical"></i>
-                                    <span>تکنیک ها</span>
-                                </span>
-                            <p>آن را ثبت کنید. با این کار شانس بیشتری برای همکاری با اساتید خواهید داشت. </p>
-                            <br>
-                            <p> همچنین با تکمیل رزومه خود از طریق </p>
-                            <span>
-                                    <i class="fas fa-cog"></i>
-                                    <span>اطلاعات کاربری</span>
-                                </span>
-                            <p> می توانید کمک تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>
+                    <div class="col-12 text-center">
+                        <div class="empty-page">
+                            <div class="empty-page-container">
+                                <img src="{% static 'img/packet.svg' %}" alt="">
+                                <h5>درخواست خود را ثبت کنید!</h5>
+                                <pre>برای دسترسی به این قسمت، لازم است ابتدا در تب «جدیدترین پروژه ها» درخواستی برای پروژه دلخواهتان ثبت کنید. سپس شما می توانید در این قسمت آن پروژه را دنبال کنید.</pre>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -303,6 +288,18 @@
                                     </div>
                                 </div>
                                 <div class="col-6">
+                                    <div class="project-techniques">
+                                        <div>
+                                            {% for keyword in project.keyword %}
+                                                {% if keyword in project.missedTechinque %}
+                                                    <span class="missed-technique">{{ keyword.name }}</span>
+                                                {% else %}
+                                                    <span>{{ keyword.name }}</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <span class="show-all" data-toggle="modal" data-target="#previewKeywords">همه</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -320,31 +317,15 @@
                     {#                                class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>#}
                     {#                    </div>#}
                 {% empty %}
-                    {#                    <div class="no-project-container">#}
-                    {#                        <div class="no-project">#}
-                    {#                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">#}
-                    {#                            <h4>متاسفانه، هنوز پروژه ای متناسب با تکنیک های ثبت شده شما، ارائه نشده!</h4>#}
-                    {#                            <p>می توانید تکنیک های بیشتر را از طریق</p>#}
-                    {#                            <a href="https://www.aparat.com/chamran_team">#}
-                    {#                                <i class="aparat-ico"></i>#}
-                    {#                                <span>Chamran_Team</span>#}
-                    {#                            </a>#}
-                    {#                            <p>یاد بگیرید و در قسمت </p>#}
-                    {#                            <span>#}
-                    {#                                    <i class="fas fa-file-medical"></i>#}
-                    {#                                    <span>تکنیک ها</span>#}
-                    {#                                </span>#}
-                    {#                            <p>آن را ثبت کنید. با این کار شانس بیشتری برای همکاری با اساتید خواهید داشت. </p>#}
-                    {#                            <br>#}
-                    {#                            <p> همچنین با تکمیل رزومه خود از طریق </p>#}
-                    {#                            <span>#}
-                    {#                                    <i class="fas fa-cog"></i>#}
-                    {#                                    <span>اطلاعات کاربری</span>#}
-                    {#                                </span>#}
-                    {#                            <p> می توانید کمک تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>#}
-                    {#                        </div>#}
-                    {#                    </div>#}
-                    NO Missed
+                    <div class="col-12 text-center">
+                        <div class="empty-page">
+                            <div class="empty-page-container">
+                                <img src="{% static 'img/packet.svg' %}" alt="">
+                                <h5>پروژه ای خارج از دسترس شما وجود ندارد!</h5>
+                                <pre>در صورتی که پروژه ای وجود داشته باشد که شما فاقد تکنیک های لازم آن باشید، این پروژه ها در این قسمت قرار خواهند گرفت و این کمک را به شما می کند که بتوانید با ارتقا هدفمند تکنیک های خود در پروژه مورد علاقه خود شرکت داشته باشید.</pre>
+                            </div>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
             <div class="tab-content done-project" style="display: none;">
@@ -365,6 +346,16 @@
                                 <span> {{ technique }} , </span>
                             {% endfor %}
             </span>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center">
+                        <div class="empty-page">
+                            <div class="empty-page-container">
+                                <img src="{% static 'img/packet.svg' %}" alt="">
+                                <h5>پروژه تکمیل شده ای ندارید!</h5>
+                                <pre>می توانید در قسمت «جدیدترین پروژه ها» درخواست خود را برای پروژه ثبت کنید و پس از تایید و تکمیل پروژه اطلاعات آنرا در این قسمت مشاهده خواهید کرد.</pre>
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
