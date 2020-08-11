@@ -134,7 +134,7 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
                     }
                     researchers_applied.append(researcher_applied)
                 appending = {
-                    'project': project.project_form.project_title_persian,
+                    'project': project.project_form.persian_title,
                     'id': project.pk,
                     "researchers_applied": researchers_applied
                 }
@@ -185,6 +185,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['research_form']       = forms.ResearchRecordForm()
         context['paper_form']          = forms.PaperRecordForm()
         context['email']               = self.request.user.get_username()
+        context['autoAddProject']      = expertForm.expert_user.autoAddProject
         if expertForm.resume:
             context['resume'] = expertForm.resume
         return context
@@ -195,6 +196,11 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def form_valid(self, form):
         expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
+        if self.request.POST.get('autoAddProject'):
+            expertForm.expert_user.autoAddProject = True
+        else:
+            expertForm.expert_user.autoAddProject = False
+        expertForm.expert_user.save()
         expertForm.university   = form.cleaned_data['university']
         expertForm.home_address = form.cleaned_data['home_address']
         expertForm.home_number  = form.cleaned_data['home_number']
@@ -477,8 +483,8 @@ def UsualShowProject(request, project, data):
     data['required_lab_equipment']= project_form.required_lab_equipment
     data['approach']= project_form.approach
     data['deadline']= calculate_deadline(project.date_finished, project.date_submitted_by_industry)
-    data['project_title_persian']= project_form.project_title_persian
-    data['project_title_english']= project_form.project_title_english
+    data['persian_title']= project_form.persian_title
+    data['english_title']= project_form.english_title
     data['research_methodology']= project_form.research_methodology
     data['policy']= project_form.policy
     data['potential_problems']= project_form.potential_problems

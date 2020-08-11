@@ -1217,7 +1217,7 @@ function setDates(date) {
 }
 
 function projectDetail(data) {
-    $(".project-details").find(".card-head").html(data.project_title_persian + "<br>" + ' ( ' + data.project_title_english + ' )');
+    $(".project-details").find(".card-head").html(data.persian_title + "<br>" + ' ( ' + data.english_title + ' )');
     $(".project-details").find(".establish-time .time-body").html(data.date);
     $(".project-details").find(".time-left .time-body").html(data.deadline);
 
@@ -1319,7 +1319,7 @@ showInfo.click(function (event) {
             $('.ajax-select-techniques').attr('id', project_id);
             if (data.status === "non active") {
                 $(".hidden").attr("style", "display : none;");
-                $("#showProject").find(".modal-header .modal-title").html(data.project_title_persian + "<br>" + data.project_title_english);
+                $("#showProject").find(".modal-header .modal-title").html(data.persian_title + "<br>" + data.english_title);
                 $("#showProject").find(".establish-time .time-body").html(data.date);
                 $("#showProject").find(".time-left .time-body").html(data.deadline);
                 const keys = JSON.parse(data.key_words);

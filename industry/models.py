@@ -150,7 +150,8 @@ class RandDProfile(models.Model):
     industry_user = models.OneToOneField(IndustryUser, blank=True, null=True, on_delete=models.CASCADE,
                                          verbose_name="صنعت")
     interfacePerson = models.OneToOneField("InterfacePerson", verbose_name='شخص رابط', on_delete=models.CASCADE)
-    RandDname = models.CharField(max_length=64, verbose_name="نام شرکت")
+    # RandDname = models.CharField(max_length=64, verbose_name="نام شرکت")
+    name = models.CharField(max_length=64, verbose_name="نام شرکت", null=True)
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     registration_number = models.CharField(max_length=10, verbose_name="شماره ثبت")
     date_of_foundation = models.CharField(max_length=4, verbose_name="تاریخ تاسیس")
@@ -169,7 +170,7 @@ class RandDProfile(models.Model):
     awards_honors = models.TextField(null=True, blank=True, verbose_name="افتخارات")
 
     def __str__(self):
-        return self.RandDname
+        return self.name
 
     def save(self, *args, **kwargs):
         if self.id:
@@ -257,8 +258,8 @@ class Keyword(models.Model):
 
 class ProjectForm(models.Model):
     key_words = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
-    project_title_persian = models.CharField(max_length=128, verbose_name="عنوان پروژه فارسی")
-    project_title_english = models.CharField(max_length=128, verbose_name="عنوان پروژه انگلیسی")
+    persian_title = models.CharField(max_length=128, verbose_name="عنوان پروژه فارسی")
+    english_title = models.CharField(max_length=128, verbose_name="عنوان پروژه انگلیسی")
     research_methodology_choice = (
         (0, 'کیفی'),
         (1, 'کمی'),
@@ -277,7 +278,7 @@ class ProjectForm(models.Model):
     techniques = models.ManyToManyField(Technique, verbose_name="تکنیک های مورد نیاز")
 
     def __str__(self):
-        return self.project_title_english
+        return self.english_title
 
     @property
     def required_technique(self):
@@ -288,6 +289,7 @@ class ProjectForm(models.Model):
 
 class Project(models.Model):
     project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
+    code = models.UUIDField(verbose_name="کد پروژه", default=uuid.uuid4, unique=True)
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
     date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True, blank=True)
     date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True, blank=True)
@@ -333,7 +335,7 @@ class Project(models.Model):
     executive_info = models.TextField(verbose_name="توضیحات اجرایی", null=True, blank=True)
 
     def __str__(self):
-        return self.project_form.project_title_english
+        return self.project_form.english_title
 
     def get_comments(self):
         project_comments = Comment.objects.all().filter(project=self)
@@ -407,7 +409,7 @@ class Comment(models.Model):
 
 
 class ProjectHistory(models.Model):
-    project_title_english = models.CharField(max_length=128)
+    english_title = models.CharField(max_length=128)
     keywords = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name="میزان اهمیت پروژه")
     project_start_date = models.DateField(verbose_name="تاریخ شروع")
@@ -422,7 +424,7 @@ class ProjectHistory(models.Model):
     industry = models.ForeignKey(IndustryUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "history of " + self.project_title_english
+        return "history of " + self.english_title
 
 
 class ExpertEvaluateIndustry(models.Model):

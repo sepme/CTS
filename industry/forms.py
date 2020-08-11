@@ -11,12 +11,12 @@ class RandDBasicInfoForm(forms.ModelForm):
 
     class Meta:
         model = models.RandDProfile
-        fields = ('photo', 'RandDname', 'registration_number', 'date_of_foundation',
+        fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
                   'research_field', 'RandD_type', 'phone_number')
         
         # error_messages = {
         #     'photo'               : { 'required' : 'عکس نمی تواند خالی باشد.'}, 
-        #     'RandDname'                : { 'required' : 'نام نمی تواند خالی باشد.'},
+        #     'name'                : { 'required' : 'نام نمی تواند خالی باشد.'},
         #     'registration_number' : { 'required' : 'شماره ثبت نمی تواند خالی باشد.'},
         #     'date_of_foundation'  : { 'required' : 'شماره تاسیس نمی تواند خالی باشد.'},
         #     'research_field'      : { 'required' : 'حوزه فعالیت را وارد کنید.'},
@@ -26,7 +26,7 @@ class RandDBasicInfoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['RandDname'].required = False
+        self.fields['name'].required = False
         self.fields['photo'].required = False
         self.fields['registration_number'].required = False
         self.fields['date_of_foundation'].required = False
@@ -41,14 +41,14 @@ class RandDBasicInfoForm(forms.ModelForm):
     #         raise ValidationError(_("عکس نمی تواند خالی باشد."))
     #     return data
 
-    def clean_RandDname(self):
-        RandDname = self.cleaned_data.get('RandDname')
-        if RandDname is None or RandDname == '':
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if name is None or name == '':
             raise ValidationError(_("نام نمی تواند خالی باشد."))
-        check_RandDname = models.RandDProfile.objects.filter(RandDname=RandDname).count()
-        if check_RandDname > 0:
+        check_name = models.RandDProfile.objects.filter(name=name).count()
+        if check_name > 0:
             raise ValidationError(_("نام انتخابی شما قبلاانتخاب شده است."))
-        return RandDname
+        return name
 
     def clean_registration_number(self):
         data = self.cleaned_data["registration_number"]
@@ -102,13 +102,13 @@ class RandDInfoForm(forms.ModelForm):
 
     class Meta:
         model = models.RandDProfile
-        fields = ('photo', 'RandDname', 'registration_number', 'date_of_foundation',
+        fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
                   'research_field', 'RandD_type', 'address', 'phone_number',
                   'tax_declaration', 'services_products', 'awards_honors')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['RandDname'].required  = False
+        self.fields['name'].required  = False
         self.fields['photo'].required = False
         self.fields['registration_number'].required = False
         self.fields['date_of_foundation'].required  = False
@@ -283,8 +283,8 @@ class IndustryInfoForm(forms.ModelForm):
 class ProjectForm(forms.Form):
     key_words = forms.CharField(required=False)
     potential_problems = forms.CharField(required=False ,widget=forms.Textarea)
-    project_title_persian = forms.CharField()
-    project_title_english = forms.CharField()
+    persian_title = forms.CharField()
+    english_title = forms.CharField()
     research_methodology_choice = (
         (0, 'کیفی'),
         (1, 'کمی'),
@@ -303,7 +303,7 @@ class ProjectForm(forms.Form):
 
     class Meta:
         fields = [
-            'project_title_persian', 'project_title_english', 'key_words', 'research_methodology',
+            'persian_title', 'english_title', 'key_words', 'research_methodology',
             'main_problem_and_importance', 'progress_profitability', 'required_lab_equipment',
             'approach', 'policy', 'project_phase', 'required_budget', 'required_method',
             'potential_problems',
@@ -311,7 +311,7 @@ class ProjectForm(forms.Form):
     # 'predict_profit',
 
     def clean_project_title_persian(self):
-        data = self.cleaned_data["project_title_persian"]
+        data = self.cleaned_data["persian_title"]
         for item in data:
             if 65 <= ord(item) <= 90:
                 raise ValidationError(_("به فارسی تایپ شود لطفا"))
@@ -320,7 +320,7 @@ class ProjectForm(forms.Form):
         return data
 
     def clean_project_title_english(self):
-        data = self.cleaned_data["project_title_english"]
+        data = self.cleaned_data["english_title"]
         for item in data:
             if 1750 > ord(item) > 1560:
                 raise ValidationError(_("به انگلیسی تایپ شود لطفا"))

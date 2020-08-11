@@ -87,7 +87,7 @@
                             <div class="box-body">
                                 <div class="row mbottom-lg-25 d-block d-lg-none ">
                                     <div class="col-lg-12 text-right">
-                                        <h6>پروژه {{ project.project_form.project_title_persian }}</h6>
+                                        <h6>پروژه {{ project.project_form.persian_title }}</h6>
                                     </div>
                                 </div>
                                 <div class="row" style="direction: ltr!important">
@@ -135,7 +135,7 @@
                                     <div class="col-lg-8 col-xs-9">
                                         <div class="row mbottom-lg-25 d-none d-lg-block ">
                                             <div class="col-lg-12 text-right">
-                                                <h6>پروژه {{ project.project_form.project_title_persian }}</h6>
+                                                <h6>پروژه {{ project.project_form.persian_title }}</h6>
                                             </div>
                                         </div>
                                         <div class="row mbottom-lg-25">
@@ -326,7 +326,7 @@
                             <div class="card box flow-root-display w-100">
                                 <div class="box-header">
                                     <h6>
-                                        {{ project.project_form.project_title_persian }}
+                                        {{ project.project_form.persian_title }}
                                     </h6>
                                     {% calculate_date_past project.date_submitted_by_industry as date_past %}
                                     <div class="data-modified">
@@ -399,7 +399,7 @@
                 {#                    <div class="card active-question flow-root-display w-100">#}
                 {#                        <div class="question-title w-50">#}
                 {#                                            <span class="header">#}
-                {#                                                {{ p.project_form.project_title_persian }}#}
+                {#                                                {{ p.project_form.persian_title }}#}
                 {#                                                <span class="sub-header">#}
                 {#                                                    ( {% calculate_date_past p.date_submitted_by_industry %} قبل )#}
                 {#                                                </span>#}
@@ -443,7 +443,7 @@
                 {#                                {% if forloop.counter0 == 0 %}#}
                 {#                                    <div class="alert"><span>فرم نظرسنجی فعال شده است!</span></div>#}
                 {#                                {% endif %}#}
-                {#                                <span class="header">{{ p.project_form.project_title_persian }} <span#}
+                {#                                <span class="header">{{ p.project_form.persian_title }} <span#}
                 {#                                        class="sub-header"> ( {% calculate_date_past p.date_submitted_by_industry %} قبل ) </span></span>#}
                 {#                                <span><i class="far fa-envelope"></i> پیام ها </span>#}
                 {#                                <span><i#}
@@ -460,7 +460,7 @@
                 {#                    <div class="card active-question flow-root-display">#}
                 {#                        <div class="question-title w-50">#}
                 {#                                            <span class="header">#}
-                {#                                                {{ p.project_form.project_title_persian }}#}
+                {#                                                {{ p.project_form.persian_title }}#}
                 {#                                                <span class="sub-header"> ( {% calculate_date_past p.date_submitted_by_industry %} قبل ) </span>#}
                 {#                                            </span>#}
                 {#                        </div>#}

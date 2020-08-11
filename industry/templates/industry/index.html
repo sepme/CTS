@@ -31,7 +31,7 @@
                 {% if project.status == 0 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <span class="check-status"></span>
                         </div>
                         <div class="box-body">
@@ -50,7 +50,7 @@
                     </div>
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
-                    {#                            <h6> {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                            <h6> {{ project.project_form.persian_title }}</h6>#}
                     {#                            <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>#}
                     {#                            <button class="preview-project default-btn show-btn show-project" type="button"#}
                     {#                                    id="{{ project.id }}">مشاهده#}
@@ -62,7 +62,7 @@
                 {% elif project.status == 1 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
                                 <i class="fas fa-cog"></i>
                             </div>
@@ -92,7 +92,7 @@
                     </div>
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
-                    {#                            <h6> {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                            <h6> {{ project.project_form.persian_title }}</h6>#}
                     {##}
                     {#                            {% if project.industryUnseenCommentCount != 0 %}#}
                     {#                                <div class="employer">#}
@@ -114,7 +114,7 @@
                 {% elif project.status == 2 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
                                 <i class="fas fa-cog"></i>
                             </div>
@@ -163,7 +163,7 @@
                     </div>
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
-                    {#                            <h6> {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                            <h6> {{ project.project_form.persian_title }}</h6>#}
                     {##}
                     {#                            {% if project.industryUnseenCommentCount != 0 %}#}
                     {#                                <div class="employer">#}
@@ -193,7 +193,7 @@
                 {% elif project.status == 3 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <span class="reject-status"></span>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
@@ -236,7 +236,7 @@
                     {#                        <div class="card project-card text-right">#}
                     {#                                <div class="status-line refuse"></div>#}
                     {#                            <h6><i class="fas fa-file-alt"></i>#}
-                    {#                                {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                                {{ project.project_form.persian_title }}</h6>#}
                     {#                            <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>#}
                     {#                            {% if project.expert_accepted %}#}
                     {#                                <div class="employer">#}
@@ -258,7 +258,7 @@
                 {% elif project.status == 4 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <span class="complete-status">
                                 <i class="fas fa-check center-abs fc-white"></i>
                             </span>
@@ -307,7 +307,7 @@
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
                     {#                            <h6><i class="fas fa-file-alt"></i>#}
-                    {#                                {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                                {{ project.project_form.persian_title }}</h6>#}
                     {#                            <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>#}
                     {#                            {% if project.expert_accepted %}#}
                     {#                                <div class="employer">#}

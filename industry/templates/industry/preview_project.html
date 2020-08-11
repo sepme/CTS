@@ -38,7 +38,7 @@
                                 <div class="step-container active">
                                             <span class="step-date">
                                                 <div class="start">
-                                                   1399/05/11
+                                                   {{ timeScheduling.start }}
                                                 </div>
                                             </span>
                                     <span class="step-name">
@@ -47,25 +47,25 @@
                                 </div>
                                 <div class="step-container ">
                                         <span class="step-date">
-                                            <div class="first_phase">1399/05/11</div>
+                                            <div class="first_phase">{{ timeScheduling.firstPhase }}</div>
                                         </span>
                                     <span class="step-name">فاز اول</span>
                                 </div>
                                 <div class="step-container ">
                                         <span class="step-date">
-                                            <div class="second_phase">1399/05/11</div>
+                                            <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
                                         </span>
                                     <span class="step-name">فاز دوم</span>
                                 </div>
                                 <div class="step-container ">
                                         <span class="step-date">
-                                            <div class="third_phase">1399/05/11</div>
+                                            <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
                                         </span>
                                     <span class="step-name">فاز سوم</span>
                                 </div>
                                 <div class="step-container">
                                         <span class="step-date">
-                                            <div class="date_finished">1399/05/11</div>
+                                            <div class="date_finished">{{ timeScheduling.finished }}</div>
                                         </span>
                                     <span class="step-name">اتمام پروژه</span>
                                 </div>
@@ -77,7 +77,7 @@
                         <div class="col-lg-8 col-xs-9">
                             <div class="row mbottom-lg-25 d-none d-lg-block ">
                                 <div class="col-lg-12 text-right">
-                                    <h6>پروژه <span>فلان</span></h6>
+                                    <h6>پروژه <span>{{ title }}</span></h6>
                                 </div>
                             </div>
                             <div class="row mbottom-lg-25">
@@ -92,7 +92,7 @@
                                                             <span>کارفرما</span>
                                                         </div>
                                                         <div id="industry-name">
-                                                            صنعت
+                                                            {{ industry_name }}
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -100,7 +100,7 @@
                                                             <span>مجری</span>
                                                         </div>
                                                         <div id="enforcer-name">
-                                                            من
+                                                            {{ enforcer_name }}
                                                         </div>
                                                     </div>
                                                     <div class="col-12 budget-text">
@@ -108,7 +108,7 @@
                                                             <span>بودجه</span>
                                                         </div>
                                                         <div id="budget-content">
-                                                            <span class="budget-amount">5,000,000</span>
+                                                            <span class="budget-amount">{{ budget_amount }}</span>
                                                             <span>ریال</span>
                                                         </div>
                                                     </div>
@@ -118,15 +118,21 @@
                                                         <div class="pre-header">
                                                             <span>توضیحات اجرایی</span>
                                                         </div>
-                                                        <pre id="executive-info"></pre>
+                                                        <pre id="executive-info">{{ executive_info }}</pre>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="industry-logo-preview">
+                                                {% if industry_logo %}
                                                     <img id="industry_logo"
-                                                         src=""
-                                                         alt="industry-logo">
+                                                         src="{{ industry_logo }}"
+                                                         alt="industry-logo" width="150px" height="150px">
+                                                {% else %}
+                                                    <img id="industry_logo"
+                                                            src="/static/industry/img/profile.jpg"
+                                                            alt="industry-logo" width="150px" height="150px">
+                                                {% endif %}
                                                 </div>
                                                 <div class="budget-section">
                                                     <div class="budget">
@@ -186,20 +192,7 @@
                                                                     تبیین کنید.
                                                                 </div>
                                                                 <div class="answer">
-                                                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                                                    صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها
-                                                                    و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
-                                                                    لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
-                                                                    کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می
-                                                                    باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و
-                                                                    آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با
-                                                                    نرم افزارها شناخت بیشتری را برای طراحان رایانه ای
-                                                                    علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی
-                                                                    ایجاد کرد. در این صورت می توان امید داشت که تمام و
-                                                                    دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به
-                                                                    پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای
-                                                                    اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی
-                                                                    اساسا مورد استفاده قرار گیرد.
+                                                                    {{ projectForm.main_problem_and_importance }}
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -214,20 +207,7 @@
                                                                     درمانی یا ... حاصل می شود؟
                                                                 </div>
                                                                 <div class="answer">
-                                                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                                                    صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها
-                                                                    و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
-                                                                    لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
-                                                                    کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می
-                                                                    باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و
-                                                                    آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با
-                                                                    نرم افزارها شناخت بیشتری را برای طراحان رایانه ای
-                                                                    علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی
-                                                                    ایجاد کرد. در این صورت می توان امید داشت که تمام و
-                                                                    دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به
-                                                                    پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای
-                                                                    اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی
-                                                                    اساسا مورد استفاده قرار گیرد.
+                                                                    {{ projectForm.progress_profitability }}
                                                                 </div>
                                                             </div>
                                                             {% comment %} <div>

@@ -28,26 +28,26 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="id_project_title_persian">عنوان پروژه (به فارسی)</label>
-                                    {% if form.project_title_persian.errors %}
-                                        {% render_field form.project_title_persian class="error w-100" %}
+                                    {% if form.persian_title.errors %}
+                                        {% render_field form.persian_title class="error w-100" %}
                                     {% else %}
-                                        {% render_field form.project_title_persian class="w-100" %}
+                                        {% render_field form.persian_title class="w-100" %}
                                     {% endif %}
                                     <div class="error">
-                                        <span class="error-body">{% render_field form.project_title_persian.errors %}</span>
+                                        <span class="error-body">{% render_field form.persian_title.errors %}</span>
                                     </div> 
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="id_project_title_english">عنوان پروژه (به لاتین)</label>
-                                    {% if form.project_title_english.errors %}
-                                        {% render_field form.project_title_english class="error w-100" %}
+                                    {% if form.english_title.errors %}
+                                        {% render_field form.english_title class="error w-100" %}
                                     {% else %}
-                                        {% render_field form.project_title_english class="w-100" %}
+                                        {% render_field form.english_title class="w-100" %}
                                     {% endif %}
                                     <div class="error">
-                                        <span class="error-body">{% render_field form.project_title_english.errors %}</span>
+                                        <span class="error-body">{% render_field form.english_title.errors %}</span>
                                     </div>
                                 </div>
                             </div>
