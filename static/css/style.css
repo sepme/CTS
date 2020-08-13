@@ -77,6 +77,10 @@ ul.errorlist {
     list-style: none;
 }
 
+ul.errorlist li {
+    direction: rtl;
+}
+
 body {
     direction: ltr;
     background-color: #f8fdf7;
@@ -5366,4 +5370,12 @@ nav[aria-label="breadcrumb"] ol {
     50% {
         font-size: 0.9rem;
     }
+}
+
+.text-danger {
+    color: #ff4545 !important;
+}
+
+.text-success {
+    color: #3ccd1c !important;
 }
