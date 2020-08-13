@@ -79,11 +79,27 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
+                                            <div class="form-group form-group-auto-check">
+                                                <label for="userID">شناسه کاربری</label>
+                                                <input type="text" class="w-100" id="userID">
+                                                <div class="form-group__status">
+                                                    <div class="success-status">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+                                                    <div class="spinner-border text-secondary" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                    <div class="fail-status">
+                                                        <i class="fas fa-times"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="id_national_code">کد ملی</label>
                                                 {% render_field form.national_code class+="w-100" readonly="true" %}
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
