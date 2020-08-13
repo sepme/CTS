@@ -5315,3 +5315,55 @@ nav[aria-label="breadcrumb"] ol {
 .check-verification-code {
     display: none;
 }
+
+.form-group-auto-check input[type="text"] {
+    padding-left: 2.3rem;
+}
+
+.form-group-auto-check .form-group__status {
+    position: absolute;
+    left: 9px;
+    bottom: 9px;
+    z-index: 1;
+}
+
+.form-group-auto-check .form-group__status .spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: none;
+}
+
+.form-group-auto-check .form-group__status.check .spinner-border {
+    display: block;
+}
+
+.form-group-auto-check .form-group__status .success-status {
+    color: #3ccd1c;
+    transform: rotateZ(-45deg);
+    transition: transform 0.3s;
+    visibility: hidden;
+}
+
+.form-group-auto-check .form-group__status.success .success-status {
+    visibility: visible;
+    transform: rotateZ(0);
+}
+
+.form-group-auto-check .form-group__status .fail-status {
+    color: #ff4545;
+    /*transform: rotateZ(-45deg);*/
+    transition: transform 0.3s;
+    display: none;
+}
+
+.form-group-auto-check .form-group__status.fail .fail-status {
+    display: block;
+    animation: zoomInOut 0.5s;
+    /*transform: rotateZ(0);*/
+}
+
+@keyframes zoomInOut {
+    50% {
+        font-size: 0.9rem;
+    }
+}

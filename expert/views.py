@@ -1017,10 +1017,12 @@ def GetResearcherComment(request):
         
     return JsonResponse(data=data)
 
-def checkUserId(request, userId):
-    if ExpertUser.objects.filter(userId=userId).count():
-        return False
-    return True
+def checkUserId(request):
+    if request.is_ajax() and request.method == "POST":
+        user_id = request.POST.get("user_id")
+        if ExpertUser.objects.filter(userId=user_id).count():
+            return JsonResponse({"is_unique": False})
+        return JsonResponse({"is_unique": True})
 
 @permission_required('expert.be_expert', login_url='/login/')
 def CollectData(request):
