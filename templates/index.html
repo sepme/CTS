@@ -327,7 +327,18 @@
 {% endblock %}
 {% block foot %}
     <script type="text/javascript">
-        $('.ct-form-item').click(function () {
-        });
+        $('.ct-form-item').click(function () {});
     </script>
+    {% if messages %}
+        <script type="text/javascript">
+            {% for message in messages %}
+                iziToast.success({
+                    rtl: true,
+                    message: "{{ message|safe }}",
+                    timeout: 999999999,
+                    position: 'bottomLeft'
+                });
+            {% endfor %}
+        </script>
+    {% endif %}
 {% endblock %}

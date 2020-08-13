@@ -15,6 +15,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.template.loader import get_template
 from django.contrib.contenttypes.models import ContentType
+from django.contrib import messages
 
 from persiantools.jdatetime import JalaliDate
 
@@ -426,7 +427,7 @@ class ResetPassword(generic.TemplateView):
                 msg.send()
             except TimeoutError:
                 return Http404('Timeout Error!')
-
+            messages.success(request, 'ایمیلی برای شما ارسال شد! <br> برای ادامه فرایند به ایمیل خود مراجعه کنید!')
             return HttpResponseRedirect(reverse('chamran:home'))
         else:
             return redirect(reverse('chamran:login'))
