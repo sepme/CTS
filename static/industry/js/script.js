@@ -685,6 +685,48 @@ $(document).ready(function () {
         });
     });
 
+    // Check user id
+    if ($("#userID").length) {
+        $("input#userID").on("keyup", function () {
+            console.log("search: ", $(this).val());
+            let thisFormGroup = $(this).closest(".form-group");
+            if ($(this).val()) {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                thisFormGroup.find(".form-group__status").addClass("check");
+                thisFormGroup.find("input").removeClass("error");
+                $.ajax({
+                    method: "POST",
+                    url: "/industry/checkUserId",
+                    data: {"user_id": $(this).val()},
+                    success: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        if (data.is_unique) {
+                            thisFormGroup.find(".form-group__status").addClass("success");
+                        } else {
+                            thisFormGroup.find(".form-group__status").addClass("fail");
+                            thisFormGroup.find("input").addClass("error");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        iziToast.error({
+                            rtl: true,
+                            message: "ارتباط با سرور با مشکل مواجه شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                });
+            } else {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                $(this).removeClass("error");
+            }
+        });
+    }
+
     function setDates(date) {
         $(".project-details .project-progress .start").html(date[0]);
         $(".project-details .project-progress .first_phase").html(date[1]);

@@ -504,10 +504,12 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
         return context
 
 
-def checkUserId(request, userId):
-    if models.IndustryUser.objects.filter(userId=userId).count():
-        return False
-    return True
+def checkUserId(request):
+    if request.is_ajax() and request.method == "POST":
+        user_id = request.POST.get("user_id")
+        if models.IndustryUser.objects.filter(userId=user_id).count():
+            return JsonResponse({"is_unique": False})
+        return JsonResponse({"is_unique": True})
 
 
 def ProjectSetting(request):
