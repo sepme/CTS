@@ -183,7 +183,7 @@ $(document).ready(function () {
                 thisFormGroup.find("input").removeClass("error");
                 $.ajax({
                     method: "POST",
-                    url: "checkUserId",
+                    url: "/expert/checkUserId",
                     data: {"user_id": $(this).val()},
                     success: function (data) {
                         console.log(data);
