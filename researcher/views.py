@@ -874,10 +874,12 @@ def show_resume_preview(request):
     researcher_information['comments'] = comments
     return JsonResponse(researcher_information)
 
-def checkUserId(request, userId):
-    if models.ResearcherUser.objects.filter(userId=userId).count():
-        return False
-    return True
+def checkUserId(request):
+    if request.is_ajax() and request.method == "POST":
+        user_id = request.POST.get("user_id")
+        if models.ResearcherUser.objects.filter(userId=user_id).count():
+            return JsonResponse({"is_unique": False})
+        return JsonResponse({"is_unique": True})
 
 TECHNIQUES = {
     'Polymerase Chain Reaction': 'Molecular Biology',

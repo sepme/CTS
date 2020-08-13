@@ -20,13 +20,28 @@
                             <div class="form-group">
                                 <label for="Fullname">نام و نام خانوادگی</label>
                                 {% if form.fullname.errors %}
-                                {{ form.fullname|attr:"id:Fullname"|attr:"class:error w-100" }}
-                            {% else %}
-                                {{ form.fullname|attr:"id:Fullname"|attr:"class:w-100" }}
-                            {% endif %}
-                            <div class="error">
-                                <span class="error-body">{% render_field form.fullname.errors %}</span>
+                                    {{ form.fullname|attr:"id:Fullname"|attr:"class:error w-100" }}
+                                {% else %}
+                                    {{ form.fullname|attr:"id:Fullname"|attr:"class:w-100" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.fullname.errors %}</span>
+                                </div>
                             </div>
+                            <div class="form-group form-group-auto-check">
+                                <label for="userID">شناسه کاربری</label>
+                                <input type="text" class="w-100" id="userID">
+                                <div class="form-group__status">
+                                    <div class="success-status">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="spinner-border text-secondary" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <div class="fail-status">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="MelliCode">کد ملی</label>
@@ -39,17 +54,17 @@
                                     <span class="error-body">{% render_field form.national_code.errors %}</span>
                                 </div>
                             </div>
-{#                            <div class="form-group">#}
-{#                                <label for="Address">آدرس</label>#}
-{#                                {% if form.address.errors %}#}
-{#                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
-{#                                {% else %}#}
-{#                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
-{#                                {% endif %}#}
-{#                                <div class="error">#}
-{#                                    <span class="error-body">{% render_field form.address.errors %}</span>#}
-{#                                </div>#}
-{#                            </div>#}
+                            {#                            <div class="form-group">#}
+                            {#                                <label for="Address">آدرس</label>#}
+                            {#                                {% if form.address.errors %}#}
+                            {#                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+                            {#                                {% else %}#}
+                            {#                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+                            {#                                {% endif %}#}
+                            {#                                <div class="error">#}
+                            {#                                    <span class="error-body">{% render_field form.address.errors %}</span>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
                         </div>
                         <div class="col-md-4">
                             <div class="form-group text-center">
@@ -57,9 +72,9 @@
                                     <i class="fas fa-pencil-alt"></i>
                                 </label>
                                 <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="profile"
-                                    width="150px" height="150px">
+                                     width="150px" height="150px">
                                 {{ form.photo|attr:"id:upload-input"| attr:"accept: image/png, image/jpeg" }}
-                                <div class="col-lg-7 text-center">    
+                                <div class="col-lg-7 text-center">
                                     <div class="error">
                                         <span class="error-body">{% render_field form.photo.errors %} </span>
                                     </div>
@@ -113,7 +128,7 @@
                                     <option selected dir="rtl" disabled>انتخاب کنید ...</option>
                                     {% for option in form.grade %}
                                         {% if not forloop.first %}
-                                            {{option}}
+                                            {{ option }}
                                         {% endif %}
                                     {% endfor %}
                                 </select>
