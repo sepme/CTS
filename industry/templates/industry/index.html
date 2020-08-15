@@ -153,10 +153,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-4">
-                                    <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
-                                        مشاهده
-                                    </button>
+                                    <a href="{% url 'industry:show_active_project' code=project.code %}">
+                                        <button class="default-btn" type="button">
+                                            مشاهده
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

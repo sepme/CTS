@@ -99,6 +99,7 @@ def usualShow(request, project):
 
 def ActiveProject(request, project, data):
     data['accepted'] = True
+    data['project_pk'] = project.id
     industryform = request.user.industryuser.profile
     data['projectForm'] = model_to_dict(project.project_form)
     projectDate = {
