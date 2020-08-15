@@ -196,12 +196,16 @@ function setTab(data) {
 
 function expertResume() {
     $(".show-resume").click(function () {
-        $('#showProject').modal('toggle');
-        $('#expertResume').modal('toggle');
-        $('#expertResume .close__redirect').click(function () {
-            $('#expertResume').modal('toggle');
+        if ($('#showProject').length) {
             $('#showProject').modal('toggle');
-        });
+            $('#expertResume').modal('toggle');
+            $('#expertResume .close__redirect').click(function () {
+                $('#expertResume').modal('toggle');
+                $('#showProject').modal('toggle');
+            });
+        } else {
+            $('#expertResume').modal('toggle');
+        }
         // $(".showProject").slideUp('slow').delay('slow');
         // $(".expert-resume").addClass("show");
         // $(".expert-resume").delay('slow').slideDown('slow');
