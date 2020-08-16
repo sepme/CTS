@@ -12,7 +12,7 @@ function numbersComma(num) {
     return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 }
 
-function setRole(data) {
+function setRole(data ,status) {
     let role = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
@@ -23,10 +23,10 @@ function setRole(data) {
         "<div class='answer'>" +
         data.policy +
         "</div></div>";
-    $(".project-info-content").html(role);
+    $(".project-info-content" + status).html(role);
 }
 
-function setResources(data) {
+function setResources(data, status) {
     let resources = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
@@ -74,11 +74,11 @@ function setResources(data) {
         " ریال" +
         "</div>" +
         "</div>";
-    $(".project-info-content").html(resources);
+    $(".project-info-content" + status).html(resources);
 }
 
-function setApproach(data) {
-    let approach = "<div>" +
+function setApproach(data, status) {
+        let approach = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
         "<i class='far fa-question-circle'></i>" +
@@ -99,10 +99,10 @@ function setApproach(data) {
         "<div class='answer'>" +
         data.potential_problems +
         "</div></div>";
-    $(".project-info-content").html(approach);
+    $(".project-info-content" + status).html(approach);
 }
 
-function setMajors(data) {
+function setMajors(data, status) {
     let majors = "<div>" +
         "<div class='question'>" +
         "<span class='question-mark'>" +
@@ -122,36 +122,37 @@ function setMajors(data) {
         "</div>" +
         "<div class='answer'>" +
         data.progress_profitability +
-        "</div></div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "برآورد شما از سود مالی این پروژه چگونه است؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        numbersComma(data.predict_profit) +
-        " ریال" +
         "</div></div>";
-    $(".project-info-content").html(majors);
+    $(".project-info-content" + status).html(majors);
 }
 
-function setValue(data) {
-    $("#v-pills-settings-tab").click(function () {
-        setRole(data);
+        // "<div>" +
+        // "<div class='question'>" +
+        // "<span class='question-mark'>" +
+        // "<i class='far fa-question-circle'></i>" +
+        // "</span>" +
+        // "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        // "</div>" +
+        // "<div class='answer'>" +
+        // numbersComma(data.predict_profit) +
+        // " ریال" +
+        // "</div></div>";
+
+function setValue(data, status) {
+    $("#v-pills-roles-tab" + status).click(function () {
+        setRole(data ,status);
         $('*').persiaNumber();
     });
-    $("#v-pills-messages-tab").click(function () {
-        setResources(data);
+    $("#v-pills-resources-tab" + status).click(function () {
+        setResources(data ,status);
         $('*').persiaNumber();
     });
-    $("#v-pills-profile-tab").click(function () {
-        setApproach(data);
+    $("#v-pills-approaches-tab" + status).click(function () {
+        setApproach(data, status);
         $('*').persiaNumber();
     });
-    $("#v-pills-home-tab").click(function () {
-        setMajors(data);
+    $("#v-pills-majors-tab" + status).click(function () {
+        setMajors(data ,status);
         $('*').persiaNumber();
     });
 }
@@ -195,11 +196,17 @@ function setTab(data) {
 
 function expertResume() {
     $(".show-resume").click(function () {
-        $(".showProject").slideUp('slow').delay('slow');
-        $(".expert-resume").addClass("show");
-        $(".expert-resume").delay('slow').slideDown('slow');
-        close_dialog(".expert-resume");
-        load_dialog();
+        $('#showProject').modal('toggle');
+        $('#expertResume').modal('toggle');
+        $('#expertResume .close__redirect').click(function () {
+            $('#expertResume').modal('toggle');
+            $('#showProject').modal('toggle');
+        });
+        // $(".showProject").slideUp('slow').delay('slow');
+        // $(".expert-resume").addClass("show");
+        // $(".expert-resume").delay('slow').slideDown('slow');
+        // close_dialog(".expert-resume");
+        // load_dialog();
         let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         $.ajax({
             method: 'GET',
@@ -207,9 +214,9 @@ function expertResume() {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                $(".expert-resume #expert_name").html(data.name);
-                $(".expert-resume #expert_uni").html("دانشگاه " + data.university);
-                $(".expert-resume #expert_field").html(data.scientific_rank + " " + data.special_field);
+                $("#expertResume .modal-header .modal-title").html(data.name);
+                $("#expertResume #expert_uni").html("دانشگاه " + data.university);
+                $("#expertResume #expert_field").html(data.scientific_rank + " " + data.special_field);
                 let sci_record = JSON.parse(data.sci_record);
                 if (sci_record.length !== 0) {
                     let table_row = "";
@@ -319,7 +326,7 @@ function setIndustryComment(data) {
 
 function setComment(data) {
     let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    data = data.comment;
+    // data = data.comment;
     let comments_code = "";
     let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
@@ -458,8 +465,24 @@ function getComments(expert_id, project_id) {
             expert_id: expert_id,
             project_id: project_id
         },
-        success: function (data) {
-            if (data.applied === false) {
+        success: function (data) {            
+            if (data.accepted){
+                $(".accept-request").hide();
+                $(".accept-request").prop('disabled', true);
+                $(".reject-request").hide();
+                $(".reject-request").prop('disabled', true);
+                if (data.enforcer){
+                    $('.request').html("این پروژه به این استاد واگذار شده است.");
+                    $('.add-comment').attr('style', "display : block");
+                    $(".comment_submit").prop('disabled', false);
+                }
+                else{
+                    $('.request').html("این پروژه به استاد دیگری واگذار شده است.");
+                    $('.add-comment').attr('style', "display : none");
+                    $(".comment_submit").prop('disabled', true);
+                }
+            }
+            else if (data.applied === false) {
                 $('.request').html("برای مشاهده رزومه استاد بر روی دکمه روبه رو کلیک کنید.");
                 $(".accept-request").hide();
                 $(".accept-request").prop('disabled', true);
@@ -473,7 +496,7 @@ function getComments(expert_id, project_id) {
                 $(".reject-request").show();
                 $(".reject-request").prop('disabled', false);
             }
-            setComment(data);
+            setComment(data.comment);
         },
         error: function (data) {
 
@@ -594,8 +617,48 @@ $(document).ready(function () {
         });
     });
 
+    function setDates(date) {
+        $(".project-details .project-progress .start").html(date[0]);
+        $(".project-details .project-progress .first_phase").html(date[1]);
+        $(".project-details .project-progress .second_phase").html(date[2]);
+        $(".project-details .project-progress .third_phase").html(date[3]);
+        $(".project-details .project-progress .date_finished").html(date[4]);
+    }
+
+    function projectDetail(data) {
+        if (data.vote)
+            $(".vote").attr('style', "display: block;");
+        else
+            $(".vote").attr('style', "display: none;");
+        $(".project-details").find(".card-head").html(data.persian_title + "<br>" + ' ( ' + data.english_title + ' )');
+        $(".project-details").find(".establish-time .time-body").html(data.date);
+        $(".project-details").find(".time-left .time-body").html(data.deadline);
+    
+        let techniques = "";
+        for (let tech_index = 0; tech_index < data.techniques.length; tech_index++) {
+            let element = data.techniques[tech_index];
+            techniques += "<span class='border-span'>" +
+                element +
+                "</span>";
+        }
+        $(".techniques").html(techniques);
+
+        $("#industry-name").html(data.industry_name);
+        $("#enforcer-name").html(data.enforcer_name);
+        $("#enforcer-name").attr("value", data.enforcer_id)
+        $("#executive-info").html(data.executive_info);
+        $("#industry_logo").attr("src", data.industry_logo);
+        $(".budget-amount").html(data.budget_amount);
+        setDates(data.timeScheduling);
+        setMajors(data, "-detail");
+        setValue(data, "-detail");
+        setTab(data);
+        // modalPreview(".project-details");
+    }
+
     $(".preview-project").click(function () {
-        const dialog = $(".showProject");
+        console.log("preview1");
+        const dialog = $("#showProject");
         $(this).closest(".card").find('.unseen-comments').html("");
         let id = $(this).attr("id");
         $.ajax({
@@ -604,53 +667,55 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                // if (data.accepted == "true")
-                //     console.log("accepted");
-                // dialog = $(".project-details");
-                // }else{
-                //     console.log("not accepted");
-                // }
-                $('.confirm-request').attr('id', id);
-                $('.comment').attr('id', id);
-                localStorage.setItem("project_id", "" + id);
-                localStorage.setItem("replied_text", null);
-                dialog.find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
-                dialog.find(".establish-time .time-body").html(data.submission_date);
-                dialog.find(".time-left .time-body").html(data.deadline);
-                for (let i = 0; i < data.key_words.length; i++) {
-                    dialog.find(".techniques").append(
-                        "<span class='border-span'>" +
-                        data.key_words[i]
-                        + "</span>"
-                    );
-                }
-                setMajors(data);
-                setValue(data);
-                if (data.status !== 1 && data.status !== 2) {
-                    dialog.find('.add-comment').attr('style', 'display : none');
-                    $('.image-btn-circle').prop('disabled', true);
-                    $(".row.add-comment").css("display", "none");
-                    dialog.find(".card").addClass("b-x0");
-                    let info_msg = "<div class='message info image-right'>" +
-                        "<img src='../../../../static/img/blue_warning.svg' alt=''>" +
-                        "<h5>توجه</h5>" +
-                        "<p>پروژه شما در حال بررسی توسط کارشناسان ما می‌باشد تا در صورت نیاز به اصلاح، با شما تماس گرفته شود.</p>" +
-                        "<p>این فرآیند، حداکثر <strong>8 ساعت</strong> زمان خواهد برد.</p>" +
-                        "<p>با تشکر از صبر و بردباری شما</p>" +
-                        "</div>";
-                    dialog.find(".container").append(info_msg);
-                } else {
-                    if (data.vote === "true") {
-                        $('.vote').attr('style', "display : block");
+                console.log(data);
+                if (data.accepted){
+                    projectDetail(data);
+                }else{
+                    $('.confirm-request').attr('id', id);
+                    $('.comment').attr('id', id);
+                    localStorage.setItem("project_id", "" + id);
+                    localStorage.setItem("replied_text", null);
+                    dialog.find(".modal-header .modal-title").html(data.persian_title + "<br>" +  data.english_title);
+                    dialog.find(".establish-time .time-body").html(data.submission_date);
+                    dialog.find(".time-left .time-body").html(data.deadline);
+                    for (let i = 0; i < data.key_words.length; i++) {
+                        dialog.find(".techniques").append(
+                            "<span class='border-span'>" +
+                            data.key_words[i]
+                            + "</span>"
+                        );
                     }
-                    $('.add-comment').attr('style', "display : block");
-                    $('.image-btn-circle').prop('disabled', false);
-                    // if (data.status === 1) {
-                    //     $(".row.add-comment").css("display", "none");
-                    // }
-                    setTab(data);
+                    setMajors(data, "-preview");
+                    setValue(data, "-preview");
+                    if (data.status !== 1 && data.status !== 2) {
+                        dialog.find('.add-comment').attr('style', 'display : none');
+                        $('.image-btn-circle').prop('disabled', true);
+                        $(".row.add-comment").css("display", "none");
+                        dialog.find(".card").addClass("b-x0");
+                        let info_msg = "<div class='message info image-right'>" +
+                            "<img src='../../../../static/img/blue_warning.svg' alt=''>" +
+                            "<h5>توجه</h5>" +
+                            "<p>پروژه شما در حال بررسی توسط کارشناسان ما می‌باشد تا در صورت نیاز به اصلاح، با شما تماس گرفته شود.</p>" +
+                            "<p>این فرآیند، حداکثر <strong>8 ساعت</strong> زمان خواهد برد.</p>" +
+                            "<p>با تشکر از صبر و بردباری شما</p>" +
+                            "</div>";
+                        dialog.find(".container").append(info_msg);
+                    } else {
+                        if (data.vote)
+                            $('.vote').attr('style', "display : block;");
+                        else
+                            $('.vote').attr('style', "display : none;");
+
+                        $('.add-comment').attr('style', "display : block");
+                        $('.image-btn-circle').prop('disabled', false);
+                        dialog_comment_init();
+                        // if (data.status === 1) {
+                        //     $(".row.add-comment").css("display", "none");
+                        // }
+                        setTab(data);
+                    }
+                    // modalPreview(".showProject");
                 }
-                modalPreview(".showProject")
             },
             error: function (data) {
 
@@ -688,9 +753,9 @@ $(document).ready(function () {
         });
     } else {
         init_windowSize();
-        // init_dialog_btn(".preview-project", ".showProject");
+        // init_dialog_btn(".preview-project", ".project-details");
         init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-        init_dialog_btn(".show-resume", ".expert-resume");
+        // init_dialog_btn(".show-resume", ".expert-resume");
         expertResume();
         // if($(".mainInfo-body").css("display") === "block"){
         //     blur_div_toggle(".top-bar");

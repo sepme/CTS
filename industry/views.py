@@ -4,7 +4,8 @@ import os
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 from django.core import serializers
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.exceptions import PermissionDenied
 from django.core.files.base import ContentFile
 from django.forms import model_to_dict
 from django.views import generic, View
@@ -13,19 +14,27 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
+from django.template.loader import get_template
 
 from persiantools.jdatetime import JalaliDate
 
 from ChamranTeamSite import settings
 from industry.models import IndustryForm, Comment
 from expert import models as expert_models
-from . import models ,forms
+from . import models, forms
 from expert.models import ExpertUser
+from researcher.models import Technique
+from chamran_admin.models import Message
+
 
 # function name says it all :)
 def gregorian_to_numeric_jalali(date):
-    j_date = JalaliDate(date)
-    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
+    if date:
+        j_date = JalaliDate(date)
+        return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
+    else:
+        return "نا مشخص"
+
 
 # returns the difference between the two dates. e.g. 3 ruz, 5 sal, ...
 def date_dif(start_date, deadline_date):
@@ -38,6 +47,7 @@ def date_dif(start_date, deadline_date):
         return str(delta.days) + ' روز'
     else:
         return 'امروز'
+
 
 # is called through an ajax request. returns the comments on a particular project with a particular expert
 @permission_required('industry.be_industry', login_url='/login/')
@@ -53,145 +63,174 @@ def get_comments_with_expert(request):
             'sender_type': comment.sender_type
         })
 
+
+def usualShow(request, project):
+    data = model_to_dict(project.project_form)
+    data['deadline'] = 'نا مشخص'
+    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
+        data['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
+    else:
+        data['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
+    data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    for ind, value in enumerate(data['key_words']):
+        data['key_words'][ind] = value.__str__()
+    data['required_technique'] = []
+    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+    data['status'] = project.status
+    data['accepted'] = False
+    data['vote'] = False
+
+    data['expert_messaged'] = []
+    for expert in project.expert_messaged.all():
+        data['expert_messaged'].append({
+            'id': expert.id,
+            'name': expert.expertform.__str__(),
+            'applied': expert in project.expert_applied.all(),
+        })
+    for expert in project.expert_applied.all():
+        if expert not in project.expert_messaged.all():
+            data['expert_messaged'].append({
+                'id': expert.id,
+                'name': expert.expertform.__str__(),
+                'applied': expert in project.expert_applied.all(),
+            })
+    return data
+
+
+def ActiveProject(request, project, data):
+    data['accepted'] = True
+    data['project_pk'] = project.id
+    industryform = request.user.industryuser.profile
+    data['projectForm'] = model_to_dict(project.project_form)
+    projectDate = {
+     "start":   gregorian_to_numeric_jalali(project.date_start),
+     "firstPhase":   gregorian_to_numeric_jalali(project.date_project_started),
+     "secondPhase":   gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+     "thirdPhase":  gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+     "finished":   gregorian_to_numeric_jalali(project.date_finished),
+    }
+    data['timeScheduling'] = projectDate
+    data['title'] = project.project_form.persian_title
+    data["industry_name"] = industryform.name
+    if industryform.photo:
+        data["industry_logo"] = industryform.photo.url
+    data['enforcer_name'] = str(project.expert_accepted.expertform)
+    data['enforcer_id'] = project.expert_accepted.pk
+    data["executive_info"] = project.executive_info
+    data["budget_amount"] = project.project_form.required_budget
+
+    data['comments'] = []
+    for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
+        try:
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+        except:
+            url = "None"
+        data['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment': url,
+            'pk': comment.pk,
+        })
+        if comment.sender_type == "expert" or comment.sender_type == "system":
+            comment.status = "seen"
+            comment.save()
+    data['deadline'] = 'نا مشخص'
+    data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+    data['status'] = project.status
+    data['vote'] = False
+    try:
+        if datetime.date.today() > project.date_finished:
+            if len(evaluation_history.filter(phase=3)) == 0:
+                data['vote'] = True
+        elif datetime.date.today() > project.date_phase_two_finished:
+            if len(evaluation_history.filter(phase=2)) == 0:
+                data['vote'] = True
+        elif datetime.date.today() > project.date_phase_one_finished:
+            if len(evaluation_history.filter(phase=1)) == 0:
+                data['vote'] = True
+    except:
+        pass
+
+    data["techniques"] = []
+    # }
+    # projectRequest = expert_models.ExpertRequestedProject.objects.filter(project=project).filter(
+    #     expert=project.expert_accepted).first()
+    for technique in project.project_form.techniques.all():
+        data["techniques"].append(technique.__str__())
+
+    return data
+
+
 # is called by an ajax request and returns the necessary information to display the project on the front-end
 @permission_required('industry.be_industry', login_url='/login/')
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
-    if not project.expert_accepted:
-        json_response = model_to_dict(project.project_form)
-        json_response['accepted'] = 'false'
-        json_response['expert_messaged'] = []
-        for expert in project.expert_messaged.all():
-            json_response['expert_messaged'].append({
-                'id': expert.id,
-                'name': expert.expertform.__str__(),
-                'applied' : expert in project.expert_applied.all(),
-            })
-        for expert in project.expert_applied.all():
-            if expert not in project.expert_messaged.all():
-                json_response['expert_messaged'].append({
-                    'id': expert.id,
-                    'name': expert.expertform.__str__(),
-                    'applied' : expert in project.expert_applied.all(),
-                })
-        json_response['deadline'] = 'نا مشخص'
-        if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-            json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
-        else:
-            json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-        json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-        for ind, value in enumerate(json_response['key_words']):
-            json_response['key_words'][ind] = value.__str__()
-        try:
-            json_response['required_technique']=[]
-            for tech in project.project_form.required_technique:
-                json_response['required_technique'].append(tech.__str__())
-        except:
-            pass
-        evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
-        json_response['status'] = project.status
-        json_response['vote'] = "false"
-        try:
-            if datetime.date.today() > project.date_finished:
-                if len(evaluation_history.filter(phase=3)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_two_finished:
-                if len(evaluation_history.filter(phase=2)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_one_finished:
-                if len(evaluation_history.filter(phase=1)) == 0:
-                    json_response['vote'] = "true"
-        except:
-            pass
-        return JsonResponse(json_response)
+    if project.status == 1 or project.status == 0:
+        data = usualShow(request, project)
+        return JsonResponse(data)
     else:
-        json_response = model_to_dict(project.project_form)
-        json_response['accepted'] = 'true'
-        json_response['expert_messaged'] = []
-        for expert in project.expert_messaged.all():
-            json_response['expert_messaged'].append({
-                'id': expert.id,
-                'name': expert.expertform.__str__(),
-                'applied' : expert in project.expert_applied.all(),
-            })
-        for expert in project.expert_applied.all():
-            if expert not in project.expert_messaged.all():
-                json_response['expert_messaged'].append({
-                    'id': expert.id,
-                    'name': expert.expertform.__str__(),
-                    'applied' : expert in project.expert_applied.all(),
-                })
-        json_response['deadline'] = 'نا مشخص'
-        if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-            json_response['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
-        else:
-            json_response['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
-        json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-        for ind, value in enumerate(json_response['key_words']):
-            json_response['key_words'][ind] = value.__str__()
-        try:
-            json_response['required_technique']=[]
-            for tech in project.project_form.required_technique:
-                json_response['required_technique'].append(tech.__str__())
-        except:
-            pass
-        evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
-        json_response['status'] = project.status
-        json_response['vote'] = "false"
-        try:
-            if datetime.date.today() > project.date_finished:
-                if len(evaluation_history.filter(phase=3)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_two_finished:
-                if len(evaluation_history.filter(phase=2)) == 0:
-                    json_response['vote'] = "true"
-            elif datetime.date.today() > project.date_phase_one_finished:
-                if len(evaluation_history.filter(phase=1)) == 0:
-                    json_response['vote'] = "true"
-        except:
-            pass
-        return JsonResponse(json_response)
+        return JsonResponse(data={"error": "This porjct is accepted by an expert."}, status=400)
+
 
 @permission_required('industry.be_industry', login_url='/login/')
 def GetComment(request):
-    expert_id  = request.GET.get('expert_id')
+    expert_id = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
-    project = get_object_or_404(models.Project ,pk=project_id)
-    expert  = get_object_or_404(ExpertUser ,pk=expert_id)
+    project = get_object_or_404(models.Project, pk=project_id)
+    expert = get_object_or_404(ExpertUser, pk=expert_id)
     all_comments = models.Comment.objects.filter(project=project)
-    comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)    
+    comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)
     response = []
     for comment in comments:
         try:
-            url = comment.attachment.url.split("/")[-1]
+            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:
             url = "None"
         temp = {
-            'pk'           : comment.pk,
-            'text'  : comment.description,
-            'replied_text' : comment.replied_text,
-            'sender_type'  : comment.sender_type,
-            'attachment'   : url
+            'pk': comment.pk,
+            'text': comment.description,
+            'replied_text': comment.replied_text,
+            'sender_type': comment.sender_type,
+            'attachment': url,
         }
-        response.append(temp)    
+        response.append(temp)
         if comment.sender_type == 'expert' or comment.sender_type == 'system':
             comment.status = "seen"
             comment.save()
+    if project.expert_accepted:
+        if project.expert_accepted == expert:
+            data = {
+                'comment': response,
+                'accepted': True,
+                'enforcer': True
+            }
+        else:
+            data = {
+                'comment': response,
+                'accepted': True,
+                'enforcer': False
+            }
+        return JsonResponse(data=data)
     if expert in project.expert_applied.all():
         data = {
-            'comment' : response,
-            'applied' : True
-            }
+            'comment': response,
+            'accepted': False,
+            'applied': True
+        }
     else:
         data = {
-            'comment' : response,
-            'applied' : False
-            }
+            'comment': response,
+            'accepted': False,
+            'applied': False
+        }
     return JsonResponse(data=data)
+
 
 @permission_required('industry.be_industry', login_url='/login/')
 def accept_project(request):
-    expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
+    expert = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
     project.expert_accepted = expert
     project.date_start = datetime.date.today()
@@ -199,22 +238,24 @@ def accept_project(request):
     project.save()
     expert.status = 'involved'
     expert.save()
-    data = {'success' : 'successful'}
+    data = {'success': 'successful'}
     return JsonResponse(data=data)
+
 
 @permission_required('industry.be_industry', login_url='/login/')
 def refuse_expert(request):
-    expert  = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
+    expert = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
     project.expert_banned.add(expert)
     project.save()
-    data = {'success' : 'successful'}
+    data = {'success': 'successful'}
     return JsonResponse(data=data)
+
 
 # this function is called when the industry user comments on a project
 @permission_required('industry.be_industry', login_url='/login/')
 def submit_comment(request):
-    form = forms.CommentForm(request.POST ,request.FILES)
+    form = forms.CommentForm(request.POST, request.FILES)
     if form.is_valid():
         project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
         expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
@@ -229,75 +270,91 @@ def submit_comment(request):
                                              status='unseen')
         new_comment.save()
         if attachment is not None:
+            url = new_comment.attachment.url[new_comment.attachment.url.find('media', 2):]
             data = {
-                'success' : 'successful',
-                'attachment' : new_comment.attachment.url.split("/")[-1],
-                'description':description,
+                'success': 'successful',
+                'attachment': url,
+                'description': description,
             }
         else:
             data = {
-                'success' : 'successful',
-                'attachment' : "None",
+                'success': 'successful',
+                'attachment': "None",
                 'description': description,
             }
         return JsonResponse(data=data)
-    return JsonResponse(data=form.errors ,status=400)
+    return JsonResponse(data=form.errors, status=400)
+
 
 # main page for an industry user
-class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     template_name = 'industry/index.html'
+    form_class = forms.basicInterfacePersonForm
     login_url = '/login/'
+    success_url = '/industry'
     permission_required = ('industry.be_industry',)
-
-    def get(self, request, *args, **kwargs):
-
-        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated and \
-                models.IndustryUser.objects.filter(user=self.request.user).count() and \
-                self.request.user.industryuser.status == 'signed_up':
-            context['form'] = forms.IndustryBasicInfoForm(self.request.user)
-        else:
+        if self.request.user.industryuser.status != 'signed_up':
             industry_user = self.request.user.industryuser
             context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
+        else:
+            context['RandD_form'] = forms.RandDBasicInfoForm
+            context['researchGroup_form'] = forms.ResearchGroupBasicInfoForm
         return context
 
-    # submitting the initial info form
-    def post(self, request, *args, **kwargs):
-        form = forms.IndustryBasicInfoForm(request.user, request.POST, request.FILES)
-        if form.is_valid():
-            photo = form.cleaned_data['photo']
-            name = form.cleaned_data['name']
-            registration_number = form.cleaned_data['registration_number']
-            date_of_foundation = form.cleaned_data['date_of_foundation']
-            research_field = form.cleaned_data['research_field']
-            industry_type = form.cleaned_data['industry_type']
-            industry_address = form.cleaned_data['industry_address']
-            phone_number = form.cleaned_data['phone_number']
-            email_address = form.cleaned_data['email_address']
-            industry_user = request.user.industryuser
-            industry_info = models.IndustryForm(industry_user=industry_user,
-                                                name=name,
-                                                registration_number=registration_number,
-                                                date_of_foundation=date_of_foundation,
-                                                research_field=research_field,
-                                                industry_type=industry_type,
-                                                industry_address=industry_address,
-                                                phone_number=phone_number,
-                                                email_address=email_address)            
-            industry_info.photo.save(photo.name, photo)
-            industry_info.save()
-            if not industry_info.photo:
-                with open(os.path.join(settings.BASE_DIR, 'industry/static/industry/img/profile.jpg'),
-                          'rb') as image_file:
-                    default_image = image_file.read()
-                    industry_info.photo.save('profile.jpg', ContentFile(default_image))
-            industry_user.status = 'free'
-            industry_user.save()
-            return HttpResponseRedirect(reverse('industry:index'))
-        return render(request, 'industry/index.html', context={'form': form})
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        if self.request.POST['industry_type'] == "group":
+            researchGroup_form = forms.ResearchGroupBasicInfoForm(self.request.POST, self.request.FILES)
+            context['researchGroup_form'] = researchGroup_form
+        else:
+            RandD_form = forms.RandDBasicInfoForm(self.request.POST, self.request.FILES)
+            context['RandD_form'] = RandD_form
+        context['form'] = form
+        return render(request=self.request, template_name=self.template_name, context=context)
+        # return super().form_invalid(form)
+
+    def form_valid(self, form):
+        industry_user = models.IndustryUser.objects.get(user=self.request.user)
+        if form.cleaned_data["industry_type"] == 'group':
+            groupForm = forms.ResearchGroupBasicInfoForm(self.request.POST, self.request.FILES)
+            if groupForm.is_valid():
+                interfacePerson = form.save()
+                groupProfile = groupForm.save(commit=False)
+                groupProfile.industry_user = industry_user
+                groupProfile.interfacePerson = interfacePerson
+                groupProfile.save()
+                industry_user.status = 'free'
+                industry_user.save()
+            else:
+                print("Group Form Invalid")
+                context = self.get_context_data()
+                context['researchGroup_form'] = groupForm
+                return render(request=self.request, template_name=self.template_name, context=context)
+        else:
+            RandDForm = forms.RandDBasicInfoForm(self.request.POST, self.request.FILES)
+            if RandDForm.is_valid():
+                interfacePerson = form.save()
+                RandDProfile = RandDForm.save(commit=False)
+                RandDProfile.industry_user = industry_user
+                RandDProfile.interfacePerson = interfacePerson
+                RandDProfile.save()
+                industry_user.status = 'free'
+                industry_user.save()
+            else:
+                print("RandD Form Invalid")
+                context = self.get_context_data()
+                context['RandD_form'] = RandDForm
+                return render(request=self.request, template_name=self.template_name, context=context)
+        industryForm = form.save(commit=False)
+        industry_user = self.request.user.industryuser
+        industryForm.industry_user = industry_user
+        industryForm.save()
+        industry_user.status = 'free'
+        industry_user.save()
+        return super().form_valid(form)
 
 
 class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView):
@@ -307,35 +364,65 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = forms.IndustryInfoForm(self.request.user,
-                                           instance=self.request.user.industryuser.industryform,
-                                           initial={
-                                               'industry_type':
-                                                   self.request.user.industryuser.industryform.industry_type})
+        industry_user = models.IndustryUser.objects.get(user=self.request.user)
+        profile = industry_user.profile
+        context['interface_form'] = forms.interfacePersonForm(instance=profile.interfacePerson, )
+        if type(profile) == models.RandDProfile:
+            context['type_form'] = "R&D"
+            context['RandD_form'] = forms.RandDInfoForm(instance=profile,
+                                                        initial={'RandD_type': profile.RandD_type})
+        else:
+            context['type_form'] = "group"
+            context['researchgroup_form'] = forms.ResearchGroupInfoForm(instance=profile,
+                                                                        initial={'type_group': profile.type_group})
         return context
 
     def post(self, request):
-        form = forms.IndustryInfoForm(self.request.user, request.POST, request.FILES,
-                                      initial={
-                                          'industry_type': self.request.user.industryuser.industryform.industry_type})
-        if form.is_valid():
-            # model_form = form.save(commit=False)
-            industryForm = IndustryForm.objects.get(name=form.cleaned_data['name'])
-            industryForm.industry_type=form.cleaned_data['industry_type']
-            industryForm.tax_declaration=form.cleaned_data['tax_declaration']
-            industryForm.services_products=form.cleaned_data['services_products']
-            industryForm.awards_honors=form.cleaned_data['awards_honors']
-            # )
+        industry_user = models.IndustryUser.objects.get(user=self.request.user)
+        industryForm = industry_user.profile
+        interface_form = forms.interfacePersonForm(request.POST)
+        if interface_form.is_valid():
+            industryForm.interfacePerson.fullname = interface_form.cleaned_data['fullname']
+            industryForm.interfacePerson.position = interface_form.cleaned_data['position']
+            industryForm.interfacePerson.phone_number = interface_form.cleaned_data['phone_number']
+            industryForm.interfacePerson.email = interface_form.cleaned_data['email']
+            industryForm.interfacePerson.save()
+            if type(industryForm) == models.RandDProfile:
+                form = forms.RandDInfoForm(request.POST, request.FILES)
+                if form.is_valid():
+                    industryForm.address = form.cleaned_data['address']
+                    industryForm.RandD_type = form.cleaned_data['RandD_type']
+                    industryForm.tax_declaration = form.cleaned_data['tax_declaration']
+                    industryForm.services_products = form.cleaned_data['services_products']
+                    industryForm.awards_honors = form.cleaned_data['awards_honors']
+                else:
+                    print('the R&D errors are:', form.errors)
+                    context = self.get_context_data()
+                    context['RandD_form'] = form
+                    return render(request=request, template_name=self.template_name, context=context)
+            else:
+                form = forms.ResearchGroupInfoForm(request.POST, request.FILES)
+                if form.is_valid():
+                    industryForm.address = form.cleaned_data['address']
+                    industryForm.type_group = form.cleaned_data['type_group']
+                else:
+                    # print(form.)
+                    print('the ResearchGroup errors are:', form.errors)
+                    context = self.get_context_data()
+                    context['researchGroup_form'] = form
+                    return render(request=request, template_name=self.template_name, context=context)
             if form.cleaned_data['photo']:
-                if os.path.isfile(industryForm.photo.path):
-                    os.remove(industryForm.photo.path)
-                # industryForm.photo.save(form.cleaned_data['photo'].name, form.cleaned_data['photo'])
+                if industryForm.photo:
+                    if os.path.isfile(industryForm.photo.path):
+                        os.remove(industryForm.photo.path)
                 industryForm.photo = form.cleaned_data['photo']
             industryForm.save()
-            return HttpResponseRedirect(reverse('industry:index'))
         else:
-            print('the errors are:', form.errors)
-        return render(request, 'industry/userInfo.html', context={'form': form})
+            print('the interface errors are:', interface_form.errors)
+            context = self.get_context_data()
+            context['interface_form'] = interface_form
+            return render(request=request, template_name=self.template_name, context=context)
+        return HttpResponseRedirect(reverse('industry:index'))
 
 
 class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -347,11 +434,11 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     def post(self, request, *args, **kwargs):
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
-            project_title_persian = form.cleaned_data['project_title_persian']
-            project_title_english = form.cleaned_data['project_title_english']
+            persian_title = form.cleaned_data['persian_title']
+            english_title = form.cleaned_data['english_title']
             research_methodology = form.cleaned_data['research_methodology']
             main_problem_and_importance = form.cleaned_data['main_problem_and_importance']
-            predict_profit = form.cleaned_data['predict_profit']
+            # predict_profit = form.cleaned_data['predict_profit']
             required_lab_equipment = form.cleaned_data['required_lab_equipment']
             approach = form.cleaned_data['approach']
             policy = form.cleaned_data['policy']
@@ -361,11 +448,11 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             required_method = form.cleaned_data['required_method']
             progress_profitability = form.cleaned_data['progress_profitability']
             potential_problems = form.cleaned_data['potential_problems']
-            new_project_form = models.ProjectForm(project_title_persian=project_title_persian,
-                                                  project_title_english=project_title_english,
+            new_project_form = models.ProjectForm(persian_title=persian_title,
+                                                  english_title=english_title,
                                                   research_methodology=research_methodology,
                                                   main_problem_and_importance=main_problem_and_importance,
-                                                  predict_profit=predict_profit,
+                                                  #   predict_profit=predict_profit,
                                                   required_lab_equipment=required_lab_equipment,
                                                   required_method=required_method,
                                                   approach=approach,
@@ -377,21 +464,22 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                                                   )
             key_words = form.cleaned_data['key_words'].split(',')
             new_project_form.save()
+
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
             subject = 'ثبت پروژه جدید'
-            message ="""با سلام و احترام
+            message = """با سلام و احترام
             کاربر صنعت با نام کاربری {}
             پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
-            با تشکر""".format(request.user.username ,project_title_persian,JalaliDate(datetime.date.today()))
+            با تشکر""".format(request.user.username, persian_title, JalaliDate(datetime.date.today()))
             try:
                 send_mail(
                     subject=subject,
                     message=message,
                     from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[settings.EMAIL_HOST_USER,"sepehr.metanat@gmail.com",],
+                    recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com", ],
                     fail_silently=False
                 )
             except TimeoutError:
@@ -399,19 +487,109 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             return HttpResponseRedirect(reverse('industry:index'))
         return super().post(request, *args, **kwargs)
 
+
 class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
     template_name = 'industry/project_list.html'
     login_url = '/login/'
     permission_required = ('industry.be_industry',)
 
     def get(self, request, *args, **kwargs):
-
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         industry = get_object_or_404(models.IndustryUser, user=self.request.user)
         context['industry'] = industry
-        if industry.industryform:
-            context['photo'] = industry.industryform.photo
+        if industry.profile:
+            context['photo'] = industry.profile.photo
         return context
+
+
+def checkUserId(request):
+    if request.is_ajax() and request.method == "POST":
+        user_id = request.POST.get("user_id")
+        if models.IndustryUser.objects.filter(userId=user_id).count():
+            return JsonResponse({"is_unique": False})
+        return JsonResponse({"is_unique": True})
+
+
+def ProjectSetting(request):
+    technique_list = request.POST.getlist('technique')
+    if len(technique_list) == 0:
+        return JsonResponse({
+            'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
+        }, status=400)
+    project = models.Project.objects.filter(pk=request.POST['projectId'])
+    for technique in technique_list:
+        project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
+        project.projectform.techniques.add(project_technique[0])
+    project.projectform.save()
+    expertId = request.POST['expertId']
+    expert = ExpertUser.objects.filter(userId=expertId)
+    data = {}
+    if expert.autoAddProject:
+        project.expert_accepted = expert
+        data['addExpert'] = True
+        message="""با سلام
+مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
+با توجه به این که قابلیت پیوستن شما به پروژه‌ها (تنها با / بدون) اجازه شما فراهم است، (از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید / شما به این پروژه اضافه شدید). 
+لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
+در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
+با آرزوی موفقیت، 
+چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
+                    "projectName"  : project.persian_title})
+        subject = 'تقاضای پیوستن به پروژه'
+        html_templateForAdmin = get_template('registration/projectRequest_template.html')
+        email_templateForAdmin = html_templateForAdmin.render({'message': message})
+        email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                    to=[expert.user.get_username(), "sepehr.metanat@gmail.com"])
+        email.attach_alternative(email_templateForAdmin, 'text/html')
+        email.send()
+        # try:
+        #     send_mail(
+        #         subject=subject,
+        #         message=message,
+        #         from_email=settings.EMAIL_HOST_USER,
+        #         recipient_list=[expert.user.get_username(), "sepehr.metanat@gmail.com", ],
+        #         fail_silently=False
+        #     )
+        # except TimeoutError:
+        #     return HttpResponse('Timeout Error!!')
+        newMessage = Message(title=subject,
+                            text=message,
+                            type=0)
+        newMessage.save()
+        newMessage.receiver.add(expert)
+    else: 
+        data['addExpert'] = False
+    project.save()
+    return JsonResponse(data={})
+
+
+def searchUserId(request):
+    searchKey = request.POST['searchKey']
+    suggestedExperts = ExpertUser.objects.filter(userId__contain=searchKey).values('userId')
+    data = {"expertId": suggestedExperts}
+    return JsonResponse(data=data)
+
+class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+    template_name = "industry/preview_project.html"
+    permission_required = ('industry.be_industry',)
+    login_url = "/login/"
+
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(models.Project, code=kwargs["code"])
+        if project.industry_creator.user != request.user:
+            raise PermissionDenied
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = get_object_or_404(models.Project, code=kwargs["code"])
+        context = ActiveProject(request=self.request, project=project, data=context)
+        return context
+    
+
+# def show_active_project(request, code):
+#     project = get_object_or_404(models.Project, code=kwargs["code"])
+#     ActiveProject(request)

@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}چمران تیم{% endblock %}
+{% block content %}
+    <div class="slide">
+        <div class="container relative full-height">
+            <div class="slide-caption">
+                <h1>چمران تیم</h1>
+                <div class="description">
+                    حلقه گمشده میان پژوهشگران، اساتید و صنایع حوزه سلامت
+                </div>
+                <div class="more">
+                    <a href="#AboutUs" class="goToDiv" data-div="AboutUs" data-next="whyUs">بیشتر بدانید</a>
+                </div>
+            </div>
+            <div class="handshake">
+                <img src="{% static 'theme-ct/images/handshake.png' %}" alt="handshake">
+            </div>
+            <div class="scroll">
+                <a href="#AboutUs" class="goToDiv" data-div="AboutUs" data-next="whyUs">
+                    <i class="fas fa-angle-down fa-2x"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-about" id="AboutUs">
+        <div class="container">
+            <div class="row" dir="ltr">
+                <div class="col-md-12">
+                    <h2>چمران تیم چیست؟</h2>
+                </div>
+                <div class="col-lg-6 offset-lg-3">
+                    <div class="home-about-content">
+                        <p>امروزه دانشجویان و اساتید بعضا در حال انجام پروژه‌هایی هستند که مورد نیاز کشور نیست و سود
+                            مالی و معنوی چندانی برای کشور ندارد. این مسئله، خود باعث هدررفت ظرفیت‌های دانشگاه می‌شود. از
+                            طرف دیگر بعضی از صنایع، نیازمند انجام پروژه‌های توسعه‌محور یا کاربرد محور هستند که به دلیل
+                            ارتباط ضعیف با ظرفیت‌های دانشگاهی، آن‌طور که باید به سرانجام نمی‌رسد.</p>
+                        <p>این گروه با بهره‌گیری از ظرفیت‌های علمی دانشجویان و اساتید و توانایی‌های مالی صنایع، سعی در
+                            فراهم کردن شرایط اجرای پروژه‌های استراتژیک و مورد نیاز کشور دارد تا از هدررفت وقت و انرژی
+                            دانشگاهیان و سرمایه‌های صنایع جلوگیری کند.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cog"></div>
+        <div class="tube"></div>
+    </div>
+
+    <div class="steps">
+        <div class="container relative">
+            <div class="step-top">
+                <div class="step-img">
+                    <img src="{% static 'theme-ct/images/i1.jpg' %}" alt="">
+                </div>
+                <div class="step-arrow"></div>
+                <div class="circle"></div>
+                <div class="spiral"></div>
+                <div class="step-content">
+                    <h3 class="text-green">ایجاد پروژه توسط صنعت</h3>
+                    <div class="description">
+                        صنعت پروژه مورد نظر خود را همراه با اطلاعات مورد نیاز (شامل مبلغ سرمایه‌گذاری، مدت قرارداد و
+                        ...) ثبت می‌کند.
+                    </div>
+                </div>
+            </div>
+            <div class="step-top lft">
+                <div class="step-img">
+                    <img src="{% static 'theme-ct/images/i2.jpg' %}" alt="">
+                </div>
+                <div class="step-arrow"></div>
+                <div class="circle"></div>
+                <div class="spiral"></div>
+                <div class="step-content">
+                    <h3>انتخاب استاد متخصص</h3>
+                    <div class="description">
+                        پروژه در دسترس اساتید دارای تخصص مربوطه قرار می‌گیرد و در نهایت، استادی مناسب مدیریت پروژه را بر
+                        عهده می‌گیرد.
+                    </div>
+                </div>
+            </div>
+            <div class="step-top">
+                <div class="step-img">
+                    <img src="{% static 'theme-ct/images/i3.jpg' %}" alt="">
+                </div>
+                <div class="step-arrow"></div>
+                <div class="circle"></div>
+                <div class="spiral"></div>
+                <div class="step-content">
+                    <h3>تخصیص پژوهشگر به استاد</h3>
+                    <div class="description">
+                        بر اساس نیاز استاد مسئول، پروژه در دسترس پژوهشگرها قرار می‌گیرد و پژوهشگرهای مناسب، توسط استاد
+                        به پروژه ملحق می‌شوند.
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="line">
+                <div class="arrow"></div>
+            </div>
+            <div class="step-bottom lft">
+                <div class="step-img">
+                    <img src="{% static 'theme-ct/images/i4.jpg' %}" alt="">
+                </div>
+                <div class="step-arrow"></div>
+                <div class="circle"></div>
+                <div class="spiral"></div>
+                <div class="step-content">
+                    <h3>امضای قرارداد و شروع پروژه</h3>
+                    <div class="description">
+                        قراردادی بین استاد و صنعت و همچنین پژوهشگر و استاد امضا شده و پروژه طبق توافق طرفین، اجرا
+                        می‌شود.
+                    </div>
+                </div>
+            </div>
+            <div class="step-bottom">
+                <div class="step-img">
+                    <img src="{% static 'theme-ct/images/i5.jpg' %}" alt="">
+                </div>
+                <div class="step-arrow"></div>
+                <div class="circle"></div>
+                <div class="spiral"></div>
+                <div class="step-content">
+                    <h3>ارزیابی‌های حین اجرای پروژه</h3>
+                    <div class="description">
+                        جهت ارزیابی عملکرد اعضای پروژه برای همکاری‌های آینده، از طرف‌های قرارداد درباره عملکرد دیگر
+                        طرف‌ها، نظرسنجی به عمل می‌آید.
+                    </div>
+                </div>
+            </div>
+            <div class="step-bottom lft">
+                <div class="step-img">
+                    <img src="{% static 'theme-ct/images/i6.jpg' %}" alt="">
+                </div>
+                <div class="step-arrow"></div>
+                <div class="circle"></div>
+                <div class="spiral last"></div>
+                <div class="step-content">
+                    <h3>پایان پروژه و ارزیابی‌های پایانی</h3>
+                    <div class="description">
+                        از طرف‌های قرارداد درباره عملکرد طرف مقابل‌شان، نظرسنجی صورت می‌گیرد تا سوابق آن‌ها برای
+                        همکاری‌های آینده با دیگران، مشخص باشد.
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="why" id="whyUs">
+        <div class="container">
+            <h2>چرا چمران تیم؟</h2>
+            <div class="row" id="owl-why">
+                <div class="col-md-4 item">
+                    <div class="why-body">
+                        <div class="why-heading">
+                            <h3>پژوهشگران</h3>
+                        </div>
+                        <div class="why-content">
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon1.png' %}" alt="آموزش و مهارت افزایی">
+                                <h4>آموزش و مهارت افزایی</h4>
+                                <p>در جهت انجام پروژه</p>
+                            </div>
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon2.png' %}" alt="ارتقای رزومه تحصیلی">
+                                <h4>ارتقای رزومه تحصیلی</h4>
+                                <p>با شرکت در پروژه های تحقیقاتی</p>
+                            </div>
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon3.png' %}" alt="کاهش اتلاف وقت">
+                                <h4>کاهش اتلاف وقت</h4>
+                                <p>از طریق انجام پروژه های هدفمند</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 item">
+                    <div class="why-body">
+                        <div class="why-heading">
+                            <h3>اساتید</h3>
+                        </div>
+                        <div class="why-content">
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon4.png' %}" alt="امضای قرارداد با صنعت">
+                                <h4>امضای قرارداد با صنعت</h4>
+                                <p>صنایع مرتبط با حوزه سلامت</p>
+                            </div>
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon5.png' %}" alt="ارتقای تجربه و تخصص">
+                                <h4>ارتقای تجربه و تخصص</h4>
+                                <p>با انجام پروژه های کاربردی و سودمند</p>
+                            </div>
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon6.png' %}" alt="کمک به پیشرفت کشور">
+                                <h4>کمک به پیشرفت کشور</h4>
+                                <p>با اجرای پروژه های مورد نیاز کشور</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 item">
+                    <div class="why-body">
+                        <div class="why-heading">
+                            <h3>صنایع</h3>
+                        </div>
+                        <div class="why-content">
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon7.png' %}" alt="افزایش سود">
+                                <h4>افزایش سود</h4>
+                                <p>با بهینه سازی یا ابداع محصول/خدمت</p>
+                            </div>
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon8.png' %}" alt="تقویت ارتباط با دانشگاه">
+                                <h4>تقویت ارتباط با دانشگاه</h4>
+                                <p>استفاده از اساتید متخصص در حوزه شما</p>
+                            </div>
+                            <div class="why-item">
+                                <img src="{% static 'theme-ct/images/icon9.png' %}" alt="استفاده بهینه از زمان">
+                                <h4>استفاده بهینه از زمان</h4>
+                                <p>با سپردن پروژه به افراد متخصص</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ct-forms" id="Cooperation">
+        <div class="container">
+            <div class="row" dir="ltr">
+                <div class="col-md-8 offset-md-2">
+                    <h2>می خواهید با چمران تیم همکاری کنید؟</h2>
+                    <p>در حال حاضر، شرکای چمران تیم توسط تیم ارزیابی انتخاب و همکاری با ایشان به صورت آزمایشی انجام
+                        می‌شود. شما هم اگر مایل به شرکت در این طرح هستید، از شما دعوت می‌شود که اطلاعات خود را از طریق
+                        فرم‌های زیر برای ما ارسال کنید تا در اسرع وقت با شما تماس حاصل شود.</p>
+                </div>
+                <div class="col-md-4" dir="rtl">
+                    <a href="/login/#signup">
+                        <div class="ct-form-item" data-type="industry" form-url="https://app.epoll.pro:443/2300425">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <img src="{% static 'theme-ct/images/cog.png' %}" alt="">
+                                </div>
+                                <div class="col-lg-8 text-right">
+                                    <h3>صنعت</h3>
+                                    جهت ثبت درخواست کلیک کنید
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" dir="rtl">
+                    <a href="/login/#signup">
+                        <div class="ct-form-item" data-type="student" form-url="https://app.epoll.pro:443/2330350">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <img src="{% static 'theme-ct/images/laboratory1.png' %}" alt="">
+                                </div>
+                                <div class="col-lg-8 text-right">
+                                    <h3>پژوهشگر</h3>
+                                    جهت ثبت درخواست کلیک کنید
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" dir="rtl">
+                    <a href="/login/#signup">
+                        <div class="ct-form-item" data-type="teacher" form-url="https://app.epoll.pro:443/2327500">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <img src="{% static 'theme-ct/images/training1.png' %}" alt="">
+                                </div>
+                                <div class="col-lg-8 text-right">
+                                    <h3>استاد</h3>
+                                    جهت ثبت درخواست کلیک کنید
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div id="Load" class="col-md-12">لطفا منتظر بمانید...</div>
+                <div id="action" class="col-md-12"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-news">
+        <div class="container">
+            <h2>اخبار و رویدادها</h2>
+            <div class="archive">
+                <a href="{% url 'chamran:newsList' %}">آرشیو اخبار</a>
+            </div>
+            <div class="row" id="owl-news">
+                {% for news in top_news %}
+                    <div class="col-md-4 item">
+                        <div class="news-item">
+                            <div class="news-item-body">
+                                <div class="img">
+                                    <a href="{% url 'chamran:newsDetail' news.uuid %}">
+                                        <img src="{{ news.topPicture }}" alt="{{ news.title }}">
+                                    </a>
+                                </div>
+                                <div class="cont">
+                                    <a href="{% url 'chamran:newsDetail' news.uuid %}">
+                                        <h3>{{ news.title }}</h3>
+                                    </a>
+                                    <p>{{ news.summary }}</p>
+                                    <div class="row">
+                                        <div class="col-7">
+                                            {{ news.date_submitted }}
+                                        </div>
+                                        <div class="col-5 text-right">
+                                            <a href="{% url 'chamran:newsDetail' news.uuid %}">ادامه مطلب</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block foot %}
+    <script type="text/javascript">
+        $('.ct-form-item').click(function () {});
+    </script>
+    {% if messages %}
+        <script type="text/javascript">
+            {% for message in messages %}
+                iziToast.success({
+                    rtl: true,
+                    message: "{{ message|safe }}",
+                    timeout: 999999999,
+                    position: 'bottomLeft'
+                });
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endblock %}

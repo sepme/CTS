@@ -42,8 +42,9 @@ $(".preview-project").click(function () {
     const dialog = $(".showProject");
     if ($(this).attr('value') == "myproject")
         return;
+    let id = $(this).attr("id");
     $(".project_id").attr('value', $(".preview-project").attr("id"));
-    $("#apply_project_id").attr('value', $(".preview-project").attr("id"));
+    $("#apply_project_id").attr('value', id);
     /*
      * reset All data
      */
@@ -51,14 +52,13 @@ $(".preview-project").click(function () {
     /*
      * end of reset
      */
-    let id = $(this).attr("id");
     $.ajax({
         method: 'GET',
         url: '/researcher/show_project/',
         dataType: 'json',
         data: {'id': id},
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
+            dialog.find(".project-title").html(data.persian_title  + "<br>" + " (" + data.english_title + ")");
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;//[0].split(",");
@@ -190,19 +190,20 @@ function setMajors(data) {
         "</div>" +
         "<div class='answer'>" +
         data.progress_profitability +
-        "</div></div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "برآورد شما از سود مالی این پروژه چگونه است؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.predict_profit +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
+
+        // "<div>" +
+        // "<div class='question'>" +
+        // "<span class='question-mark'>" +
+        // "<i class='far fa-question-circle'></i>" +
+        // "</span>" +
+        // "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        // "</div>" +
+        // "<div class='answer'>" +
+        // data.predict_profit +
+        // "</div></div>";
 
 function setValue(data) {
     $("#v-pills-settings-tab").click(function () {
@@ -314,7 +315,7 @@ $(".trash").click(function (event) {
 $(document).ready(function () {
     init_setup();
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".add-new-technique", ".add-technique");
+    // init_dialog_btn(".add-new-technique", ".add-technique");
     init_dialog_btn(".new-review-request", ".review-request");
     init_dialog_btn(".send-answer", ".thanks_response");
     init_dialog_btn(".start-question", ".confirmation");
@@ -981,6 +982,10 @@ apply_form.submit(function (event) {
     event.preventDefault();
     let url = apply_form.attr('url');
     let data = $(this).serialize().toString();
+    $("input#most_hours").removeClass("error");
+    $("input#least_hours").removeClass("error");
+    $("#least_hours").closest("div").find(".error").remove();
+    $("#most_hours").closest("div").find(".error").remove();
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -1190,7 +1195,7 @@ $(".my-project").click(function () {
         data: {id: projectId},
         dataType: 'json',
         success: function (data) {
-            dialog.find(".project-title").html(data.project_title_persian  + "<br>" + " (" + data.project_title_english + ")");
+            dialog.find(".project-title").html(data.persian_title  + "<br>" + " (" + data.english_title + ")");
             dialog.find(".establish-time .time-body").html(data.submission_date);
             dialog.find(".time-left .time-body").html(data.deadline);
             const keys = data.key_words;

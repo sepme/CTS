@@ -1,0 +1,85 @@
+{% load static %}
+<div class="modal fade" id="projectSetting" tabindex="-1" role="dialog" aria-labelledby="projectSettingLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectSettingLabel">تنظیمات</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <form id="ajax-project-setting" action="{% url 'expert:show-technique' %}">
+                <div class="modal-body">
+
+                    <div class="divide__line text-right mb-4">
+                        <span class="w__title RandD__form-item">درخواست استاد</span>
+                        <span class="__line"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1 d-md-block d-none"></div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="searchExpert">نام/id استاد</label>
+                                <div>
+                                    <input type="text" class="w-100 auto-complete-input" id="searchExpert"
+                                           name="search_expert">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divide__line text-right mb-4 mt-5">
+                        <span class="w__title RandD__form-item">مهارت های پژوهشی</span>
+                        <span class="__line"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1 d-md-block d-none"></div>
+
+                        <div class="col-md-10 text-right">
+
+                            <p class="mb-4">شما در این قسمت می توانید مهارت هایی که برای پروژه خود نیاز دارید را وارد
+                                کنید.</p>
+
+                            <div class="row">
+                                <div class="col-md-8 text-right mbottom-lg-25">
+                                    <span class="section-title">لیست تکنیک ها</span>
+                                    <div class="section">
+                                        <div id="fancy-tree"></div>
+                                    </div>
+                                    <div dir="rtl" class="sub-header mtop-lg-25">
+                                        در صورتی که تکنیک مورد نطر خود را در لیست بالا نیافتید، آن را اینجا وارد کنید و
+                                        کلید Enter
+                                        را
+                                        فشار دهید.
+                                    </div>
+                                    <div style="position: relative">
+                                        <label for="add-new-technique"></label>
+                                        <input style="margin: 0" type="text"
+                                               class="w-100" name=""
+                                               id="add-new-technique"
+                                               placeholder="برای انتخاب نام تکنیک، روی علامت مثبت کلیک کنید">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-right mbottom-lg-25">
+                                    <span class="section-title">تکنیک های انتخاب شده</span>
+                                    <div class="section">
+                                        <label for="tags"></label>
+                                        <input name="techniques" id="tags" value="" class="w-100"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">ثبت</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

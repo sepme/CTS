@@ -6,275 +6,412 @@
     <link rel="stylesheet" href="{% static 'researcher/css/persian-datepicker.min.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/datepicker-style.css' %}">
 {% endblock %}
+
 {% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}
+
 {% block dialog %}
     {% include 'researcher/layouts/dialog.html' %}
     {% include 'researcher/layouts/scientific_form.html' %}
     {% include 'researcher/layouts/executive_form.html' %}
     {% include 'researcher/layouts/research_form.html' %}
 {% endblock %}
+
 {% block content %}
-    <div class="row">
-        <div class="col-12 text-right">
-            <h3 class="h3 border-bottom p-top-15">اطلاعات کاربری</h3>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-12 text-right">
+                <h3 class="h3 p-top-15">اطلاعات کاربری</h3>
+                <button type="submit" class="top-page-button border-button"
+                        style="position: absolute;left: 0;top: 0;">
+                    <i class="fas fa-check"></i>
+                    اعمال تغییرات
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header text-right">
-                        <h6>اطلاعات کاربری</h6>
+        <div class="row">
+            <div class="col-12 text-right">
+                <nav class="nav-tabs-container mb-3">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active fs-15" id="nav-personal-info-tab" data-toggle="tab"
+                           href="#nav-personal-info" role="tab"
+                           aria-controls="nav-personal-info" aria-selected="true">اطلاعات شخصی</a>
+                        <a class="nav-item nav-link fs-15" id="nav-resume-tab" data-toggle="tab" href="#nav-resume"
+                           role="tab"
+                           aria-controls="nav-resume" aria-selected="false">رزومه</a>
+                        <a class="nav-item nav-link fs-15" id="nav-upload-tab" data-toggle="tab" href="#nav-upload"
+                           role="tab"
+                           aria-controls="nav-upload" aria-selected="false">بارگذاری رزومه</a>
                     </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <label for="upload-input" class="upload text-center">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </label>
-                                {% if user.researcheruser.researcherprofile.photo %}
-                                    <img src="/media/{{ user.researcheruser.researcherprofile.photo.name }}"
-                                         alt="profile" class="profile" width="150px" height="150px">
-                                {% else %}
-                                    <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile"
-                                         class="profile"
-                                         width="150px" height="150px">
-                                {% endif %}
-                                <input type="file" id="upload-input" accept="image/png, image/jpeg" name="photo">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="id_first_name">نام</label>
-                                <!-- <input type="text" id="FirstName" class="w-100"> -->
-                                {% render_field form.first_name class+="w-100" readonly="true" %}
-                            </div>
-                            <div class="col-md-6">
-                                <label for="id_last_name">نام خانوادگی</label>
-                                <!-- <input type="text" id="LastName" class="w-100"> -->
-                                {% render_field form.last_name class+="w-100" readonly="true" %}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <label for="id_major">رشته تحصیلی</label>
-                                <!-- <input type="text" id="Field" class="w-100"> -->
-                                {% render_field form.major class+="w-100" readonly="true" %}
-                            </div>
-                            <div class="col-md-4">
-                                <label for="id_national_code">کد ملی</label>
-                                <!-- <input type="text" id="MelliCode" class="w-100"> -->
-                                {% render_field form.national_code class+="w-100" readonly="true" %}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-6">
-                                <label for="id_student_number">شماره دانشجویی</label>
-                                <!-- <input type="text" id="student-num" class="w-100"> -->
-                                {% render_field form.student_number class+="w-100" readonly="true" %}
-                            </div>
-                            <div class="col-lg-2 col-md-6">
-                                <label for="id_entry_year">سال ورود</label>
-                                <!-- <input type="text" id="enter-date" class="w-100"> -->
-                                {% render_field form.entry_year class+="w-100" readonly="true" %}
-                            </div>
-                            <div class="col-lg-7 col-md-5 rankDiv">
-                                <label class="rankLabel" for="id_grade">آخرین مقطع تحصیلی</label>
-                                <select id="id_grade" name="grade" class="w-100">
-                                    <option selected disabled dir="rtl">انتخاب کنید ...</option>
-                                    {% for option in form.grade %}
-                                        {{ option }}
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-lg-12 col-md-7">
-                                <label for="id_university">دانشگاه محل تحصیل</label>
-                                <!-- <input type="text" id="Uni" class="w-100"> -->
-                                {% render_field form.university class+="w-100" readonly="true" %}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <label for="id_address">آدرس محل سکونت</label>
-                                <!-- <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea> -->
-                                {% render_field form.address class+="w-100" rows="3" dir="rtl" %}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="id_home_number">تلفن منزل</label>
-                                <!-- <input type="text" id="HomeNum" class="w-100"> -->
-                                {% render_field form.home_number class+="w-100" %}
-                                <div class="error">
-                                    <!-- <span class="error-body">{% render_field form.home_number.errors %}</span> -->
-                                    {{ home_number_error }}
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-personal-info" role="tabpanel"
+                         aria-labelledby="nav-personal-info-tab">
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-body">
+                                <div class="row mt-3" style="direction: ltr!important;">
+                                    <div class="col-lg-6 text-center">
+                                        <div style="position: relative">
+                                            <label for="upload-input" class="upload text-center">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </label>
+                                            {% if user.researcheruser.researcherprofile.photo %}
+                                                <img src="/media/{{ user.researcheruser.researcherprofile.photo.name }}"
+                                                     alt="profile"
+                                                     class="profile"
+                                                     width="150px" height="150px">
+                                            {% else %}
+                                                <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile"
+                                                     class="profile"
+                                                     width="150px"
+                                                     height="150px">
+                                            {% endif %}
+                                            <input type="file" id="upload-input" name="photo"
+                                                   accept="image/png, image/jpeg">
+                                        </div>
+                                        <div class="mt-1">بارگزاری تصویر پروفایل</div>
+                                    </div>
+                                    <div class="col-lg-6 p-0">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="id_fullname">نام و نام خانوادگی</label>
+                                                {% render_field form.fullname class+="w-100" readonly="true" %}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group form-group-auto-check">
+                                                <label for="userID">شناسه کاربری</label>
+                                                <input type="text" class="w-100" id="userID">
+                                                <div class="form-group__status">
+                                                    <div class="success-status">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+                                                    <div class="spinner-border text-secondary" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                    <div class="fail-status">
+                                                        <i class="fas fa-times"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="id_national_code">کد ملی</label>
+                                                {% render_field form.national_code class+="w-100" readonly="true" %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_major">رشته تحصیلی</label>
+                                            {% render_field form.major class+="w-100" readonly="true" %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_university">دانشگاه محل تحصیل</label>
+                                            {% render_field form.university class+="w-100" readonly="true" %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 rankDiv">
+                                        <div class="form-group">
+                                            <label class="rankLabel" for="id_grade">آخرین مقطع تحصیلی</label>
+                                            <select id="id_grade" name="grade" class="w-100">
+                                                <option selected disabled dir="rtl">انتخاب کنید ...</option>
+                                                {% for option in form.grade %}
+                                                    {{ option }}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_entry_year">سال ورود</label>
+                                            <!-- <input type="text" id="enter-date" class="w-100"> -->
+                                            {% render_field form.entry_year class+="w-100" readonly="true" %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_student_number">شماره دانشجویی</label>
+                                            <!-- <input type="text" id="student-num" class="w-100"> -->
+                                            {% render_field form.student_number class+="w-100" readonly="true" %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="id_address">آدرس محل سکونت</label>
+                                            <!-- <textarea dir="rtl" rows="3" class="w-100" id="Address"></textarea> -->
+                                            {% render_field form.address class+="w-100" rows="3" dir="rtl" %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_home_number">تلفن منزل</label>
+                                            <!-- <input type="text" id="HomeNum" class="w-100"> -->
+                                            {% render_field form.home_number class+="w-100" %}
+                                            <div class="error">
+                                                <!-- <span class="error-body">{% render_field form.home_number.errors %}</span> -->
+                                                {{ home_number_error }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="id_phone_number">تلفن همراه</label>
+                                            <!-- <input type="text" id="PhoneNum" class="w-100"> -->
+                                            {% render_field form.phone_number class+="w-100" %}
+                                            <div class="error">
+                                                {{ phone_number_error }}
+                                                <!-- <span class="error-body">{% render_field form.phone_number.errors %}</span> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label for="id_email">پست الکترونیکی</label>
+                                        <!-- <input type="text" id="Email" class="w-100"> -->
+                                        {% render_field form.email class+="w-100" readonly="true" %}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="id_phone_number">تلفن همراه</label>
-                                <!-- <input type="text" id="PhoneNum" class="w-100"> -->
-                                {% render_field form.phone_number class+="w-100" %}
-                                <div class="error">
-                                    {{ phone_number_error }}
-                                    <!-- <span class="error-body">{% render_field form.phone_number.errors %}</span> -->
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-resume" role="tabpanel" aria-labelledby="nav-resume-tab">
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-header text-right">
+                                <h6>سوابق علمی</h6>
+                                <button type="button" class="education-btn btn p-0 float-left">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-center">
+                                        <div class="education text-center w-100">
+                                            {% if scientificrecord_set %}
+                                                <table class='table m-top-10'>
+                                                    <thead>
+                                                    <tr>
+                                                        <td>مقطع تحصیلی</td>
+                                                        <td>رشته تحصیلی</td>
+                                                        <td>دانشگاه</td>
+                                                        <td>شهر محل تحصیل</td>
+                                                        <td>سال اخذ مدرک</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    </thead>
+                                                    {% for record in scientificrecord_set %}
+                                                        <tbody class="row-sci-{{ record.pk }}">
+                                                        <tr>
+                                                            <div class="sci-row">
+                                                                <td>{{ record.grade }}</td>
+                                                                <td>{{ record.major }}</td>
+                                                                <td>{{ record.university }}</td>
+                                                                <td>{{ record.place }}</td>
+                                                                <td>{{ record.graduated_year }}</td>
+                                                                <td>
+                                                                    <i class='fas fa-pen' id='edit_edu'></i>
+                                                                    <i class='fas fa-trash-alt delete_edu'
+                                                                       value={{ record.pk }}></i>
+                                                                </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    {% endfor %}
+                                                </table>
+                                            {% else %}
+                                                <span class="initial-value  mb-3"
+                                                      style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                                        class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <label for="id_email">پست الکترونیکی</label>
-                                <!-- <input type="text" id="Email" class="w-100"> -->
-                                {% render_field form.email class+="w-100" readonly="true" %}
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-header text-right">
+                                <h6>سوابق اجرایی</h6>
+                                <button type="button" class="executive-btn btn p-0 float-left">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-center">
+                                        <div class="executive text-center w-100">
+                                            {% if executiverecord_set %}
+                                                <table class='table m-top-10'>
+                                                    <thead>
+                                                    <tr>
+                                                        <td>سمت</td>
+                                                        <td>نام مجموعه</td>
+                                                        <td>شهر</td>
+                                                        <td>از سال</td>
+                                                        <td>تا سال</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    </thead>
+                                                    {% for record in executiverecord_set %}
+                                                        <tbody class="row-exe-{{ record.pk }}">
+                                                        <tr>
+                                                            <td>{{ record.post }}</td>
+                                                            <td>{{ record.place }}</td>
+                                                            <td>{{ record.city }}</td>
+                                                            <td>{{ record.start }}</td>
+                                                            <td>{{ record.end }}</td>
+                                                            <td>
+                                                                <i class='fas fa-pen' id='edit_exe'></i>
+                                                                <i class='fas fa-trash-alt delete_exe'
+                                                                   value="{{ record.pk }}"></i>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    {% endfor %}
+                                                </table>
+                                            {% else %}
+                                                <span class="initial-value mb-3"
+                                                      style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                                        class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-header text-right">
+                                <h6>سوابق پژوهشی</h6>
+                                <button type="button" class="research-btn btn p-0 float-left">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-center">
+                                        <div class="studious text-center w-100">
+                                            {% if studiousrecord_set %}
+                                                <table class='table m-top-10'>
+                                                    <thead>
+                                                    <tr>
+                                                        <td>عنوان طرح پژوهشی</td>
+                                                        <td>مجری</td>
+                                                        <td>مسئول اجرا/ همکار</td>
+                                                        <td>وضعیت طرح پژوهشی</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    </thead>
+                                                    {% for record in studiousrecord_set %}
+                                                        <tbody class="row-stu-{{ record.pk }}">
+                                                        <tr>
+                                                            <td>{{ record.title }}</td>
+                                                            <td>{{ record.presenter }}</td>
+                                                            <td>{{ record.responsible }}</td>
+                                                            <td> {% if record.status == 1 %}
+                                                                در دست اجرا
+                                                            {% elif record.status == 2 %}
+                                                                خاتمه یافته
+                                                            {% else %}
+                                                                متوقف
+                                                            {% endif %} </td>
+                                                            <td>
+                                                                <i class='fas fa-pen' id='edit_stu'></i>
+                                                                <i class='fas fa-trash-alt delete_stu'
+                                                                   value={{ record.pk }}></i>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    {% endfor %}
+                                                </table>
+                                            {% else %}
+                                                <span class="initial-value mb-3"
+                                                      style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
+                                                        class="fas fa-plus"></i>  کلیک کنید!  </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-header text-right">
+                                <h6>اطلاعات تکمیلی</h6>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="id_description">چه ویژگی در تیم چمران شما را به عضویت در این تیم
+                                                متمایل
+                                                کرد؟</label>
+                                            <!-- <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea> -->
+                                            {% render_field form.description class+="w-100" rows="3" dir="rtl" %}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header text-right">
-                        <h6>سوابق علمی</h6>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <div class="education text-center w-100">
-                                    {% if scientificrecord_set %}
-                                        <table class='table m-top-10'>
-                                            <thead>
-                                            <tr>
-                                                <td>مقطع تحصیلی</td>
-                                                <td>رشته تحصیلی</td>
-                                                <td>دانشگاه</td>
-                                                <td>شهر محل تحصیل</td>
-                                                <td>سال اخذ مدرک</td>
-                                                <td></td>
-                                            </tr>
-                                            </thead>
-                                            {% for record in scientificrecord_set %}
-                                                <tbody class="row-sci-{{ record.pk }}">
-                                                <tr>
-                                                    <div class="sci-row">
-                                                        <td>{{ record.grade }}</td>
-                                                        <td>{{ record.major }}</td>
-                                                        <td>{{ record.university }}</td>
-                                                        <td>{{ record.place }}</td>
-                                                        <td>{{ record.graduated_year }}</td>
-                                                        <td>
-                                                            <i class='fas fa-pen' id='edit_edu'></i>
-                                                            <i class='fas fa-trash-alt delete_edu'
-                                                               value={{ record.pk }}></i>
-                                                        </td>
-                                                </tr>
-                                                </tbody>
-                                            {% endfor %}
-                                        </table>
-                                    {% else %}
-                                        <span class="initial-value"
-                                              style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
-                                                class="fas fa-plus"></i>  کلیک کنید!  </span>
-                                    {% endif %}
+                    <div class="tab-pane fade" id="nav-upload" role="tabpanel" aria-labelledby="nav-upload-tab">
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <div class="mt-2">
+                                            <p class="font-weight-norma">
+                                                در این قسمت شما می توانید رزومه خود را بارگذاری کنید.
+                                            </p>
+                                            <div class="row">
+                                                <div class="col-md-2"></div>
+                                                <div class="col-md-8 text-center attach__container">
+                                                    <div class="form-group text-center font-weight-bold">
+                                                        <label class="upload-dash-box" for="uploadResume">
+                                                            <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                                 class="bi bi-cloud" fill="currentColor"
+                                                                 xmlns="http://www.w3.org/2000/svg"
+                                                                 style="font-size: 30px">
+                                                                <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"
+                                                                      fill-rule="evenodd"></path>
+                                                            </svg>
+                                                            انتخاب فایل
+                                                        </label>
+                                                        <input type="file" class="form-control-file"
+                                                               id="uploadResume" name="resume" hidden>
+                                                    </div>
+                                                    {#                                                    <div class="attach-box m-auto">#}
+                                                    {#                                                        <span class="attach-box__img pdf"></span>#}
+                                                    {#                                                        <span class="attach-box__info">#}
+                                                    {#                                                            <span class="attach-box__info-name">#}
+                                                    {#                                                                Capture#}
+                                                    {#                                                            </span>#}
+                                                    {#                                                            <span class="attach-box__info-ext">#}
+                                                    {#                                                                PNG#}
+                                                    {#                                                            </span>#}
+                                                    {#                                                        </span>#}
+                                                    {#                                                        <span class="attach-box__option">#}
+                                                    {#                                                           <a class="attach-box__option-download" href="#">#}
+                                                    {#                                                               <i class="fas fa-download"></i>#}
+                                                    {#                                                           </a>#}
+                                                    {#                                                        </span>#}
+                                                    {#                                                    </div>#}
+                                                    {#                                                    <button class="btn btn-primary mt-4" type="button" id="changeAttachment">تغییر فایل</button>#}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="button" class="education-btn success-btn">افزودن</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header text-right">
-                        <h6>سوابق اجرایی</h6>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <div class="executive text-center w-100">
-                                    {% if executiverecord_set %}
-                                        <table class='table m-top-10'>
-                                            <thead>
-                                            <tr>
-                                                <td>سمت</td>
-                                                <td>نام مجموعه</td>
-                                                <td>شهر</td>
-                                                <td>از سال</td>
-                                                <td>تا سال</td>
-                                                <td></td>
-                                            </tr>
-                                            </thead>
-                                            {% for record in executiverecord_set %}
-                                                <tbody class="row-exe-{{ record.pk }}">
-                                                <tr>
-                                                    <td>{{ record.post }}</td>
-                                                    <td>{{ record.place }}</td>
-                                                    <td>{{ record.city }}</td>
-                                                    <td>{{ record.start }}</td>
-                                                    <td>{{ record.end }}</td>
-                                                    <td>
-                                                        <i class='fas fa-pen' id='edit_exe'></i>
-                                                        <i class='fas fa-trash-alt delete_exe'
-                                                           value="{{ record.pk }}"></i>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            {% endfor %}
-                                        </table>
-                                    {% else %}
-                                        <span class="initial-value"
-                                              style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
-                                                class="fas fa-plus"></i>  کلیک کنید!  </span>
-                                    {% endif %}
-                                </div>
-                                <button type="button" class="executive-btn success-btn">افزودن</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header text-right">
-                        <h6>سوابق پژوهشی</h6>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <div class="studious text-center w-100">
-                                    {% if studiousrecord_set %}
-                                        <table class='table m-top-10'>
-                                            <thead>
-                                            <tr>
-                                                <td>عنوان طرح پژوهشی</td>
-                                                <td>مجری</td>
-                                                <td>مسئول اجرا/ همکار</td>
-                                                <td>وضعیت طرح پژوهشی</td>
-                                                <td></td>
-                                            </tr>
-                                            </thead>
-                                            {% for record in studiousrecord_set %}
-                                                <tbody class="row-stu-{{ record.pk }}">
-                                                <tr>
-                                                    <td>{{ record.title }}</td>
-                                                    <td>{{ record.presenter }}</td>
-                                                    <td>{{ record.responsible }}</td>
-                                                    <td> {% if record.status == 1 %}
-                                                        در دست اجرا
-                                                    {% elif record.status == 2 %}
-                                                        خاتمه یافته
-                                                    {% else %}
-                                                        متوقف
-                                                    {% endif %} </td>
-                                                    <td>
-                                                        <i class='fas fa-pen' id='edit_stu'></i>
-                                                        <i class='fas fa-trash-alt delete_stu'
-                                                           value={{ record.pk }}></i>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            {% endfor %}
-                                        </table>
-                                    {% else %}
-                                        <span class="initial-value"
-                                              style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
-                                                class="fas fa-plus"></i>  کلیک کنید!  </span>
-                                    {% endif %}
-                                </div>
-                                <button type="button" class="research-btn success-btn">افزودن</button>
                             </div>
                         </div>
                     </div>
@@ -284,7 +421,7 @@
                 {#                <div class="inner-card card">#}
                 {#                    #}
                 {#                </div>#}
-                <div class="card box flow-root-display w-100">
+                <!-- <div class="card box flow-root-display w-100">
                     <div class="box-header text-right">
                         <h6>ویژگی های شخصیتی</h6>
                     </div>
@@ -777,7 +914,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- <div class="card-header">تکنیک ها</div>
                 <div class="inner-card card">
                     <div class="row">
@@ -786,29 +923,9 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header text-right">
-                        <h6>اطلاعات تکمیلی</h6>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <!-- <textarea dir="rtl" class="w-100" rows="3" id="introduction-method"></textarea> -->
-                                {% render_field form.description class+="w-100" rows="3" dir="rtl" %}
-                                <label for="id_description">چه ویژگی در تیم چمران شما را به عضویت در این تیم متمایل
-                                    کرد؟</label>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="form-submit">
-                    <i class="fas fa-check"></i>
-                    اعمال تغییرات
-                </button>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
     <a href="#top" class="top-button">
         <i class="fas fa-angle-up"></i>
     </a>

@@ -1,0 +1,317 @@
+{% extends "expert/layouts/base_layout.html" %}
+{% load static %}
+{% load gregorian_to_jalali %}
+{% block title %}جزییات پروژه{% endblock %}
+
+{% block modals %}
+
+{% endblock %}
+
+{% block name %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 text-right">
+            <h3 class="h3 p-top-15">جزییات پروژه</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'expert:index' %}">پروژه ها</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span>جزییات پروژه</span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 text-right">
+            <div class="card box flow-root-display w-100">
+                <div class="box-body">
+                    <div class="row mbottom-lg-25 d-block d-lg-none ">
+                        <div class="col-lg-12 text-right">
+                            <h6>پروژه <span>فلان</span></h6>
+                        </div>
+                    </div>
+                    <div class="row" style="direction: ltr!important">
+                        <div class="col-lg-4 col-xs-3">
+                            <div class="project-progress mbottom-lg-25">
+                                <div class="step-container active">
+                                            <span class="step-date">
+                                                <div class="start">
+                                                   1399/05/11
+                                                </div>
+                                            </span>
+                                    <span class="step-name">
+                                                شروع پروژه
+                                            </span>
+                                </div>
+                                <div class="step-container ">
+                                        <span class="step-date">
+                                            <div class="first_phase">1399/05/11</div>
+                                        </span>
+                                    <span class="step-name">فاز اول</span>
+                                </div>
+                                <div class="step-container ">
+                                        <span class="step-date">
+                                            <div class="second_phase">1399/05/11</div>
+                                        </span>
+                                    <span class="step-name">فاز دوم</span>
+                                </div>
+                                <div class="step-container ">
+                                        <span class="step-date">
+                                            <div class="third_phase">1399/05/11</div>
+                                        </span>
+                                    <span class="step-name">فاز سوم</span>
+                                </div>
+                                <div class="step-container">
+                                        <span class="step-date">
+                                            <div class="date_finished">1399/05/11</div>
+                                        </span>
+                                    <span class="step-name">اتمام پروژه</span>
+                                </div>
+                                <div class="line-100">
+                                    <div class="arrow"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-xs-9">
+                            <div class="row mbottom-lg-25 d-none d-lg-block ">
+                                <div class="col-lg-12 text-right">
+                                    <h6>پروژه <span>فلان</span></h6>
+                                </div>
+                            </div>
+                            <div class="row mbottom-lg-25">
+                                <div class="col-lg-12 text-right">
+                                    <span class="section-title">مشخصات پروژه</span>
+                                    <div class="section">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <div class="row m-top-10">
+                                                    <div class="col-md-6">
+                                                        <div class="pre-header">
+                                                            <span>کارفرما</span>
+                                                        </div>
+                                                        <div id="industry-name">
+                                                            صنعت
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pre-header">
+                                                            <span>مجری</span>
+                                                        </div>
+                                                        <div id="enforcer-name">
+                                                            من
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 budget-text">
+                                                        <div class="pre-header">
+                                                            <span>بودجه</span>
+                                                        </div>
+                                                        <div id="budget-content">
+                                                            <span class="budget-amount">5,000,000</span>
+                                                            <span>ریال</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="pre-header">
+                                                            <span>توضیحات اجرایی</span>
+                                                        </div>
+                                                        <pre id="executive-info"></pre>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="industry-logo-preview">
+                                                    <img id="industry_logo"
+                                                         src=""
+                                                         alt="industry-logo">
+                                                </div>
+                                                <div class="budget-section">
+                                                    <div class="budget">
+                                                        <div class="budget-header">بودجه</div>
+                                                        <div class="budget-content">
+                                                            <div class="budget-amount">1000</div>
+                                                            <div>ریال</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mbottom-lg-25">
+                                            <div class="col-lg-12 text-right">
+                                                <span class="section-title">اطلاعات پروژه</span>
+                                                <div class="project-info-tabs">
+                                                    <div class="nav flex-column nav-pills" id="v-pills-tab"
+                                                         role="tablist"
+                                                         aria-orientation="vertical">
+                                                        <a class="nav-link active" id="v-pills-majors-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-majors"
+                                                           aria-selected="true">
+                                                            شاخص ها
+                                                        </a>
+                                                        <a class="nav-link" id="v-pills-approaches-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-approaches"
+                                                           aria-selected="false">
+                                                            راهکار ها
+                                                        </a>
+                                                        <a class="nav-link" id="v-pills-resources-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-resources"
+                                                           aria-selected="false">
+                                                            منابع مورد نیاز
+                                                        </a>
+                                                        <a class="nav-link" id="v-pills-roles-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-roles"
+                                                           aria-selected="false">
+                                                            قوانین
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="section">
+                                                    <div class="project-info-innerDiv">
+                                                        <div class="project-info-content">
+                                                            <div>
+                                                                <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                    لطفا مشکل اصلی که پروژه به حل آن پرداخته
+                                                                    را
+                                                                    توضیح و اهمیت آن را
+                                                                    تبیین کنید.
+                                                                </div>
+                                                                <div class="answer">
+                                                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
+                                                                    صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها
+                                                                    و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
+                                                                    لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+                                                                    کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می
+                                                                    باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و
+                                                                    آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با
+                                                                    نرم افزارها شناخت بیشتری را برای طراحان رایانه ای
+                                                                    علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی
+                                                                    ایجاد کرد. در این صورت می توان امید داشت که تمام و
+                                                                    دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به
+                                                                    پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای
+                                                                    اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی
+                                                                    اساسا مورد استفاده قرار گیرد.
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                    در صورت حل این مشکل، چه پیشرفتی در شیوه
+                                                                    های
+                                                                    درمانی / تجهیزات پزشکی /
+                                                                    خدمات
+                                                                    درمانی یا ... حاصل می شود؟
+                                                                </div>
+                                                                <div class="answer">
+                                                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
+                                                                    صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها
+                                                                    و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
+                                                                    لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+                                                                    کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می
+                                                                    باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و
+                                                                    آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با
+                                                                    نرم افزارها شناخت بیشتری را برای طراحان رایانه ای
+                                                                    علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی
+                                                                    ایجاد کرد. در این صورت می توان امید داشت که تمام و
+                                                                    دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به
+                                                                    پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای
+                                                                    اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی
+                                                                    اساسا مورد استفاده قرار گیرد.
+                                                                </div>
+                                                            </div>
+                                                            {% comment %} <div>
+                                                                            <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                                برآورد شما از سود مالی این پروژه چگونه
+                                                                                است؟
+                                                                            </div>
+                                                                            <div class="answer">{{ project.project_form.predict_profit }}</div>
+                                                                        </div> {% endcomment %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mbottom-lg-25">
+                                            <div class="col-12">
+                                                <span class="section-title">پژوهشگران</span>
+                                                <button type="button"
+                                                        class="border-button section-button"
+                                                        data-toggle="modal"
+                                                        data-target="#researcherRequest">درخواست
+                                                </button>
+                                                <div class="section">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="horizontal-avatar-list owl-carousel owl-theme">
+{#                                                                {% for researcher in researcher_accepted %}#}
+{#                                                                    <div class="item">#}
+                                                                {#                                                                        <div class="avatar-item">#}
+                                                                {#                                                                            <img src="/media/{{ researcher.photo }}"#}
+                                                                {#                                                                                 alt="{{ researcher.fullname }}پروفایل ">#}
+                                                                {#                                                                            <div class="info">#}
+                                                                {#                                                                                <h3>{{ researcher.fullname }}</h3>#}
+                                                                {#                                                                                <button value="{{ project.pk }}"#}
+                                                                {#                                                                                        id="{{ researcher.id }}"#}
+                                                                {#                                                                                        data-url="{% url 'researcher:show_resume_preview' %}"#}
+                                                                {#                                                                                        data-toggle="modal"#}
+                                                                {#                                                                                        data-target="#researcherInfo">#}
+                                                                {#                                                                                    رزومه#}
+                                                                {#                                                                                </button>#}
+                                                                {#                                                                            </div>#}
+                                                                {#                                                                        </div>#}
+                                                                {#                                                                    </div>#}
+                                                                <div class="item">
+                                                                        <div class="avatar-item">
+                                                                            <img src="/media/"
+                                                                                 alt="پروفایل ">
+                                                                            <div class="info">
+                                                                                <h3>رضا باسره</h3>
+                                                                                <button value="1"
+                                                                                        id="2"
+                                                                                        data-url="#"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#researcherInfo">
+                                                                                    رزومه
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+{#                                                                {% empty %}#}
+{##}
+{#                                                                {% endfor %}#}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+{#                            {% include 'expert/layouts/comment.html' with comments=comment project=project %}#}
+                            {% include 'expert/layouts/comment.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}{% endblock %}

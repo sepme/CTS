@@ -31,17 +31,17 @@ function init_dialog_btn(element, dialogClass) {
 
 function modalPreview(modalClass) {
     vote_dialog_init(modalClass);
-        $(".fixed-back").removeClass("show");
-        $(".main").removeClass("blur-div");
-        blur_div_toggle(".main");
-        $(modalClass).addClass("show");
-        close_dialog(modalClass);
-        dialog_comment_init();
-        load_dialog();
-        if (modalClass === ".showProject") {
-            $(modalClass).removeAttr("id");
-            $(modalClass).attr("id", $(this).attr("id"));
-        }
+    $(".fixed-back").removeClass("show");
+    $(".main").removeClass("blur-div");
+    blur_div_toggle(".main");
+    $(modalClass).addClass("show");
+    close_dialog(modalClass);
+    dialog_comment_init();
+    load_dialog();
+    if (modalClass === ".showProject") {
+        $(modalClass).removeAttr("id");
+        $(modalClass).attr("id", $(this).attr("id"));
+    }
 }
 
 // function cancel_add(className) {
@@ -78,14 +78,15 @@ function close_dialog(className) {
             $(className).find(".message").remove();
             $(className).find(".message.info").remove();
         }
-        if (className === ".expert-resume") {
-            $(".expert-resume").slideUp('slow').delay('slow');
-            $(".showProject").delay('slow').slideDown('slow');
-        }
+        // if (className === ".expert-resume") {
+        //     $(".expert-resume").slideUp('slow').delay('slow');
+        //     $(".showProject").delay('slow').slideDown('slow');
+        // }
         $(className).find(".no-comment").remove();
         $(className).find(".comment-tabs .nav").html("");
     });
 }
+
 //
 // function addComment(comment) {
 //     let newPost = "<div class=\"my-comment\" style='display: none'><div class=\"comment-profile\"></div><div class=\"comment-body\" dir=\"ltr\"><span class=\"comment-tools\"><i class=\"fas fa-trash-alt\"></i><i class=\"fas fa-reply\"></i><i class=\"fas fa-pen\"></i></span><span>" + comment + "</span></div></div>";
@@ -185,7 +186,7 @@ function dialog_comment_init() {
 }
 
 function vote_dialog_init(className) {
-    flag = 0;
+    let flag = 0;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
             "color": "#3ccd1c",

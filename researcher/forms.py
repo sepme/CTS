@@ -3,12 +3,12 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from expert.forms import is_numeric
+from expert.forms import has_number
 from . import models,views
 
 from datetime import date
 
-def is_numeric(string):
+def has_number(string):
     for ch in string:
         if ch in '0123456789':
             return True
@@ -26,13 +26,12 @@ class InitailForm(forms.ModelForm):
     class Meta:
         model = models.ResearcherProfile
         fields = [
-            'first_name', 'last_name', 'photo', 'address', 'national_code', 'entry_year', 'grade',
+            'fullname', 'photo', 'address', 'national_code', 'entry_year', 'grade',
             'university', 'major', 'home_number', 'phone_number', 'email', 'student_number'
         ]
         widgets = {
             'photo': forms.FileInput(attrs={'id': "upload-input", 'accept': "image/png, image/jpeg"}),
-            'first_name': forms.TextInput(attrs={'id': "FirstName", 'class': "w-100"}),
-            'last_name': forms.TextInput(attrs={'id': "LastName", 'class': "w-100"}),
+            'fullname': forms.TextInput(attrs={'id': "FUllName", 'class': "w-100"}),
             'major': forms.TextInput(attrs={'id': "Field", 'class': "w-100"}),
             'national_code': forms.TextInput(attrs={'id': "nationalCode", 'class': "w-100"}),
             'student_number': forms.TextInput(attrs={'id': "student-num", 'class': "w-100"}),
@@ -104,13 +103,9 @@ class InitailForm(forms.ModelForm):
         university = self.cleaned_data.get('university')
         return university
 
-    def clean_first_name(self):
-        first_name = self.cleaned_data.get('first_name')
-        return first_name
-
-    def clean_last_name(self):
-        data = self.cleaned_data["last_name"]
-        return data
+    def clean_fullname(self):
+        fullname = self.cleaned_data.get('fullname')
+        return fullname
 
     def clean_email(self):
         data = self.cleaned_data["email"]
@@ -124,49 +119,20 @@ class InitailForm(forms.ModelForm):
 class ResearcherProfileForm(forms.ModelForm):
     class Meta:
         model = models.ResearcherProfile
-        fields = ['first_name', 'last_name', 'major', 'national_code', 'grade', 'university',
+        fields = ['fullname', 'major', 'national_code', 'grade', 'university',
                   'entry_year', 'student_number', 'address', 'home_number', 'phone_number',
                   'team_work', 'creative_thinking', 'interest_in_major', 'motivation',
                   'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
-                  'project_knowledge', 'description', 'photo','sacrifice','email',
+                  'project_knowledge', 'description', 'photo','sacrifice','email','resume'
                   ]
         # error_messages= {}
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['address'].required = False
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]
-        return data
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-    
-        return email
-
-    def clean_first_name(self):
-        data = self.cleaned_data["first_name"]
-        return data
-
-    def clean_last_name(self):
-        data = self.cleaned_data["last_name"]
-        return data
-
-    def clean_major(self):
-        major = self.cleaned_data.get('major')
-        return major
-
-    def clean_national_code(self):
-        data = self.cleaned_data["national_code"]
-        return data
-
-    def clean_grade(self):
-        data = self.cleaned_data["grade"]
-        return data
-
-    def clean_university(self):
-        data = self.cleaned_data["university"]
         return data
 
     def clean_entry_year(self):
@@ -178,12 +144,12 @@ class ResearcherProfileForm(forms.ModelForm):
             raise ValidationError(_("سال را اشتباه وارد کرده اید."))
         return data
 
-    def clean_address(self):
-        data = self.cleaned_data["address"]
-        return data
-
     def clean_student_number(self):
         data = self.cleaned_data["student_number"]
+        try:
+            int(data)
+        except ValueError:
+            raise forms.ValidationError('شماره دانشجویی باید یک عدد باشد.')
         return data
 
     def clean_home_number(self):
@@ -209,50 +175,6 @@ class ResearcherProfileForm(forms.ModelForm):
             raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
         return phone_number
 
-    def clean_team_work(self):
-        data = self.cleaned_data["team_work"]
-        return data
-
-    def clean_creative_thinking(self):
-        data = self.cleaned_data["creative_thinking"]
-        return data
-
-    def clean_interest_in_major(self):
-        data = self.cleaned_data["interest_in_major"]
-        return data
-
-    def clean_motivation(self):
-        data = self.cleaned_data["motivation"]
-        return data
-
-    def clean_sacrifice(self):
-        data = self.cleaned_data["sacrifice"]
-        return data
-
-    def clean_diligence(self):
-        data = self.cleaned_data["diligence"]
-        return data
-
-    def clean_interest_in_learn(self):
-        data = self.cleaned_data["interest_in_learn"]
-        return data
-
-    def clean_punctuality(self):
-        data = self.cleaned_data["punctuality"]
-        return data
-
-    def clean_data_collection(self):
-        data = self.cleaned_data["data_collection"]
-        return data
-
-    def clean_project_knowledge(self):
-        data = self.cleaned_data["project_knowledge"]
-        return data
-
-    def clean_description(self):
-        data = self.cleaned_data["description"]
-        return data
-
 
 class InitialInfoForm(forms.ModelForm):
     class Meta:
@@ -260,18 +182,16 @@ class InitialInfoForm(forms.ModelForm):
         # exclude = ['birth_year', 'team_work', 'creative_thinking', 'interest_in_major',
         #            'motivation', 'sacrifice', 'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
         #            'project_knowledge', 'description', 'researcher_user']
-        fields = ['photo', 'first_name', 'last_name', 'major', 'national_code', 'grade', 'university',
-                  'entry_year', 'address', 'home_number', 'phone_number', 'student_number']
+        fields = ['photo', 'fullname', 'major', 'national_code', 'grade', 'university',
+                  'entry_year', 'home_number', 'phone_number', 'student_number']
         error_messages = {
-            'first_name': {'required': "نام نمی تواند خالی باشد."},
-            'last_name': {'required': "نام خانوادگی نمی تواند خالی باشد."},
+            'fullname': {'required': "نام و نام خانوادگی نمی تواند خالی باشد."},
             'major': {'required': "رشته تحصیلی نمی تواند خالی باشد."},
             'national_code': {'required': "کد ملی نمی تواند خالی باشد."},
             'student_number': {'required': "شماره دانشجویی نمی تواند خالی باشد."},
             'entry_year': {'required': "سال ورود نمی تواند خالی باشد."},
             'grade': {'required': 'مقطع تحصیلی نمی تواند خالی باشد'},
             'university': {'required': "دانشگاه نمی تواند خالی باشد."},
-            'address': {'required': "آدرس نمی تواند خالی باشد."},
             'phone_number': {'required': "شماره تلفن همراه نمی تواند خالی باشد."},
             'home_number': {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
             # 'email': {'required': 'پست الکترونیکی نمی تواند خالی باشد.',
@@ -279,30 +199,24 @@ class InitialInfoForm(forms.ModelForm):
 
         }
 
-    def clean_photo(self):
-        data = self.cleaned_data["photo"]
-        if data is None:
-            raise forms.ValidationError('عکس نمی تواند خالی باشد.')
-        return data
+    # def clean_photo(self):
+    #     data = self.cleaned_data["photo"]
+    #     if data is None:
+    #         raise forms.ValidationError('عکس نمی تواند خالی باشد.')
+    #     return data
     
 
-    def clean_first_name(self):
-        first_name = self.cleaned_data.get('first_name')
-        if is_numeric(first_name):
-            raise forms.ValidationError('نام نباید شامل عدد باشد.')
-        return first_name
-
-    def clean_last_name(self):
-        last_name = self.cleaned_data.get('last_name')
-        if is_numeric(last_name):
-            raise forms.ValidationError('نام خانوادگی نباید شامل عدد باشد.')
-        return last_name
+    def clean_fullname(self):
+        fullname = self.cleaned_data.get('fullname')
+        if has_number(fullname):
+            raise forms.ValidationError('نام و نام خانوادگی نباید شامل عدد باشد.')
+        return fullname
 
     # def clean_email(self):
     #     current_email = self.cleaned_data.get('email')
     #     email = models.ResearcherProfile.objects.filter(email=current_email)
     #     if email.exists():
-    #         raise forms.ValidationError('کاربر با این ایمیل قبلا ثبت نام شده است')
+    #         raise forms.ValidationError('کاربر با این ایمیل قبلا ثبت نام و نام خانوادگی شده است')
 
     #     return current_email
 
@@ -349,9 +263,6 @@ class InitialInfoForm(forms.ModelForm):
         except ValueError:
             raise forms.ValidationError('شماره دانشجویی باید یک عدد باشد.')
 
-        if len(number) != 8:
-            raise forms.ValidationError('شماره دانشجویی باید هشت رقمی باشد.')
-
         return number
 
     def clean_entry_year(self):
@@ -380,25 +291,25 @@ class ScientificRecordForm(forms.ModelForm):
 
     def clean_grade(self):
         grade = self.cleaned_data.get('grade')
-        if is_numeric(grade):
+        if has_number(grade):
             raise ValidationError(_("مقطع تحصیلی نمی تواند شامل عدد باشد."))
         return grade
 
     def clean_major(self):
         data = self.cleaned_data["major"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("رشته تحصیلی نمی تواند شامل عدد باشد."))
         return data
 
     def clean_university(self):
         data = self.cleaned_data["university"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("دانشگاه نمی تواند شامل عدد باشد."))
         return data
     
     def clean_place(self):
         data = self.cleaned_data["place"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("شهر نمی تواند شامل عدد باشد."))
         return data
     
@@ -429,13 +340,13 @@ class ExecutiveRecordForm(forms.ModelForm):
             'post': {'required': "سمت نمی تواند خالی باشد."},
             'start': {'required': "تارخ شروع نمی تواند خالی باشد."},
             'end': {'required': "تارخ پایان نمی تواند خالی باشد."},
-            'place': {'required': "نام مجموعه نمی تواند خالی باشد."},
+            'place': {'required': "نام و نام خانوادگی مجموعه نمی تواند خالی باشد."},
             'city': {'required': "شهر نمی تواند خالی باشد."},
             }
     
     def clean_post(self):
         data = self.cleaned_data["post"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("سمت نمی تواند شامل عدد باشد."))
         return data
     
@@ -479,13 +390,13 @@ class ExecutiveRecordForm(forms.ModelForm):
     
     def clean_place(self):
         data = self.cleaned_data["place"]
-        if is_numeric(data):
-            raise ValidationError(_("نام مجموعه نمی تواند شامل عدد باشد."))
+        if has_number(data):
+            raise ValidationError(_("نام و نام خانوادگی مجموعه نمی تواند شامل عدد باشد."))
         return data
     
     def clean_city(self):
         data = self.cleaned_data["city"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("شهر نمی تواند شامل عدد باشد."))
         return data
 
@@ -496,33 +407,29 @@ class StudiousRecordForm(forms.ModelForm):
 
         error_messages = {
         'title': {'required': "عنوان طرح پژوهشی نمی تواند خالی باشد."},
-        'presenter': {'required': "نام مجری نمی تواند خالی باشد."},
+        'presenter': {'required': "نام و نام خانوادگی مجری نمی تواند خالی باشد."},
         'responsible': {'required': "مسئول اجرا / همکار نمی تواند خالی باشد."},
         'status': {'required': "وضعیت طرح پژوهشی نمی تواند خالی باشد."},
         }
 
     def clean_title(self):
         data = self.cleaned_data["title"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("عنوان طرح پژوهشی نمی تواند شامل عدد باشد."))
         return data
     
     def clean_presenter(self):
         data = self.cleaned_data["presenter"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("مجری نمی تواند شامل عدد باشد."))
         return data
     
     def clean_responsible(self):
         data = self.cleaned_data["responsible"]
-        if is_numeric(data):
+        if has_number(data):
             raise ValidationError(_("مسئول اجرا / همکار نمی تواند شامل عدد باشد."))
         return data
-    
-    def clean_status(self):
-        data = self.cleaned_data["status"]
-        
-        return data
+
 
 class TechniqueInstanceForm(forms.Form):
     technique = forms.CharField(max_length=100 ,empty_value='None')
@@ -564,21 +471,9 @@ class TechniqueInstanceForm(forms.Form):
         return data
 
 class TechniqueReviewFrom(forms.Form):
-    request_body = forms.CharField(widget=forms.Textarea)
-    request_confirmation_method = forms.CharField(max_length=100 ,required=False)
+    request_body = forms.CharField(widget=forms.Textarea, error_messages={'required' : 'توضیحات نمی تواند خالی باشد.'})
+    request_confirmation_method = forms.CharField(max_length=100, error_messages={'required' : 'یکی از راه های ارتفا را انتخاب کنید.'})
     new_resume = forms.FileField(required=False)
-
-    def clean_request_body(self):
-        data = self.cleaned_data["request_body"]        
-        if data == "":
-            raise ValidationError(_("توضیحات نمی تواند خالی باشد."))
-        return data
-
-    def clean_request_confirmation_method(self):
-        data = self.cleaned_data["request_confirmation_method"]
-        if data == '':
-            raise ValidationError(_("یکی از راه های ارتفا را انتخاب کنید."))
-        return data
 
     def clean_new_resume(self):
         data = self.cleaned_data["new_resume"]
@@ -606,25 +501,26 @@ class CommentForm(forms.Form):
         return data
 
 class ApplyForm(forms.Form):
-    least_hours = forms.CharField(max_length=10, required=False)
     most_hours = forms.CharField(max_length=10, required=False)
+    least_hours = forms.CharField(max_length=10, required=False)
 
     def clean_least_hours(self):
         data = self.cleaned_data["least_hours"]
+        most_hour = self.cleaned_data.get('most_hours')
         if data == '':
             raise ValidationError(_("لطفا حداقل ساعت را وارد کنید."))
         if not completely_numeric(data):
             raise ValidationError(_("لطفا فقط عدد وارد کنید."))
+        if most_hour is not None:
+            if int(most_hour) < int(data):
+                raise ValidationError(_("حداقل ساعت از حداکثر ساعت بیشتر است."))
         return data
     
     def clean_most_hours(self):
         data = self.cleaned_data["most_hours"]
-        least_hour = self.cleaned_data.get('least_hours')
         if data == '':
             raise ValidationError(_("لطفا حداکثر ساعت را وارد کنید."))
         if not completely_numeric(data):            
             raise ValidationError(_("لطفا فقط عدد وارد کنید."))
-        if least_hour > data:
-            raise ValidationError(_("حداقل ساعت از حداکثر ساعت بیشتر است."))
         return data
     

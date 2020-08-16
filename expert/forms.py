@@ -3,7 +3,7 @@ from .models import *
 from django.core.exceptions import ValidationError
 
 
-def is_numeric(string):
+def has_number(string):
     for ch in string:
         if ch in '0123456789':
             return True
@@ -11,72 +11,62 @@ def is_numeric(string):
 
 
 def completely_numeric(string):
-    b = True
-    for ch in string:
-        if ch not in '0123456789':
-            b = False
-    return b
+    try:
+        int(string)
+        return True
+    except:
+        return False
 
 
-class InitialInfoForm(forms.Form):
-    photo = forms.FileField(max_length=255, error_messages={'required': "عکس نمی تواند خالی باشد."})
-    first_name = forms.CharField(max_length=32, error_messages={'required': "نام نمی تواند خالی باشد."})
-    last_name = forms.CharField(max_length=32, error_messages={'required': "نام خانوادگی نمی تواند خالی باشد."})
-    special_field = forms.CharField(max_length=256, error_messages={'required': "حوزه تخصصی نمی تواند خالی باشد."})
-    melli_code = forms.CharField(error_messages={'required': "کد ملی نمی تواند خالی باشد."})
-    scientific_rank = forms.IntegerField(error_messages={'required': 'مرتبه علمی نباید خالی باشد!'})
-    university = forms.CharField(max_length=128, error_messages={'required': "دانشگاه مورد نظر نمی تواند خالی باشد."})
-    address = forms.CharField(widget=forms.Textarea(), error_messages={'required': "آدرس  نمی تواند خالی باشد."})
-    home_number = forms.CharField(error_messages={'required': "شماره تلفن منزل نمی تواند خالی باشد."})
-    phone_number = forms.CharField(error_messages={'required': "شماره تلفن همراه نمی تواند خالی باشد."})
-    email_address = forms.EmailField(error_messages={'required': "ایمیل نمی تواند خالی باشد.",
-                                                     'invalid': 'ایمیل وارد شده نامعتبر است.'})
+class InitialInfoForm(forms.ModelForm):
 
-    def clean_photo(self):
-        data = self.cleaned_data["photo"]
-        if data is None:
-            raise ValidationError('عکس نمی تواند خالی باشد.')
-        return data
-    
+    class Meta:
+        model = ExpertForm
+        fields = ['photo', 'fullname', 'special_field', 'national_code', 'scientific_rank',
+                  'university', 'home_number', 'phone_number']
+        error_messages = {
+            # 'photo'           : {'required': "عکس نمی تواند خالی باشد."} ,
+            'fullname'        : {'required': "نام و نام خانوادگی نمی تواند خالی باشد."},
+            'special_field'   : {'required': "حوزه تخصصی نمی تواند خالی باشد."},
+            'national_code'   : {'required': "کد ملی نمی تواند خالی باشد."},
+            'scientific_rank' : {'required': 'مرتبه علمی نباید خالی باشد.'},
+            'university'      : {'required': "دانشگاه مورد نظر نمی تواند خالی باشد."},
+            'home_number'     : {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
+            'phone_number'    : {'required': "شماره تلفن همراه نمی تواند خالی باشد."},
+        }
+    # photo = forms.FileField(max_length=255, error_messages={'required': "عکس نمی تواند خالی باشد."})
+    # fullname = forms.CharField(max_length=128, error_messages={'required': "نام و نام خانوادگی نمی تواند خالی باشد."})
+    # special_field = forms.CharField(max_length=256, error_messages={'required': "حوزه تخصصی نمی تواند خالی باشد."})
+    # national_code = forms.CharField(error_messages={'required': "کد ملی نمی تواند خالی باشد."})
+    # scientific_rank = forms.IntegerField(error_messages={'required': 'مرتبه علمی نباید خالی باشد!'})
+    # university = forms.CharField(max_length=128, error_messages={'required': "دانشگاه مورد نظر نمی تواند خالی باشد."})
+    # home_number = forms.CharField(error_messages={'required': "شماره تلفن منزل نمی تواند خالی باشد."})
+    # phone_number = forms.CharField(error_messages={'required': "شماره تلفن همراه نمی تواند خالی باشد."})
+    # email_address = forms.EmailField(error_messages={'required': "ایمیل نمی تواند خالی باشد.",
+    #                                                  'invalid': 'ایمیل وارد شده نامعتبر است.'})
 
-    def clean_first_name(self):
-        first_name = self.cleaned_data.get('first_name')
-        if is_numeric(first_name):
+    def clean_fullname(self):
+        fullname = self.cleaned_data.get('fullname')
+        if has_number(fullname):
             raise forms.ValidationError('نام نباید شامل عدد باشد.')
-        return first_name
+        return fullname
 
-    def clean_last_name(self):
-        last_name = self.cleaned_data.get('last_name')
-        if is_numeric(last_name):
-            raise forms.ValidationError('نام خانوادگی نباید شامل عدد باشد.')
-        return last_name
-
-    def clean_email_address(self):
-        current_email = self.cleaned_data.get('email_address')
-        print('the email is', current_email)
+    def clean_national_code(self):
+        national_code = self.cleaned_data.get('national_code')
+        if national_code is None:
+            raise forms.ValidationError("کد ملی نمی تواند خالی باشد.")
         try:
-            ExpertUser.objects.get(user__username=current_email)
-        except ExpertUser.DoesNotExist:
-            raise forms.ValidationError('ایمیل وارد شده نادرست است.')
-
-        return current_email
-
-    def clean_melli_code(self):
-        melli_code = self.cleaned_data.get('melli_code')
-        print('mellicode:', melli_code)
-        try:
-            int(melli_code)
+            int(national_code)
         except ValueError:
             raise forms.ValidationError('کد ملی باید یک عدد باشد.')
 
-        if len(melli_code) != 10:
+        if len(national_code) != 10:
             raise forms.ValidationError('کد ملی باید ده رقمی باشد.')
 
-        return melli_code
+        return national_code
 
     def clean_home_number(self):
         home_number = self.cleaned_data.get('home_number')
-        print('home_number:', home_number)
         try:
             int(home_number)
         except ValueError:
@@ -89,7 +79,6 @@ class InitialInfoForm(forms.Form):
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
-        print('phone_number:', phone_number)
         try:
             int(phone_number)
         except ValueError:
@@ -102,47 +91,60 @@ class InitialInfoForm(forms.Form):
 
 
 class ExpertInfoForm(forms.ModelForm):
-    prefix = 'expert_info'
     keywords = forms.CharField(required=False)
 
     class Meta:
         model = ExpertForm
-        exclude = ['photo','keywords', 'eq_test', 'number_of_researcher', 'has_industrial_research', 'positive_feature', 'lab_equipment']
+        exclude = ['expert_user', 'photo','keywords', 'eq_test', 'lab_equipment']
         error_messages = {
             'special_field': {
                 'required': 'حوزه تخصصی نمی تواند خالی باشد.'
             },
-            'home_address': {
-                'required': 'آدرس نمی تواند خالی باشد.'
-            },
             'scientific_rank': {
                 'required': 'مرتبه علمی نمی تواند خالی باشد'
-            }
+            },
+            # 'home_address': {
+            #     'required': 'آدرس نمی تواند خالی باشد.'
+            # },
         }
 
-    def clean_mobile_phone(self):
-        home_number = self.cleaned_data.get('mobile_phone')
-        try:
-            int(home_number)
-        except ValueError:
-            raise forms.ValidationError('شماره تلفن همراه باید یک عدد باشد.')
-
-        if len(home_number) != 11:
-            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
-
-        return home_number
+        widgets = {
+            'home_address': forms.Textarea(attrs={'rows': "5",}),
+        }
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
         try:
             int(phone_number)
         except ValueError:
-            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
+            raise forms.ValidationError('شماره تلفن همراه باید یک عدد باشد.')
 
         if len(phone_number) != 11:
-            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
+            raise forms.ValidationError('شماره تلفن همراه باید یازده رقمی باشد.')
 
         return phone_number
+
+    def clean_home_number(self):
+        home_number = self.cleaned_data.get('home_number')
+        try:
+            int(home_number)
+        except ValueError:
+            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
+
+        if len(home_number) != 11:
+            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
+
+        return home_number
+    
+    def clean_number_of_grants(self):
+        data = self.cleaned_data["number_of_grants"]
+        if data is not None:
+            try:
+                int(data)
+            except:
+                raise forms.ValidationError("تعداد گرنت ها باید به عدد باشد.")
+        return data
+    
 
 
 class ScientificRecordForm(forms.ModelForm):
@@ -156,6 +158,8 @@ class ScientificRecordForm(forms.ModelForm):
             int(year)
         except ValueError:
             raise forms.ValidationError('سال اخذ مدرک باید عدد باشد.')
+        if int(year) < 1000 or int(year) > 9999:
+            raise forms.ValidationError('سال اخذ مدرک باید چهار رقمی باشد.')
         return year
 
     def clean_degree(self):
@@ -234,19 +238,19 @@ class ResearchRecordForm(forms.ModelForm):
 
     def clean_research_title(self):
         title = self.cleaned_data.get('research_title')
-        if completely_numeric(title):
+        if completely_numeric(title):            
             raise forms.ValidationError('عنوان طرح نمی تواند عدد باشد')
         return title
 
     def clean_researcher(self):
         researcher = self.cleaned_data.get('researcher')
-        if is_numeric(researcher):
+        if has_number(researcher):
             raise forms.ValidationError('نام مجری نمی تواند عدد باشد')
         return researcher
 
     def clean_co_researcher(self):
         co_researcher = self.cleaned_data.get('co_researcher')
-        if is_numeric(co_researcher):
+        if has_number(co_researcher):
             raise forms.ValidationError('نام همکار نمی تواند عدد باشد')
         return co_researcher
 
@@ -338,4 +342,24 @@ class CommentForm(forms.Form):
     
     def clean_attachment(self):
         data = self.cleaned_data["attachment"]
+        return data
+
+class RequestResearcherForm(forms.Form):
+    least_hour       = forms.IntegerField(required=False)
+    researcher_count = forms.IntegerField(required=False)
+    
+    def clean_least_hour(self):
+        data = self.cleaned_data["least_hour"]
+        if data is None:
+            raise ValidationError('حداقل ساعت نمی تواند خالی باشد.')
+        if data < 1:
+            raise ValidationError("مقدار حداقل ساعت وارد شده نامعتر می باشد.")
+        return data
+    
+    def clean_researcher_count(self):
+        data = self.cleaned_data["researcher_count"]
+        if data is None:
+            raise ValidationError('تعداد دانشجو نمی تواند خالی باشد.')
+        if data < 1:
+            raise ValidationError("تعداد دانشجو وارد شده نامعتر می باشد.")
         return data

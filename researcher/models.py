@@ -50,6 +50,7 @@ def get_resumeFile_path(instance, filename):
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    userId = models.CharField(verbose_name="ID کاربر", max_length=50 ,blank=True, null=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
@@ -81,15 +82,26 @@ class Status(models.Model):
         ('deactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
-    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
-    inactivate_duration_temp = models.DateField(verbose_name="غیرفعال تا تاریخ",default='0001-01-01' , blank=True, null=True)
+    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True, verbose_name="غیرفعال تا تاریخ")
+    # inactivate_duration_temp = models.DateField(default='0001-01-01' , blank=True, null=True)
 
     @property
-    def check_activity_status(self):
-        today = datetime.datetime.today().date()
-        if  today > self.inactivate_duration_temp:
-            return True
-        return False
+    def is_deactivated(self):
+        today = datetime.datetime.now(datetime.timezone.utc)
+        if  today > self.inactivate_duration:
+            return False
+        return True
+    
+    @property
+    def remainingTime(self):
+        now = datetime.datetime.now(datetime.timezone.utc)
+        delta = self.inactivate_duration - now
+        remaining = {}
+        remaining['day'] = delta.days
+        remaining['hour'] = delta.seconds // 3600
+        remaining['minute'] = (delta.seconds % 3600) // 60
+        remaining['second'] = delta.seconds % 60
+        return remaining
 
     def __str__(self):
         return '{user} - {status}'.format(user=self.researcher_user, status=self.status)
@@ -107,8 +119,7 @@ class MembershipFee(models.Model):
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
                                            on_delete=models.CASCADE, blank=True, null=True)
-    first_name = models.CharField(max_length=300, verbose_name="نام")
-    last_name = models.CharField(max_length=300, verbose_name="نام خانوادگی")
+    fullname = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
     photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
@@ -162,24 +173,31 @@ class ResearcherProfile(models.Model):
                                             , blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
+    resume      = models.FileField(verbose_name="رزومه دانشجو", upload_to=profileUpload, max_length=511,
+                                   null=True, blank=True)
 
     def __str__(self):
-        return '{name} {lastname}'.format(name=self.first_name, lastname=self.last_name)
+        return self.fullname
 
     def save(self, *args, **kwargs):
         if self.id:
             perv = ResearcherProfile.objects.get(id=self.id)
-            if perv.photo.name.split("/")[-1] != self.photo.name.split("/")[-1]:
-                self.photo = self.compressImage(self.photo)
+            if perv.photo.name: 
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
+                    self.photo = self.compressImage(self.photo)
+            else:
+                if self.photo.name: 
+                    self.photo = self.compressImage(self.photo)
         else:
-            self.photo = self.compressImage(self.photo)
+            if self.photo.name: 
+                self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
         outputIoStream.seek(0)
         uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
@@ -240,7 +258,7 @@ class ResearcherHistory(models.Model):
     involve_tech = models.ManyToManyField('Technique', verbose_name="تکنیک های استفاده شده")
 
     def __str__(self):
-        return "history of " + self.researcher_profile.first_name
+        return "history of " + self.researcher_profile.fullname
 
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
@@ -347,27 +365,25 @@ class TechniqueInstance(models.Model):
 
     @property
     def date_last(self):
-        days_passed = datetime.datetime.today().day - self.evaluat_date.day
-        months_passed = datetime.datetime.today().month - self.evaluat_date.month
-        years_passed = datetime.datetime.today().year - self.evaluat_date.year
-        days = ""
-        months = ""
-        years = ""
-        if years_passed != 0:
-            years = persianNumber.convert(str(years_passed)) + " سال "
-        if months_passed != 0:
-            if years_passed != 0:
-                months = " و " + persianNumber.convert(str(months_passed)) + " ماه "
+        days_passed = (datetime.datetime.today().date() - self.evaluat_date).days
+        if days_passed == 0:
+            return "امروز"
+        total_passed = ""
+        if days_passed > 364:
+            total_passed = persianNumber.convert(str(days_passed // 365)) + " سال "
+        days_passed = days_passed % 365
+        if days_passed > 30:
+            if total_passed == "" :
+                total_passed = persianNumber.convert(str(days_passed // 30)) + " ماه "
             else:
-                months = persianNumber.convert(str(months_passed)) + " ماه "
-        if days_passed != 0:
-            if months_passed == 0 and years_passed == 0:
-                days = persianNumber.convert(str(days_passed)) + " روز "
-            else:
-                days = " و " + persianNumber.convert(str(days_passed)) + " روز "
-        if days_passed != 0 or months_passed != 0 or years_passed != 0:
-            return years + months + days + " پیش"
-        return "امروز"
+                total_passed += " و " + persianNumber.convert(str(days_passed // 30)) + " ماه "
+        days_passed = days_passed % 30
+        if total_passed == "" :
+            total_passed = persianNumber.convert(str(days_passed)) + " روز "
+        else:
+            total_passed += " و " + persianNumber.convert(str(days_passed)) + " روز "
+        total_passed += " پیش"
+        return total_passed
 
     def __str__(self):
         return str(self.researcher) + " - " + str(self.technique)
@@ -398,7 +414,7 @@ class ResearchQuestionInstance(models.Model):
                                           verbose_name="سوال پژوهشی")
     researcher = models.ForeignKey(ResearcherUser, on_delete=models.CASCADE, verbose_name="پژوهشگر",
                                    blank=True, null=True)
-    hand_out_date = models.DateField(verbose_name="تاریخ واگذاری", default=now)
+    hand_out_date = models.DateTimeField(verbose_name="تاریخ واگذاری", default=now)
     answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True, blank=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
     is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={

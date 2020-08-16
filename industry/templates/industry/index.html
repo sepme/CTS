@@ -4,15 +4,20 @@
 {% block title %}پروژه ها{% endblock %}
 
 {% block dialog %}
+    {% comment %} {% include 'industry/layouts/project_details.html' %} {% endcomment %}
+    {% include 'industry/layouts/vote_dialog.html' %}
+{% endblock %}
+{% block modals %}
     {% if user.industryuser.status == 'signed_up' %}
+        {% include 'industry/layouts/select_usage.html' %}
         {% include 'industry/layouts/initial_information.html' %}
     {% endif %}
-    {% include 'industry/layouts/showProject.html' %}
-    {% include 'industry/layouts/vote_dialog.html' %}
+    {% include 'industry/layouts/show_project.html' %}
     {% include 'industry/layouts/expertResume.html' %}
+    {% include 'industry/layouts/project_setting.html' %}
 {% endblock %}
 
-{% block name %}{{ request.user.industryuser.industryform }}{% endblock %}
+{% block name %}{{ request.user.industryuser.profile }}{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -26,7 +31,7 @@
                 {% if project.status == 0 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <span class="check-status"></span>
                         </div>
                         <div class="box-body">
@@ -36,7 +41,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -44,7 +50,7 @@
                     </div>
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
-                    {#                            <h6> {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                            <h6> {{ project.project_form.persian_title }}</h6>#}
                     {#                            <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>#}
                     {#                            <button class="preview-project default-btn show-btn show-project" type="button"#}
                     {#                                    id="{{ project.id }}">مشاهده#}
@@ -56,7 +62,10 @@
                 {% elif project.status == 1 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
+                            <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
+                                <i class="fas fa-cog"></i>
+                            </div>
                             <span class="active-status">
                                 <i class="fas fa-spinner fc-white center-abs"></i>
                             </span>
@@ -74,7 +83,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -82,7 +92,7 @@
                     </div>
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
-                    {#                            <h6> {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                            <h6> {{ project.project_form.persian_title }}</h6>#}
                     {##}
                     {#                            {% if project.industryUnseenCommentCount != 0 %}#}
                     {#                                <div class="employer">#}
@@ -104,7 +114,10 @@
                 {% elif project.status == 2 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
+                            <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
+                                <i class="fas fa-cog"></i>
+                            </div>
                             <span class="active-status"></span>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
@@ -140,16 +153,18 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-4">
-                                    <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
-                                    </button>
+                                    <a href="{% url 'industry:show_active_project' code=project.code %}">
+                                        <button class="default-btn" type="button">
+                                            مشاهده
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
-                    {#                            <h6> {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                            <h6> {{ project.project_form.persian_title }}</h6>#}
                     {##}
                     {#                            {% if project.industryUnseenCommentCount != 0 %}#}
                     {#                                <div class="employer">#}
@@ -179,7 +194,7 @@
                 {% elif project.status == 3 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <span class="reject-status"></span>
                             <div class="notification">
                                 <i class="far fa-comment-alt center-abs"></i>
@@ -211,7 +226,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -221,7 +237,7 @@
                     {#                        <div class="card project-card text-right">#}
                     {#                                <div class="status-line refuse"></div>#}
                     {#                            <h6><i class="fas fa-file-alt"></i>#}
-                    {#                                {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                                {{ project.project_form.persian_title }}</h6>#}
                     {#                            <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>#}
                     {#                            {% if project.expert_accepted %}#}
                     {#                                <div class="employer">#}
@@ -243,7 +259,7 @@
                 {% elif project.status == 4 %}
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
-                            <h6>{{ project.project_form.project_title_persian }}</h6>
+                            <h6>{{ project.project_form.persian_title }}</h6>
                             <span class="complete-status">
                                 <i class="fas fa-check center-abs fc-white"></i>
                             </span>
@@ -282,7 +298,8 @@
                                 </div>
                                 <div class="col-6">
                                     <button class="preview-project default-btn" type="button"
-                                            id="{{ project.id }}">مشاهده
+                                            id="{{ project.id }}" data-toggle="modal" data-target="#showProject">
+                                        مشاهده
                                     </button>
                                 </div>
                             </div>
@@ -291,7 +308,7 @@
                     {#                    <div class="col-lg-6 col-md-6">#}
                     {#                        <div class="card project-card text-right">#}
                     {#                            <h6><i class="fas fa-file-alt"></i>#}
-                    {#                                {{ project.project_form.project_title_persian }}</h6>#}
+                    {#                                {{ project.project_form.persian_title }}</h6>#}
                     {#                            <div class="employer"><i class="far fa-envelope"></i> پیام ها</div>#}
                     {#                            {% if project.expert_accepted %}#}
                     {#                                <div class="employer">#}
@@ -323,6 +340,10 @@
                 </div>
             {% endfor %}
         </div>
-{#        <div class="col-lg-3"></div>#}
+        {#        <div class="col-lg-3"></div>#}
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
 {% endblock %}

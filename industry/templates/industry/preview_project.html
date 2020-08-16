@@ -1,0 +1,472 @@
+{% extends "industry/layouts/base_layout.html" %}
+{% load static %}
+{% load gregorian_to_jalali %}
+{% load date_tags %}
+{% block title %} جزییات پروژه {{ title }}{% endblock %}
+
+{% block modals %}
+    {% include 'industry/layouts/expertResume.html' %}
+{% endblock %}
+
+{% block name %}{{ request.user.industryuser.profile }}{% endblock %}
+
+{% block style %}
+    <style type="text/css">
+        @media (min-width: 768px) and (max-width: 992px) {
+            .project-progress .line-100:after {
+                width: calc({% project_progress  project_pk %}% + 6%);
+            }
+
+            .project-progress .step-container:nth-child(2) {
+                right: {% date_to_percent project_pk=project_pk phase=1 type="w" %}%;
+            }
+
+            .project-progress .step-container:nth-child(3) {
+                right: {% date_to_percent project_pk=project_pk phase=2 type="w" %}%;
+            }
+
+            .project-progress .step-container:nth-child(4) {
+                right: {% date_to_percent project_pk=project_pk phase=3 type="w" %}%;
+            }
+        }
+        @media (min-width: 992px) {
+            .project-progress .line-100:after {
+                height: calc({% project_progress  project_pk %}% + 6%);
+            }
+
+            .project-progress .step-container:nth-child(2) {
+                top: {% date_to_percent project_pk=project_pk phase=1 type="h" %}%;
+            }
+
+            .project-progress .step-container:nth-child(3) {
+                top: {% date_to_percent project_pk=project_pk phase=2 type="h" %}%;
+            }
+
+            .project-progress .step-container:nth-child(4) {
+                top: {% date_to_percent project_pk=project_pk phase=3 type="h" %}%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 text-right">
+            <h3 class="h3 p-top-15">جزییات پروژه</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'industry:index' %}">پروژه ها</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span>جزییات پروژه</span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 text-right">
+            <div class="card box flow-root-display w-100">
+                <div class="box-body">
+                    <div class="row mbottom-lg-25 d-block d-lg-none ">
+                        <div class="col-lg-12 text-right">
+                            <h6>پروژه <span>{{ title }}</span></h6>
+                        </div>
+                    </div>
+                    <div class="row" style="direction: ltr!important">
+                        <div class="col-lg-4 col-xs-3">
+                            <div class="project-progress mbottom-lg-25">
+                                <div class="step-container active">
+                                    <span class="step-date">
+                                        <div class="start">
+                                            {{ timeScheduling.start }}
+                                        </div>
+                                    </span>
+                                    <span class="step-name">
+                                        شروع پروژه
+                                    </span>
+                                </div>
+                                <div class="step-container {% is_active project_pk=project_pk phase=1 %}">
+                                    <span class="step-date">
+                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>
+                                    </span>
+                                    <span class="step-name">فاز اول</span>
+                                </div>
+                                <div class="step-container {% is_active project_pk=project_pk phase=2 %}">
+                                    <span class="step-date">
+                                        <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
+                                    </span>
+                                    <span class="step-name">فاز دوم</span>
+                                </div>
+                                <div class="step-container {% is_active project_pk=project_pk phase=3 %}">
+                                    <span class="step-date">
+                                        <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
+                                    </span>
+                                    <span class="step-name">فاز سوم</span>
+                                </div>
+                                <div class="step-container {% is_active project_pk=project_pk phase=4 %}">
+                                    <span class="step-date">
+                                        <div class="date_finished">{{ timeScheduling.finished }}</div>
+                                    </span>
+                                    <span class="step-name">اتمام پروژه</span>
+                                </div>
+                                <div class="line-100">
+                                    <div class="arrow"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-xs-9">
+                            <div class="row mbottom-lg-25 d-none d-lg-block ">
+                                <div class="col-lg-12 text-right">
+                                    <h6>پروژه <span>{{ title }}</span></h6>
+                                </div>
+                            </div>
+                            <div class="row mbottom-lg-25">
+                                <div class="col-lg-12 text-right">
+                                    <span class="section-title">مشخصات پروژه</span>
+                                    <div class="section">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <div class="row m-top-10">
+                                                    <div class="col-md-6">
+                                                        <div class="pre-header">
+                                                            <span>کارفرما</span>
+                                                        </div>
+                                                        <div id="industry-name">
+                                                            {{ industry_name }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="pre-header">
+                                                            <span>مجری</span>
+                                                        </div>
+                                                        <div id="enforcer-name">
+                                                            {{ enforcer_name }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 budget-text">
+                                                        <div class="pre-header">
+                                                            <span>بودجه</span>
+                                                        </div>
+                                                        <div id="budget-content">
+                                                            <span class="budget-amount">{{ budget_amount }}</span>
+                                                            <span>ریال</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="pre-header">
+                                                            <span>توضیحات اجرایی</span>
+                                                        </div>
+                                                        <pre id="executive-info">{{ executive_info }}</pre>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="industry-logo-preview text-left">
+                                                    {% if industry_logo %}
+                                                        <img id="industry_logo"
+                                                             src="{{ industry_logo }}"
+                                                             alt="industry-logo" width="150px" height="150px">
+                                                    {% else %}
+                                                        <img id="industry_logo"
+                                                             src="/static/industry/img/profile.jpg"
+                                                             alt="industry-logo" width="150px" height="150px">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="budget-section">
+                                                    <div class="budget">
+                                                        <div class="budget-header">بودجه</div>
+                                                        <div class="budget-content">
+                                                            <div class="budget-amount">1000</div>
+                                                            <div>ریال</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mbottom-lg-25">
+                                            <div class="col-lg-12 text-right">
+                                                <span class="section-title">اطلاعات پروژه</span>
+                                                <div class="project-info-tabs">
+                                                    <div class="nav flex-column nav-pills" id="v-pills-tab"
+                                                         role="tablist"
+                                                         aria-orientation="vertical">
+                                                        <a class="nav-link active" id="v-pills-majors-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-majors"
+                                                           aria-selected="true">
+                                                            شاخص ها
+                                                        </a>
+                                                        <a class="nav-link" id="v-pills-approaches-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-approaches"
+                                                           aria-selected="false">
+                                                            راهکار ها
+                                                        </a>
+                                                        <a class="nav-link" id="v-pills-resources-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-resources"
+                                                           aria-selected="false">
+                                                            منابع مورد نیاز
+                                                        </a>
+                                                        <a class="nav-link" id="v-pills-roles-tab"
+                                                           data-toggle="pill"
+                                                           role="tab" aria-controls="v-pills-roles"
+                                                           aria-selected="false">
+                                                            قوانین
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="section">
+                                                    <div class="project-info-innerDiv">
+                                                        <div class="project-info-content">
+                                                            <div>
+                                                                <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                    لطفا مشکل اصلی که پروژه به حل آن پرداخته
+                                                                    را
+                                                                    توضیح و اهمیت آن را
+                                                                    تبیین کنید.
+                                                                </div>
+                                                                <div class="answer">
+                                                                    {{ projectForm.main_problem_and_importance }}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                    در صورت حل این مشکل، چه پیشرفتی در شیوه
+                                                                    های
+                                                                    درمانی / تجهیزات پزشکی /
+                                                                    خدمات
+                                                                    درمانی یا ... حاصل می شود؟
+                                                                </div>
+                                                                <div class="answer">
+                                                                    {{ projectForm.progress_profitability }}
+                                                                </div>
+                                                            </div>
+                                                            {% comment %} <div>
+                                                                            <div class="question">
+                                                            <span class="question-mark">
+                                                                <i class="far fa-question-circle"></i>
+                                                            </span>
+                                                                                برآورد شما از سود مالی این پروژه چگونه
+                                                                                است؟
+                                                                            </div>
+                                                                            <div class="answer">{{ project.project_form.predict_profit }}</div>
+                                                                        </div> {% endcomment %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mbottom-lg-25">
+                                            <div class="col-12">
+                                                <span class="section-title">پژوهشگران</span>
+                                                {#                                                <button type="button"#}
+                                                {#                                                        class="border-button section-button"#}
+                                                {#                                                        data-toggle="modal"#}
+                                                {#                                                        data-target="#researcherRequest">درخواست#}
+                                                {#                                                </button>#}
+                                                <div class="section">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="horizontal-avatar-list owl-carousel owl-theme">
+                                                                {% for researcher in researcher_accepted %}
+                                                                    <div class="item">
+                                                                        <div class="avatar-item">
+                                                                            <img src="/media/{{ researcher.photo }}"
+                                                                                 alt="{{ researcher.fullname }}پروفایل ">
+                                                                            <div class="info">
+                                                                                <h3>{{ researcher.fullname }}</h3>
+                                                                                <button value="{{ project.pk }}"
+                                                                                        id="{{ researcher.id }}"
+                                                                                        data-url="{% url 'researcher:show_resume_preview' %}"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#researcherInfo">
+                                                                                    رزومه
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                {% empty %}
+
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            {% include 'industry/layouts/comment.html' with comments=comments project_pk=project_pk %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $("#v-pills-roles-tab").click(function () {
+            let role = "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟" +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.policy }}" +
+                "</div>" +
+                "</div>";
+            $(".project-info-content").html(role);
+            $('*').persiaNumber();
+        });
+        $("#v-pills-resources-tab").click(function () {
+            let resources = "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.required_lab_equipment }}" +
+                "</div>" +
+                "</div>" +
+                "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.required_method }}" +
+                "</div>" +
+                "</div>" +
+                "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "لطفا مراحل انجام پروژه خود را مشخص کنید." +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.project_phase }}" +
+                "</div>" +
+                "</div>" +
+                "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
+                "</div>" +
+                "<div class='answer'>" +
+                numbersComma("{{ projectForm.required_budget }}") + " ریال" +
+                "</div>" +
+                "</div>";
+            $(".project-info-content").html(resources);
+            $('*').persiaNumber();
+        });
+        $("#v-pills-approaches-tab").click(function () {
+            let approach = "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.approach }}" +
+                "</div>" +
+                "</div>" +
+                "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "این راه حل چه مشکلاتی می‌تواند داشته باشد؟" +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.potential_problems }}" +
+                "</div></div>";
+            $(".project-info-content").html(approach);
+            $('*').persiaNumber();
+        });
+        $("#v-pills-majors-tab").click(function () {
+            let majors = "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید." +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.main_problem_and_importance }}" +
+                "</div></div>" +
+                "<div>" +
+                "<div class='question'>" +
+                "<span class='question-mark'>" +
+                "<i class='far fa-question-circle'></i>" +
+                "</span>" +
+                "در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟" +
+                "</div>" +
+                "<div class='answer'>" +
+                "{{ projectForm.progress_profitability }}" +
+                "</div></div>";
+            $(".project-info-content").html(majors);
+            $('*').persiaNumber();
+        });
+        //"<div>" +
+        //        "<div class='question'>" +
+        //        "<span class='question-mark'>" +
+        //        "<i class='far fa-question-circle'></i>" +
+        //        "</span>" +
+        //        "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        //        "</div>" +
+        //        "<div class='answer'>" +
+        //        numbersComma("{{ projectForm.predict_profit }}") + " ریال" +
+        //        "</div></div>";
+    </script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script type="text/javascript">
+        $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+            deleteComment($(this).closest('.my-comment'));
+        });
+        dialog_comment_init();
+        $('.owl-carousel').owlCarousel({
+            stagePadding: 50,
+            loop: false,
+            margin: 20,
+            nav: false,
+            dots: true,
+            rtl: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 3
+                }
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,11 +1,34 @@
 {% extends "researcher/layouts/base_layout.html" %}
 {% load static %}
+{% load custom_tags %}
 {% block title %}پروژه ها{% endblock %}
 
 {% block dialog %}
-    {% include 'researcher/layouts/initial_information.html' %}
     {% include 'researcher/layouts/showProject.html' %}
+    {% include 'researcher/layouts/project_requset.html' %}
     {% include 'researcher/layouts/vote_dialog.html' %}
+{% endblock %}
+{% block modals %}
+    {% if request.user.researcheruser.status.status == 'signed_up' %}
+        {% include 'researcher/layouts/initial_information.html' %}
+    {% endif %}
+    <div class="modal fade" id="previewKeywords" tabindex="-1" role="dialog" aria-labelledby="previewKeywordsLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewKeywordsLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}
@@ -18,16 +41,20 @@
     </div>
     <div class="row">
         <div class="col-lg-12 text-right">
-            <div class="project-info-tabs">
+            <div class="project-info-tabs mb-3">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                      aria-orientation="vertical">
                     <a class="nav-link active fs-15" id="new-projects" data-toggle="pill"
                        role="tab" aria-selected="true">
                         جدیدترین پروژه ها
                     </a>
-                    <a class="nav-link fs-15" id="your-project" data-toggle="pill"
+                    <a class="nav-link fs-15" id="active-project" data-toggle="pill"
                        role="tab" aria-selected="false">
-                        پروژه های مرتبط
+                        پروژه‌های در حال انجام
+                    </a>
+                    <a class="nav-link fs-15" id="missed-project" data-toggle="pill"
+                       role="tab" aria-selected="false">
+                        پروژه‌های غیرقابل‌‌دسترس
                     </a>
                     <a class="nav-link fs-15" id="done-project" data-toggle="pill"
                        role="tab" aria-selected="false">
@@ -69,7 +96,7 @@
                                             <div class="status text-center">
                                                 <div class="label">زمان لازم</div>
                                                 <div class="value">
-                                                    <span>{{project.need_hour}} ساعت</span>
+                                                    <span>{{ project.need_hour }} ساعت</span>
                                                     <span>در هفته</span>
                                                 </div>
                                             </div>
@@ -77,7 +104,8 @@
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="default-btn preview-project" id="{{ project.PK }}">
+                                    <button type="button" class="default-btn preview-project" id="{{ project.PK }}"
+                                            data-toggle="modal" data-target="#showProject">
                                         مشاهده
                                     </button>
                                 </div>
@@ -106,7 +134,7 @@
                                     <i class="fas fa-cog"></i>
                                     <span>اطلاعات کاربری</span>
                                 </span>
-                            <p> می توانید کمک تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>
+                            <p> می توانید کمک کنید تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -133,44 +161,169 @@
             {#                    </div>#}
             <div class="tab-content your-project" style="display: none;">
                 {% for project in my_project_list %}
-                    <div class="card project-item">
-                        <span class="header">{{ project.project_title }} <span
-                                class="sub-header">( {{ project.started }} قبل )</span></span>
-                        <span>
-                            {% for keyword in project.keyword %}
-                                <span class="border-span">{{ keyword.name }}</span>
-                            {% endfor %}
-                        </span>
-                        <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>
-                        <span><i
-                                class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>
-                        <button type="button" class="chamran-btn-info my-project" value="myproject"
-                                id="{{ project.PK }}">مشاهده
-                        </button>
+                    <div class="card box flow-root-display w-100">
+                        <div class="box-header">
+                            <h6>
+                                {{ project.project_title }}
+                            </h6>
+                            <div class="data-modified">
+                                <span>{{ project.started }}   قبل </span>
+                            </div>
+                            <div class="notification">
+                                <i class="far fa-comment-alt center-abs"></i>
+                                {% unseen_researcher_msgs project.PK request.user as count %}
+                                {% if count %}
+                                    <span class="unseen-comments">{{ count }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="date text-center">
+                                                <div class="label">مهلت</div>
+                                                <div class="value">
+                                                    <span>{{ project.finished }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="status text-center">
+                                                <div class="label">زمان لازم</div>
+                                                <div class="value">
+                                                    <span>{{ project.need_hour }} ساعت</span>
+                                                    <span>در هفته</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="project-techniques">
+                                        <div>
+                                            {% for keyword in project.keyword %}
+                                                <span>{{ keyword.name }}</span>
+                                            {% endfor %}
+                                            <span class="show-all" data-toggle="modal" data-target="#previewKeywords">همه</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="default-btn preview-project" id="{{ project.PK }}"
+                                            data-toggle="modal" data-target="#showProject">
+                                        مشاهده
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    {#                    <div class="card project-item">#}
+                    {#                        <span class="header">{{ project.project_title }} <span#}
+                    {#                                class="sub-header">( {{ project.started }} قبل )</span></span>#}
+                    {#                        <span>#}
+                    {#                            {% for keyword in project.keyword %}#}
+                    {#                                <span class="border-span">{{ keyword.name }}</span>#}
+                    {#                            {% endfor %}#}
+                    {#                        </span>#}
+                    {#                        <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>#}
+                    {#                        <span><i#}
+                    {#                                class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>#}
+                    {#                        <button type="button" class="chamran-btn-info my-project" value="myproject"#}
+                    {#                                id="{{ project.PK }}">مشاهده#}
+                    {#                        </button>#}
+                    {#                    </div>#}
                 {% empty %}
-                    <div class="no-project-container">
-                        <div class="no-project">
-                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
-                            <h4>متاسفانه، هنوز پروژه ای متناسب با تکنیک های ثبت شده شما، ارائه نشده!</h4>
-                            <p>می توانید تکنیک های بیشتر را از طریق</p>
-                            <a href="https://www.aparat.com/chamran_team">
-                                <i class="aparat-ico"></i>
-                                <span>Chamran_Team</span>
-                            </a>
-                            <p>یاد بگیرید و در قسمت </p>
-                            <span>
-                                    <i class="fas fa-file-medical"></i>
-                                    <span>تکنیک ها</span>
-                                </span>
-                            <p>آن را ثبت کنید. با این کار شانس بیشتری برای همکاری با اساتید خواهید داشت. </p>
-                            <br>
-                            <p> همچنین با تکمیل رزومه خود از طریق </p>
-                            <span>
-                                    <i class="fas fa-cog"></i>
-                                    <span>اطلاعات کاربری</span>
-                                </span>
-                            <p> می توانید کمک تا اساتید با شناخت و اطمینان بیشتری شما را انتخاب کنند.</p>
+                    <div class="col-12 text-center">
+                        <div class="empty-page">
+                            <div class="empty-page-container">
+                                <img src="{% static 'img/packet.svg' %}" alt="">
+                                <h5>درخواست خود را ثبت کنید!</h5>
+                                <pre>برای دسترسی به این قسمت، لازم است ابتدا در تب «جدیدترین پروژه ها» درخواستی برای پروژه دلخواهتان ثبت کنید. سپس شما می توانید در این قسمت آن پروژه را دنبال کنید.</pre>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="tab-content missed-project" style="display: none;">
+                {% for project in missed_project_list %}
+                    <div class="card box flow-root-display w-100">
+                        <div class="box-header">
+                            <h6>
+                                {{ project.project_title }}
+                            </h6>
+                            <div class="data-modified">
+                                <span>{{ project.started }}   قبل </span>
+                            </div>
+                            {#                            <div class="project-techniques">#}
+                            {#                                <ul class="mix-list hover">#}
+                            {#                                    {% for keyword in project.keyword %}#}
+                            {#                                        <li>{{ keyword.name }}</li>#}
+                            {#                                    {% endfor %}#}
+                            {#                                </ul>#}
+                            {#                            </div>#}
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="date text-center">
+                                                <div class="label">مهلت</div>
+                                                <div class="value">
+                                                    <span>{{ project.finished }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="status text-center">
+                                                <div class="label">زمان لازم</div>
+                                                <div class="value">
+                                                    <span>{{ project.need_hour }} ساعت</span>
+                                                    <span>در هفته</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="project-techniques">
+                                        <div>
+                                            {% for keyword in project.keyword %}
+                                                {% if keyword in project.missedTechinque %}
+                                                    <span class="missed-technique">{{ keyword.name }}</span>
+                                                {% else %}
+                                                    <span>{{ keyword.name }}</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <span class="show-all" data-toggle="modal" data-target="#previewKeywords">همه</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {#                    <div class="card project-item">#}
+                    {#                        <span class="header">{{ project.project_title }} <span#}
+                    {#                                class="sub-header">( {{ project.started }} قبل )</span></span>#}
+                    {#                        <span>#}
+                    {#                            {% for keyword in project.keyword %}#}
+                    {#                                <span class="border-span">{{ keyword.name }}</span>#}
+                    {#                            {% endfor %}#}
+                    {#                        </span>#}
+                    {#                        <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>#}
+                    {#                        <span><i#}
+                    {#                                class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>#}
+                    {#                    </div>#}
+                {% empty %}
+                    <div class="col-12 text-center">
+                        <div class="empty-page">
+                            <div class="empty-page-container">
+                                <img src="{% static 'img/packet.svg' %}" alt="">
+                                <h5>پروژه ای خارج از دسترس شما وجود ندارد!</h5>
+                                <pre>در صورتی که پروژه ای وجود داشته باشد که شما فاقد تکنیک های لازم آن باشید، این پروژه ها در این قسمت قرار خواهند گرفت و این کمک را به شما می کند که بتوانید با ارتقا هدفمند تکنیک های خود در پروژه مورد علاقه خود شرکت داشته باشید.</pre>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -193,6 +346,16 @@
                                 <span> {{ technique }} , </span>
                             {% endfor %}
             </span>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center">
+                        <div class="empty-page">
+                            <div class="empty-page-container">
+                                <img src="{% static 'img/packet.svg' %}" alt="">
+                                <h5>پروژه تکمیل شده ای ندارید!</h5>
+                                <pre>می توانید در قسمت «جدیدترین پروژه ها» درخواست خود را برای پروژه ثبت کنید و پس از تایید و تکمیل پروژه اطلاعات آنرا در این قسمت مشاهده خواهید کرد.</pre>
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>

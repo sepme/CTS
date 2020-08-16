@@ -27,15 +27,18 @@ def get_attachment_path(instance, filename):
 
 
 class ExpertUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
+    user   = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
+    userId = models.CharField(max_length=50, verbose_name="ID کاربر", blank=True, null=True)
     expert_point = models.FloatField(verbose_name="امتیاز استاد", default=0.0)
     STATUS = (
         ('signed_up', "فرم های مورد نیاز تکمیل نشده است. "),
         ('free', "فعال - بدون پروژه"),
+        ('applied', "فعال - در انتظار درخواست پروژه"),
         ('involved', "فعال - درگیر پروژه"),
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
+    autoAddProject = models.BooleanField(verbose_name="اضافه شدن خودکار به پروژه", default=False)
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     class Meta:
@@ -74,10 +77,9 @@ class EqTest(models.Model):
 class ExpertForm(models.Model):
     expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
                                        null=True, blank=True)
-    expert_firstname = models.CharField(max_length=32, verbose_name="نام")
-    expert_lastname = models.CharField(max_length=32, verbose_name="نام خانوادگی")
+    fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
-    national_code = models.CharField(max_length=15, verbose_name="کد ملی")
+    national_code = models.CharField(max_length=15, verbose_name="کد ملی", blank=True, null=True)
     scientific_rank_choice = (
         (1, 'مربی'),
         (2, 'استادیار'),
@@ -89,10 +91,9 @@ class ExpertForm(models.Model):
     )
     scientific_rank = models.IntegerField(choices=scientific_rank_choice, verbose_name="مرتبه علمی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه محل فعالیت")
-    home_address = models.CharField(max_length=512, verbose_name="ادرس منزل")
-    phone_number = models.CharField(max_length=15, verbose_name="شماره منزل")
-    mobile_phone = models.CharField(max_length=15, verbose_name="شماره تلفن همراه")
-    email_address = models.EmailField(max_length=254, verbose_name="ایمیل")
+    home_address = models.CharField(max_length=512, verbose_name="ادرس منزل", blank=True)
+    home_number = models.CharField(max_length=15, verbose_name="شماره منزل", null=True)
+    phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن همراه", null=True)
     keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
     eq_test = models.OneToOneField(EqTest, on_delete=models.SET_NULL, verbose_name="تست EQ", blank=True, null=True)
     awards = models.TextField(blank=True, verbose_name="افتخارات", null=True)
@@ -117,25 +118,32 @@ class ExpertForm(models.Model):
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
+    photo  = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
+    resume = models.FileField(verbose_name="رزومه استاد", upload_to=profileUpload, max_length=511,
+                              null=True, blank=True)
 
     def __str__(self):
-        return '{first_name} {last_name}'.format(first_name=self.expert_firstname, last_name=self.expert_lastname)
+        return self.fullname
 
     def save(self, *args, **kwargs):
         if self.id:
             perv = ExpertForm.objects.get(id=self.id)
-            if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
-                self.photo = self.compressImage(self.photo)
+            if perv.photo.name:
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                    self.photo = self.compressImage(self.photo)
+            else:
+                if self.photo.name:
+                    self.photo = self.compressImage(self.photo)
         else:
-            self.photo = self.compressImage(self.photo)
+            if self.photo.name:
+                self.photo = self.compressImage(self.photo)
         super(ExpertForm, self).save(*args, **kwargs)
 
     def compressImage(self,photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
-        imageTemproary.save(outputIoStream , format='JPEG', quality=60)
+        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
         outputIoStream.seek(0)
         uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
@@ -195,7 +203,7 @@ class PaperRecord(models.Model):
 
 
 class ExpertProjectHistory(models.Model):
-    project_title_english = models.CharField(max_length=128, verbose_name="عنوان مقاله")
+    english_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")
     key_words = models.ManyToManyField('industry.Keyword', verbose_name="کلمات کلیدی")
     project_priority_level = models.FloatField(verbose_name="اولویت پروژه")
     project_start_date = models.CharField(max_length=15, verbose_name="تاریخ شروع")
@@ -211,7 +219,7 @@ class ExpertProjectHistory(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
 
     def __str__(self):
-        return "history of " + self.project_title_english
+        return "history of " + self.english_title
 
 
 class IndustryEvaluateExpert(models.Model):
@@ -356,3 +364,24 @@ class RequestResearcher(models.Model):
         if self.researcher_count > 0:
             return True
         return False
+class TempExpertForm(models.Model):
+    expertUser      = models.OneToOneField(ExpertUser, verbose_name="استاد", on_delete=models.CASCADE)
+    photo           = models.ImageField(upload_to="tempExpertForm", height_field=None, width_field=None, max_length=None, null=True, blank=True)
+    special_field   = models.CharField(max_length=100, null=True, blank=True)
+    scientific_rank = models.IntegerField(verbose_name="مرتبه علمی", null=True, blank=True)
+    university      = models.CharField(max_length=100, null=True, blank=True)
+    keywords        = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
+
+    def __str__(self):
+        return str(self.expertUser)
+    
+class TempPaperRecord(models.Model):
+    tempExpertForm = models.ForeignKey(TempExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
+    research_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")
+    date_published = models.CharField(max_length=15, verbose_name="تاریخ انتشار")
+    published_at = models.CharField(max_length=32, verbose_name="محل انتشار")
+    impact_factor = models.FloatField(verbose_name="impact factor")
+    citation = models.CharField(max_length=5, verbose_name="تعداد ارجاع")
+
+    def __str__(self):
+        return str(self.tempExpertForm)

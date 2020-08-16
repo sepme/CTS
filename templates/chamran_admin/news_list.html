@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}اخبار و رویدادها{% endblock %}
+{% block content %}
+    <br/><br/><br/>
+    <div class="home-news">
+        <div class="container">
+            <h2>اخبار و رویدادها</h2>
+            <div class="row" id="owl-news">
+                {% for news in news_list %}
+                    <div class="col-md-4 item">
+                        <div class="news-item">
+                            <div class="news-item-body">
+                                <div class="img">
+                                    <a href="{% url 'chamran:newsDetail' news.uuid %}">
+                                        <img src="{{ news.topPicture }}" alt="{{ news.title }}">
+                                    </a>
+                                </div>
+                                <div class="cont">
+                                    <a href="{% url 'chamran:newsDetail' news.uuid %}">
+                                        <h3>{{ news.title }}</h3>
+                                    </a>
+                                    <p>{{ news.summary }}</p>
+                                    <div class="row">
+                                        <div class="col-7">
+                                            {{ news.date_submitted }}
+                                        </div>
+                                        <div class="col-5 text-right">
+                                            <a href="{% url 'chamran:newsDetail' news.uuid %}">ادامه مطلب</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

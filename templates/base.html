@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    <link rel="stylesheet" href="{% static 'theme-ct/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'theme-ct/css/res.css' %}">
+    {#	<link rel="shortcut icon" href="{{$setting->icon}}"/>#}
+    {% block head %}{% endblock %}
+</head>
+<body id="top">
+
+<header>
+    <div class="container">
+        <div class="navicon" id="navicon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="logo">
+            <a href="{% url 'chamran:home' %}">
+                <img src="{% static 'theme-ct/images/logo.png' %}" alt="ChamranTeam Logo">
+            </a>
+        </div>
+        <div class="enter_icon" id="enter_icon">
+            <a href="{% url 'chamran:login' %}">
+                <i class="fas fa-user"></i>
+            </a>
+        </div>
+        <nav id="nav">
+            <ul>
+                <li class="goToDiv" data-div="top" data-next="AboutUs">
+                    <a href="{% if request.path == "/" %}#top{% else %}{% url 'chamran:home' %}{% endif %}">صفحه اصلی</a>
+                </li>
+                <li class="goToDiv" data-div="AboutUs" data-next="whyUs"><a href="/#AboutUs">درباره ما</a></li>
+                <li class="goToDiv" data-div="whyUs" data-next="Cooperation"><a href="/#whyUs">مزایای عضویت</a></li>
+                <li class="goToDiv" data-div="Cooperation" data-next="contactUs"><a href="/#Cooperation">تقاضای همکاری
+                    با ما</a></li>
+                <li class="goToDiv" data-div="contactUs" data-next="footer"><a href="/#contactUs">تماس با ما</a></li>
+            </ul>
+        </nav>
+        <div class="enter">
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'chamran:login' %}">
+                    داشبورد
+                </a>
+            {% else %}
+                <a href="{% url 'chamran:login' %}">
+                    ورود | عضویت
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+{% block content %}{% endblock %}
+<div class="container-fluid" id="contactUs">
+    <div class="row">
+        <div class="col-md-6" style="padding-right: 0;">
+            <div class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d809.9491055965157!2d51.38995982922172!3d35.706626998761784!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDQyJzIzLjkiTiA1McKwMjMnMjUuOCJF!5e0!3m2!1sen!2s!4v1564981435888!5m2!1sen!2s"
+                        width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="col-md-5">
+            {#            {!! Form::open(['url'=>route('contact-us-post'),'id'=>'contact-us-post']) !!}#}
+            <form id="contactUs_form" method="POST">
+                {% csrf_token %}
+                <div class="contact-us text-right">
+                    <h2>تماس با ما</h2>
+                    <div class='fullname'></div>
+                        <input type="text" name="fullname" id='fullname' class="form-control" placeholder="نام و نام خانوادگی">
+                    {% comment %} </div> {% endcomment %}
+                    <div class="email"></div>
+                        <input type="text" name="email" id="email" class="form-control" placeholder="پست الکترونیک">
+                    <div class="context"></div>
+                        <textarea name="context" id='context' class="form-control" rows="5" placeholder="پیام شما"></textarea>
+                    {% comment %} </div> {% endcomment %}
+                    <button type="submit" id="submit" class="btn btn-contact">ارسال</button>
+                </div>
+            <span id="Loader">منتظر بمانید...</span>
+            <div id="res" class="margin-20"></div>
+            </form>
+            {#            {!! Form::close() !!}#}
+        </div>
+    </div>
+</div>
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 text-right">
+                <div class="f-heading">
+                    دسترسی سریع
+                </div>
+                <ul>
+                    <li class="goToDiv" data-div="top" data-next="AboutUs"><a
+                            href="/{% if request.path == "/" %}#top{% endif %}">صفحه اصلی</a></li>
+                    <li class="goToDiv" data-div="AboutUs" data-next="whyUs"><a href="/#AboutUs">درباره ما</a></li>
+                    <li class="goToDiv" data-div="whyUs" data-next="Cooperation"><a href="/#whyUs">مزایای عضویت</a></li>
+                    <li class="goToDiv" data-div="Cooperation" data-next="contactUs"><a href="/#Cooperation">تقاضای
+                        همکاری با ما</a></li>
+                    <li><a href="/news">اخبار</a></li>
+                    <li class="goToDiv" data-div="contactUs" data-next="footer"><a href="/#contactUs">تماس با ما</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4 text-right">
+                <div class="f-heading">
+                    اطلاعات تماس
+                </div>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i>خیابان کارگر شمالی، نرسیده به بلوار کشاورز، پلاک ۱۵۴۷،
+                        ساختمان مراکز تحقیقاتی، طبقه چهارم، مرکز رشد فناوری سلامت
+                    </li>
+                    <li><i class="fas fa-envelope"></i> info@chamranteam.ir</li>
+                    <li><i class="fas fa-phone"></i> ۲۲۴۵ ۲۸۴۲ ۰۲۱</li>
+                </ul>
+            </div>
+            <div class="col-md-4 text-right">
+                <div class="f-heading">
+                    ما را دنبال کنید
+                </div>
+                <p>حساب‌های چمران تیم در شبکه‌های اجتماعی</p>
+                <ul class="socials">
+                    <li>
+                        <a href="https://www.instagram.com/chamran_team/">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://t.me/chamran_team">
+                            <i class="fab fa-telegram-plane"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://ble.im/chamran_team">
+                            <img src="{% static 'theme-ct/images/bale.png' %}"
+                                 alt="Bale">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.aparat.com/chamran_team">
+                            <img src="{% static 'theme-ct/images/aparat.png' %}"
+                                 alt="aparat">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="container">
+            تمام حقوق این وبسایت برای چمران تیم محفوظ است.
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+<script type="text/javascript">
+    $('#navicon').click(function () {
+        $('#nav').slideToggle();
+    });
+    let width = $(window).width();
+    if (width < 767) {
+        $('#owl-why').attr('class', 'owl-carousel owl-theme owl-why')
+        $('#owl-news').attr('class', 'owl-carousel owl-theme owl-why')
+    }
+    $(document).ready(function () {
+        let owl = $('.owl-why');
+        owl.owlCarousel({
+            margin: 0,
+            nav: false,
+            loop: true,
+            autoplay: true,
+            responsiveClass: true,
+            items: 1,
+            dots: true,
+            smartSpeed: 900,
+            rtl: true
+        })
+    });
+    $(".goToDiv").click(function () {
+        let div = $(this).attr('data-div');
+        $('html, body').animate({
+            scrollTop: $("#" + div).offset().top
+        }, 1000);
+    });
+
+    $(window).scroll(function (event) {
+        didScroll();
+    });
+
+    function didScroll() {
+        let st = $(window).scrollTop();
+        $(".goToDiv").each(function () {
+            let datadiv = $(this).attr('data-div');
+            let datanext = $(this).attr('data-next');
+            let thisdiv = $('#' + datadiv).offset().top;
+            let nextdiv = $('#' + datanext).offset().top;
+            if (st > (thisdiv - 50) && st < (nextdiv - 50)) {
+                $(this).attr('class', 'goToDiv active');
+            } else {
+                $(this).attr('class', 'goToDiv');
+            }
+        });
+    }
+
+    didScroll();
+
+    $("#contact-us-post").on('submit', (function (e) {
+        e.preventDefault();
+        $('#Loader').show();
+        $('#res').empty();
+        $.ajax({
+            {#url: "{{route('contact-us-post')}}",#}
+            type: "POST",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                $('#res').html(data.str);
+                $('#Loader').hide();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#Loader').hide();
+                alert('Error!');
+            }
+        });
+    }));
+    let contactForm = $("#contactUs_form");
+    contactForm.submit(function (event) {
+        $(".loading").css('display', "block");
+        $(".owl-carousel").css('display', "none");
+        event.preventDefault();
+        $(".email").find("div.error").remove();
+        $("input#email").removeClass("error").css("color", "").prev().css("color", "");
+        $("input#fullname").removeClass("error").css("color", "").prev().css("color", "");
+        $(".fullname").find("div.error").remove();
+        $("input#context").removeClass("error").css("color", "").prev().css("color", "");
+        $(".context").find("div.error").remove();
+        
+        $.ajax({
+            method: 'POST',
+            url: "/contactUs/",
+            dataType: 'json',
+            data: $(this).serialize().toString(),
+            success: function(data){
+                contactForm[0].reset();
+                iziToast.success({
+                    rtl: true,
+                    message: "پیام شما با موفقیت ارسال شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function(data){
+                $(".loading").css('display', "none");
+                $(".owl-carousel").css('display', "block");
+                let obj = JSON.parse(data.responseText);
+                if (obj.email !== undefined) {
+                    $(".email").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.email + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#email").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+                if (obj.fullname !== undefined) {
+                    $(".fullname").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.fullname + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#fullname").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+                if (obj.context !== undefined) {
+                    $(".context").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.context + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("input#context").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+            }
+        })
+    });
+
+</script>
+
+{% block foot %}{% endblock %}
+
+</body>
+</html>

@@ -17,3 +17,5 @@ admin.site.register(models.EqTest)
 admin.site.register(models.ResearchQuestion)
 admin.site.register(models.ExpertRequestedProject)
 admin.site.register(models.RequestResearcher)
+
+admin.site.register(models.TempExpertForm)

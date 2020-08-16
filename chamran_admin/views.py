@@ -11,11 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.template.loader import get_template
-from django.urls import resolve
 from django.contrib.contenttypes.models import ContentType
+from django.contrib import messages
 
 from persiantools.jdatetime import JalaliDate
 
@@ -25,13 +25,11 @@ from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment
 
-LOCAL_URL = 'chamranteambot.pythonanywhere.com'
+LOCAL_URL = 'chamranteam.ir'
 
 
 def jalali_date(jdate):
-
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
-
 
 
 def get_message_detail(request, message_id):
@@ -42,6 +40,7 @@ def get_message_detail(request, message_id):
     if message.attachment:
         attachment = message.attachment.url[message.attachment.url.find('media', 2):]
     return JsonResponse({
+        'id' : message.id,
         'text': message.text,
         'date': jalali_date(JalaliDate(message.date)),
         'title': message.title,
@@ -51,8 +50,8 @@ def get_message_detail(request, message_id):
     })
 
 
-class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
-    template_name = '../registration/chamran_admin/messages.html'
+class MessagesView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'chamran_admin/messages.html'
     login_url = "/login"
     jalali_months = ('فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر',
                      'دی', 'بهمن', 'اسفند')
@@ -81,8 +80,8 @@ class MessagesView(LoginRequiredMixin ,generic.TemplateView ):
                     username=self.request.user.username).exists()))
 
             other_messages.append((message, jalali_date(jdate), MessagesView.date_dif(jdate),
-                                    message.read_by.filter(
-                                        username=self.request.user.username).exists()))
+                                   message.read_by.filter(
+                                       username=self.request.user.username).exists()))
         context['top_3'] = top_3
         context['other_messages'] = other_messages
         context['account_type'] = find_account_type(self.request.user)
@@ -129,14 +128,33 @@ def get_user_by_unique_id(unique):
 
 
 class Home(generic.TemplateView):
-    template_name = "../registration/base.html"
+    template_name = "index.html"
+
+    # def get(self, request, *args,g **kwargs):
+        # return HttpResponseRedirect(reverse('chamran:login'))
     
-    def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect(reverse('chamran:login'))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        top_news = []
+        for news in models.News.objects.all()[:3]:
+            top_news.append({
+                "uuid": news.uuid,
+                "title": news.title,
+                'text': news.text,
+                'summary': news.summary,
+                'link': news.link,
+                'writer': news.writer,
+                'topPicture': news.topPicture.url[news.topPicture.url.find('media', 2) - 1:],
+                'attachment': news.attachment,
+                'date_submitted': jalali_date(JalaliDate(news.date_submitted)),
+            })
+        context['top_news'] = top_news
+        return context
+    
 
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
-    template_name = "registration/signup.html"
+    template_name = "registration/login.html"
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -210,7 +228,7 @@ def signup_email_ajax(request):
             return JsonResponse({'Error': 'Timeout Error!'})
         return JsonResponse(data)
     else:
-        print('form error')
+        print(form.errors)
         return JsonResponse(form.errors, status=400)
 
 
@@ -245,13 +263,13 @@ def login_ajax(request):
             #            'error': 'گذرواژه اشتباه است'}
             return JsonResponse({
                 'password': 'گذرواژه اشتباه است'
-            } ,status=400)
+            }, status=400)
     else:
         print('form error')
         return JsonResponse(form.errors, status=400)
 
 def addGroup(user, group_name):
-    if not Group.objects.filter(name = group_name).exists():
+    if not Group.objects.filter(name=group_name).exists():
         newGroup = Group(name=group_name)
         newGroup.save()
         if group_name == "Researcher":
@@ -266,7 +284,7 @@ def addGroup(user, group_name):
         newGroup.user_set.add(user)
         newGroup.save()
     else:
-        group = Group.objects.get(name = group_name)
+        group = Group.objects.get(name=group_name)
         group.user_set.add(user)
         group.save()
 
@@ -303,6 +321,27 @@ class SignupUser(generic.FormView):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
+        try:            
+            message = Message.objects.filter(title="خوش آمدگویی").first()
+        except:
+            message = None
+        if message is None:
+
+            context= """با سلام،
+به چمران‌تیم خوش آمدید.
+امیدواریم در کنار شما، بتوانیم قدمی هر چند کوچک برداریم برای کاربردی و صنعتی شدن پژوهش‌ها در کشور.
+لطفا برای آشنایی بیشتر با امکانات حساب کاربری‌تان، قسمت‌های مختلف آن را از طریق منوی سمت راست، بررسی بفرمایید.
+با توجه به این که نسخه فعلی این سامانه، نسخه آزمایشی‌ست، برای ارتقای هر چه بیشتر قابلیت‌ها و امکانات، نیازمند حضور گرم و پرشور شما هستیم.
+به همین منظور، می‌توانید برای انتقال تجربیات کاربری و یا پیشنهادهای‌تان، می‌توانید از طریق شماره تلفن 09102143451 و یا فرم ارسال گزارش (تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) با ما در ارتباط باشید.
+با آرزوی موفیت،
+چمران‌تیم """
+            message = Message(title="خوش آمدگویی",
+                            text=context,
+                            type=0)
+            message.save() 
+        else:
+            message.receiver.add(user)
+            message.save()
         if account_type == 'researcher':
             researcher = ResearcherUser.objects.create(user=user)
             Status.objects.create(researcher_user=researcher)
@@ -314,7 +353,7 @@ class SignupUser(generic.FormView):
             ctype = ContentType.objects.get_for_model(ResearcherUser)
             permission = Permission.objects.get(content_type=ctype, codename='is_active')
             user.user_permissions.add(permission)
-            user.save()    
+            user.save()
             return researcher.get_absolute_url()
 
         elif account_type == 'expert':
@@ -336,6 +375,7 @@ class SignupUser(generic.FormView):
             return industry.get_absolute_url()
         return super().form_valid(form)
 
+
 class LoginView(generic.TemplateView):
     template_name = 'registration/login.html'
 
@@ -347,16 +387,16 @@ class LoginView(generic.TemplateView):
         except:
             pass
         return super().get(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context['form'] = forms.LoginForm()
         context['register_form'] = forms.RegisterEmailForm()
-        if self.request.GET.get('next') :
+        if self.request.GET.get('next'):
             context['next'] = self.request.GET.get('next')
         return context
-    
+
 
 class LogoutView(generic.TemplateView):
     template_name = 'registration/base.html'
@@ -364,7 +404,7 @@ class LogoutView(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             logout(request)
-        return HttpResponseRedirect(reverse("chamran:home"))
+        return HttpResponseRedirect(reverse("chamran:login"))
 
 
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
@@ -387,7 +427,7 @@ class ResetPassword(generic.TemplateView):
                 msg.send()
             except TimeoutError:
                 return Http404('Timeout Error!')
-
+            messages.success(request, 'ایمیلی برای شما ارسال شد! <br> برای ادامه فرایند به ایمیل خود مراجعه کنید!')
             return HttpResponseRedirect(reverse('chamran:home'))
         else:
             return redirect(reverse('chamran:login'))
@@ -448,20 +488,25 @@ class RecoverPasswordConfirm(generic.FormView):
         path = request.path
         uuid = path.split('/')[-2]
         try:
-            user = ExpertUser.objects.get(unique__exact=uuid)
+            self.user = ExpertUser.objects.get(unique__exact=uuid)
         except ExpertUser.DoesNotExist:
             try:
-                user = IndustryUser.objects.get(unique__exact=uuid)
+                self.user = IndustryUser.objects.get(unique__exact=uuid)
             except IndustryUser.DoesNotExist:
                 try:
-                    user = ResearcherUser.objects.get(unique__exact=uuid)
+                    self.user = ResearcherUser.objects.get(unique__exact=uuid)
                 except ResearcherUser.DoesNotExist:
                     raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
-        return render(request, self.template_name, {'form': forms.RegisterUserForm(),
-                                                    'username': user.user.username})
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['username'] = "username"
+        if self.user:
+            context['username'] = self.user.user.get_username()
+        return context
 
     def post(self, request, *args, **kwargs):
-        # print('recover: \nuser: ', self.recover, self.user)
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
         user = get_user_by_unique_id(unique_id)
@@ -483,16 +528,32 @@ class UserPass(generic.TemplateView):
     template_name = 'registration/user_pass.html'
 
 
-def notFound404(request ,exception):
-    context = {'data' : exception}
-    return render(request, '../registration/404Template.html', context)
+def notFound404(request, exception):
+    context = {'data': exception}
+    return render(request, '404Template.html', context)
+
 
 def notFound500(request):
-    return render(request, '../registration/404Template.html', {})
+    return render(request, '404Template.html', {})
 
-def Handler403(request ,exception):
-    context = {'data' : exception}
-    return render(request, '../registration/403Template.html', context)
+
+def Handler403(request, exception):    
+    if not request.user.has_perm('researcher.is_active') and request.user.groups.filter(name="Researcher").exists():
+        researcher = request.user.researcheruser
+        if researcher.status.is_deactivated :
+            remaining = researcher.status.remainingTime
+            context = {'day'    : remaining['day'],
+                       'hour'   : remaining['hour'],
+                       'minute' : remaining['minute'],
+                       'second' : remaining['second'],
+                      }        
+            return render(request=request, template_name='researcher/forbid_access.html', context=context)
+        else:
+            "not_answered"
+            return HttpResponseRedirect(request.path)
+    context = {'data': exception}
+    return render(request, '403Template.html', context)
+
 
 class RecoverPassword(generic.TemplateView):
     template_name = 'registration/recover_pass.html'
@@ -501,6 +562,7 @@ class RecoverPassword(generic.TemplateView):
     #     context = super().get_context_data(**kwargs)
     #     context['form'] = forms.RecoverPasswordForm
     #     return context
+
 
 def RecoverPassword_ajax(request):
     form = forms.RecoverPasswordForm(request.POST)
@@ -515,20 +577,117 @@ def RecoverPassword_ajax(request):
             html_template = get_template('registration/email_template.html')
             email_template = html_template.render({'message': message, 'proper_text': 'بازیابی رمز عبور'})
             msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                            to=[username])
+                                         to=[username])
             msg.attach_alternative(email_template, 'text/html')
-            msg.send()            
+            msg.send()
         except TimeoutError:
             print("Timeout Occure.")
-            return JsonResponse({"error" : "couldn't send email"} ,status=400)
-        response = {"seccessful" :"seccessful"}
+            return JsonResponse({"error": "couldn't send email"}, status=400)
+        response = {"seccessful": "seccessful"}
         return JsonResponse(response)
-    return JsonResponse(form.errors ,status=400)
+    return JsonResponse(form.errors, status=400)
+
 
 def DeleteComment(request):
     try:
-        comment = get_object_or_404(Comment ,pk=request.POST['id'])
+        comment = get_object_or_404(Comment, pk=request.POST['id'])
         comment.delete()
     except:
-        return JsonResponse({} ,400)
-    return JsonResponse({'successful' :"successful"})
+        return JsonResponse({}, 400)
+    return JsonResponse({'successful': "successful"})
+
+class News(generic.ListView):
+    template_name = "chamran_admin/news_list.html"
+    model = models.News
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        news_list = []
+        for news in context["object_list"]:
+            news_list.append({
+                "uuid"    : news.uuid,
+                "title"   : news.title,
+                'text'    : news.text,
+                'summary' : news.summary,
+                'link'    : news.link,
+                'writer'  : news.writer,
+                'topPicture' : news.topPicture.url[news.topPicture.url.find('media', 2)-1:],
+                'attachment' : news.attachment,
+                'date_submitted' : jalali_date(JalaliDate(news.date_submitted)),
+            })
+        context['news_list'] = news_list
+        return context
+    
+
+class NewsDetail(generic.DetailView):
+    template_name = 'chamran_admin/news_detail.html'
+    model = models.News
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        news = context['news']
+        context["news"] = {
+                "uuid"    : news.uuid,
+                "title"   : news.title,
+                'text'    : news.text,
+                'summary' : news.summary,
+                'link'    : news.link,
+                'writer'  : news.writer,
+                'topPicture' : news.topPicture.url[news.topPicture.url.find('media', 2)-1:],
+                'attachment' : news.attachment,
+                'date_submitted' : jalali_date(JalaliDate(news.date_submitted)),
+            }
+        return context
+    
+
+class NewsForm(generic.FormView):
+    template_name = "chamran_admin/newsForm.html"
+    form_class = forms.NewsForm
+    
+def ContactUS(request):
+    form = forms.ContactForm(request.POST)
+    if form.is_valid():
+        contact = form.save()
+        subject = "تماس با ما - " + contact.fullname
+        message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(contact.fullname ,contact.email, contact.context)
+        html_template = get_template('registration/contactUs_sendEmail.html')
+        email_template = html_template.render({"message" : message})
+        msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                        to=[settings.EMAIL_HOST_USER])
+        msg.attach_alternative(email_template, "text/html")
+        msg.send()
+        return JsonResponse(data={"success": 'success'})
+    else:
+        return JsonResponse(data=form.errors, status=400)
+
+# class ContactUS(generic.FormView):
+#     template_name = 'chamran_admin/contactUs.html'
+#     form_class = forms.ContactForm
+#     success_url = "/"
+
+
+    # def form_valid(self, form):
+    #     subject = "تماس با ما - " + form.cleaned_data['fullName']
+    #     message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(form.cleaned_data['fullName'] ,form.cleaned_data['email'], form.cleaned_data['text'])
+    #     html_template = get_template('registration/contactUs_sendEmail.html')
+    #     email_template = html_template.render({"message" : message})
+    #     msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+    #                                     to=[settings.EMAIL_HOST_USER])
+    #     msg.attach_alternative(email_template, "text/html")
+    #     msg.send()
+    #     return super().form_valid(form)
+
+def AddOpinion(request):
+    form = forms.FeedBackForm(request.POST)
+    if form.is_valid():
+        user_type = find_account_type(request.user)
+        feedBack = models.FeedBack(email=request.POST['email'],
+                                    opinion=request.POST['opinion'],
+                                    user_type=user_type,
+                                    user_info=request.META['HTTP_USER_AGENT'],
+                                    )
+        feedBack.user = request.user
+        feedBack.save()
+        return JsonResponse(data={"success" : "success"})
+    return JsonResponse(data=form.errors, status=400)
+        

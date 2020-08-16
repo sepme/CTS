@@ -1,0 +1,207 @@
+{% load static %}
+<div class="modal fade" id="showProject" tabindex="-1" role="dialog" aria-labelledby="showProjectLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="showProjectLabel"></h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container text-right">
+                    <div class="row">
+                        <div class="col-lg-12 techniques"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6 text-left">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="establish-time">
+                                        <div class="time-head">ثبت</div>
+                                        <div class="time-body"></div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="time-left">
+                                        <div class="time-head">مهلت</div>
+                                        <div class="time-body"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mbottom-lg-25">
+                        <div class="col-lg-12 text-right">
+                            <span class="section-title">اطلاعات پروژه</span>
+                            <div class="project-info-tabs">
+                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                                     aria-orientation="vertical">
+                                    <a class="nav-link active" id="v-pills-majors-tab-preview" data-toggle="pill"
+                                       role="tab" aria-controls="v-pills-majors"
+                                       aria-selected="true">
+                                        شاخص ها
+                                    </a>
+                                    <a class="nav-link" id="v-pills-approaches-tab-preview" data-toggle="pill"
+                                       role="tab" aria-controls="v-pills-approaches"
+                                       aria-selected="false">
+                                        راهکار ها
+                                    </a>
+                                    <a class="nav-link" id="v-pills-resources-tab-preview" data-toggle="pill"
+                                       role="tab" aria-controls="v-pills-resources"
+                                       aria-selected="false">
+                                        منابع مورد نیاز
+                                    </a>
+                                    <a class="nav-link" id="v-pills-roles-tab-preview" data-toggle="pill"
+                                       role="tab" aria-controls="v-pills-roles"
+                                       aria-selected="false">
+                                        قوانین
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <div class="project-info-innerDiv">
+                                    <div class="project-info-content-preview"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row add-comment">
+                        <div class="col-lg-12 text-right">
+                            {% include 'industry/layouts/comment.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+{% comment %} <div class="fixed-back showProject">
+    <div class="card text-right stick-footer">
+        <div class="close"></div>
+        <div class="vote">
+            <i class="fas fa-ellipsis-v"></i>
+        </div>
+        <div class="card-head"></div>
+        <div class="vote-dialog">
+            <div class="card expert-back text-center">ارزیابی از استاد</div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 techniques"></div>
+            </div>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6 text-left">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="establish-time">
+                                <div class="time-head">ثبت</div>
+                                <div class="time-body"></div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="time-left">
+                                <div class="time-head">مهلت</div>
+                                <div class="time-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    <span class="section-title">اطلاعات پروژه</span>
+                    <div class="project-info-tabs">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                             aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-majors-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-majors"
+                               aria-selected="true">
+                                شاخص ها
+                            </a>
+                            <a class="nav-link" id="v-pills-approaches-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-approaches"
+                               aria-selected="false">
+                                راهکار ها
+                            </a>
+                            <a class="nav-link" id="v-pills-resources-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-resources"
+                               aria-selected="false">
+                                منابع مورد نیاز
+                            </a>
+                            <a class="nav-link" id="v-pills-roles-tab-preview" data-toggle="pill"
+                               role="tab" aria-controls="v-pills-roles"
+                               aria-selected="false">
+                                قوانین
+                            </a>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="project-info-innerDiv">
+                            <div class="project-info-content-preview">
+                                {#                                <div>#}
+                                {#                                    <div class="question">#}
+                                {#                                        <span class="question-mark">#}
+                                {#                                            <i class="far fa-question-circle"></i>#}
+                                {#                                        </span>#}
+                                {#                                        لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.#}
+                                {#                                    </div>#}
+                                {#                                    <div class="answer">#}
+                                {#                                        نمونه های موجود در بازار همه از خارج از کشور وارد میشوند و ادعا میشود که از خون#}
+                                {#                                        جنین گاو در تولید آن ها استفاده میشود ولی این کار بسیار هزینه بر است.#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div>#}
+                                {#                                    <div class="question">#}
+                                {#                                        <span class="question-mark">#}
+                                {#                                            <i class="far fa-question-circle"></i>#}
+                                {#                                        </span>#}
+                                {#                                        در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات#}
+                                {#                                        درمانی یا ... حاصل می شود؟#}
+                                {#                                    </div>#}
+                                {#                                    <div class="answer">#}
+                                {#                                        مصرف کننده های این محصول ، داروسازی ها و مراکز پژوهشی میباشد که در حال حاضر#}
+                                {#                                        تولیدکننده این محصول شرکت THERMO FISHER میباشد. اگر کیفیت محصول تولیدی خوب باشد#}
+                                {#                                        میتواند جایگزین نمونه خارجی شود.#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div>#}
+                                {#                                    <div class="question">#}
+                                {#                                        <span class="question-mark">#}
+                                {#                                            <i class="far fa-question-circle"></i>#}
+                                {#                                        </span>#}
+                                {#                                        برآورد شما از سود مالی این پروژه چگونه است؟#}
+                                {#                                    </div>#}
+                                {#                                    <div class="answer">#}
+                                {#                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.#}
+                                {#                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.#}
+                                {#                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.#}
+                                {#                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.#}
+                                {#                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.#}
+                                {#                                        براورد دقیقی از سود حاصل در دست نیست ولی این پروژه سود زیادی دارد.#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row add-comment">
+                <div class="col-lg-12 text-right">
+                    {% include 'industry/layouts/comment.html' %}
+                </div>
+            </div>
+            {#            <div class="card-footer">#}
+            {#                <input type="text" name="add-comment" class="w-100">#}
+            {#                <span class="send-comment">#}
+            {##}
+            {#                </span>#}
+            {#                <span class="attach-comment">#}
+            {##}
+            {#                </span>#}
+            {#            </div>#}
+        </div>
+    </div>
+</div> {% endcomment %}

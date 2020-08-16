@@ -1,8 +1,15 @@
 {% load static %}
-<span class="section-title">نظرات</span>
+{% load comment_tags %}
+<span class="section-title">گفتگو</span>
 <div class="project-info-tabs comment-tabs">
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
          aria-orientation="vertical">
+        {% if comments %}
+            <a class='nav-link active' data-toggle='pill' role='tab' aria-controls='v-pills-home' aria-selected='true'
+                id="v-pills-expert-1">
+                سپهر متانت
+            </a>
+        {% endif %}
     </div>
 </div>
 <div class="section">
@@ -11,44 +18,105 @@
         </p>
         <div class="button-group">
             <button class="show-resume">مشاهده رزومه</button>
-            <button class="accept-request">تایید درخواست</button>
-            <button class="reject-request">رد درخواست</button>
+            {% if not comments %}
+                <button class="accept-request">تایید درخواست</button>
+                <button class="reject-request">رد درخواست</button>
+            {% endif %}
         </div>
     </div>
     <div class="industry-comment"></div>
     <div class="project-comment-innerDiv">
-        <div class="comments"></div>
-    </div>
-</div>
-<div class="comment">
-    <div class="add-comment" style="display: none">
-        <form action="" method="post" enctype="multipart/form-data" id="comment-form">
-            <div class="row">
-                <div class="col-lg-12">
-                    <input type="text" name="project_id" id="project_id" hidden>
-                    <input type="text" name="expert_id" id="expert_id" hidden>
-                    <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
-                    <div class="send-comment-container">
-                        <button class="image-btn-circle" type="submit"></button>
-                        <div class="comment-input">
-                            <label for="description"></label>
-                            <textarea dir="rtl" id="description" class="" name="description" rows="1"
-                                      placeholder="نظر خود را اینجا وارد کنید ..."></textarea>
-
-                            <div class="new-comment-tools">
-                                <input type="file" id="comment-attach" name="attachment" hidden>
-                                <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
+        <div class="no-comment" style="{% if not comments %}display:block;{% endif %}">
+            <img class="no comment" src="{% static 'img/no_message.svg' %}" alt="no message">
+            <h5 dir="rtl">نظری درباره این پروژه ثبت نشده!</h5>
+            <p>
+                در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.
+            </p>
+        </div>
+        <div class="comments">
+            {% if comments %}
+                {% for comment in comments %}
+                    {% if comment.sender_type == "industry" %}
+                        <div class='my-comment' id='{{ comment.pk }}'>
+                            <div class='comment-profile'></div>
+                            <span class='comment-tools'>
+                            <div class='btn-group dropright'>
+                                <button type='button' class='dropdown-toggle' data-toggle='dropdown'
+                                        aria-haspopup='true'
+                                        aria-expanded='false'>
+                                       <i class='fas fa-cog'></i>
+                                </button>
+                                <div class='dropdown-menu'>
+                                    <div class='dropdown-item'>
+                                        <i class='fas fa-trash-alt'></i>
+                                        <span>حذف پیام</span>
+                                    </div>
+                                </div>
                             </div>
+                        </span>
+                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>
+                                <pre>{{ comment.text }}</pre>
+                                {% if comment.attachment != "None" %}
+                                    <a href='/{{ comment.attachment }}' class='attached-file'>
+                                        <i class='fas fa-paperclip'></i>
+                                        <span>{% file_name comment.attachment %}</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% elif comment.sender_type == "expert" %}
+                        <div class='your-comment'>
+                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>
+                                <span class='comment-tools'></span>
+                                <pre>{{ comment.text }}</pre>
+                                {% if comment.attachment != "None" %}
+                                    <a href='/{{ comment.attachment }}' class='attached-file'>
+                                        <i class='fas fa-paperclip'></i>
+                                        <span>{% file_name comment.attachment %}</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% elif comment.sender_type == "system" %}
+                        <div class='system-comment'>
+                            <div class='comment-body' dir='ltr'>
+                                <pre>{{ comment.text }}</pre>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="add-comment" id="{% if project_pk %}{{ project_pk }}{% endif %}">
+            <form action="" method="POST" enctype="multipart/form-data" id="comment-form">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="text" name="project_id" id="project_id" hidden>
+                        <input type="text" name="expert_id" id="expert_id" hidden>
+                        <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
+                        <div class="send-comment-container">
+                            <button class="image-btn-circle" type="submit"></button>
+                            <div class="comment-input">
+                                <label for="description"></label>
+                                <textarea dir="rtl" id="description" class="" name="description" rows="1"
+                                          placeholder="نظر خود را اینجا وارد کنید ..."></textarea>
 
-                            <div class="attachment">
-                                <i class="fas fa-paperclip"></i>
-                                    <span></span>
+                                <div class="new-comment-tools">
+                                    <input type="file" id="comment-attach" name="attachment" hidden>
+                                    <label for="comment-attach"><i class="fas fa-paperclip"></i></label>
+                                </div>
+
+                                <div class="attachment">
+                                    <i class="fas fa-paperclip"></i>
+                                    <span class="file-name"></span>
                                     <i class="far fa-trash-alt"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

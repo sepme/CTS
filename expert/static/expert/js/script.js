@@ -69,7 +69,7 @@ function newItem_label() {
 
 function showQuestion() {
     $(".show-btn").click(function () {
-        const dialog = $(".show-question");
+        const dialog = $("#showQuestion");
         let id = $(this).attr("id");
         console.log(id);
         $.ajax({
@@ -92,7 +92,7 @@ function showQuestion() {
                     $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("پاسخ داده شده");
                 }
-                dialog.find(".card-head").html(data.question_title);
+                dialog.find(".modal-header .modal-title").html(data.question_title);
                 dialog.find(".question-date").html(data.question_date);
                 dialog.find("pre#question-body").html(data.question_body);
                 dialog.find(".close-answer").attr("id", id);
@@ -142,15 +142,15 @@ $(document).ready(function () {
     input_focus();
     showQuestion();
     // $('*').persiaNumber();
-    question_dialog_init();
+    // question_dialog_init();
     question_page_init();
     // init_dialog_btn(".preview-project", ".showProject");
-    init_dialog_btn(".preview-project.type-2", ".project-details");
+    // init_dialog_btn(".preview-project.type-2", ".project-details");
     // init_dialog_btn(".preview-project", ".project-details");
-    init_dialog_btn(".confirm_project", ".select-technique");
+    // init_dialog_btn(".confirm_project", ".select-technique");
     // init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    init_dialog_btn(".add-new-question", ".add-question");
+    // init_dialog_btn(".add-new-question", ".add-question");
     init_dialog_btn(".education-btn", ".scientific_form");
     init_dialog_btn(".executive-btn", ".executive_form");
     init_dialog_btn(".research-btn", ".research_form");
@@ -183,6 +183,12 @@ $(document).ready(function () {
     tag_input_label("id_key_words");
 
     $(".confirm_project").click(function () {
+        $('#showProject').modal('toggle');
+        $('#selectTechniques').modal('toggle');
+        $('#selectTechniques .close__redirect').click(function () {
+            $('#selectTechniques').modal('toggle');
+            $('#showProject').modal('toggle');
+        });
         $.ajax({
             method: 'GET',
             url: '/expert/show_technique/',
@@ -207,7 +213,7 @@ $(document).ready(function () {
                     }
                     source.push(item);
                 }
-                $(".select-technique").find("#fancy-tree").fancytree({
+                $("#selectTechniques").find("#fancy-tree").fancytree({
                     extensions: ["glyph"],
                     checkbox: false,
                     selectMode: 1,
@@ -251,7 +257,7 @@ $(document).ready(function () {
                         }
                     },
                 });
-                select_technique(".select-technique");
+                select_technique("#selectTechniques");
             },
         });
         $('#tags').tagsInput({
@@ -266,51 +272,55 @@ $(document).ready(function () {
             $(this).css("width", "fit-content");
         });
         tag_input_label("tags");
-        let techniquesForm = $('.ajax-select-techniques');
-        $(techniquesForm).on('keyup keypress', function (e) {
-            let keyCode = e.keyCode || e.which;
-            if (keyCode === 13) {
-                e.preventDefault();
-                return false;
-            }
+    });
+    let techniquesForm = $('.ajax-select-techniques');
+    $(techniquesForm).on('keyup keypress', function (e) {
+        let keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    techniquesForm.submit(function (event) {
+        event.preventDefault();
+        let data = [];
+        let id = $(this).attr("id");
+        $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
+            data[index] = $(this).find("span").text();
         });
-        techniquesForm.submit(function (event) {
-            event.preventDefault();
-            let data = [];
-            let id = $(this).attr("id");
-            $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
-                data[index] = $(this).find("span").text();
-            });
-            $.ajax({
-                traditional: true,
-                method: 'POST',
-                url: $(this).attr('data-url'),
-                data: {technique: data, id: id},
-                dataType: 'json',
-                success: function (data) {
-                    iziToast.success({
-                        rtl: true,
-                        message: data.message,
-                        position: 'bottomLeft',
-                        duration: 9999,
-                    });
-                    $(".select-technique").removeClass("show");
-                    $(".main").removeClass("blur-div");
-                },
-                error: function (data) {
-                    let obj = JSON.parse(data.responseText);
-                    let message = "";
-                    if (obj.message !== undefined)
-                        message = obj.message;
-                    else
-                        message = "اجرای این عملیات با خطا مواجه شد!";
-                    iziToast.error({
-                        rtl: true,
-                        message: message,
-                        position: 'bottomLeft'
-                    });
-                }
-            });
+        // iziToast.success({
+        //     rtl: true,
+        //     message: "درخواست شما ارسال شد.",
+        //     position: 'bottomLeft',
+        //     duration: 9999,
+        // });
+        $.ajax({
+            traditional: true,
+            method: 'POST',
+            url: $(this).attr('data-url'),
+            data: {technique: data, id: id},
+            dataType: 'json',
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: data.message,
+                    position: 'bottomLeft',
+                });
+                $('#selectTechniques').modal('toggle');
+            },
+            error: function (data) {
+                let obj = JSON.parse(data.responseText);
+                let message = "";
+                if (obj.message !== undefined)
+                    message = obj.message;
+                else
+                    message = "اجرای این عملیات با خطا مواجه شد!";
+                iziToast.error({
+                    rtl: true,
+                    message: message,
+                    position: 'bottomLeft'
+                });
+            }
         });
     });
     if ($(window).width() < 767) {
@@ -390,7 +400,7 @@ $(document).ready(function () {
     //  Questions Page
     //****************************************//
     if (window.location.href.indexOf('questions') > -1) {
-        init_dialog_btn(".show-btn", ".show-question");
+        // init_dialog_btn(".show-btn", ".show-question");
 
         function getAllQuestions() {
             return $(".tab-content div.card").toArray();
@@ -430,7 +440,7 @@ $(document).ready(function () {
             } else if ($(element).attr("id") === "all-questions") {
                 $(".tab-content").html(questions);
             }
-            init_dialog_btn(".show-btn", ".show-question");
+            // init_dialog_btn(".show-btn", ".show-question");
             showQuestion();
         }
 
@@ -482,6 +492,7 @@ $(document).ready(function () {
                         });
                         ResearchQuestionForm[0].reset();
                     }
+                    $('#addNewQuestion').modal('toggle');
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);
@@ -1042,7 +1053,7 @@ function setDates(date) {
 }
 
 function projectDetail(data) {
-    $(".project-details").find(".card-head").html(data.project_title_persian + "<br>" + ' ( ' + data.project_title_english + ' )');
+    $(".project-details").find(".card-head").html(data.persian_title + "<br>" + ' ( ' + data.english_title + ' )');
     $(".project-details").find(".establish-time .time-body").html(data.date);
     $(".project-details").find(".time-left .time-body").html(data.deadline);
 
@@ -1056,7 +1067,7 @@ function projectDetail(data) {
     $(".techniques").html(techniques);
 
     $("#industry-name").html(data.industry_name);
-    $("#enforced-name").html(data.enforced_name);
+    $("#enforcer-name").html(data.enforcer_name);
     $("#executive-info").html(data.executive_info);
     $("#industry_logo").attr("src", data.industry_logo);
     $(".budget-amount").html(data.budget_amount);
@@ -1112,9 +1123,9 @@ showInfo.click(function (event) {
             $('.ajax-select-techniques').attr('id', project_id);
             if (data.status === "non active") {
                 $(".hidden").attr("style", "display : none;");
-                $(".showProject").find(".card-head").html(data.project_title_persian + "<br>" + " (" + data.project_title_english + ")");
-                $(".showProject").find(".establish-time .time-body").html(data.date);
-                $(".showProject").find(".time-left .time-body").html(data.deadline);
+                $("#showProject").find(".modal-header .modal-title").html(data.persian_title + "<br>" + data.english_title);
+                $("#showProject").find(".establish-time .time-body").html(data.date);
+                $("#showProject").find(".time-left .time-body").html(data.deadline);
                 const keys = JSON.parse(data.key_words);
                 let keys_code = '';
                 for (let i = 0; i < keys.length; i++) {
@@ -1124,8 +1135,7 @@ showInfo.click(function (event) {
                 setMajors(data);
                 setValue(data);
                 setComment(data.comments);
-                vote_dialog_init(".showProject");
-                showModal(".showProject");
+                // vote_dialog_init(".showProject");
                 if (data.applied === true) {
                     $("#accept-project").attr("disabled", "disabled");
                 }
@@ -1268,19 +1278,20 @@ function setMajors(data) {
         "</div>" +
         "<div class='answer'>" +
         data.progress_profitability +
-        "</div></div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "برآورد شما از سود مالی این پروژه چگونه است؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        numbersComma(data.predict_profit) + " ریال" +
         "</div></div>";
     $(".project-info-content").html(majors);
 }
+
+//         "<div>" +
+//         "<div class='question'>" +
+//         "<span class='question-mark'>" +
+//         "<i class='far fa-question-circle'></i>" +
+//         "</span>" +
+//         "برآورد شما از سود مالی این پروژه چگونه است؟" +
+//         "</div>" +
+//         "<div class='answer'>" +
+//         numbersComma(data.predict_profit) + " ریال" +
+//         "</div></div>"
 
 function setValue(data) {
     $("#v-pills-roles-tab").click(function () {
@@ -1520,6 +1531,27 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
                 iziToast.success({
                     rtl: true,
                     message: "پژوهشگر با موفقیت به پروژه اضافه شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log("Error");
+            }
+        });
+    });
+    $(".refuse-researcher").click(function () {
+        $.ajax({
+            method: "POST",
+            url: 'refuseResearcher/',
+            dataType: "json",
+            data: {
+                researcher_id: $(this).attr("id"),
+                project_id: $(this).val(),
+            },
+            success: function (data) {
+                iziToast.success({
+                    rtl: true,
+                    message: "درخواست پژوهشگر با موفقیت رد شد.",
                     position: 'bottomLeft'
                 });
             },

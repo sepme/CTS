@@ -1,27 +1,88 @@
 {% load static %}
-<div class="fixed-back researcher-info-dialog">
-    <div class="card p-bottom-0 text-right large side-card">
-        <div class="close"></div>
-        <div class="card-head"></div>
-        <div class="card-side has-image">
-            <div class="researcher-personal-info">
-                <div class="researcher-profile">
-                    <img src="" alt="profile-img" id="researcher_photo">
-                </div>
-                <div class="information">
-                    <h6 id="researcher_name"></h6>
-                    <div id="researcher_techniques"></div>
-                </div>
+<div class="modal fade" id="researcherInfo" tabindex="-1" role="dialog" aria-labelledby="researcherInfoLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-resume">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="researcherInfoLabel">رزومه پژوهشگر</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row mbottom-lg-25" id="whole-education-info">
-                        <div class="col-lg-12 text-right">
-                            <span class="section-title">سوابق علمی</span>
-                            <div class="section no-border">
-                                <div class="education-info-innerDiv">
+            <div class="modal-body">
+                <div class="row mbottom-lg-25">
+                    <div class="col-12">
+                        <div class="user-personal-info">
+                            <div class="profile">
+                                <img src="" alt="Researcher Profile" id="researcher_photo">
+                            </div>
+                            <div class="row w-100">
+                                <div class="col-12">
+                                    <div class="information">
+                                        <h6 id="researcher_name"></h6>
+                                        {#<div class="rate"></div>#}
+                                        <div class="common-info">
+                                            <span class="value">دانشگاه</span>
+                                            <span id="researcher_university"></span>
+                                        </div>
+                                        <div class="common-info">
+                                            <span class="value">مقطع</span>
+                                            <span id="researcher_grade"></span>
+                                        </div>
+                                        <div class="common-info">
+                                            <span class="value">سال ورود</span>
+                                            <span id="researcher_entry_year"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    {% url 'expert:index' as index_path %}
+                                    {% if not request.path == index_path %}
+                                        <div class="request-response">
+                                            <button class="border-button confirm-researcher"
+                                                    id="researcher-confirm-" value="">تایید
+                                            </button>
+                                            <button class="border-button fail-button refuse-researcher"
+                                                    id="researcher-reject-" value="">رد
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mbottom-lg-25">
+                    <div class="col-md-3">
+                        <div class="divide__line text-right">
+                            <span class="w__title">تکنیک ها</span>
+                            <span class="__line"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="technique-list" class="mt-4 mb-4">
+                                    {#                                    <div class="technique-item">#}
+                                    {#                                        <span class="technique-name">PCR</span>#}
+                                    {#                                        <span class="grade grade__A"></span>#}
+                                    {#                                    </div>#}
+                                    {#                                    <div class="technique-item">#}
+                                    {#                                        <span class="technique-name">PCR</span>#}
+                                    {#                                        <span class="grade grade__B"></span>#}
+                                    {#                                    </div>#}
+                                    {#                                    <div class="technique-item">#}
+                                    {#                                        <span class="technique-name">PCR</span>#}
+                                    {#                                        <span class="grade"></span>#}
+                                    {#                                    </div>#}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="divide__line text-right">
+                            <span class="w__title">سوابق علمی</span>
+                            <span class="__line"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="res-table-container">
                                     <table class="table text-center">
                                         <thead>
                                         <tr>
@@ -40,19 +101,28 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mbottom-lg-25" id="whole-project-info">
-                        <div class="col-lg-12 text-right">
-                            <span class="section-title">سوابق اجرایی</span>
-                            <div class="section no-border">
-                                <div class="education-info-innerDiv">
+                        <div class="divide__line text-right">
+                            <span class="w__title">سوابق اجرایی</span>
+                            <span class="__line"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="res-table-container">
                                     <table class="table text-center">
                                         <thead>
                                         <tr>
-                                            <td scope="col" rowspan="2">سمت</td>
-                                            <td scope="col" rowspan="2">محل خدمت</td>
-                                            <td scope="col" rowspan="2">شهر</td>
-                                            <td scope="col" colspan="2">تاریخ</td>
+                                            <td scope="col" rowspan="2">
+                                                سمت
+                                            </td>
+                                            <td scope="col" rowspan="2">محل
+                                                خدمت
+                                            </td>
+                                            <td scope="col" rowspan="2">
+                                                شهر
+                                            </td>
+                                            <td scope="col" colspan="2">
+                                                تاریخ
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td scope="col">شروع</td>
@@ -67,12 +137,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mbottom-lg-25" id="whole-executive-info">
-                        <div class="col-lg-12 text-right">
-                            <span class="section-title">سوابق پژوهشی</span>
-                            <div class="section no-border">
-                                <div class="education-info-innerDiv">
+                        <div class="divide__line text-right">
+                            <span class="w__title">سوابق پژوهشی</span>
+                            <span class="__line"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="res-table-container">
                                     <table class="table text-center">
                                         <thead>
                                         <tr>
@@ -91,15 +162,222 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mbottom-lg-25">
-                        <div class="col-lg-12 text-right">
-                            <div class="status" status="researcher">
-                                {% include 'expert/layouts/comment.html' %}
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" id="researcherInfoResume"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <div class="status" status="researcher">
+                            {% include 'expert/layouts/comment.html' %}
                         </div>
                     </div>
                 </div>
+                {#                                </div>#}
+                {#                <div class="card-side has-image">#}
+                {#                    <div class="user-personal-info">#}
+                {#                        <div class="researcher-profile">#}
+                {#                            <img src="" alt="profile-img" id="researcher_photo">#}
+                {#                        </div>#}
+                {#                        <div class="information">#}
+                {#                            <h6 id="researcher_name"></h6>#}
+                {#                            <div id="researcher_techniques"></div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {#                <div class="container">#}
+                {#                    <div class="row">#}
+                {#                        <div class="col-lg-12">#}
+                {#                            <div class="row mbottom-lg-25" id="whole-education-info">#}
+                {#                                <div class="col-lg-12 text-right">#}
+                {#                                    <span class="section-title">سوابق علمی</span>#}
+                {#                                    <div class="section no-border">#}
+                {#                                        <div class="education-info-innerDiv">#}
+                {#                                            <table class="table text-center">#}
+                {#                                                <thead>#}
+                {#                                                <tr>#}
+                {#                                                    <td scope="col">رشته تحصیلی</td>#}
+                {#                                                    <td scope="col">مقطع تحصیلی</td>#}
+                {#                                                    <td scope="col">دانشگاه</td>#}
+                {#                                                    <td scope="col">شهر</td>#}
+                {#                                                    <td scope="col">سال ورود</td>#}
+                {#                                                </tr>#}
+                {#                                                </thead>#}
+                {#                                                <tbody id="researcher_scientific_record">#}
+                {#                                                <tr>#}
+                {#                                                </tr>#}
+                {#                                                </tbody>#}
+                {#                                            </table>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="row mbottom-lg-25" id="whole-project-info">#}
+                {#                                <div class="col-lg-12 text-right">#}
+                {#                                    <span class="section-title">سوابق اجرایی</span>#}
+                {#                                    <div class="section no-border">#}
+                {#                                        <div class="education-info-innerDiv">#}
+                {#                                            <table class="table text-center">#}
+                {#                                                <thead>#}
+                {#                                                <tr>#}
+                {#                                                    <td scope="col" rowspan="2">سمت</td>#}
+                {#                                                    <td scope="col" rowspan="2">محل خدمت</td>#}
+                {#                                                    <td scope="col" rowspan="2">شهر</td>#}
+                {#                                                    <td scope="col" colspan="2">تاریخ</td>#}
+                {#                                                </tr>#}
+                {#                                                <tr>#}
+                {#                                                    <td scope="col">شروع</td>#}
+                {#                                                    <td scope="col">اتمام</td>#}
+                {#                                                </tr>#}
+                {#                                                </thead>#}
+                {#                                                <tbody id="researcher_executive_record">#}
+                {#                                                <tr>#}
+                {#                                                </tr>#}
+                {#                                                </tbody>#}
+                {#                                            </table>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="row mbottom-lg-25" id="whole-executive-info">#}
+                {#                                <div class="col-lg-12 text-right">#}
+                {#                                    <span class="section-title">سوابق پژوهشی</span>#}
+                {#                                    <div class="section no-border">#}
+                {#                                        <div class="education-info-innerDiv">#}
+                {#                                            <table class="table text-center">#}
+                {#                                                <thead>#}
+                {#                                                <tr>#}
+                {#                                                    <td scope="col">عنوان طرح پژوهشی</td>#}
+                {#                                                    <td scope="col">نام مجری</td>#}
+                {#                                                    <td scope="col">مسئول اجرا/همکار</td>#}
+                {#                                                    <td scope="col">وضعیت طرح پژوهشی</td>#}
+                {#                                                </tr>#}
+                {#                                                </thead>#}
+                {#                                                <tbody id="researcher_research_record">#}
+                {#                                                <tr>#}
+                {#                                                </tr>#}
+                {#                                                </tbody>#}
+                {#                                            </table>#}
+                {#                                        </div>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="row mbottom-lg-25">#}
+                {#                                <div class="col-lg-12 text-right">#}
+                {#                                    <div class="status" status="researcher">#}
+                {#                                        {% include 'expert/layouts/comment.html' %}#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
             </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
 </div>
+{#<div class="fixed-back researcher-info-dialog">#}
+{#    <div class="card p-bottom-0 text-right large side-card">#}
+{#        <div class="close"></div>#}
+{#        <div class="card-head"></div>#}
+{#        <div class="card-side has-image">#}
+{#            <div class="researcher-personal-info">#}
+{#                <div class="researcher-profile">#}
+{#                    <img src="" alt="profile-img" id="researcher_photo">#}
+{#                </div>#}
+{#                <div class="information">#}
+{#                    <h6 id="researcher_name"></h6>#}
+{#                    <div id="researcher_techniques"></div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="container">#}
+{#            <div class="row">#}
+{#                <div class="col-lg-12">#}
+{#                    <div class="row mbottom-lg-25" id="whole-education-info">#}
+{#                        <div class="col-lg-12 text-right">#}
+{#                            <span class="section-title">سوابق علمی</span>#}
+{#                            <div class="section no-border">#}
+{#                                <div class="education-info-innerDiv">#}
+{#                                    <table class="table text-center">#}
+{#                                        <thead>#}
+{#                                        <tr>#}
+{#                                            <td scope="col">رشته تحصیلی</td>#}
+{#                                            <td scope="col">مقطع تحصیلی</td>#}
+{#                                            <td scope="col">دانشگاه</td>#}
+{#                                            <td scope="col">شهر</td>#}
+{#                                            <td scope="col">سال ورود</td>#}
+{#                                        </tr>#}
+{#                                        </thead>#}
+{#                                        <tbody id="researcher_scientific_record">#}
+{#                                        <tr>#}
+{#                                        </tr>#}
+{#                                        </tbody>#}
+{#                                    </table>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="row mbottom-lg-25" id="whole-project-info">#}
+{#                        <div class="col-lg-12 text-right">#}
+{#                            <span class="section-title">سوابق اجرایی</span>#}
+{#                            <div class="section no-border">#}
+{#                                <div class="education-info-innerDiv">#}
+{#                                    <table class="table text-center">#}
+{#                                        <thead>#}
+{#                                        <tr>#}
+{#                                            <td scope="col" rowspan="2">سمت</td>#}
+{#                                            <td scope="col" rowspan="2">محل خدمت</td>#}
+{#                                            <td scope="col" rowspan="2">شهر</td>#}
+{#                                            <td scope="col" colspan="2">تاریخ</td>#}
+{#                                        </tr>#}
+{#                                        <tr>#}
+{#                                            <td scope="col">شروع</td>#}
+{#                                            <td scope="col">اتمام</td>#}
+{#                                        </tr>#}
+{#                                        </thead>#}
+{#                                        <tbody id="researcher_executive_record">#}
+{#                                        <tr>#}
+{#                                        </tr>#}
+{#                                        </tbody>#}
+{#                                    </table>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="row mbottom-lg-25" id="whole-executive-info">#}
+{#                        <div class="col-lg-12 text-right">#}
+{#                            <span class="section-title">سوابق پژوهشی</span>#}
+{#                            <div class="section no-border">#}
+{#                                <div class="education-info-innerDiv">#}
+{#                                    <table class="table text-center">#}
+{#                                        <thead>#}
+{#                                        <tr>#}
+{#                                            <td scope="col">عنوان طرح پژوهشی</td>#}
+{#                                            <td scope="col">نام مجری</td>#}
+{#                                            <td scope="col">مسئول اجرا/همکار</td>#}
+{#                                            <td scope="col">وضعیت طرح پژوهشی</td>#}
+{#                                        </tr>#}
+{#                                        </thead>#}
+{#                                        <tbody id="researcher_research_record">#}
+{#                                        <tr>#}
+{#                                        </tr>#}
+{#                                        </tbody>#}
+{#                                    </table>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="row mbottom-lg-25">#}
+{#                        <div class="col-lg-12 text-right">#}
+{#                            <div class="status" status="researcher">#}
+{#                                {% include 'expert/layouts/comment.html' %}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}

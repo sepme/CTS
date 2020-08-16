@@ -7,6 +7,105 @@ function init_setup() {
 
 }
 
+let mBackdrop;
+
+function haveBackdrop() {
+    if ($('.modal-backdrop').length > 0) {
+        $('.modal-backdrop').html(`
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>`);
+        clearTimeout(mBackdrop);
+        return true;
+    }
+    return false;
+}
+
+
+function display_error(form) {
+    $.each(form.find("input.error, select.error"), function () {
+        let input = $(this);
+        let value = $(this).val();
+        // console.log($(this).prop('nodeName'));
+        if (input.attr("id") === "id_captcha_1") {
+            input.on("keyup", function () {
+                input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                input.closest("form").find(".captcha-error div.error").css("top", "-35px");
+            });
+        } else if ($(this).prop("nodeName") === "INPUT") {
+            switch (input.attr("type")) {
+                case "number":
+                    input.on("keyup", function () {
+                        if (input.val() === value) {
+                            input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                            input.closest("div").find("div.error").removeAttr("style");
+                        } else {
+                            input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                            input.closest("div").find("div.error").css("top", "33px");
+                        }
+                    });
+                    break;
+
+                default:
+                    console.log("default case");
+                    input.on("keyup", function () {
+                        if (input.val() === value) {
+                            input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                            input.closest("div").find("div.error").removeAttr("style");
+                        } else {
+                            input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                            input.closest("div").find("div.error").css("top", "33px");
+                        }
+                    });
+                    break;
+            }
+        } else if ($(this).prop("nodeName") === "SELECT") {
+            value = input.find(":selected").text();
+            input.change(function () {
+                if (input.find(":selected").text() === value) {
+                    input.addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    input.closest("div").find("div.error").removeAttr("style");
+                } else {
+                    input.removeClass("error").removeAttr("style").prev().removeAttr("style");
+                    input.closest("div").find("div.error").css("top", "33px");
+                }
+            });
+        }
+
+    });
+}
+
+function close_modal() {
+    if ($(".modal").length > 0) {
+        $(".modal").each(function () {
+            $(this).on('hidden.bs.modal', function (e) {
+                if ($(this).find(".techniques").length > 0) {
+                    $(this).find(".techniques").html("");
+                }
+                if ($(this).find(".keywords").length > 0) {
+                    $(this).find(".keywords").html("");
+                }
+                if ($(this).find(".comment-tabs").length > 0) {
+                    $(this).find(".comment-tabs .nav").html("");
+                }
+                if ($(this).find(".no-comment").length > 0) {
+                    $(this).find(".no-comment").html("");
+                }
+            })
+        });
+    }
+}
+
+close_modal();
+
+
 function init_windowSize() {
     // if ($(window).width() < 575.98) {
     // } else {
@@ -50,113 +149,113 @@ function blur_div_toggle(content) {
 }
 
 function input_focus() {
-    if ($("input[type='text'],input[type='email'],textarea, input[type='number'],input[type='password']").prop("disabled")) {
-        $(this).each(function () {
-            let inputLabel = "label[for='" + $(this).attr("id") + "']";
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "13px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#8d8d8d"
-            });
+    // if ($("input[type='text'],input[type='email'],textarea, input[type='number'],input[type='password']").prop("disabled")) {
+    //     $(this).each(function () {
+    //         let inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //         $(inputLabel).addClass("full-focus-out");
+    //         $(inputLabel).css({
+    //             "font-size": "13px",
+    //             "top": "12px",
+    //             "right": "30px",
+    //             "color": "#8d8d8d"
+    //         });
 
-        });
-    }
-    $("input[type='text'],input[type='email'],textarea, input[type='number'],input[type='password']").each(function () {
-        let inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).val() !== '') {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#6f7285",
-                "padding": "0 10px"
-            });
-        } else {
-            $(inputLabel).removeClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "13px",
-                "top": "28px",
-                "right": "25px",
-                "color": "#6f7285",
-                "padding": "0"
-            });
-        }
-        if ($(this).hasClass("error")) {
-            $(inputLabel).css("color", "#ff4545");
-        }
-    }).on("focus", function () {
-        let inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-            let errorDiv = $(this).next(".error");
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "rgb(255, 69, 69)",
-                "padding": "0 10px"
-            });
-            $(this).css("color", "rgb(255, 69, 69)");
-            // $(this).keyup(function () {
-            //     // console.log($(this).attr("id"));
-            //     // $(this).removeClass("error");
-            //     // errorDiv.remove();
-            // });
-        } else {
-            $(inputLabel).addClass("full-focus-out");
-            $(inputLabel).css({
-                "font-size": "12px",
-                "top": "12px",
-                "right": "30px",
-                "color": "#3CCD1C",
-                "padding": "0 10px"
-            });
-            $(this).css("color", "#3ccd1c");
-            if ($(this).next().hasClass("fas")) {
-                $(this).next().css("color", "#3ccd1c");
-            }
-        }
-    }).on("focusout", function () {
-        let inputLabel = "label[for='" + $(this).attr("id") + "']";
-        if ($(this).hasClass("solid-label")) {
-            return false;
-        } else if ($(this).hasClass("error")) {
-            $(inputLabel).css("color", "rgb(255, 69, 69)");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "13px",
-                    "top": "28px",
-                    "right": "25px",
-                    "color": "rgb(255, 69, 69)",
-                    "padding": "0"
-                });
-                $(inputLabel).removeClass("full-focus-out");
-            }
-        } else {
-            $(inputLabel).css("color", "#6f7285");
-            if ($(this).val() === '') {
-                $(inputLabel).css({
-                    "font-size": "13px",
-                    "top": "28px",
-                    "right": "25px",
-                    "color": "#6f7285",
-                    "padding": "0"
-                });
-                $(inputLabel).removeClass("full-focus-out");
-            } else {
-                $(this).css("color", "#8d8d8d");
-                $(inputLabel).css("color", "#8d8d8d");
-            }
-            if ($(this).next().hasClass("fas")) {
-                $(this).next().css("color", "#bdbdbd");
-            }
-        }
-    });
+    //     });
+    // }
+    // $("input[type='text'],input[type='email'],textarea, input[type='number'],input[type='password']").each(function () {
+    //     let inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //     if ($(this).val() !== '') {
+    //         $(inputLabel).addClass("full-focus-out");
+    //         $(inputLabel).css({
+    //             "font-size": "12px",
+    //             "top": "12px",
+    //             "right": "30px",
+    //             "color": "#6f7285",
+    //             "padding": "0 10px"
+    //         });
+    //     } else {
+    //         $(inputLabel).removeClass("full-focus-out");
+    //         $(inputLabel).css({
+    //             "font-size": "13px",
+    //             "top": "28px",
+    //             "right": "25px",
+    //             "color": "#6f7285",
+    //             "padding": "0"
+    //         });
+    //     }
+    //     if ($(this).hasClass("error")) {
+    //         $(inputLabel).css("color", "#ff4545");
+    //     }
+    // }).on("focus", function () {
+    //     let inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //     if ($(this).hasClass("solid-label")) {
+    //         return false;
+    //     } else if ($(this).hasClass("error")) {
+    //         let errorDiv = $(this).next(".error");
+    //         $(inputLabel).addClass("full-focus-out");
+    //         $(inputLabel).css({
+    //             "font-size": "12px",
+    //             "top": "12px",
+    //             "right": "30px",
+    //             "color": "rgb(255, 69, 69)",
+    //             "padding": "0 10px"
+    //         });
+    //         $(this).css("color", "rgb(255, 69, 69)");
+    //         // $(this).keyup(function () {
+    //         //     // console.log($(this).attr("id"));
+    //         //     // $(this).removeClass("error");
+    //         //     // errorDiv.remove();
+    //         // });
+    //     } else {
+    //         $(inputLabel).addClass("full-focus-out");
+    //         $(inputLabel).css({
+    //             "font-size": "12px",
+    //             "top": "12px",
+    //             "right": "30px",
+    //             "color": "#3CCD1C",
+    //             "padding": "0 10px"
+    //         });
+    //         $(this).css("color", "#3ccd1c");
+    //         if ($(this).next().hasClass("fas")) {
+    //             $(this).next().css("color", "#3ccd1c");
+    //         }
+    //     }
+    // }).on("focusout", function () {
+    //     let inputLabel = "label[for='" + $(this).attr("id") + "']";
+    //     if ($(this).hasClass("solid-label")) {
+    //         return false;
+    //     } else if ($(this).hasClass("error")) {
+    //         $(inputLabel).css("color", "rgb(255, 69, 69)");
+    //         if ($(this).val() === '') {
+    //             $(inputLabel).css({
+    //                 "font-size": "13px",
+    //                 "top": "28px",
+    //                 "right": "25px",
+    //                 "color": "rgb(255, 69, 69)",
+    //                 "padding": "0"
+    //             });
+    //             $(inputLabel).removeClass("full-focus-out");
+    //         }
+    //     } else {
+    //         $(inputLabel).css("color", "#6f7285");
+    //         if ($(this).val() === '') {
+    //             $(inputLabel).css({
+    //                 "font-size": "13px",
+    //                 "top": "28px",
+    //                 "right": "25px",
+    //                 "color": "#6f7285",
+    //                 "padding": "0"
+    //             });
+    //             $(inputLabel).removeClass("full-focus-out");
+    //         } else {
+    //             $(this).css("color", "#8d8d8d");
+    //             $(inputLabel).css("color", "#8d8d8d");
+    //         }
+    //         if ($(this).next().hasClass("fas")) {
+    //             $(this).next().css("color", "#bdbdbd");
+    //         }
+    //     }
+    // });
 }
 
 if (window.location.href.indexOf('messages') > -1) {
@@ -401,6 +500,6 @@ $(window).on("load", function () {
         $("#Uni").autocomplete({
             source: arr,
         });
-         $("#Uni").attr("autocomplete", "on");
+        $("#Uni").attr("autocomplete", "on");
     }
 });

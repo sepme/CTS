@@ -3,6 +3,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from captcha.fields import CaptchaField
+from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.widgets import CKEditorWidget
+
 from . import models
 from researcher.models import ResearcherUser
 from expert.models import ExpertUser
@@ -19,6 +23,8 @@ class RegisterEmailForm(forms.Form):
     email = forms.EmailField(label="ایمیل", error_messages={'required': 'لطفا ایمیل خود را وارد کنید',
                                                             'invalid': 'ایمیل وارد شده نامعتبر است'})
     account_type = forms.CharField(max_length=10, required=True,error_messages={'required': 'لطفانوع حساب کاربری خود را مشخص کنید',})
+    captcha = CaptchaField( error_messages={'required': 'لطفا کد امنیتی را وارد کنید.',
+                                            'invalid' : 'کد امنیتی وارد شده نامعتبر است.'})
     #
     # class Meta:
     #     widgets = {
@@ -115,3 +121,34 @@ class RecoverPasswordForm(forms.Form):
         if not user:
             raise forms.ValidationError('کاربر با این نام کاربری ثبت نام نشده است.')
         return username
+
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = models.News
+        fields = ['title', 'text', 'attachment', 'link', 'writer'] 
+
+class ContactForm(forms.ModelForm):
+    # fullname = forms.CharField(label="نام و نام خانوادگی", max_length=150, required=True, error_messages={'required': 'لطفا نام و نام خانوادگی خود را وارد کنید.',})
+    # email = forms.EmailField(label="ایمیل", required=True, error_messages={'required': 'لطفا ایمیل خود را وارد کنید.',})
+    # context = forms.CharField(label="پیام", max_length=1000, widget=forms.Textarea(), required=True ,error_messages={'required': 'لطفا پیام خود را وارد کنید.',})
+
+    class Meta:
+        model = models.ContactUs
+        exclude = []
+        error_messages = {
+            'fullname' : {'required': 'لطفا نام و نام خانوادگی خود را وارد کنید.',},
+            'email'    : {'required': 'لطفا ایمیل خود را وارد کنید.',},
+            'context'  : {'required': 'لطفا پیام خود را وارد کنید.',}
+            }
+    
+
+class FeedBackForm(forms.ModelForm):
+    # captcha = CaptchaField( error_messages={'required': 'لطفا کد امنیتی را وارد کنید.',
+    #                                         'invalid' : 'کد امنیتی وارد شده نامعتبر است.'})
+    
+    class Meta:
+        model = models.FeedBack
+        fields = ['email', 'opinion']
+        widgets = {
+            'opinion': forms.Textarea(),
+        }

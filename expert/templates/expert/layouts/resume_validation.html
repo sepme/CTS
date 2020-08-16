@@ -1,0 +1,85 @@
+{% load static %}
+<div class="modal fade" id="resumeValidation" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="resumeValidationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="resumeValidationLabel">صحت سنجی</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-right">
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            در صورتی که اطلاعات زیر با شما مطابقت دارد می توانید آنها را تایید کنید تا به صورت خودکار در
+                            سامانه افزوده شوند.
+                        </p>
+                    </div>
+                    <div class="col-12 pt-4 pb-4">
+                        <div class="d-flex">
+                            <img class="rounded" src="{% static 'expert/img/profile.jpg' %}" alt="" style="width: 7rem">
+                            <div class="pr-4">
+                                <div class="pb-3 pt-2">
+                                    <span>نام و نام خانوادگی</span>
+                                    <span>سپهر متانت</span>
+                                </div>
+                                <div class="pb-3">
+                                    <span>دانشگاه</span>
+                                    <span>علوم پزشکی تهران</span>
+                                </div>
+                                <div>
+                                    <span>گروه هیئت علمی</span>
+                                    <span>سپهر متانت</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="custom-techniques">
+                            <div>
+                                <span>تکنیک </span><span>تکنیک </span><span>تکنیک </span><span>تکنیک </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <table class='table mtop-lg-25 text-center'>
+                            <thead>
+                            <tr>
+                                <td>تعداد ارجاع</td>
+                                <td>مجله</td>
+                                <td>سمت</td>
+                                <td>عنوان</td>
+                            </tr>
+                            </thead>
+                            <tbody class="">
+                            <tr>
+                                <td>8</td>
+                                <td class="text-left">International journal of cancer</td>
+                                <td>نویسنده مسئول</td>
+                                <td class="text-left">
+                                    A prospective study of tea drinking temperature and risk of esophageal squamous cell
+                                    carcinoma
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td class="text-left">International journal of cancer</td>
+                                <td>نویسنده مسئول</td>
+                                <td class="text-left">
+                                    A prospective study of tea drinking temperature and risk of esophageal squamous cell
+                                    carcinoma
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary save-btn confirm_project" id="accept-project">
+                    تایید
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

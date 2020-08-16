@@ -1,0 +1,70 @@
+{% load widget_tweaks %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
+    <title>انتخاب رمز عبور</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="card registration single-column-card text-center">
+    <div class="col-12 loading">
+        <div class="circle-loader">
+            <div class="checkmark draw"></div>
+        </div>
+        <h6>لطفا صبر کنید ...</h6>
+    </div>
+    <div class="recover-pass-container">
+        <div class="card-center-image">
+            <img src="{% static 'img/key.svg' %}" alt="">
+        </div>
+        <h6>ثبت نام کاربری و رمز عبور</h6>
+        <hr>
+        <form method="post" id="user-pass-form">
+            {% csrf_token %}
+            <div class="username input-compact">
+                <label for="username">نام کاربری</label>
+                <input type="text" id="username" name="username" {% if request.user.is_authenticated %}
+                       value="{{ request.user }}" {% else %} value="{{ username }}"{% endif %} class="w-100" readonly>
+                <i class="fas fa-user-alt fa-lg"></i>
+            </div>
+            <div class="password input-compact">
+                {% if form.non_field_errors %}
+                    <label for="id_password" style="color: rgb(255, 69, 69);">رمز عبور</label>
+                    {{ form.password|attr:'class:w-100 error' }}
+                {% else %}
+                    <label for="id_password">رمز عبور</label>
+                    {{ form.password|attr:'class:w-100' }}
+                {% endif %}
+                <div class="error">
+                    {{ form.non_field_errors }}
+                </div>
+                <i class="fas fa-lock fa-lg"></i>
+            </div>
+            <div class="confirm_password input-compact">
+                <label for="confirm_password">تایید رمز عبور</label>
+                {{ form.confirm_password|attr:"id:confirm_password"|attr:'class:w-100' }}
+                <i class="fas fa-check fa-lg"></i>
+            </div>
+            <button type="submit" name="enter" class="Enter-btn">ثبت اطلاعات</button>
+        </form>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% if form.non_field_errors %}
+    <script type="text/javascript">
+        display_error($("#user-pass-form"));
+    </script>
+{% endif %}
+</body>
+</html>

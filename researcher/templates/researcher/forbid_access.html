@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_tags %}
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    {% load static %}
+    <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
+</head>
+<body>
+<div class="main forbid-background">
+    <div class="top-bar">
+        <img src="{% static 'researcher/img/logoName.png' %}" alt="chamranTeam">
+        <div class="dropdown">
+            <button type="button" name="button" class="btn dropdown-toggle" id="dropdown-btn" data-toggle="dropdown">
+                {% if request.user.researcheruser.researcherprofile.photo %}
+                    <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile"
+                         class="dropdown-img profile"
+                         height="45px">
+                {% else %}
+                    <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="dropdown-img profile"
+                         height="45px">
+                {% endif %}
+            </button>
+            <ul class="dropdown-menu text-center" role="menu" aria-labelledby="dropdown-btn" id="dropdown">
+                <li><a href="{% url 'researcher:userInfo' %}">اطلاعات کاربری<i class="fas fa-cog"></i></a></li>
+                <li><a href="{% url 'chamran:send_reset_email' %}">تغییر رمز عبور<i class="fas fa-pen"></i></a></li>
+                <hr>
+                <li><a href="{% url 'chamran:logout' %}">خروج<i class="fas fa-sign-out-alt"></i></a></li>
+            </ul>
+        </div>
+        <a href="#" id="toggle"><span></span></a>
+    </div>
+    <div class="container text-center" style="margin: auto;overflow: auto;height: 100vh;padding-top: 120px;">
+        <div class="forbidden-access">
+            <h1 style="color: #E8505B">شما دسترسی به حساب خود ندارید</h1>
+            <p style="color: #484848">
+                به دلیل عدم پاسخ به موقع به سوال پژوهشی، تا مدت معینی شما نمی توانید به حساب خود دسترسی داشته باشید.
+                خواهشمندیم تا پایان این زمان شکیبا باشید
+            </p>
+            <div class="dots-timer row" style="direction: ltr!important;">
+                <div class="30-dot-circle timer-item col-12 col-md-4" id="day">
+                    <div class="circle">
+                        <span class="circle-value day">{{ day }}</span>
+                    </div>
+                    <span class="circle-label">روز</span>
+                </div>
+                <div class="24-dot-circle timer-item col-12 col-md-4" id="hour">
+                    <div class="circle">
+                        <span class="circle-value hour">{{ hour }}</span>
+                    </div>
+                    <span class="circle-label">ساعت</span>
+                </div>
+                <div class="60-dot-circle timer-item col-12 col-md-4" id="min">
+                    <div class="circle">
+                        <span class="circle-value minute">{{ minute }}</span>
+                    </div>
+                    <span class="circle-label">دقیقه</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+<script type="text/javascript">
+    let day = $('.day').html();
+    let hour = $('.hour').html();
+    let min = $('.minute').html();
+    $(".dots-timer div.timer-item").each(function () {
+        let active_dots = 0;
+        if ($(this).attr("id") === "day") {
+            $(this).find(".circle-value").text(day);
+            active_dots = day;
+        } else if ($(this).attr("id") === "hour") {
+            $(this).find(".circle-value").text(hour);
+            active_dots = hour;
+        } else {
+            $(this).find(".circle-value").text(min);
+            active_dots = min;
+        }
+        let dots = parseInt($(this).attr("class").toString().replace("-dot-circle", ""));
+        let width = $(this).find(".circle").width();
+        let degree = 0;
+        for (let i = 0; i < dots; i++) {
+            let top = 30 + (1 - Math.cos(degree)) * width / 2;
+            let left = 30 + (1 + Math.sin(degree)) * width / 2;
+            let dot;
+            if (i < dots - active_dots) {
+                dot = `<span class="circle-dot active" style="top: ${top}px;left: ${left}px"></span>`;
+            } else if (i === dots - active_dots) {
+                dot = `<span class="circle-dot blink" style="top: ${top}px;left: ${left}px"></span>`;
+            } else {
+                dot = `<span class="circle-dot" style="top: ${top}px;left: ${left}px"></span>`;
+            }
+            $(this).find(".circle").append(dot);
+            degree += 2 * Math.PI / dots;
+        }
+    });
+
+    function update_timer() {
+        let minElement = $(".dots-timer div.timer-item#min");
+        let min = parseInt(minElement.find(".circle-value").text());
+        let hourElement = $(".dots-timer div.timer-item#hour");
+        let hour = parseInt(hourElement.find(".circle-value").text());
+        let dayElement = $(".dots-timer div.timer-item#day");
+        let day = parseInt(dayElement.find(".circle-value").text());
+        console.log(min);
+        min--;
+        if (min > 0) {
+            minElement.find(".circle-dot:nth-child(" + (61 - min) + ")").removeClass("blink").addClass("active");
+            minElement.find(".circle-dot:nth-child(" + (62 - min) + ")").addClass("blink");
+            minElement.find(".circle-value").text(min);
+        } else {
+            hour--;
+            minElement.find(".circle-value").text(60);
+            minElement.find(".circle-dot").removeClass("active").removeClass("blink");
+            if (hour > 0) {
+                hourElement.find(".circle-dot:nth-child(" + (25 - hour) + ")").removeClass("blink").addClass("active");
+                hourElement.find(".circle-dot:nth-child(" + (26 - hour) + ")").addClass("blink");
+                hourElement.find(".circle-value").text(hour);
+            } else {
+                day--;
+                hourElement.find(".circle-value").text(24);
+                hourElement.find(".circle-dot").removeClass("active").removeClass("blink");
+                dayElement.find(".circle-value").text(day);
+                dayElement.find(".circle-dot:nth-child(" + (31 - day) + ")").removeClass("blink").addClass("active");
+                dayElement.find(".circle-dot:nth-child(" + (32 - day) + ")").addClass("blink");
+            }
+            return true;
+
+        }
+    }
+
+    setInterval(update_timer, 60 * 1000);
+</script>
+</body>
+</html>

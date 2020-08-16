@@ -1,5 +1,59 @@
 {% load static %}
-<div class="fixed-back select-technique">
+<div class="modal fade" id="selectTechniques" tabindex="-1" role="dialog" aria-labelledby="showProjectLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <form method="post" enctype="multipart/form-data" class="ajax-select-techniques"
+                  data-url="{% url 'expert:accept_project' %}">
+                {% csrf_token %}
+      <div class="modal-header">
+        <h6 class="modal-title text-right" id="showProjectLabel">انتخاب تکنیک</h6>
+        <button type="button" class="close close__redirect" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+            <div class="row mbottom-lg-25">
+                <div class="col-lg-12 text-right">
+                    پیش از ارسال درخواستتان برای صاحب پروژه و تایید نهایی آن،
+                    در این قسمت می بایست تکنیک هایی که به نظرتان برای انجام پروژه به آنها نیاز خواهید داشت را انتخاب
+                    کنید.
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-md-8 text-right mbottom-lg-25">
+                        <span class="section-title">لیست تکنیک ها</span>
+                        <div class="section">
+                            <div id="fancy-tree"></div>
+                        </div>
+                        <div dir="rtl" class="sub-header mtop-lg-25">
+                            در صورتی که تکنیک مورد نطر خود را در لیست بالا نیافتید، آن را اینجا وارد کنید و کلید Enter
+                            را
+                            فشار دهید.
+                        </div>
+                        <div style="position: relative">
+                            <input style="margin: 0" type="text" class="w-100" name="" id="add-new-technique"
+                                   placeholder="برای انتخاب نام تکنیک، روی علامت مثبت کلیک کنید">
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-right mbottom-lg-25">
+                        <span class="section-title">تکنیک های انتخاب شده</span>
+                        <div class="section">
+                            <label for="tags"></label>
+                            <input name="techniques" id="tags" value="" class="w-100"/>
+                        </div>
+                    </div>
+                </div>
+        </div>
+      </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary save-btn" id="accept-techniques" type="submit">
+                ثبت و درخواست ملاقات
+            </button>
+        </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% comment %} <div class="fixed-back select-technique">
     <div class="card text-right">
         <div class="close"></div>
         <div class="card-head">انتخاب تکنیک</div>
@@ -40,10 +94,10 @@
                 </div>
                 <div class="card-footer">
                     <button class="save-btn" id="accept-techniques" type="submit">
-                        ثبت و ارسال درخواست
+                        ثبت و درخواست ملاقات
                     </button>
                 </div>
             </form>
         </div>
     </div>
-</div>
+</div> {% endcomment %}

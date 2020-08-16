@@ -1,7 +1,14 @@
 {% load static %}
-<span class="section-title">نظرات</span>
+<span class="section-title">گفتگو</span>
 <div class="section">
     <div class="project-comment-innerDiv">
+        <div class="no-comment">
+            <img class="no comment" src="{% static 'img/no_message.svg' %}" alt="no message">
+            <h5>نظری درباره این پروژه ثبت نشده!</h5>
+            <p>
+                در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.
+            </p>
+        </div>
         <div class="comments"></div>
         <div class="add-comment">
             <form action="" method="POST" enctype="multipart/form-data" id="comment-form" url="{% url 'researcher:comment' %}">

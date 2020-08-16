@@ -5,19 +5,25 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
 import json
 
-from . import forms
+from . import forms, webScraping
 from .models import *
 
 from industry.models import *
 from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance
+from chamran_admin.models import Message
 
+
+def get_url(rawUrl):
+    return rawUrl[rawUrl.find('media', 2):]
 
 def gregorian_to_numeric_jalali(date):
     if date is None:
@@ -58,36 +64,36 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
         if expert_user.status != "signed_up":
             projects = []
-            if expert_user.status == "free":
+            if expert_user.status in ["free", "applied"]:
                 projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
             if expert_user.status == "involved":
-                projects = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
+                project  = Project.objects.filter(status=2).get(expert_accepted=expert_user)
+                comments = project.get_comments().filter(researcher_user=None).filter(expert_user=expert_user)
+                context['project'] = project
+                context['comment'] = comments
+                context['requestResearcherForm'] = forms.RequestResearcherForm()
+                context['researcher_accepted'] = []
+                for researcher in project.researcher_accepted.all():
+                    researcher = {
+                        "id" : researcher.pk,
+                        "fullname" : researcher.researcherprofile.fullname,
+                        "photo": researcher.researcherprofile.photo
+                    }
+                    context['researcher_accepted'].append(researcher)
             context['projects'] = projects
         return context
     
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
     def form_valid(self, form):
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
-
-        photo = form.cleaned_data['photo']
-        first_name = form.cleaned_data['first_name']
-        last_name = form.cleaned_data['last_name']
-        special_field = form.cleaned_data['special_field']
-        melli_code = form.cleaned_data['melli_code']
-        scientific_rank = form.cleaned_data['scientific_rank']
-        university = form.cleaned_data['university']
-        address = form.cleaned_data['address']
-        home_number = form.cleaned_data['home_number']
-        phone_number = form.cleaned_data['phone_number']
-        email = form.cleaned_data['email_address']
-        expert_form = ExpertForm.objects.create(photo=photo, expert_user=expert_user,
-                                                expert_firstname=first_name, expert_lastname=last_name,
-                                                special_field=special_field, national_code=melli_code,
-                                                scientific_rank=scientific_rank, university=university,
-                                                phone_number=home_number, home_address=address,
-                                                mobile_phone=phone_number, email_address=expert_user.user.get_username())
+        expert_form = form.save(commit=False)
+        expert_form.expert_user = expert_user
+        expert_form.email = expert_user.user.get_username()
+        expert_form.save()
         expert_user.status = 'free'
         expert_user.save()
-        expert_form.save()
         return HttpResponseRedirect(reverse('expert:index'))
 
 
@@ -113,13 +119,22 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
                 for researcher_form in researchers_form:
                     techniques = [tech.technique.technique_title for tech in
                                     researcher_form.researcher_user.techniqueinstance_set.all()]
+                    accepted = False
+                    refused  = False
+                    if researcher_form.researcher_user in project.researcher_accepted.all():
+                        accepted = True
+                    elif researcher_form.researcher_user in project.researcher_banned.all():
+                        refused = True
                     researcher_applied = {
-                        'profile': researcher_form,
+                        'id'        : researcher_form.researcher_user.pk,
+                        'profile'   : researcher_form,
                         'techniques': techniques,
+                        'accepted'  : accepted,
+                        'refused'   : refused,
                     }
                     researchers_applied.append(researcher_applied)
                 appending = {
-                    'project': project.project_form.project_title_persian,
+                    'project': project.project_form.persian_title,
                     'id': project.pk,
                     "researchers_applied": researchers_applied
                 }
@@ -152,18 +167,13 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = forms.ExpertInfoForm
     model = ExpertForm
     login_url = '/login/'
-    success_url = "/"
+    success_url = "/expert/"
     permission_required = ('expert.be_expert',)
-    form = forms.ExpertInfoForm()
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         expertForm = get_object_or_404(ExpertForm, expert_user__user=self.request.user)
-        expert_info_form = forms.ExpertInfoForm(instance=expertForm)
-        context['expert_info_form']    = expert_info_form
+        context['expert_info_form']    = self.form_class(instance=expertForm)
         context['scientific_instance'] = ScientificRecord.objects.filter(expert_form=expertForm)
         context['executive_instance']  = ExecutiveRecord.objects.filter(expert_form=expertForm)
         context['research_instance']   = ResearchRecord.objects.filter(expert_form=expertForm)
@@ -174,56 +184,108 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['executive_form']      = forms.ExecutiveRecordForm()
         context['research_form']       = forms.ResearchRecordForm()
         context['paper_form']          = forms.PaperRecordForm()
-        for error in self.form.errors:
-            context[error+"_error"] = self.form.errors[error]
+        context['email']               = self.request.user.get_username()
+        context['autoAddProject']      = expertForm.expert_user.autoAddProject
+        if expertForm.resume:
+            context['resume'] = expertForm.resume
         return context
 
-    def post(self, request, *args, **kwargs):
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
         expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
-        self.form = forms.ExpertInfoForm(request.POST, request.FILES)
-        if self.form.is_valid():
-            expertForm.university   = self.form.cleaned_data['university']
-            expertForm.home_address = self.form.cleaned_data['home_address']
-            expertForm.phone_number = self.form.cleaned_data['phone_number']
-            expertForm.mobile_phone = self.form.cleaned_data['mobile_phone']
-            if self.form.cleaned_data['awards']:
-                expertForm.awards = self.form.cleaned_data['awards']
-            
-            if self.form.cleaned_data['number_of_grants']:
-                expertForm.number_of_grants = self.form.cleaned_data['number_of_grants']
-            
-            if self.form.cleaned_data['languages']:
-                expertForm.languages = self.form.cleaned_data['languages']
+        if self.request.POST.get('autoAddProject'):
+            expertForm.expert_user.autoAddProject = True
+        else:
+            expertForm.expert_user.autoAddProject = False
+        expertForm.expert_user.save()
+        expertForm.university   = form.cleaned_data['university']
+        expertForm.home_address = form.cleaned_data['home_address']
+        expertForm.home_number  = form.cleaned_data['home_number']
+        expertForm.phone_number = form.cleaned_data['phone_number'] 
+        if form.cleaned_data['awards']:
+            expertForm.awards = form.cleaned_data['awards']
+        
+        if form.cleaned_data['number_of_grants']:
+            expertForm.number_of_grants = form.cleaned_data['number_of_grants']
+        
+        if form.cleaned_data['languages']:
+            expertForm.languages = form.cleaned_data['languages']
 
-            if self.form.cleaned_data['method_of_introduction']:
-                expertForm.method_of_introduction = self.form.cleaned_data['method_of_introduction']
+        if form.cleaned_data['method_of_introduction']:
+            expertForm.method_of_introduction = form.cleaned_data['method_of_introduction']
 
-            expertForm.has_industrial_research = request.POST.get('has_industrial_research')
-            expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
+        if form.cleaned_data['has_industrial_research']:
+            expertForm.has_industrial_research = form.cleaned_data['has_industrial_research']
 
-            if expertForm.eq_test:
-                    eq_test = expertForm.eq_test
-            else:
-                eq_test = EqTest()
+        if form.cleaned_data['number_of_researcher']:
+            expertForm.number_of_researcher = form.cleaned_data['number_of_researcher']
 
-            eq_test.team_work              = request.POST.get('team_work', False)
-            eq_test.innovation             = request.POST.get('creative_thinking', False)
-            eq_test.devotion               = request.POST.get('sacrifice', False)
-            eq_test.productive_research    = request.POST.get('researching', False)
-            eq_test.national_commitment    = request.POST.get('obligation', False)
-            eq_test.collecting_information = request.POST.get('data_collection', False)
-            eq_test.business_thinking      = request.POST.get('morale', False)
-            eq_test.risk_averse            = request.POST.get('risk', False)
-            eq_test.save()
+        if form.cleaned_data['resume']:
+            expertForm.resume = form.cleaned_data['resume']
 
-            photo = request.FILES.get('photo')
-            if photo is not None:
+        photo = self.request.FILES.get('photo')
+        if photo is not None:
+            if expertForm.photo:
                 if os.path.isfile(expertForm.photo.path):
                     os.remove(expertForm.photo.path)
-                expertForm.photo = photo
+            expertForm.photo = photo
 
-            expertForm.save()
-        return super().post(self, request, *args, **kwargs)
+        expertForm.save()
+        for word in self.request.POST['keywords'].split(','):
+            expertForm.keywords.add(Keyword.objects.get_or_create(name=word)[0])
+        return super().form_valid(form)
+
+    # def post(self, request, *args, **kwargs):
+    #     expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
+    #     self.form = forms.ExpertInfoForm(request.POST, request.FILES)
+    #     if self.form.is_valid():
+    #         expertForm.university   = self.form.cleaned_data['university']
+    #         expertForm.home_address = self.form.cleaned_data['home_address']
+    #         expertForm.phone_number = self.form.cleaned_data['phone_number']
+    #         expertForm.mobile_phone = self.form.cleaned_data['mobile_phone']
+    #         if self.form.cleaned_data['awards']:
+    #             expertForm.awards = self.form.cleaned_data['awards']
+            
+    #         if self.form.cleaned_data['number_of_grants']:
+    #             expertForm.number_of_grants = self.form.cleaned_data['number_of_grants']
+            
+    #         if self.form.cleaned_data['languages']:
+    #             expertForm.languages = self.form.cleaned_data['languages']
+
+    #         if self.form.cleaned_data['method_of_introduction']:
+    #             expertForm.method_of_introduction = self.form.cleaned_data['method_of_introduction']
+
+    #         expertForm.has_industrial_research = request.POST.get('has_industrial_research')
+    #         expertForm.number_of_researcher    = request.POST.get('number_of_researcher')
+
+    #         # if expertForm.eq_test:
+    #         #         eq_test = expertForm.eq_test
+    #         # else:
+    #         #     eq_test = EqTest()
+
+    #         # eq_test.team_work              = request.POST.get('team_work', False)
+    #         # eq_test.innovation             = request.POST.get('creative_thinking', False)
+    #         # eq_test.devotion               = request.POST.get('sacrifice', False)
+    #         # eq_test.productive_research    = request.POST.get('researching', False)
+    #         # eq_test.national_commitment    = request.POST.get('obligation', False)
+    #         # eq_test.collecting_information = request.POST.get('data_collection', False)
+    #         # eq_test.business_thinking      = request.POST.get('morale', False)
+    #         # eq_test.risk_averse            = request.POST.get('risk', False)
+    #         # eq_test.save()
+
+    #         photo = request.FILES.get('photo')
+    #         if photo is not None:
+    #             if os.path.isfile(expertForm.photo.path):
+    #                 os.remove(expertForm.photo.path)
+    #             expertForm.photo = photo
+
+    #         expertForm.save()
+    #         expert.status = "free"
+    #         expert.save()
+    #     return super().post(self, request, *args, **kwargs)
     
 
 # class FUserInfo(generic.FormView):
@@ -312,6 +374,7 @@ def scienfic_record_view(request):
             }
         return JsonResponse(data)
     else:
+        print(scientific_form.errors)
         print('form error occured')
         return JsonResponse(scientific_form.errors, status=400)
 
@@ -328,7 +391,7 @@ def executive_record_view(request):
             }
         return JsonResponse(data)
     else:
-        print('form error occured')
+        print('executive form error occured')
         return JsonResponse(executive_form.errors, status=400)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -344,7 +407,9 @@ def research_record_view(request):
             }
         return JsonResponse(data)
     else:
-        print('form error occured')
+        if 'status' in research_form.errors.keys():
+            research_form.errors['status'] = "وضعیت نمی تواند خالی باشد."
+        print('research record form error occured')
         return JsonResponse(research_form.errors, status=400)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -373,46 +438,44 @@ def show_project_view(request):
             ActiveProjcet(request, project, data)
     return UsualShowProject(request, project, data)
 
-@permission_required('expert.be_expert', login_url='/login/')
 def UsualShowProject(request, project, data):
     project_form = project.project_form
-    if request.user.expertuser in project.expert_applied.all():
+    if request.user.expertuser.status == "applied":
         data['applied'] = True
     else:
         data['applied'] = False
-    comments = []
-    comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
-    sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
-    for comment in comment_list:
-        try:
-            url = comment.attachment.url.split("/")[-1]
-        except:
-            url = "None"
-        comments.append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type,
-            'attachment': url,
-            'pk' : comment.pk,
-        })
-        if comment.sender_type == "industry":
-            comment.status = "seen"
-            comment.save()
-    for comment in sys_comment:
-        comments.append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type,
-            'pk' : comment.pk,
-        })
-        if comment.sender_type == "system":
-            comment.status = "seen"
-            comment.save()
-    # data = {
     if "status" not in data.keys():
         data["status"] = "non active"
         data['techniques_list']= Technique.get_technique_list()
-    data['comments']= comments
+        comments = []
+        comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
+        sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
+        for comment in comment_list:
+            try:
+                url = get_url(comment.attachment.url)
+            except:
+                url = "None"
+            comments.append({
+                'id': comment.id,
+                'text': comment.description,
+                'sender_type': comment.sender_type,
+                'attachment' : url,
+                'pk' : comment.pk,
+            })
+            if comment.sender_type == "industry":
+                comment.status = "seen"
+                comment.save()
+        for comment in sys_comment:
+            comments.append({
+                'id': comment.id,
+                'text': comment.description,
+                'sender_type': comment.sender_type,
+                'pk' : comment.pk,
+            })
+            if comment.sender_type == "system":
+                comment.status = "seen"
+                comment.save()
+        data['comments']= comments
     data['date']= JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d")
     data['key_words']= serializers.serialize('json', project_form.key_words.all())
     data['main_problem_and_importance']= project_form.main_problem_and_importance
@@ -420,17 +483,16 @@ def UsualShowProject(request, project, data):
     data['required_lab_equipment']= project_form.required_lab_equipment
     data['approach']= project_form.approach
     data['deadline']= calculate_deadline(project.date_finished, project.date_submitted_by_industry)
-    data['project_title_persian']= project_form.project_title_persian
-    data['project_title_english']= project_form.project_title_english
+    data['persian_title']= project_form.persian_title
+    data['english_title']= project_form.english_title
     data['research_methodology']= project_form.research_methodology
     data['policy']= project_form.policy
     data['potential_problems']= project_form.potential_problems
     data['required_budget']= project_form.required_budget
     data['required_method']= project_form.required_method
     data['project_phase']= project_form.project_phase
-    data['predict_profit']= project_form.predict_profit 
+    # data['predict_profit']= project_form.predict_profit 
     data['success']= 'successful'
-    # }
     # data['required_technique']=[]
     # for tech in project.project_form.required_technique:
     #     data['required_technique'].append(tech.__str__())
@@ -456,6 +518,8 @@ def accept_project(request):
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             expert_request.required_technique.add(project_technique[0])
         expert_request.save()
+        expert_user.status = "applied"
+        expert_user.save()
         text = "درخواست شما برای صنعت ارسال شد."
         comment = Comment(description=text,
                           sender_type="system",
@@ -463,6 +527,32 @@ def accept_project(request):
                           expert_user=expert_user,
                           status='unseen')
         comment.save()
+        try:
+            subjectForAdmin = "درخواست قرار ملاقات"
+            messageForAdmin = """با سلام و احترام\n
+            استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
+            با تشکر
+            """.format(str(expert_user.expertform) ,str(project) ,str(project.industry_creator.profile))
+            html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
+            msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
+                                         to=[settings.EMAIL_HOST_USER,])
+            msgForAdmin.attach_alternative(email_templateForAdmin, 'text/html')
+            msgForAdmin.send()
+            
+            subjectForExpert = "درخواست قرار ملاقات"
+            messageForExpert = """با سلام و احترام\n
+            درخواست قرار ملاقات شما برای پروژه {} برای ادمین ارسال شد.\n
+            با تشکر
+            """.format(str(project))
+            html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            email_templateForAdmin = html_templateForAdmin.render({'message': messageForExpert})
+            msgForExpert = EmailMultiAlternatives(subject=subjectForExpert, from_email=settings.EMAIL_HOST_USER,
+                                         to=[request.user.get_username(),])
+            msgForExpert.attach_alternative(email_templateForAdmin, 'text/html')
+            msgForExpert.send()
+        except TimeoutError:
+            print("Timeout Occure.")
         return JsonResponse({
             'message': 'درخواست شما با موفقیت ثبت شد. لطفا تا بررسی توسط صنعت مربوطه، منتظر بمانید.'
         })
@@ -528,55 +618,95 @@ def terminate_research_question(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def set_answer_situation(request):
     answer = ResearchQuestionInstance.objects.filter(id=request.GET.get('id')).first()
+    title = ""
+    text = ""
+    messageType = 0
     if request.GET.get('type') == 'true':
         answer.is_correct = 'correct'
+        title = "تایید سوال پژوهشی"
+        text =  """با سلام،
+پژوهشگر گرامی، پاسخ سوال پژوهشی شما پذیرفته شد.
+به این ترتیب، پیوستن شما به مجموعه پژوهشگران «چمران‌تیم» را تبریک می‌گوییم و امیدواریم شاهد پیشرفت شما در زمینه پژوهش باشیم.
+از این پس می‌توانید از طریق قسمت «پروژه‌ها» برای شرکت در پروژه‌های تعریف‌شده توسط مجموعه‌های پژوهشی، درخواست ارسال کنید. 
+البته در نظر داشته باشید که برای شرکت در هر پروژه‌ای، لازم است مهارت‌های پژوهشی آن پروژه را قبلا کسب کرده باشید. به همین خاطر، توصیه می‌کنیم به قسمت «مهارت‌های پژوهشی» حساب کاربری‌تان هم سر بزنید و با افزایش تعداد مهارت‌های‌تان، شانس خود را برای شرکت در پروژه‌ها افزایش دهید.
+همچنین، با تکمیل یا بارگذاری رزومه علمی‌تان از طریق قسمت «اطلاعات کاربری»، می‌توانید توانمندی‌های خود را در هنگام انتخاب شدن‌تان توسط استاد و یا مجموعه پژوهشی، نشان دهید.
+با آرزوی موفقیت، 
+چمران‌تیم"""
+        messageType = 0
     else:
         answer.is_correct = 'wrong'
+        title = "رد سوال پژوهشی"
+        text = """با سلام،
+پژوهشگر گرامی، متاسفانه پاسخ شما به سوال پژوهشی (در مهلت یک هفته‌ای ارسال نشد / به دلیل نداشتن کیفیت مناسب، مورد قبول واقع نشد).
+علی‌رغم میل درونی، حساب کاربری شما به مدت دو هفته به حالت تعلیق در خواهد آمد و پس از آن، مجددا می‌توانید در یک سوال پژوهشی شرکت نمایید.
+امیدواریم دو هفته‌ی دیگر هم شما را ببینیم.
+در ضمن، در صورتی که فکر می‌کنید این پیام به اشتباه ارسال شده است، می‌توانید مراتب اعتراض خود را از طریق شماره تلفن ۰۹۱۰۲۱۴۳۴۵۱ و یا فرم ارسال گزارش (با کلیک بر روی تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) ارسال فرمایید.
+با آرزوی موفقیت،
+چمران‌تیم"""
+        messageType = 1
+    try:
+        message = Message.objects.filter(title=title).first()
+    except:
+        message = None
+    if message is None:
+        message = Message(title=title,
+                          text=text,
+                          type=messageType)
+        message.save()
+    message.receiver.add(answer.researcher.user)
+    message.save()
+    html_templateForAdmin = get_template('registration/projectRequest_template.html')
+    email_templateForAdmin = html_templateForAdmin.render({'message': text})
+    email = EmailMultiAlternatives(subject=title, from_email=settings.EMAIL_HOST_USER,
+                                to=[answer.researcher.user.get_username(),])
+    email.attach_alternative(email_templateForAdmin, 'text/html')
+    email.send()
     answer.save(update_fields=['is_correct'])
     return JsonResponse({
         'success': 'successful'
     })
 
-@permission_required('expert.be_expert', login_url='/login/')
-def show_researcher_preview(request):
-    researcherProfile = ResearcherProfile.objects.get(id=request.GET.get('id'))
-    researcher = researcherProfile.researcher_user
-    researcher_information = {
-        'photo': researcherProfile.photo.url,
-        'name': researcherProfile.__str__(),
-        'major': researcherProfile.major,
-        'grade': researcherProfile.grade,
-        'university': researcherProfile.university,
-        'entry_year': researcherProfile.entry_year,
-        'techniques': [],
-        'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(
-            researcherProfile=researcherProfile)),
-        'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(
-            researcherProfile=researcherProfile)),
-        'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcherProfile)),
-    }
-    for tech in TechniqueInstance.objects.filter(researcher=researcher):
-        researcher_information['techniques'].append(tech.technique.technique_title)
-    project = get_object_or_404(Project ,pk=request.GET["project_id"])
-    comments = []
-    comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
-    for comment in comment_list:
-        try:
-            url = comment.attachment.url.split("/")[-1]
-        except:
-            url = "None"
-        comments.append({
-            'id': comment.id,
-            'text': comment.description,
-            'sender_type': comment.sender_type,
-            'attachment': url,
-            'pk' : comment.pk,
-        })
-        if comment.sender_type == 'researcher':
-            comment.status = 'seen'
-            comment.save()
-    researcher_information['comments'] = comments
-    return JsonResponse(researcher_information)
+# @permission_required('expert.be_expert', login_url='/login/')
+# def show_researcher_preview(request):
+#     researcherProfile = ResearcherProfile.objects.get(id=request.GET.get('id'))
+#     researcher = researcherProfile.researcher_user
+#     researcher_information = {
+#         'photo': researcherProfile.photo.url,
+#         'name': researcherProfile.__str__(),
+#         'major': researcherProfile.major,
+#         'grade': researcherProfile.grade,
+#         'university': researcherProfile.university,
+#         'entry_year': researcherProfile.entry_year,
+#         'resume'    : researcherProfile.resume.url,
+#         'techniques': [],
+#         'scientific_record': serializers.serialize('json', ResearcherScientificRecord.objects.filter(
+#             researcherProfile=researcherProfile)),
+#         'executive_record': serializers.serialize('json', ResearcherExecutiveRecord.objects.filter(
+#             researcherProfile=researcherProfile)),
+#         'research_record': serializers.serialize('json', StudiousRecord.objects.filter(researcherProfile=researcherProfile)),
+#     }
+#     for tech in TechniqueInstance.objects.filter(researcher=researcher):
+#         researcher_information['techniques'].append(tech.technique.technique_title)
+#     project = get_object_or_404(Project ,pk=request.GET["project_id"])
+#     comments = []
+#     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
+#     for comment in comment_list:
+#         try:
+#             url = get_url(comment.attachment.url)
+#         except:
+#             url = "None"
+#         comments.append({
+#             'id': comment.id,
+#             'text': comment.description,
+#             'sender_type': comment.sender_type,
+#             'attachment' : url,
+#             'pk' : comment.pk,
+#         })
+#         if comment.sender_type == 'researcher':
+#             comment.status = 'seen'
+#             comment.save()
+#     researcher_information['comments'] = comments
+#     return JsonResponse(researcher_information)
 
 @permission_required('expert.be_expert', login_url='/login/')
 def CommentForResearcher(request):
@@ -646,7 +776,7 @@ def CommentForIndustry(request):
     else:
         return JsonResponse(form.errors, status=400)
 
-@permission_required('expert.be_expert', login_url='/login/')
+@permission_required([], login_url='/login/')
 def ShowTechnique(request):
     TYPE = (
         'molecular_biology',
@@ -688,7 +818,8 @@ def GetResume(request):
     elif expert_form.scientific_rank == 6 :
         scientific_rank = 'پژوهشگر'
     data = {
-    'name'            : expert_form.expert_firstname + " " + expert_form.expert_lastname,
+    'name'            : expert_form.fullname,
+    'photo'           : expert_form.photo.url,
     "university"      : expert_form.university,
     "scientific_rank" : scientific_rank,
     "special_field"   : expert_form.special_field,
@@ -706,6 +837,7 @@ def GetResume(request):
 
     "awards"    : expert_form.awards,
     'languages' : expert_form.languages,
+    'resume'    : expert_form.resume.url,
     }
 
     if expert_form.has_industrial_research == 'yes':
@@ -722,6 +854,7 @@ def GetResume(request):
     if expert_form.number_of_researcher == 4:
         data['researcher_count'] = '+60'
 
+    print(data['photo'])
     return JsonResponse(data=data)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -738,8 +871,19 @@ def confirmResearcher(request):
         return JsonResponse(data={} ,status=400)
 
 @permission_required('expert.be_expert', login_url='/login/')
+def refuseResearcher(request):
+    try:
+        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(Project, pk=request.POST['project_id'])
+        project.researcher_accepted.remove(researcher)
+        project.researcher_banned.add(researcher)
+        project.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={} ,status=400)
+
 def ActiveProjcet(request, project, data):
-    industryform = project.industry_creator.industryform
+    industryform = project.industry_creator.profile
     projectDate = [
         gregorian_to_numeric_jalali(project.date_start),
         gregorian_to_numeric_jalali(project.date_project_started),
@@ -751,7 +895,7 @@ def ActiveProjcet(request, project, data):
     data["status"]         = "active"
     data["industry_name"]  = industryform.name
     data["industry_logo"]  = industryform.photo.url
-    data['enforced_name']  = str(project.expert_accepted.expertform)
+    data['enforcer_name']  = str(project.expert_accepted.expertform)
     data["executive_info"] = project.executive_info
     data["budget_amount"]  = project.project_form.required_budget
     data['timeScheduling'] = projectDate
@@ -768,6 +912,24 @@ def ActiveProjcet(request, project, data):
             data['request_status'] = False
     except:
         data['request_status'] = True
+    expert = project.expert_accepted
+    # all_researchers = Comment.objects.filter(project=project).filter(expert_user=expert).filter(sender_type="researcher").values('researcher_user').distinct()
+    # data['researcher_comment'] = []    
+    # for researcher in all_researchers:
+    #     researcherInfo = {
+    #         'id'   : researcher['researcher_user'],
+    #         "name" : str(ResearcherProfile.objects.get(researcher_user=researcher['researcher_user'])),
+    #     }
+    #     data['researcher_comment'].append(researcherInfo)
+
+    data['researcher_accepted'] = []
+    for researcher in project.researcher_accepted.all():
+        researcherInfo = {
+            'id'      : researcher.pk,
+            "name"    : str(researcher.researcherprofile),
+            "profile" : researcher.researcherprofile.photo,
+        }
+        data['researcher_accepted'].append(researcherInfo)
     return JsonResponse(data=data)
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -809,19 +971,141 @@ def DeletePaperRecord(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def ExpertRequestResearcher(request):
     project = Project.objects.get(id=request.POST['project_id'])
-    expert = request.user.expertuser
-    try:
-        researcher_request = RequestResearcher.objects.get(project=project)
-        researcher_request.researcher_count += int(request.POST['reseacherCount'])
-        researcher_request.least_hour = int(request.POST['hour'])
-        researcher_request.save()
-    except:
-        researcher_request = RequestResearcher(project=project
-                                                ,expert=expert
-                                                ,researcher_count=int(request.POST['reseacherCount'])
-                                                ,least_hour=int(request.POST['hour']))
+    form = forms.RequestResearcherForm(request.POST)
+    if form.is_valid():
+        expert = request.user.expertuser
+        least_hour       = form.cleaned_data['least_hour']
+        researcher_count = form.cleaned_data['researcher_count']
+        try:
+            researcher_request = RequestResearcher.objects.get(project=project)
+            researcher_request.researcher_count += researcher_count
+            researcher_request.least_hour = least_hour
+            researcher_request.save()
+        except:
+            researcher_request = RequestResearcher(project=project
+                                                  ,expert=expert
+                                                  ,researcher_count=researcher_count
+                                                  ,least_hour=least_hour)
 
-        researcher_request.save()
+            researcher_request.save()
+
+        return JsonResponse({"successfull" : "successfull"})
+    else:
+        return JsonResponse(data=form.errors, status=400)
+
+@permission_required('expert.be_expert', login_url='/login/')
+def GetResearcherComment(request):
+    project_id    = request.GET['project_id']
+    researcher_id = request.GET['researcher_id']
+    comments = Comment.objects.filter(project=project_id).filter(researcher_user=researcher_id).exclude(sender_type="system")
+    data = {'comments' : []}
+    for comment in comments:
+        try:
+            url = get_url(comment.attachment.url)
+        except:
+            url = "None"
+        commentInfo = {
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment' : url,
+        }
+        if comment.sender_type == "researcher":
+            comment.status = "seen"
+            comment.save()
+        data['comments'].append(commentInfo)
+        
+    return JsonResponse(data=data)
+
+def checkUserId(request):
+    if request.is_ajax() and request.method == "POST":
+        user_id = request.POST.get("user_id")
+        if ExpertUser.objects.filter(userId=user_id).count():
+            return JsonResponse({"is_unique": False})
+        return JsonResponse({"is_unique": True})
+
+@permission_required('expert.be_expert', login_url='/login/')
+def CollectData(request):
+    # link = request.POST['link']
+    link = "https://isid.research.ac.ir/Reza_Malekzadeh"
+    # try:
+    collectedData = webScraping.webScraping(link=link)
+        
+    # except:
+# 
+        # return JsonResponse(data={}, status=400)
+    scientific_rank = ""
+    special_field = ""
+    if "پژوهشگر"       in collectedData['information'][0]:
+        scientific_rank = 6
+        special_field   = collectedData['information'][0][8:]
+    elif "استاد ممتاز" in collectedData['information'][0]:
+        scientific_rank = 5
+        special_field   = collectedData['information'][0][12:]
+    elif "استادیار"    in collectedData['information'][0]:
+        scientific_rank = 2
+        special_field   = collectedData['information'][0][9:]
+    elif "استاد"       in collectedData['information'][0]:
+        scientific_rank = 4
+        special_field   = collectedData['information'][0][6:]
+    elif "دانشیار"     in collectedData['information'][0]:
+        scientific_rank = 3
+        special_field   = collectedData['information'][0][8:]
+    elif "مربی"        in collectedData['information'][0]:
+        scientific_rank = 1
+        special_field   = collectedData['information'][0][5:]
+    tempForm = TempExpertForm(expertUser=request.user.expertuser,
+                              special_field=special_field,
+                              scientific_rank=scientific_rank,
+                              university=collectedData['information'][-1]
+                              )
+    tempForm.save()
+    tempForm.photo.save(str(request.user.expertuser) + "_photo.jpg",collectedData['photo'])
+    for keyword in collectedData['keywords']:
+        key = Keyword(name=keyword)
+        key.save()
+        tempForm.keywords.add(key)
     
-    return JsonResponse({"successfull" : "successfull"})
+    for paper in collectedData['papers_information']:
+        temp = TempPaperRecord(tempExpertForm=tempForm,
+                               research_title=paper['title'],
+                               date_published=paper['publish_year'],
+                               published_at=paper['source'],
+                               impact_factor=paper['impact_factor'],
+                               citation=paper['citation'])
+        temp.save()
 
+    data = {
+        "scientific_rank" : scientific_rank,
+        "special_field" : special_field,
+        "university"    : collectedData['information'][-1],
+        "keywords"      : collectedData['keywords'],
+        "papers"        : collectedData['papers_information'],
+    }
+    return JsonResponse(data=data)
+
+
+def submitData(request):
+    expert_user = request.user.expertuser
+    tempExpertForm = get_object_or_404(TempExpertForm, expertUser=expert_user)
+    expertForm = ExpertForm(expert_user=expert_user,
+                            photo=tempExpertForm.photo,
+                            special_field=tempExpertForm.special_field,
+                            scientific_rank=tempExpertForm.scientific_rank,
+                            university=tempExpertForm.university,)
+    expertForm.save()
+    for keyword in tempExpertForm.keywords.all():
+        expertForm.keywords.add(keyword)
+    expertForm.save()
+    tempPapers = TempPaperRecord.objects.filter(tempExpertForm=tempExpertForm)
+    for tempPaper in tempPapers:
+        paper = PaperRecord(expert_form=expertForm,
+                            research_title=tempPaper.research_title,
+                            date_published=tempPaper.date_published,
+                            published_at=tempPaper.published_at,
+                            impact_factor=tempPaper.impact_factor,
+                            citation=tempPaper.citation,
+                            )
+        paper.save()
+    tempExpertForm.delete()
+    return JsonResponse(data={})
