@@ -15,9 +15,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <link rel="stylesheet" href="{% static 'css/comments.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
+    {% block style %}{% endblock %}
 </head>
 <body class="{% if user.industryuser.status == 'signed_up' %}modal-open{% endif %}">
 {% getUnseenMessages request.user as UnseenMessages %}
@@ -215,10 +219,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
 <script type="text/javascript" src="{% static 'js/persianumber.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
-{% block script %}{% endblock %}
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'industry/js/script-functions.js' %}"></script>
 <script type="text/javascript" src="{% static 'industry/js/script.js' %}"></script>
+{% block script %}{% endblock %}
 {% if user.industryuser.status == 'signed_up' %}
     <div class="modal-backdrop fade show" style="user-select: auto;"></div>
     <script type="text/javascript">

@@ -658,9 +658,10 @@ nav ul li a:hover, nav ul .active a {
 .home-news .page-body > div:not(.page-info) img {
     max-width: 100%;
 }
+
 @media (max-width: 768px) {
     .home-news .page-body > div:not(.page-info) img {
-        height: unset!important;
+        height: unset !important;
     }
 }
 
@@ -824,4 +825,66 @@ footer .copyright {
     color: #aaa;
     text-align: center;
     padding: 15px 0;
+}
+
+.iziToast {
+    box-shadow: 0 0 10px 0 rgba(183, 192, 206, .2);
+}
+
+.iziToast-rtl {
+    font-family: iranyekan, serif;
+    padding: 15px 0 15px 45px;
+    background-color: #ffffff !important;
+    font-weight: 500;
+    color: #707070;
+}
+
+.iziToast > .iziToast-body .iziToast-texts {
+    display: grid;
+}
+
+.iziToast.iziToast-color-green:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -3px;
+    width: 4px;
+    height: 100%;
+    background-color: #3CCD1C;
+    -webkit-border-radius: 0 0.25em 0.25em 0;
+    -moz-border-radius: 0 0.25em 0.25em 0;
+    border-radius: 0 0.25em 0.25em 0;
+}
+
+.iziToast > .iziToast-body .iziToast-icon.ico-success {
+    background: url("../../img/circle_tick.svg") center;
+    background-size: contain;
+
+}
+
+/*.iziToast > .iziToast-body .iziToast-icon.ico-success:before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    right: 10px;*/
+/*    width: 50px;*/
+/*    height: 50px*/
+/*}*/
+
+.iziToast.iziToast-color-red:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -3px;
+    width: 4px;
+    height: 100%;
+    background-color: #ff4545;
+    -webkit-border-radius: 0 0.25em 0.25em 0;
+    -moz-border-radius: 0 0.25em 0.25em 0;
+    border-radius: 0 0.25em 0.25em 0;
+}
+
+.iziToast > .iziToast-body .iziToast-icon.ico-error {
+    background: url("../../img/circle_close.svg") center;
+    background-size: contain;
 }

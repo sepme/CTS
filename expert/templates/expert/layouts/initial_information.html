@@ -39,17 +39,32 @@
                                     <span class="error-body">{% render_field form.national_code.errors %}</span>
                                 </div>
                             </div>
-{#                            <div class="form-group">#}
-{#                                <label for="Address">آدرس</label>#}
-{#                                {% if form.address.errors %}#}
-{#                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
-{#                                {% else %}#}
-{#                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
-{#                                {% endif %}#}
-{#                                <div class="error">#}
-{#                                    <span class="error-body">{% render_field form.address.errors %}</span>#}
-{#                                </div>#}
-{#                            </div>#}
+                            <div class="form-group form-group-auto-check">
+                                <label for="userID">شناسه کاربری</label>
+                                <input type="text" class="w-100" id="userID">
+                                <div class="form-group__status">
+                                    <div class="success-status">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="spinner-border text-secondary" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <div class="fail-status">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            {#                            <div class="form-group">#}
+                            {#                                <label for="Address">آدرس</label>#}
+                            {#                                {% if form.address.errors %}#}
+                            {#                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+                            {#                                {% else %}#}
+                            {#                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+                            {#                                {% endif %}#}
+                            {#                                <div class="error">#}
+                            {#                                    <span class="error-body">{% render_field form.address.errors %}</span>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
                         </div>
                         <div class="col-md-4">
                             <div class="form-group text-center">
@@ -95,11 +110,11 @@
                                     <select id="rank" name="scientific_rank">
                                 {% endif %}
                                 <option selected dir="rtl" disabled>انتخاب کنید ...</option>
-                                    {% for option in form.scientific_rank %}
-                                        {% if not forloop.first %}
-                                          {{ option }}
-                                        {% endif %}
-                                    {% endfor %}
+                                {% for option in form.scientific_rank %}
+                                    {% if not forloop.first %}
+                                        {{ option }}
+                                    {% endif %}
+                                {% endfor %}
                                 </select>
                                 <div class="error">
                                     <span class="error-body">{% render_field form.scientific_rank.errors %}</span>

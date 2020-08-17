@@ -171,6 +171,48 @@ $(document).ready(function () {
     });
 
 
+    // Check user id
+    if ($("#userID").length) {
+        $("input#userID").on("keyup", function () {
+            console.log("search: ", $(this).val());
+            let thisFormGroup = $(this).closest(".form-group");
+            if ($(this).val()) {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                thisFormGroup.find(".form-group__status").addClass("check");
+                thisFormGroup.find("input").removeClass("error");
+                $.ajax({
+                    method: "POST",
+                    url: "/expert/checkUserId",
+                    data: {"user_id": $(this).val()},
+                    success: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        if (data.is_unique) {
+                            thisFormGroup.find(".form-group__status").addClass("success");
+                        } else {
+                            thisFormGroup.find(".form-group__status").addClass("fail");
+                            thisFormGroup.find("input").addClass("error");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        iziToast.error({
+                            rtl: true,
+                            message: "ارتباط با سرور با مشکل مواجه شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                });
+            } else {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                $(this).removeClass("error");
+            }
+        });
+    }
+
     // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
 
     $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
@@ -735,7 +777,7 @@ $(document).ready(function () {
                 if (research_record.length !== 0) {
                     let table_row = "";
                     let status = "";
-                    for (i = 0; i < research_record.length; i++) {
+                    for (let i = 0; i < research_record.length; i++) {
                         switch (research_record[i].fields.status) {
                             case 1:
                                 status = "در دست اجرا";
@@ -753,7 +795,28 @@ $(document).ready(function () {
                             "<td>" + research_record[i].fields.responsible + "</td>" +
                             "<td>" + status + "</td>" +
                             "</tr>";
-                        $('#researcher_research_record').html(table_row)
+                        $('#researcher_research_record').html(table_row);
+                        if (data.resume) {
+                            console.log(data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1));
+                            let fileType = returnFileType(data.resume.substring(data.resume.lastIndexOf(".") + 1).toUpperCase());
+                            let resume = `
+                            <div class="attach-box m-auto">
+                                <span class="attach-box__img ${fileType}"></span>
+                                <span class="attach-box__info">
+                                    <span class="attach-box__info-name">${data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1)}</span>
+                                    <span class="attach-box__info-ext">${fileType.toUpperCase()}</span>
+                                </span>
+                                <span class="attach-box__option">
+                                    <a class="attach-box__option-download" href="${data.resume}">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            `;
+                            $("#researcherInfoResume").html(resume);
+                        } else {
+                            $("#researcherInfoResume").html("");
+                        }
                     }
                 } else {
                     $('#researcher_research_record').html(`<tr><td colspan="4">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);

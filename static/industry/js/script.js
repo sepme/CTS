@@ -126,17 +126,17 @@ function setMajors(data, status) {
     $(".project-info-content" + status).html(majors);
 }
 
-        // "<div>" +
-        // "<div class='question'>" +
-        // "<span class='question-mark'>" +
-        // "<i class='far fa-question-circle'></i>" +
-        // "</span>" +
-        // "برآورد شما از سود مالی این پروژه چگونه است؟" +
-        // "</div>" +
-        // "<div class='answer'>" +
-        // numbersComma(data.predict_profit) +
-        // " ریال" +
-        // "</div></div>";
+// "<div>" +
+// "<div class='question'>" +
+// "<span class='question-mark'>" +
+// "<i class='far fa-question-circle'></i>" +
+// "</span>" +
+// "برآورد شما از سود مالی این پروژه چگونه است؟" +
+// "</div>" +
+// "<div class='answer'>" +
+// numbersComma(data.predict_profit) +
+// " ریال" +
+// "</div></div>";
 
 function setValue(data, status) {
     $("#v-pills-roles-tab" + status).click(function () {
@@ -196,12 +196,16 @@ function setTab(data) {
 
 function expertResume() {
     $(".show-resume").click(function () {
-        $('#showProject').modal('toggle');
-        $('#expertResume').modal('toggle');
-        $('#expertResume .close__redirect').click(function () {
-            $('#expertResume').modal('toggle');
+        if ($('#showProject').length) {
             $('#showProject').modal('toggle');
-        });
+            $('#expertResume').modal('toggle');
+            $('#expertResume .close__redirect').click(function () {
+                $('#expertResume').modal('toggle');
+                $('#showProject').modal('toggle');
+            });
+        } else {
+            $('#expertResume').modal('toggle');
+        }
         // $(".showProject").slideUp('slow').delay('slow');
         // $(".expert-resume").addClass("show");
         // $(".expert-resume").delay('slow').slideDown('slow');
@@ -685,6 +689,48 @@ $(document).ready(function () {
         });
     });
 
+    // Check user id
+    if ($("#userID").length) {
+        $("input#userID").on("keyup", function () {
+            console.log("search: ", $(this).val());
+            let thisFormGroup = $(this).closest(".form-group");
+            if ($(this).val()) {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                thisFormGroup.find(".form-group__status").addClass("check");
+                thisFormGroup.find("input").removeClass("error");
+                $.ajax({
+                    method: "POST",
+                    url: "/industry/checkUserId",
+                    data: {"user_id": $(this).val()},
+                    success: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        if (data.is_unique) {
+                            thisFormGroup.find(".form-group__status").addClass("success");
+                        } else {
+                            thisFormGroup.find(".form-group__status").addClass("fail");
+                            thisFormGroup.find("input").addClass("error");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        iziToast.error({
+                            rtl: true,
+                            message: "ارتباط با سرور با مشکل مواجه شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                });
+            } else {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                $(this).removeClass("error");
+            }
+        });
+    }
+
     function setDates(date) {
         $(".project-details .project-progress .start").html(date[0]);
         $(".project-details .project-progress .first_phase").html(date[1]);
@@ -698,9 +744,10 @@ $(document).ready(function () {
             $(".vote").attr('style', "display: block;");
         else
             $(".vote").attr('style', "display: none;");
-        $(".project-details").find(".card-head").html(data.persian_title + "<br>" + ' ( ' + data.english_title + ' )');
-        $(".project-details").find(".establish-time .time-body").html(data.date);
-        $(".project-details").find(".time-left .time-body").html(data.deadline);
+        let projectDetails = $(".project-details");
+        projectDetails.find(".card-head").html(data.persian_title + "<br>" + ' ( ' + data.english_title + ' )');
+        projectDetails.find(".establish-time .time-body").html(data.date);
+        projectDetails.find(".time-left .time-body").html(data.deadline);
 
         let techniques = "";
         for (let tech_index = 0; tech_index < data.techniques.length; tech_index++) {
@@ -712,8 +759,7 @@ $(document).ready(function () {
         $(".techniques").html(techniques);
 
         $("#industry-name").html(data.industry_name);
-        $("#enforcer-name").html(data.enforcer_name);
-        $("#enforcer-name").attr("value", data.enforcer_id)
+        $("#enforcer-name").html(data.enforcer_name).attr("value", data.enforcer_id);
         $("#executive-info").html(data.executive_info);
         $("#industry_logo").attr("src", data.industry_logo);
         $(".budget-amount").html(data.budget_amount);
@@ -725,7 +771,6 @@ $(document).ready(function () {
     }
 
     $(".preview-project").click(function () {
-        console.log("preview");
         const dialog = $("#showProject");
         $(this).closest(".card").find('.unseen-comments').html("");
         let id = $(this).attr("id");

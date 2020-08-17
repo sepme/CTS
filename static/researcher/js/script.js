@@ -77,6 +77,37 @@ $(".preview-project").click(function () {
             setMajors(data);
             setValue(data);
             setComment(data.comments);
+            let status = "unseen";
+            dialog.find(".modal-footer button").removeClass("confirm-project btn-primary").prop("disabled", true)
+                .css("opacity", 1);
+            switch (status) {
+                case "unseen":
+                    dialog.find(".modal-footer button").html(`درخواست شما ارسال شده است!`);
+                    break;
+                case "pending":
+                    dialog.find(".modal-footer button").html(`
+                        <div class="spinner-border text-warning" style="width: 1.5rem;height: 1.5rem" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span class="text-warning">درخواست شما درحال بررسی است!</span>
+                    `);
+                    break;
+                case "accepted":
+                    dialog.find(".modal-footer button").html(`
+                        <i class="fas fa-check text-success"></i>
+                        <span class="text-success">درخواست شما تایید شده است!</span>
+                    `);
+                    break;
+                case "refused":
+                    dialog.find(".modal-footer button").html(`
+                        <i class="fas fa-times text-danger"></i>
+                        <span class="text-danger">درخواست شما رد شده است!</span>
+                    `);
+                    break;
+                default:
+                    dialog.find(".modal-footer button").removeAttr("class").addClass("btn btn-primary confirm_project")
+                        .prop("disabled", false).html(`ارسال درخواست انجام پروژه`);
+            }
         },
         error: function (data) {
             console.log("error");
@@ -306,6 +337,49 @@ $(document).ready(function () {
     $('input#upload-input').change(function (event) {
         $("img.profile").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
     });
+
+    // Check user id
+    if ($("#userID").length) {
+        $("input#userID").on("keyup", function () {
+            console.log("search: ", $(this).val());
+            let thisFormGroup = $(this).closest(".form-group");
+            if ($(this).val()) {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                thisFormGroup.find(".form-group__status").addClass("check");
+                thisFormGroup.find("input").removeClass("error");
+                $.ajax({
+                    method: "POST",
+                    url: "/researcher/checkUserId",
+                    data: {"user_id": $(this).val()},
+                    success: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        if (data.is_unique) {
+                            thisFormGroup.find(".form-group__status").addClass("success");
+                        } else {
+                            thisFormGroup.find(".form-group__status").addClass("fail");
+                            thisFormGroup.find("input").addClass("error");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        iziToast.error({
+                            rtl: true,
+                            message: "ارتباط با سرور با مشکل مواجه شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                });
+            } else {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                $(this).removeClass("error");
+            }
+        });
+    }
+
     if ($(window).width() < 575.98) {
         $(".main").removeClass("blur-div");
         $("#toggle").click(function () {
@@ -696,7 +770,7 @@ executive_form.submit(function (event) {
 
     $("input#exe-city").removeClass("error").css("color", "").prev().css("color", "");
     $(".exe-city").find("div.error").remove();
-    
+
     $.ajax({
         method: 'POST',
         url: $thisURL,

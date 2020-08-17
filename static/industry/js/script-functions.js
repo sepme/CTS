@@ -94,6 +94,25 @@ function close_dialog(className) {
 //     $comments.html(newPost + $comments.html());
 //
 // }
+function deleteComment(comment) {
+    $.ajax({
+        method: 'POST',
+        url: '/deleteComment/',
+        dataType: 'json',
+        data: {id: $(comment).attr("id")},
+        success: function (data) {
+            $(comment).remove();
+            iziToast.success({
+                rtl: true,
+                message: "پیام با موفقیت پاک شد.",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            console.log('Error');
+        },
+    });
+}
 
 function dialog_comment_init() {
     $(".send-comment-container .comment-input input#comment-attach").on("change", function () {
@@ -102,7 +121,7 @@ function dialog_comment_init() {
         $(".send-comment-container .comment-input").addClass("attached");
 
         $(".send-comment-container .comment-input.attached i.fa-trash-alt").click(function () {
-            $(".send-comment-container .comment-input input#comment-attach").val("");
+            $(".send-comment-container .comment_formcomment-input input#comment-attach").val("");
             $(".send-comment-container .comment-input .attachment span").html("");
             $(".send-comment-container .comment-input").removeClass("attached");
         });
@@ -113,9 +132,10 @@ function dialog_comment_init() {
         event.preventDefault();
         comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
         comment_form.find("label").addClass("progress-cursor");
-        $("#project_id").attr('value', $(this).closest(".row").find(".comment").attr("id"));
+        comment_form.find("input#project_id").attr('value', comment_form.closest(".add-comment").attr("id"));
         $("#expert_id").attr('value', $(this).closest(".row").find(".comment-tabs .active").attr("id")
             .replace("v-pills-expert-", ""));
+        console.log("expert_id", $("#expert_id").attr('value'));
         let thisUrl = "/industry/submit_comment/";
         let data = new FormData(comment_form.get(0));
         $.ajax({
@@ -130,11 +150,12 @@ function dialog_comment_init() {
                     .prop("disabled", false);
                 comment_form.find("label").removeClass("progress-cursor");
                 comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                    $(".project-comment-innerDiv").find(".no-comment").remove();
+                let PCID = $(".project-comment-innerDiv");
+                if (PCID.find(".no-comment").length > 0) {
+                    PCID.find(".no-comment").remove();
                 }
                 let comment_code = addComment(data);
-                $(".project-comment-innerDiv").find(".comments").append(comment_code);
+                PCID.find(".comments").append(comment_code);
                 iziToast.success({
                     rtl: true,
                     message: "پیام با موفقیت ارسال شد!",
@@ -245,7 +266,7 @@ function dialog_comment_init() {
 }
 
 function vote_dialog_init(className) {
-    flag = 0;
+    let flag = 0;
     $(".vote-question").hover(function () {
         $(this).parent('.col-lg-12').children('.vote-question-text').slideDown().css({
             "color": "#3ccd1c",
