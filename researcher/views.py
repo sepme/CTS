@@ -93,11 +93,15 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         missedTechnique = []
         for project in new_projects:
             missedTechnique = []
+            satisfiedTechniques = []
             for tech in project.project_form.required_technique.all():
                 if tech not in technique:
                     missedTechnique.append(tech.technique_title)
+                satisfiedTechniques.append(tech.technique_title)
             if len(missedTechnique):
-                missedProjects.append({'project': project, "missedTechnique": missedTechnique})
+                missedProjects.append({'project': project,
+                                       "missedTechnique": missedTechnique,
+                                       "satisfiedTechniques":satisfiedTechniques})
             else:
                 projects.append(project)
         new_project_list = []
@@ -122,6 +126,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'finished': date_last(datetime.date.today(), project["project"].date_finished),
                 'need_hour': project["project"].requestresearcher.least_hour,
                 'missedTechinque': project["missedTechnique"],
+                "satisfiedTechniques": project['satisfiedTechniques'],
             }
             missed_project_list.append(temp)
         context['new_project_list'] = new_project_list
