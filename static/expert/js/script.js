@@ -699,16 +699,26 @@ $(document).ready(function () {
         let id = $(this).attr("id");
         let url = $(this).attr("data-url");
         let project_id = $(this).attr("value");
-        console.log("id ", id);
-        console.log("url ", url);
-        console.log("p_id ", project_id);
+        // console.log("id ", id);
+        // console.log("url ", url);
+        // console.log("p_id ", project_id);
         $.ajax({
             method: 'GET',
             url: url,
             dataType: 'json',
             data: {id: id, project_id: project_id},
             success: function (data) {
-                console.log(data);
+                // console.log(data);
+                if (data.status == "justComment"){
+                    $('.request-response').attr("style", "display : none;");
+                    $(".confirm-researcher").prop('disabled', true);
+                    $(".refuse-researcher").prop('disabled', true);
+                }
+                else{
+                    $('.request-response').attr("style", "display : block;");
+                    $(".confirm-researcher").prop('disabled', false);
+                    $(".refuse-researcher").prop('disabled', false);
+                }
                 $(".researcher_id").attr("value", id);
                 $(".project_id").attr("value", project_id);
                 $('#researcher_photo').attr("src", data.photo);

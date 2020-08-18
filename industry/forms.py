@@ -310,7 +310,7 @@ class ProjectForm(forms.Form):
         ]
     # 'predict_profit',
 
-    def clean_project_title_persian(self):
+    def clean_persian_title(self):
         data = self.cleaned_data["persian_title"]
         for item in data:
             if 65 <= ord(item) <= 90:

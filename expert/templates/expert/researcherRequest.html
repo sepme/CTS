@@ -23,7 +23,11 @@
                     <div class="col-lg-4 col-md-6 col-12">
                         <div class="card third-width box flow-root-display no-border has-image w-100 text-right">
                             <div class="box-image">
+                            {% if researcher.profile.photo %}
                                 <img src="{{ researcher.profile.photo.url }}" alt="researcher-profile-image">
+                            {% else %}
+                                <img src="{% static 'expert/img/profile.jpg' %}" alt="researcher-profile-image">
+                            {% endif %}
                             </div>
                             <div class="box-header">
                                 <h5>
@@ -103,7 +107,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        {% if not researcher.accepted and not researcher.refused %}
+                                        {% if researcher.status == "pending"%}
                                             <div class="row mbottom-10">
                                                 <div class="col-6 text-left">
                                                     <button class="border-button confirm-researcher"

@@ -18,7 +18,7 @@ from .models import *
 from industry.models import *
 from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
-from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance
+from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance, RequestedProject
 from chamran_admin.models import Message
 
 
@@ -105,42 +105,46 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
-        projects_list = Project.objects.filter(expert_accepted=expert_user).only('project_form__project_title_persian')
+        projects_list = Project.objects.filter(expert_accepted=expert_user)
         projects_data = []
         for project in projects_list:
-            try:
-                researchers_applied = []
-                researchers_form = [ResearcherProfile.objects.get(researcher_user=researcher_user) for researcher_user in project.researcher_applied.all()]
-                for com in Comment.objects.filter(project=project).exclude(researcher_user=None):
-                    if com.researcher_user.researcherprofile not in researchers_form:
-                        researchers_form.append(com.researcher_user.researcherprofile)
-                if len(researchers_form) == 0:
-                    continue
-                for researcher_form in researchers_form:
-                    techniques = [tech.technique.technique_title for tech in
-                                    researcher_form.researcher_user.techniqueinstance_set.all()]
-                    accepted = False
-                    refused  = False
-                    if researcher_form.researcher_user in project.researcher_accepted.all():
-                        accepted = True
-                    elif researcher_form.researcher_user in project.researcher_banned.all():
-                        refused = True
-                    researcher_applied = {
-                        'id'        : researcher_form.researcher_user.pk,
-                        'profile'   : researcher_form,
-                        'techniques': techniques,
-                        'accepted'  : accepted,
-                        'refused'   : refused,
-                    }
-                    researchers_applied.append(researcher_applied)
-                appending = {
-                    'project': project.project_form.persian_title,
-                    'id': project.pk,
-                    "researchers_applied": researchers_applied
+            researchers_applied = []
+            researcherRequested = RequestedProject.objects.filter(project=project)
+            researchers = []
+            for requested in researcherRequested:
+                techniques = [tech.technique.technique_title for tech in
+                                requested.researcher.techniqueinstance_set.all()]
+                researcher_applied = {
+                    'id'        : requested.researcher.pk,
+                    'profile'   : requested.researcher.researcherprofile,
+                    'techniques': techniques,
+                    "status"    :  requested.status 
                 }
-                projects_data.append(appending)
-            except:
+                if requested.status == "unseen":
+                    requested.status = "pending"
+                    requested.save()
+                researchers_applied.append(researcher_applied)
+            
+            for com in Comment.objects.filter(project=project).exclude(researcher_user=None):
+                if com.researcher_user not in researchers:
+                    researchers.append(com.researcher_user)
+            if len(researchers) == 0:
                 continue
+            for researcher in researchers:
+                techniques = [tech.technique.technique_title for tech in
+                                researcher.techniqueinstance_set.all()]
+                researcher_applied = {
+                    'id'        : researcher.pk,
+                    'profile'   : researcher.researcherprofile,
+                    'techniques': techniques,
+                }
+                researchers_applied.append(researcher_applied)
+            appending = {
+                'project': project.project_form.persian_title,
+                'id': project.pk,
+                "researchers_applied": researchers_applied
+            }
+            projects_data.append(appending)
 
         context = {}
         if len(projects_data) != 0:

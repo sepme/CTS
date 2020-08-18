@@ -406,6 +406,14 @@ class RequestedProject(models.Model):
     date_requested = models.DateField(default=now, verbose_name='تاریخ درخواست')
     least_hours_offered = models.IntegerField(default=0, verbose_name='حداقل مدت زمانی پیشنهادی در هفته')
     most_hours_offered = models.IntegerField(default=0, verbose_name='حداکثر مدت زمانی پیشنهادی در هفته')
+
+    STATUS = (
+        ('unseen', "unseen"),
+        ('pending', 'pending'),
+        ('accepted', "accepted"),
+        ('refused', 'refused')
+    )
+    status = models.CharField(verbose_name="وضعیت درخواست", max_length=10, choices=STATUS, default='unseen')
     def __str__(self):
         return str(self.project) + " - " + str(self.date_requested)
 

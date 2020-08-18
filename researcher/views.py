@@ -841,14 +841,14 @@ def show_resume_preview(request):
     researcher = researcherProfile.researcher_user
     # TODO: Plz check resume key when it is none! I[ Reza :) ] comment that because of error type 500
     researcher_information = {
-        'photo': researcherProfile.photo.url,
+        # 'photo': researcherProfile.photo.url,
         'name': researcherProfile.__str__(),
         'major': researcherProfile.major,
         'grade': researcherProfile.grade,
         'university': researcherProfile.university,
         'entry_year': researcherProfile.entry_year,
-        'resume': researcherProfile.resume.url,
-        'resume_name': researcherProfile.resume.name,
+        # 'resume': researcherProfile.resume.url,
+        # 'resume_name': researcherProfile.resume.name,
         'techniques': [],
         'scientific_record': serialize('json', models.ScientificRecord.objects.filter(
             researcherProfile=researcherProfile)),
@@ -877,6 +877,11 @@ def show_resume_preview(request):
             comment.status = 'seen'
             comment.save()
     researcher_information['comments'] = comments
+    researcher_information['status'] = 'justComment'
+    try:
+        researcher_information['status'] = researcher.requestedproject_set.get(project=project).status
+    except:
+        pass
     return JsonResponse(researcher_information)
 
 def checkUserId(request):
