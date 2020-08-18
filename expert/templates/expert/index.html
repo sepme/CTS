@@ -27,27 +27,6 @@
     {# {% endwith %} #}
 {% endblock %}
 
-{% block style %}
-
-    <style type="text/css">
-        .project-progress .line-100:after {
-            height: calc({% project_progress project %}% + 6%);
-        }
-
-        .project-progress .step-container:nth-child(2) {
-            top: calc(5% + {% date_to_percent project=project date=project.date_phase_one_finished %}%);
-        }
-
-        .project-progress .step-container:nth-child(3) {
-            top: calc(5% + {% date_to_percent project=project date=project.date_phase_two_deadline %}%);
-        }
-
-        .project-progress .step-container:nth-child(4) {
-            top: calc(5% + {% date_to_percent project=project date=project.date_phase_three_deadline %}%);
-        }
-    </style>
-{% endblock %}
-
 {% block content %}
     <div class="row">
         <div class="col-12 text-right">
@@ -82,318 +61,320 @@
                     </div>
                 </div>
                 <div class="tab-content cover-page">
-                    {% if project.status == 2 %}
+                    {#                    {% if project.status == 2 %}#}
+                    {#                        <div class="card box flow-root-display w-100">#}
+                    {#                            <div class="box-body">#}
+                    {#                                <div class="row mbottom-lg-25 d-block d-lg-none ">#}
+                    {#                                    <div class="col-lg-12 text-right">#}
+                    {#                                        <h6>پروژه {{ project.project_form.persian_title }}</h6>#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                                <div class="row" style="direction: ltr!important">#}
+                    {#                                    <div class="col-lg-4 col-xs-3">#}
+                    {#                                        <div class="project-progress mbottom-lg-25">#}
+                    {#                                            <div class="step-container active">#}
+                    {#                                            <span class="step-date">#}
+                    {#                                                <div class="start">#}
+                    {#                                                    {% gregorian_to_numeric_jalali project.date_project_started %}#}
+                    {#                                                </div>#}
+                    {#                                            </span>#}
+                    {#                                                <span class="step-name">#}
+                    {#                                                شروع پروژه#}
+                    {#                                            </span>#}
+                    {#                                            </div>#}
+                    {#                                            <div class="step-container {% is_active project=project date=project.date_phase_one_finished %}">#}
+                    {#                                        <span class="step-date">#}
+                    {#                                            <div class="first_phase">{% gregorian_to_numeric_jalali project.date_phase_one_finished %}</div>#}
+                    {#                                        </span>#}
+                    {#                                                <span class="step-name">فاز اول</span>#}
+                    {#                                            </div>#}
+                    {#                                            <div class="step-container {% is_active project=project date=project.date_phase_two_deadline %}">#}
+                    {#                                        <span class="step-date">#}
+                    {#                                            <div class="second_phase">{% gregorian_to_numeric_jalali project.date_phase_two_deadline %}</div>#}
+                    {#                                        </span>#}
+                    {#                                                <span class="step-name">فاز دوم</span>#}
+                    {#                                            </div>#}
+                    {#                                            <div class="step-container ">#}
+                    {#                                        <span class="step-date">#}
+                    {#                                            <div class="third_phase">{% gregorian_to_numeric_jalali project.date_phase_three_deadline %}</div>#}
+                    {#                                        </span>#}
+                    {#                                                <span class="step-name">فاز سوم</span>#}
+                    {#                                            </div>#}
+                    {#                                            <div class="step-container">#}
+                    {#                                        <span class="step-date">#}
+                    {#                                            <div class="date_finished">{% gregorian_to_numeric_jalali project.date_finished %}</div>#}
+                    {#                                        </span>#}
+                    {#                                                <span class="step-name">اتمام پروژه</span>#}
+                    {#                                            </div>#}
+                    {#                                            <div class="line-100">#}
+                    {#                                                <div class="arrow"></div>#}
+                    {#                                            </div>#}
+                    {#                                        </div>#}
+                    {#                                    </div>#}
+                    {#                                    <div class="col-lg-8 col-xs-9">#}
+                    {#                                        <div class="row mbottom-lg-25 d-none d-lg-block ">#}
+                    {#                                            <div class="col-lg-12 text-right">#}
+                    {#                                                <h6>پروژه {{ project.project_form.persian_title }}</h6>#}
+                    {#                                            </div>#}
+                    {#                                        </div>#}
+                    {#                                        <div class="row mbottom-lg-25">#}
+                    {#                                            <div class="col-lg-12 text-right">#}
+                    {#                                                <span class="section-title">مشخصات پروژه</span>#}
+                    {#                                                <div class="section">#}
+                    {#                                                    <div class="row">#}
+                    {#                                                        <div class="col-md-9">#}
+                    {#                                                            <div class="row m-top-10">#}
+                    {#                                                                <div class="col-md-6">#}
+                    {#                                                                    <div class="pre-header">#}
+                    {#                                                                        <span>کارفرما</span>#}
+                    {#                                                                    </div>#}
+                    {#                                                                    <div id="industry-name">#}
+                    {#                                                                        {{ project.industry_creator }}#}
+                    {#                                                                    </div>#}
+                    {#                                                                </div>#}
+                    {#                                                                <div class="col-md-6">#}
+                    {#                                                                    <div class="pre-header">#}
+                    {#                                                                        <span>مجری</span>#}
+                    {#                                                                    </div>#}
+                    {#                                                                    <div id="enforcer-name">#}
+                    {#                                                                        {{ project.expert_accepted }}#}
+                    {#                                                                    </div>#}
+                    {#                                                                </div>#}
+                    {#                                                                <div class="col-12 budget-text">#}
+                    {#                                                                    <div class="pre-header">#}
+                    {#                                                                        <span>بودجه</span>#}
+                    {#                                                                    </div>#}
+                    {#                                                                    <div id="budget-content">#}
+                    {#                                                                        <span class="budget-amount">5,000,000</span>#}
+                    {#                                                                        <span>ریال</span>#}
+                    {#                                                                    </div>#}
+                    {#                                                                </div>#}
+                    {#                                                            </div>#}
+                    {#                                                            <div class="row">#}
+                    {#                                                                <div class="col-lg-12">#}
+                    {#                                                                    <div class="pre-header">#}
+                    {#                                                                        <span>توضیحات اجرایی</span>#}
+                    {#                                                                    </div>#}
+                    {#                                                                    <pre id="executive-info"></pre>#}
+                    {#                                                                </div>#}
+                    {#                                                            </div>#}
+                    {#                                                        </div>#}
+                    {#                                                        <div class="col-md-3">#}
+                    {#                                                            <div class="industry-logo-preview">#}
+                    {#                                                                <img id="industry_logo"#}
+                    {#                                                                     src="{{ project.industry_creator.profile.photo.url }}"#}
+                    {#                                                                     alt="industry-logo">#}
+                    {#                                                            </div>#}
+                    {#                                                            <div class="budget-section">#}
+                    {#                                                                <div class="budget">#}
+                    {#                                                                    <div class="budget-header">بودجه</div>#}
+                    {#                                                                    <div class="budget-content">#}
+                    {#                                                                        <div class="budget-amount">{{ project.project_form.required_budget }}</div>#}
+                    {#                                                                        <div>ریال</div>#}
+                    {#                                                                    </div>#}
+                    {#                                                                </div>#}
+                    {#                                                            </div>#}
+                    {#                                                        </div>#}
+                    {#                                                    </div>#}
+                    {#                                                    <div class="row mbottom-lg-25">#}
+                    {#                                                        <div class="col-lg-12 text-right">#}
+                    {#                                                            <span class="section-title">اطلاعات پروژه</span>#}
+                    {#                                                            <div class="project-info-tabs">#}
+                    {#                                                                <div class="nav flex-column nav-pills" id="v-pills-tab"#}
+                    {#                                                                     role="tablist"#}
+                    {#                                                                     aria-orientation="vertical">#}
+                    {#                                                                    <a class="nav-link active" id="v-pills-majors-tab"#}
+                    {#                                                                       data-toggle="pill"#}
+                    {#                                                                       role="tab" aria-controls="v-pills-majors"#}
+                    {#                                                                       aria-selected="true">#}
+                    {#                                                                        شاخص ها#}
+                    {#                                                                    </a>#}
+                    {#                                                                    <a class="nav-link" id="v-pills-approaches-tab"#}
+                    {#                                                                       data-toggle="pill"#}
+                    {#                                                                       role="tab" aria-controls="v-pills-approaches"#}
+                    {#                                                                       aria-selected="false">#}
+                    {#                                                                        راهکار ها#}
+                    {#                                                                    </a>#}
+                    {#                                                                    <a class="nav-link" id="v-pills-resources-tab"#}
+                    {#                                                                       data-toggle="pill"#}
+                    {#                                                                       role="tab" aria-controls="v-pills-resources"#}
+                    {#                                                                       aria-selected="false">#}
+                    {#                                                                        منابع مورد نیاز#}
+                    {#                                                                    </a>#}
+                    {#                                                                    <a class="nav-link" id="v-pills-roles-tab"#}
+                    {#                                                                       data-toggle="pill"#}
+                    {#                                                                       role="tab" aria-controls="v-pills-roles"#}
+                    {#                                                                       aria-selected="false">#}
+                    {#                                                                        قوانین#}
+                    {#                                                                    </a>#}
+                    {#                                                                </div>#}
+                    {#                                                            </div>#}
+                    {#                                                            <div class="section">#}
+                    {#                                                                <div class="project-info-innerDiv">#}
+                    {#                                                                    <div class="project-info-content">#}
+                    {#                                                                        <div>#}
+                    {#                                                                            <div class="question">#}
+                    {#                                                            <span class="question-mark">#}
+                    {#                                                                <i class="far fa-question-circle"></i>#}
+                    {#                                                            </span>#}
+                    {#                                                                                لطفا مشکل اصلی که پروژه به حل آن پرداخته#}
+                    {#                                                                                را#}
+                    {#                                                                                توضیح و اهمیت آن را#}
+                    {#                                                                                تبیین کنید.#}
+                    {#                                                                            </div>#}
+                    {#                                                                            <div class="answer">{{ project.project_form.main_problem_and_importance }}</div>#}
+                    {#                                                                        </div>#}
+                    {#                                                                        <div>#}
+                    {#                                                                            <div class="question">#}
+                    {#                                                            <span class="question-mark">#}
+                    {#                                                                <i class="far fa-question-circle"></i>#}
+                    {#                                                            </span>#}
+                    {#                                                                                در صورت حل این مشکل، چه پیشرفتی در شیوه#}
+                    {#                                                                                های#}
+                    {#                                                                                درمانی / تجهیزات پزشکی /#}
+                    {#                                                                                خدمات#}
+                    {#                                                                                درمانی یا ... حاصل می شود؟#}
+                    {#                                                                            </div>#}
+                    {#                                                                            <div class="answer">{{ project.project_form.progress_profitability }}</div>#}
+                    {#                                                                        </div>#}
+                    {#                                                                        {% comment %} <div>#}
+                    {#                                                                            <div class="question">#}
+                    {#                                                            <span class="question-mark">#}
+                    {#                                                                <i class="far fa-question-circle"></i>#}
+                    {#                                                            </span>#}
+                    {#                                                                                برآورد شما از سود مالی این پروژه چگونه#}
+                    {#                                                                                است؟#}
+                    {#                                                                            </div>#}
+                    {#                                                                            <div class="answer">{{ project.project_form.predict_profit }}</div>#}
+                    {#                                                                        </div> {% endcomment %}#}
+                    {#                                                                    </div>#}
+                    {#                                                                </div>#}
+                    {#                                                            </div>#}
+                    {#                                                        </div>#}
+                    {#                                                    </div>#}
+                    {#                                                    <div class="row mbottom-lg-25">#}
+                    {#                                                        <div class="col-12">#}
+                    {#                                                            <span class="section-title">پژوهشگران</span>#}
+                    {#                                                            <button type="button"#}
+                    {#                                                                    class="border-button section-button"#}
+                    {#                                                                    data-toggle="modal"#}
+                    {#                                                                    data-target="#researcherRequest">درخواست#}
+                    {#                                                            </button>#}
+                    {#                                                            <div class="section">#}
+                    {#                                                                <div class="row">#}
+                    {#                                                                    <div class="col-12">#}
+                    {#                                                                        <div class="horizontal-avatar-list owl-carousel owl-theme">#}
+                    {#                                                                            {% for researcher in researcher_accepted %}#}
+                    {#                                                                                <div class="item">#}
+                    {#                                                                                    <div class="avatar-item">#}
+                    {#                                                                                        <img src="/media/{{ researcher.photo }}"#}
+                    {#                                                                                             alt="{{ researcher.fullname }}پروفایل ">#}
+                    {#                                                                                        <div class="info">#}
+                    {#                                                                                            <h3>{{ researcher.fullname }}</h3>#}
+                    {#                                                                                            <button value="{{ project.pk }}"#}
+                    {#                                                                                                    id="{{ researcher.id }}"#}
+                    {#                                                                                                    data-url="{% url 'researcher:show_resume_preview' %}"#}
+                    {#                                                                                                    data-toggle="modal"#}
+                    {#                                                                                                    data-target="#researcherInfo">#}
+                    {#                                                                                                رزومه#}
+                    {#                                                                                            </button>#}
+                    {#                                                                                        </div>#}
+                    {#                                                                                    </div>#}
+                    {#                                                                                </div>#}
+                    {#                                                                            {% empty %}#}
+                    {##}
+                    {#                                                                            {% endfor %}#}
+                    {#                                                                        </div>#}
+                    {#                                                                    </div>#}
+                    {#                                                                </div>#}
+                    {#                                                            </div>#}
+                    {#                                                        </div>#}
+                    {#                                                    </div>#}
+                    {#                                                </div>#}
+                    {#                                            </div>#}
+                    {#                                        </div>#}
+                    {#                                    </div>#}
+                    {#                                    <div class="col-12">#}
+                    {#                                        {% include 'expert/layouts/comment.html' with comments=comment project=project %}#}
+                    {#                                    </div>#}
+                    {#                                </div>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    {% else %}#}
+                    {% for project in projects %}
                         <div class="card box flow-root-display w-100">
-                            <div class="box-body">
-                                <div class="row mbottom-lg-25 d-block d-lg-none ">
-                                    <div class="col-lg-12 text-right">
-                                        <h6>پروژه {{ project.project_form.persian_title }}</h6>
-                                    </div>
+                            <div class="box-header">
+                                <h6>
+                                    {{ project.project_form.persian_title }}
+                                </h6>
+                                {% calculate_date_past project.date_submitted_by_industry as date_past %}
+                                <div class="data-modified">
+                                    <span>{{ date_past }} قبل </span>
                                 </div>
-                                <div class="row" style="direction: ltr!important">
-                                    <div class="col-lg-4 col-xs-3">
-                                        <div class="project-progress mbottom-lg-25">
-                                            <div class="step-container active">
-                                            <span class="step-date">
-                                                <div class="start">
-                                                    {% gregorian_to_numeric_jalali project.date_project_started %}
+                                <div class="notification">
+                                    <i class="far fa-comment-alt center-abs"></i>
+                                    {% getUnseenComments project.pk request.user.expertuser as UnseenComments %}
+                                    {% if UnseenComments != 0 %}
+                                        <span class="unseen-comments"> {{ UnseenComments }} </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-6 col-9">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="date text-center">
+                                                    <div class="label">مهلت</div>
+                                                    <div class="value">
+                                                        <span>{% calculate_date_remaining project.date_finished %}</span>
+                                                        <!-- <span>3</span>
+                                                        <span>روز</span> -->
+                                                    </div>
                                                 </div>
-                                            </span>
-                                                <span class="step-name">
-                                                شروع پروژه
-                                            </span>
                                             </div>
-                                            <div class="step-container {% is_active project=project date=project.date_phase_one_finished %}">
-                                        <span class="step-date">
-                                            <div class="first_phase">{% gregorian_to_numeric_jalali project.date_phase_one_finished %}</div>
-                                        </span>
-                                                <span class="step-name">فاز اول</span>
-                                            </div>
-                                            <div class="step-container {% is_active project=project date=project.date_phase_two_deadline %}">
-                                        <span class="step-date">
-                                            <div class="second_phase">{% gregorian_to_numeric_jalali project.date_phase_two_deadline %}</div>
-                                        </span>
-                                                <span class="step-name">فاز دوم</span>
-                                            </div>
-                                            <div class="step-container ">
-                                        <span class="step-date">
-                                            <div class="third_phase">{% gregorian_to_numeric_jalali project.date_phase_three_deadline %}</div>
-                                        </span>
-                                                <span class="step-name">فاز سوم</span>
-                                            </div>
-                                            <div class="step-container">
-                                        <span class="step-date">
-                                            <div class="date_finished">{% gregorian_to_numeric_jalali project.date_finished %}</div>
-                                        </span>
-                                                <span class="step-name">اتمام پروژه</span>
-                                            </div>
-                                            <div class="line-100">
-                                                <div class="arrow"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8 col-xs-9">
-                                        <div class="row mbottom-lg-25 d-none d-lg-block ">
-                                            <div class="col-lg-12 text-right">
-                                                <h6>پروژه {{ project.project_form.persian_title }}</h6>
-                                            </div>
-                                        </div>
-                                        <div class="row mbottom-lg-25">
-                                            <div class="col-lg-12 text-right">
-                                                <span class="section-title">مشخصات پروژه</span>
-                                                <div class="section">
-                                                    <div class="row">
-                                                        <div class="col-md-9">
-                                                            <div class="row m-top-10">
-                                                                <div class="col-md-6">
-                                                                    <div class="pre-header">
-                                                                        <span>کارفرما</span>
-                                                                    </div>
-                                                                    <div id="industry-name">
-                                                                        {{ project.industry_creator }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="pre-header">
-                                                                        <span>مجری</span>
-                                                                    </div>
-                                                                    <div id="enforcer-name">
-                                                                        {{ project.expert_accepted }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-12 budget-text">
-                                                                    <div class="pre-header">
-                                                                        <span>بودجه</span>
-                                                                    </div>
-                                                                    <div id="budget-content">
-                                                                        <span class="budget-amount">{{ project.project_form.required_budget }}</span>
-                                                                        <span>ریال</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <div class="pre-header">
-                                                                        <span>توضیحات اجرایی</span>
-                                                                    </div>
-                                                                    <pre id="executive-info"></pre>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <div class="industry-logo-preview">
-                                                                <img id="industry_logo"
-                                                                     src="{{ project.industry_creator.profile.photo.url }}"
-                                                                     alt="industry-logo">
-                                                            </div>
-                                                            <div class="budget-section">
-                                                                <div class="budget">
-                                                                    <div class="budget-header">بودجه</div>
-                                                                    <div class="budget-content">
-                                                                        <div class="budget-amount">{{ project.project_form.required_budget }}</div>
-                                                                        <div>ریال</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mbottom-lg-25">
-                                                        <div class="col-lg-12 text-right">
-                                                            <span class="section-title">اطلاعات پروژه</span>
-                                                            <div class="project-info-tabs">
-                                                                <div class="nav flex-column nav-pills" id="v-pills-tab"
-                                                                     role="tablist"
-                                                                     aria-orientation="vertical">
-                                                                    <a class="nav-link active" id="v-pills-majors-tab"
-                                                                       data-toggle="pill"
-                                                                       role="tab" aria-controls="v-pills-majors"
-                                                                       aria-selected="true">
-                                                                        شاخص ها
-                                                                    </a>
-                                                                    <a class="nav-link" id="v-pills-approaches-tab"
-                                                                       data-toggle="pill"
-                                                                       role="tab" aria-controls="v-pills-approaches"
-                                                                       aria-selected="false">
-                                                                        راهکار ها
-                                                                    </a>
-                                                                    <a class="nav-link" id="v-pills-resources-tab"
-                                                                       data-toggle="pill"
-                                                                       role="tab" aria-controls="v-pills-resources"
-                                                                       aria-selected="false">
-                                                                        منابع مورد نیاز
-                                                                    </a>
-                                                                    <a class="nav-link" id="v-pills-roles-tab"
-                                                                       data-toggle="pill"
-                                                                       role="tab" aria-controls="v-pills-roles"
-                                                                       aria-selected="false">
-                                                                        قوانین
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="section">
-                                                                <div class="project-info-innerDiv">
-                                                                    <div class="project-info-content">
-                                                                        <div>
-                                                                            <div class="question">
-                                                            <span class="question-mark">
-                                                                <i class="far fa-question-circle"></i>
-                                                            </span>
-                                                                                لطفا مشکل اصلی که پروژه به حل آن پرداخته
-                                                                                را
-                                                                                توضیح و اهمیت آن را
-                                                                                تبیین کنید.
-                                                                            </div>
-                                                                            <div class="answer">{{ project.project_form.main_problem_and_importance }}</div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="question">
-                                                            <span class="question-mark">
-                                                                <i class="far fa-question-circle"></i>
-                                                            </span>
-                                                                                در صورت حل این مشکل، چه پیشرفتی در شیوه
-                                                                                های
-                                                                                درمانی / تجهیزات پزشکی /
-                                                                                خدمات
-                                                                                درمانی یا ... حاصل می شود؟
-                                                                            </div>
-                                                                            <div class="answer">{{ project.project_form.progress_profitability }}</div>
-                                                                        </div>
-                                                                        {% comment %} <div>
-                                                                            <div class="question">
-                                                            <span class="question-mark">
-                                                                <i class="far fa-question-circle"></i>
-                                                            </span>
-                                                                                برآورد شما از سود مالی این پروژه چگونه
-                                                                                است؟
-                                                                            </div>
-                                                                            <div class="answer">{{ project.project_form.predict_profit }}</div>
-                                                                        </div> {% endcomment %}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mbottom-lg-25">
-                                                        <div class="col-12">
-                                                            <span class="section-title">پژوهشگران</span>
-                                                            <button type="button"
-                                                                    class="border-button section-button"
-                                                                    data-toggle="modal"
-                                                                    data-target="#researcherRequest">درخواست
-                                                            </button>
-                                                            <div class="section">
-                                                                <div class="row">
-                                                                    <div class="col-12">
-                                                                        <div class="horizontal-avatar-list owl-carousel owl-theme">
-                                                                            {% for researcher in researcher_accepted %}
-                                                                                <div class="item">
-                                                                                    <div class="avatar-item">
-                                                                                        <img src="/media/{{ researcher.photo }}"
-                                                                                             alt="{{ researcher.fullname }}پروفایل ">
-                                                                                        <div class="info">
-                                                                                            <h3>{{ researcher.fullname }}</h3>
-                                                                                            <button value="{{ project.pk }}"
-                                                                                                    id="{{ researcher.id }}"
-                                                                                                    data-url="{% url 'researcher:show_resume_preview' %}"
-                                                                                                    data-toggle="modal"
-                                                                                                    data-target="#researcherInfo">
-                                                                                                رزومه
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            {% empty %}
-
-                                                                            {% endfor %}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                            <div class="col-6">
+                                                <div class="status text-center">
+                                                    <div class="label">بودجه</div>
+                                                    <div class="value">
+                                                        <span>{{ project.project_form.required_budget }}</span>
+                                                        <span>ریال</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        {% include 'expert/layouts/comment.html' with comments=comment project=project %}
+                                    <div class="col-md-6 col-3">
+                                        <button class="default-btn preview-project type-{{ project.status }}"
+                                                id={{ project.pk }}
+                                                        data-url="{% url 'expert:show_project' %}"
+                                                data-toggle="modal"
+                                                data-target="#showProject">
+                                            مشاهده
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    {% else %}
-                        {% for project in projects %}
-                            <div class="card box flow-root-display w-100">
-                                <div class="box-header">
-                                    <h6>
-                                        {{ project.project_form.persian_title }}
-                                    </h6>
-                                    {% calculate_date_past project.date_submitted_by_industry as date_past %}
-                                    <div class="data-modified">
-                                        <span>{{ date_past }} قبل </span>
-                                    </div>
-                                    <div class="notification">
-                                        <i class="far fa-comment-alt center-abs"></i>
-                                        {% getUnseenComments project.pk request.user.expertuser as UnseenComments %}
-                                        {% if UnseenComments != 0 %}
-                                            <span class="unseen-comments"> {{ UnseenComments }} </span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-md-6 col-9">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <div class="date text-center">
-                                                        <div class="label">مهلت</div>
-                                                        <div class="value">
-                                                            <span>{% calculate_date_remaining project.date_finished %}</span>
-                                                            <!-- <span>3</span>
-                                                            <span>روز</span> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="status text-center">
-                                                        <div class="label">بودجه</div>
-                                                        <div class="value">
-                                                            <span>{{ project.project_form.required_budget }}</span>
-                                                            <span>ریال</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-3">
-                                            <button class="default-btn preview-project type-{{ project.status }}"
-                                                    id={{ project.pk }}
-                                                            data-url="{% url 'expert:show_project' %}"
-                                                    data-toggle="modal"
-                                                    data-target="#showProject">
-                                                مشاهده
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                    {% empty %}
+                        <div class="no-project-container">
+                            <div class="no-project">
+                                <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
+                                <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>
+                                <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>
+                                <span>
+                                    <i class="fas fa-cog"></i>
+                                    <span>اطلاعات کاربری</span>
+                                </span>
+                                <p>
+                                    رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت
+                                    و
+                                    اطمینان کامل، پروژه شان را به شما بسپارند.
+                                </p>
                             </div>
-                        {% empty %}
-                            <div class="no-project-container">
-                                <div class="no-project">
-                                    <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">
-                                    <h4>متاسفانه، هنوز پروژه ای مرتبط با تخصص شما ثبت نشده است!</h4>
-                                    <p>پیشنهاد می کنیم دست از کار نکشید و با کلیک بر روی</p>
-                                    <span>
-                                                            <i class="fas fa-cog"></i>
-                                                            <span>اطلاعات کاربری</span>
-                                                        </span>
-                                    <p>رزومه خود را کامل کنید تا در هنگام ارسال درخواست انجام پروژه، صنایع با شناخت
-                                        و
-                                        اطمینان کامل، پروژه شان را به شما بسپارند.</p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+                        </div>
+                    {% endfor %}
+                    {#                    {% endif %}#}
                 </div>
                 {#                {% for p in projects %}#}
                 {#                    <div class="card active-question flow-root-display w-100">#}
