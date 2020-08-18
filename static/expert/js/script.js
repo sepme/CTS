@@ -721,7 +721,10 @@ $(document).ready(function () {
                 }
                 $(".researcher_id").attr("value", id);
                 $(".project_id").attr("value", project_id);
-                $('#researcher_photo').attr("src", data.photo);
+                if (data.photo)
+                    $('#researcher_photo').attr("src", data.photo);
+                else
+                    $('#researcher_photo').attr("src", "/static/expert/img/profile.jpg");
                 $('#researcher_name').html(data.name);
                 $('#researcher_major').html(data.major);
                 switch (data.grade) {
@@ -806,31 +809,34 @@ $(document).ready(function () {
                             "<td>" + status + "</td>" +
                             "</tr>";
                         $('#researcher_research_record').html(table_row);
-                        if (data.resume) {
-                            console.log(data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1));
-                            let fileType = returnFileType(data.resume.substring(data.resume.lastIndexOf(".") + 1).toUpperCase());
-                            let resume = `
-                            <div class="attach-box m-auto">
-                                <span class="attach-box__img ${fileType}"></span>
-                                <span class="attach-box__info">
-                                    <span class="attach-box__info-name">${data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1)}</span>
-                                    <span class="attach-box__info-ext">${fileType.toUpperCase()}</span>
-                                </span>
-                                <span class="attach-box__option">
-                                    <a class="attach-box__option-download" href="${data.resume}">
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                </span>
-                            </div>
-                            `;
-                            $("#researcherInfoResume").html(resume);
-                        } else {
-                            $("#researcherInfoResume").html("");
-                        }
                     }
                 } else {
                     $('#researcher_research_record').html(`<tr><td colspan="4">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
+                if (data.resume) {
+                    // console.log(data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1));
+                    let fileType = returnFileType(data.resume.substring(data.resume.lastIndexOf(".") + 1).toUpperCase());
+                    let resume = `
+                    <div class="attach-box m-auto">
+                        <span class="attach-box__img ${fileType}"></span>
+                        <span class="attach-box__info">
+                            <span class="attach-box__info-name">${data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1)}</span>
+                            <span class="attach-box__info-ext">${fileType.toUpperCase()}</span>
+                        </span>
+                        <span class="attach-box__option">
+                            <a class="attach-box__option-download" href="${data.resume}">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </span>
+                    </div>
+                    `;
+                    $("#researcherInfoResume").html(resume);
+                } else 
+                    $("#researcherInfoResume").html("");
+                if (data.comments.length)
+                    $(".no-comment").attr("style", "display : none;");
+                else
+                    $(".no-comment").attr("style", "display : block;");
                 setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
@@ -1625,7 +1631,7 @@ comment_form.submit(function (event) {
             comment_form.find("button[type='submit']").prop("disabled", false);
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
             if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                $(".project-comment-innerDiv").find(".no-comment").remove();
+                $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
             }
             let comment_code = addComment(data);
             $(".project-comment-innerDiv").find(".comments").append(comment_code);

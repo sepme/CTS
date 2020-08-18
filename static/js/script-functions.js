@@ -96,7 +96,7 @@ function close_modal() {
                     $(this).find(".comment-tabs .nav").html("");
                 }
                 if ($(this).find(".no-comment").length > 0) {
-                    $(this).find(".no-comment").html("");
+                    $(this).find(".no-comment").attr("style", "display : none;");
                 }
             })
         });
