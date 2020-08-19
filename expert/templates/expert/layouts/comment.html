@@ -5,7 +5,7 @@
     <div class="project-comment-innerDiv">
         <div class="no-comment" style="{% if not comments %}display:block;{% endif %}">
             <img class="no comment" src="{% static 'img/no_message.svg' %}" alt="no message">
-            <h5>نظری درباره این پروژه ثبت نشده!</h5>
+            <h5 dir="rtl">نظری درباره این پروژه ثبت نشده!</h5>
             <p>
                 در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.
             </p>
@@ -14,7 +14,7 @@
             {% if comments %}
                 {% for comment in comments %}
                     {% if comment.sender_type == "expert" %}
-                        <div class='my-comment' id='{{ comment.pk }}'>
+                        <div class='my-comment' id='{{ comment_pk }}'>
                             <div class='comment-profile'></div>
                             <span class='comment-tools'>
                             <div class='btn-group dropright'>
@@ -31,9 +31,9 @@
                                 </div>
                             </div>
                         </span>
-                            <div class='comment-body {% if comment.attachment %}attached{% endif %}'>
-                                <pre>{{ comment.description }}</pre>
-                                {% if comment.attachment %}
+                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>
+                                <pre>{{ comment.text }}</pre>
+                                {% if comment.attachment != "None" %}
                                     <a href='/{{ comment.attachment }}' class='attached-file'>
                                         <i class='fas fa-paperclip'></i>
                                         <span>{% file_name comment.attachment %}</span>
@@ -43,10 +43,10 @@
                         </div>
                     {% elif comment.sender_type == "industry" %}
                         <div class='your-comment'>
-                            <div class='comment-body {% if comment.attachment %}attached{% endif %}'>
+                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>
                                 <span class='comment-tools'></span>
-                                <pre>{{ comment.description }}</pre>
-                                {% if comment.attachment %}
+                                <pre>{{ comment.text }}</pre>
+                                {% if comment.attachment != "None" %}
                                     <a href='/{{ comment.attachment }}' class='attached-file'>
                                         <i class='fas fa-paperclip'></i>
                                         <span>{% file_name comment.attachment %}</span>
@@ -57,7 +57,7 @@
                     {% elif comment.sender_type == "system" %}
                         <div class='system-comment'>
                             <div class='comment-body' dir='ltr'>
-                                <pre>{{ comment.description }}</pre>
+                                <pre>{{ comment.text }}</pre>
                             </div>
                         </div>
                     {% endif %}

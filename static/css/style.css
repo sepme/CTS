@@ -4828,37 +4828,42 @@ img.center-head {
     margin: -40px auto 15px;
 }
 
-.apply_Project .input-group-prepend {
+.apply_Project .input-group-prepend,
+.apply .input-group-prepend {
     margin-right: -1px;
     position: absolute;
     top: 22px;
-    left: 0;
+    left: 23px;
     z-index: 2;
 }
 
-.apply_Project .input-group-append {
+.apply_Project .input-group-append,
+.apply .input-group-append {
     margin-left: -1px;
     position: absolute;
     top: 22px;
-    right: 36px;
+    right: 37px;
     z-index: 2;
 }
 
-.apply_Project .input-group-text {
+.apply_Project .input-group-text,
+.apply .input-group-text {
     position: absolute;
     width: 36px;
-    height: 36px;
+    height: 38px;
     left: 0;
     top: 0;
 }
 
-.apply_Project .input-group-text:hover {
+.apply_Project .input-group-text:hover,
+.apply .input-group-text:hover {
     background: #cacbcd;
     color: #000;
     cursor: pointer;
 }
 
-.apply_Project .form-control {
+.apply_Project .form-control,
+.apply .form-control {
     padding: 10px 40px;
     text-align: center;
     -webkit-appearance: textfield;
@@ -4866,12 +4871,15 @@ img.center-head {
     appearance: textfield;
 }
 
-.apply_Project div.error {
+.apply_Project div.error,
+.apply div.error {
     top: 60px;
 }
 
 .apply_Project .form-control::-webkit-inner-spin-button,
-.apply_Project .form-control::-webkit-outer-spin-button {
+.apply .form-control::-webkit-inner-spin-button,
+.apply_Project .form-control::-webkit-outer-spin-button,
+.apply .form-control::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
 
@@ -5765,6 +5773,7 @@ nav[aria-label="breadcrumb"] ol {
 .project-progress .step-container.active span.step-name {
     background-color: #3CCD1C;
     color: #ffffff;
+    font-weight: 600لو
 }
 
 @media (max-width: 992px) {

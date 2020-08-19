@@ -170,6 +170,75 @@ $(document).ready(function () {
         }
     });
 
+    let comment_form = $('#comment_form');
+    comment_form.submit(function (event) {
+        event.preventDefault();
+        comment_form.find("button[type='submit']").attr("disabled", "true");
+        let thisUrl = "";
+        if (comment_form.find(".researcher_id").val() === "")
+            thisUrl = "/expert/industry_comment/";
+        else
+            thisUrl = "/expert/researcher_comment/";
+        if (comment_form.closest(".showProject").length > 0) {
+            $(".project_id").attr('value', $('.showProject').attr("id"));
+        } else {
+            $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
+        }
+        let form = new FormData(comment_form.get(0));
+        // $.ajax({
+        //     method: 'POST',
+        //     url: thisUrl,
+        //     data: form,
+        //     processData: false,
+        //     contentType: false,
+        //     success: function (data) {
+        //         comment_form.find("button[type='submit']").prop("disabled", false);
+        //         comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+        //         if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+        //             $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
+        //         }
+        //         let comment_code = addComment(data);
+        //         $(".project-comment-innerDiv").find(".comments").append(comment_code);
+        //         iziToast.success({
+        //             rtl: true,
+        //             message: "پیام با موفقیت ارسال شد!",
+        //             position: 'bottomLeft'
+        //         });
+        //
+        //         $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+        //             deleteComment($(this).closest('.my-comment'));
+        //         });
+        //
+        //         comment_form[0].reset();
+        //         comment_form.find("#description").css("height", "fit-content");
+        //         $("textarea#description").removeClass("error");
+        //         $('.error').remove();
+        //         $('.file-name').html("");
+        //         $(".send-comment-container .comment-input").removeClass("attached");
+        //         $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+        //
+        //     },
+        //     error: function (data) {
+        //         console.log(data);
+        //         let obj = JSON.parse(data.responseText);
+        //         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+        //             .prop("disabled", false);
+        //         comment_form.find("label").removeClass("progress-cursor");
+        //         comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+        //         if (obj.description) {
+        //             $("#description").closest("div").append("<div class='error'>" +
+        //                 "<span class='error-body'>" +
+        //                 "<ul class='errorlist'>" +
+        //                 "<li>" + obj.description + "</li>" +
+        //                 "</ul>" +
+        //                 "</span>" +
+        //                 "</div>");
+        //             $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+        //         }
+        //         comment_form[0].reset();
+        //     },
+        // });
+    });
 
     // Check user id
     if ($("#userID").length) {
@@ -709,12 +778,11 @@ $(document).ready(function () {
             data: {id: id, project_id: project_id},
             success: function (data) {
                 // console.log(data);
-                if (data.status == "justComment"){
+                if (data.status == "justComment") {
                     $('.request-response').attr("style", "display : none;");
                     $(".confirm-researcher").prop('disabled', true);
                     $(".refuse-researcher").prop('disabled', true);
-                }
-                else{
+                } else {
                     $('.request-response').attr("style", "display : block;");
                     $(".confirm-researcher").prop('disabled', false);
                     $(".refuse-researcher").prop('disabled', false);
@@ -831,7 +899,7 @@ $(document).ready(function () {
                     </div>
                     `;
                     $("#researcherInfoResume").html(resume);
-                } else 
+                } else
                     $("#researcherInfoResume").html("");
                 if (data.comments.length)
                     $(".no-comment").attr("style", "display : none;");
@@ -1605,76 +1673,6 @@ function addComment(data) {
         "</div>";
     return comment_code;
 }
-
-let comment_form = $('#comment_form');
-comment_form.submit(function (event) {
-    event.preventDefault();
-    comment_form.find("button[type='submit']").attr("disabled", "true");
-    let thisUrl = "";
-    if (comment_form.find(".researcher_id").val() === "")
-        thisUrl = "/expert/industry_comment/";
-    else
-        thisUrl = "/expert/researcher_comment/";
-    if (comment_form.closest(".showProject").length > 0) {
-        $(".project_id").attr('value', $('.showProject').attr("id"));
-    } else {
-        $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
-    }
-    let form = new FormData(comment_form.get(0));
-    $.ajax({
-        method: 'POST',
-        url: thisUrl,
-        data: form,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            comment_form.find("button[type='submit']").prop("disabled", false);
-            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-            if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
-            }
-            let comment_code = addComment(data);
-            $(".project-comment-innerDiv").find(".comments").append(comment_code);
-            iziToast.success({
-                rtl: true,
-                message: "پیام با موفقیت ارسال شد!",
-                position: 'bottomLeft'
-            });
-
-            $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
-                deleteComment($(this).closest('.my-comment'));
-            });
-
-            comment_form[0].reset();
-            comment_form.find("#description").css("height", "fit-content");
-            $("textarea#description").removeClass("error");
-            $('.error').remove();
-            $('.file-name').html("");
-            $(".send-comment-container .comment-input").removeClass("attached");
-            $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
-
-        },
-        error: function (data) {
-            console.log(data);
-            let obj = JSON.parse(data.responseText);
-            comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            comment_form.find("label").removeClass("progress-cursor");
-            comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-            if (obj.description) {
-                $("#description").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.description + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            comment_form[0].reset();
-        },
-    });
-});
 
 // Researcher Request Page
 if (window.location.href.indexOf("expert/researcher/") > 0) {

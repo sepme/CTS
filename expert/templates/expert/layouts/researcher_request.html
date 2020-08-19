@@ -11,37 +11,48 @@
                 </h6>
                 <button type="button" class="close close__redirect" data-dismiss="modal" aria-label="Close"></button>
             </div>
-            {#            <div class="researcher-request">#}
             <form id="researcher-request-ajax" method="post" action="">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <input type="text" class="project"
-                           name="project_id"
-                           value="{{ project.pk }}"
-                           hidden>
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="researcher-number">
-                                حداکثر تعداد
-                            </label>
-                            {{ requestResearcherForm.researcher_count }}
-                            {#                            <input type="number"#}
-                            {#                                   class="w-100"#}
-                            {#                                   id="researcher-number"#}
-                            {#                                   name="reseacherCount">#}
-                        </div>
-                        <div class="col-6">
-                            <label for="researcher-time">
-                                ساعت کار
-                                <span class="fs-10">
-                                    (ساعت)
-                                </span>
-                            </label>
-                            {{ requestResearcherForm.least_hour }}
-                            {#                            <input type="number"#}
-                            {#                                   class="w-100"#}
-                            {#                                   id="researcher-time"#}
-                            {#                                   name="hour">#}
+                    <div class="container text-right">
+                        <img class="center-head" src="{% static 'img/time.svg' %}" alt="cooperation image">
+                        <p style="margin: 25px auto;">
+                            پیش از ارسال درخواست لازم است حداقل و حداکثر زمانی را که در هفته می توانید به این پروژه
+                            اختصاص دهید را مشخص کنید.
+                        </p>
+                        <div class="apply">
+                            <div class="row">
+                                <label>
+                                    <input type="text" class="project"
+                                           name="project_id"
+                                           value="{{ project_pk }}"
+                                           hidden>
+                                </label>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"> - </span>
+                                        </div>
+                                        <label for="id_researcher_count">حداکثر تعداد:</label>
+                                        {{ requestResearcherForm.researcher_count }}
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">+</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"> - </span>
+                                        </div>
+                                        <label for="id_least_hour"> ساعت کار(ساعت):</label>
+                                        {{ requestResearcherForm.least_hour }}
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">+</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

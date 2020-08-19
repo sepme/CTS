@@ -1227,5 +1227,6 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         project = get_object_or_404(Project, code=kwargs["code"])
-        context = ActiveProject(request=self.request, project=project, data=context)
+        context['project'] = ActiveProject(request=self.request, project=project, data=context)
+        context['requestResearcherForm'] = forms.RequestResearcherForm()
         return context
