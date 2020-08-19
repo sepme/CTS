@@ -14,14 +14,47 @@
     {% endif %}
     <div class="modal fade" id="previewKeywords" tabindex="-1" role="dialog" aria-labelledby="previewKeywordsLabel"
          aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="previewKeywordsLabel"></h5>
+                    <h6 class="modal-title" id="previewKeywordsLabel">تکنیک های پروژه</h6>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-
+                <div class="modal-body pt-0">
+                    <div class="row">
+                        <div class="col-lg-6 mt-3">
+                            <div class="divide__line text-right">
+                                <span class="w__title">تکنیک های من</span>
+                                <span class="__line"></span>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <div class="project-techniques">
+                                        <div>
+                                            <span>تکنیک موجود من</span>
+                                            <span class="primary-technique">تکنیک به درد نخور من</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mt-3">
+                            <div class="divide__line text-right">
+                                <span class="w__title">تکنیک های پروژه</span>
+                                <span class="__line"></span>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <div class="project-techniques">
+                                        <div>
+                                            <span class="missed-technique">تکنیک ناموجود</span>
+                                            <span>تکنیک موجود ما</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -290,14 +323,15 @@
                                 <div class="col-6">
                                     <div class="project-techniques">
                                         <div>
-                                            {% for keyword in project.keyword %}
-                                                {% if keyword in project.missedTechinque %}
-                                                    <span class="missed-technique">{{ keyword.name }}</span>
+                                            {% for technique in project.satisfiedTechniques %}
+                                                {% if technique in project.missedTechinque %}
+                                                    <span class="missed-technique">{{ technique }}</span>
                                                 {% else %}
-                                                    <span>{{ keyword.name }}</span>
+                                                    <span>{{ technique }}</span>
                                                 {% endif %}
                                             {% endfor %}
-                                            <span class="show-all" data-toggle="modal" data-target="#previewKeywords">همه</span>
+                                            <span class="show-all mr-1" data-toggle="modal"
+                                                  data-target="#previewKeywords">همه</span>
                                         </div>
                                     </div>
                                 </div>
@@ -385,4 +419,9 @@
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
+    <script type="text/javascript">
+        $("[data-target='#previewKeywords']").click(function (){
+            console.log("show all clicked!");
+        });
+    </script>
 {% endblock %}
