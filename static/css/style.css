@@ -2448,6 +2448,10 @@ ul.fancytree-container {
     outline: none !important;
 }
 
+ul.fancytree-container li[role="treeitem"] {
+    margin: 5px 0;
+}
+
 img.fancytree-icon, span.fancytree-checkbox, span.fancytree-icon {
     margin-left: 0;
     margin-right: 3px;
@@ -3740,12 +3744,12 @@ div.no-project > span.disable-border-button {
     cursor: pointer;
 }
 
-.project-techniques span.missed-technique{
+.project-techniques span.missed-technique {
     background-color: #ff4545;
     color: #ffffff;
 }
 
-.project-techniques span.primary-technique{
+.project-techniques span.primary-technique {
     background-color: #ebebeb;
     color: #000000;
 }
