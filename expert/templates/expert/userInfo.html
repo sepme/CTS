@@ -19,17 +19,35 @@
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header"></div>
-                <div class="modal-body text-center">
-                    <div class="col-12 loading d-block">
-                        <div class="circle-loader">
-                            <div class="checkmark draw"></div>
-                        </div>
-                        <h6>لطفا شکیبا باشید</h6>
-                    </div>
-                    <p>در حال تلاش برای جمع آوری اطلاعات</p>
+                <div class="modal-header">
+                    <h6 class="modal-title default">واردکردن لینک</h6>
                 </div>
-                <div class="modal-footer"></div>
+                <div class="modal-body text-center">
+                    <div class="text-right" id="insertLink">
+                        <p class="mb-3">
+                            برای ادامه عملیات لازم است آدرس حساب خود، در سامانه علم سنجی را در قسمت زیر وارد کنید.
+                        </p>
+                        <form id="ajax-web-scrapping-form" action="/expert/collect_data/" method="POST">
+                            <div class="form-group">
+                                <label for="linkUrl">لینک</label>
+                                <input class="w-100" id="linkUrl" name="link" style="direction: ltr">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="d-none" id="waitingToCheck">
+                        <div class="col-12 loading d-block">
+                            <div class="circle-loader">
+                                <div class="checkmark draw"></div>
+                            </div>
+                            <h6>لطفا شکیبا باشید</h6>
+                        </div>
+                        <p>در حال تلاش برای جمع آوری اطلاعات</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-primary mr-2">ادامه</button>
+                </div>
             </div>
         </div>
     </div>

@@ -1062,8 +1062,8 @@ def checkUserId(request):
 
 @permission_required('expert.be_expert', login_url='/login/')
 def CollectData(request):
-    # link = request.POST['link']
-    link = "https://isid.research.ac.ir/Reza_Malekzadeh"
+    link = request.POST['link']
+    # link = "https://isid.research.ac.ir/Reza_Malekzadeh"
     # try:
     collectedData = webScraping.webScraping(link=link)
 

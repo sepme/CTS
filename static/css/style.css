@@ -4495,7 +4495,7 @@ input.remove-border-bottom {
 
 .modal-header {
     direction: rtl;
-    padding-right: 30px;
+    padding-right: 1rem;
 }
 
 .modal-header .close {
@@ -4550,6 +4550,7 @@ input.remove-border-bottom {
     color: #707070;
     direction: rtl;
     padding-bottom: 0;
+    padding-top: 0;
 }
 
 .modal-body h6 {

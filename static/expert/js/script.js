@@ -593,9 +593,39 @@ $(document).ready(function () {
             });
         }
 
-        $("#waitToGet").click(function (event) {
-            $(this).modal("hide");
-            $("#resumeValidation").modal("show");
+        $("#waitToGet .modal-footer button.btn-primary").click(function (event) {
+            let btnClicked = $(this);
+            btnClicked.closest(".modal-footer").find("button").addClass("d-none");
+            btnClicked.closest(".modal-content").find(".modal-header .modal-title").addClass("d-none");
+            btnClicked.closest(".modal-content").find(".modal-body #insertLink").addClass("d-none");
+            btnClicked.closest(".modal-content").find(".modal-body #waitingToCheck").removeClass("d-none");
+            let webScrappingForm = btnClicked.closest(".modal-content").find("#ajax-web-scrapping-form");
+            $.ajax({
+                method: webScrappingForm.attr("method"),
+                url: webScrappingForm.attr("action"),
+                data: webScrappingForm.serialize(),
+                success: function (data) {
+                    btnClicked.closest(".modal-footer").find("button").removeClass("d-none");
+                    btnClicked.closest(".modal-content").find(".modal-header .modal-title").removeClass("d-none");
+                    btnClicked.closest(".modal-content").find(".modal-body #insertLink").removeClass("d-none");
+                    btnClicked.closest(".modal-content").find(".modal-body #waitingToCheck").addClass("d-none");
+                    webScrappingForm.closest(".modal").modal("hide");
+                    $("#resumeValidation").modal("show");
+                    console.log(data);
+                    $("#resumeValidation #expertUniDetected").html(data.university.replace("دانشگاه", ""));
+                },
+                error: function (data) {
+                    btnClicked.closest(".modal-footer").find("button").removeClass("d-none");
+                    btnClicked.closest(".modal-content").find(".modal-header .modal-title").removeClass("d-none");
+                    btnClicked.closest(".modal-content").find(".modal-body #insertLink").removeClass("d-none");
+                    btnClicked.closest(".modal-content").find(".modal-body #waitingToCheck").addClass("d-none");
+                    iziToast.error({
+                        rtl: true,
+                        message: "ارتباط با سرور با مشکل مواجه شد.\nلطفا دوباره امتحان کنید!",
+                        position: 'bottomLeft'
+                    });
+                }
+            })
         });
     }
 
