@@ -11,7 +11,9 @@ class ResearcherAdmin(admin.ModelAdmin):
 class ResearcherProfileAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(models.Status)
+@admin.register(models.Status)
+class StatusAdmin(admin.ModelAdmin):
+    pass
 
 @admin.register(models.ScientificRecord)
 class ScientificRecordAdmin(admin.ModelAdmin):
@@ -47,4 +49,12 @@ class ResearcherHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(models.RequestedProject)
 class RequestedProjectAdmin(admin.ModelAdmin):
+    pass
+
+@admin.reginster(models.MembershipFee)
+class MembershipFeeAdmin(admin.ModelAdmin):
+    pass
+
+@admin.reginster(models.ResearcherEvaluation)
+class ResearcherEvaluation(admin.ModelAdmin):
     pass
