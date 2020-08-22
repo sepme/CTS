@@ -944,6 +944,24 @@ $(document).ready(function () {
             },
         });
     });
+
+    $("#active-project").click(function () {
+        $(".new-project").attr("style", "display :none;");
+        $(".done-project").attr("style", "display :none;");
+        $(".your-project").attr("style", "display :block;");
+    });
+
+    $("#new-projects").click(function () {
+        $(".new-project").attr("style", "display :block");
+        $(".done-project").attr("style", "display :none");
+        $(".your-project").attr("style", "display :none");
+    });
+
+    $("#done-project").click(function () {
+        $(".new-project").attr("style", "display :none");
+        $(".your-project").attr("style", "display :none");
+        $(".done-project").attr("style", "display :block");
+    });
 });
 
 function education_record() {
