@@ -137,7 +137,7 @@ def ActiveProject(request, project, data):
             comment.save()
     data['deadline'] = 'نا مشخص'
     data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-    evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
+    evaluation_history = project.industry_creator.expertevaluateindustry_set.filter(project=project)
     data['status'] = project.status
     data['vote'] = False
     try:
@@ -504,15 +504,16 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
             context['photo'] = industry.profile.photo
         return context
 
-
+@permission_required('industry.be_industry', login_url='/login/')
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
-        if models.IndustryUser.objects.filter(userId=user_id).count():
-            return JsonResponse({"is_unique": False})
+        if user_id != request.user.industry_user:
+            if models.IndustryUser.objects.filter(userId=user_id).count():
+                return JsonResponse({"is_unique": False})
         return JsonResponse({"is_unique": True})
 
-
+@permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):
     technique_list = request.POST.getlist('technique')
     if len(technique_list) == 0:

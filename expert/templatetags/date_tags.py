@@ -74,10 +74,13 @@ def project_progress(project_pk):
         project = Project.objects.get(id=project_pk)
         total_days = (project.date_finished - project.date_project_started).total_seconds()
         pass_days = (datetime.date.today() - project.date_project_started).total_seconds()
-        amount = 100 * pass_days / total_days
-        if amount > 89:
-            amount = 89
-        return str("{:.2f}".format(amount))
+        if total_days:
+            print(total_days)
+            amount = 100 * pass_days / total_days
+            if amount > 89:
+                amount = 89
+            return str("{:.2f}".format(amount))
+        return None
 
 
 @register.simple_tag
@@ -94,10 +97,12 @@ def date_to_percent(project_pk, phase, type):
             date = ""
         total_days = (project.date_finished - project.date_start).total_seconds()
         pass_days = (date - project.date_start).total_seconds()
-        if type == "h":
-            return str(int((100 * pass_days / total_days) * 0.88 + 5))
-        elif type == "w":
-            return str(int(81 * pass_days / total_days))
+        if total_days : 
+            if type == "h":
+                return str(int((100 * pass_days / total_days) * 0.88 + 5))
+            elif type == "w":
+                return str(int(81 * pass_days / total_days))
+        return None
 
 
 @register.simple_tag

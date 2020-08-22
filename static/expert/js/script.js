@@ -175,6 +175,7 @@ $(document).ready(function () {
     if ($("#userID").length) {
         $("input#userID").on("keyup", function () {
             console.log("search: ", $(this).val());
+            $(".userId-error").remove();
             let thisFormGroup = $(this).closest(".form-group");
             if ($(this).val()) {
                 thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
@@ -1391,7 +1392,7 @@ showInfo.click(function (event) {
                 setComment(data.comments);
                 // vote_dialog_init(".showProject");
             } else {
-                $(".project").attr("value", project_id);
+                $(".project_id").attr("value", project_id);
                 projectDetail(data);
             }
 
@@ -1615,11 +1616,11 @@ comment_form.submit(function (event) {
         thisUrl = "/expert/industry_comment/";
     else
         thisUrl = "/expert/researcher_comment/";
-    if (comment_form.closest(".showProject").length > 0) {
-        $(".project_id").attr('value', $('.showProject').attr("id"));
-    } else {
-        $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
-    }
+    // if (comment_form.closest(".showProject").length > 0) {
+    //     $(".project_id").attr('value', $('.showProject').attr("id"));
+    // } else {
+    //     $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
+    // }
     let form = new FormData(comment_form.get(0));
     $.ajax({
         method: 'POST',
@@ -1631,7 +1632,7 @@ comment_form.submit(function (event) {
             comment_form.find("button[type='submit']").prop("disabled", false);
             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
             if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
+                $(".project-comment-innerDiv").find(".no-comment").attr("style", "display: none;");
             }
             let comment_code = addComment(data);
             $(".project-comment-innerDiv").find(".comments").append(comment_code);
