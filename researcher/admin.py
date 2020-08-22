@@ -51,10 +51,10 @@ class ResearcherHistoryAdmin(admin.ModelAdmin):
 class RequestedProjectAdmin(admin.ModelAdmin):
     pass
 
-@admin.reginster(models.MembershipFee)
+@admin.register(models.MembershipFee)
 class MembershipFeeAdmin(admin.ModelAdmin):
     pass
 
-@admin.reginster(models.ResearcherEvaluation)
+@admin.register(models.ResearcherEvaluation)
 class ResearcherEvaluation(admin.ModelAdmin):
     pass
