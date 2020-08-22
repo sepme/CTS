@@ -673,7 +673,7 @@ img {
 
 .fixed-back .close, .modal .close {
     position: absolute;
-    top: 5px;
+    top: 0;
     left: 5px;
     height: 30px;
     width: 30px;
