@@ -79,17 +79,18 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def form_valid(self, form):
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
-        expert_form = expert_user.expertform
-        if expert_form :
-            expert_form.photo = form.cleaned_data['photo']
-            expert_form.fullname = form.cleaned_data['fullname']
-            expert_form.national_code = form.cleaned_data['national_code']
-            expert_form.special_field = form.cleaned_data['special_field']
-            expert_form.scientific_rank = form.cleaned_data['scientific_rank']
-            expert_form.university = form.cleaned_data['university']
-            expert_form.home_number = form.cleaned_data['home_number']
-            expert_form.phone_number = form.cleaned_data['phone_number']
-        else:
+        try:
+            expert_form = expert_user.expertform
+            if expert_form :
+                expert_form.photo = form.cleaned_data['photo']
+                expert_form.fullname = form.cleaned_data['fullname']
+                expert_form.national_code = form.cleaned_data['national_code']
+                expert_form.special_field = form.cleaned_data['special_field']
+                expert_form.scientific_rank = form.cleaned_data['scientific_rank']
+                expert_form.university = form.cleaned_data['university']
+                expert_form.home_number = form.cleaned_data['home_number']
+                expert_form.phone_number = form.cleaned_data['phone_number']
+        except:
             expert_form = form.save(commit=False)
         expert_form.expert_user = expert_user
         expert_form.email = expert_user.user.get_username()
