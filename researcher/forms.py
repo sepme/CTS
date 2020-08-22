@@ -117,6 +117,7 @@ class InitailForm(forms.ModelForm):
 
 
 class ResearcherProfileForm(forms.ModelForm):
+    userId = forms.CharField(max_length=150, required=False)
     class Meta:
         model = models.ResearcherProfile
         fields = ['fullname', 'major', 'national_code', 'grade', 'university',
@@ -130,6 +131,14 @@ class ResearcherProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['address'].required = False
+
+    def clean_userId(self):
+        data = self.cleaned_data["userId"]
+        print(data)
+        if data == "":
+            raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
+        return data
+    
 
     def clean_photo(self):
         data = self.cleaned_data["photo"]

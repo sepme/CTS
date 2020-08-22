@@ -84,8 +84,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             return context
         all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gte=0)]
         all_projects = Project.objects.filter(id__in=all_projects)
-        my_projects = all_projects.filter(researcher_applied__in=[researcher])
         new_projects = all_projects.exclude(researcher_applied__in=[researcher])
+        applied_projects = all_projects.filter(researcher_applied__in=[researcher])
         technique_title = [str(item.technique) for item in researcher.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(technique_title__in=technique_title)
         projects = []
@@ -152,10 +152,10 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['done_project_list'] = done_project_list
 
         my_project_list = []
-        if len(my_projects) != 0:
+        if len(applied_projects) != 0:
             evaluation_history = models.ResearcherEvaluation.objects.filter(
-                project_title=my_projects[0].project_form.english_title)
-            for project in my_projects:
+                project_title=applied_projects[0].project_form.english_title)
+            for project in applied_projects:
                 title = project.project_form.english_title
                 status = "در حال بررسی"
                 if researcher in project.researcher_accepted.all():
@@ -198,28 +198,32 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
 
     def get(self, request, *args, **kwargs):
         try:
-            self.researcherProfile = self.request.user.researcheruser.researcherprofile
+            researcher = self.request.user.researcheruser
         except:
             return HttpResponseRedirect(reverse("researcher:index"))
-        if request.user.researcheruser.status.status == 'not_answered':
+        if researcher.status.status == 'not_answered':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
-        if request.user.researcheruser.status.status == 'wait_for_result':
+        if researcher.status.status == 'wait_for_result':
             return HttpResponseRedirect(reverse('researcher:question-alert'))
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['status'] = self.request.user.researcheruser.status.status
-        context["form"] = forms.ResearcherProfileForm(instance=self.researcherProfile,
+        researcher = self.request.user.researcheruser
+        profile = researcher.researcherprofile
+        context['status'] = researcher.status.status
+        context["form"] = forms.ResearcherProfileForm(instance=profile,
                                                       initial={
+                                                          "userId":
+                                                              researcher.userId,
                                                           'grade':
-                                                              self.researcherProfile.grade,
+                                                              profile.grade,
                                                           'email':
                                                               self.request.user.username})
-        context['scientificrecord_set'] = self.researcherProfile.scientificrecord_set.all()
-        context['executiverecord_set'] = self.researcherProfile.executiverecord_set.all()
-        context['studiousrecord_set'] = self.researcherProfile.studiousrecord_set.all()
-        context['researcher_form'] = self.researcherProfile
+        context['scientificrecord_set'] = profile.scientificrecord_set.all()
+        context['executiverecord_set'] = profile.executiverecord_set.all()
+        context['studiousrecord_set'] = profile.studiousrecord_set.all()
+        context['researcher_form'] = profile
         return context
 
     def post(self, request, *args, **kwargs):
@@ -229,6 +233,9 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
                                            #            self.request.user.researcheruser.researcherprofile.grade})
                                            )
         if form.is_valid():
+            researcher = request.user.researcheruser
+            researcher.userId = form.cleaned_data['userId']
+            researcher.save()
             profile = request.user.researcheruser.researcherprofile
             if form.cleaned_data['photo'] is not None:
                 if profile.photo:
@@ -270,12 +277,14 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             return HttpResponseRedirect(reverse("researcher:index"))
         context = self.get_context_data(**kwargs)
 
-        if form.errors['home_number']:
+        if 'home_number' in form.errors.keys():
             context['home_number_error'] = form.errors['home_number']
 
-        if form.errors['phone_number']:
+        if 'phone_number' in form.errors.keys():
             context['phone_number_error'] = form.errors['phone_number']
-
+        
+        if 'userId' in form.errors.keys():
+            context['userId_error'] = form.errors['userId']
         return render(request, 'researcher/userInfo.html', context=context)
 
 
@@ -668,6 +677,11 @@ def ShowProject(request):
             com.status = 'seen'
             com.save()
     json_response['status'] = request.user.researcheruser.status.status
+    try:
+        requestedProject = models.RequestedProject.objects.get(project=project)
+        json_response['status'] = requestedProject.status
+    except:
+        pass
     return JsonResponse(json_response)
 
 
@@ -683,26 +697,28 @@ def DeleteComment(request):
 
 @permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def ApplyProject(request):
-    if request.user.researcheruser.status.status == "waiting":
-        data = {"error": "your waiting for another project"}
+    researcher = request.user.researcheruser
+    if researcher.status.status != "free":
+        data = {"error": "You can not apply for new Project."}
         return JsonResponse(data, status=400)
     form = forms.ApplyForm(request.POST)
     if form.is_valid():
         project = get_object_or_404(Project, id=request.POST['id'])
         least_hour = form.cleaned_data['least_hours']
-        most_hour = form.cleaned_data['most_hours']
-        apply_project = models.RequestedProject(researcher=request.user.researcheruser,
+        most_hour = form.cleaned_data['most_hours']        
+        apply_project = models.RequestedProject(researcher=researcher,
                                                 project=project,
                                                 least_hours_offered=least_hour,
-                                                most_hours_offered=most_hour)
+                                                most_hours_offered=most_hour,
+                                                status="unseen")
         apply_project.save()
         comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
                           sender_type="system",
                           project=project,
-                          researcher_user=request.user.researcheruser,
+                          researcher_user=researcher,
                           status='unseen')
         comment.save()
-        project.researcher_applied.add(request.user.researcheruser)
+        project.researcher_applied.add(researcher)
         return JsonResponse(data={'success': "success"})
     return JsonResponse(form.errors, status=400)
 
@@ -839,7 +855,6 @@ def DeleteStudiousRecord(request):
 def show_resume_preview(request):
     researcherProfile = models.ResearcherProfile.objects.get(id=request.GET.get('id'))
     researcher = researcherProfile.researcher_user
-    # TODO: Plz check resume key when it is none! I[ Reza :) ] comment that because of error type 500
     researcher_information = {
         'name': researcherProfile.__str__(),
         'major': researcherProfile.major,
@@ -887,12 +902,54 @@ def show_resume_preview(request):
         researcher_information['status'] = 'justComment'
     return JsonResponse(researcher_information)
 
+@permission_required('researcher.be_researcher', login_url='/login/')
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
-        if models.ResearcherUser.objects.filter(userId=user_id).count():
-            return JsonResponse({"is_unique": False})
+        if user_id != request.user.researcheruser.userId:
+            if models.ResearcherUser.objects.filter(userId=user_id).count():
+                return JsonResponse({"is_unique": False})
         return JsonResponse({"is_unique": True})
+
+@permission_required('researcher.be_researcher', login_url='/login/')
+def forbidden_access(request):
+    researcher = request.user.researcheruser
+    status = researcher.status
+    if status.is_deactivated:
+        remaining = researcher.status.remainingTime
+        context = {'day'    : remaining['day'],
+                    'hour'   : remaining['hour'],
+                    'minute' : remaining['minute'],
+                    'second' : remaining['second'],
+                    }        
+        return render(request=request, template_name='researcher/forbid_access.html', context=context)
+    else:
+        if status.status == "deactivated":
+            status.status = "not_answered"
+            status.save()
+            ctype = ContentType.objects.get_for_model(models.ResearcherUser)
+            permission = Permission.objects.get(content_type=ctype, codename='is_active')
+            request.user.user_permissions.add(permission)
+            request.user.save()
+        return HttpResponseRedirect(reverse("researcher:index"))
+
+@permission_required('researcher.be_researcher', login_url='/login/')
+def getProjectTechniques(request):
+    try:
+        project = Project.objects.get(pk=request.POST['project_id'])
+    except:
+        return JsonResponse(data={"error" : "The Project Id is wrong."}, status=400)
+    researcher = request.user.researcheruser
+    data = {
+        "researcher_techniques" : [],
+        "project_techniques" : []
+    }
+    for tech in models.TechniqueInstance.objects.filter(researcher=researcher):
+        data['researcher_techniques'].append(tech.technique.technique_title)
+    
+    for tech in project.project_form.techniques.all():
+        data['project_techniques'].append(tech.technique_title)
+    return JsonResponse(data=data)
 
 TECHNIQUES = {
     'Polymerase Chain Reaction': 'Molecular Biology',
@@ -1033,10 +1090,3 @@ TECHNIQUES = {
     'Histological Sample Preparation for Light Microscopy': 'Cellular Biology',
     'Cell-surface Biotinylation Assay': 'Cellular Biology',
 }
-
-
-# 7072488c-02ab-4362-9e51-7100dae78473
-# persiontools
-
-def forbidden_access(request):
-    return render(request, 'researcher/forbid_access.html', {})

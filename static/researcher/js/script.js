@@ -342,6 +342,7 @@ $(document).ready(function () {
     if ($("#userID").length) {
         $("input#userID").on("keyup", function () {
             console.log("search: ", $(this).val());
+            $('.userId-error').remove();
             let thisFormGroup = $(this).closest(".form-group");
             if ($(this).val()) {
                 thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")

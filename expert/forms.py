@@ -92,11 +92,15 @@ class InitialInfoForm(forms.ModelForm):
 
 class ExpertInfoForm(forms.ModelForm):
     keywords = forms.CharField(required=False)
+    userId = forms.CharField(max_length=150, required=False)
 
     class Meta:
         model = ExpertForm
         exclude = ['expert_user', 'photo','keywords', 'eq_test', 'lab_equipment']
         error_messages = {
+            'userId': {
+                'required': 'شناسه کاربری نمی تواند خالی باشد.'
+            },
             'special_field': {
                 'required': 'حوزه تخصصی نمی تواند خالی باشد.'
             },
@@ -111,6 +115,13 @@ class ExpertInfoForm(forms.ModelForm):
         widgets = {
             'home_address': forms.Textarea(attrs={'rows': "5",}),
         }
+
+    def clean_userId(self):
+        data = self.cleaned_data["userId"]
+        if data == "":
+            raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
+        return data
+    
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')

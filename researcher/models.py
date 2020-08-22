@@ -88,8 +88,9 @@ class Status(models.Model):
     @property
     def is_deactivated(self):
         today = datetime.datetime.now(datetime.timezone.utc)
-        if  today > self.inactivate_duration:
-            return False
+        if self.inactivate_duration:
+            if  today > self.inactivate_duration:
+                return False
         return True
     
     @property

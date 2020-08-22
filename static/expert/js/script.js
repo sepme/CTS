@@ -244,6 +244,7 @@ $(document).ready(function () {
     if ($("#userID").length) {
         $("input#userID").on("keyup", function () {
             console.log("search: ", $(this).val());
+            $(".userId-error").remove();
             let thisFormGroup = $(this).closest(".form-group");
             if ($(this).val()) {
                 thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
@@ -1489,7 +1490,7 @@ showInfo.click(function (event) {
                 setComment(data.comments);
                 // vote_dialog_init(".showProject");
             } else {
-                $(".project").attr("value", project_id);
+                $(".project_id").attr("value", project_id);
                 projectDetail(data);
             }
 

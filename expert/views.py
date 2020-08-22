@@ -58,10 +58,6 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     permission_required = ("expert.be_expert",)
     form_class = forms.InitialInfoForm
 
-    def get(self, request, *args, **kwargs):
-
-        return super().get(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
@@ -69,30 +65,33 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         if expert_user.status != "signed_up":
             projects = []
             if expert_user.status in ["free", "applied"]:
-                projects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
-            if expert_user.status == "involved":
-                project = Project.objects.filter(status=2).get(expert_accepted=expert_user)
-                comments = project.get_comments().filter(researcher_user=None).filter(expert_user=expert_user)
-                context['project'] = project
-                context['comment'] = comments
-                context['requestResearcherForm'] = forms.RequestResearcherForm()
-                context['researcher_accepted'] = []
-                for researcher in project.researcher_accepted.all():
-                    researcher = {
-                        "id": researcher.pk,
-                        "fullname": researcher.researcherprofile.fullname,
-                        "photo": researcher.researcherprofile.photo
-                    }
-                    context['researcher_accepted'].append(researcher)
-            context['projects'] = projects
-        return context
+                allProjects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
+                context['allProjects'] = allProjects
+                newProjects = allProjects.exclude(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+                context['newProjects'] = newProjects
+                appliedProjects = allProjects.filter(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+                context['appliedProjects'] = appliedProjects
 
-    def form_invalid(self, form):
-        return super().form_invalid(form)
+            if expert_user.status == "involved":
+                context['activeProjects'] = Project.objects.filter(status=2).get(expert_accepted=expert_user)
+            context['doneProjects'] = ExpertProjectHistory.objects.filter(expert=expert_user)
+        return context
 
     def form_valid(self, form):
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
-        expert_form = form.save(commit=False)
+        try:
+            expert_form = expert_user.expertform
+            if expert_form :
+                expert_form.photo = form.cleaned_data['photo']
+                expert_form.fullname = form.cleaned_data['fullname']
+                expert_form.national_code = form.cleaned_data['national_code']
+                expert_form.special_field = form.cleaned_data['special_field']
+                expert_form.scientific_rank = form.cleaned_data['scientific_rank']
+                expert_form.university = form.cleaned_data['university']
+                expert_form.home_number = form.cleaned_data['home_number']
+                expert_form.phone_number = form.cleaned_data['phone_number']
+        except:
+            expert_form = form.save(commit=False)
         expert_form.expert_user = expert_user
         expert_form.email = expert_user.user.get_username()
         expert_form.save()
@@ -181,8 +180,9 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        expertForm = get_object_or_404(ExpertForm, expert_user__user=self.request.user)
-        context['expert_info_form'] = self.form_class(instance=expertForm)
+        expert = self.request.user.expertuser
+        expertForm = get_object_or_404(ExpertForm, expert_user=expert)
+        context['expert_info_form'] = self.form_class(instance=expertForm, initial={"userId":expert.userId})
         context['scientific_instance'] = ScientificRecord.objects.filter(expert_form=expertForm)
         context['executive_instance'] = ExecutiveRecord.objects.filter(expert_form=expertForm)
         context['research_instance'] = ResearchRecord.objects.filter(expert_form=expertForm)
@@ -199,17 +199,15 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             context['resume'] = expertForm.resume
         return context
 
-    def form_invalid(self, form):
-        print(form.errors)
-        return super().form_invalid(form)
-
     def form_valid(self, form):
         expertForm = get_object_or_404(ExpertForm, expert_user=self.request.user.expertuser)
+        expert_user = expertForm.expert_user
         if self.request.POST.get('autoAddProject'):
-            expertForm.expert_user.autoAddProject = True
+            expert_user.autoAddProject = True
         else:
-            expertForm.expert_user.autoAddProject = False
-        expertForm.expert_user.save()
+            expert_user.autoAddProject = False
+        expert_user.userId = form.cleaned_data['userId']
+        expert_user.save()
         expertForm.university = form.cleaned_data['university']
         expertForm.home_address = form.cleaned_data['home_address']
         expertForm.home_number = form.cleaned_data['home_number']
@@ -383,8 +381,7 @@ def scienfic_record_view(request):
         }
         return JsonResponse(data)
     else:
-        print(scientific_form.errors)
-        print('form error occured')
+        print('scientific_record form error occured')
         return JsonResponse(scientific_form.errors, status=400)
 
 
@@ -437,7 +434,7 @@ def paper_record_view(request):
         }
         return JsonResponse(data)
     else:
-        print('form error occured')
+        print('paper_record form error occured')
         return JsonResponse(paper_form.errors, status=400)
 
 
@@ -462,8 +459,8 @@ def UsualShowProject(request, project, data):
         data["status"] = "non active"
         data['techniques_list'] = Technique.get_technique_list()
         comments = []
-        comment_list = project.comment_set.all().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
-        sys_comment = project.comment_set.all().filter(sender_type="system").filter(expert_user=request.user.expertuser)
+        comment_list = project.get_comments().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
+        sys_comment = project.get_comments().filter(sender_type="system").filter(expert_user=request.user.expertuser)
         for comment in comment_list:
             try:
                 url = get_url(comment.attachment.url)
@@ -877,7 +874,6 @@ def GetResume(request):
     if expert_form.number_of_researcher == 4:
         data['researcher_count'] = '+60'
 
-    print(data['photo'])
     return JsonResponse(data=data)
 
 
@@ -1051,12 +1047,13 @@ def GetResearcherComment(request):
 
     return JsonResponse(data=data)
 
-
+@permission_required('expert.be_expert', login_url='/login/')
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
-        if ExpertUser.objects.filter(userId=user_id).count():
-            return JsonResponse({"is_unique": False})
+        if user_id != request.user.expertuser.userId:
+            if ExpertUser.objects.filter(userId=user_id).count():
+                return JsonResponse({"is_unique": False})
         return JsonResponse({"is_unique": True})
 
 
@@ -1064,12 +1061,10 @@ def checkUserId(request):
 def CollectData(request):
     link = request.POST['link']
     # link = "https://isid.research.ac.ir/Reza_Malekzadeh"
-    # try:
-    collectedData = webScraping.webScraping(link=link)
-
-    # except:
-    #
-    # return JsonResponse(data={}, status=400)
+    try:
+        collectedData = webScraping.webScraping(link=link)
+    except:
+        return JsonResponse(data={}, status=400)
     scientific_rank = ""
     special_field = ""
     if "پژوهشگر" in collectedData['information'][0]:
@@ -1098,7 +1093,7 @@ def CollectData(request):
     tempForm.save()
     tempForm.photo.save(str(request.user.expertuser) + "_photo.jpg", collectedData['photo'])
     for keyword in collectedData['keywords']:
-        key = Keyword(name=keyword)
+        key = Keyword.get_or_create(name=keyword)
         key.save()
         tempForm.keywords.add(key)
 
@@ -1112,6 +1107,7 @@ def CollectData(request):
         temp.save()
 
     data = {
+        "photo": collectedData['photo'],
         "scientific_rank": scientific_rank,
         "special_field": special_field,
         "university": collectedData['information'][-1],
@@ -1170,7 +1166,7 @@ def ActiveProject(request, project, data):
     data["budget_amount"] = project.project_form.required_budget
 
     data['comments'] = []
-    for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
+    for comment in project.get_comments().exclude(industry_user=None).filter(expert=project.expert_accepted):
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:
@@ -1182,12 +1178,12 @@ def ActiveProject(request, project, data):
             'attachment': url,
             'pk': comment.pk,
         })
-        if comment.sender_type == "expert" or comment.sender_type == "system":
+        if comment.sender_type == "industry" or comment.sender_type == "system":
             comment.status = "seen"
             comment.save()
     data['deadline'] = 'نا مشخص'
     data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-    evaluation_history = project.industry_creator.expertevaluateindustry_set.filter(project=project)
+    evaluation_history = project.expert_accepted.industryevaluateexpert_set.filter(project=project)
     data['status'] = project.status
     data['vote'] = False
     try:
@@ -1227,6 +1223,16 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         project = get_object_or_404(Project, code=kwargs["code"])
-        context['project'] = ActiveProject(request=self.request, project=project, data=context)
+        context = ActiveProject(request=self.request, project=project, data=context)
         context['requestResearcherForm'] = forms.RequestResearcherForm()
+        context['researcher_accepted'] = []
+        for researcher in project.researcher_accepted.all():
+            researcher = {
+                "id": researcher.pk,
+                "fullname": researcher.researcherprofile.fullname,
+                "photo": researcher.researcherprofile.photo
+            }
+            context['researcher_accepted'].append(researcher)
+        if project.researcher_accepted.all():
+            context['researcherComment'] = project.get_comments().exclude(researcher=project.researcher_accepted[0]).exlude(expert=None)
         return context

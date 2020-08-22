@@ -129,7 +129,16 @@
                                         <div class="col-lg-12">
                                             <div class="form-group form-group-auto-check">
                                                 <label for="userID">شناسه کاربری</label>
-                                                <input type="text" class="w-100" id="userID">
+                                                {% if form.userId.errors %}
+                                                    {{ expert_info_form.userId |attr:"class:error w-100" |attr:"id:userID" }}
+                                                {% else %}
+                                                    {{ expert_info_form.userId |attr:"class:w-100" |attr:"id:userID" }}
+                                                {% endif %}
+                                                <div class="userId-error">
+                                                    <div class="error">
+                                                        <span class="error-body">{{ form.userId.errors }}</span>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group__status">
                                                     <div class="success-status">
                                                         <i class="fas fa-check"></i>
