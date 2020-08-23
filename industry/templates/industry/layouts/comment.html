@@ -6,7 +6,7 @@
          aria-orientation="vertical">
         {% if comments %}
             <a class='nav-link active' data-toggle='pill' role='tab' aria-controls='v-pills-home' aria-selected='true'
-                id="v-pills-expert-1">
+               id="v-pills-expert-1">
                 سپهر متانت
             </a>
         {% endif %}
@@ -26,12 +26,10 @@
     </div>
     <div class="industry-comment"></div>
     <div class="project-comment-innerDiv">
-        <div class="no-comment" style="{% if not comments %}display:block;{% endif %}">
-            <img class="no comment" src="{% static 'img/no_message.svg' %}" alt="no message">
-            <h5 dir="rtl">نظری درباره این پروژه ثبت نشده!</h5>
-            <p>
-                در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.
-            </p>
+        <div class="no-comment" style="{% if project_pk %}{% if not comments %}display:block;{% endif %}{% endif %}">
+            <img src="{% static 'img/no_message.svg' %}" alt="no message">
+            <h6>نظری درباره این پروژه ثبت نشده!</h6>
+            <pre>در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.</pre>
         </div>
         <div class="comments">
             {% if comments %}

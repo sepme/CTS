@@ -4,299 +4,301 @@
 {% block title %}اطلاعات کاربری{% endblock %}
 {% block name %}{{ request.user.industryuser.profile }}{% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-12 text-right">
-            <h3 class="h3 border-bottom p-top-15">اطلاعات کاربری</h3>
+    <form action="" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-12 text-right">
+                <h3 class="h3 p-top-15">اطلاعات کاربری</h3>
+                <button type="submit" class="top-page-button border-button"
+                        style="position: absolute;left: 0;top: 0;">
+                    <i class="fas fa-check"></i>
+                    اعمال تغییرات
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <form enctype="multipart/form-data" method="POST">
-                {% csrf_token %}
-                {% if request.user.industryuser.industry_type == "R&D" %}
-                    <div class="card box flow-root-display w-100">
-                        <div class="box-header text-right">
-                            <h6>اطلاعات واحد تحقیق و توسعه</h6>
+        <div class="row">
+            <div class="col-lg-12 text-right">
+                <nav class="nav-tabs-container">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        {% if request.user.industryuser.industry_type == "R&D" %}
+                            <a class="nav-item nav-link active fs-15" id="nav-personal-info-tab" data-toggle="tab"
+                               href="#nav-personal-info" role="tab"
+                               aria-controls="nav-company-info" aria-selected="true">اطلاعات واحد</a>
+                            <a class="nav-item nav-link fs-15" id="nav-company-info-tab" data-toggle="tab"
+                               href="#nav-company-info" role="tab"
+                               aria-controls="nav-company-info" aria-selected="false">اطلاعات شرکت</a>
+                        {% else %}
+                            <a class="nav-item nav-link active fs-15" id="nav-personal-info-tab" data-toggle="tab"
+                               href="#nav-personal-info" role="tab"
+                               aria-controls="nav-personal-info" aria-selected="true">اطلاعات مجموعه</a>
+                        {% endif %}
+                        <a class="nav-item nav-link fs-15" id="nav-interface-tab" data-toggle="tab"
+                           href="#nav-interface"
+                           role="tab"
+                           aria-controls="nav-interface" aria-selected="false">مشخصات رابط</a>
+                    </div>
+                </nav>
+                <div class="tab-content mt-3" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-personal-info" role="tabpanel"
+                         aria-labelledby="nav-personal-info-tab">
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-body">
+                                {% if request.user.industryuser.industry_type == "R&D" %}
+                                    <div class="row mt-3" style="direction: ltr!important;">
+                                        <div class="col-lg-6 text-center">
+                                            <div style="position: relative">
+                                                <label for="id_photo" class="upload text-center">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </label>
+                                                <img
+                                                        {% if user.industryuser.profile.photo %}
+                                                            src="/media/{{ user.industryuser.profile.photo.name }}"
+                                                        {% else %}
+                                                            src="{% static 'industry/img/profile.jpg' %}"
+                                                        {% endif %}
+                                                            alt="profile" class="profile" width="150px" height="150px">
+                                                {% render_field form.photo accept="image/png, image/jpeg" %}
+                                            </div>
+                                            <div class="mt-1">بارگزاری تصویر پروفایل</div>
+                                        </div>
+                                        <div class="col-lg-6 p-0">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="id_RandDname">نام واحد</label>
+                                                    {% render_field RandD_form.RandDname class+="w-100" readonly="true" %}
+                                                </div>
+                                            </div>
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="id_registration_number">شماره ثبت</label>
+                                                        {% render_field RandD_form.registration_number class+="w-100" readonly="true" %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="id_date_of_foundation">سال تاسیس</label>
+                                                        {% render_field RandD_form.date_of_foundation class+="w-100" readonly="true" %}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="id_research_field">حوزه فعالیت</label>
+                                                {% render_field RandD_form.research_field class+="w-100" readonly="true" %}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 rankDiv">
+                                            <div class="form-group">
+                                                <label class="rankLabel" for="id_RandD_type">نوع شرکت</label>
+                                                <select id="id_type_group" name="RandD_type" class="w-100">
+                                                    {% for option in RandD_form.RandD_type %}
+                                                        {% if not forloop.first %}
+                                                            {{ option }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                                {% render_field RandD_form.RandD_type.errors %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="id_address">آدرس</label>
+                                                {% render_field RandD_form.address dir="rtl" rows="3" class="w-100" %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="id_phone_number">تلفن</label>
+                                                {% render_field RandD_form.phone_number class+="w-100" readonly="true" %}
+                                                {% render_field RandD_form.phone_number.errors %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="row mt-3" style="direction: ltr!important;">
+                                        <div class="col-lg-6 text-center">
+                                            <div style="position: relative">
+                                                <label for="id_photo" class="upload text-center">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </label>
+                                                <img
+                                                        {% if user.industryuser.profile.photo %}
+                                                            src="/media/{{ user.industryuser.profile.photo.name }}"
+                                                        {% else %}
+                                                            src="{% static 'industry/img/profile.jpg' %}"
+                                                        {% endif %}
+                                                            alt="profile" class="profile" width="150px" height="150px">
+                                                {#                                            <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg"#}
+                                                {#                                                   hidden>#}
+                                                {% render_field form.photo accept="image/png, image/jpeg" %}
+                                            </div>
+                                            <div class="mt-1">بارگزاری تصویر پروفایل</div>
+                                        </div>
+                                        <div class="col-lg-6 p-0">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="id_name">نام مجموعه</label>
+                                                    {% render_field researchgroup_form.name class+="w-100" readonly="true" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="id_research_field">نام مرکز/پژوهشکده تابعه</label>
+                                                    {% render_field researchgroup_form.subordinateResearch class+="w-100" readonly="true" %}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 rankDiv">
+                                            <div class="form-group" style="direction: ltr">
+                                                <label class="rankLabel" for="id_type_group">نوع مجموعه</label>
+                                                <select id="id_type_group" name="type_group" class="w-100">
+                                                    {% for option in researchgroup_form.type_group %}
+                                                        {% if not forloop.first %}
+                                                            {{ option }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                                {% render_field researchgroup_form.type_group.errors %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="id_industry_address">نشانی محل استقرار</label>
+                                                {% render_field researchgroup_form.address dir="rtl" rows="3" class="w-100" %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="id_phone_number">تلفن</label>
+                                                {% render_field researchgroup_form.phone_number class+="w-100" readonly="true" %}
+                                                {% render_field researchgroup_form.phone_number.errors %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-lg-12 text-center">
-                                    <label for="id_photo" class="upload text-center">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </label>
-                                    <img
-                                            {% if user.industryuser.profile.photo %}
-                                                src="/media/{{ user.industryuser.profile.photo.name }}"
-                                            {% else %}
-                                                src="{% static 'industry/img/profile.jpg' %}"
-                                            {% endif %}
-                                                alt="profile" class="profile" width="150px" height="150px">
-                                    <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg" hidden>
-                                    {#                                {% render_field form.photo accept="image/png, image/jpeg" %}#}
-                                </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-company-info" role="tabpanel"
+                         aria-labelledby="nav-personal-info-tab">
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-header text-right">
+                                <h6>درباره شرکت</h6>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_RandDname">نام واحد</label>
-                                        {#                                <input type="text" id="firmName" class="w-100">#}
-                                        {% render_field RandD_form.RandDname class+="w-100" readonly="true" %}
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <span class="sub-header">لطفا چند نمونه از خدمات / محصولاتی را که توسط شرکت شما ارائه می شود، ذکر بفرمایید.</span>
+                                        {% render_field RandD_form.services_products class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ...." style="margin-top: 0" %}
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label for="id_registration_number">شماره ثبت</label>
-                                        {#                                <input type="text" id="registerNum" class="w-100">#}
-                                        {% render_field RandD_form.registration_number class+="w-100" readonly="true" %}
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <span class="sub-header">لطفا چند نمونه از افتخارات شرکت مربوطه را نام ببرید.</span>
+                                        {% render_field RandD_form.awards_honors class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label for="id_date_of_foundation">سال تاسیس</label>
-                                        {#                                <input type="text" id="establishmentDate" class="w-100">#}
-                                        {% render_field RandD_form.date_of_foundation class+="w-100" readonly="true" %}
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                    <span class="sub-header">
+                                        لطفا اظهارنامه مالیاتی سال گذشته خود را ارسال کنید. همچنین، درصدی از گردش مالی که به تحقیق و توسعه اختصاص داده شده را نیز مشخص بفرمایید.
+                                    </span>
+                                        <div class="text-center w-100">
+                                            <label class="attach-label">
+                                                <input type="file" name="tax_declaration" id="id_tax_declaration"
+                                                       class="attach-input">
+                                                {% render_field form.tax_declaration class+="attach-input" %}
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <span class="file-name">بارگذاری اظهارنامه مالیاتی ...</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-interface" role="tabpanel" aria-labelledby="nav-interface-tab">
+                        <div class="card box flow-root-display w-100">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-7 text-right">
                                     <div class="form-group">
-                                        <label for="id_research_field">حوزه فعالیت</label>
-                                        {#                                <input type="text" id="Field" class="w-100">#}
-                                        {% render_field RandD_form.research_field class+="w-100" readonly="true" %}
+                                        <label for="id_fullname">نام</label>
+                                        {% if interface_form.fullname.errors %}
+                                            {% render_field interface_form.fullname class+="w-100 error" %}
+                                        {% else %}
+                                            {% render_field interface_form.fullname class+="w-100" %}
+                                        {% endif %}
+                                        <div class="error">
+                                            {% render_field interface_form.fullname.errors %}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 rankDiv">
+                                <div class="col-lg-5 text-right">
                                     <div class="form-group">
-                                        <label class="rankLabel" for="id_RandD_type">نوع شرکت</label>
-                                        <select id="id_type_group" name="RandD_type" class="w-100">
-                                            {% for option in RandD_form.RandD_type %}
-                                                {% if not forloop.first %}
-                                                {{ option }}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                        {% render_field RandD_form.RandD_type.errors %}
+                                        <label for="id_position">سمت</label>
+                                        {% if interface_form.position.errors %}
+                                            {% render_field interface_form.position class+="w-100 error" %}
+                                        {% else %}
+                                            {% render_field interface_form.position class+="w-100" %}
+                                        {% endif %}
+                                        <div class="error">
+                                            {% render_field interface_form.position.errors %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="id_address">آدرس</label>
-                                        {% render_field RandD_form.address dir="rtl" rows="3" class="w-100" %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-3">
+                                <div class="col-lg-3 text-right">
                                     <div class="form-group">
                                         <label for="id_phone_number">تلفن</label>
-                                        {#                                <input type="text" id="phoneNum" class="w-100">#}
-                                        {% render_field RandD_form.phone_number class+="w-100" readonly="true" %}
-                                        {% render_field RandD_form.phone_number.errors %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="card box flow-root-display w-100">
-                        <div class="box-header text-right">
-                            <h6>اطلاعات مجموعه پژوهشی</h6>
-                        </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-lg-12 text-center">
-                                    <label for="id_photo" class="upload text-center">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </label>
-                                    <img
-                                            {% if user.industryuser.profile.photo %}
-                                                src="/media/{{ user.industryuser.profile.photo.name }}"
-                                            {% else %}
-                                                src="{% static 'industry/img/profile.jpg' %}"
-                                            {% endif %}
-                                                alt="profile" class="profile" width="150px" height="150px">
-                                    <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg" hidden>
-                                    {#                                {% render_field form.photo accept="image/png, image/jpeg" %}#}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_name">نام مجموعه</label>
-                                        {#                                <input type="text" id="firmName" class="w-100">#}
-                                        {% render_field researchgroup_form.name class+="w-100" readonly="true" %}
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 rankDiv">
-                                    <div class="form-group">
-                                        <label class="rankLabel" for="id_type_group">نوع مجموعه</label>
-                                        <select id="id_type_group" name="type_group" class="w-100">
-                                            {% for option in researchgroup_form.type_group %}
-                                                {% if not forloop.first %}
-                                                {{ option }}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% comment %} <option value="0"
-                                                    {% if researchgroup_form.industr_type.value == 0 %}
-                                                    selected
-                                                    {% endif %}>
-                                                خصوصی
-                                            </option>
-                                            <option value="1"
-                                                    {% if researchgroup_form.type_group.value == 1 %}
-                                                    selected
-                                                    {% endif %}>
-                                                دولتی
-                                            </option> {% endcomment %}
-                                        </select>
-                                        {% render_field researchgroup_form.type_group.errors %}
+                                        {% if interface_form.phone_number.errors %}
+                                            {% render_field interface_form.phone_number class+="w-100 error" %}
+                                        {% else %}
+                                            {% render_field interface_form.phone_number class+="w-100" %}
+                                        {% endif %}
+                                        <div class="error">
+                                            {% render_field interface_form.phone_number.errors %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-4 text-right">
                                     <div class="form-group">
-                                        <label for="id_research_field">نام مرکز/پژوهشکده تابعه</label>
-                                        {#                                <input type="text" id="Field" class="w-100">#}
-                                        {% render_field researchgroup_form.subordinateResearch class+="w-100" readonly="true" %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_industry_address">نشانی محل استقرار</label>
-                                        {% render_field researchgroup_form.address dir="rtl" rows="3" class="w-100" %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="id_phone_number">تلفن</label>
-                                        {#                                <input type="text" id="phoneNum" class="w-100">#}
-                                        {% render_field researchgroup_form.phone_number class+="w-100" readonly="true" %}
-                                        {% render_field researchgroup_form.phone_number.errors %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-                <div class="card box flow-root-display w-100">
-                    <div class="box-header text-right">
-                        <h6>مشخصات رابط</h6>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-7 text-right">
-                                <div class="form-group">
-                                    <label for="id_fullname">نام رابط</label>
-                                    {% if interface_form.fullname.errors %}
-                                        {% render_field interface_form.fullname class+="w-100 error" %}
-                                    {% else %}
-                                        {% render_field interface_form.fullname class+="w-100" %}
-                                    {% endif %}
-                                    <div class="error">
-                                        {% render_field interface_form.fullname.errors %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5 text-right">
-                                <div class="form-group">
-                                    <label for="id_position">سمت رابط</label>
-                                    {% if interface_form.position.errors %}
-                                        {% render_field interface_form.position class+="w-100 error" %}
-                                    {% else %}
-                                        {% render_field interface_form.position class+="w-100" %}
-                                    {% endif %}
-                                    <div class="error">
-                                        {% render_field interface_form.position.errors %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3 text-right">
-                                <div class="form-group">
-                                    <label for="id_phone_number">تلفن رابط</label>
-                                    {% if interface_form.phone_number.errors %}
-                                        {% render_field interface_form.phone_number class+="w-100 error" %}
-                                    {% else %}
-                                        {% render_field interface_form.phone_number class+="w-100" %}
-                                    {% endif %}
-                                    <div class="error">
-                                        {% render_field interface_form.phone_number.errors %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4 text-right">
-                                <div class="form-group">
-                                    <label for="id_email">رایانامه رابط</label>
-                                    {% if interface_form.email.errors %}
-                                        {% render_field interface_form.email class+="w-100 error" %}
-                                    {% else %}
-                                        {% render_field interface_form.email class+="w-100" %}
-                                    {% endif %}
-                                    <div class="error">
-                                        {% render_field interface_form.email.errors %}
+                                        <label for="id_email">رایانامه</label>
+                                        {% if interface_form.email.errors %}
+                                            {% render_field interface_form.email class+="w-100 error" %}
+                                        {% else %}
+                                            {% render_field interface_form.email class+="w-100" %}
+                                        {% endif %}
+                                        <div class="error">
+                                            {% render_field interface_form.email.errors %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% if request.user.industryuser.industry_type == "R&D" %}
-                    <div class="card box flow-root-display w-100">
-                        <div class="box-header text-right">
-                            <h6>درباره شرکت</h6>
-                        </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-lg-12 text-right">
-                                    <span class="sub-header">لطفا چند نمونه از خدمات / محصولاتی را که توسط شرکت شما ارائه می شود، ذکر بفرمایید.</span>
-                                    {#                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>#}
-                                    {% render_field RandD_form.services_products class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ...." style="margin-top: 0" %}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 text-right">
-                                    <span class="sub-header">لطفا چند نمونه از افتخارات شرکت مربوطه را نام ببرید.</span>
-                                    {#                                <textarea class="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0"></textarea>#}
-                                    {% render_field RandD_form.awards_honors class+="w-100" rows="5" dir="rtl" placeholder="اینجا وارد کنید ..." style="margin-top: 0" %}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 text-right">
-                                <span class="sub-header">
-                                    لطفا اظهارنامه مالیاتی سال گذشته خود را ارسال کنید. همچنین، درصدی از گردش مالی که به تحقیق و توسعه اختصاص داده شده را نیز مشخص بفرمایید.
-                                </span>
-                                    <div class="text-center w-100">
-                                        <label class="attach-label">
-                                            <input type="file" name="tax_declaration" id="id_tax_declaration"
-                                                   class="attach-input">
-                                            {#                                        {% render_field form.tax_declaration class+="attach-input" %}#}
-                                            <i class="fas fa-cloud-upload-alt"></i>
-                                            <span class="file-name">بارگذاری اظهارنامه مالیاتی ...</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-                <button type="submit" class="form-submit">
-                    <i class="fas fa-check"></i>
-                    ذخیره تغییرات
-                </button>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
     <a href="#top" class="top-button">
         <i class="fas fa-angle-up"></i>
     </a>

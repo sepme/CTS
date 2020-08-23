@@ -161,13 +161,13 @@ function setTab(data) {
     if (data.expert_messaged.length === 0) {
         console.log(data.expert_messaged);
         $(".project-comment-innerDiv .add-comment").css("display", "none");
-        let no_comment = "<div class='no-comment'>" +
-            "<img src='../../../../static/img/hourglass.svg' alt=''>" +
-            "<h6>لطفا شکیبا باشید!</h6>" +
-            "<pre>متاسفانه، هنوز پروژه شما توسط استادی بررسی نشده است.</pre>" +
-            "</div>";
+        let no_comment = `<div class='no-comment not-requested'>
+            <img src='../../../../static/img/hourglass.svg' alt=''>
+            <h6>لطفا شکیبا باشید!</h6>
+            <pre>متاسفانه، هنوز پروژه شما توسط استادی بررسی نشده است.</pre>
+            </div>`;
         $(".project-comment-innerDiv").append(no_comment);
-        $(".project-comment-innerDiv .no-comment").addClass("show");
+        $(".project-comment-innerDiv .no-comment.not-requested").addClass("show");
         $(".confirm-request").attr("style", "display : none");
         $(".comment").attr("style", "display : none");
         $(".comments").attr("style", "display : none");
@@ -330,6 +330,7 @@ function setIndustryComment(data) {
 }
 
 function setComment(data) {
+    console.log(data);
     let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
     // data = data.comment;
     let comments_code = "";
@@ -394,7 +395,7 @@ function setComment(data) {
                 "   </div>" +
                 "</div>";
         } else { //system
-            comments_code += "<div class='my-comment'>" +
+            comments_code += "<div class='system-comment'>" +
                 "<div class='comment-body' dir='ltr'>" +
                 "<pre>" +
                 data[i].text +
@@ -572,8 +573,18 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
+    //****************************************//
+    //  New Project
+    //****************************************//
+    if (window.location.href.indexOf("/industry/newProject/") !== -1) {
+        $("input#id_required_budget").on("keyup", function () {
+            $(this).attr();
+        });
+    }
+    //****************************************//
+    //  End New Project
+    //****************************************//
 
-    // Project Setting Auto Search
     function selecting_expert(element) {
         element.on("keyup", function () {
             const thisElement = $(this);
@@ -804,14 +815,16 @@ $(document).ready(function () {
                         $('.image-btn-circle').prop('disabled', true);
                         $(".row.add-comment").css("display", "none");
                         dialog.find(".card").addClass("b-x0");
-                        let info_msg = "<div class='message info image-right'>" +
-                            "<img src='../../../../static/img/blue_warning.svg' alt=''>" +
-                            "<h5>توجه</h5>" +
-                            "<p>پروژه شما در حال بررسی توسط کارشناسان ما می‌باشد تا در صورت نیاز به اصلاح، با شما تماس گرفته شود.</p>" +
-                            "<p>این فرآیند، حداکثر <strong>8 ساعت</strong> زمان خواهد برد.</p>" +
-                            "<p>با تشکر از صبر و بردباری شما</p>" +
-                            "</div>";
-                        dialog.find(".container").append(info_msg);
+                        if (dialog.find(".container .message.info.image-right").length === 0) {
+                            let info_msg = "<div class='message info image-right'>" +
+                                "<img src='../../../../static/img/blue_warning.svg' alt=''>" +
+                                "<h5>توجه</h5>" +
+                                "<p>پروژه شما در حال بررسی توسط کارشناسان ما می‌باشد تا در صورت نیاز به اصلاح، با شما تماس گرفته شود.</p>" +
+                                "<p>این فرآیند، حداکثر <strong>8 ساعت</strong> زمان خواهد برد.</p>" +
+                                "<p>با تشکر از صبر و بردباری شما</p>" +
+                                "</div>";
+                            dialog.find(".container").append(info_msg);
+                        }
                     } else {
                         if (data.vote)
                             $('.vote').attr('style', "display : block;");

@@ -29,6 +29,7 @@
                 right: {% date_to_percent project_pk=project_pk phase=3 type="w" %}%;
             }
         }
+
         @media (min-width: 992px) {
             .project-progress .line-100:after {
                 height: calc({% project_progress  project_pk %}% + 6%);
@@ -124,7 +125,7 @@
                                 <div class="col-lg-12 text-right">
                                     <span class="section-title">مشخصات پروژه</span>
                                     <div class="section">
-                                        <div class="row">
+                                        <div class="row mbottom-lg-25">
                                             <div class="col-md-9">
                                                 <div class="row m-top-10">
                                                     <div class="col-md-6">
@@ -275,29 +276,35 @@
                                                 {#                                                </button>#}
                                                 <div class="section">
                                                     <div class="row">
-                                                        <div class="col-12">
-                                                            <div class="horizontal-avatar-list owl-carousel owl-theme">
-                                                                {% for researcher in researcher_accepted %}
-                                                                    <div class="item">
-                                                                        <div class="avatar-item">
-                                                                            <img src="/media/{{ researcher.photo }}"
-                                                                                 alt="{{ researcher.fullname }}پروفایل ">
-                                                                            <div class="info">
-                                                                                <h3>{{ researcher.fullname }}</h3>
-                                                                                <button value="{{ project.pk }}"
-                                                                                        id="{{ researcher.id }}"
-                                                                                        data-url="{% url 'researcher:show_resume_preview' %}"
-                                                                                        data-toggle="modal"
-                                                                                        data-target="#researcherInfo">
-                                                                                    رزومه
-                                                                                </button>
+                                                        <div class="col-12 text-center">
+                                                            {% if researcher_accepted %}
+                                                                <div class="horizontal-avatar-list owl-carousel owl-theme">
+                                                                    {% for researcher in researcher_accepted %}
+                                                                        <div class="item">
+                                                                            <div class="avatar-item">
+                                                                                <img src="/media/{{ researcher.photo }}"
+                                                                                     alt="{{ researcher.fullname }}پروفایل ">
+                                                                                <div class="info">
+                                                                                    <h3>{{ researcher.fullname }}</h3>
+                                                                                    <button value="{{ project.pk }}"
+                                                                                            id="{{ researcher.id }}"
+                                                                                            data-url="{% url 'researcher:show_resume_preview' %}"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#researcherInfo">
+                                                                                        رزومه
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                {% empty %}
-
-                                                                {% endfor %}
-                                                            </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% else %}
+                                                                <img src="{% static 'img/empty-tray.svg' %}"
+                                                                     alt="no researcher" height="100px"
+                                                                     class="rounded-0">
+                                                                <h5>پژوهشگری برای این پروژه ثبت نشده است!</h5>
+                                                                <p></p>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 </div>

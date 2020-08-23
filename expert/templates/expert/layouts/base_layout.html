@@ -257,6 +257,8 @@
                     message: "بازخورد شما با موفقیت ارسال شد!",
                     position: 'bottomLeft'
                 });
+                $("form#feedback_ajax_form")[0].reset();
+                $("#feedbackModal").modal("hide");
             },
             error: function (data) {
                 console.log(data);
