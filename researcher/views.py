@@ -188,6 +188,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         status = models.Status.objects.get(researcher_user=researcher)
         status.status = 'not_answered'
         status.save()
+        researcher.userId = form.cleaned_data['userId']
+        researcher.save()
         return super().form_valid(form)
 
 
@@ -407,7 +409,7 @@ def AddTechnique(request):
                 subject=subject,
                 message=message,
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER, ],
+                recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
                 fail_silently=False
             )
         except TimeoutError:
@@ -595,7 +597,7 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
                         subject=subject,
                         message=message,
                         from_email=settings.EMAIL_HOST_USER,
-                        recipient_list=[email, "a.jafarzadeh1998@gmail.com"],
+                        recipient_list=[email, "sepehr.metanat@gmail.com"],
                     )
                 except TimeoutError:
                     return HttpResponse('Timeout Error!!')
@@ -634,7 +636,7 @@ def ajax_Technique_review(request):
                 subject=subject,
                 message=message,
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER],
+                recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
             )
         except TimeoutError:
             return HttpResponse('Timeout Error!!')

@@ -30,7 +30,15 @@
                             </div>
                             <div class="form-group form-group-auto-check">
                                 <label for="userID">شناسه کاربری</label>
-                                <input type="text" class="w-100" id="userID">
+                                {% comment %} <input type="text" class="w-100" id="userID"> {% endcomment %}
+                                {% if form.userId.errors %}
+                                    {{ form.userId |attr:"class:error w-100" |attr:"id:userID" }}
+                                {% else %}
+                                    {{ form.userId |attr:"class:w-100" |attr:"id:userID" }}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.userId.errors %}</span>
+                                </div>
                                 <div class="form-group__status">
                                     <div class="success-status">
                                         <i class="fas fa-check"></i>

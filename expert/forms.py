@@ -71,9 +71,7 @@ class InitialInfoForm(forms.ModelForm):
     def clean_userId(self):
         data = self.cleaned_data["userId"]
         if not bool(USER_ID_PATTERN.match(data)):
-            raise ValidationError('شناسه کاربری فقط شامل حروف و اعداد و خط زیر است.')
-        if data == "":
-            raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
+            raise ValidationError('فقط شامل حروف و اعداد و خط زیر است.')
         return data
 
     def clean_home_number(self):
@@ -130,9 +128,7 @@ class ExpertInfoForm(forms.ModelForm):
     def clean_userId(self):
         data = self.cleaned_data["userId"]
         if not bool(USER_ID_PATTERN.match(data)):
-            raise ValidationError('شناسه کاربری فقط شامل حروف و اعداد و خط زیر است.')
-        if data == "":
-            raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
+            raise ValidationError('فقط شامل حروف و اعداد و خط زیر است.')
         return data
     
 
