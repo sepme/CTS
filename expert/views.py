@@ -1088,6 +1088,7 @@ def CollectData(request):
         scientific_rank = 1
         special_field = collectedData['information'][0][5:]
     tempForm = TempExpertForm(expertUser=request.user.expertuser,
+                              fullname=collectedData['fullname'],
                               special_field=special_field,
                               scientific_rank=scientific_rank,
                               university=collectedData['information'][-1]
@@ -1110,6 +1111,7 @@ def CollectData(request):
 
     data = {
         "photo": collectedData['photo'],
+        "fullname": collectedData['fullname'],
         "scientific_rank": scientific_rank,
         "special_field": special_field,
         "university": collectedData['information'][-1],

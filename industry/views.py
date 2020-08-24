@@ -585,8 +585,16 @@ def ProjectSetting(request):
 
 def searchUserId(request):
     searchKey = request.POST['searchKey']
-    suggestedExperts = ExpertUser.objects.filter(userId__contain=searchKey).values('userId')
-    data = {"expertId": suggestedExperts}
+    suggestedExperts = ExpertUser.objects.filter(userId__icontains=searchKey)
+    data = {"experts": []}
+    for expert in suggestedExperts:
+        expertData = {
+            "userId" : expert.userId,
+            "fullname" : expert.expertform.fullname,
+        }
+        if expert.expertform.photo:
+            expertData['photo'] = expert.expertform.photo.url
+        data['experts'].append(expertData)
     return JsonResponse(data=data)
 
 class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):

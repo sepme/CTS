@@ -366,6 +366,7 @@ class RequestResearcher(models.Model):
         return False
 class TempExpertForm(models.Model):
     expertUser      = models.OneToOneField(ExpertUser, verbose_name="استاد", on_delete=models.CASCADE)
+    fullname        = models.CharField(verbose_name="نام و نام خانوادگی" ,max_length=150, null=True, blank=True)
     photo           = models.ImageField(upload_to="tempExpertForm", height_field=None, width_field=None, max_length=None, null=True, blank=True)
     special_field   = models.CharField(max_length=100, null=True, blank=True)
     scientific_rank = models.IntegerField(verbose_name="مرتبه علمی", null=True, blank=True)
