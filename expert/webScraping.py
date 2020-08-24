@@ -64,11 +64,17 @@ def webScraping(link):
     information_list = []
     for information in informations:
         information_list.append(information.text)
-    photo_in_byte = urllib.request.urlopen("https://isid.research.ac.ir/repo/Person/gxunjcqd5f10sana.jpg").read()
+
+    fullname = driver.find_element_by_class_name("TitrHuge").text
+
+    img = driver.find_element_by_class_name("image")
+    src = img.get_attribute('src')
+    photo_in_byte = urllib.request.urlopen(src).read()
     photo = io.BytesIO(photo_in_byte)
     driver.close()
 
     result = {
+        "fullname"    : fullname,
         "keywords"    : keyword_list,
         "photo"       : photo,
         "information" : information_list,
