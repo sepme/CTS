@@ -12,7 +12,7 @@ from django.core.exceptions import PermissionDenied
 
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
-import json
+import json, re
 
 from . import forms, webScraping
 from .models import *
@@ -22,6 +22,8 @@ from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance, RequestedProject
 from chamran_admin.models import Message
+
+USER_ID_PATTERN = re.compile("[\w]+$")
 
 
 def get_url(rawUrl):
@@ -91,6 +93,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         expert_form.expert_user = expert_user
         expert_form.email = expert_user.user.get_username()
         expert_form.save()
+        expert_user.userId = form.cleaned_data['userId']
         expert_user.status = 'free'
         expert_user.save()
         return HttpResponseRedirect(reverse('expert:index'))
@@ -171,7 +174,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = forms.ExpertInfoForm
     model = ExpertForm
     login_url = '/login/'
-    success_url = "/expert/"
+    success_url = "/expert/userInfo"
     permission_required = ('expert.be_expert',)
 
     def get_context_data(self, **kwargs):
@@ -454,8 +457,8 @@ def UsualShowProject(request, project, data):
     if "status" not in data.keys():
         data["status"] = "non active"
         data['techniques_list'] = Technique.get_technique_list()
-        comments = []
-        comment_list = project.get_comments().filter(expert_user=request.user.expertuser).exclude(industry_user=None)
+        comments = []        
+        comment_list = project.get_comments().filter(expert_user=request.user.expertuser).exclude(industry_user=None)        
         sys_comment = project.get_comments().filter(sender_type="system").filter(expert_user=request.user.expertuser)
         for comment in comment_list:
             try:
@@ -853,8 +856,9 @@ def GetResume(request):
 
         "awards": expert_form.awards,
         'languages': expert_form.languages,
-        'resume': expert_form.resume.url,
     }
+    if expert_form.resume:
+        data['resume'] = expert_form.resume.url
 
     if expert_form.has_industrial_research == 'yes':
         data['has_industrial_research'] = 'داشته'
@@ -1047,10 +1051,12 @@ def GetResearcherComment(request):
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
+        if not bool(USER_ID_PATTERN.match(user_id)):
+            return JsonResponse({"invalid_input": True})
         if user_id != request.user.expertuser.userId:
             if ExpertUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False})
-        return JsonResponse({"is_unique": True})
+                return JsonResponse({"is_unique": False, "invalid_input": False})
+        return JsonResponse({"is_unique": True, "invalid_input": False})
 
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -1230,5 +1236,5 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
             }
             context['researcher_accepted'].append(researcher)
         if project.researcher_accepted.all():
-            context['researcherComment'] = project.get_comments().exclude(researcher=project.researcher_accepted[0]).exlude(expert=None)
+            context['researcherComment'] = project.get_comments().exclude(researcher_user=project.researcher_accepted.all()[0]).exclude(expert_user=None)
         return context

@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
@@ -26,6 +27,7 @@ from expert.models import ExpertUser
 from researcher.models import Technique
 from chamran_admin.models import Message
 
+USER_ID_PATTERN = re.compile('[\w]+')
 
 # function name says it all :)
 def gregorian_to_numeric_jalali(date):
@@ -74,7 +76,11 @@ def usualShow(request, project):
     data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(data['key_words']):
         data['key_words'][ind] = value.__str__()
-    data['required_technique'] = []
+    
+    tempTech = []
+    for tech in data['techniques']:
+        tempTech.append(tech.technique_title)
+    data["techniques"] = tempTech
     evaluation_history = request.user.industryuser.expertevaluateindustry_set.filter(project=project)
     data['status'] = project.status
     data['accepted'] = False
@@ -296,8 +302,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.industryuser.status != 'signed_up':
-            industry_user = self.request.user.industryuser
+        industry_user = self.request.user.industryuser
+        if industry_user.status != 'signed_up':
             context['projects'] = models.Project.objects.filter(industry_creator=industry_user)
         else:
             context['RandD_form'] = forms.RandDBasicInfoForm
@@ -306,12 +312,15 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def form_invalid(self, form):
         context = self.get_context_data()
+        context['form_filled'] = None
         if self.request.POST['industry_type'] == "group":
             researchGroup_form = forms.ResearchGroupBasicInfoForm(self.request.POST, self.request.FILES)
             context['researchGroup_form'] = researchGroup_form
+            context['form_filled'] = "researchGroup"
         else:
             RandD_form = forms.RandDBasicInfoForm(self.request.POST, self.request.FILES)
             context['RandD_form'] = RandD_form
+            context['form_filled'] = "RandD_form"
         context['form'] = form
         return render(request=self.request, template_name=self.template_name, context=context)
         # return super().form_invalid(form)
@@ -338,6 +347,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             if RandDForm.is_valid():
                 interfacePerson = form.save()
                 RandDProfile = RandDForm.save(commit=False)
+                RandDProfile.name = RandDForm.cleaned_data['RandDname']
                 RandDProfile.industry_user = industry_user
                 RandDProfile.interfacePerson = interfacePerson
                 RandDProfile.save()
@@ -370,7 +380,9 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
         if type(profile) == models.RandDProfile:
             context['type_form'] = "R&D"
             context['RandD_form'] = forms.RandDInfoForm(instance=profile,
-                                                        initial={'RandD_type': profile.RandD_type})
+                                                        initial={
+                                                            'RandD_type': profile.RandD_type,
+                                                            "RandDname": profile.name})
         else:
             context['type_form'] = "group"
             context['researchgroup_form'] = forms.ResearchGroupInfoForm(instance=profile,
@@ -395,6 +407,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
                     industryForm.tax_declaration = form.cleaned_data['tax_declaration']
                     industryForm.services_products = form.cleaned_data['services_products']
                     industryForm.awards_honors = form.cleaned_data['awards_honors']
+                    industry_user.userId = form.cleaned_data['userId']                    
                 else:
                     print('the R&D errors are:', form.errors)
                     context = self.get_context_data()
@@ -405,8 +418,8 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
                 if form.is_valid():
                     industryForm.address = form.cleaned_data['address']
                     industryForm.type_group = form.cleaned_data['type_group']
+                    industry_user.userId = form.cleaned_data['userId']
                 else:
-                    # print(form.)
                     print('the ResearchGroup errors are:', form.errors)
                     context = self.get_context_data()
                     context['researchGroup_form'] = form
@@ -417,12 +430,13 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
                         os.remove(industryForm.photo.path)
                 industryForm.photo = form.cleaned_data['photo']
             industryForm.save()
+            industry_user.save()
         else:
             print('the interface errors are:', interface_form.errors)
             context = self.get_context_data()
             context['interface_form'] = interface_form
             return render(request=request, template_name=self.template_name, context=context)
-        return HttpResponseRedirect(reverse('industry:index'))
+        return HttpResponseRedirect(reverse('industry:userInfo'))
 
 
 class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -508,10 +522,12 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
+        if not bool(USER_ID_PATTERN.match(user_id)):
+            return JsonResponse({"invalid_input": True})
         if user_id != request.user.industry_user:
             if models.IndustryUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False})
-        return JsonResponse({"is_unique": True})
+                return JsonResponse({"is_unique": False, "invalid_input": False})
+        return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):

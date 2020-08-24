@@ -7,13 +7,13 @@ from django.views import generic, View
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 
@@ -684,17 +684,29 @@ def ContactUS(request):
     #     msg.send()
     #     return super().form_valid(form)
 
+# @method_decorator(login_required(login_url='/login/'), name='dispatch')
 def AddOpinion(request):
     form = forms.FeedBackForm(request.POST)
     if form.is_valid():
         user_type = find_account_type(request.user)
-        feedBack = models.FeedBack(email=request.POST['email'],
-                                    opinion=request.POST['opinion'],
+        feedBack = models.FeedBack(email=form.cleaned_data['email'],
+                                    opinion=form.cleaned_data['opinion'],
                                     user_type=user_type,
                                     user_info=request.META['HTTP_USER_AGENT'],
                                     )
         feedBack.user = request.user
         feedBack.save()
+        
+        subject = 'بازخورد از کاربر'
+        message = "با عرض سلام\n کاربر با نوع خساب کاربری {} بازخوردی ارسال کرده است.\n{}".format(user_type, form.cleaned_data['opinion'])
+        try:
+            email_template = render_to_string('registration/email_template.html', {"message" : message})
+            msg = EmailMultiAlternatives(subject=subject, body=message, from_email=settings.EMAIL_HOST_USER,
+                                            to=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"])
+            msg.attach_alternative(email_template, "text/html")
+            msg.send(fail_silently=True)
+        except TimeoutError:
+            return JsonResponse(data={"success" : "success"}, status=400)
         return JsonResponse(data={"success" : "success"})
     return JsonResponse(data=form.errors, status=400)
         

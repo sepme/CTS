@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.core.serializers import serialize
 from django.conf import settings
 from django.forms import model_to_dict
-import os, random, datetime
+import os, random, datetime, re
 from persiantools.jdatetime import JalaliDate
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import permission_required
@@ -21,6 +21,7 @@ from industry.models import Project, Comment
 from chamran_admin.models import Message
 
 ACCELERATOR = "384025"
+USER_ID_PATTERN = re.compile('[\w]+$')
 
 
 def get_url(rawUrl):
@@ -187,6 +188,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         status = models.Status.objects.get(researcher_user=researcher)
         status.status = 'not_answered'
         status.save()
+        researcher.userId = form.cleaned_data['userId']
+        researcher.save()
         return super().form_valid(form)
 
 
@@ -274,7 +277,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             profile.description = form.cleaned_data['description']
 
             profile.save()
-            return HttpResponseRedirect(reverse("researcher:index"))
+            return HttpResponseRedirect(reverse("researcher:userInfo"))
         context = self.get_context_data(**kwargs)
 
         if 'home_number' in form.errors.keys():
@@ -406,7 +409,7 @@ def AddTechnique(request):
                 subject=subject,
                 message=message,
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER, ],
+                recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
                 fail_silently=False
             )
         except TimeoutError:
@@ -594,7 +597,7 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
                         subject=subject,
                         message=message,
                         from_email=settings.EMAIL_HOST_USER,
-                        recipient_list=[email, "a.jafarzadeh1998@gmail.com"],
+                        recipient_list=[email, "sepehr.metanat@gmail.com"],
                     )
                 except TimeoutError:
                     return HttpResponse('Timeout Error!!')
@@ -633,7 +636,7 @@ def ajax_Technique_review(request):
                 subject=subject,
                 message=message,
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER],
+                recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
             )
         except TimeoutError:
             return HttpResponse('Timeout Error!!')
@@ -906,10 +909,12 @@ def show_resume_preview(request):
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
+        if not bool(USER_ID_PATTERN.match(user_id)):
+            return JsonResponse({"invalid_input": True})
         if user_id != request.user.researcheruser.userId:
             if models.ResearcherUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False})
-        return JsonResponse({"is_unique": True})
+                return JsonResponse({"is_unique": False, "invalid_input": False})
+        return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('researcher.be_researcher', login_url='/login/')
 def forbidden_access(request):
