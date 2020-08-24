@@ -264,75 +264,77 @@ $(document).ready(function () {
         }
     });
 
-    let comment_form = $('#comment_form');
-    comment_form.submit(function (event) {
-        event.preventDefault();
-        console.log("sending...");
-        comment_form.find("button[type='submit']").attr("disabled", "true");
-        let thisUrl = "";
-        if (comment_form.find(".researcher_id").val() === "")
-            thisUrl = "/expert/industry_comment/";
-        else
-            thisUrl = "/expert/researcher_comment/";
-        if (comment_form.closest(".showProject").length > 0) {
-            $(".project_id").attr('value', $('.showProject').attr("id"));
-        } else {
-            $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
-        }
-        let form = new FormData(comment_form.get(0));
-        console.log(form);
-        $.ajax({
-            method: 'POST',
-            url: thisUrl,
-            data: form,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                comment_form.find("button[type='submit']").prop("disabled", false);
-                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                let comment_code = addComment(data);
-                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                    $(".project-comment-innerDiv").find(".no-comment").attr("style", "display: none;");
-                }
-                $(".project-comment-innerDiv").find(".comments").append(comment_code);
-                iziToast.success({
-                    rtl: true,
-                    message: "پیام با موفقیت ارسال شد!",
-                    position: 'bottomLeft'
-                });
+    $(".add-comment").each(function () {
+        let comment_form = $(this).find('#comment_form');
+        comment_form.submit(function (event) {
+            event.preventDefault();
+            console.log("sending...");
+            comment_form.find("button[type='submit']").attr("disabled", "true");
+            let thisUrl = "";
+            if (comment_form.find(".researcher_id").val() === "")
+                thisUrl = "/expert/industry_comment/";
+            else
+                thisUrl = "/expert/researcher_comment/";
+            if (comment_form.closest(".showProject").length > 0) {
+                $(".project_id").attr('value', $('.showProject').attr("id"));
+            } else {
+                $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
+            }
+            let form = new FormData(comment_form.get(0));
+            console.log(form);
+            $.ajax({
+                method: 'POST',
+                url: thisUrl,
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    comment_form.find("button[type='submit']").prop("disabled", false);
+                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                    let comment_code = addComment(data);
+                    if (comment_form.closest(".section").find(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                        comment_form.closest(".section").find(".project-comment-innerDiv").find(".no-comment").attr("style", "display: none;");
+                    }
+                    comment_form.closest(".section").find(".project-comment-innerDiv").find(".comments").append(comment_code);
+                    iziToast.success({
+                        rtl: true,
+                        message: "پیام با موفقیت ارسال شد!",
+                        position: 'bottomLeft'
+                    });
 
-                $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
-                    deleteComment($(this).closest('.my-comment'));
-                });
+                    comment_form.closest(".section").find(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+                        deleteComment($(this).closest('.my-comment'));
+                    });
 
-                comment_form[0].reset();
-                comment_form.find("#description").css("height", "fit-content");
-                $("textarea#description").removeClass("error");
-                $('.error').remove();
-                $('.file-name').html("");
-                $(".send-comment-container .comment-input").removeClass("attached");
-                $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+                    comment_form[0].reset();
+                    comment_form.find("#description").css("height", "fit-content");
+                    comment_form.closest(".section").find("textarea#description").removeClass("error");
+                    comment_form.closest(".section").find('.error').remove();
+                    comment_form.closest(".section").find('.file-name').html("");
+                    comment_form.closest(".section").find(".send-comment-container .comment-input").removeClass("attached");
+                    comment_form.closest(".section").find('.comments').animate({scrollTop: comment_form.closest(".section").find('.comments').prop("scrollHeight")}, 1000);
 
-            },
-            error: function (data) {
-                console.log(data);
-                let obj = JSON.parse(data.responseText);
-                comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                    .prop("disabled", false);
-                comment_form.find("label").removeClass("progress-cursor");
-                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                if (obj.description) {
-                    $("#description").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.description + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-                comment_form[0].reset();
-            },
+                },
+                error: function (data) {
+                    console.log(data);
+                    let obj = JSON.parse(data.responseText);
+                    comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    comment_form.find("label").removeClass("progress-cursor");
+                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (obj.description) {
+                        comment_form.closest(".section").find("#description").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.description + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        comment_form.closest(".section").find("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    comment_form[0].reset();
+                },
+            });
         });
     });
 
@@ -354,7 +356,7 @@ $(document).ready(function () {
                     success: function (data) {
                         console.log(data);
                         thisFormGroup.find(".form-group__status").removeClass("check");
-                        if (data.invalid_input){
+                        if (data.invalid_input) {
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error");
                         } else if (data.is_unique) {
@@ -943,10 +945,10 @@ $(document).ready(function () {
                 } else
                     $("#researcherInfoResume").html("");
                 if (data.comments.length)
-                    $(".no-comment").attr("style", "display : none;");
+                    $(".modal#researcherInfo").find(".no-comment").attr("style", "display : none;");
                 else
-                    $(".no-comment").attr("style", "display : block;");
-                setComment(data.comments);
+                    $(".modal#researcherInfo").find(".no-comment").attr("style", "display : block;");
+                setComment(data.comments, $(".modal#researcherInfo"));
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
             error: function (data) {
@@ -1525,7 +1527,7 @@ showInfo.click(function (event) {
                 $(".techniques").html(keys_code);
                 setMajors(data);
                 setValue(data);
-                setComment(data.comments);
+                setComment(data.comments, $(".modal#showProject"));
                 // vote_dialog_init(".showProject");
             } else {
                 $(".project_id").attr("value", project_id);

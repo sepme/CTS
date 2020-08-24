@@ -1188,7 +1188,7 @@ $("#delete_paper").click(function () {
     });
 });
 
-function setComment(data) {
+function setComment(data, parent) {
     let comments_code = "";
     console.log(data);
     for (let i = 0; i < data.length; i++) {
@@ -1261,12 +1261,12 @@ function setComment(data) {
         }
     }
     if (comments_code === "") {
-        $(".no-comment").addClass("show");
+        parent.find(".no-comment").addClass("show");
     }
-    $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+    parent.find('.comments').html(comments_code).animate({scrollTop: parent.find('.comments').prop("scrollHeight")}, 1000);
 
-    $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+    parent.find(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
         deleteComment($(this).closest('.my-comment'));
     });
-    dialog_comment_init();
+    dialog_comment_init(parent);
 }
