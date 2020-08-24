@@ -63,17 +63,13 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
 
         if expert_user.status != "signed_up":
-            projects = []
-            if expert_user.status in ["free", "applied"]:
-                allProjects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
-                context['allProjects'] = allProjects
-                newProjects = allProjects.exclude(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
-                context['newProjects'] = newProjects
-                appliedProjects = allProjects.filter(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
-                context['appliedProjects'] = appliedProjects
-
-            if expert_user.status == "involved":
-                context['activeProjects'] = Project.objects.filter(status=2).get(expert_accepted=expert_user)
+            allProjects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
+            context['allProjects'] = allProjects
+            newProjects = allProjects.exclude(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+            context['newProjects'] = newProjects
+            appliedProjects = allProjects.filter(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+            context['appliedProjects'] = appliedProjects
+            context['activeProjects'] = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
             context['doneProjects'] = ExpertProjectHistory.objects.filter(expert=expert_user)
         return context
 
@@ -1166,7 +1162,7 @@ def ActiveProject(request, project, data):
     data["budget_amount"] = project.project_form.required_budget
 
     data['comments'] = []
-    for comment in project.get_comments().exclude(industry_user=None).filter(expert=project.expert_accepted):
+    for comment in project.get_comments().exclude(industry_user=None).filter(expert_user=project.expert_accepted):
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:

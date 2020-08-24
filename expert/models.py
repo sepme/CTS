@@ -223,6 +223,7 @@ class ExpertProjectHistory(models.Model):
 
 
 class IndustryEvaluateExpert(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="پروژه", blank=True)
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
     industry = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
                                     verbose_name="صنعت ارزیابی کننده", blank=True, null=True)

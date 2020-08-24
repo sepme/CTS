@@ -133,171 +133,7 @@ function showQuestion() {
     });
 }
 
-$(document).ready(function () {
-    /*
-    * I didn't find a better place to put this;
-    * so please move this part to a section you prefer.
-    * By the way, it has a big problem (expect those told earlier in comments),
-    * after clicking on 'show-btn' of a new research question, 'attachments' and
-    * 'answers' of the previous one is still shown (in the case the previous one had it).
-    */
-    init_setup();
-    input_focus();
-    showQuestion();
-    // $('*').persiaNumber();
-    question_dialog_init();
-    question_page_init();
-    // init_dialog_btn(".preview-project", ".showProject");
-    // init_dialog_btn(".preview-project.type-2", ".project-details");
-    // init_dialog_btn(".preview-project", ".project-details");
-    // init_dialog_btn(".confirm_project", ".select-technique");
-    // init_dialog_btn("#accept-techniques", ".project-details");
-    init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
-    // init_dialog_btn(".add-new-question", ".add-question");
-    init_dialog_btn(".education-btn", ".scientific_form");
-    init_dialog_btn(".executive-btn", ".executive_form");
-    init_dialog_btn(".research-btn", ".research_form");
-    init_dialog_btn(".paper-btn", ".paper_form");
-    init_dialog_btn(".technique", ".technique-dialog-main");
-    search_input(".search_message");
-    researcherRequest();
-
-    $('.content').scroll(function () {
-        if ($(".content").scrollTop() > 300) {
-            $("a.top-button").addClass('show');
-        } else {
-            $("a.top-button").removeClass('show');
-        }
-    });
-
-    let comment_form = $('#comment_form');
-    comment_form.submit(function (event) {
-        event.preventDefault();
-        comment_form.find("button[type='submit']").attr("disabled", "true");
-        let thisUrl = "";
-        if (comment_form.find(".researcher_id").val() === "")
-            thisUrl = "/expert/industry_comment/";
-        else
-            thisUrl = "/expert/researcher_comment/";
-        if (comment_form.closest(".showProject").length > 0) {
-            $(".project_id").attr('value', $('.showProject').attr("id"));
-        } else {
-            $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
-        }
-        let form = new FormData(comment_form.get(0));
-        // $.ajax({
-        //     method: 'POST',
-        //     url: thisUrl,
-        //     data: form,
-        //     processData: false,
-        //     contentType: false,
-        //     success: function (data) {
-        //         comment_form.find("button[type='submit']").prop("disabled", false);
-        //         comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-        //         if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-        //             $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
-        //         }
-        //         let comment_code = addComment(data);
-        //         $(".project-comment-innerDiv").find(".comments").append(comment_code);
-        //         iziToast.success({
-        //             rtl: true,
-        //             message: "پیام با موفقیت ارسال شد!",
-        //             position: 'bottomLeft'
-        //         });
-        //
-        //         $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
-        //             deleteComment($(this).closest('.my-comment'));
-        //         });
-        //
-        //         comment_form[0].reset();
-        //         comment_form.find("#description").css("height", "fit-content");
-        //         $("textarea#description").removeClass("error");
-        //         $('.error').remove();
-        //         $('.file-name').html("");
-        //         $(".send-comment-container .comment-input").removeClass("attached");
-        //         $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
-        //
-        //     },
-        //     error: function (data) {
-        //         console.log(data);
-        //         let obj = JSON.parse(data.responseText);
-        //         comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-        //             .prop("disabled", false);
-        //         comment_form.find("label").removeClass("progress-cursor");
-        //         comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-        //         if (obj.description) {
-        //             $("#description").closest("div").append("<div class='error'>" +
-        //                 "<span class='error-body'>" +
-        //                 "<ul class='errorlist'>" +
-        //                 "<li>" + obj.description + "</li>" +
-        //                 "</ul>" +
-        //                 "</span>" +
-        //                 "</div>");
-        //             $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-        //         }
-        //         comment_form[0].reset();
-        //     },
-        // });
-    });
-
-    // Check user id
-    if ($("#userID").length) {
-        $("input#userID").on("keyup", function () {
-            console.log("search: ", $(this).val());
-            $(".userId-error").remove();
-            let thisFormGroup = $(this).closest(".form-group");
-            if ($(this).val()) {
-                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
-                    .removeClass("fail");
-                thisFormGroup.find(".form-group__status").addClass("check");
-                thisFormGroup.find("input").removeClass("error");
-                $.ajax({
-                    method: "POST",
-                    url: "/expert/checkUserId",
-                    data: {"user_id": $(this).val()},
-                    success: function (data) {
-                        console.log(data);
-                        thisFormGroup.find(".form-group__status").removeClass("check");
-                        if (data.is_unique) {
-                            thisFormGroup.find(".form-group__status").addClass("success");
-                        } else {
-                            thisFormGroup.find(".form-group__status").addClass("fail");
-                            thisFormGroup.find("input").addClass("error");
-                        }
-                    },
-                    error: function (data) {
-                        console.log(data);
-                        thisFormGroup.find(".form-group__status").removeClass("check");
-                        iziToast.error({
-                            rtl: true,
-                            message: "ارتباط با سرور با مشکل مواجه شد!",
-                            position: 'bottomLeft'
-                        });
-                    }
-                });
-            } else {
-                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
-                    .removeClass("fail");
-                $(this).removeClass("error");
-            }
-        });
-    }
-
-    // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
-
-    $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
-        $(this).css("width", "fit-content");
-    });
-
-    $('#id_key_words').tagsInput({
-        'height': 'FIT-CONTENT',
-        'width': '100%',
-        'defaultText': '',
-        'onAddTag': newItem_label,
-        'onRemoveTag': newItem_label
-    });
-    tag_input_label("id_key_words");
-
+function init_confirm_project() {
     $(".confirm_project").click(function () {
         $('#showProject').modal('toggle');
         $('#selectTechniques').modal('toggle');
@@ -389,6 +225,176 @@ $(document).ready(function () {
         });
         tag_input_label("tags");
     });
+}
+
+$(document).ready(function () {
+    /*
+    * I didn't find a better place to put this;
+    * so please move this part to a section you prefer.
+    * By the way, it has a big problem (expect those told earlier in comments),
+    * after clicking on 'show-btn' of a new research question, 'attachments' and
+    * 'answers' of the previous one is still shown (in the case the previous one had it).
+    */
+    init_setup();
+    input_focus();
+    showQuestion();
+    // $('*').persiaNumber();
+    question_dialog_init();
+    question_page_init();
+    // init_dialog_btn(".preview-project", ".showProject");
+    // init_dialog_btn(".preview-project.type-2", ".project-details");
+    // init_dialog_btn(".preview-project", ".project-details");
+    // init_dialog_btn(".confirm_project", ".select-technique");
+    // init_dialog_btn("#accept-techniques", ".project-details");
+    init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
+    // init_dialog_btn(".add-new-question", ".add-question");
+    init_dialog_btn(".education-btn", ".scientific_form");
+    init_dialog_btn(".executive-btn", ".executive_form");
+    init_dialog_btn(".research-btn", ".research_form");
+    init_dialog_btn(".paper-btn", ".paper_form");
+    init_dialog_btn(".technique", ".technique-dialog-main");
+    search_input(".search_message");
+    researcherRequest();
+
+    $('.content').scroll(function () {
+        if ($(".content").scrollTop() > 300) {
+            $("a.top-button").addClass('show');
+        } else {
+            $("a.top-button").removeClass('show');
+        }
+    });
+
+    let comment_form = $('#comment_form');
+    comment_form.submit(function (event) {
+        event.preventDefault();
+        console.log("sending...");
+        comment_form.find("button[type='submit']").attr("disabled", "true");
+        let thisUrl = "";
+        if (comment_form.find(".researcher_id").val() === "")
+            thisUrl = "/expert/industry_comment/";
+        else
+            thisUrl = "/expert/researcher_comment/";
+        if (comment_form.closest(".showProject").length > 0) {
+            $(".project_id").attr('value', $('.showProject').attr("id"));
+        } else {
+            $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
+        }
+        let form = new FormData(comment_form.get(0));
+        $.ajax({
+            method: 'POST',
+            url: thisUrl,
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                comment_form.find("button[type='submit']").prop("disabled", false);
+                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                    $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
+                }
+                let comment_code = addComment(data);
+                $(".project-comment-innerDiv").find(".comments").append(comment_code);
+                iziToast.success({
+                    rtl: true,
+                    message: "پیام با موفقیت ارسال شد!",
+                    position: 'bottomLeft'
+                });
+
+                $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+                    deleteComment($(this).closest('.my-comment'));
+                });
+
+                comment_form[0].reset();
+                comment_form.find("#description").css("height", "fit-content");
+                $("textarea#description").removeClass("error");
+                $('.error').remove();
+                $('.file-name').html("");
+                $(".send-comment-container .comment-input").removeClass("attached");
+                $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+
+            },
+            error: function (data) {
+                console.log(data);
+                let obj = JSON.parse(data.responseText);
+                comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                    .prop("disabled", false);
+                comment_form.find("label").removeClass("progress-cursor");
+                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                if (obj.description) {
+                    $("#description").closest("div").append("<div class='error'>" +
+                        "<span class='error-body'>" +
+                        "<ul class='errorlist'>" +
+                        "<li>" + obj.description + "</li>" +
+                        "</ul>" +
+                        "</span>" +
+                        "</div>");
+                    $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                }
+                comment_form[0].reset();
+            },
+        });
+    });
+
+    // Check user id
+    if ($("#userID").length) {
+        $("input#userID").on("keyup", function () {
+            console.log("search: ", $(this).val());
+            $(".userId-error").remove();
+            let thisFormGroup = $(this).closest(".form-group");
+            if ($(this).val()) {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                thisFormGroup.find(".form-group__status").addClass("check");
+                thisFormGroup.find("input").removeClass("error");
+                $.ajax({
+                    method: "POST",
+                    url: "/expert/checkUserId",
+                    data: {"user_id": $(this).val()},
+                    success: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        if (data.is_unique) {
+                            thisFormGroup.find(".form-group__status").addClass("success");
+                        } else {
+                            thisFormGroup.find(".form-group__status").addClass("fail");
+                            thisFormGroup.find("input").addClass("error");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        thisFormGroup.find(".form-group__status").removeClass("check");
+                        iziToast.error({
+                            rtl: true,
+                            message: "ارتباط با سرور با مشکل مواجه شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                });
+            } else {
+                thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
+                    .removeClass("fail");
+                $(this).removeClass("error");
+            }
+        });
+    }
+
+    // $(".question-info").find(".status span").html(numbersComma($(".question-info").find(".status span").html()));
+
+    $("#id_key_words_tagsinput").find("#id_key_words_tag").on("focus", function () {
+        $(this).css("width", "fit-content");
+    });
+
+    $('#id_key_words').tagsInput({
+        'height': 'FIT-CONTENT',
+        'width': '100%',
+        'defaultText': '',
+        'onAddTag': newItem_label,
+        'onRemoveTag': newItem_label
+    });
+    tag_input_label("id_key_words");
+
+    init_confirm_project();
+
     let techniquesForm = $('.ajax-select-techniques');
     $(techniquesForm).on('keyup keypress', function (e) {
         let keyCode = e.keyCode || e.which;
@@ -809,7 +815,7 @@ $(document).ready(function () {
             data: {id: id, project_id: project_id},
             success: function (data) {
                 // console.log(data);
-                if (data.status == "justComment") {
+                if (data.status === "justComment") {
                     $('.request-response').attr("style", "display : none;");
                     $(".confirm-researcher").prop('disabled', true);
                     $(".refuse-researcher").prop('disabled', true);
@@ -945,23 +951,23 @@ $(document).ready(function () {
         });
     });
 
-    $("#active-project").click(function () {
-        $(".new-project").attr("style", "display :none;");
-        $(".done-project").attr("style", "display :none;");
-        $(".your-project").attr("style", "display :block;");
-    });
-
-    $("#new-projects").click(function () {
-        $(".new-project").attr("style", "display :block");
-        $(".done-project").attr("style", "display :none");
-        $(".your-project").attr("style", "display :none");
-    });
-
-    $("#done-project").click(function () {
-        $(".new-project").attr("style", "display :none");
-        $(".your-project").attr("style", "display :none");
-        $(".done-project").attr("style", "display :block");
-    });
+    // $("#active-project").click(function () {
+    //     $(".new-project").attr("style", "display :none;");
+    //     $(".done-project").attr("style", "display :none;");
+    //     $(".your-project").attr("style", "display :block;");
+    // });
+    //
+    // $("#new-projects").click(function () {
+    //     $(".new-project").attr("style", "display :block");
+    //     $(".done-project").attr("style", "display :none");
+    //     $(".your-project").attr("style", "display :none");
+    // });
+    //
+    // $("#done-project").click(function () {
+    //     $(".new-project").attr("style", "display :none");
+    //     $(".your-project").attr("style", "display :none");
+    //     $(".done-project").attr("style", "display :block");
+    // });
 });
 
 function education_record() {
@@ -989,8 +995,6 @@ function education_record() {
             url: $thisURL,
             dataType: 'json',
             data: data,
-            // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-            // contentType: 'application/json; charset=utf-8',
             success: function (data) {
                 myForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
                     .prop("disabled", false);
@@ -1480,15 +1484,25 @@ showInfo.click(function (event) {
         },
         dataType: 'json',
         success: function (data) {
-            if (data.applied === true) {
+            console.log(data);
+            if (data.applied !== true) {
                 $("#accept-project").attr("disabled", "disabled").css("pointer-events", "none");
                 let btn = $("#accept-project").closest(".modal-footer").html();
                 $("#accept-project").closest(".modal-footer").html(
-                    `<span tabindex="0" data-toggle="tooltip" title="یه چیز بگین بذارم">
+                    `<span tabindex="0" data-placement='right' data-toggle="tooltip" data-html="true"
+                        title="<p class='m-0' dir='rtl'>شما تکنیک های لازم برای پروژه را ثبت کرده اید!</p>">
                         ${btn}
                     </span>`
                 );
                 $('#accept-project').closest("span").tooltip();
+                $(".modal#showProject").on("hidden.bs.modal", function () {
+                    $(this).closest(".modal-footer").html(`
+                        <button class="btn btn-primary save-btn confirm_project" id="accept-project">
+                            تایید و انتخاب تکینک
+                        </button>
+                    `);
+                    init_confirm_project();
+                });
             }
             $('.project_id').attr('value', project_id);
             $('.ajax-select-techniques').attr('id', project_id);

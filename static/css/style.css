@@ -4839,12 +4839,17 @@ img.center-head {
     margin: -40px auto 15px;
 }
 
+.num-input-control input {
+    padding: 10px 45px;
+    width: 100%;
+}
+
 .apply_Project .input-group-prepend,
 .apply .input-group-prepend {
     margin-right: -1px;
     position: absolute;
     top: 22px;
-    left: 23px;
+    left: 2px;
     z-index: 2;
 }
 

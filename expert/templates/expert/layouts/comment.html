@@ -3,12 +3,10 @@
 <span class="section-title">گفتگو</span>
 <div class="section">
     <div class="project-comment-innerDiv">
-        <div class="no-comment" style="{% if not comments %}display:block;{% endif %}">
-            <img class="no comment" src="{% static 'img/no_message.svg' %}" alt="no message">
-            <h5 dir="rtl">نظری درباره این پروژه ثبت نشده!</h5>
-            <p>
-                در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.
-            </p>
+        <div class="no-comment" style="{% if project_pk %}{% if not comments %}display:block;{% endif %}{% endif %}">
+            <img src="{% static 'img/no_message.svg' %}" alt="no message">
+            <h6 dir="rtl">نظری درباره این پروژه ثبت نشده!</h6>
+            <pre>در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.</pre>
         </div>
         <div class="comments">
             {% if comments %}
@@ -64,7 +62,7 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <div class="add-comment" id="{% if project %}{{ project.pk }}{% endif %}">
+        <div class="add-comment" id="{% if project_pk %}{{ project.pk }}{% endif %}">
             <form action="" method="POST" enctype="multipart/form-data" id="comment_form">
                 {% csrf_token %}
                 <div class="row">
