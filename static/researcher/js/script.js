@@ -356,6 +356,10 @@ $(document).ready(function () {
                     success: function (data) {
                         console.log(data);
                         thisFormGroup.find(".form-group__status").removeClass("check");
+                        if (data.invalid_input){
+                            thisFormGroup.find(".form-group__status").addClass("fail");
+                            thisFormGroup.find("input").addClass("error");
+                        } else if (data.is_unique) {
                         if (data.is_unique) {
                             thisFormGroup.find(".form-group__status").addClass("success");
                         } else {

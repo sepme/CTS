@@ -2,6 +2,9 @@ from django import forms
 from .models import *
 from django.core.exceptions import ValidationError
 
+import re
+
+USER_ID_PATTERN = re.compile("^[\w]+$")
 
 def has_number(string):
     for ch in string:
@@ -19,7 +22,7 @@ def completely_numeric(string):
 
 
 class InitialInfoForm(forms.ModelForm):
-
+    userId = forms.CharField(max_length=150, required=False)
     class Meta:
         model = ExpertForm
         fields = ['photo', 'fullname', 'special_field', 'national_code', 'scientific_rank',
@@ -64,6 +67,14 @@ class InitialInfoForm(forms.ModelForm):
             raise forms.ValidationError('کد ملی باید ده رقمی باشد.')
 
         return national_code
+
+    def clean_userId(self):
+        data = self.cleaned_data["userId"]
+        if not bool(USER_ID_PATTERN.match(data)):
+            raise ValidationError('شناسه کاربری فقط شامل حروف و اعداد و خط زیر است.')
+        if data == "":
+            raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
+        return data
 
     def clean_home_number(self):
         home_number = self.cleaned_data.get('home_number')
@@ -118,6 +129,8 @@ class ExpertInfoForm(forms.ModelForm):
 
     def clean_userId(self):
         data = self.cleaned_data["userId"]
+        if not bool(USER_ID_PATTERN.match(data)):
+            raise ValidationError('شناسه کاربری فقط شامل حروف و اعداد و خط زیر است.')
         if data == "":
             raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
         return data
@@ -163,8 +176,18 @@ class ScientificRecordForm(forms.ModelForm):
         model = ScientificRecord
         fields = ['degree', 'major', 'university', 'city', 'date_of_graduation']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['degree'].required = False
+        self.fields['major'].required = False
+        self.fields['university'].required = False
+        self.fields['city'].required = False
+        self.fields['date_of_graduation'].required = False
+
     def clean_date_of_graduation(self):
         year = self.cleaned_data.get('date_of_graduation')
+        if year == "" :
+            raise forms.ValidationError("سال اخذ مدرک باید خالی باشد.")
         try:
             int(year)
         except ValueError:
@@ -175,24 +198,32 @@ class ScientificRecordForm(forms.ModelForm):
 
     def clean_degree(self):
         degree = self.cleaned_data.get('degree')
+        if degree == "":
+            raise forms.ValidationError('مقطع تحصیلی نمی تواند خالی باشد')
         if completely_numeric(degree):
             raise forms.ValidationError('مقطع تحصیلی نمی تواند عدد باشد')
         return degree
 
     def clean_major(self):
         major = self.cleaned_data.get('major')
+        if major == "":
+            raise forms.ValidationError('رشته تحصیلی نمی تواند خالی باشد')
         if completely_numeric(major):
             raise forms.ValidationError('رشته تحصیلی نمی تواند عدد باشد')
         return major
 
     def clean_university(self):
         university = self.cleaned_data.get('university')
+        if university == "":
+           raise forms.ValidationError('دانشگاه نمی تواند خالی باشد')
         if completely_numeric(university):
             raise forms.ValidationError('دانشگاه نمی تواند عدد باشد')
         return university
 
     def clean_city(self):
         city = self.cleaned_data.get('city')
+        if city == "":
+            raise forms.ValidationError('شهر نمی تواند خالی باشد')
         if completely_numeric(city):
             raise forms.ValidationError('شهر نمی تواند عدد باشد')
         return city
@@ -203,26 +234,42 @@ class ExecutiveRecordForm(forms.ModelForm):
         model = ExecutiveRecord
         exclude = ['expert_form']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['executive_post'].required = False
+        self.fields['date_start_post'].required = False
+        self.fields['date_end_post'].required = False
+        self.fields['organization'].required = False
+        self.fields['city'].required = False
+
     def clean_executive_post(self):
         executive_post = self.cleaned_data.get('executive_post')
+        if executive_post == "":
+            raise forms.ValidationError("سمت نمی تواند خالی باشد.")
         if completely_numeric(executive_post):
             raise forms.ValidationError('سمت نمی تواند عدد باشد')
         return executive_post
 
     def clean_city(self):
         city = self.cleaned_data.get('city')
+        if city == "":
+            raise forms.ValidationError("شهر نمی تواند خالی باشد.")
         if completely_numeric(city):
             raise forms.ValidationError('شهر نمی تواند عدد باشد')
         return city
 
     def clean_organization(self):
         organization = self.cleaned_data.get('organization')
+        if organization == "":
+            raise forms.ValidationError("محل خدمت نمی تواند خالی باشد.")
         if completely_numeric(organization):
             raise forms.ValidationError('محل خدمت نمی تواند عدد باشد')
         return organization
 
     def clean_date_start_post(self):
         start = self.cleaned_data.get('date_start_post')
+        if start == "":
+            raise forms.ValidationError("سال ورود نمی تواند خالی باشد.")
         try:
             int(start)
         except ValueError:
@@ -233,6 +280,8 @@ class ExecutiveRecordForm(forms.ModelForm):
 
     def clean_date_end_post(self):
         end = self.cleaned_data.get('date_end_post')
+        if end == "":
+            raise forms.ValidationError("سال پایان نمی تواند خالی باشد.")
         try:
             int(end)
         except ValueError:
@@ -247,20 +296,32 @@ class ResearchRecordForm(forms.ModelForm):
         model = ResearchRecord
         exclude = ['expert_form']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['research_title'].required = False
+        self.fields['researcher'].required = False
+        self.fields['co_researcher'].required = False
+
     def clean_research_title(self):
         title = self.cleaned_data.get('research_title')
+        if title == "":
+            raise forms.ValidationError('عنوان طرح نمی تواند خالی باشد')
         if completely_numeric(title):            
             raise forms.ValidationError('عنوان طرح نمی تواند عدد باشد')
         return title
 
     def clean_researcher(self):
         researcher = self.cleaned_data.get('researcher')
+        if researcher == "":
+            raise forms.ValidationError("نام مجری نمی تواند خالی باشد")
         if has_number(researcher):
             raise forms.ValidationError('نام مجری نمی تواند عدد باشد')
         return researcher
 
     def clean_co_researcher(self):
         co_researcher = self.cleaned_data.get('co_researcher')
+        if co_researcher == "":
+            raise forms.ValidationError('نام همکار نمی تواند خالی باشد')
         if has_number(co_researcher):
             raise forms.ValidationError('نام همکار نمی تواند عدد باشد')
         return co_researcher
@@ -271,8 +332,18 @@ class PaperRecordForm(forms.ModelForm):
         model = PaperRecord
         exclude = ['expert_form']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['citation'].required = False
+        self.fields['research_title'].required = False
+        self.fields['date_published'].required = False
+        self.fields['published_at'].required = False
+        self.fields['impact_factor'].required = False
+
     def clean_citation(self):
         citation = self.cleaned_data.get('citation')
+        if citation == "":
+            raise forms.ValidationError('تعداد ارجاع نمی تواند خالی باشد')
         try:
             int(citation)
         except ValueError:
@@ -282,12 +353,16 @@ class PaperRecordForm(forms.ModelForm):
 
     def clean_research_title(self):
         title = self.cleaned_data.get('research_title')
+        if title == "":
+            raise forms.ValidationError('عنوان مقاله نمی تواند خالی باشد')
         if completely_numeric(title):
             raise forms.ValidationError('عنوان مقاله نمی تواند عدد باشد')
         return title
 
     def clean_date_published(self):
         date_published = self.cleaned_data.get('date_published')
+        if date_published == "":
+            raise forms.ValidationError('تاریخ انتشار نمی تواند خالی باشد')
         try:
             int(date_published)
         except ValueError:
@@ -298,12 +373,16 @@ class PaperRecordForm(forms.ModelForm):
 
     def clean_published_at(self):
         published_at = self.cleaned_data.get('published_at')
+        if published_at == "":
+            raise forms.ValidationError('عنوان مقاله نمی تواند خالی باشد')
         if completely_numeric(published_at):
             raise forms.ValidationError('عنوان مقاله نمی تواند عدد باشد')
         return published_at
 
     def clean_impact_factor(self):
         impact_factor = self.cleaned_data.get('impact_factor')
+        if impact_factor == None:
+            raise forms.ValidationError('فاکتور تاثیرگذاری نمی تواند خالی باشد.')
         try:
             int(impact_factor)
         except ValueError:

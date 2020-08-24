@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
@@ -26,6 +27,7 @@ from expert.models import ExpertUser
 from researcher.models import Technique
 from chamran_admin.models import Message
 
+USER_ID_PATTERN = re.compile('[\w]+')
 
 # function name says it all :)
 def gregorian_to_numeric_jalali(date):
@@ -422,7 +424,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             context = self.get_context_data()
             context['interface_form'] = interface_form
             return render(request=request, template_name=self.template_name, context=context)
-        return HttpResponseRedirect(reverse('industry:index'))
+        return HttpResponseRedirect(reverse('industry:userInfo'))
 
 
 class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -508,10 +510,12 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
+        if not bool(USER_ID_PATTERN.match(user_id)):
+            return JsonResponse({"invalid_input": True})
         if user_id != request.user.industry_user:
             if models.IndustryUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False})
-        return JsonResponse({"is_unique": True})
+                return JsonResponse({"is_unique": False, "invalid_input": False})
+        return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):

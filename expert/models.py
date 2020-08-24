@@ -86,8 +86,6 @@ class ExpertForm(models.Model):
         (3, 'دانشیار'),
         (4, 'استاد'),
         (5, 'استاد تمام'),
-        (6, 'پژوهشگر'),
-
     )
     scientific_rank = models.IntegerField(choices=scientific_rank_choice, verbose_name="مرتبه علمی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه محل فعالیت")
@@ -226,6 +224,7 @@ class IndustryEvaluateExpert(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
     industry = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
                                     verbose_name="صنعت ارزیابی کننده", blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="پروژه", blank=True )
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),

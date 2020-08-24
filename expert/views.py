@@ -12,7 +12,7 @@ from django.core.exceptions import PermissionDenied
 
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
-import json
+import json, re
 
 from . import forms, webScraping
 from .models import *
@@ -22,6 +22,8 @@ from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance, RequestedProject
 from chamran_admin.models import Message
+
+USER_ID_PATTERN = re.compile("[\w]+$")
 
 
 def get_url(rawUrl):
@@ -63,17 +65,13 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
 
         if expert_user.status != "signed_up":
-            projects = []
-            if expert_user.status in ["free", "applied"]:
-                allProjects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
-                context['allProjects'] = allProjects
-                newProjects = allProjects.exclude(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
-                context['newProjects'] = newProjects
-                appliedProjects = allProjects.filter(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
-                context['appliedProjects'] = appliedProjects
-                
-            if expert_user.status == "involved":
-                context['activeProjects'] = Project.objects.filter(status=2).get(expert_accepted=expert_user)
+            allProjects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
+            context['allProjects'] = allProjects
+            newProjects = allProjects.exclude(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+            context['newProjects'] = newProjects
+            appliedProjects = allProjects.filter(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+            context['appliedProjects'] = appliedProjects
+            context['activeProjects'] = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
             context['doneProjects'] = ExpertProjectHistory.objects.filter(expert=expert_user)
         return context
 
@@ -95,6 +93,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         expert_form.expert_user = expert_user
         expert_form.email = expert_user.user.get_username()
         expert_form.save()
+        expert_user.userId = form.cleaned_data['userId']
         expert_user.status = 'free'
         expert_user.save()
         return HttpResponseRedirect(reverse('expert:index'))
@@ -175,7 +174,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = forms.ExpertInfoForm
     model = ExpertForm
     login_url = '/login/'
-    success_url = "/expert/"
+    success_url = "/expert/userInfo"
     permission_required = ('expert.be_expert',)
 
     def get_context_data(self, **kwargs):
@@ -1051,10 +1050,12 @@ def GetResearcherComment(request):
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
+        if not bool(USER_ID_PATTERN.match(user_id)):
+            return JsonResponse({"invalid_input": True})
         if user_id != request.user.expertuser.userId:            
             if ExpertUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False})
-        return JsonResponse({"is_unique": True})
+                return JsonResponse({"is_unique": False, "invalid_input": False})
+        return JsonResponse({"is_unique": True, "invalid_input": False})
 
 
 @permission_required('expert.be_expert', login_url='/login/')
@@ -1166,7 +1167,7 @@ def ActiveProject(request, project, data):
     data["budget_amount"] = project.project_form.required_budget
 
     data['comments'] = []
-    for comment in project.get_comments().exclude(industry_user=None).filter(expert=project.expert_accepted):
+    for comment in project.get_comments().exclude(industry_user=None).filter(expert_user=project.expert_accepted):
         try:
             url = comment.attachment.url[comment.attachment.url.find('media', 2):]
         except:
@@ -1234,5 +1235,5 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
             }
             context['researcher_accepted'].append(researcher)
         if project.researcher_accepted.all():
-            context['researcherComment'] = project.get_comments().exclude(researcher=project.researcher_accepted[0]).exlude(expert=None)
+            context['researcherComment'] = project.get_comments().exclude(researcher_user=project.researcher_accepted.all()[0]).exclude(expert_user=None)
         return context

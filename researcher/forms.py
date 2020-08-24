@@ -7,6 +7,9 @@ from expert.forms import has_number
 from . import models,views
 
 from datetime import date
+import re
+
+USER_ID_PATTERN = re.compile('[\w]+$')
 
 def has_number(string):
     for ch in string:
@@ -134,7 +137,8 @@ class ResearcherProfileForm(forms.ModelForm):
 
     def clean_userId(self):
         data = self.cleaned_data["userId"]
-        print(data)
+        if not bool(USER_ID_PATTERN.match(data)):
+            raise ValidationError('شناسه کاربری فقط شامل حروف و اعداد و خط زیر است.')
         if data == "":
             raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
         return data
@@ -186,6 +190,7 @@ class ResearcherProfileForm(forms.ModelForm):
 
 
 class InitialInfoForm(forms.ModelForm):
+    userId = forms.CharField(max_length=150, required=False)
     class Meta:
         model = models.ResearcherProfile
         # exclude = ['birth_year', 'team_work', 'creative_thinking', 'interest_in_major',
@@ -214,6 +219,13 @@ class InitialInfoForm(forms.ModelForm):
     #         raise forms.ValidationError('عکس نمی تواند خالی باشد.')
     #     return data
     
+    def clean_userId(self):
+        data = self.cleaned_data["userId"]
+        if not bool(USER_ID_PATTERN.match(data)):
+            raise ValidationError('شناسه کاربری فقط شامل حروف و اعداد و خط زیر است.')
+        if data == "":
+            raise ValidationError('شناسه کاربری نمی تواند خالی باشد.')
+        return data
 
     def clean_fullname(self):
         fullname = self.cleaned_data.get('fullname')
