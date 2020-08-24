@@ -90,6 +90,9 @@
                         <a class="nav-item nav-link fs-15" id="nav-upload-tab" data-toggle="tab" href="#nav-upload"
                            role="tab"
                            aria-controls="nav-upload" aria-selected="false">بارگذاری رزومه</a>
+                        <a class="nav-item nav-link fs-15" id="nav-setting-tab" data-toggle="tab" href="#nav-setting"
+                           role="tab"
+                           aria-controls="nav-setting" aria-selected="false">تنظیمات</a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -262,58 +265,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input inp-cbx" id="autoAddProject"
-                                           name="autoAddProject" value=1 hidden
-                                           {% if autoAddProject %}checked{% endif %}>
-                                    <label class="form-check-label cbx" for="autoAddProject">
-                                        <span>
-                                            <svg class="inline-svg bi bi-check2" viewBox="0 0 16 16"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd"
-                                                      d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
-                                            </svg>
-                                        </span>
-                                        <span>
-                                            قبل از این که مجموعه
-                                        پژوهشی‌ای بخواهد من را به پروژه‌ای اضافه کند، از من اجازه گرفته
-                                        شود
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="tab-pane fade" id="nav-resume" role="tabpanel" aria-labelledby="nav-resume-tab">
-                        <div class="card box flow-root-display w-100">
-                            <div class="box-header text-right">
-                                <h6>کلیدواژه</h6>
-                                <button type="button" class="btn-add-on" data-toggle="modal" data-target="#waitToGet">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus"
-                                         fill="currentColor"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                              d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"></path>
-                                        <path fill-rule="evenodd"
-                                              d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"></path>
-                                    </svg>
-                                    <span>استخراج اطلاعات از سامانه علم سنجی</span>
-                                </button>
-                            </div>
-
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-lg-12 text-right">
-                                        <label for="id_key_words">کلیدواژه ها</label>
-                                        {#{{ expert_info_form.keywords|attr:"id:id_key_words"|attr:"class:w-100"|attr:"value:اولی,دومی," }}#}
-                                        <input type="text" name="keywords" id="id_key_words" class="w-100"
-                                               value="{{ keywords }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="card box flow-root-display w-100">
                             <div class="box-header text-right">
                                 <h6>سوابق علمی</h6>
@@ -522,7 +475,33 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-header text-right">
+                                <h6>کلیدواژه</h6>
+                                <button type="button" class="btn-add-on" data-toggle="modal" data-target="#waitToGet">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus"
+                                         fill="currentColor"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                              d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"></path>
+                                        <path fill-rule="evenodd"
+                                              d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"></path>
+                                    </svg>
+                                    <span>استخراج اطلاعات از سامانه علم سنجی</span>
+                                </button>
+                            </div>
 
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <label for="id_key_words">کلیدواژه ها</label>
+                                        {#{{ expert_info_form.keywords|attr:"id:id_key_words"|attr:"class:w-100"|attr:"value:اولی,دومی," }}#}
+                                        <input type="text" name="keywords" id="id_key_words" class="w-100"
+                                               value="{{ keywords }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card box flow-root-display w-100">
                             <div class="box-header text-right">
                                 <h6>افتخارات</h6>
@@ -688,6 +667,35 @@
                                                     {#                                                    <button class="btn btn-primary mt-4" type="button" id="changeAttachment">تغییر فایل</button>#}
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-setting" role="tabpanel" aria-labelledby="nav-setting-tab">
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" class="form-check-input inp-cbx" id="autoAddProject"
+                                                   name="autoAddProject" value=1 hidden
+                                                   {% if autoAddProject %}checked{% endif %}>
+                                            <label class="form-check-label cbx" for="autoAddProject">
+                                        <span>
+                                            <svg class="inline-svg bi bi-check2" viewBox="0 0 16 16"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                      d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+                                            </svg>
+                                        </span>
+                                                <span>
+                                            قبل از این که مجموعه
+                                        پژوهشی‌ای بخواهد من را به پروژه‌ای اضافه کند، از من اجازه گرفته
+                                        شود
+                                        </span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>

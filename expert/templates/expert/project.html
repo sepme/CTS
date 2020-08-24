@@ -279,7 +279,7 @@
                                                 <div class="section">
                                                     <div class="row">
                                                         <div class="col-12 text-center">
-                                                            {% if researcher %}
+                                                            {% if researcher_accepted %}
                                                                 <div class="horizontal-avatar-list owl-carousel owl-theme">
                                                                     {% for researcher in researcher_accepted %}
                                                                         <div class="item">
@@ -288,7 +288,7 @@
                                                                                      alt="{{ researcher.fullname }}پروفایل ">
                                                                                 <div class="info">
                                                                                     <h3>{{ researcher.fullname }}</h3>
-                                                                                    <button value="{{ project.pk }}"
+                                                                                    <button value="{{ project_pk }}"
                                                                                             id="{{ researcher.id }}"
                                                                                             data-url="{% url 'researcher:show_resume_preview' %}"
                                                                                             data-toggle="modal"
