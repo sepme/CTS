@@ -6,12 +6,13 @@ from django.contrib.auth.models import User
 
 from . import models
 
+USER_ID_PATTERN = re.compile("^[\w]+$")
 
 class RandDBasicInfoForm(forms.ModelForm):
-
+    RandDname = forms.CharField(max_length=150, required=False)
     class Meta:
         model = models.RandDProfile
-        fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
+        fields = ('photo', 'registration_number', 'date_of_foundation',
                   'research_field', 'RandD_type', 'phone_number')
         
         # error_messages = {
@@ -26,7 +27,7 @@ class RandDBasicInfoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].required = False
+        # self.fields['name'].required = False
         self.fields['photo'].required = False
         self.fields['registration_number'].required = False
         self.fields['date_of_foundation'].required = False
@@ -41,14 +42,14 @@ class RandDBasicInfoForm(forms.ModelForm):
     #         raise ValidationError(_("عکس نمی تواند خالی باشد."))
     #     return data
 
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-        if name is None or name == '':
+    def clean_RandDname(self):
+        RandDname = self.cleaned_data.get('RandDname')
+        if RandDname is None or RandDname == '':
             raise ValidationError(_("نام نمی تواند خالی باشد."))
-        check_name = models.RandDProfile.objects.filter(name=name).count()
+        check_name = models.RandDProfile.objects.filter(name=RandDname).count()
         if check_name > 0:
             raise ValidationError(_("نام انتخابی شما قبلاانتخاب شده است."))
-        return name
+        return RandDname
 
     def clean_registration_number(self):
         data = self.cleaned_data["registration_number"]
@@ -99,16 +100,18 @@ class RandDBasicInfoForm(forms.ModelForm):
         return data
 
 class RandDInfoForm(forms.ModelForm):
+    RandDname = forms.CharField(max_length=150, required=False)
+    userId = forms.CharField(max_length=150, required=False)
 
     class Meta:
         model = models.RandDProfile
-        fields = ('photo', 'name', 'registration_number', 'date_of_foundation',
+        fields = ('photo', 'registration_number', 'date_of_foundation',
                   'research_field', 'RandD_type', 'address', 'phone_number',
                   'tax_declaration', 'services_products', 'awards_honors')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].required  = False
+        # self.fields['name'].required  = False
         self.fields['photo'].required = False
         self.fields['registration_number'].required = False
         self.fields['date_of_foundation'].required  = False
@@ -118,9 +121,15 @@ class RandDInfoForm(forms.ModelForm):
         self.fields['tax_declaration'].required     = False
         self.fields['services_products'].required   = False
         self.fields['awards_honors'].required       = False 
-
+    
+    def clean_userId(self):
+        data = self.cleaned_data["userId"]
+        if not bool(USER_ID_PATTERN.match(data)):
+            raise ValidationError('فقط شامل حروف و اعداد و خط زیر است.')
+        return data
 
 class ResearchGroupInfoForm(forms.ModelForm):
+    userId = forms.CharField(max_length=150, required=False)
 
     class Meta:
         model = models.ResearchGroupProfile
@@ -129,6 +138,12 @@ class ResearchGroupInfoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['address'].required = False
+    
+    def clean_userId(self):
+        data = self.cleaned_data["userId"]
+        if not bool(USER_ID_PATTERN.match(data)):
+            raise ValidationError('فقط شامل حروف و اعداد و خط زیر است.')
+        return data
 
 
 
