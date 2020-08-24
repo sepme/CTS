@@ -290,10 +290,10 @@ $(document).ready(function () {
             success: function (data) {
                 comment_form.find("button[type='submit']").prop("disabled", false);
                 comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                    $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
-                }
                 let comment_code = addComment(data);
+                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                    $(".project-comment-innerDiv").find(".no-comment").attr("style", "display: none;");
+                }
                 $(".project-comment-innerDiv").find(".comments").append(comment_code);
                 iziToast.success({
                     rtl: true,

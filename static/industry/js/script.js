@@ -159,7 +159,6 @@ function setValue(data, status) {
 
 function setTab(data) {
     if (data.expert_messaged.length === 0) {
-        console.log(data.expert_messaged);
         $(".project-comment-innerDiv .add-comment").css("display", "none");
         let no_comment = `<div class='no-comment not-requested'>
             <img src='../../../../static/img/hourglass.svg' alt=''>
@@ -717,15 +716,16 @@ $(document).ready(function () {
                     success: function (data) {
                         console.log(data);
                         thisFormGroup.find(".form-group__status").removeClass("check");
-                        if (data.invalid_input){
+                        if (data.invalid_input) {
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error");
                         } else if (data.is_unique) {
-                        if (data.is_unique) {
-                            thisFormGroup.find(".form-group__status").addClass("success");
-                        } else {
-                            thisFormGroup.find(".form-group__status").addClass("fail");
-                            thisFormGroup.find("input").addClass("error");
+                            if (data.is_unique) {
+                                thisFormGroup.find(".form-group__status").addClass("success");
+                            } else {
+                                thisFormGroup.find(".form-group__status").addClass("fail");
+                                thisFormGroup.find("input").addClass("error");
+                            }
                         }
                     },
                     error: function (data) {
@@ -799,7 +799,7 @@ $(document).ready(function () {
                     projectDetail(data);
                 } else {
                     $('.confirm-request').attr('id', id);
-                    $('.comment').attr('id', id);
+                    $('.add-comment').attr('id', id);
                     localStorage.setItem("project_id", "" + id);
                     localStorage.setItem("replied_text", null);
                     dialog.find(".modal-header .modal-title").html(data.persian_title + "<br>" + data.english_title);
@@ -1094,63 +1094,63 @@ $(document).ready(function () {
             $(".dialog-main").css("display", "block");
             close_dialog();
         });
-        let comment_form = $('#comment-form');
-        comment_form.submit(function (event) {
-            event.preventDefault();
-            comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
-            comment_form.find("label").addClass("progress-cursor");
-            $("#project_id").attr('value', $(".comment").attr("id"));
-            $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
-            let thisUrl = "/industry/submit_comment/";
-            let data = new FormData(comment_form.get(0));
-            $.ajax({
-                method: 'POST',
-                url: thisUrl,
-                data: data,
-                type: "ajax",
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                        .prop("disabled", false);
-                    comment_form.find("label").removeClass("progress-cursor");
-                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                    if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                        $(".project-comment-innerDiv").find(".no-comment").remove();
-                    }
-                    let comment_code = addComment(data);
-                    $(".project-comment-innerDiv").find(".comments").append(comment_code);
-                    iziToast.success({
-                        rtl: true,
-                        message: "پیام با موفقیت ارسال شد!",
-                        position: 'bottomLeft'
-                    });
-                    comment_form[0].reset();
-                    comment_form.find("#description").css("height", "fit-content");
-                    $('.error').remove();
-                    $('.file-name').html("");
-                    $(".send-comment-container .comment-input").removeClass("attached");
-                    $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
-                },
-                error: function (data) {
-                    let obj = JSON.parse(data.responseText);
-                    comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                        .prop("disabled", false);
-                    comment_form.find("label").removeClass("progress-cursor");
-                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                    if (obj.description) {
-                        $("#description").closest("div").append("<div class='error'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + obj.description + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
-                        $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                    }
-                },
-            });
-        });
+        // let comment_form = $('#comment-form');
+        // comment_form.submit(function (event) {
+        //     event.preventDefault();
+        //     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+        //     comment_form.find("label").addClass("progress-cursor");
+        //     $("#project_id").attr('value', $(".comment").attr("id"));
+        //     $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
+        //     let thisUrl = "/industry/submit_comment/";
+        //     let data = new FormData(comment_form.get(0));
+        //     $.ajax({
+        //         method: 'POST',
+        //         url: thisUrl,
+        //         data: data,
+        //         type: "ajax",
+        //         processData: false,
+        //         contentType: false,
+        //         success: function (data) {
+        //             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+        //                 .prop("disabled", false);
+        //             comment_form.find("label").removeClass("progress-cursor");
+        //             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+        //             if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+        //                 $(".project-comment-innerDiv").find(".no-comment").remove();
+        //             }
+        //             let comment_code = addComment(data);
+        //             $(".project-comment-innerDiv").find(".comments").append(comment_code);
+        //             iziToast.success({
+        //                 rtl: true,
+        //                 message: "پیام با موفقیت ارسال شد!",
+        //                 position: 'bottomLeft'
+        //             });
+        //             comment_form[0].reset();
+        //             comment_form.find("#description").css("height", "fit-content");
+        //             $('.error').remove();
+        //             $('.file-name').html("");
+        //             $(".send-comment-container .comment-input").removeClass("attached");
+        //             $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+        //         },
+        //         error: function (data) {
+        //             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+        //                 .prop("disabled", false);
+        //             comment_form.find("label").removeClass("progress-cursor");
+        //             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+        //             let obj = JSON.parse(data.responseText);
+        //             if (obj.description) {
+        //                 $("#description").closest("div").append("<div class='error'>" +
+        //                     "<span class='error-body'>" +
+        //                     "<ul class='errorlist'>" +
+        //                     "<li>" + obj.description + "</li>" +
+        //                     "</ul>" +
+        //                     "</span>" +
+        //                     "</div>");
+        //                 $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+        //             }
+        //         },
+        //     });
+        // });
         // $(".chamran_btn").click(function () {
         //     let comment_obj = $("#comment");
         //     let comment_description = comment_obj.val();

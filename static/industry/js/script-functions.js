@@ -133,9 +133,12 @@ function dialog_comment_init() {
         comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
         comment_form.find("label").addClass("progress-cursor");
         comment_form.find("input#project_id").attr('value', comment_form.closest(".add-comment").attr("id"));
-        $("#expert_id").attr('value', $(this).closest(".row").find(".comment-tabs .active").attr("id")
-            .replace("v-pills-expert-", ""));
-        console.log("expert_id", $("#expert_id").attr('value'));
+        if ($(this).find("#expert_id").val() === "") {
+            $("#expert_id").attr('value', $(this).closest(".row").find(".comment-tabs .active").attr("id")
+                .replace("v-pills-expert-", ""));
+        }
+        console.log($("#project_id").val());
+        console.log($("#expert_id").val());
         let thisUrl = "/industry/submit_comment/";
         let data = new FormData(comment_form.get(0));
         $.ajax({

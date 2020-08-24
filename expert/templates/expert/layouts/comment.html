@@ -62,12 +62,12 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <div class="add-comment" id="{% if project_pk %}{{ project.pk }}{% endif %}">
+        <div class="add-comment" id="{% if project_pk %}{{ project_pk }}{% endif %}">
             <form action="" method="POST" enctype="multipart/form-data" id="comment_form">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">
-                        <input type="text" class="project_id" name="project_id" value="" hidden>
+                        <input type="text" class="project_id" name="project_id" value="{% if project_pk %}{{ project_pk }}{% endif %}" hidden>
                         <input type="text" class="researcher_id" name="researcher_id" value="" hidden>
                         <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
                         <div class="send-comment-container">

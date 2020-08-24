@@ -4,12 +4,10 @@
 <div class="project-info-tabs comment-tabs">
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
          aria-orientation="vertical">
-        {% if comments %}
-            <a class='nav-link active' data-toggle='pill' role='tab' aria-controls='v-pills-home' aria-selected='true'
-               id="v-pills-expert-1">
-                سپهر متانت
-            </a>
-        {% endif %}
+{#        {% if comments %}#}
+{#            <a class='nav-link active' data-toggle='pill' role='tab' aria-controls='v-pills-home' aria-selected='true'#}
+{#               id="v-pills-expert-1"></a>#}
+{#        {% endif %}#}
     </div>
 </div>
 <div class="section">
@@ -28,7 +26,7 @@
     <div class="project-comment-innerDiv">
         <div class="no-comment" style="{% if project_pk %}{% if not comments %}display:block;{% endif %}{% endif %}">
             <img src="{% static 'img/no_message.svg' %}" alt="no message">
-            <h6>نظری درباره این پروژه ثبت نشده!</h6>
+            <h6 dir="rtl">نظری درباره این پروژه ثبت نشده!</h6>
             <pre>در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.</pre>
         </div>
         <div class="comments">
@@ -90,8 +88,8 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-12">
-                        <input type="text" name="project_id" id="project_id" hidden>
-                        <input type="text" name="expert_id" id="expert_id" hidden>
+                        <input type="text" name="project_id" id="project_id" value="{% if project_pk %}{{ project_pk }}{% endif %}" hidden>
+                        <input type="text" name="expert_id" id="expert_id" value="{% if project_pk %}{{ expert_pk }}{% endif %}" hidden>
                         <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
                         <div class="send-comment-container">
                             <button class="image-btn-circle" type="submit"></button>
