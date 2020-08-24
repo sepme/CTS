@@ -856,8 +856,9 @@ def GetResume(request):
 
         "awards": expert_form.awards,
         'languages': expert_form.languages,
-        'resume': expert_form.resume.url,
     }
+    if expert_form.resume:
+        data['resume'] = expert_form.resume.url
 
     if expert_form.has_industrial_research == 'yes':
         data['has_industrial_research'] = 'داشته'
