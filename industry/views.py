@@ -532,20 +532,21 @@ def checkUserId(request):
 
 @permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):
-    technique_list = request.POST.getlist('technique')
-    if len(technique_list) == 0:
-        return JsonResponse({
-            'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
-        }, status=400)
-    project = models.Project.objects.filter(pk=request.POST['projectId'])
-    for technique in technique_list:
-        project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
-        project.projectform.techniques.add(project_technique[0])
-    project.projectform.save()
     expertId = request.POST['expertId']
     expert = ExpertUser.objects.filter(userId=expertId)
     data = {}
     if expert.autoAddProject:
+        technique_list = request.POST.getlist('technique')
+        if len(technique_list) == 0:
+            return JsonResponse({
+                'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
+            }, status=400)
+        project = models.Project.objects.filter(pk=request.POST['projectId'])
+        for technique in technique_list:
+            project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
+            project.projectform.techniques.add(project_technique[0])
+        project.projectform.save()
+    # if expert.autoAddProject:
         project.expert_accepted = expert
         data['addExpert'] = True
         message="""با سلام
@@ -578,9 +579,9 @@ def ProjectSetting(request):
                             type=0)
         newMessage.save()
         newMessage.receiver.add(expert)
+        project.save()
     else: 
         data['addExpert'] = False
-    project.save()
     return JsonResponse(data={})
 
 

@@ -28,6 +28,7 @@
                             برای ادامه عملیات لازم است آدرس حساب خود، در سامانه علم سنجی را در قسمت زیر وارد کنید.
                         </p>
                         <form id="ajax-web-scrapping-form" action="/expert/collect_data/" method="POST">
+                            {% csrf_token %}
                             <div class="form-group">
                                 <label for="linkUrl">لینک</label>
                                 <input class="w-100" id="linkUrl" name="link" style="direction: ltr">

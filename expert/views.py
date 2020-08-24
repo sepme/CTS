@@ -1061,62 +1061,68 @@ def checkUserId(request):
 
 @permission_required('expert.be_expert', login_url='/login/')
 def CollectData(request):
-    link = request.POST['link']
-    # link = "https://isid.research.ac.ir/Reza_Malekzadeh"
-    try:
-        collectedData = webScraping.webScraping(link=link)
-    except:
-        return JsonResponse(data={}, status=400)
-    scientific_rank = ""
-    special_field = ""
-    if "پژوهشگر" in collectedData['information'][0]:
-        scientific_rank = 6
-        special_field = collectedData['information'][0][8:]
-    elif "استاد ممتاز" in collectedData['information'][0]:
-        scientific_rank = 5
-        special_field = collectedData['information'][0][12:]
-    elif "استادیار" in collectedData['information'][0]:
-        scientific_rank = 2
-        special_field = collectedData['information'][0][9:]
-    elif "استاد" in collectedData['information'][0]:
-        scientific_rank = 4
-        special_field = collectedData['information'][0][6:]
-    elif "دانشیار" in collectedData['information'][0]:
-        scientific_rank = 3
-        special_field = collectedData['information'][0][8:]
-    elif "مربی" in collectedData['information'][0]:
-        scientific_rank = 1
-        special_field = collectedData['information'][0][5:]
-    tempForm = TempExpertForm(expertUser=request.user.expertuser,
-                              fullname=collectedData['fullname'],
-                              special_field=special_field,
-                              scientific_rank=scientific_rank,
-                              university=collectedData['information'][-1]
-                              )
-    tempForm.save()
-    tempForm.photo.save(str(request.user.expertuser) + "_photo.jpg", collectedData['photo'])
-    for keyword in collectedData['keywords']:
-        key = Keyword.get_or_create(name=keyword)
-        key.save()
-        tempForm.keywords.add(key)
+    if not TempExpertForm.objects.filter(expertUser=request.user.expertuser).count():
+        link = request.POST['link']
+        # link = "https://isid.research.ac.ir/Reza_Malekzadeh"
+        try:
+            collectedData = webScraping.webScraping(link=link)
+        except:
+            return JsonResponse(data={}, status=400)
+        scientific_rank = ""
+        special_field = ""
+        if "پژوهشگر" in collectedData['information'][0]:
+            scientific_rank = 6
+            special_field = collectedData['information'][0][8:]
+        elif "استاد ممتاز" in collectedData['information'][0]:
+            scientific_rank = 5
+            special_field = collectedData['information'][0][12:]
+        elif "استادیار" in collectedData['information'][0]:
+            scientific_rank = 2
+            special_field = collectedData['information'][0][9:]
+        elif "استاد" in collectedData['information'][0]:
+            scientific_rank = 4
+            special_field = collectedData['information'][0][6:]
+        elif "دانشیار" in collectedData['information'][0]:
+            scientific_rank = 3
+            special_field = collectedData['information'][0][8:]
+        elif "مربی" in collectedData['information'][0]:
+            scientific_rank = 1
+            special_field = collectedData['information'][0][5:]
+        TempExpertForm
+        tempForm = TempExpertForm(expertUser=request.user.expertuser,
+                                fullname=collectedData['fullname'],
+                                special_field=special_field,
+                                scientific_rank=scientific_rank,
+                                university=collectedData['information'][-1]
+                                )
+        tempForm.save()
+        tempForm.photo.save(str(request.user.expertuser) + "_photo.jpg", collectedData['photo'])
+        for keyword in collectedData['keywords']:
+            tempForm.keywords.add(Keyword.objects.get_or_create(name=keyword)[0])
 
-    for paper in collectedData['papers_information']:
-        temp = TempPaperRecord(tempExpertForm=tempForm,
-                               research_title=paper['title'],
-                               date_published=paper['publish_year'],
-                               published_at=paper['source'],
-                               impact_factor=paper['impact_factor'],
-                               citation=paper['citation'])
-        temp.save()
+        for paper in collectedData['papers_information']:
+            temp = TempPaperRecord(tempExpertForm=tempForm,
+                                research_title=paper['title'],
+                                date_published=paper['publish_year'],
+                                published_at=paper['source'],
+                                impact_factor=paper['impact_factor'],
+                                citation=paper['citation'])
+            temp.save()
+        keywords = collectedData['keywords']
+        papers_information = collectedData['papers_information']
+    else:
+        tempForm = TempExpertForm.objects.get(expertUser=request.user.expertuser)
+        keywords = [keyword.name for keyword in tempForm.keywords.all()]
+        papers_information = [model_to_dict(paper) for paper in tempForm.temppaperrecord_set.all()]
 
     data = {
-        "photo": collectedData['photo'],
-        "fullname": collectedData['fullname'],
-        "scientific_rank": scientific_rank,
-        "special_field": special_field,
-        "university": collectedData['information'][-1],
-        "keywords": collectedData['keywords'],
-        "papers": collectedData['papers_information'],
+        "photo": tempForm.photo.url,
+        "fullname": tempForm.fullname,
+        "scientific_rank": tempForm.scientific_rank,
+        "special_field": tempForm.special_field,
+        "university": tempForm.university,
+        "keywords": keywords,
+        "papers": papers_information,
     }
     return JsonResponse(data=data)
 
