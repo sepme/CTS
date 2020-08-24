@@ -280,6 +280,7 @@ $(document).ready(function () {
             $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
         }
         let form = new FormData(comment_form.get(0));
+        console.log(form);
         $.ajax({
             method: 'POST',
             url: thisUrl,
@@ -289,10 +290,10 @@ $(document).ready(function () {
             success: function (data) {
                 comment_form.find("button[type='submit']").prop("disabled", false);
                 comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-                    $(".project-comment-innerDiv").find(".no-comment").att("style", "display: none;");
-                }
                 let comment_code = addComment(data);
+                if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
+                    $(".project-comment-innerDiv").find(".no-comment").attr("style", "display: none;");
+                }
                 $(".project-comment-innerDiv").find(".comments").append(comment_code);
                 iziToast.success({
                     rtl: true,
@@ -1429,7 +1430,7 @@ function researcherRequest() {
     requestForm.submit(function (event) {
         event.preventDefault();
         $(".project").attr("value", $('.showProject').attr('id'));
-        let thisUrl = "request_researcher/";
+        let thisUrl = "/expert/request_researcher/";
         let form = new FormData(requestForm.get(0));
         $("#id_least_hour").removeClass("error").css("color", "").prev().css("color", "");
         $("#id_researcher_count").removeClass("error").css("color", "").prev().css("color", "");
@@ -1441,12 +1442,13 @@ function researcherRequest() {
             processData: false,
             contentType: false,
             success: function (data) {
-                requestForm[0].reset();
                 iziToast.success({
                     rtl: true,
-                    message: "اطلاعات با موفقیت ذخیره شد!",
+                    message: "درخواست شما با موفقیت ثبت شد!",
                     position: 'bottomLeft'
                 });
+                requestForm[0].reset();
+                requestForm.closest(".modal").modal("hide");
             },
             error: function (data) {
                 let obj = JSON.parse(data.responseText);
@@ -1470,6 +1472,7 @@ function researcherRequest() {
                         "</div>");
                     $("#id_researcher_count").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                 }
+                display_error(requestForm);
             },
         });
     });

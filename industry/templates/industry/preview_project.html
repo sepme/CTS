@@ -286,7 +286,7 @@
                                                                                      alt="{{ researcher.fullname }}پروفایل ">
                                                                                 <div class="info">
                                                                                     <h3>{{ researcher.fullname }}</h3>
-                                                                                    <button value="{{ project.pk }}"
+                                                                                    <button value="{{ project_pk }}"
                                                                                             id="{{ researcher.id }}"
                                                                                             data-url="{% url 'researcher:show_resume_preview' %}"
                                                                                             data-toggle="modal"
@@ -315,7 +315,7 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            {% include 'industry/layouts/comment.html' with comments=comments project_pk=project_pk %}
+                            {% include 'industry/layouts/comment.html' with comments=comments project_pk=project_pk expert_pk=expert_pk %}
                         </div>
                     </div>
                 </div>

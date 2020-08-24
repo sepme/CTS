@@ -106,6 +106,7 @@ def usualShow(request, project):
 def ActiveProject(request, project, data):
     data['accepted'] = True
     data['project_pk'] = project.id
+    data['expert_pk'] = project.expert_accepted.id
     industryform = request.user.industryuser.profile
     data['projectForm'] = model_to_dict(project.project_form)
     projectDate = {
@@ -612,6 +613,14 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         context = super().get_context_data(**kwargs)
         project = get_object_or_404(models.Project, code=kwargs["code"])
         context = ActiveProject(request=self.request, project=project, data=context)
+        context['researcher_accepted'] = []
+        for researcher in project.researcher_accepted.all():
+            researcher = {
+                "id": researcher.pk,
+                "fullname": researcher.researcherprofile.fullname,
+                "photo": researcher.researcherprofile.photo
+            }
+            context['researcher_accepted'].append(researcher)
         return context
     
 
