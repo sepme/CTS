@@ -580,6 +580,7 @@ def add_research_question(request):
             attachment = request.FILES.get('attachment')
             research_question.attachment.save(attachment.name, attachment)
         research_question.save()
+        data["id"] = research_question.id
         return JsonResponse(data)
     else:
         return JsonResponse(research_question_form.errors, status=400)

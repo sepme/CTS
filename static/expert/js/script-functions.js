@@ -532,70 +532,76 @@ function show_paper_record(id) {
     record_edit(".paper");
 }
 
-function show_new_research_question() {
+function show_new_research_question(pk) {
     if ($(".empty-page").length !== 0) {
-        let container = "<div class=\"col-lg-12 text-right\">\n" +
-            "                <div class=\"project-info-tabs\">\n" +
-            "                    <div class=\"nav flex-column nav-pills\" id=\"v-pills-tab\" role=\"tablist\"\n" +
-            "                         aria-orientation=\"vertical\">\n" +
-            "                        <a class=\"nav-link active fs-15\" id=\"all-questions\" data-toggle=\"pill\"\n" +
-            "                           role=\"tab\" aria-selected=\"true\">\n" +
-            "                            همه\n" +
-            "                        </a>\n" +
-            "                        <a class=\"nav-link fs-15\" id=\"active-questions\" data-toggle=\"pill\"\n" +
-            "                           role=\"tab\" aria-selected=\"false\">\n" +
-            "                            فعال\n" +
-            "                        </a>\n" +
-            "                        <a class=\"nav-link fs-15\" id=\"check-questions\" data-toggle=\"pill\"\n" +
-            "                           role=\"tab\" aria-selected=\"false\">\n" +
-            "                            درحال بررسی\n" +
-            "                        </a>\n" +
-            "                        <a class=\"nav-link fs-15\" id=\"answered-questions\" data-toggle=\"pill\"\n" +
-            "                           role=\"tab\" aria-selected=\"false\">\n" +
-            "                            پاسخ داده شده\n" +
-            "                        </a>\n" +
-            "                    </div>\n" +
-            "                </div>\n" +
-            "                <div class=\"tab-content cover-page\"></div>" +
-            "</div>";
+        let container = `
+            <div class="col-lg-12 text-right">
+                <div class="project-info-tabs">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                         aria-orientation="vertical">
+                        <a class="nav-link active fs-15" id="all-questions" data-toggle="pill"
+                           role="tab" aria-selected="true">
+                            همه
+                        </a>
+                        <a class="nav-link fs-15" id="active-questions" data-toggle="pill"
+                           role="tab" aria-selected="false">
+                            فعال
+                        </a>
+                        <a class="nav-link fs-15" id="check-questions" data-toggle="pill"
+                           role="tab" aria-selected="false">
+                            درحال بررسی
+                        </a>
+                        <a class="nav-link fs-15" id="answered-questions" data-toggle="pill"
+                           role="tab" aria-selected="false">
+                            پاسخ داده شده
+                        </a>
+                    </div>
+                </div>
+                <div class="tab-content cover-page"></div>
+            </div>
+        `;
         $(".empty-page").closest(".row").html(container);
         $(".h3").removeClass("border-bottom");
     }
-    let new_question = "<div class='card check-question box flow-root-display w-100'>" +
-        "                                <div class='box-header'>" +
-        "                                    <h6>" + $("#question-title").val() + "</h6>" +
-        "                                    <span class='check-status'></span>" +
-        "                                </div>" +
-        "                                <div class='box-body'>" +
-        "                                    <div class='row'>" +
-        "                                        <div class='col-md-6 col-9'>" +
-        "                                            <div class='row'>" +
-        "                                                <div class='col-6'>" +
-        "                                                    <div class='date text-center'>" +
-        "                                                        <div class='label'>زمان ثبت</div>" +
-        "                                                        <div class='value'>" +
-        "                                                            <span>الان</span>" +
-        "                                                        </div>" +
-        "                                                    </div>" +
-        "                                                </div>" +
-        "                                                <div class='col-6'>" +
-        "                                                    <div class='answers text-center'>" +
-        "                                                        <div class='label'>پاسخ های جدید</div>" +
-        "                                                        <div class='value'>" +
-        "                                                            <span>0</span>" +
-        "                                                            <span></span>" +
-        "                                                        </div>" +
-        "                                                    </div>" +
-        "                                                </div>" +
-        "                                            </div>" +
-        "                                        </div>" +
-        "                                        <div class='col-md-6 col-3'>" +
-        "                                            <button class='default-btn show-btn' id=''>مشاهده" +
-        "                                            </button>" +
-        "                                        </div>" +
-        "                                    </div>" +
-        "                                </div>" +
-        "                            </div>";
+    let new_question = `
+        <div class="card check-question box flow-root-display w-100">
+            <div class="box-header">
+                <h6>${$("#question-title").val()}</h6>
+                <span class="check-status"></span>       
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6 col-9">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="date text-center">
+                                    <div class="label">زمان ثبت</div>
+                                    <div class="value">
+                                        <span>چند لحظه</span>
+                                        <span>قبل</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="answers text-center">
+                                    <div class="label">پاسخ های جدید</div>
+                                    <div class="value">
+                                        <span>0</span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-3">
+                        <button class="default-btn show-btn" id="${pk}" data-toggle="modal" data-target="#showQuestion">
+                            مشاهده
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
     $(".tab-content").append(new_question);
 }
 
@@ -991,13 +997,13 @@ function show_question_answers(data) {
         }
         if (data[i].is_correct === "correct") {
             answer = answer +
-                '           <div class="status correct-answer" style="display: inline-table;">' +
+                '           <div class="status correct-answer" style="display: block ruby;">' +
                 '               <span>پاسخ صحیح</span>' +
                 '               <i class="fas fa-check"></i>' +
                 '           </div>';
         } else if (data[i].is_correct === "wrong") {
             answer = answer +
-                '           <div class="status wrong-answer" style="display: inline-table;">' +
+                '           <div class="status wrong-answer" style="display: block ruby;">' +
                 '               <span>پاسخ نادرست</span>' +
                 '               <i class="fas fa-times"></i>' +
                 '           </div>';

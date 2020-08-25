@@ -68,6 +68,7 @@ function newItem_label() {
 }
 
 function showQuestion() {
+    $("[data-target='#showQuestion']").off();
     $("[data-target='#showQuestion']").click(function () {
         const dialog = $("#showQuestion");
         let id = $(this).attr("id");
@@ -728,11 +729,12 @@ $(document).ready(function () {
                         $(".add-question").css("display", "none");
                         $(".main").removeClass("blur-div");
                         $(".empty-question").remove();
-                        show_new_research_question();
+                        show_new_research_question(data.id);
                         let questions = getAllQuestions();
                         $(".nav-tabs .nav-item .nav-link").click(function () {
                             questionsNav(questions, this);
                         });
+                        showQuestion();
                         iziToast.success({
                             rtl: true,
                             message: "سوال پژوهشی با موفقیت ذخیره شد. " +
