@@ -340,8 +340,7 @@ $(document).ready(function () {
 
     // Check user id
     if ($("#userID").length) {
-        $("input#userID").on("keyup", function () {
-            console.log("search: ", $(this).val());
+        $("input#userID").on("focusout", function () {
             $('.userId-error').remove();
             let thisFormGroup = $(this).closest(".form-group");
             if ($(this).val()) {
@@ -354,7 +353,6 @@ $(document).ready(function () {
                     url: "/researcher/checkUserId",
                     data: {"user_id": $(this).val()},
                     success: function (data) {
-                        console.log(data);
                         thisFormGroup.find(".form-group__status").removeClass("check");
                         if (data.invalid_input){
                             thisFormGroup.find(".form-group__status").addClass("fail");
@@ -367,7 +365,6 @@ $(document).ready(function () {
                         }
                     },
                     error: function (data) {
-                        console.log(data);
                         thisFormGroup.find(".form-group__status").removeClass("check");
                         iziToast.error({
                             rtl: true,
