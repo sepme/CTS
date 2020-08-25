@@ -6,7 +6,7 @@ import uuid
 from industry.models import Keyword, Project
 from researcher.models import ResearchQuestionInstance
 
-#for Compress the photo
+# for Compress the photo
 import sys
 from PIL import Image
 from io import BytesIO
@@ -14,20 +14,22 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 import time
 
+
 def profileUpload(instance, filename):
-    return os.path.join('Expert Profile' , instance.expert_user.user.username ,filename)
-    
+    return os.path.join('Expert Profile', instance.expert_user.user.username, filename)
+
     # ext = filename.split('.')[-1]
     # filename = '{}.{}'.format('profile', ext)
 
     # return os.path.join('unique', instance.expert_user.user.username, filename)
+
 
 def get_attachment_path(instance, filename):
     return os.path.join('Research Question', instance.expert.user.username + '-' + instance.question_title, filename)
 
 
 class ExpertUser(models.Model):
-    user   = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر استاد")
     userId = models.CharField(max_length=50, verbose_name="ID کاربر", blank=True, null=True)
     expert_point = models.FloatField(verbose_name="امتیاز استاد", default=0.0)
     STATUS = (
@@ -54,7 +56,8 @@ class ExpertUser(models.Model):
 
     @property
     def score(self):
-        return self.expert_point*23
+        return self.expert_point * 23
+
 
 class EqTest(models.Model):
     INT_CHOICE = (
@@ -77,7 +80,7 @@ class EqTest(models.Model):
 class ExpertForm(models.Model):
     expert_user = models.OneToOneField('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="فرم استاد",
                                        null=True, blank=True)
-    fullname      = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی")
+    fullname = models.CharField(max_length=128, verbose_name="نام و نام خانوادگی")
     special_field = models.CharField(max_length=256, verbose_name="حوزه تخصصی")
     national_code = models.CharField(max_length=15, verbose_name="کد ملی", blank=True, null=True)
     scientific_rank_choice = (
@@ -116,7 +119,7 @@ class ExpertForm(models.Model):
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo  = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
     resume = models.FileField(verbose_name="رزومه استاد", upload_to=profileUpload, max_length=511,
                               null=True, blank=True)
 
@@ -127,7 +130,7 @@ class ExpertForm(models.Model):
         if self.id:
             perv = ExpertForm.objects.get(id=self.id)
             if perv.photo.name:
-                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1] :
+                if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
                     self.photo = self.compressImage(self.photo)
             else:
                 if self.photo.name:
@@ -137,13 +140,14 @@ class ExpertForm(models.Model):
                 self.photo = self.compressImage(self.photo)
         super(ExpertForm, self).save(*args, **kwargs)
 
-    def compressImage(self,photo):
+    def compressImage(self, photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
-        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
+        imageTemproaryResized = imageTemproary.resize((1020, 573))
+        imageTemproary.save(outputIoStream, format='JPEG', quality=40)
         outputIoStream.seek(0)
-        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        uploadedImage = InMemoryUploadedFile(outputIoStream, 'ImageField', "%s.jpg" % photo.name.split('.')[0],
+                                             'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
 
     def get_keywords(self):
@@ -155,6 +159,44 @@ class ExpertForm(models.Model):
             return keyword_string
         else:
             return ''
+
+    def get_resume_name(self):
+        try:
+            return os.path.basename(self.resume.name)[:os.path.basename(self.resume.name).rfind(".")]
+        except:
+            return ""
+
+    def get_resume_ext(self):
+        try:
+            return os.path.basename(self.resume.name)[os.path.basename(self.resume.name).rfind(".") + 1:]
+        except:
+            return ""
+
+    def get_resume_icon(self):
+        try:
+            icon = "unknown"
+            ext = self.get_resume_ext()
+            if ext.lower() == "pdf":
+                icon = "pdf"
+            elif ext.lower() == "doc":
+                icon = "doc"
+            elif ext.lower() == "gif":
+                icon = "gif"
+            elif ext.lower() == "jpg":
+                icon = "jpg"
+            elif ext.lower() == "png":
+                icon = "png"
+            elif ext.lower() == "ppt":
+                icon = "ppt"
+            elif ext.lower() == "txt":
+                icon = "txt"
+            elif ext.lower() == "wmv":
+                icon = "wmv"
+            elif ext.lower() == "zip":
+                icon = "zip"
+            return icon
+        except:
+            return "unknown"
 
 
 class ScientificRecord(models.Model):
@@ -224,8 +266,8 @@ class IndustryEvaluateExpert(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="پروژه", blank=True)
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
     industry = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
-                                    verbose_name="صنعت ارزیابی کننده", blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="پروژه", blank=True )
+                                 verbose_name="صنعت ارزیابی کننده", blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="پروژه", blank=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -350,32 +392,37 @@ class ExpertRequestedProject(models.Model):
     def __str__(self):
         return "{}'s request for '{}' project".format(self.expert.expertform, self.project)
 
+
 class RequestResearcher(models.Model):
-    project    = models.OneToOneField(Project, verbose_name="پروژه", on_delete=models.CASCADE)
-    expert     = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
+    project = models.OneToOneField(Project, verbose_name="پروژه", on_delete=models.CASCADE)
+    expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
     least_hour = models.IntegerField(verbose_name="حداقل ساعت")
     researcher_count = models.IntegerField(verbose_name="تعداد دانشجو")
 
     def __str__(self):
-        return str(self.project) + " - " +str(self.researcher_count)
-    
+        return str(self.project) + " - " + str(self.researcher_count)
+
     @property
     def need_researcher(self):
         if self.researcher_count > 0:
             return True
         return False
+
+
 class TempExpertForm(models.Model):
-    expertUser      = models.OneToOneField(ExpertUser, verbose_name="استاد", on_delete=models.CASCADE)
-    fullname        = models.CharField(verbose_name="نام و نام خانوادگی" ,max_length=150, null=True, blank=True)
-    photo           = models.ImageField(upload_to="tempExpertForm", height_field=None, width_field=None, max_length=None, null=True, blank=True)
-    special_field   = models.CharField(max_length=100, null=True, blank=True)
+    expertUser = models.OneToOneField(ExpertUser, verbose_name="استاد", on_delete=models.CASCADE)
+    fullname = models.CharField(verbose_name="نام و نام خانوادگی", max_length=150, null=True, blank=True)
+    photo = models.ImageField(upload_to="tempExpertForm", height_field=None, width_field=None, max_length=None,
+                              null=True, blank=True)
+    special_field = models.CharField(max_length=100, null=True, blank=True)
     scientific_rank = models.IntegerField(verbose_name="مرتبه علمی", null=True, blank=True)
-    university      = models.CharField(max_length=100, null=True, blank=True)
-    keywords        = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
+    university = models.CharField(max_length=100, null=True, blank=True)
+    keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
 
     def __str__(self):
         return str(self.expertUser)
-    
+
+
 class TempPaperRecord(models.Model):
     tempExpertForm = models.ForeignKey(TempExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
     research_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")

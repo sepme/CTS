@@ -555,10 +555,10 @@ $(document).ready(function () {
                         </a>
                     </span>
                 </div>
-                <button class="btn btn-primary mt-4" type="button" id="deleteAttachment">حذف فایل</button>
+                <button class="btn btn-primary mt-4" type="button" id="changeAttachment">حذف فایل</button>
             `;
                 $(this).closest(".attach__container").html(attachment);
-                $("#deleteAttachment").click(function () {
+                $("#changeAttachment").click(function () {
                     $(this).closest(".attach__container").html(`
                     <div class="form-group text-center font-weight-bold">
                         <label class="upload-dash-box" for="uploadResume">
@@ -584,8 +584,8 @@ $(document).ready(function () {
             putAttachment($("input#uploadResume"));
         }
 
-        if ($("#deleteAttachment").length) {
-            $("#deleteAttachment").click(function () {
+        if ($("#changeAttachment").length) {
+            $("#changeAttachment").click(function () {
                 $(this).closest(".attach__container").html(`
                     <div class="form-group text-center font-weight-bold">
                         <label class="upload-dash-box" for="uploadResume">

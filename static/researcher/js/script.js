@@ -455,10 +455,10 @@ $(document).ready(function () {
                         </a>
                     </span>
                 </div>
-                <button class="btn btn-primary mt-4" type="button" id="deleteAttachment">حذف فایل</button>
+                <button class="btn btn-primary mt-4" type="button" id="changeAttachment">حذف فایل</button>
             `;
                 $(this).closest(".attach__container").html(attachment);
-                $("#deleteAttachment").click(function () {
+                $("#changeAttachment").click(function () {
                     $(this).closest(".attach__container").html(`
                     <div class="form-group text-center font-weight-bold">
                         <label class="upload-dash-box" for="uploadResume">
@@ -484,8 +484,8 @@ $(document).ready(function () {
             putAttachment($("input#uploadResume"));
         }
 
-        if ($("#deleteAttachment").length) {
-            $("#deleteAttachment").click(function () {
+        if ($("#changeAttachment").length) {
+            $("#changeAttachment").click(function () {
                 $(this).closest(".attach__container").html(`
                     <div class="form-group text-center font-weight-bold">
                         <label class="upload-dash-box" for="uploadResume">
@@ -1586,74 +1586,70 @@ function isOverflow(element) {
     return (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)
 }
 
-$("#active-project").click(function () {
-    $(".new-project").attr("style", "display :none;");
-    $(".done-project").attr("style", "display :none;");
-    $(".missed-project").attr("style", "display :none;");
-    $(".your-project").attr("style", "display :block;");
-    $(".your-project .card.box").each(function () {
-        if (isOverflow($(this).find(".project-techniques")[0])) {
-            $(this).find(".project-techniques").addClass("do-not-touch");
-            while (isOverflow($(this).find(".project-techniques")[0])) {
-                $(this).find(".project-techniques span:nth-last-child(2)").remove();
-            }
-        } else {
-            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
-        }
-
-    });
-});
-
-$("#new-projects").click(function () {
-    $(".new-project").attr("style", "display :block");
-    $(".done-project").attr("style", "display :none");
-    $(".your-project").attr("style", "display :none");
-    $(".missed-project").attr("style", "display :none");
-    $(".new-project .card.box").each(function () {
-        if (isOverflow($(this).find(".project-techniques")[0])) {
-            $(this).find(".project-techniques").addClass("do-not-touch");
-            while (isOverflow($(this).find(".project-techniques")[0])) {
-                $(this).find(".project-techniques span:nth-last-child(2)").remove();
-            }
-        } else {
-            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
-        }
-
-    })
-});
-
-$("#missed-project").click(function () {
-    $(".missed-project").attr("style", "display :block");
-    $(".done-project").attr("style", "display :none");
-    $(".your-project").attr("style", "display :none");
-    $(".new-project").attr("style", "display :none");
-    $(".missed-project .card.box").each(function () {
-        if (isOverflow($(this).find(".project-techniques")[0])) {
-            $(this).find(".project-techniques").addClass("do-not-touch");
-            while (isOverflow($(this).find(".project-techniques")[0])) {
-                $(this).find(".project-techniques span:nth-last-child(2)").remove();
-            }
-        } else {
-            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
-        }
-
-    })
-});
-
-$("#done-project").click(function () {
-    $(".new-project").attr("style", "display :none");
-    $(".your-project").attr("style", "display :none");
-    $(".missed-project").attr("style", "display :none");
-    $(".done-project").attr("style", "display :block");
-    $(".done-project .card.box").each(function () {
-        if (isOverflow($(this).find(".project-techniques")[0])) {
-            $(this).find(".project-techniques").addClass("do-not-touch");
-            while (isOverflow($(this).find(".project-techniques")[0])) {
-                $(this).find(".project-techniques span:nth-last-child(2)").remove();
-            }
-        } else {
-            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
-        }
-
-    })
-});
+// $("#active-project").click(function () {
+//     $(".your-project .card.box").each(function () {
+//         if (isOverflow($(this).find(".project-techniques")[0])) {
+//             $(this).find(".project-techniques").addClass("do-not-touch");
+//             while (isOverflow($(this).find(".project-techniques")[0])) {
+//                 $(this).find(".project-techniques span:nth-last-child(2)").remove();
+//             }
+//         } else {
+//             $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+//         }
+//
+//     });
+// });
+//
+// $("#new-projects").click(function () {
+//     $(".new-project").attr("style", "display :block");
+//     $(".done-project").attr("style", "display :none");
+//     $(".your-project").attr("style", "display :none");
+//     $(".missed-project").attr("style", "display :none");
+//     $(".new-project .card.box").each(function () {
+//         if (isOverflow($(this).find(".project-techniques")[0])) {
+//             $(this).find(".project-techniques").addClass("do-not-touch");
+//             while (isOverflow($(this).find(".project-techniques")[0])) {
+//                 $(this).find(".project-techniques span:nth-last-child(2)").remove();
+//             }
+//         } else {
+//             $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+//         }
+//
+//     })
+// });
+//
+// $("#missed-project").click(function () {
+//     $(".missed-project").attr("style", "display :block");
+//     $(".done-project").attr("style", "display :none");
+//     $(".your-project").attr("style", "display :none");
+//     $(".new-project").attr("style", "display :none");
+//     $(".missed-project .card.box").each(function () {
+//         if (isOverflow($(this).find(".project-techniques")[0])) {
+//             $(this).find(".project-techniques").addClass("do-not-touch");
+//             while (isOverflow($(this).find(".project-techniques")[0])) {
+//                 $(this).find(".project-techniques span:nth-last-child(2)").remove();
+//             }
+//         } else {
+//             $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+//         }
+//
+//     })
+// });
+//
+// $("#done-project").click(function () {
+//     $(".new-project").attr("style", "display :none");
+//     $(".your-project").attr("style", "display :none");
+//     $(".missed-project").attr("style", "display :none");
+//     $(".done-project").attr("style", "display :block");
+//     $(".done-project .card.box").each(function () {
+//         if (isOverflow($(this).find(".project-techniques")[0])) {
+//             $(this).find(".project-techniques").addClass("do-not-touch");
+//             while (isOverflow($(this).find(".project-techniques")[0])) {
+//                 $(this).find(".project-techniques span:nth-last-child(2)").remove();
+//             }
+//         } else {
+//             $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+//         }
+//
+//     })
+// });
