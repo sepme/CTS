@@ -496,7 +496,7 @@ function customAutocomplete(element, arr) {
 
 $(window).on("load", function () {
     if ($(document).find("#Uni").length > 0) {
-        let arr = ["دانشگاه شریف", "دانشگاه تهران"];
+        let arr = ["شهید بهشتی", "ایران", "علوم پزشکی تهران"];
         $("#Uni").autocomplete({
             source: arr,
         });
