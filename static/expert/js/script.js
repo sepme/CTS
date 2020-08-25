@@ -68,10 +68,9 @@ function newItem_label() {
 }
 
 function showQuestion() {
-    $(".show-btn").click(function () {
+    $("[data-target='#showQuestion']").click(function () {
         const dialog = $("#showQuestion");
         let id = $(this).attr("id");
-        console.log(id);
         dialog.css("display", "none");
         mBackdrop = setTimeout("haveBackdrop()", 100);
         $.ajax({
@@ -80,7 +79,6 @@ function showQuestion() {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                console.log(data);
                 if (data.question_status === "waiting") {
                     $('.close-answer').hide();
                     $('.close-answer').prop('disabled', true);
@@ -118,8 +116,10 @@ function showQuestion() {
                 if (answer_list_obj.length !== 0) {
                     show_question_answers(answer_list_obj);
                 } else {
-                    let no_answer = "<div class='no-comment'>متاسفانه، هنوز پاسخی به سوال شما داده نشده است.</div>";
-                    dialog.find(".all-answers").html(no_answer);
+                    dialog.find(".no-comment").attr("style", "display: block");
+                    dialog.on("hidden.bs.modal", function () {
+                        $(this).find(".no-comment").removeAttr("style");
+                    });
                 }
 
                 question_dialog_init();

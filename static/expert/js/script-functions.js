@@ -956,7 +956,7 @@ function show_question_answers(data) {
         }
         answer = answer +
             '<div class="col-lg-12 mbottom-10">' +
-            '   <div class="answer ' + divider_line ;
+            '   <div class="answer ' + divider_line;
         if (data[i].is_correct !== "not_seen") {
             answer = answer + ' answered';
         }
@@ -973,9 +973,9 @@ function show_question_answers(data) {
             '           </a>' +
             '       </div>' +
             '       <div class="check">' +
-            '           <span class="wait-load"></span>' ;
+            '           <span class="wait-load"></span>';
         if (data[i].is_correct === "not_seen") {
-                answer = answer +
+            answer = answer +
                 '           <div class="correct">' +
                 '               <button type="button" title="صحیح" id="' + data[i].answer_id + '">' +
                 '                   <i class="fas fa-check"></i>' +
@@ -987,25 +987,25 @@ function show_question_answers(data) {
                 '                   <i class="fas fa-times"></i>' +
                 '                   <span>نادرست</span>' +
                 '               </button>' +
-                '           </div>' ;
-            }
-            if(data[i].is_correct === "correct") {
-                answer = answer +
+                '           </div>';
+        }
+        if (data[i].is_correct === "correct") {
+            answer = answer +
                 '           <div class="status correct-answer" style="display: inline-table;">' +
                 '               <span>پاسخ صحیح</span>' +
                 '               <i class="fas fa-check"></i>' +
-                '           </div>' ;
-            }else if(data[i].is_correct === "wrong") {
-                answer = answer +
+                '           </div>';
+        } else if (data[i].is_correct === "wrong") {
+            answer = answer +
                 '           <div class="status wrong-answer" style="display: inline-table;">' +
                 '               <span>پاسخ نادرست</span>' +
                 '               <i class="fas fa-times"></i>' +
-                '           </div>' ;
-            }else {
-                answer = answer +
-                '           <div class="status" style="display: block;"></div>' ;
-            }
+                '           </div>';
+        } else {
             answer = answer +
+                '           <div class="status" style="display: block;"></div>';
+        }
+        answer = answer +
             '       </div>' +
             '   </div>' +
             '</div>';
@@ -1240,7 +1240,7 @@ function setComment(data, parent) {
                 "       <span class='comment-tools'>" +
                 // "           <i class='fas fa-reply'" + data[i].pk + "></i>" +
                 "       </span>" +
-                "<pre>" + data[i].text + "</pre>" ;
+                "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
                 comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
