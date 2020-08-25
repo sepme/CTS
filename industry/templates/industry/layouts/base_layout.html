@@ -32,7 +32,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="feedbackModalLabel">ثبت بازخورد</h5>
+                <h6 class="modal-title default" id="feedbackModalLabel">ثبت بازخورد</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{% url 'chamran:addOpinion' %}" id="feedback_ajax_form">
@@ -310,18 +310,27 @@
 <script type="text/javascript">
     $("form#feedback_ajax_form").submit(function (event) {
         event.preventDefault();
+        let modalElement = $("#feedbackModal");
+
         $.ajax({
             method: "POST",
             url: $(this).attr("action"),
             data: $(this).serialize(),
             success: function (data) {
-                iziToast.success({
-                    rtl: true,
-                    message: "بازخورد شما با موفقیت ارسال شد!",
-                    position: 'bottomLeft'
+                $(`
+                    <div class="alert alert-success alert-dismissible fade show text-justify" role="alert">
+                         <strong>گزارش شما دریافت شد.</strong> از همکاری‌تان صمیمانه سپاسگزاریم. به زودی این گزارش بررسی و اقدامات لازم صورت خواهد گرفت.
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                `).insertBefore(modalElement.find(".form-group:first-child"));
+                modalElement.on("hidden.bs.modal", function () {
+                    if ($(this).find(".alert.alert-success").length) {
+                        $(this).find(".alert.alert-success").remove();
+                        $("form#feedback_ajax_form")[0].reset();
+                    }
                 });
-                $("form#feedback_ajax_form")[0].reset();
-                $("#feedbackModal").modal("hide");
             },
             error: function (data) {
                 console.log(data);

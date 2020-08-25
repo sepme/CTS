@@ -671,10 +671,10 @@ img {
     color: #707070;
 }
 
-.fixed-back .close, .modal .close {
+.fixed-back .close, .modal .modal-header .close {
     position: absolute;
-    top: 0;
-    left: 5px;
+    top: 1rem;
+    left: 1rem;
     height: 30px;
     width: 30px;
     border-radius: 50%;
@@ -683,7 +683,7 @@ img {
 }
 
 .fixed-back .close:after, .fixed-back .close:before,
-.modal .close:after, .modal .close:before {
+.modal .modal-header .close:after, .modal .modal-header .close:before {
     background-color: #707070;
     content: "";
     display: block;
@@ -694,24 +694,24 @@ img {
     transform-origin: center center;
 }
 
-.fixed-back .close:after, .modal .close:after {
+.fixed-back .close:after, .modal .modal-header .close:after {
     height: 1.5px;
     width: 70%;
 }
 
-.fixed-back .close:before, .modal .close:before {
+.fixed-back .close:before, .modal .modal-header .close:before {
     height: 70%;
     width: 1.5px;
 }
 
-.fixed-back .close:hover, .modal .close:hover {
+.fixed-back .close:hover, .modal .modal-header .close:hover {
     cursor: pointer;
     border: none;
     background-color: #ff4545;
 }
 
 .fixed-back .close:hover:after, .fixed-back .close:hover:before,
-.modal .close:hover:after, .modal .close:hover:before {
+.modal .modal-header .close:hover:after, .modal .modal-header .close:hover:before {
     background-color: #fff;
 }
 
@@ -2158,7 +2158,7 @@ span.star-warning:after {
     background-color: rgba(60, 205, 28, 0.01);
 }
 
-.close {
+. modal-header .close {
     position: absolute;
     top: 5px;
     left: 5px;
@@ -2169,7 +2169,7 @@ span.star-warning:after {
     z-index: 100;
 }
 
-.close:after, .close:before {
+. modal-header .close :after, . modal-header .close :before {
     background-color: #bdbdbd;
     content: "";
     display: block;
@@ -2180,22 +2180,22 @@ span.star-warning:after {
     transform-origin: center center;
 }
 
-.close:after {
+. modal-header .close :after {
     height: 1px;
     width: 50%;
 }
 
-.close:before {
+. modal-header .close :before {
     height: 50%;
     width: 1px;
 }
 
-.close:hover {
+. modal-header .close :hover {
     cursor: pointer;
     border: 1px solid #ff4545;
 }
 
-.close:hover:after, .close:hover:before {
+. modal-header .close :hover:after, . modal-header .close :hover:before {
     background-color: #ff4545;
 }
 
@@ -6150,4 +6150,16 @@ nav[aria-label="breadcrumb"] ol {
 .btn-secondary:not(:disabled):not(.disabled):active:focus,
 .show > .btn-secondary.dropdown-toggle:focus {
     box-shadow: none;
+}
+
+.alert-dismissible {
+    padding-right: 1.25rem;
+    padding-left: 4rem;
+}
+
+.alert-dismissible .close {
+    right: auto;
+    left: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
