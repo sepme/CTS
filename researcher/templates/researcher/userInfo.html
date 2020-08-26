@@ -203,7 +203,8 @@
                         <div class="card box flow-root-display w-100">
                             <div class="box-header text-right">
                                 <h6>سوابق علمی</h6>
-                                <button type="button" class="education-btn btn p-0 float-left">
+                                <button type="button" class="btn p-0 float-left" data-toggle="modal"
+                                        data-target="#newScientificRecord">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -212,34 +213,36 @@
                                     <div class="col-lg-12 text-center">
                                         <div class="education text-center w-100">
                                             {% if scientificrecord_set %}
-                                                <table class='table m-top-10'>
-                                                    <thead>
-                                                    <tr>
-                                                        <td>مقطع تحصیلی</td>
-                                                        <td>رشته تحصیلی</td>
-                                                        <td>دانشگاه</td>
-                                                        <td>شهر محل تحصیل</td>
-                                                        <td>سال اخذ مدرک</td>
-                                                        <td></td>
-                                                    </tr>
-                                                    </thead>
-                                                    {% for record in scientificrecord_set %}
-                                                        <tbody class="row-sci-{{ record.pk }}">
+                                                <div class="res-table-container">
+                                                    <table class='table mtop-lg-25 text-center'>
+                                                        <thead>
                                                         <tr>
-                                                            <td>{{ record.grade }}</td>
-                                                            <td>{{ record.major }}</td>
-                                                            <td>{{ record.university }}</td>
-                                                            <td>{{ record.place }}</td>
-                                                            <td>{{ record.graduated_year }}</td>
-                                                            <td>
-                                                                <i class='fas fa-pen' id='edit_edu'></i>
-                                                                <i class='fas fa-trash-alt delete_edu'
-                                                                   value={{ record.pk }}></i>
-                                                            </td>
+                                                            <td>مقطع تحصیلی</td>
+                                                            <td>رشته تحصیلی</td>
+                                                            <td>دانشگاه</td>
+                                                            <td>شهر محل تحصیل</td>
+                                                            <td>سال اخذ مدرک</td>
+                                                            <td></td>
                                                         </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for record in scientificrecord_set %}
+                                                            <tr class="row-sci-{{ record.pk }}">
+                                                                <td>{{ record.grade }}</td>
+                                                                <td>{{ record.major }}</td>
+                                                                <td>{{ record.university }}</td>
+                                                                <td>{{ record.place }}</td>
+                                                                <td>{{ record.graduated_year }}</td>
+                                                                <td>
+                                                                    {#                                                                    <i class='fas fa-pen' id='edit_edu'></i>#}
+                                                                    <i class='fas fa-trash-alt delete_edu'
+                                                                       value={{ record.pk }}></i>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
                                                         </tbody>
-                                                    {% endfor %}
-                                                </table>
+                                                    </table>
+                                                </div>
                                             {% else %}
                                                 <span class="initial-value  mb-3"
                                                       style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
@@ -253,7 +256,8 @@
                         <div class="card box flow-root-display w-100">
                             <div class="box-header text-right">
                                 <h6>سوابق اجرایی</h6>
-                                <button type="button" class="executive-btn btn p-0 float-left">
+                                <button type="button" class="btn p-0 float-left" data-toggle="modal"
+                                        data-target="#newExecutiveRecord">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -262,34 +266,36 @@
                                     <div class="col-lg-12 text-center">
                                         <div class="executive text-center w-100">
                                             {% if executiverecord_set %}
-                                                <table class='table m-top-10'>
-                                                    <thead>
-                                                    <tr>
-                                                        <td>سمت</td>
-                                                        <td>نام مجموعه</td>
-                                                        <td>شهر</td>
-                                                        <td>از سال</td>
-                                                        <td>تا سال</td>
-                                                        <td></td>
-                                                    </tr>
-                                                    </thead>
-                                                    {% for record in executiverecord_set %}
-                                                        <tbody class="row-exe-{{ record.pk }}">
+                                                <div class="res-table-container">
+                                                    <table class='table mtop-lg-25 text-center'>
+                                                        <thead>
                                                         <tr>
-                                                            <td>{{ record.post }}</td>
-                                                            <td>{{ record.place }}</td>
-                                                            <td>{{ record.city }}</td>
-                                                            <td>{{ record.start }}</td>
-                                                            <td>{{ record.end }}</td>
-                                                            <td>
-                                                                <i class='fas fa-pen' id='edit_exe'></i>
-                                                                <i class='fas fa-trash-alt delete_exe'
-                                                                   value="{{ record.pk }}"></i>
-                                                            </td>
+                                                            <td>سمت</td>
+                                                            <td>نام مجموعه</td>
+                                                            <td>شهر</td>
+                                                            <td>از سال</td>
+                                                            <td>تا سال</td>
+                                                            <td></td>
                                                         </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for record in executiverecord_set %}
+                                                            <tr class="row-exe-{{ record.pk }}">
+                                                                <td>{{ record.post }}</td>
+                                                                <td>{{ record.place }}</td>
+                                                                <td>{{ record.city }}</td>
+                                                                <td>{{ record.start }}</td>
+                                                                <td>{{ record.end }}</td>
+                                                                <td>
+                                                                    {#                                                                    <i class='fas fa-pen' id='edit_exe'></i>#}
+                                                                    <i class='fas fa-trash-alt delete_exe'
+                                                                       value="{{ record.pk }}"></i>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
                                                         </tbody>
-                                                    {% endfor %}
-                                                </table>
+                                                    </table>
+                                                </div>
                                             {% else %}
                                                 <span class="initial-value mb-3"
                                                       style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
@@ -303,7 +309,8 @@
                         <div class="card box flow-root-display w-100">
                             <div class="box-header text-right">
                                 <h6>سوابق پژوهشی</h6>
-                                <button type="button" class="research-btn btn p-0 float-left">
+                                <button type="button" class="btn p-0 float-left" data-toggle="modal"
+                                        data-target="#newResearchRecord">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -312,38 +319,40 @@
                                     <div class="col-lg-12 text-center">
                                         <div class="studious text-center w-100">
                                             {% if studiousrecord_set %}
-                                                <table class='table m-top-10'>
-                                                    <thead>
-                                                    <tr>
-                                                        <td>عنوان طرح پژوهشی</td>
-                                                        <td>مجری</td>
-                                                        <td>مسئول اجرا/ همکار</td>
-                                                        <td>وضعیت طرح پژوهشی</td>
-                                                        <td></td>
-                                                    </tr>
-                                                    </thead>
-                                                    {% for record in studiousrecord_set %}
-                                                        <tbody class="row-stu-{{ record.pk }}">
+                                                <div class="res-table-container">
+                                                    <table class='table mtop-lg-25 text-center'>
+                                                        <thead>
                                                         <tr>
-                                                            <td>{{ record.title }}</td>
-                                                            <td>{{ record.presenter }}</td>
-                                                            <td>{{ record.responsible }}</td>
-                                                            <td> {% if record.status == 1 %}
-                                                                در دست اجرا
-                                                            {% elif record.status == 2 %}
-                                                                خاتمه یافته
-                                                            {% else %}
-                                                                متوقف
-                                                            {% endif %} </td>
-                                                            <td>
-                                                                <i class='fas fa-pen' id='edit_stu'></i>
-                                                                <i class='fas fa-trash-alt delete_stu'
-                                                                   value={{ record.pk }}></i>
-                                                            </td>
+                                                            <td>عنوان طرح پژوهشی</td>
+                                                            <td>مجری</td>
+                                                            <td>مسئول اجرا/ همکار</td>
+                                                            <td>وضعیت طرح پژوهشی</td>
+                                                            <td></td>
                                                         </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for record in studiousrecord_set %}
+                                                            <tr class="row-stu-{{ record.pk }}">
+                                                                <td>{{ record.title }}</td>
+                                                                <td>{{ record.presenter }}</td>
+                                                                <td>{{ record.responsible }}</td>
+                                                                <td> {% if record.status == 1 %}
+                                                                    در دست اجرا
+                                                                {% elif record.status == 2 %}
+                                                                    خاتمه یافته
+                                                                {% else %}
+                                                                    متوقف
+                                                                {% endif %} </td>
+                                                                <td>
+                                                                    {#                                                                    <i class='fas fa-pen' id='edit_stu'></i>#}
+                                                                    <i class='fas fa-trash-alt delete_stu'
+                                                                       value={{ record.pk }}></i>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
                                                         </tbody>
-                                                    {% endfor %}
-                                                </table>
+                                                    </table>
+                                                </div>
                                             {% else %}
                                                 <span class="initial-value mb-3"
                                                       style="border: 1px dashed #bdbdbd;width: fit-content;border-radius: 0.25em;padding: 5px 10px;font-size: 13px;font-weight: 300;">برای افزودن سابقه جدید روی <i
