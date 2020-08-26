@@ -164,12 +164,14 @@ function dialog_comment_init() {
                     message: "پیام با موفقیت ارسال شد!",
                     position: 'bottomLeft'
                 });
+
                 comment_form[0].reset();
                 comment_form.find("#description").css("height", "fit-content");
-                $('.error').remove();
-                $('.file-name').html("");
-                $(".send-comment-container .comment-input").removeClass("attached");
-                $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
+                comment_form.closest(".section").find("textarea#description").removeClass("error");
+                comment_form.closest(".section").find('.error').remove();
+                comment_form.closest(".section").find('.file-name').html("");
+                comment_form.closest(".section").find(".send-comment-container .comment-input").removeClass("attached");
+                comment_form.closest(".section").find('.comments').animate({scrollTop: comment_form.closest(".section").find('.comments').prop("scrollHeight")}, 1000);
             },
             error: function (data) {
                 let obj = JSON.parse(data.responseText);

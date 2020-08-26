@@ -2863,7 +2863,7 @@ ul.tick-ul .out-college-research span:nth-child(2), .B-g {
 
 div.no-project-container {
     position: absolute;
-    top: 0;
+    top: 40px;
     left: 0;
     min-height: 500px;
     width: 100%;
