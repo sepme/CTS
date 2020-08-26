@@ -1,55 +1,56 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back executive_form">
-    <div class="card small-card text-right">
-        <div class="close"></div>
-        <div class="card-head">ثبت سابقه اجرایی</div>
-        <div class="container">
-            <form method="post" action="" class="ajax-executive-form" data-url="{% url 'expert:ajax_executive' %}">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-6">
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <label for='duty'>سمت</label>
-                                {{ executive_form.executive_post|attr:"id:duty"|attr:"class:w-100" }}
-                            </div>
-                        </div>
+<div class="modal fade" id="newExecutiveRecord" tabindex="-1" role="dialog" aria-labelledby="newExecutiveRecordLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="" class="ajax-executive-form" data-url="{% url 'expert:ajax_executive' %}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title default text-right" id="newExecutiveRecordLabel">ثبت سابقه اجرایی</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
                         <div class="row">
-                            <div class='col-lg-2'>
-                                <span class='center-vr'>زمان :</span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for='duty'>سمت</label>
+                                    {{ executive_form.executive_post|attr:"id:duty"|attr:"class:w-100" }}
+                                </div>
+
+                                <div class="row">
+                                    <div class='col-sm-12 text-right'>
+                                        <span>زمان :</span>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        {{ executive_form.date_start_post|attr:"id:from"|attr:"class:w-100"|attr:"placeholder: از سال" }}
+                                    </div>
+                                    <div class='col-md-6'>
+                                        {{ executive_form.date_end_post|attr:"id:until"|attr:"class:w-100"|attr:"placeholder: تا سال" }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                </div>
+                                <div class="form-group">
+                                    <label for='workplace'>محل خدمت</label>
+                                    {{ executive_form.organization|attr:"id:workplace"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label for='exe-city'>شهر</label>
+                                    {{ executive_form.city|attr:"id:exe-city"|attr:"class:w-100" }}
+                                </div>
                             </div>
-                            <div class='col-lg-5'>
-                                <label for='from'>از تاریخ</label>
-                                {{ executive_form.date_start_post|attr:"id:from"|attr:"class:w-100" }}
-                            </div>
-                            <div class='col-lg-5'>
-                                <label for='until'>تا تاریخ</label>
-                                {{ executive_form.date_end_post|attr:"id:until"|attr:"class:w-100" }}
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <label for='workplace'>محل خدمت</label>
-                                {{ executive_form.organization|attr:"id:workplace"|attr:"class:w-100" }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class='col-lg-12'>
-                                <label for='exe-city'>شهر</label>
-                                {{ executive_form.city|attr:"id:exe-city"|attr:"class:w-100" }}
+                            <div class="col-md-6 d-none d-md-flex">
+                                <img src="{% static '/img/execution.svg' %}" alt="execution img" class="form-image">
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 flex-display">
-                        <img src="{% static '/img/execution.svg' %}" alt="execution img" class="form-image">
-                    </div>
                 </div>
-                <div class="card-footer">
-                    <button class="save-btn" type="submit">افزودن</button>
-                    <button class="reject-btn" type="reset">لغو</button>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                    <button type="submit" class="btn btn-primary mr-2">افزدون</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>

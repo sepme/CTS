@@ -249,10 +249,10 @@ $(document).ready(function () {
     // init_dialog_btn("#accept-techniques", ".project-details");
     init_dialog_btn(".message-body button, .message-body-sm button", ".message-show");
     // init_dialog_btn(".add-new-question", ".add-question");
-    init_dialog_btn(".education-btn", ".scientific_form");
-    init_dialog_btn(".executive-btn", ".executive_form");
-    init_dialog_btn(".research-btn", ".research_form");
-    init_dialog_btn(".paper-btn", ".paper_form");
+    // init_dialog_btn(".education-btn", ".scientific_form");
+    // init_dialog_btn(".executive-btn", ".executive_form");
+    // init_dialog_btn(".research-btn", ".research_form");
+    // init_dialog_btn(".paper-btn", ".paper_form");
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
     researcherRequest();
@@ -498,7 +498,7 @@ $(document).ready(function () {
         $('input#upload-input').change(function (event) {
             $("img.profile").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
         });
-        education_record();
+        // education_record();
         // executive_record();
         // research_record();
         // paper_record();
@@ -603,6 +603,431 @@ $(document).ready(function () {
                 putAttachment($("input#uploadResume"));
             });
         }
+
+        sci_record_option();
+        exe_record_option();
+        research_record_option();
+        paper_record_option();
+
+        let scientificForm = $('.ajax-sci-form');
+        scientificForm.submit(function (event) {
+            event.preventDefault();
+
+            scientificForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+                .attr("disabled", "true");
+            scientificForm.find("button[type='reset']").attr("disabled", "true");
+            scientificForm.find("label").addClass("progress-cursor");
+            scientificForm.closest(".fixed-back").find(".card").addClass("wait");
+            let $thisURL = scientificForm.attr('action');
+            let data = $(this).serialize();
+            scientificForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+            $("input#edu-city").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#edu-year").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#edu-section").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#edu-subject").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#university").removeClass("error").css("color", "").prev().css("color", "");
+            $('.error').remove();
+
+            $.ajax({
+                method: 'POST',
+                url: $thisURL,
+                dataType: 'json',
+                data: data,
+                success: function (data) {
+                    scientificForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    scientificForm.find("button[type='reset']").prop("disabled", false);
+                    scientificForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    scientificForm.find("label").removeClass("progress-cursor");
+                    scientificForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (data.success === "successful") {
+                        show_scientific_record(data.id);
+                        scientificForm[0].reset();
+                        scientificForm.closest(".modal").modal("hide");
+                        iziToast.success({
+                            rtl: true,
+                            message: "اطلاعات با موفقیت ذخیره شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                },
+                error: function (data) {
+                    let obj = JSON.parse(data.responseText);
+                    scientificForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    scientificForm.find("button[type='reset']").prop("disabled", false);
+                    scientificForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    scientificForm.find("label").removeClass("progress-cursor");
+                    scientificForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (obj.city) {
+                        $("#edu-city").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.city + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#edu-city").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.date_of_graduation) {
+                        $("#edu-year").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.date_of_graduation + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#edu-year").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.degree) {
+                        $("#edu-section").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.degree + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#edu-section").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.major) {
+                        $("#edu-subject").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.major + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#edu-subject").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.university) {
+                        $("#university").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.university + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#university").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    display_error(scientificForm);
+                },
+            })
+        });
+
+        let executiveForm = $('.ajax-executive-form');
+        executiveForm.submit(function (event) {
+            event.preventDefault();
+            executiveForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+                .attr("disabled", "true");
+            executiveForm.find("button[type='reset']").attr("disabled", "true");
+            executiveForm.find("label").addClass("progress-cursor");
+            executiveForm.closest(".fixed-back").find(".card").addClass("wait");
+            let $thisURL = executiveForm.attr('data-url');
+            let data = $(this).serialize().toString();
+            executiveForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+            $("input#exe-city").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#from").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#until").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#duty").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#workplace").removeClass("error").css("color", "").prev().css("color", "");
+            $(".error").remove();
+
+            $.ajax({
+                method: 'POST',
+                url: $thisURL,
+                dataType: 'json',
+                data: data,
+                // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                // contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    executiveForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    executiveForm.find("button[type='']").prop("disabled", false);
+                    executiveForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    executiveForm.find("label").removeClass("progress-cursor");
+                    executiveForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (data.success === "successful") {
+                        show_executive_record(data.id);
+                        executiveForm[0].reset();
+                        executiveForm.closest(".modal").modal("hide");
+                        iziToast.success({
+                            rtl: true,
+                            message: "اطلاعات با موفقیت ذخیره شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                },
+                error: function (data) {
+                    let obj = JSON.parse(data.responseText);
+                    executiveForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    executiveForm.find("button[type='']").prop("disabled", false);
+                    executiveForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    executiveForm.find("label").removeClass("progress-cursor");
+                    executiveForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (obj.city) {
+                        $("#exe-city").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.city + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#exe-city").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.date_end_post) {
+                        $("#until").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.date_end_post + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#until").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.date_start_post) {
+                        $("#from").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.date_start_post + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#from").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.executive_post) {
+                        $("#duty").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.executive_post + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#duty").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.organization) {
+                        $("#workplace").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.organization + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#workplace").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    display_error(executiveForm);
+                },
+            })
+        });
+
+        let researchForm = $('.ajax-research-form');
+        researchForm.submit(function (event) {
+            event.preventDefault();
+            researchForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+                .attr("disabled", "true");
+            researchForm.find("button[type='reset']").attr("disabled", "true");
+            researchForm.find("label").addClass("progress-cursor");
+            researchForm.closest(".fixed-back").find(".card").addClass("wait");
+            let $thisURL = researchForm.attr('data-url');
+            let data = $(this).serialize().toString();
+            researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+            $("input#liable").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#subject").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#admin").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#rank").removeClass("error").css("color", "").prev().css("color", "");
+            $('.error').remove();
+
+            $.ajax({
+                method: 'POST',
+                url: $thisURL,
+                dataType: 'json',
+                data: data,
+                // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                // contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    researchForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    researchForm.find("button[type='reset']").prop("disabled", false);
+                    researchForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    researchForm.find("label").removeClass("progress-cursor");
+                    researchForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (data.success === "successful") {
+                        $(".research_form").removeClass("show");
+                        $(".main").removeClass("blur-div");
+                        show_research_record(data.id);
+                        researchForm[0].reset();
+                        researchForm.closest(".modal").modal("hide");
+                        iziToast.success({
+                            rtl: true,
+                            message: "اطلاعات با موفقیت ذخیره شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                },
+                error: function (data) {
+                    let obj = JSON.parse(data.responseText);
+                    researchForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    researchForm.find("button[type='reset']").prop("disabled", false);
+                    researchForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    researchForm.find("label").removeClass("progress-cursor");
+                    researchForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (obj.co_researcher) {
+                        $("#liable").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.co_researcher + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#liable").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.research_title) {
+                        $("#subject").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.research_title + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#subject").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.researcher) {
+                        $("#admin").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.researcher + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#admin").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.status) {
+                        $("#rank").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.status + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#rank").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    display_error(researchForm);
+                },
+            })
+        });
+
+        let paperForm = $('.ajax-paper-form');
+        paperForm.submit(function (event) {
+            event.preventDefault();
+            paperForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
+                .attr("disabled", "true");
+            paperForm.find("button[type='reset']").attr("disabled", "true");
+            paperForm.find("label").addClass("progress-cursor");
+            paperForm.closest(".fixed-back").find(".card").addClass("wait");
+            let $thisURL = paperForm.attr('data-url');
+            let data = $(this).serialize().toString();
+            paperForm.find("input").attr("disabled", "true").addClass("progress-cursor");
+
+            $("input#referring-num").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#publish-date").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#published-at").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#article-name").removeClass("error").css("color", "").prev().css("color", "");
+            $("input#impact-factor").removeClass("error").css("color", "").prev().css("color", "");
+            $('.error').remove();
+
+            $.ajax({
+                method: 'POST',
+                url: $thisURL,
+                dataType: 'json',
+                data: data,
+                // headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                // contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    paperForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    paperForm.find("button[type='reset']").prop("disabled", false);
+                    paperForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    paperForm.find("label").removeClass("progress-cursor");
+                    paperForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (data.success === "successful") {
+                        $(".paper_form").removeClass("show");
+                        $(".main").removeClass("blur-div");
+                        show_paper_record(data.id);
+                        paperForm[0].reset();
+                        paperForm.closest(".modal").modal("hide");
+                        iziToast.success({
+                            rtl: true,
+                            message: "اطلاعات با موفقیت ذخیره شد!",
+                            position: 'bottomLeft'
+                        });
+                    }
+                },
+                error: function (data) {
+                    let obj = JSON.parse(data.responseText);
+                    paperForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    paperForm.find("button[type='reset']").prop("disabled", false);
+                    paperForm.find("input").prop("disabled", false).removeClass("progress-cursor");
+                    paperForm.find("label").removeClass("progress-cursor");
+                    paperForm.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (obj.citation) {
+                        $("#referring-num").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.citation + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#referring-num").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.date_published) {
+                        $("#publish-date").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.date_published + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#publish-date").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.published_at) {
+                        $("#published-at").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.published_at + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#published-at").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.research_title) {
+                        $("#article-name").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.research_title + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#article-name").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    if (obj.impact_factor) {
+                        $("#impact-factor").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.impact_factor + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("input#impact-factor").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                    display_error(paperForm);
+                },
+            })
+        });
 
         $("#waitToGet .modal-footer button.btn-primary").click(function (event) {
             let btnClicked = $(this);
@@ -973,423 +1398,6 @@ $(document).ready(function () {
     //     $(".your-project").attr("style", "display :none");
     //     $(".done-project").attr("style", "display :block");
     // });
-});
-
-function education_record() {
-    let myForm = $('.ajax-sci-form');
-    myForm.submit(function (event) {
-        event.preventDefault();
-        myForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
-            .attr("disabled", "true");
-        myForm.find("button[type='reset']").attr("disabled", "true");
-        myForm.find("label").addClass("progress-cursor");
-        myForm.closest(".fixed-back").find(".card").addClass("wait");
-        let $thisURL = myForm.attr('data-url');
-        let data = $(this).serialize();
-        myForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-
-        $("input#edu-city").removeClass("error").css("color", "").prev().css("color", "");
-        $("input#edu-year").removeClass("error").css("color", "").prev().css("color", "");
-        $("input#edu-section").removeClass("error").css("color", "").prev().css("color", "");
-        $("input#edu-subject").removeClass("error").css("color", "").prev().css("color", "");
-        $("input#university").removeClass("error").css("color", "").prev().css("color", "");
-        $('.error').remove();
-
-        $.ajax({
-            method: 'POST',
-            url: $thisURL,
-            dataType: 'json',
-            data: data,
-            success: function (data) {
-                myForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                    .prop("disabled", false);
-                myForm.find("button[type='reset']").prop("disabled", false);
-                myForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-                myForm.find("label").removeClass("progress-cursor");
-                myForm.closest(".fixed-back").find(".card").removeClass("wait");
-                if (data.success === "successful") {
-                    $(".scientific_form").removeClass("show");
-                    $(".main").removeClass("blur-div");
-                    show_scientific_record(data.id);
-                    iziToast.success({
-                        rtl: true,
-                        message: "اطلاعات با موفقیت ذخیره شد!",
-                        position: 'bottomLeft'
-                    });
-                    myForm[0].reset();
-                }
-            },
-            error: function (data) {
-                let obj = JSON.parse(data.responseText);
-                myForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                    .prop("disabled", false);
-                myForm.find("button[type='reset']").prop("disabled", false);
-                myForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-                myForm.find("label").removeClass("progress-cursor");
-                myForm.closest(".fixed-back").find(".card").removeClass("wait");
-                if (obj.city) {
-                    $("#edu-city").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.city + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#edu-city").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-                if (obj.date_of_graduation) {
-                    $("#edu-year").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.date_of_graduation + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#edu-year").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-                if (obj.degree) {
-                    $("#edu-section").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.degree + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#edu-section").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-                if (obj.major) {
-                    $("#edu-subject").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.major + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#edu-subject").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-                if (obj.university) {
-                    $("#university").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.university + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("input#university").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-            },
-        })
-    })
-}
-
-let executiveForm = $('.ajax-executive-form');
-executiveForm.submit(function (event) {
-    event.preventDefault();
-    executiveForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
-        .attr("disabled", "true");
-    executiveForm.find("button[type='reset']").attr("disabled", "true");
-    executiveForm.find("label").addClass("progress-cursor");
-    executiveForm.closest(".fixed-back").find(".card").addClass("wait");
-    let $thisURL = executiveForm.attr('data-url');
-    let data = $(this).serialize().toString();
-    executiveForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-
-    $("input#exe-city").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#from").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#until").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#duty").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#workplace").removeClass("error").css("color", "").prev().css("color", "");
-    $(".error").remove();
-
-    $.ajax({
-        method: 'POST',
-        url: $thisURL,
-        dataType: 'json',
-        data: data,
-        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        // contentType: 'application/json; charset=utf-8',
-        success: function (data) {
-            executiveForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            executiveForm.find("button[type='']").prop("disabled", false);
-            executiveForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            executiveForm.find("label").removeClass("progress-cursor");
-            executiveForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (data.success === "successful") {
-                $(".executive_form").removeClass("show");
-                $(".main").removeClass("blur-div");
-                show_executive_record(data.id);
-                iziToast.success({
-                    rtl: true,
-                    message: "اطلاعات با موفقیت ذخیره شد!",
-                    position: 'bottomLeft'
-                });
-                executiveForm[0].reset();
-            }
-        },
-        error: function (data) {
-            let obj = JSON.parse(data.responseText);
-            executiveForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            executiveForm.find("button[type='']").prop("disabled", false);
-            executiveForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            executiveForm.find("label").removeClass("progress-cursor");
-            executiveForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (obj.city) {
-                $("#exe-city").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.city + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#exe-city").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.date_end_post) {
-                $("#until").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.date_end_post + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#until").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.date_start_post) {
-                $("#from").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.date_start_post + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#from").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.executive_post) {
-                $("#duty").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.executive_post + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#duty").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.organization) {
-                $("#workplace").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.organization + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#workplace").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-        },
-    })
-});
-
-let researchForm = $('.ajax-research-form');
-researchForm.submit(function (event) {
-    event.preventDefault();
-    researchForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
-        .attr("disabled", "true");
-    researchForm.find("button[type='reset']").attr("disabled", "true");
-    researchForm.find("label").addClass("progress-cursor");
-    researchForm.closest(".fixed-back").find(".card").addClass("wait");
-    let $thisURL = researchForm.attr('data-url');
-    let data = $(this).serialize().toString();
-    researchForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-
-    $("input#liable").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#subject").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#admin").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#rank").removeClass("error").css("color", "").prev().css("color", "");
-    $('.error').remove();
-
-    $.ajax({
-        method: 'POST',
-        url: $thisURL,
-        dataType: 'json',
-        data: data,
-        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        // contentType: 'application/json; charset=utf-8',
-        success: function (data) {
-            researchForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            researchForm.find("button[type='reset']").prop("disabled", false);
-            researchForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            researchForm.find("label").removeClass("progress-cursor");
-            researchForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (data.success === "successful") {
-                $(".research_form").removeClass("show");
-                $(".main").removeClass("blur-div");
-                show_research_record(data.id);
-                iziToast.success({
-                    rtl: true,
-                    message: "اطلاعات با موفقیت ذخیره شد!",
-                    position: 'bottomLeft'
-                });
-                researchForm[0].reset();
-            }
-        },
-        error: function (data) {
-            let obj = JSON.parse(data.responseText);
-            researchForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            researchForm.find("button[type='reset']").prop("disabled", false);
-            researchForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            researchForm.find("label").removeClass("progress-cursor");
-            researchForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (obj.co_researcher) {
-                $("#liable").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.co_researcher + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#liable").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.research_title) {
-                $("#subject").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.research_title + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#subject").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.researcher) {
-                $("#admin").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.researcher + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#admin").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.status) {
-                $("#rank").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.status + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#rank").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-        },
-    })
-});
-
-let paperForm = $('.ajax-paper-form');
-paperForm.submit(function (event) {
-    event.preventDefault();
-    paperForm.find("button[type='submit']").css("color", "transparent").addClass("loading-btn")
-        .attr("disabled", "true");
-    paperForm.find("button[type='reset']").attr("disabled", "true");
-    paperForm.find("label").addClass("progress-cursor");
-    paperForm.closest(".fixed-back").find(".card").addClass("wait");
-    let $thisURL = paperForm.attr('data-url');
-    let data = $(this).serialize().toString();
-    paperForm.find("input").attr("disabled", "true").addClass("progress-cursor");
-
-    $("input#referring-num").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#publish-date").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#published-at").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#article-name").removeClass("error").css("color", "").prev().css("color", "");
-    $("input#impact-factor").removeClass("error").css("color", "").prev().css("color", "");
-    $('.error').remove();
-
-    $.ajax({
-        method: 'POST',
-        url: $thisURL,
-        dataType: 'json',
-        data: data,
-        // headers: {'X-CSRFToken': '{{ csrf_token }}'},
-        // contentType: 'application/json; charset=utf-8',
-        success: function (data) {
-            paperForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            paperForm.find("button[type='reset']").prop("disabled", false);
-            paperForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            paperForm.find("label").removeClass("progress-cursor");
-            paperForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (data.success === "successful") {
-                $(".paper_form").removeClass("show");
-                $(".main").removeClass("blur-div");
-                show_paper_record(data.id);
-                iziToast.success({
-                    rtl: true,
-                    message: "اطلاعات با موفقیت ذخیره شد!",
-                    position: 'bottomLeft'
-                });
-                paperForm[0].reset();
-            }
-        },
-        error: function (data) {
-            let obj = JSON.parse(data.responseText);
-            paperForm.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                .prop("disabled", false);
-            paperForm.find("button[type='reset']").prop("disabled", false);
-            paperForm.find("input").prop("disabled", false).removeClass("progress-cursor");
-            paperForm.find("label").removeClass("progress-cursor");
-            paperForm.closest(".fixed-back").find(".card").removeClass("wait");
-            if (obj.citation) {
-                $("#referring-num").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.citation + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#referring-num").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.date_published) {
-                $("#publish-date").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.date_published + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#publish-date").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.published_at) {
-                $("#published-at").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.published_at + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#published-at").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.research_title) {
-                $("#article-name").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.research_title + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#article-name").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.impact_factor) {
-                $("#impact-factor").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.impact_factor + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("input#impact-factor").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-        },
-    })
 });
 
 function setDates(date) {

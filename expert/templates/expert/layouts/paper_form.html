@@ -1,54 +1,50 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back paper_form">
-    <div class="card small-card text-right">
-        <div class="close"></div>
-        <div class="card-head">ثبت مقاله</div>
-        <div class="container">
-            <form method="post" action="" class="ajax-paper-form" data-url="{% url 'expert:ajax_paper' %}">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-6">
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <label for='article-name'>عنوان مقاله</label>
-                                {{ paper_form.research_title|attr:"id:article-name"|attr:"class:w-100" }}
-                            </div>
-                        </div>
+<div class="modal fade" id="newPaperRecord" tabindex="-1" role="dialog" aria-labelledby="newPaperRecordLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="" class="ajax-paper-form" data-url="{% url 'expert:ajax_paper' %}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title default text-right" id="newPaperRecordLabel">ثبت مقاله</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
                         <div class="row">
-                            <div class='col-lg-12'>
-                                <label for='publish-date'>تاریخ انتشار</label>
-                                {{ paper_form.date_published|attr:"id:publish-date"|attr:"class:w-100" }}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for='article-name'>عنوان مقاله</label>
+                                    {{ paper_form.research_title|attr:"id:article-name"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label for='publish-date'>تاریخ انتشار</label>
+                                    {{ paper_form.date_published|attr:"id:publish-date"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label for='published-at'>محل دقیق انتشار</label>
+                                    {{ paper_form.published_at|attr:"id:published-at"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label for='impact-factor'>Impact Factor</label>
+                                    {{ paper_form.impact_factor|attr:"id:impact-factor"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label for='referring-num'>تعداد ارجاع به مقاله شما</label>
+                                    {{ paper_form.citation|attr:"id:referring-num"|attr:"class:w-100" }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class='col-lg-12'>
-                                <label for='published-at'>محل دقیق انتشار</label>
-                                {{ paper_form.published_at|attr:"id:published-at"|attr:"class:w-100" }}
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <label for='impact-factor'>Impact Factor</label>
-                                {{ paper_form.impact_factor|attr:"id:impact-factor"|attr:"class:w-100" }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class='col-lg-12'>
-                                <label for='referring-num'>تعداد ارجاع به مقاله شما</label>
-                                {{ paper_form.citation|attr:"id:referring-num"|attr:"class:w-100" }}
+                            <div class="col-md-6 d-none d-md-flex">
+                                <img src="{% static '/img/paper.svg' %}" alt="paper img" class="form-image">
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 flex-display">
-                        <img src="{% static '/img/paper.svg' %}" alt="paper img" class="form-image">
-                    </div>
                 </div>
-                <div class="card-footer">
-                    <button class="save-btn" type="submit">افزودن</button>
-                    <button class="reject-btn" type="reset">لغو</button>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                    <button type="submit" class="btn btn-primary mr-2">افزدون</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>

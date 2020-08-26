@@ -4727,7 +4727,7 @@ span.border-span {
 
 
 input[type="number"] {
-    direction: ltr;
+    direction: rtl;
     letter-spacing: 1px;
 }
 
@@ -6162,4 +6162,9 @@ nav[aria-label="breadcrumb"] ol {
     left: 0.25rem;
     top: 50%;
     transform: translateY(-50%);
+}
+
+table .fas.fa-trash-alt:hover {
+    cursor: pointer;
+    color: #ff4545;
 }
