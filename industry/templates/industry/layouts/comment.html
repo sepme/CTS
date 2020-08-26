@@ -4,10 +4,10 @@
 <div class="project-info-tabs comment-tabs">
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
          aria-orientation="vertical">
-{#        {% if comments %}#}
-{#            <a class='nav-link active' data-toggle='pill' role='tab' aria-controls='v-pills-home' aria-selected='true'#}
-{#               id="v-pills-expert-1"></a>#}
-{#        {% endif %}#}
+        {% if comments %}
+            <a class='nav-link active d-none' data-toggle='pill' role='tab' aria-controls='v-pills-home' aria-selected='true'
+               id="v-pills-expert-{{ expert_pk }}"></a>
+        {% endif %}
     </div>
 </div>
 <div class="section">
