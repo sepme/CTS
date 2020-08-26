@@ -9,19 +9,19 @@ import uuid
 from . import persianNumber
 from chamran_admin.models import Message
 
-#for Compress the photo
+# for Compress the photo
 import sys
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
+
 def profileUpload(instance, filename):
-    return os.path.join('Researcher Profile' , instance.researcher_user.user.username ,filename)
+    return os.path.join('Researcher Profile', instance.researcher_user.user.username, filename)
     # ext = filename.split('.')[-1]
     # filename = '{}.{}'.format('profile', ext)
 
     # return os.path.join('unique', instance.researcher_user.user.username, filename)
-
 
 
 def get_answerFile_path(instance, filename):
@@ -50,16 +50,16 @@ def get_resumeFile_path(instance, filename):
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    userId = models.CharField(verbose_name="ID کاربر", max_length=50 ,blank=True, null=True)
+    userId = models.CharField(verbose_name="ID کاربر", max_length=50, blank=True, null=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     class Meta:
         permissions = (
-            ('be_researcher' ,'Be Researcher'),
-            ('is_active' ,'is active'),
-            )
-    
+            ('be_researcher', 'Be Researcher'),
+            ('is_active', 'is active'),
+        )
+
     def __str__(self):
         return self.user.get_username()
 
@@ -68,7 +68,8 @@ class ResearcherUser(models.Model):
 
     @property
     def score(self):
-        return self.points*23
+        return self.points * 23
+
 
 class Status(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
@@ -82,17 +83,19 @@ class Status(models.Model):
         ('deactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
-    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True, verbose_name="غیرفعال تا تاریخ")
+    inactivate_duration = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True,
+                                               verbose_name="غیرفعال تا تاریخ")
+
     # inactivate_duration_temp = models.DateField(default='0001-01-01' , blank=True, null=True)
 
     @property
     def is_deactivated(self):
         today = datetime.datetime.now(datetime.timezone.utc)
         if self.inactivate_duration:
-            if  today > self.inactivate_duration:
+            if today > self.inactivate_duration:
                 return False
         return True
-    
+
     @property
     def remainingTime(self):
         now = datetime.datetime.now(datetime.timezone.utc)
@@ -107,6 +110,7 @@ class Status(models.Model):
     def __str__(self):
         return '{user} - {status}'.format(user=self.researcher_user, status=self.status)
 
+
 class MembershipFee(models.Model):
     researcher_user = models.OneToOneField('ResearcherUser', verbose_name="حق عضویت", on_delete=models.CASCADE,
                                            blank=True, null=True)
@@ -116,6 +120,7 @@ class MembershipFee(models.Model):
 
     def __str__(self):
         return str(self.fee)
+
 
 class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
@@ -174,8 +179,8 @@ class ResearcherProfile(models.Model):
                                             , blank=True, null=True)
 
     description = models.TextField(blank=True, null=True)
-    resume      = models.FileField(verbose_name="رزومه دانشجو", upload_to=profileUpload, max_length=511,
-                                   null=True, blank=True)
+    resume = models.FileField(verbose_name="رزومه دانشجو", upload_to=profileUpload, max_length=511,
+                              null=True, blank=True)
 
     def __str__(self):
         return self.fullname
@@ -183,25 +188,65 @@ class ResearcherProfile(models.Model):
     def save(self, *args, **kwargs):
         if self.id:
             perv = ResearcherProfile.objects.get(id=self.id)
-            if perv.photo.name: 
+            if perv.photo.name:
                 if self.photo.name.split("/")[-1] != perv.photo.name.split("/")[-1]:
                     self.photo = self.compressImage(self.photo)
             else:
-                if self.photo.name: 
+                if self.photo.name:
                     self.photo = self.compressImage(self.photo)
         else:
-            if self.photo.name: 
+            if self.photo.name:
                 self.photo = self.compressImage(self.photo)
         super(ResearcherProfile, self).save(*args, **kwargs)
 
-    def compressImage(self,photo):
+    def compressImage(self, photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.resize( (1020,573) ) 
-        imageTemproary.save(outputIoStream , format='JPEG', quality=40)
+        imageTemproaryResized = imageTemproary.resize((1020, 573))
+        imageTemproary.save(outputIoStream, format='JPEG', quality=40)
         outputIoStream.seek(0)
-        uploadedImage = InMemoryUploadedFile(outputIoStream,'ImageField', "%s.jpg" % photo.name.split('.')[0], 'image/jpeg', sys.getsizeof(outputIoStream), None)
+        uploadedImage = InMemoryUploadedFile(outputIoStream, 'ImageField', "%s.jpg" % photo.name.split('.')[0],
+                                             'image/jpeg', sys.getsizeof(outputIoStream), None)
         return uploadedImage
+
+    def get_resume_name(self):
+        try:
+            return os.path.basename(self.resume.name)[:os.path.basename(self.resume.name).rfind(".")]
+        except:
+            return ""
+
+    def get_resume_ext(self):
+        try:
+            return os.path.basename(self.resume.name)[os.path.basename(self.resume.name).rfind(".") + 1:]
+        except:
+            return ""
+
+    def get_resume_icon(self):
+        try:
+            icon = "unknown"
+            ext = self.get_resume_ext()
+            if ext.lower() == "pdf":
+                icon = "pdf"
+            elif ext.lower() == "doc":
+                icon = "doc"
+            elif ext.lower() == "gif":
+                icon = "gif"
+            elif ext.lower() == "jpg":
+                icon = "jpg"
+            elif ext.lower() == "png":
+                icon = "png"
+            elif ext.lower() == "ppt":
+                icon = "ppt"
+            elif ext.lower() == "txt":
+                icon = "txt"
+            elif ext.lower() == "wmv":
+                icon = "wmv"
+            elif ext.lower() == "zip":
+                icon = "zip"
+            return icon
+        except:
+            return "unknown"
+
 
 class ScientificRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق علمی", on_delete=models.CASCADE)
@@ -215,6 +260,7 @@ class ScientificRecord(models.Model):
     def __str__(self):
         return self.grade
 
+
 class ExecutiveRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق اجرایی", on_delete=models.CASCADE)
 
@@ -226,6 +272,7 @@ class ExecutiveRecord(models.Model):
 
     def __str__(self):
         return self.post
+
 
 class StudiousRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق پژوهشی", on_delete=models.CASCADE)
@@ -242,6 +289,7 @@ class StudiousRecord(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class ResearcherHistory(models.Model):
     researcher_profile = models.ForeignKey("ResearcherProfile", verbose_name="تاریخچه", on_delete=models.CASCADE)
@@ -260,6 +308,7 @@ class ResearcherHistory(models.Model):
 
     def __str__(self):
         return "history of " + self.researcher_profile.fullname
+
 
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
@@ -309,6 +358,7 @@ class ResearcherEvaluation(models.Model):
         ava = float(sum / 10)
         return ava
 
+
 class Technique(models.Model):
     TYPE = (
         ('molecular_biology', 'Molecular Biology'),
@@ -333,16 +383,26 @@ class Technique(models.Model):
     @staticmethod
     def get_technique_list():
         technique_list = {
-            "molecular_biology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='molecular_biology')],
-            "immunology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='immunology')],
-            "imaging" : [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')],
-            "histology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='histology')],
-            "general_lab" : [technique.technique_title for technique in Technique.objects.filter(technique_type='general_lab')],
-            "animal_lab" : [technique.technique_title for technique in Technique.objects.filter(technique_type='animal_lab')],"lab_safety" : [technique.technique_title for technique in Technique.objects.filter(technique_type='lab_safety')],
-            "biochemistry" : [technique.technique_title for technique in Technique.objects.filter(technique_type='biochemistry')],
-            "cellular_biology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='cellular_biology')],
-            "research_methodology" : [technique.technique_title for technique in Technique.objects.filter(technique_type='research_methodology')],
-            }
+            "molecular_biology": [technique.technique_title for technique in
+                                  Technique.objects.filter(technique_type='molecular_biology')],
+            "immunology": [technique.technique_title for technique in
+                           Technique.objects.filter(technique_type='immunology')],
+            "imaging": [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')],
+            "histology": [technique.technique_title for technique in
+                          Technique.objects.filter(technique_type='histology')],
+            "general_lab": [technique.technique_title for technique in
+                            Technique.objects.filter(technique_type='general_lab')],
+            "animal_lab": [technique.technique_title for technique in
+                           Technique.objects.filter(technique_type='animal_lab')],
+            "lab_safety": [technique.technique_title for technique in
+                           Technique.objects.filter(technique_type='lab_safety')],
+            "biochemistry": [technique.technique_title for technique in
+                             Technique.objects.filter(technique_type='biochemistry')],
+            "cellular_biology": [technique.technique_title for technique in
+                                 Technique.objects.filter(technique_type='cellular_biology')],
+            "research_methodology": [technique.technique_title for technique in
+                                     Technique.objects.filter(technique_type='research_methodology')],
+        }
         return technique_list
 
 
@@ -374,12 +434,12 @@ class TechniqueInstance(models.Model):
             total_passed = persianNumber.convert(str(days_passed // 365)) + " سال "
         days_passed = days_passed % 365
         if days_passed > 30:
-            if total_passed == "" :
+            if total_passed == "":
                 total_passed = persianNumber.convert(str(days_passed // 30)) + " ماه "
             else:
                 total_passed += " و " + persianNumber.convert(str(days_passed // 30)) + " ماه "
         days_passed = days_passed % 30
-        if total_passed == "" :
+        if total_passed == "":
             total_passed = persianNumber.convert(str(days_passed)) + " روز "
         else:
             total_passed += " و " + persianNumber.convert(str(days_passed)) + " روز "
@@ -415,8 +475,10 @@ class RequestedProject(models.Model):
         ('refused', 'refused')
     )
     status = models.CharField(verbose_name="وضعیت درخواست", max_length=10, choices=STATUS, default='unseen')
+
     def __str__(self):
         return str(self.project) + " - " + str(self.date_requested)
+
 
 class ResearchQuestionInstance(models.Model):
     research_question = models.ForeignKey('expert.ResearchQuestion', on_delete=models.CASCADE,

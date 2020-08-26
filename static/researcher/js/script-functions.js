@@ -209,246 +209,205 @@ function education_record() {
     });
 }
 
+function sci_record_option() {
+    $(".delete_edu").off("click");
+    $(".delete_edu").click(function () {
+        let pk = $(this).attr("value");
+        $.ajax({
+            method: 'POST',
+            url: "/researcher/delete_scientific/",
+            dataType: 'json',
+            data: {pk: pk},
+            success: function (data) {
+                $(".row-sci-" + pk).remove();
+                iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت حذف شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log(data);
+            },
+        });
+    });
+}
+
+function exe_record_option() {
+    $(".delete_exe").off();
+    $(".delete_exe").click(function () {
+        let pk = $(this).attr("value");
+        $.ajax({
+            method: 'POST',
+            url: "/researcher/delete_executive/",
+            dataType: 'json',
+            data: {pk: pk},
+            success: function (data) {
+                $(".row-exe-" + pk).remove();
+                iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت حذف شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log(data);
+            },
+        });
+    });
+}
+
+function research_record_option() {
+    $(".delete_stu").off();
+    $(".delete_stu").click(function () {
+        let pk = $(this).attr("value");
+        $.ajax({
+            method: 'POST',
+            url: "/researcher/delete_studious/",
+            dataType: 'json',
+            data: {pk: pk},
+            success: function (data) {
+                $(".row-stu-" + pk).remove();
+                iziToast.success({
+                    rtl: true,
+                    message: "اطلاعات با موفقیت حذف شد!",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                console.log(data);
+            },
+        });
+    });
+}
+
 function show_scientific_record(pk) {
-    let row = "<tbody class='row-sci-" + pk + "'><tr>" +
-        "<td>" + $("#edu-section").val() + "</td>" +
-        "<td>" + $("#edu-subject").val() + "</td>" +
-        "<td>" + $("#university").val() + "</td>" +
-        "<td>" + $("#edu-city").val() + "</td>" +
-        "<td>" + $("#year").val() + "</td>" +
-        "<td>" +
-        "<i class='fas fa-pen' id='edit_edu'></i>" +
-        "<i class='fas fa-trash-alt delete_edu' value=" + pk + "></i>" +
-        "</td>" +
-        "</tr></tbody>";
-    if (!$(".education > table").hasClass("table")) {
-        let table = "<table class='table mtop-lg-25'>" +
-            "<thead>" +
-            "<tr>" +
-            "<td>مقطع تحصیلی</td>" +
-            "<td>رشته تحصیلی</td>" +
-            "<td>دانشگاه</td>" +
-            "<td>شهر محل تحصیل</td>" +
-            "<td>سال اخذ مدرک</td>" +
-            "<td></td>" +
-            "</tr>" +
-            "</thead>" +
-            "<tbody>" +
-            "</tbody>" +
-            "</table>";
+    if ($(".education table").length === 0) {
+        let table = `
+            <div class="res-table-container">
+                <table class='table mtop-lg-25 text-center'>
+                    <thead>
+                    <tr>
+                        <td scope="col">مقطع تحصیلی</td>
+                        <td scope="col">رشته تحصیلی</td>
+                        <td scope="col">دانشگاه</td>
+                        <td scope="col">شهر محل تحصیل</td>
+                        <td scope="col">سال اخذ مدرک</td>
+                        <td scope="col"></td>
+                    </tr>
+                    </thead>
+                        <tbody></tbody>
+                </table>
+            </div>
+        `;
         $(".education").html(table);
     }
-    $(".education > table").append(row);
-    $(".education div#" + $(this).attr("id")).remove();
-    record_edit(".education");
+
+    let newRow = `
+        <tr class="row-sci-${pk}">
+            <td>${$("#edu-section").val()}</td>
+            <td>${$("#edu-subject").val()}</td>
+            <td>${$("#university").val()}</td>
+            <td>${$("#edu-city").val()}</td>
+            <td>${$("#year").val()}</td>
+            <td>
+                <i class='fas fa-trash-alt delete_edu'
+                   value='${pk}'></i>
+            </td>
+        </tr>
+    `;
+    $(".education table tbody").append(newRow);
+    sci_record_option();
 }
 
-function executive_data_form(exe_count) {
-    let div = document.createElement("div");
-    $(div).addClass('card').addClass('ch-card-item');
-    $(div).attr("id", exe_count);
-    $(div).html("<form action='' method='post'><div class='row'>" +
-        "<div class='col-lg-5'>" +
-        "<label for='duty" + exe_count + "'>سمت</label>" +
-        "<input type='text' id='duty" + exe_count + "' class='w-100'>" +
-        "</div>" +
-        "<div class='col-lg-1'>" +
-        "<span class='center-vr'>زمان :</span>" +
-        "</div>" +
-        "<div class='col-lg-3'>" +
-        "<label for='from" + exe_count + "'>از تاریخ</label>" +
-        "<input type='text' id='from" + exe_count + "' class='w-100'>" +
-        "</div>" +
-        "<div class='col-lg-3'>" +
-        "<label for='until" + exe_count + "'>تا تاریخ</label>" +
-        "<input type='text' id='until" + exe_count + "' class='w-100'>" +
-        "</div>" +
-        "</div>" +
-        "<div class='row'>" +
-        "<div class='col-lg-5'>" +
-        "<label for='workplace" + exe_count + "'>نام مجموعه</label>" +
-        "<input type='text' id='workplace" + exe_count + "' class='w-100'>" +
-        "</div>" +
-        "<div class='col-lg-4'>" +
-        "<label for='exe-city" + exe_count + "'>شهر</label>" +
-        "<input type='text' id='exe-city" + exe_count + "' class='w-100'>" +
-        "</div>" +
-        "<div class='col-lg-3'></div>" +
-        "</div>" +
-        "<div class='row mtop-lg-25'>" +
-        "<div class='col-lg-9'>" +
-        "<button type='button' id='" + exe_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
-        "</div>" +
-        "<div class='col-lg-3'>" +
-        "<button type='button' id='" + exe_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
-        "</div>" +
-        "</div></form>");
-    return div;
-}
-
-// function executive_record() {
-//     $(".executive-btn > i.fa-plus").click(function () {
-//         if( $(".executive .ch-card-item").length === 0 ) {
-//             if ($(".executive > .initial-value").hasClass("initial-value")) {
-//                 $(".executive").html(executive_data_form(exe_count));
-//             } else {
-//                 $('.executive').append(executive_data_form(exe_count));
-//             }
-//             cancel_add(".executive");
-//             add_executive_record(exe_count);
-//             input_focus();
-//             $("#from" + exe_count).persianDatepicker({});
-//             $("#until" + exe_count).persianDatepicker({});
-//             exe_count++;
-//         }
-//     });
-// }
 function show_executive_record(pk) {
-    let row = "<tbody class='row-exe-" + pk + "'><tr>" +
-        "<td>" + $("#duty").val() + "</td>" +
-        "<td>" + $("#workplace").val() + "</td>" +
-        "<td>" + $("#exe-city").val() + "</td>" +
-        "<td>" + $("#from").val() + "</td>" +
-        "<td>" + $("#until").val() + "</td>" +
-        "<td>" +
-        "<i class='fas fa-pen' id='edit_exe'></i>" +
-        "<i class='fas fa-trash-alt delete_exe' value=" + pk + "></i>" +
-        "</td>" +
-        "</tr></tbody>";
-    if (!$(".executive > table").hasClass("table")) {
-        let table = "<table class='table mtop-lg-25'>" +
-            "<thead>" +
-            "<tr>" +
-            "<td>سمت</td>" +
-            "<td>نام مجموعه</td>" +
-            "<td>شهر</td>" +
-            "<td>از تاریخ</td>" +
-            "<td>تا تاریخ</td>" +
-            "<td></td>" +
-            "</tr>" +
-            "</thead>" +
-            "<tbody>" +
-            "</tbody>" +
-            "</table>";
+    if ($(".executive table").length === 0) {
+        let table = `
+            <div class="res-table-container">
+                <table class='table mtop-lg-25 text-center'>
+                    <thead>
+                    <tr>
+                        <td scope="col">سمت</td>
+                        <td scope="col">نام مجموعه</td>
+                        <td scope="col">شهر</td>
+                        <td scope="col">از سال</td>
+                        <td scope="col">تا سال</td>
+                        <td scope="col"></td>
+                    </tr>
+                    </thead>
+                        <tbody></tbody>
+                </table>
+            </div>
+        `;
         $(".executive").html(table);
     }
-    $(".executive > table").append(row);
-    $(".executive div#" + $(this).attr("id")).remove();
-    record_edit(".executive");
-}
 
-function studious_data_form(stu_count) {
-    let div = document.createElement("div");
-    $(div).addClass('card').addClass('ch-card-item');
-    $(div).attr("id", stu_count);
-    $(div).html("<form action='' method='post'><div class='row'>" +
-        "<div class='col-lg-5'>" +
-        "<label for='subject" + stu_count + "'>عنوان طرح پژوهشی</label>" +
-        "<input type='text' id='subject" + stu_count + "' class='w-100'>" +
-        "</div>" +
-        "<div class='col-lg-3'>" +
-        "<label for='admin" + stu_count + "'>نام مجری</label>" +
-        "<input type='text' id='admin" + stu_count + "' class='w-100'>" +
-        "</div>" +
-        "<div class='col-lg-4'>" +
-        "<label for='liable" + stu_count + "'>مسئول اجرا/همکار</label>" +
-        "<input type='text' id='liable" + stu_count + "' class='w-100'>" +
-        "</div>" +
-        "</div>" +
-        "<div class='row'>" +
-        "<div class='col-lg-7 rankDiv'>" +
-        "<label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>" +
-        "<select id='rank'>" +
-        "<option selected dir='rtl'>انتخاب کنید ...</option>" +
-        "<option value='1'>در دست  اجرا</option>" +
-        "<option value='2'>خاتمه یافته</option>" +
-        "<option value='3'>متوقف</option>" +
-        "</select>" +
-        "</div>" +
-        "<div class='col-lg-5'></div>" +
-        "</div>" +
-        "<div class='row mtop-lg-25'>" +
-        "<div class='col-lg-9'>" +
-        "<button type='button' id='" + stu_count + "' class='w-100 accept-btn btn'>افزودن</button>" +
-        "</div>" +
-        "<div class='col-lg-3'>" +
-        "<button type='button' id='" + stu_count + "' class='w-100 refuse-btn btn'>لغو</button>" +
-        "</div>" +
-        "</div></form>");
-    return div;
-}
+    let newRow = `
+        <tr  class="row-exe-${pk}">
+            <td>${$("#duty").val()}</td>
+            <td>${$("#workplace").val()}</td>
+            <td>${$("#exe-city").val()}</td>
+            <td>${$("#from").val()}</td>
+            <td>${$("#until").val()}</td>
+            <td>
+                <i class='fas fa-trash-alt delete_exe'
+                   value='${pk}'></i>
+            </td>
+        </tr>
+    `;
 
-// function studious_record() {
-//     $(".studious-btn > i.fa-plus").click(function () {
-//         if ($(".studious .ch-card-item").length === 0) {
-//             if ($(".studious > .initial-value").hasClass("initial-value")) {
-//                 $(".studious").html(studious_data_form(stu_count));
-//             } else {
-//                 $('.studious').append(studious_data_form(stu_count));
-//             }
-//             cancel_add(".studious");
-//             add_studious_record(stu_count);
-//             input_focus();
-//             stu_count++;
-//         }
-//     });
-// }
+    $(".executive table tbody").append(newRow);
+    exe_record_option();
+}
 
 function show_research_record(pk) {
-    console.log($("#rank").val());
-    if ($("#rank").val() === 1) {
-        let row = "<tbody class='row-stu-" + pk + "'><tr>" +
-            "<td>" + $("#subject").val() + "</td>" +
-            "<td>" + $("#admin").val() + "</td>" +
-            "<td>" + $("#liable").val() + "</td>" +
-            "<td>در دست اجرا</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_stu'></i>" +
-            "<i class='fas fa-trash-alt delete_stu' value=" + pk + "></i>" +
-            "</td>" +
-            "</tr></tbody>";
-    } else if ($("#rank").val() === 2) {
-        let row = "<tbody class='row-stu-" + pk + "'><tr>" +
-            "<td>" + $("#subject").val() + "</td>" +
-            "<td>" + $("#admin").val() + "</td>" +
-            "<td>" + $("#liable").val() + "</td>" +
-            "<td>خاتمه یافته</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_stu'></i>" +
-            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
-            "</td>" +
-            "</tr></tbody>";
-    } else if ($("#rank").val() === 3) {
-        let row = "<tbody class='row-stu-" + pk + "'><tr>" +
-            "<td>" + $("#subject").val() + "</td>" +
-            "<td>" + $("#admin").val() + "</td>" +
-            "<td>" + $("#liable").val() + "</td>" +
-            "<td>متوقف</td>" +
-            "<td>" +
-            "<i class='fas fa-pen' id='edit_stu'></i>" +
-            "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
-            "</td>" +
-            "</tr></tbody>";
-    }
-    if (!$(".studious > table").hasClass("table")) {
-        let table = "<table class='table mtop-lg-25'>" +
-            "<thead>" +
-            "<tr>" +
-            "<td>عنوان طرح پژوهشی</td>" +
-            "<td>مجری</td>" +
-            "<td>مسئول اجرا/ همکار</td>" +
-            "<td>وضعیت طرح پژوهشی</td>" +
-            "<td></td>" +
-            "</tr>" +
-            "</thead>" +
-            "<tbody>" +
-            "</tbody>" +
-            "</table>";
+    if ($(".studious table").length === 0) {
+        let table = `
+            <div class="res-table-container">
+                <table class='table mtop-lg-25 text-center'>
+                    <thead>
+                    <tr>
+                        <td scope="col">عنوان طرح پژوهشی</td>
+                        <td scope="col">مجری</td>
+                        <td scope="col">مسئول اجرا/همکار</td>
+                        <td scope="col">وضعیت طرح پژوهشی</td>
+                        <td scope="col"></td>
+                    </tr>
+                    </thead>
+                        <tbody></tbody>
+                </table>
+            </div>
+        `;
         $(".studious").html(table);
     }
-    $(".studious > table ").append(row);
-    $(".studious div#" + $(this).attr("id")).remove();
-    record_edit(".studious");
+
+    let status = "";
+    switch ($("#rank").val()) {
+        case 1:
+            status = "در دست اجرا";
+            break;
+        case 2:
+            status = "خاتمه یافته";
+            break;
+        case 3:
+            status = "متوقف";
+            break;
+    }
+    let newRow = `
+        <tr class="row-stu-${pk}">
+            <td>${$("#subject").val()}</td>
+            <td>${$("#admin").val()}</td>
+            <td>${$("#liable").val()}</td>
+            <td>${status}</td>
+            <td>
+                <i class='fas fa-trash-alt delete_stu'
+                   value='${pk}'></i>
+            </td>
+        </tr>
+    `;
+
+    $(".studious table tbody").append(newRow);
+    research_record_option();
 }
 
 function isOverflow(element) {
@@ -777,60 +736,5 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
-});
-
-$(".delete_edu").click(function () {
-    let pk = $(this).attr("value");
-    $.ajax({
-        method: 'POST',
-        url: "/researcher/delete_scientific/",
-        dataType: 'json',
-        data: {pk: pk},
-        success: function (data) {
-            $(".row-sci-" + pk).remove();
-        },
-        error: function (data) {
-            console.log(data);
-        },
-    });
-});
-
-$(".delete_stu").click(function () {
-    let pk = $(this).attr("value");
-    console.log("delete_stu");
-    console.log(pk);
-    $.ajax({
-        method: 'POST',
-        url: "/researcher/delete_studious/",
-        dataType: 'json',
-        data: {pk: pk},
-        success: function (data) {
-            console.log(pk);
-            $(".row-stu-" + pk).remove();
-        },
-        error: function (data) {
-            console.log(data);
-        },
-    });
-});
-
-$(".delete_exe").click(function () {
-    let pk = $(this).attr("value");
-    console.log("delete_exe");
-    console.log(pk);
-    $.ajax({
-        method: 'POST',
-        url: "/researcher/delete_executive/",
-        dataType: 'json',
-        data: {pk: pk},
-        success: function (data) {
-            $(".row-exe-" + pk).remove();
-            if (!$(".executive > table").hasClass("tbody"))
-                console.log("doesnt have tbody");
-        },
-        error: function (data) {
-            console.log(data);
-        },
-    });
 });
     
