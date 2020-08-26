@@ -1209,12 +1209,10 @@ $(document).ready(function () {
             'onAddTag': newItem_label,
             'onRemoveTag': newItem_label
         });
-        $("#projectSetting #tags_tagsinput #tags_addTag").remove();
+        $("#projectSetting #tags_tagsinput #tags_addTag").css("display", "none");
         $('#projectSetting #tags_tagsinput').addClass("border-0 mt-0");
         // add technique that write in input on Enter press
         $("#add-new-technique").keyup(function (e) {
-            console.log($(this).val());
-            console.log(e);
             if (e.keyCode === 13) {
                 if ($(this).val() !== "") {
                     $('#tags').addTag($(this).val());
@@ -1226,6 +1224,8 @@ $(document).ready(function () {
         let projectSettingForm = $('#ajax-project-setting');
         //## get techniques list via ajax request
         $("[data-target='#projectSetting']").click(function () {
+            let pk = $(this).closest(".card").find("button.default-btn").attr("id");
+            $(".modal#projectSetting").find("form#ajax-project-setting").attr("id", pk);
             let projectSetting = $("#projectSetting");
             $.ajax({
                 method: 'GET',
@@ -1323,6 +1323,10 @@ $(document).ready(function () {
             event.preventDefault();
             let data = [];
             let id = $(this).attr("id");
+            let uuid = "";
+            if (projectSettingForm.find("#searchExpert").length === 0) {
+                uuid = projectSettingForm.find(".selected-expert").find(".selected-expert__details div:last-child").text();
+            }
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
@@ -1330,7 +1334,7 @@ $(document).ready(function () {
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('data-url'),
-                data: {technique: data, id: id},
+                data: {technique: data, id: id, uuid: uuid},
                 dataType: 'json',
                 success: function (data) {
                     iziToast.success({
