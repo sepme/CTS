@@ -448,7 +448,7 @@ class Question(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
             return HttpResponseRedirect(reverse('chamran:login'))
         researcher = models.ResearcherUser.objects.get(user=request.user)
         if researcher.status.status == 'not_answered':
-            if researcher.researchquestioninstance_set.all().count():
+            if researcher.researchquestioninstance_set.all().filter(is_answered=False).count():
                 question = request.user.researcheruser.researchquestioninstance_set.all().reverse().first()
                 return HttpResponseRedirect(
                     reverse('researcher:question-show', kwargs={'question_id': question.research_question.uniqe_id}))
@@ -460,10 +460,11 @@ class Question(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['status'] = self.request.user.researcheruser.status.status
-        if self.request.user.researcheruser.status.status == "wait_for_result":
+        researcheruser = self.request.user.researcheruser
+        context['status'] = researcheruser.status.status
+        if researcheruser.status.status == "wait_for_result":
             question = models.ResearchQuestionInstance.objects.filter(
-                researcher=self.request.user.researcheruser).reverse().first()
+                researcher=researcheruser).reverse().first()
             answer = question.answer
             context['answerName'] = answer.name.split(".com-")[-1]
             context["answerType"] = answer.name.split(".")[-1]
@@ -472,7 +473,7 @@ class Question(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
             context['answerUrl'] = answer.url
             return context
         STATUS = ["free", 'waiting', 'involved']
-        if self.request.user.researcheruser.status.status in STATUS:
+        if researcheruser.status.status in STATUS:
             context['answered'] = True
         return context
 
@@ -520,22 +521,23 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
     permission_required = ('researcher.be_researcher', 'researcher.is_active')
 
     def get(self, request, *args, **kwargs):
+        researcheruser = request.user.researcheruser
         if kwargs[
-            'question_id'] != request.user.researcheruser.researchquestioninstance_set.all().reverse().first().research_question.uniqe_id:
+            'question_id'] != researcheruser.researchquestioninstance_set.all().reverse().first().research_question.uniqe_id:
             raise Http404("سوال مورد نظر پیدا نشد.")
-        if self.request.user.researcheruser.status.status != "not_answered":
+        if researcheruser.status.status != "not_answered":
             return HttpResponseRedirect(reverse("researcher:question-alert"))
-        question = request.user.researcheruser.researchquestioninstance_set.all().reverse().first()
+        question = researcheruser.researchquestioninstance_set.all().filter(is_answered=False).reverse().first()
         deadLine = question.hand_out_date + datetime.timedelta(days=+7)
         now = datetime.datetime.now(datetime.timezone.utc)
         if now < deadLine:
             if question.is_correct == "correct":
-                request.user.researcheruser.status.status = 'free'
-                request.user.researcheruser.status.save()
+                researcheruser.status.status = 'free'
+                researcheruser.status.save()
                 self.template_name = "researcher/layouts/answered_question.html"
                 return super().get(request, args, kwargs)
-        elif request.user.researcheruser.status.status == "not_answered":
-            status = request.user.researcheruser.status
+        elif researcheruser.status.status == "not_answered":
+            status = researcheruser.status
             status.status = 'deactivated'
             inactivate_date = datetime.date.today() + datetime.timedelta(days=30)
             status.inactivate_duration_temp = inactivate_date
@@ -657,9 +659,14 @@ def ShowProject(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    json_response['required_technique'] = []
-    for tech in project.project_form.required_technique:
-        json_response['required_technique'].append(tech.__str__())
+    # json_response['required_technique'] = []
+    # for tech in project.project_form.required_technique:
+    #     json_response['required_technique'].append(tech.__str__())
+
+    tempTech = []
+    for tech in json_response['techniques']:
+        tempTech.append(tech.technique_title)
+    json_response["techniques"] = tempTech
     projects_comments = project.get_comments()
     all_comments = projects_comments.exclude(researcher_user=None)
     json_response['comments'] = []
@@ -682,7 +689,7 @@ def ShowProject(request):
     json_response['status'] = request.user.researcheruser.status.status
     try:
         requestedProject = models.RequestedProject.objects.get(project=project)
-        json_response['status'] = requestedProject.status
+        json_response['status'] = requestedProject.reqeust_status
     except:
         pass
     return JsonResponse(json_response)
@@ -713,7 +720,7 @@ def ApplyProject(request):
                                                 project=project,
                                                 least_hours_offered=least_hour,
                                                 most_hours_offered=most_hour,
-                                                status="unseen")
+                                                request_status="unseen")
         apply_project.save()
         comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
                           sender_type="system",
@@ -900,7 +907,7 @@ def show_resume_preview(request):
             comment.save()
     researcher_information['comments'] = comments
     try:
-        researcher_information['status'] = researcher.requestedproject_set.get(project=project).status
+        researcher_information['status'] = researcher.requestedproject_set.get(project=project).request_status
     except:
         researcher_information['status'] = 'justComment'
     return JsonResponse(researcher_information)
