@@ -657,9 +657,14 @@ def ShowProject(request):
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
-    json_response['required_technique'] = []
-    for tech in project.project_form.required_technique:
-        json_response['required_technique'].append(tech.__str__())
+    # json_response['required_technique'] = []
+    # for tech in project.project_form.required_technique:
+    #     json_response['required_technique'].append(tech.__str__())
+    
+    tempTech = []
+    for tech in json_response['techniques']:
+        tempTech.append(tech.technique_title)
+    json_response["techniques"] = tempTech
     projects_comments = project.get_comments()
     all_comments = projects_comments.exclude(researcher_user=None)
     json_response['comments'] = []
@@ -682,9 +687,10 @@ def ShowProject(request):
     json_response['status'] = request.user.researcheruser.status.status
     try:
         requestedProject = models.RequestedProject.objects.get(project=project)
-        json_response['status'] = requestedProject.status
+        # json_response['request_status'] = requestedProject.status
+        json_response['request_status'] = requestedProject.reqeust_status
     except:
-        pass
+        json_response['request_status'] = ""
     return JsonResponse(json_response)
 
 
@@ -900,7 +906,7 @@ def show_resume_preview(request):
             comment.save()
     researcher_information['comments'] = comments
     try:
-        researcher_information['status'] = researcher.requestedproject_set.get(project=project).status
+        researcher_information['status'] = researcher.requestedproject_set.get(project=project).request_status
     except:
         researcher_information['status'] = 'justComment'
     return JsonResponse(researcher_information)
