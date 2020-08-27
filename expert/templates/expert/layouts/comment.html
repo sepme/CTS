@@ -32,7 +32,7 @@
                             <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>
                                 <pre>{{ comment.text }}</pre>
                                 {% if comment.attachment != "None" %}
-                                    <a href='/{{ comment.attachment }}' class='attached-file'>
+                                    <a href='{{ comment.attachment }}' class='attached-file'>
                                         <i class='fas fa-paperclip'></i>
                                         <span>{% file_name comment.attachment %}</span>
                                     </a>
@@ -45,7 +45,7 @@
                                 <span class='comment-tools'></span>
                                 <pre>{{ comment.text }}</pre>
                                 {% if comment.attachment != "None" %}
-                                    <a href='/{{ comment.attachment }}' class='attached-file'>
+                                    <a href='{{ comment.attachment }}' class='attached-file'>
                                         <i class='fas fa-paperclip'></i>
                                         <span>{% file_name comment.attachment %}</span>
                                     </a>

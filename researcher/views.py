@@ -671,7 +671,7 @@ def ShowProject(request):
     json_response['comments'] = []
     for com in all_comments:
         try:
-            url = com.attachment.url[com.attachment.url.find('media', 2):]
+            url = com.attachment.url
         except:
             url = "None"
         temp = {
@@ -751,7 +751,7 @@ def MyProject(request):
     json_response['comments'] = []
     for com in all_comments:
         try:
-            url = com.attachment.url[com.attachment.url.find('media', 2):]
+            url = com.attachment.url
         except:
             url = "None"
         temp = {

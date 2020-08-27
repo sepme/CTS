@@ -129,7 +129,7 @@ def ActiveProject(request, project, data):
     data['comments'] = []
     for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            url = comment.attachment.url
         except:
             url = "None"
         data['comments'].append({
@@ -192,7 +192,7 @@ def GetComment(request):
     response = []
     for comment in comments:
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            url = comment.attachment.url
         except:
             url = "None"
         temp = {
@@ -278,7 +278,7 @@ def submit_comment(request):
         new_comment.save()
         print(new_comment.attachment.name)
         if attachment is not None:
-            url = new_comment.attachment.url[new_comment.attachment.url.find('media', 2):]
+            url = new_comment.attachment.url
             data = {
                 'success': 'successful',
                 'attachment': url,
@@ -562,19 +562,9 @@ def ProjectSetting(request):
         html_templateForAdmin = get_template('registration/projectRequest_template.html')
         email_templateForAdmin = html_templateForAdmin.render({'message': message})
         email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                    to=[expert.user.get_username(), "sepehr.metanat@gmail.com"])
+                                    to=[expert.user.get_username(), ])
         email.attach_alternative(email_templateForAdmin, 'text/html')
         email.send()
-        # try:
-        #     send_mail(
-        #         subject=subject,
-        #         message=message,
-        #         from_email=settings.EMAIL_HOST_USER,
-        #         recipient_list=[expert.user.get_username(), "sepehr.metanat@gmail.com", ],
-        #         fail_silently=False
-        #     )
-        # except TimeoutError:
-        #     return HttpResponse('Timeout Error!!')
         newMessage = Message(title=subject,
                             text=message,
                             type=0)
