@@ -1107,7 +1107,7 @@ function setComment(data) {
     //             // "       </i>" +
     //             "</span>";
     //         if (data[i].attachment !== "None") {
-    //             comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+    //             comments_code += "<a href='" + data[i].attachment + "' class='attached-file'>" +
     //                 "   <i class='fas fa-paperclip'></i>" +
     //                 "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
     //                 "</a>";
@@ -1143,7 +1143,7 @@ function setComment(data) {
     //             // "       </i>" +
     //             "   </span>";
     //         if (data[i].attachment !== "None") {
-    //             comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+    //             comments_code += "<a href='" + data[i].attachment + "' class='attached-file'>" +
     //                 "   <i class='fas fa-paperclip'></i>" +
     //                 "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
     //                 "</a>";
@@ -1219,7 +1219,7 @@ function setComment(data) {
                 "       </span>" +
                 "<pre>" + data[i].description + "</pre>";
             if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                comments_code += "<a href='" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";

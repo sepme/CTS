@@ -312,6 +312,7 @@ class Project(models.Model):
     expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
                                                                                                     "شده",
                                         related_name="expert_accepted", blank=True, null=True)
+    expert_suggested = models.ForeignKey("expert.ExpertUser", verbose_name="استاد پیشنهادی", on_delete=models.CASCADE, blank=True, null=True)
     expert_messaged = models.ManyToManyField('expert.ExpertUser', blank=True,
                                              verbose_name='اساتیدی که پیام داده اند')
     industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,

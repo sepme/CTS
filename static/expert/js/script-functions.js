@@ -1034,7 +1034,7 @@ function setComment(data, parent) {
                 "       <div class='" + comment_body_classes + "'>" +
                 "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                comments_code += "<a href='" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";
@@ -1054,7 +1054,7 @@ function setComment(data, parent) {
                 "       </span>" +
                 "<pre>" + data[i].text + "</pre>";
             if (data[i].attachment !== "None") {
-                comments_code += "<a href='/" + data[i].attachment + "' class='attached-file'>" +
+                comments_code += "<a href='" + data[i].attachment + "' class='attached-file'>" +
                     "   <i class='fas fa-paperclip'></i>" +
                     "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
                     "</a>";

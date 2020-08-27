@@ -27,11 +27,6 @@ from chamran_admin.models import Message
 
 USER_ID_PATTERN = re.compile("[\w]+$")
 
-
-def get_url(rawUrl):
-    return rawUrl[rawUrl.find('media', 2):]
-
-
 def gregorian_to_numeric_jalali(date):
     if date is None:
         return "نامشخص"
@@ -116,13 +111,15 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
             researcherRequested = RequestedProject.objects.filter(project=project)
             researchers = []
             for requested in researcherRequested:
+                researcher = requested.researcher
+                researchers.append(researcher)
                 techniques = [tech.technique.technique_title for tech in
-                                requested.researcher.techniqueinstance_set.all()]
+                                researcher.techniqueinstance_set.all()]
                 researcher_applied = {
-                    'id'        : requested.researcher.pk,
-                    'profile'   : requested.researcher.researcherprofile,
-                    'techniques': techniques,
-                    "status"    :  requested.status 
+                    'id'        : researcher.pk,
+                    'profile'   : researcher.researcherprofile,
+                    'techniques': techniques,   
+                    "status"    : requested.status 
                 }
                 if requested.status == "unseen":
                     requested.status = "pending"
@@ -465,7 +462,7 @@ def UsualShowProject(request, project, data):
         comment_list = project.get_comments().filter(expert_user=request.user.expertuser).filter(researcher_user=None)
         for comment in comment_list:
             try:
-                url = get_url(comment.attachment.url)
+                url = comment.attachment.url
             except:
                 url = "None"
             comments.append({
@@ -714,7 +711,7 @@ def set_answer_situation(request):
 #     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
 #     for comment in comment_list:
 #         try:
-#             url = get_url(comment.attachment.url)
+#             url = comment.attachment.url)
 #         except:
 #             url = "None"
 #         comments.append({
@@ -1037,7 +1034,7 @@ def GetResearcherComment(request):
     data = {'comments': []}
     for comment in comments:
         try:
-            url = get_url(comment.attachment.url)
+            url = comment.attachment.url
         except:
             url = "None"
         commentInfo = {
@@ -1184,7 +1181,8 @@ def ActiveProject(request, project, data):
     data['comments'] = []
     for comment in project.get_comments().exclude(industry_user=None).filter(expert_user=project.expert_accepted):
         try:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            # TODO
+            url = comment.attachment.url
         except:
             url = "None"
         data['comments'].append({
