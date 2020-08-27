@@ -36,6 +36,10 @@
                            href="#nav-interface"
                            role="tab"
                            aria-controls="nav-interface" aria-selected="false">مشخصات رابط</a>
+                        <a class="nav-item nav-link fs-15" id="nav-setting-tab" data-toggle="tab"
+                           href="#nav-setting"
+                           role="tab"
+                           aria-controls="nav-setting" aria-selected="false">تنظیمات</a>
                     </div>
                 </nav>
                 <div class="tab-content mt-3" id="nav-tabContent">
@@ -139,7 +143,7 @@
                                                             alt="profile" class="profile" width="150px" height="150px">
                                                 {#                                            <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg"#}
                                                 {#                                                   hidden>#}
-                                                {% render_field researchgroup_form.photo accept="image/png, image/jpeg"%}
+                                                {% render_field researchgroup_form.photo accept="image/png, image/jpeg" %}
                                             </div>
                                             <div class="mt-1">بارگزاری تصویر پروفایل</div>
                                         </div>
@@ -289,6 +293,34 @@
                                         {% endif %}
                                         <div class="error">
                                             {% render_field interface_form.email.errors %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-setting" role="tabpanel" aria-labelledby="nav-setting-tab">
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <div class="form-group form-check mb-0">
+                                            <input type="checkbox" class="form-check-input inp-cbx" id="autoAddProject"
+                                                   name="autoAddProject" value=1 hidden
+                                                   {% if autoAddProject %}checked{% endif %}>
+                                            <label class="form-check-label cbx mb-0" for="autoAddProject">
+                                                <span class="mt-2">
+                                                    <svg class="inline-svg bi bi-check2" viewBox="0 0 16 16"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+                                                    </svg>
+                                                </span>
+                                                <span>
+                                                    <h6>دسترسی به پژوهشگران</h6>
+                                                     امکان درخواست، مشاهده رزومه و انتخاب پژوهشگران متقاضی برای پروژه‌تان را خودتان انجام دهید.
+                                                </span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>

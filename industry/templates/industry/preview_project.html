@@ -142,10 +142,12 @@
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
-                                                        <div class="rounded-name-profile clickable mt-2" id="enforcer-name"
+                                                        <div class="rounded-name-profile clickable mt-2"
+                                                             id="enforcer-name"
                                                              data-toggle="modal" data-target="#expertResume">
                                                             <span>{{ enforcer_name }}</span>
-                                                            <img src="{% static 'industry/img/profile.jpg' %}" alt="enforcer photo">
+                                                            <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                 alt="enforcer photo">
                                                         </div>
                                                     </div>
                                                     <div class="col-12 budget-text">
@@ -332,114 +334,123 @@
 {% block script %}
     <script type="text/javascript">
         $("#v-pills-roles-tab").click(function () {
-            let role = "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟" +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.policy }}" +
-                "</div>" +
-                "</div>";
+            let policy = "{{ projectForm.policy|escapejs }}";
+            let role = `<div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟
+                </div>
+                <div class='answer'>
+                ${policy}
+                </div>
+                </div>`;
             $(".project-info-content").html(role);
             $('*').persiaNumber();
         });
         $("#v-pills-resources-tab").click(function () {
-            let resources = "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.required_lab_equipment }}" +
-                "</div>" +
-                "</div>" +
-                "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.required_method }}" +
-                "</div>" +
-                "</div>" +
-                "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "لطفا مراحل انجام پروژه خود را مشخص کنید." +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.project_phase }}" +
-                "</div>" +
-                "</div>" +
-                "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
-                "</div>" +
-                "<div class='answer'>" +
-                numbersComma("{{ projectForm.required_budget }}") + " ریال" +
-                "</div>" +
-                "</div>";
+            let required_lab_equipment = "{{ projectForm.required_lab_equipment|escapejs }}";
+            let required_method = "{{ projectForm.required_method|escapejs }}";
+            let project_phase = "{{ projectForm.project_phase|escapejs }}";
+            let required_budget = numbersComma("{{ projectForm.required_budget }}");
+            let resources = `<div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟
+                </div>
+                <div class='answer'>
+                ${required_lab_equipment}
+                </div>
+                </div>
+                <div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟
+                </div>
+                <div class='answer'>
+                ${required_method}
+                </div>
+                </div>
+                <div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                لطفا مراحل انجام پروژه خود را مشخص کنید.
+                </div>
+                <div class='answer'>
+                ${project_phase}
+                </div>
+                </div>
+                <div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                پروژه شما به چه مقدار بودجه نیاز دارد؟
+                </div>
+                <div class='answer'>
+                ${required_budget} ریال
+                </div>
+                </div>`;
             $(".project-info-content").html(resources);
             $('*').persiaNumber();
         });
         $("#v-pills-approaches-tab").click(function () {
-            let approach = "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.approach }}" +
-                "</div>" +
-                "</div>" +
-                "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "این راه حل چه مشکلاتی می‌تواند داشته باشد؟" +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.potential_problems }}" +
-                "</div></div>";
+            let approach_ans = "{{ projectForm.approach|escapejs }}";
+            let potential_problems = "{{ projectForm.potential_problems|escapejs }}";
+            let approach = `<div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید.
+                </div>
+                <div class='answer'>
+                ${approach_ans}
+                </div>
+                </div>
+                <div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                این راه حل چه مشکلاتی می‌تواند داشته باشد؟
+                </div>
+                <div class='answer'>
+                ${potential_problems}
+                </div></div>`;
             $(".project-info-content").html(approach);
             $('*').persiaNumber();
         });
         $("#v-pills-majors-tab").click(function () {
-            let majors = "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید." +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.main_problem_and_importance }}" +
-                "</div></div>" +
-                "<div>" +
-                "<div class='question'>" +
-                "<span class='question-mark'>" +
-                "<i class='far fa-question-circle'></i>" +
-                "</span>" +
-                "در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟" +
-                "</div>" +
-                "<div class='answer'>" +
-                "{{ projectForm.progress_profitability }}" +
-                "</div></div>";
+            let main_problem_and_importance = "{{ projectForm.main_problem_and_importance|escapejs }}";
+            let progress_profitability = "{{ projectForm.progress_profitability|escapejs }}";
+            let majors = `<div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.
+                </div>
+                <div class='answer'>
+                ${main_problem_and_importance}
+                </div></div>
+                <div>
+                <div class='question'>
+                <span class='question-mark'>
+                <i class='far fa-question-circle'></i>
+                </span>
+                در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟
+                </div>
+                <div class='answer'>
+                ${progress_profitability}
+                </div></div>`;
             $(".project-info-content").html(majors);
             $('*').persiaNumber();
         });
