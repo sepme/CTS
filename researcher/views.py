@@ -95,7 +95,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         for project in new_projects:
             missedTechnique = []
             satisfiedTechniques = []
-            for tech in project.project_form.required_technique.all():
+            for tech in project.project_form.techniques.all():
                 if tech not in technique:
                     missedTechnique.append(tech.technique_title)
                 satisfiedTechniques.append(tech.technique_title)
@@ -745,7 +745,7 @@ def MyProject(request):
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
     json_response['required_technique'] = []
-    for tech in project.project_form.required_technique:
+    for tech in project.project_form.techniques:
         json_response['required_technique'].append(tech.__str__())
     all_comments = project.get_comments().exclude(researcher_user=None)
     json_response['comments'] = []

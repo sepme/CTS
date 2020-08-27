@@ -38,7 +38,7 @@ def get_message_detail(request, message_id):
         message.read_by.add(request.user)
     attachment = None
     if message.attachment:
-        attachment = message.attachment.url[message.attachment.url.find('media', 2):]
+        attachment = message.attachment.url
     return JsonResponse({
         'id' : message.id,
         'text': message.text,

@@ -3,6 +3,7 @@ import os
 import re
 
 from dateutil.relativedelta import relativedelta
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -245,6 +246,12 @@ def accept_project(request):
     project.save()
     expert.status = 'involved'
     expert.save()
+    requestPorject = expert_models.ExpertRequestedProject.objects.get(expert=expert)
+    project_form = project.project_form
+    for tech in requestProject.required_technique.all():
+        if tech not in project_form.techniques.all():
+            project_form.techniques.add(tech)
+    project_form.save()
     data = {'success': 'successful'}
     return JsonResponse(data=data)
 
@@ -533,31 +540,84 @@ def checkUserId(request):
 
 @permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):
-    expertId = request.POST['uuid']
-    expert = ExpertUser.objects.get(userId=expertId)
-    data = {}
-    if expert.autoAddProject:
+    if request.method == "GET":
+        project = models.Project.objects.get(id=request.GET.get('id'))
+        data = { "techniques": []}
+        for tech in project.project_form.techniques.all():
+            data['techniques'].append(tech.technique_title)
+        if project.expert_accepted:
+            expert = project.expert_accepted
+            expertData = { 
+                "id": expert.pk,
+                "fullname": expert.expertform.__str__(),
+                "userId"  : expert.userId,
+                "accepted": True,
+            }
+            if expert.expertform.photo:
+                expertData['photo'] = expert.expertform.photo.url
+            data['expert'] = expertData
+        elif project.expert_suggested:
+            expert = project.expert_suggested
+            expertData = { 
+                "id": expert.pk,
+                "fullname": expert.expertform.__str__(),
+                "userId"  : expert.userId,
+                "accepted": False,
+            }
+            if expert.expertform.photo:
+                expertData['photo'] = expert.expertform.photo.url
+            data['expert'] = expertData
+        return JsonResponse(data=data)
+    elif request.method == "POST":
+        expertId = request.POST['uuid']
+        if expertId == "":
+            return JsonResponse({
+                'expertId': 'استاد نمی تواند خالی باشد.',
+            }, status=400)
         technique_list = request.POST.getlist('technique')
         if len(technique_list) == 0:
             return JsonResponse({
                 'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
             }, status=400)
+        try:
+            expert = ExpertUser.objects.get(userId=expertId)
+        except:
+            return JsonResponse({
+                'expertId': 'چنین استادی وجود ندارد.',
+            }, status=400)
+
+        data = {'addExpert': False}
         project = models.Project.objects.get(id=request.POST['id'])
+        projectform = project.project_form
         for technique in technique_list:
-            project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
-            project.projectform.techniques.add(project_technique[0])
-        project.projectform.save()
-    # if expert.autoAddProject:
-        project.expert_accepted = expert
-        data['addExpert'] = True
-        message="""با سلام
+            projectform.techniques.add(Technique.objects.get_or_create(\
+                                               technique_title=technique[:-2])[0])
+        projectform.save()
+        if expert.autoAddProject:
+            project.expert_accepted = expert
+            project.date_start = datetime.date.today()
+            project.status = 2
+            expert.status = 'involved'
+            expert.save()
+            data['addExpert'] = True
+            message="""با سلام
 مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
-با توجه به این که قابلیت پیوستن شما به پروژه‌ها (تنها با / بدون) اجازه شما فراهم است، (از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید / شما به این پروژه اضافه شدید). 
+با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
 لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
 در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
 با آرزوی موفقیت، 
 چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
                     "projectName"  : project.persian_title})
+        else: 
+            project.expert_suggested = expert
+            message="""با سلام
+    مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
+    با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
+    لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
+    در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
+    با آرزوی موفقیت، 
+    چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
+                        "projectName"  : project.persian_title})
         subject = 'تقاضای پیوستن به پروژه'
         html_templateForAdmin = get_template('registration/projectRequest_template.html')
         email_templateForAdmin = html_templateForAdmin.render({'message': message})
@@ -566,21 +626,17 @@ def ProjectSetting(request):
         email.attach_alternative(email_templateForAdmin, 'text/html')
         email.send()
         newMessage = Message(title=subject,
-                            text=message,
-                            type=0)
+                                text=message,
+                                type=0)
         newMessage.save()
         newMessage.receiver.add(expert)
         project.save()
-    else: 
-        data['addExpert'] = False
-    return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
+        return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 
-from django.db.models import Q
 def searchUserId(request):
     searchKey = request.POST['searchKey']
     suggestedExperts = ExpertUser.objects.filter((Q(userId__icontains=searchKey)| \
-                                                Q(expertform__fullname__icontains=searchKey)))\
-                                                .filter(autoAddProject=True)
+                                                Q(expertform__fullname__icontains=searchKey)))
     data = {"experts": []}
     for expert in suggestedExperts:
         expertData = {
