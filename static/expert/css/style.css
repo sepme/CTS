@@ -2089,48 +2089,6 @@ div.researcher-info-innerDiv {
     position: absolute;
 }
 
-.close {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    border: none;
-    z-index: 100;
-}
-
-.close:after, .close:before {
-    background-color: #707070;
-    content: "";
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translateX(50%) translateY(-50%) rotate(-45deg);
-    transform-origin: center center;
-}
-
-.close:after {
-    height: 1.5px;
-    width: 70%;
-}
-
-.close:before {
-    height: 70%;
-    width: 1.5px;
-}
-
-.close:hover {
-    cursor: pointer;
-    border: none;
-    background-color: #ff4545;
-}
-
-.close:hover:after, .close:hover:before {
-    background-color: #fff;
-}
-
 .researcher-card-button-show {
     padding: 5px;
     left: 5px;

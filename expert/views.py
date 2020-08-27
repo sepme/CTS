@@ -20,7 +20,8 @@ from .models import *
 from industry.models import *
 from researcher.models import ScientificRecord as ResearcherScientificRecord
 from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
-from researcher.models import ResearcherProfile, Technique, StudiousRecord, TechniqueInstance, RequestedProject
+from researcher.models import ResearcherUser, ResearcherProfile, Technique, \
+                              StudiousRecord, TechniqueInstance, RequestedProject
 from chamran_admin.models import Message
 
 USER_ID_PATTERN = re.compile("[\w]+$")
@@ -580,6 +581,7 @@ def add_research_question(request):
             attachment = request.FILES.get('attachment')
             research_question.attachment.save(attachment.name, attachment)
         research_question.save()
+        data["id"] = research_question.id
         return JsonResponse(data)
     else:
         return JsonResponse(research_question_form.errors, status=400)
@@ -594,12 +596,14 @@ def show_research_question(request):
 
     answers_list = []
     for answer in research_question.get_answers():
-        researcher_user = ResearcherProfile.objects.get(researcher_user=answer.researcher)
+        researcherProfile = ResearcherProfile.objects.get(researcher_user=answer.researcher)
+        domain = answer.researcher.user.get_username().split("@")[-1]
+        file_name = answer.answer.name.split(domain)[-1][1:]
         answer_json = {
-            'researcher_name': researcher_user.__str__(),
+            'researcher_name': researcherProfile.__str__(),
             'hand_out_date': JalaliDate(answer.hand_out_date).strftime("%Y/%m/%d"),
             'is_correct': answer.is_correct,
-            'file_name': answer.answer.name.split(".com-")[-1],
+            'file_name': file_name,
             'answer_attachment': answer.answer.url,
             'answer_id': str(answer.id),
         }

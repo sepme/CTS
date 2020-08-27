@@ -495,11 +495,12 @@ function customAutocomplete(element, arr) {
 }
 
 $(window).on("load", function () {
-    if ($(document).find("#Uni").length > 0) {
-        let arr = ["دانشگاه شریف", "دانشگاه تهران"];
-        $("#Uni").autocomplete({
+    let uniId = ["#Uni", "#university"];
+    uniId.forEach(function (item) {
+        let arr = ["شهید بهشتی", "ایران", "علوم پزشکی تهران"];
+        $(item).autocomplete({
             source: arr,
         });
-        $("#Uni").attr("autocomplete", "on");
-    }
+        $(item).attr("autocomplete", "on");
+    });
 });

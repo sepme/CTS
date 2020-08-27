@@ -1,54 +1,51 @@
-{% load static%}
+{% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back scientific_form">
-    <div class="card small-card text-right small-card">
-        <div class="close"></div>
-        <div class="card-head">ثبت سابقه علمی</div>
-        <div class="container">
-            <form method="post" action="" id="ajax-sci-form" url="{% url 'researcher:scientific_form' %}">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-6">
-                        <div class='row edu-section'>
-                            <div class='col-lg-12'>
-                                <label for="edu-section">مقطع تحصیلی</label>
-                                <input type="text" id="edu-section" class="w-100" name="grade">
+<div class="modal fade" id="newScientificRecord" tabindex="-1" role="dialog" aria-labelledby="newScientificRecordLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="" id="ajax-sci-form" url="{% url 'researcher:scientific_form' %}">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title default text-right" id="newScientificRecordLabel">ثبت سابقه علمی</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="edu-section">مقطع تحصیلی</label>
+                                    <input type="text" id="edu-section" class="w-100" name="grade">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edu-subject">رشته تحصیلی</label>
+                                    <input type="text" id="edu-subject" class="w-100" name="major">
+                                </div>
+                                <div class="form-group">
+                                    <label for="university">دانشگاه</label>
+                                    <input type="text" id="university" class="w-100" name="university">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edu-city">شهر محل تحصیل</label>
+                                    <input type="text" id="edu-city" class="w-100" name="place">
+                                </div>
+                                <div class="form-group">
+                                    <label for="year">سال اخذ مدرک</label>
+                                    <input type="text" id="year" class="w-100" name="graduated_year">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row edu-subject">
-                            <div class='col-lg-12'>
-                                <label for="edu-subject">رشته تحصیلی</label>
-                                <input type="text" id="edu-subject" class="w-100" name="major">
-                            </div>
-                        </div>
-                        <div class='row university'>
-                            <div class='col-lg-12'>
-                                <label for="university">دانشگاه</label>
-                                <input type="text" id="university" class="w-100" name="university">
-                            </div>
-                        </div>
-                        <div class="row edu-city">
-                            <div class='col-lg-12'>
-                                <label for="edu-city">شهر محل تحصیل</label>
-                                <input type="text" id="edu-city" class="w-100" name="place">
-                            </div>
-                        </div>
-                        <div class="row year">
-                            <div class='col-lg-12'>
-                                <label for="year">سال اخذ مدرک</label>
-                                <input type="text" id="year" class="w-100" name="graduated_year">
+                            <div class="col-md-6 d-none d-md-flex">
+                                <img src="{% static '/img/scientific.svg' %}" alt="scientific img" class="form-image">
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 flex-display">
-                        <img src="{% static '/img/scientific.svg' %}" alt="scientific img" class="form-image">
-                    </div>
                 </div>
-                <div class="card-footer">
-                    <button class="save-btn" type="submit" id="submit_button" >افزودن</button>
-                    <button class="reject-btn" type="reset">لغو</button>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                    <button type="submit" class="btn btn-primary mr-2">افزدون</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>

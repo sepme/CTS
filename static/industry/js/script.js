@@ -195,21 +195,19 @@ function setTab(data) {
 
 function expertResume() {
     $(".show-resume").click(function () {
-        if ($('#showProject').length) {
-            $('#showProject').modal('toggle');
-            $('#expertResume').modal('toggle');
+        if ($('.modal#showProject').length) {
+            $('#showProject').modal('hide');
+            $('#expertResume').modal('show');
             $('#expertResume .close__redirect').click(function () {
-                $('#expertResume').modal('toggle');
-                $('#showProject').modal('toggle');
+                $('#expertResume').modal('hide');
+                $('#showProject').modal('show');
             });
         } else {
-            $('#expertResume').modal('toggle');
+            $('#expertResume').modal('show');
+            $('#expertResume .close__redirect').click(function () {
+                $('#expertResume').modal('hide');
+            });
         }
-        // $(".showProject").slideUp('slow').delay('slow');
-        // $(".expert-resume").addClass("show");
-        // $(".expert-resume").delay('slow').slideDown('slow');
-        // close_dialog(".expert-resume");
-        // load_dialog();
         let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         $.ajax({
             method: 'GET',
@@ -622,18 +620,18 @@ $(document).ready(function () {
                         },
                         select: function (event, ui) {
                             let expert = `<div class="selected-expert">
-                    <img src="${ui.item.photo}" alt="${ui.item.value}" width="60px" height="60px">
-                    <div class="selected-expert__details text-right">
-                        <div>${ui.item.value}</div>
-                        <div dir="ltr">${ui.item.id}</div>
-                    </div>
-                    <div class="selected-expert__status text-warning">
-                        در انتظار تایید
-                    </div>
-                    <button type="button" class="selected-expert__delete-item">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>`;
+                                                <img src="${ui.item.photo}" alt="${ui.item.value}" width="60px" height="60px">
+                                                <div class="selected-expert__details text-right">
+                                                    <div>${ui.item.value}</div>
+                                                    <div dir="ltr">${ui.item.id}</div>
+                                                </div>
+                                                <div class="selected-expert__status text-warning">
+                                                    در انتظار تایید
+                                                </div>
+                                                <button type="button" class="selected-expert__delete-item">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>`;
                             thisElement.closest(".form-group").closest("div.col-md-10").html(expert);
                             $(".selected-expert .selected-expert__delete-item").click(function () {
                                 let select_expert = `<div class="form-group">

@@ -1,53 +1,51 @@
 {% load static %}
 {% load widget_tweaks %}
-<div class="fixed-back research_form">
-    <div class="card small-card text-right">
-        <div class="close"></div>
-        <div class="card-head">ثبت سابقه پژوهشی</div>
-        <div class="container">
-            <form method="post" action="" class="ajax-research-form" data-url="{% url 'expert:ajax_research' %}">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-6">
-                        <div class='row'>
-                            <div class='col-lg-12'>
-                                <label for='subject'>عنوان طرح پژوهشی</label>
-                                {{ research_form.research_title|attr:"id:subject"|attr:"class:w-100" }}
-                            </div>
-                        </div>
+<div class="modal fade" id="newResearchRecord" tabindex="-1" role="dialog" aria-labelledby="newResearchRecordLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="" class="ajax-research-form" data-url="{% url 'expert:ajax_research' %}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title default text-right" id="newResearchRecordLabel">ثبت سابقه پژوهشی</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
                         <div class="row">
-                            <div class='col-lg-12'>
-                                <label for='admin'>نام مجری</label>
-                                {{ research_form.researcher|attr:"id:admin"|attr:"class:w-100" }}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for='subject'>عنوان طرح پژوهشی</label>
+                                    {{ research_form.research_title|attr:"id:subject"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label for='admin'>نام مجری</label>
+                                    {{ research_form.researcher|attr:"id:admin"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label for='liable'>مسئول اجرا/همکار</label>
+                                    {{ research_form.co_researcher|attr:"id:liable"|attr:"class:w-100" }}
+                                </div>
+                                <div class="form-group">
+                                    <label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>
+                                    <select id='rank' name="status">
+                                        <option selected dir='rtl'>انتخاب کنید ...</option>
+                                        <option value='1'>در دست اجرا</option>
+                                        <option value='2'>خاتمه یافته</option>
+                                        <option value='3'>متوقف</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class='col-lg-12'>
-                                <label for='liable'>مسئول اجرا/همکار</label>
-                                {{ research_form.co_researcher|attr:"id:liable"|attr:"class:w-100" }}
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-lg-12 rankDiv'>
-                                <label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>
-                                <select id='rank' name="status">
-                                    <option selected dir='rtl'>انتخاب کنید ...</option>
-                                    <option value='1'>در دست اجرا</option>
-                                    <option value='2'>خاتمه یافته</option>
-                                    <option value='3'>متوقف</option>
-                                </select>
+                            <div class="col-md-6 d-none d-md-flex">
+                                <img src="{% static '/img/research.svg' %}" alt="research img" class="form-image">
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 flex-display h-100">
-                        <img src="{% static '/img/research.svg' %}" alt="research img" class="form-image">
-                    </div>
                 </div>
-                <div class="card-footer">
-                    <button class="save-btn" type="submit">افزودن</button>
-                    <button class="reject-btn" type="reset">لغو</button>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">لغو</button>
+                    <button type="submit" class="btn btn-primary mr-2">افزدون</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
