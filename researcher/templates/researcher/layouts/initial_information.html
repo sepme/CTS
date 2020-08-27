@@ -190,42 +190,10 @@
                         </div>
                         <div class="col-md-4"></div>
                     </div>
-                    <button type="button" class="btn btn-primary mb-3 mt-3 pl-4 pr-4 back-step d-none">
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right"
-                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                  d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"></path>
-                            <path fill-rule="evenodd"
-                                  d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"></path>
-                        </svg>
-                        قبلی
-                    </button>
-                    <button type="button" class="btn btn-primary mb-3 mt-3 pl-4 pr-4 next-step">
-                        بعدی
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left"
-                             fill="currentColor"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                  d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"></path>
-                            <path fill-rule="evenodd"
-                                  d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
-                        </svg>
-                    </button>
-                    <button type="submit" class="btn btn-primary mb-3 mt-3 pl-4 pr-4 d-none">
-                        ثبت تغییرات
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                  d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
-                        </svg>
-                    </button>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">ثبت تغییرات</button>
+                    </div>
                 </form>
-                <div class="initial-step-dots mb-4 mt-3">
-                    <div class="dot-item active"></div>
-                    <div class="dot-item"></div>
-                    <div class="dot-item"></div>
-                    <div class="dot-item"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -244,14 +212,14 @@
                         <img src="{% static 'researcher/img/profile.jpg' %}" alt="profile" class="profile"
                              width="150px" height="150px">
                         {{ form.photo|attr:"id:upload-input"| attr:"accept: image/png, image/jpeg" }}
-                        <div class="col-lg-7 text-center">    
+                        <div class="col-lg-7 text-center">
                             <div class="error">
                                 <span class="error-body">{% render_field form.photo.errors %} </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 {% if form.photo.errors %}
                     <div class="row"><div class="col-lg-12"> <br></div></div>
                 {% endif %}
