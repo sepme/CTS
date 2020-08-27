@@ -512,5 +512,15 @@ class ResearchQuestionInstance(models.Model):
                 permission = Permission.objects.get(content_type=ctype, codename='is_active')
                 user.user_permissions.add(permission)
                 user.save()
-        return super().save(force_insert=force_insert, force_update=force_update, using=using,
-                            update_fields=update_fields)
+            elif perv.is_correct == "not_seen" and self.is_correct == "wrong":                
+                status = self.researcher.status
+                researcher = self.researcher
+                status.status = 'deactivated'
+                inactivate_date = datetime.date.today() + datetime.timedelta(days=30)        
+                status.inactivate_duration = inactivate_date
+                status.save()
+                ctype = ContentType.objects.get_for_model(ResearcherUser)
+                permission = Permission.objects.get(content_type=ctype, codename='is_active')
+                researcher.user.user_permissions.remove(permission)
+                researcher.user.save()
+        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)

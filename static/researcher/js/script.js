@@ -43,7 +43,7 @@ $(".preview-project").click(function () {
     if ($(this).attr('value') === "myproject")
         return;
     let id = $(this).attr("id");
-    $(".project_id").attr('value', $(".preview-project").attr("id"));
+    $(".project_id").attr('value', id);
     $("#apply_project_id").attr('value', id);
     /*
      * reset All data
@@ -69,15 +69,15 @@ $(".preview-project").click(function () {
                     + "</span>"
                 );
             }
-            console.log(data.status);
-            if (data.status === "waiting" || data.status === "involved") {
-                $('.vote').remove();
-                $('.apply').remove();
-            }
+            // console.log(data.status);
+            // if (data.status === "waiting" || data.status === "involved") {
+            //     $('.vote').remove();
+            //     $('.apply').remove();
+            // }
             setMajors(data);
             setValue(data);
             setComment(data.comments);
-            let status = "unseen";
+            let status = data.status;
             dialog.find(".modal-footer button").removeClass("confirm-project btn-primary").prop("disabled", true)
                 .css("opacity", 1);
             switch (status) {

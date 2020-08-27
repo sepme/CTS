@@ -549,10 +549,10 @@ def Handler403(request, exception):
                       }        
             return render(request=request, template_name='researcher/forbid_access.html', context=context)
         else:
-            if researcher.researcher.status.status == "deactivated":
+            if researcher.status.status == "deactivated":
                 researcher.status.status = "not_answered"
                 researcher.status.save()
-                ctype = ContentType.objects.get_for_model(models.ResearcherUser)
+                ctype = ContentType.objects.get_for_model(ResearcherUser)
                 permission = Permission.objects.get(content_type=ctype, codename='is_active')
                 request.user.user_permissions.add(permission)
                 request.user.save()

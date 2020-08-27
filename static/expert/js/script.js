@@ -1501,7 +1501,7 @@ showInfo.click(function (event) {
         dataType: 'json',
         success: function (data) {
             console.log(data);
-            if (data.applied !== true) {
+            if (data.applied === true) {
                 $("#accept-project").attr("disabled", "disabled").css("pointer-events", "none");
                 let btn = $("#accept-project").closest(".modal-footer").html();
                 $("#accept-project").closest(".modal-footer").html(
