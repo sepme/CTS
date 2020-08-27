@@ -2746,6 +2746,7 @@ span.title-back {
     padding-right: 20px;
     padding-left: 20px;
     text-align: justify;
+    white-space: pre-line;
 }
 
 .project-info-content .answer {

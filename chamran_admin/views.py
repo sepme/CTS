@@ -687,6 +687,7 @@ def ContactUS(request):
 # @method_decorator(login_required(login_url='/login/'), name='dispatch')
 def AddOpinion(request):
     form = forms.FeedBackForm(request.POST)
+    print(request.POST.get("data"))
     if form.is_valid():
         user_type = find_account_type(request.user)
         feedBack = models.FeedBack(email=form.cleaned_data['email'],
