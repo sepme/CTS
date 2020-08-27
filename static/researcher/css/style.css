@@ -1681,7 +1681,7 @@ ul.nav-tabs {
 
 .question p {
     text-align: justify;
-    line-height: 23px;
+    line-height: 2em;
     font-weight: 300 !important;
     margin: 0;
     background-color: transparent;
