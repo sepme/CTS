@@ -276,6 +276,7 @@ def submit_comment(request):
                                              attachment=attachment,
                                              status='unseen')
         new_comment.save()
+        print(new_comment.attachment.name)
         if attachment is not None:
             url = new_comment.attachment.url[new_comment.attachment.url.find('media', 2):]
             data = {
@@ -584,10 +585,12 @@ def ProjectSetting(request):
         data['addExpert'] = False
     return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 
-
+from django.db.models import Q
 def searchUserId(request):
     searchKey = request.POST['searchKey']
-    suggestedExperts = ExpertUser.objects.filter(userId__icontains=searchKey)
+    suggestedExperts = ExpertUser.objects.filter((Q(userId__icontains=searchKey)| \
+                                                Q(expertform__fullname__icontains=searchKey)))\
+                                                .filter(autoAddProject=True)
     data = {"experts": []}
     for expert in suggestedExperts:
         expertData = {

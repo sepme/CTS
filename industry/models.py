@@ -338,7 +338,7 @@ class Project(models.Model):
         return self.project_form.english_title
 
     def get_comments(self):
-        project_comments = Comment.objects.all().filter(project=self)
+        project_comments = Comment.objects.all().filter(project=self).reverse()
         return project_comments
 
     @property

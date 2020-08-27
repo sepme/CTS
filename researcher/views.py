@@ -719,7 +719,7 @@ def ApplyProject(request):
                                                 project=project,
                                                 least_hours_offered=least_hour,
                                                 most_hours_offered=most_hour,
-                                                request_status="unseen")
+                                                status="unseen")
         apply_project.save()
         comment = Comment(description="درخواست شما برای استاد پروژه فرستاده شد.",
                           sender_type="system",
@@ -727,7 +727,7 @@ def ApplyProject(request):
                           researcher_user=researcher,
                           status='unseen')
         comment.save()
-        project.researcher_applied.add(researcher)
+        # project.researcher_applied.add(researcher)
         return JsonResponse(data={'success': "success"})
     return JsonResponse(form.errors, status=400)
 
@@ -906,7 +906,7 @@ def show_resume_preview(request):
             comment.save()
     researcher_information['comments'] = comments
     try:
-        researcher_information['status'] = researcher.requestedproject_set.get(project=project).request_status
+        researcher_information['status'] = researcher.requestedproject_set.get(project=project).status
     except:
         researcher_information['status'] = 'justComment'
     return JsonResponse(researcher_information)

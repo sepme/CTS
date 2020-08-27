@@ -12,6 +12,7 @@ from django.core.exceptions import PermissionDenied
 
 from persiantools.jdatetime import JalaliDate
 from datetime import datetime
+from itertools import chain
 import json, re
 
 from . import forms, webScraping
@@ -459,8 +460,9 @@ def UsualShowProject(request, project, data):
         data["status"] = "non active"
         data['techniques_list'] = Technique.get_technique_list()
         comments = []        
-        comment_list = project.get_comments().filter(expert_user=request.user.expertuser).exclude(industry_user=None)        
-        sys_comment = project.get_comments().filter(sender_type="system").filter(expert_user=request.user.expertuser)
+        # comment_list = project.get_comments().exclude(industry_user=None).filter(expert_user=request.user.expertuser)
+        # sys_comment = project.get_comments().filter(sender_type="system").filter(expert_user=request.user.expertuser)
+        comment_list = project.get_comments().filter(expert_user=request.user.expertuser).filter(researcher_user=None)
         for comment in comment_list:
             try:
                 url = get_url(comment.attachment.url)
@@ -473,19 +475,19 @@ def UsualShowProject(request, project, data):
                 'attachment': url,
                 'pk': comment.pk,
             })
-            if comment.sender_type == "industry":
+            if comment.sender_type in ["industry", "system"]:
                 comment.status = "seen"
                 comment.save()
-        for comment in sys_comment:
-            comments.append({
-                'id': comment.id,
-                'text': comment.description,
-                'sender_type': comment.sender_type,
-                'pk': comment.pk,
-            })
-            if comment.sender_type == "system":
-                comment.status = "seen"
-                comment.save()
+        # for comment in sys_comment:
+        #     comments.append({
+        #         'id': comment.id,
+        #         'text': comment.description,
+        #         'sender_type': comment.sender_type,
+        #         'pk': comment.pk,
+        #     })
+        #     if comment.sender_type == "system":
+        #         comment.status = "seen"
+        #         comment.save()
         data['comments'] = comments
     data['date'] = JalaliDate(project.date_submitted_by_industry).strftime("%Y/%m/%d")
     data['key_words'] = serializers.serialize('json', project_form.key_words.all())
