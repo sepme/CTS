@@ -40,18 +40,21 @@
             </div>
             <div class="tab-content cover-page">
                 {% for message in other_messages %}
-                    <div class="card {% if not message.3 %}new{% endif %} box flow-root-display hover-enable w-100 {% if message.0.type == 0 %}notice-message{% elif message.0.type == 1 %}alert-message{% else %}news-message{% endif %}" id="{{ message.0.id }}">
+                    <div class="card {% if not message.3 %}new{% endif %} box flow-root-display hover-enable w-100 {% if message.0.type == 0 %}notice-message{% elif message.0.type == 1 %}alert-message{% else %}news-message{% endif %}"
+                         id="{{ message.0.id }}">
                         <div class="box-header">
                             <h6>
                                 {{ message.0.title }}
                             </h6>
                             <span class="new-message">new</span>
-{#                            <div class="data-code">#}
-{#                                <span>{{ message.0.code }}</span>#}
-{#                            </div>#}
-                            <div class="data-modified">
-                                <span>{{ message.1 }}</span>
-                            </div>
+                            {#                            <div class="data-code">#}
+                            {#                                <span>{{ message.0.code }}</span>#}
+                            {#                            </div>#}
+                            {% if not message.0.type == 0 %}
+                                <div class="data-modified">
+                                    <span>{{ message.1 }}</span>
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="box-body">
                             <div class="row">
@@ -110,7 +113,7 @@
                     </a>
                 </span>
                 <span class="email">
-                    <a  href="mailto:info@chamranteam.ir">
+                    <a href="mailto:info@chamranteam.ir">
                         <i class="fas fa-envelope"></i>
                     </a>
                 </span>

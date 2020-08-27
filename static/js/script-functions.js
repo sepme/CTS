@@ -306,7 +306,9 @@ if (window.location.href.indexOf('messages') > -1) {
                                 "</div></a>";
                             $(".preview-message .box-body .attachment").html(attachment);
                         }
-                        $(".preview-message .box-header .data-modified span").html(data.date);
+                        if (data.type !== 0) {
+                            $(".preview-message .box-header .data-modified span").html(data.date);
+                        }
                         thisElement.removeClass("new");
                         thisElement.find(".new-message").remove();
                         if (!$(".tab-content.cover-page ." + messageType).hasClass("new")) {
