@@ -6168,3 +6168,25 @@ table .fas.fa-trash-alt:hover {
     cursor: pointer;
     color: #ff4545;
 }
+
+.initial-step-dots {
+    display: flex;
+    place-content: center;
+}
+
+.initial-step-dots .dot-item {
+    min-width: 12px;
+    min-height: 12px;
+    background-color: #c9c9c9;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 6px;
+}
+
+.initial-step-dots .dot-item:hover {
+
+}
+
+.initial-step-dots .dot-item.active {
+    background-color: #3CCD1C;
+}
