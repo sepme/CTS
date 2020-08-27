@@ -1229,7 +1229,7 @@ $(document).ready(function () {
             let projectSetting = $("#projectSetting");
             $.ajax({
                 method: 'GET',
-                url: projectSettingForm.attr("action"),
+                url: projectSettingForm.attr("data-url"),
                 dataType: 'json',
                 data: {'id': "None"},
                 success: function (data) {
@@ -1333,7 +1333,7 @@ $(document).ready(function () {
             $.ajax({
                 traditional: true,
                 method: 'POST',
-                url: $(this).attr('data-url'),
+                url: $(this).attr('action'),
                 data: {technique: data, id: id, uuid: uuid},
                 dataType: 'json',
                 success: function (data) {
