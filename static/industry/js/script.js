@@ -194,7 +194,7 @@ function setTab(data) {
 }
 
 function expertResume() {
-    $(".show-resume").click(function () {
+    $("[data-target='#expertResume']").click(function () {
         if ($('.modal#showProject').length) {
             $('#showProject').modal('hide');
             $('#expertResume').modal('show');
@@ -1305,6 +1305,158 @@ $(document).ready(function () {
     }
 
     //End Project Setting Technique Selection
+
+    $("button[data-target='#researcherInfo']").click(function () {
+        let id = $(this).attr("id");
+        let url = $(this).attr("data-url");
+        let project_id = $(this).attr("value");
+        console.log("id ", id);
+        console.log("url ", url);
+        console.log("p_id ", project_id);
+        $.ajax({
+            method: 'GET',
+            url: url,
+            dataType: 'json',
+            data: {id: id, project_id: project_id},
+            success: function (data) {
+                // console.log(data);
+                if (data.status === "justComment") {
+                    $('.request-response').attr("style", "display : none;");
+                    $(".confirm-researcher").prop('disabled', true);
+                    $(".refuse-researcher").prop('disabled', true);
+                } else {
+                    $('.request-response').attr("style", "display : block;");
+                    $(".confirm-researcher").prop('disabled', false);
+                    $(".refuse-researcher").prop('disabled', false);
+                }
+                $("#researcherInfo").find(".add-comment").attr("id", project_id);
+                $(".researcher_id").attr("value", id);
+                $(".project_id").attr("value", project_id);
+                if (data.photo)
+                    $('#researcher_photo').attr("src", data.photo);
+                else
+                    $('#researcher_photo').attr("src", "/static/expert/img/profile.jpg");
+                $('#researcher_name').html(data.name);
+                $('#researcher_major').html(data.major);
+                switch (data.grade) {
+                    case 1:
+                        $('#researcher_grade').html('کارشناسی');
+                        break;
+                    case 2:
+                        $('#researcher_grade').html('کارشناسی ارشد');
+                        break;
+                    case 3:
+                        $('#researcher_grade').html('دکتری');
+                        break;
+                    case 4:
+                        $('#researcher_grade').html('دکتری عمومی');
+                        break;
+                }
+                let tech = "";
+                console.log(data);
+                for (let index = 0; index < data.techniques.length; index++)
+                    tech += `<div class="technique-item">
+                                <span class="technique-name">${data.techniques[index]}</span>
+                                <span class="grade grade__A"></span>
+                             </div>`;
+                // tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
+                $("#technique-list").html(tech);
+                $('#researcher_university').html(data.university);
+                $('#researcher_entry_year').html(data.entry_year);
+
+                let scientific_record = JSON.parse(data.scientific_record);
+                if (scientific_record.length !== 0) {
+                    let table_row = "";
+                    for (i = 0; i < scientific_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + scientific_record[i].fields.major + "</td>" +
+                            "<td>" + scientific_record[i].fields.grade + "</td>" +
+                            "<td>" + scientific_record[i].fields.university + "</td>" +
+                            "<td>" + scientific_record[i].fields.place + "</td>" +
+                            "<td>" + scientific_record[i].fields.graduated_year + "</td>" +
+                            "</tr>";
+                        $('#researcher_scientific_record').html(table_row)
+                    }
+                } else {
+                    $('#researcher_scientific_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
+
+                let executive_record = JSON.parse(data.executive_record);
+                if (executive_record.length !== 0) {
+                    let table_row = "";
+                    for (i = 0; i < executive_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + executive_record[i].fields.post + "</td>" +
+                            "<td>" + executive_record[i].fields.place + "</td>" +
+                            "<td>" + executive_record[i].fields.city + "</td>" +
+                            "<td>" + executive_record[i].fields.start + "</td>" +
+                            "<td>" + executive_record[i].fields.end + "</td>" +
+                            "</tr>";
+                        $('#researcher_executive_record').html(table_row)
+                    }
+                } else {
+                    $('#researcher_executive_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
+
+                let research_record = JSON.parse(data.research_record);
+                if (research_record.length !== 0) {
+                    let table_row = "";
+                    let status = "";
+                    for (let i = 0; i < research_record.length; i++) {
+                        switch (research_record[i].fields.status) {
+                            case 1:
+                                status = "در دست اجرا";
+                                break;
+                            case 2:
+                                status = "خاتمه یافته";
+                                break;
+                            case 3:
+                                status = "متوقف";
+                                break;
+                        }
+                        table_row = table_row + "<tr>" +
+                            "<td>" + research_record[i].fields.title + "</td>" +
+                            "<td>" + research_record[i].fields.presenter + "</td>" +
+                            "<td>" + research_record[i].fields.responsible + "</td>" +
+                            "<td>" + status + "</td>" +
+                            "</tr>";
+                        $('#researcher_research_record').html(table_row);
+                    }
+                } else {
+                    $('#researcher_research_record').html(`<tr><td colspan="4">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
+                if (data.resume) {
+                    // console.log(data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1));
+                    let fileType = returnFileType(data.resume.substring(data.resume.lastIndexOf(".") + 1).toUpperCase());
+                    let resume = `
+                    <div class="attach-box m-auto">
+                        <span class="attach-box__img ${fileType}"></span>
+                        <span class="attach-box__info">
+                            <span class="attach-box__info-name">${data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1)}</span>
+                            <span class="attach-box__info-ext">${fileType.toUpperCase()}</span>
+                        </span>
+                        <span class="attach-box__option">
+                            <a class="attach-box__option-download" href="${data.resume}">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </span>
+                    </div>
+                    `;
+                    $("#researcherInfoResume").html(resume);
+                } else
+                    $("#researcherInfoResume").html("");
+                if (data.comments.length)
+                    $(".modal#researcherInfo").find(".no-comment").attr("style", "display : none;");
+                else
+                    $(".modal#researcherInfo").find(".no-comment").attr("style", "display : block;");
+                setComment(data.comments, $(".modal#researcherInfo"));
+                //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
+            },
+            error: function (data) {
+
+            },
+        });
+    });
 
     function getCookie(name) {
         let cookieValue = null;
