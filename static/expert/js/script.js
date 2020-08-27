@@ -277,7 +277,7 @@ $(document).ready(function () {
             else
                 thisUrl = "/expert/researcher_comment/";
             if (comment_form.closest("#showProject").length > 0) {
-                $(".project_id").attr('value', $('.showProject').attr("id"));
+            $(".project_id").attr('value', $('.showProject').attr("id"));
             } else {
                 $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
             }
@@ -1255,6 +1255,7 @@ $(document).ready(function () {
                     $(".confirm-researcher").prop('disabled', false);
                     $(".refuse-researcher").prop('disabled', false);
                 }
+                $("#researcherInfo").find(".add-comment").attr("id", project_id);
                 $(".researcher_id").attr("value", id);
                 $(".project_id").attr("value", project_id);
                 if (data.photo)
