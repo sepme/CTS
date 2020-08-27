@@ -1016,6 +1016,10 @@ div.tagsinput input {
     height: 30px;
 }
 
+#selectTechniques div.tagsinput {
+    height: 100% !important
+}
+
 div.tagsinput span.tag {
     font-family: iranyekan, serif;
     border-color: #3ccd1c;
@@ -4837,7 +4841,7 @@ img.center-head {
     border-radius: 0;
     width: 120px;
     display: block;
-    margin: -40px auto 15px;
+    margin: 0 auto 15px;
 }
 
 .num-input-control input {

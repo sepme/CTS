@@ -220,7 +220,8 @@ function init_confirm_project() {
             'onAddTag': newItem_label,
             'onRemoveTag': newItem_label
         });
-        $("#tags_tagsinput").css("border", "none");
+        $("#tags_tagsinput #tags_addTag").css("display", "none");
+        $('#tags_tagsinput').addClass("border-0 mt-0");
         $("#tags_tagsinput").find("#tags_tag").on("focus", function () {
             $(this).css("width", "fit-content");
         });
@@ -277,7 +278,7 @@ $(document).ready(function () {
             else
                 thisUrl = "/expert/researcher_comment/";
             if (comment_form.closest("#showProject").length > 0) {
-            $(".project_id").attr('value', $('.showProject').attr("id"));
+                $(".project_id").attr('value', $('.showProject').attr("id"));
             } else {
                 $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));
             }
@@ -291,7 +292,6 @@ $(document).ready(function () {
                 contentType: false,
                 success: function (data) {
                     comment_form.find("button[type='submit']").prop("disabled", false);
-                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
                     let comment_code = addComment(data);
                     if (comment_form.closest(".section").find(".project-comment-innerDiv").find(".no-comment").length > 0) {
                         comment_form.closest(".section").find(".project-comment-innerDiv").find(".no-comment").attr("style", "display: none;");
@@ -308,13 +308,12 @@ $(document).ready(function () {
                     });
 
                     comment_form[0].reset();
-                    comment_form.find("#description").css("height", "fit-content");
                     comment_form.closest(".section").find("textarea#description").removeClass("error");
                     comment_form.closest(".section").find('.error').remove();
                     comment_form.closest(".section").find('.file-name').html("");
                     comment_form.closest(".section").find(".send-comment-container .comment-input").removeClass("attached");
                     comment_form.closest(".section").find('.comments').animate({scrollTop: comment_form.closest(".section").find('.comments').prop("scrollHeight")}, 1000);
-
+                    comment_form.find("textarea#description").css("height", "41px");
                 },
                 error: function (data) {
                     console.log(data);
@@ -1279,6 +1278,7 @@ $(document).ready(function () {
                         break;
                 }
                 let tech = "";
+                console.log(data);
                 for (let index = 0; index < data.techniques.length; index++)
                     tech += `<div class="technique-item">
                                 <span class="technique-name">${data.techniques[index]}</span>

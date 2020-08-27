@@ -215,6 +215,7 @@ function expertResume() {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                console.log(data);
                 $("#expertResume #expert_photo").attr("src", data.photo);
                 $("#expert_name").html(data.name);
                 $("#expert_uni").html(data.university);
@@ -481,7 +482,7 @@ function getComments(expert_id, project_id) {
                     $('.add-comment').attr('style', "display : block");
                     $(".comment_submit").prop('disabled', false);
                 } else {
-                    $('.request').html("این پروژه به استاد دیگری واگذار شده است.");
+                    $('.request').html("درخواست این استاد برای پروژه رد شده است.");
                     $('.add-comment').attr('style', "display : none");
                     $(".comment_submit").prop('disabled', true);
                 }
@@ -666,6 +667,7 @@ $(document).ready(function () {
     $('.accept-request').click(function (data) {
         let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         let project_id = $(this).closest(".confirm-request").attr("id");
+        let thisElement = $(this);
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -681,9 +683,18 @@ $(document).ready(function () {
                     message: "درخواست شما با موفقیت ارسال شد!",
                     position: 'bottomLeft'
                 });
+                thisElement.hide();
+                thisElement.prop('disabled', true);
+                thisElement.closest(".button-group").find(".accept-request").hide();
+                thisElement.closest(".button-group").find(".accept-request").prop('disabled', true);
+                thisElement.closest(".confirm-request").find('.request').html("این پروژه به این استاد واگذار شده است.");
             },
             error: function (data) {
-                console.log("error");
+                iziToast.error({
+                    rtl: true,
+                    message: "درخواست شما با خطا روبه رو شد!",
+                    position: 'bottomLeft'
+                });
             },
         });
     });
@@ -691,6 +702,7 @@ $(document).ready(function () {
     $('.reject-request').click(function (data) {
         let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         let project_id = $(this).closest(".confirm-request").attr("id");
+        let thisElement = $(this);
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -706,9 +718,18 @@ $(document).ready(function () {
                     message: "درخواست شما با موفقیت ارسال شد!",
                     position: 'bottomLeft'
                 });
+                thisElement.hide();
+                thisElement.prop('disabled', true);
+                thisElement.closest(".button-group").find(".accept-request").hide();
+                thisElement.closest(".button-group").find(".accept-request").prop('disabled', true);
+                thisElement.closest(".confirm-request").find('.request').html("درخواست این استاد برای پروژه رد شده است.");
             },
             error: function (data) {
-                console.log("error");
+                iziToast.error({
+                    rtl: true,
+                    message: "درخواست شما با خطا روبه رو شد!",
+                    position: 'bottomLeft'
+                });
             },
         });
     });
@@ -1106,84 +1127,6 @@ $(document).ready(function () {
             $(".dialog-main").css("display", "block");
             close_dialog();
         });
-        // let comment_form = $('#comment-form');
-        // comment_form.submit(function (event) {
-        //     event.preventDefault();
-        //     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
-        //     comment_form.find("label").addClass("progress-cursor");
-        //     $("#project_id").attr('value', $(".comment").attr("id"));
-        //     $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
-        //     let thisUrl = "/industry/submit_comment/";
-        //     let data = new FormData(comment_form.get(0));
-        //     $.ajax({
-        //         method: 'POST',
-        //         url: thisUrl,
-        //         data: data,
-        //         type: "ajax",
-        //         processData: false,
-        //         contentType: false,
-        //         success: function (data) {
-        //             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-        //                 .prop("disabled", false);
-        //             comment_form.find("label").removeClass("progress-cursor");
-        //             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-        //             if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-        //                 $(".project-comment-innerDiv").find(".no-comment").remove();
-        //             }
-        //             let comment_code = addComment(data);
-        //             $(".project-comment-innerDiv").find(".comments").append(comment_code);
-        //             iziToast.success({
-        //                 rtl: true,
-        //                 message: "پیام با موفقیت ارسال شد!",
-        //                 position: 'bottomLeft'
-        //             });
-        //             comment_form[0].reset();
-        //             comment_form.find("#description").css("height", "fit-content");
-        //             $('.error').remove();
-        //             $('.file-name').html("");
-        //             $(".send-comment-container .comment-input").removeClass("attached");
-        //             $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
-        //         },
-        //         error: function (data) {
-        //             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-        //                 .prop("disabled", false);
-        //             comment_form.find("label").removeClass("progress-cursor");
-        //             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-        //             let obj = JSON.parse(data.responseText);
-        //             if (obj.description) {
-        //                 $("#description").closest("div").append("<div class='error'>" +
-        //                     "<span class='error-body'>" +
-        //                     "<ul class='errorlist'>" +
-        //                     "<li>" + obj.description + "</li>" +
-        //                     "</ul>" +
-        //                     "</span>" +
-        //                     "</div>");
-        //                 $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-        //             }
-        //         },
-        //     });
-        // });
-        // $(".chamran_btn").click(function () {
-        //     let comment_obj = $("#comment");
-        //     let comment_description = comment_obj.val();
-        //     addComment(comment_description);
-        //     console.log(comment_description);
-        //     $.ajax({
-        //         method: 'GET',
-        //         url: '/industry/submit_comment/',
-        //         dataType: 'json',
-        //         data: {
-        //             description: comment_description,
-        //             project_id: localStorage.getItem("project_id"),
-        //         },
-        //         success: function (data) {
-        //             localStorage.setItem("replied_text", null);
-        //             // display the comment
-        //
-        //         },
-        //     });
-        //     comment_obj.val("");
-        // });
         $(".technique-list-item").click(function () {
             $(this).toggleClass("active");
             $(this).children("span").children(".fa-chevron-left").toggleClass("rotate--90");

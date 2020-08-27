@@ -68,14 +68,23 @@ def gregorian_to_numeric_jalali(date):
     return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
 
+def is_date_valid(project_pk):
+    if Project.objects.filter(id=project_pk).exists():
+        project = Project.objects.get(id=project_pk)
+        if project.date_project_started is not None and project.date_finished is not None and \
+                project.date_phase_two_deadline is not None and project.date_phase_three_deadline is not None and \
+                project.date_start:
+            return True
+    return False
+
+
 @register.simple_tag
 def project_progress(project_pk):
-    if Project.objects.filter(id=project_pk).exists():
+    if Project.objects.filter(id=project_pk).exists() and is_date_valid(project_pk):
         project = Project.objects.get(id=project_pk)
         total_days = (project.date_finished - project.date_project_started).total_seconds()
         pass_days = (datetime.date.today() - project.date_project_started).total_seconds()
         if total_days:
-            print(total_days)
             amount = 100 * pass_days / total_days
             if amount > 89:
                 amount = 89
@@ -85,7 +94,7 @@ def project_progress(project_pk):
 
 @register.simple_tag
 def date_to_percent(project_pk, phase, type):
-    if Project.objects.filter(id=project_pk).exists():
+    if Project.objects.filter(id=project_pk).exists() and is_date_valid(project_pk):
         project = Project.objects.get(id=project_pk)
         if phase == 1:
             date = project.date_project_started
@@ -97,7 +106,7 @@ def date_to_percent(project_pk, phase, type):
             date = ""
         total_days = (project.date_finished - project.date_start).total_seconds()
         pass_days = (date - project.date_start).total_seconds()
-        if total_days : 
+        if total_days:
             if type == "h":
                 return str(int((100 * pass_days / total_days) * 0.88 + 5))
             elif type == "w":
@@ -107,7 +116,7 @@ def date_to_percent(project_pk, phase, type):
 
 @register.simple_tag
 def is_active(project_pk, phase):
-    if Project.objects.filter(id=project_pk).exists() and phase is not None:
+    if Project.objects.filter(id=project_pk).exists() and is_date_valid(project_pk) and phase is not None:
         project = Project.objects.get(id=project_pk)
         if phase == 1:
             date = project.date_project_started

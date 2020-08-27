@@ -307,18 +307,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card project-item">
-                                                <span class="header">{{ project.project_title }} <span
-                                                        class="sub-header">( {{ project.started }} قبل )</span></span>
-                            <span>
-                                                    {% for keyword in project.keyword %}
-                                                        <span class="border-span">{{ keyword.name }}</span>
-                                                    {% endfor %}
-                                                </span>
-                            <span><i class="fas fa-calendar-alt"></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>
-                            <span><i
-                                    class="fas fa-hourglass-end"></i>تا اتمام پروژه <span>{{ project.finished }}</span> فرصت باقی است!</span>
-                        </div>
                     {% empty %}
                         <div class="col-12 text-center">
                             <div class="empty-page">

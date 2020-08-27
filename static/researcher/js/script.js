@@ -960,47 +960,84 @@ technique_review.submit(function (event) {
 });
 
 function show_add_technique_record(data) {
-    let newTechnique = "" +
-        "<div class='card box flow-root-display w-100'>" +
-        "    <div class='box-header text-right'>" +
-        "        <h6>" + data.title + "</h6>" +
-        "        <div class='box-object-left'>" +
-        "           <a href='//" + data.link + "'>" +
-        "            <i class='fas fa-film'/>" +
-        "            <span class='info-text'>ویدیو آموزشی</span>" +
-        "           </a>" +
-        "       </div>" +
-        "    </div>" +
-        "    <div class='box-body'>" +
-        "        <div class='row'>" +
-        "            <div class='col-md-6 col-8'>" +
-        "                <div class='row'>" +
-        "                    <div class='col-6'>" +
-        "                        <div class='date text-center'>" +
-        "                            <div class='label'>ثبت</div>" +
-        "                            <div class='value'>" +
-        "                                <span>امروز</span>" +
-        "                            </div>" +
-        "                        </div>" +
-        "                    </div>" +
-        "                    <div class='col-6 text-center'>" +
-        "                        <div class='label'>سطح تسلط</div>" +
-        "                        <div class='value'>";
-    if (data.is_exam)
-        newTechnique += "                            <span>" +
-            "زمان آزمون از طریق تماس با شما هماهنگ خواهد شد" +
-            "                            </span>";
-    else
-        newTechnique += "                            <span>" +
-            "در حال بررسی...                               " +
-            "                            </span>";
-    newTechnique += "                        </div>" +
-        "                    </div>" +
-        "                </div>" +
-        "            </div>" +
-        "        </div>" +
-        "    </div>" +
-        "</div>";
+    let newTechnique = `
+        <div class="card box flow-root-display w-100">
+            <div class="box-header text-right">
+                <h6>${data.title}</h6>
+                <div class="box-object-left">
+                    <a href="//${data.link}">
+                        <i class="fas fa-film"></i>
+                        <span class="info-text">ویدیو آموزشی</span>
+                    </a>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-10 col-10">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="date text-center">
+                                    <div class="label">ثبت</div>
+                                    <div class="value">
+                                        <span>امروز</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="label">سطح تسلط</div>
+                                <div class="value">
+                                    <span>
+                                        در حال بررسی...
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    // let newTechnique = "" +
+    //     "<div class='card box flow-root-display w-100'>" +
+    //     "    <div class='box-header text-right'>" +
+    //     "        <h6>" + data.title + "</h6>" +
+    //     "        <div class='box-object-left'>" +
+    //     "           <a href='//" + data.link + "'>" +
+    //     "            <i class='fas fa-film'/>" +
+    //     "            <span class='info-text'>ویدیو آموزشی</span>" +
+    //     "           </a>" +
+    //     "       </div>" +
+    //     "    </div>" +
+    //     "    <div class='box-body'>" +
+    //     "        <div class='row'>" +
+    //     "            <div class='col-md-6 col-8'>" +
+    //     "                <div class='row'>" +
+    //     "                    <div class='col-6'>" +
+    //     "                        <div class='date text-center'>" +
+    //     "                            <div class='label'>ثبت</div>" +
+    //     "                            <div class='value'>" +
+    //     "                                <span>امروز</span>" +
+    //     "                            </div>" +
+    //     "                        </div>" +
+    //     "                    </div>" +
+    //     "                    <div class='col-6 text-center'>" +
+    //     "                        <div class='label'>سطح تسلط</div>" +
+    //     "                        <div class='value'>";
+    // if (data.is_exam)
+    //     newTechnique += "                            <span>" +
+    //         "زمان آزمون از طریق تماس با شما هماهنگ خواهد شد" +
+    //         "                            </span>";
+    // else
+    //     newTechnique += "                            <span>" +
+    //         "در حال بررسی...                               " +
+    //         "                            </span>";
+    // newTechnique += "                        </div>" +
+    //     "                    </div>" +
+    //     "                </div>" +
+    //     "            </div>" +
+    //     "        </div>" +
+    //     "    </div>" +
+    //     "</div>";
     $(".techniques-list .empty-page").remove();
     $(".techniques-list").append(newTechnique);
 }
@@ -1324,7 +1361,7 @@ comment_form.submit(function (event) {
             });
 
             comment_form[0].reset();
-            comment_form.find("#description").css("height", "fit-content");
+            comment_form.find("#description").css("height", "41px");
             comment_form.closest(".section").find("textarea#description").removeClass("error");
             comment_form.closest(".section").find('.error').remove();
             comment_form.closest(".section").find('.file-name').html("");
