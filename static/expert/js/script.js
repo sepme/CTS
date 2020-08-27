@@ -276,7 +276,7 @@ $(document).ready(function () {
                 thisUrl = "/expert/industry_comment/";
             else
                 thisUrl = "/expert/researcher_comment/";
-            if (comment_form.closest(".showProject").length > 0) {
+            if (comment_form.closest("#showProject").length > 0) {
                 $(".project_id").attr('value', $('.showProject').attr("id"));
             } else {
                 $(".project_id").attr('value', $(this).closest(".add-comment").attr("id"));

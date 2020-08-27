@@ -57,7 +57,7 @@
                                                             src="{% static 'industry/img/profile.jpg' %}"
                                                         {% endif %}
                                                             alt="profile" class="profile" width="150px" height="150px">
-                                                {% render_field form.photo accept="image/png, image/jpeg" %}
+                                                {% render_field RandD_form.photo accept="image/png, image/jpeg" %}
                                             </div>
                                             <div class="mt-1">بارگزاری تصویر پروفایل</div>
                                         </div>
@@ -117,7 +117,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label for="id_phone_number">تلفن</label>
+                                                <label for="id_phone_number">شماره همراه</label>
                                                 {% render_field RandD_form.phone_number class+="w-100" readonly="true" %}
                                                 {% render_field RandD_form.phone_number.errors %}
                                             </div>
@@ -139,7 +139,7 @@
                                                             alt="profile" class="profile" width="150px" height="150px">
                                                 {#                                            <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg"#}
                                                 {#                                                   hidden>#}
-                                                {% render_field form.photo accept="image/png, image/jpeg" %}
+                                                {% render_field researchgroup_form.photo accept="image/png, image/jpeg"%}
                                             </div>
                                             <div class="mt-1">بارگزاری تصویر پروفایل</div>
                                         </div>
@@ -266,7 +266,7 @@
                             <div class="row mr-0 ml-0">
                                 <div class="col-lg-3 text-right">
                                     <div class="form-group">
-                                        <label for="id_phone_number">تلفن</label>
+                                        <label for="id_phone_number">شماره همراه</label>
                                         {% if interface_form.phone_number.errors %}
                                             {% render_field interface_form.phone_number class+="w-100 error" %}
                                         {% else %}
@@ -281,7 +281,7 @@
                             <div class="row mr-0 ml-0">
                                 <div class="col-lg-4 text-right">
                                     <div class="form-group">
-                                        <label for="id_email">رایانامه</label>
+                                        <label for="id_email">پست الکترونیکی</label>
                                         {% if interface_form.email.errors %}
                                             {% render_field interface_form.email class+="w-100 error" %}
                                         {% else %}
