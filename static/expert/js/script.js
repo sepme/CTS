@@ -555,7 +555,8 @@ $(document).ready(function () {
                 </div>
                 <button class="btn btn-primary mt-4" type="button" id="changeAttachment">حذف فایل</button>
             `;
-                $(this).closest(".attach__container").html(attachment);
+                $(this).closest(".attach__container").find(".form-group").remove();
+                $(this).closest(".attach__container").append(attachment);
                 $("#changeAttachment").click(function () {
                     $(this).closest(".attach__container").html(`
                     <div class="form-group text-center font-weight-bold">
@@ -569,9 +570,9 @@ $(document).ready(function () {
                                     </svg>
                                         انتخاب فایل
                         </label>
-                        <input type="file" class="form-control-file"
-                            id="uploadResume" name="resume" hidden>
                     </div>
+                    <input type="file" class="form-control-file"
+                                id="uploadResume" name="resume" hidden>
                 `);
                     putAttachment($("input#uploadResume"));
                 });
@@ -596,9 +597,9 @@ $(document).ready(function () {
                                     </svg>
                                         انتخاب فایل
                         </label>
-                        <input type="file" class="form-control-file"
-                            id="uploadResume" name="resume" hidden>
                     </div>
+                    <input type="file" class="form-control-file"
+                            id="uploadResume" name="resume" hidden>
                 `);
                 putAttachment($("input#uploadResume"));
             });
