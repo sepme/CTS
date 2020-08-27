@@ -311,11 +311,13 @@
     $("form#feedback_ajax_form").submit(function (event) {
         event.preventDefault();
         let modalElement = $("#feedbackModal");
-
+        console.log($(this).serialize());
         $.ajax({
             method: "POST",
             url: $(this).attr("action"),
             data: $(this).serialize(),
+            datatype:"json",
+            contentType: "application/json; charset=utf-8",
             success: function (data) {
                 $(`
                     <div class="alert alert-success alert-dismissible fade show text-justify" role="alert">

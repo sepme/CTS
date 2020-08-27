@@ -532,8 +532,8 @@ def checkUserId(request):
 
 @permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):
-    expertId = request.POST['expertId']
-    expert = ExpertUser.objects.filter(userId=expertId)
+    expertId = request.POST['uuid']
+    expert = ExpertUser.objects.get(userId=expertId)
     data = {}
     if expert.autoAddProject:
         technique_list = request.POST.getlist('technique')
@@ -541,7 +541,7 @@ def ProjectSetting(request):
             return JsonResponse({
                 'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
             }, status=400)
-        project = models.Project.objects.filter(pk=request.POST['projectId'])
+        project = models.Project.objects.get(id=request.POST['id'])
         for technique in technique_list:
             project_technique = Technique.objects.get_or_create(technique_title=technique[:-2])
             project.projectform.techniques.add(project_technique[0])
@@ -582,7 +582,7 @@ def ProjectSetting(request):
         project.save()
     else: 
         data['addExpert'] = False
-    return JsonResponse(data={})
+    return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 
 
 def searchUserId(request):
