@@ -194,7 +194,7 @@ function setTab(data) {
 }
 
 function expertResume() {
-    $(".show-resume").click(function () {
+    $("[data-target='#expertResume']").click(function () {
         if ($('.modal#showProject').length) {
             $('#showProject').modal('hide');
             $('#expertResume').modal('show');
@@ -215,6 +215,7 @@ function expertResume() {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
+                console.log(data);
                 $("#expertResume #expert_photo").attr("src", data.photo);
                 $("#expert_name").html(data.name);
                 $("#expert_uni").html(data.university);
@@ -481,7 +482,7 @@ function getComments(expert_id, project_id) {
                     $('.add-comment').attr('style', "display : block");
                     $(".comment_submit").prop('disabled', false);
                 } else {
-                    $('.request').html("این پروژه به استاد دیگری واگذار شده است.");
+                    $('.request').html("درخواست این استاد برای پروژه رد شده است.");
                     $('.add-comment').attr('style', "display : none");
                     $(".comment_submit").prop('disabled', true);
                 }
@@ -666,6 +667,7 @@ $(document).ready(function () {
     $('.accept-request').click(function (data) {
         let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         let project_id = $(this).closest(".confirm-request").attr("id");
+        let thisElement = $(this);
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -681,9 +683,18 @@ $(document).ready(function () {
                     message: "درخواست شما با موفقیت ارسال شد!",
                     position: 'bottomLeft'
                 });
+                thisElement.hide();
+                thisElement.prop('disabled', true);
+                thisElement.closest(".button-group").find(".accept-request").hide();
+                thisElement.closest(".button-group").find(".accept-request").prop('disabled', true);
+                thisElement.closest(".confirm-request").find('.request').html("این پروژه به این استاد واگذار شده است.");
             },
             error: function (data) {
-                console.log("error");
+                iziToast.error({
+                    rtl: true,
+                    message: "درخواست شما با خطا روبه رو شد!",
+                    position: 'bottomLeft'
+                });
             },
         });
     });
@@ -691,6 +702,7 @@ $(document).ready(function () {
     $('.reject-request').click(function (data) {
         let expert_id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
         let project_id = $(this).closest(".confirm-request").attr("id");
+        let thisElement = $(this);
         data = {
             "expert_id": expert_id,
             "project_id": project_id
@@ -706,9 +718,18 @@ $(document).ready(function () {
                     message: "درخواست شما با موفقیت ارسال شد!",
                     position: 'bottomLeft'
                 });
+                thisElement.hide();
+                thisElement.prop('disabled', true);
+                thisElement.closest(".button-group").find(".accept-request").hide();
+                thisElement.closest(".button-group").find(".accept-request").prop('disabled', true);
+                thisElement.closest(".confirm-request").find('.request').html("درخواست این استاد برای پروژه رد شده است.");
             },
             error: function (data) {
-                console.log("error");
+                iziToast.error({
+                    rtl: true,
+                    message: "درخواست شما با خطا روبه رو شد!",
+                    position: 'bottomLeft'
+                });
             },
         });
     });
@@ -1106,84 +1127,6 @@ $(document).ready(function () {
             $(".dialog-main").css("display", "block");
             close_dialog();
         });
-        // let comment_form = $('#comment-form');
-        // comment_form.submit(function (event) {
-        //     event.preventDefault();
-        //     comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
-        //     comment_form.find("label").addClass("progress-cursor");
-        //     $("#project_id").attr('value', $(".comment").attr("id"));
-        //     $("#expert_id").attr('value', $(".comment-tabs .active").attr("id").replace("v-pills-expert-", ""));
-        //     let thisUrl = "/industry/submit_comment/";
-        //     let data = new FormData(comment_form.get(0));
-        //     $.ajax({
-        //         method: 'POST',
-        //         url: thisUrl,
-        //         data: data,
-        //         type: "ajax",
-        //         processData: false,
-        //         contentType: false,
-        //         success: function (data) {
-        //             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-        //                 .prop("disabled", false);
-        //             comment_form.find("label").removeClass("progress-cursor");
-        //             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-        //             if ($(".project-comment-innerDiv").find(".no-comment").length > 0) {
-        //                 $(".project-comment-innerDiv").find(".no-comment").remove();
-        //             }
-        //             let comment_code = addComment(data);
-        //             $(".project-comment-innerDiv").find(".comments").append(comment_code);
-        //             iziToast.success({
-        //                 rtl: true,
-        //                 message: "پیام با موفقیت ارسال شد!",
-        //                 position: 'bottomLeft'
-        //             });
-        //             comment_form[0].reset();
-        //             comment_form.find("#description").css("height", "fit-content");
-        //             $('.error').remove();
-        //             $('.file-name').html("");
-        //             $(".send-comment-container .comment-input").removeClass("attached");
-        //             $('.comments').animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
-        //         },
-        //         error: function (data) {
-        //             comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-        //                 .prop("disabled", false);
-        //             comment_form.find("label").removeClass("progress-cursor");
-        //             comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-        //             let obj = JSON.parse(data.responseText);
-        //             if (obj.description) {
-        //                 $("#description").closest("div").append("<div class='error'>" +
-        //                     "<span class='error-body'>" +
-        //                     "<ul class='errorlist'>" +
-        //                     "<li>" + obj.description + "</li>" +
-        //                     "</ul>" +
-        //                     "</span>" +
-        //                     "</div>");
-        //                 $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-        //             }
-        //         },
-        //     });
-        // });
-        // $(".chamran_btn").click(function () {
-        //     let comment_obj = $("#comment");
-        //     let comment_description = comment_obj.val();
-        //     addComment(comment_description);
-        //     console.log(comment_description);
-        //     $.ajax({
-        //         method: 'GET',
-        //         url: '/industry/submit_comment/',
-        //         dataType: 'json',
-        //         data: {
-        //             description: comment_description,
-        //             project_id: localStorage.getItem("project_id"),
-        //         },
-        //         success: function (data) {
-        //             localStorage.setItem("replied_text", null);
-        //             // display the comment
-        //
-        //         },
-        //     });
-        //     comment_obj.val("");
-        // });
         $(".technique-list-item").click(function () {
             $(this).toggleClass("active");
             $(this).children("span").children(".fa-chevron-left").toggleClass("rotate--90");
@@ -1229,7 +1172,7 @@ $(document).ready(function () {
             let projectSetting = $("#projectSetting");
             $.ajax({
                 method: 'GET',
-                url: projectSettingForm.attr("action"),
+                url: projectSettingForm.attr("data-url"),
                 dataType: 'json',
                 data: {'id': "None"},
                 success: function (data) {
@@ -1333,7 +1276,7 @@ $(document).ready(function () {
             $.ajax({
                 traditional: true,
                 method: 'POST',
-                url: $(this).attr('data-url'),
+                url: $(this).attr('action'),
                 data: {technique: data, id: id, uuid: uuid},
                 dataType: 'json',
                 success: function (data) {
@@ -1362,6 +1305,158 @@ $(document).ready(function () {
     }
 
     //End Project Setting Technique Selection
+
+    $("button[data-target='#researcherInfo']").click(function () {
+        let id = $(this).attr("id");
+        let url = $(this).attr("data-url");
+        let project_id = $(this).attr("value");
+        console.log("id ", id);
+        console.log("url ", url);
+        console.log("p_id ", project_id);
+        $.ajax({
+            method: 'GET',
+            url: url,
+            dataType: 'json',
+            data: {id: id, project_id: project_id},
+            success: function (data) {
+                // console.log(data);
+                if (data.status === "justComment") {
+                    $('.request-response').attr("style", "display : none;");
+                    $(".confirm-researcher").prop('disabled', true);
+                    $(".refuse-researcher").prop('disabled', true);
+                } else {
+                    $('.request-response').attr("style", "display : block;");
+                    $(".confirm-researcher").prop('disabled', false);
+                    $(".refuse-researcher").prop('disabled', false);
+                }
+                $("#researcherInfo").find(".add-comment").attr("id", project_id);
+                $(".researcher_id").attr("value", id);
+                $(".project_id").attr("value", project_id);
+                if (data.photo)
+                    $('#researcher_photo').attr("src", data.photo);
+                else
+                    $('#researcher_photo').attr("src", "/static/expert/img/profile.jpg");
+                $('#researcher_name').html(data.name);
+                $('#researcher_major').html(data.major);
+                switch (data.grade) {
+                    case 1:
+                        $('#researcher_grade').html('کارشناسی');
+                        break;
+                    case 2:
+                        $('#researcher_grade').html('کارشناسی ارشد');
+                        break;
+                    case 3:
+                        $('#researcher_grade').html('دکتری');
+                        break;
+                    case 4:
+                        $('#researcher_grade').html('دکتری عمومی');
+                        break;
+                }
+                let tech = "";
+                console.log(data);
+                for (let index = 0; index < data.techniques.length; index++)
+                    tech += `<div class="technique-item">
+                                <span class="technique-name">${data.techniques[index]}</span>
+                                <span class="grade grade__A"></span>
+                             </div>`;
+                // tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
+                $("#technique-list").html(tech);
+                $('#researcher_university').html(data.university);
+                $('#researcher_entry_year').html(data.entry_year);
+
+                let scientific_record = JSON.parse(data.scientific_record);
+                if (scientific_record.length !== 0) {
+                    let table_row = "";
+                    for (i = 0; i < scientific_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + scientific_record[i].fields.major + "</td>" +
+                            "<td>" + scientific_record[i].fields.grade + "</td>" +
+                            "<td>" + scientific_record[i].fields.university + "</td>" +
+                            "<td>" + scientific_record[i].fields.place + "</td>" +
+                            "<td>" + scientific_record[i].fields.graduated_year + "</td>" +
+                            "</tr>";
+                        $('#researcher_scientific_record').html(table_row)
+                    }
+                } else {
+                    $('#researcher_scientific_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
+
+                let executive_record = JSON.parse(data.executive_record);
+                if (executive_record.length !== 0) {
+                    let table_row = "";
+                    for (i = 0; i < executive_record.length; i++) {
+                        table_row = table_row + "<tr>" +
+                            "<td>" + executive_record[i].fields.post + "</td>" +
+                            "<td>" + executive_record[i].fields.place + "</td>" +
+                            "<td>" + executive_record[i].fields.city + "</td>" +
+                            "<td>" + executive_record[i].fields.start + "</td>" +
+                            "<td>" + executive_record[i].fields.end + "</td>" +
+                            "</tr>";
+                        $('#researcher_executive_record').html(table_row)
+                    }
+                } else {
+                    $('#researcher_executive_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
+
+                let research_record = JSON.parse(data.research_record);
+                if (research_record.length !== 0) {
+                    let table_row = "";
+                    let status = "";
+                    for (let i = 0; i < research_record.length; i++) {
+                        switch (research_record[i].fields.status) {
+                            case 1:
+                                status = "در دست اجرا";
+                                break;
+                            case 2:
+                                status = "خاتمه یافته";
+                                break;
+                            case 3:
+                                status = "متوقف";
+                                break;
+                        }
+                        table_row = table_row + "<tr>" +
+                            "<td>" + research_record[i].fields.title + "</td>" +
+                            "<td>" + research_record[i].fields.presenter + "</td>" +
+                            "<td>" + research_record[i].fields.responsible + "</td>" +
+                            "<td>" + status + "</td>" +
+                            "</tr>";
+                        $('#researcher_research_record').html(table_row);
+                    }
+                } else {
+                    $('#researcher_research_record').html(`<tr><td colspan="4">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
+                }
+                if (data.resume) {
+                    // console.log(data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1));
+                    let fileType = returnFileType(data.resume.substring(data.resume.lastIndexOf(".") + 1).toUpperCase());
+                    let resume = `
+                    <div class="attach-box m-auto">
+                        <span class="attach-box__img ${fileType}"></span>
+                        <span class="attach-box__info">
+                            <span class="attach-box__info-name">${data.resume_name.substring(data.resume_name.lastIndexOf("/") + 1)}</span>
+                            <span class="attach-box__info-ext">${fileType.toUpperCase()}</span>
+                        </span>
+                        <span class="attach-box__option">
+                            <a class="attach-box__option-download" href="${data.resume}">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </span>
+                    </div>
+                    `;
+                    $("#researcherInfoResume").html(resume);
+                } else
+                    $("#researcherInfoResume").html("");
+                if (data.comments.length)
+                    $(".modal#researcherInfo").find(".no-comment").attr("style", "display : none;");
+                else
+                    $(".modal#researcherInfo").find(".no-comment").attr("style", "display : block;");
+                setComment(data.comments, $(".modal#researcherInfo"));
+                //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
+            },
+            error: function (data) {
+
+            },
+        });
+    });
 
     function getCookie(name) {
         let cookieValue = null;

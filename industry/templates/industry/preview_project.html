@@ -6,6 +6,8 @@
 
 {% block modals %}
     {% include 'industry/layouts/expertResume.html' %}
+    {% include 'industry/layouts/researcher_info.html' %}
+    {% include 'industry/layouts/researcher_request.html' %}
 {% endblock %}
 
 {% block name %}{{ request.user.industryuser.profile }}{% endblock %}
@@ -140,8 +142,10 @@
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
-                                                        <div id="enforcer-name">
-                                                            {{ enforcer_name }}
+                                                        <div class="rounded-name-profile clickable mt-2" id="enforcer-name"
+                                                             data-toggle="modal" data-target="#expertResume">
+                                                            <span>{{ enforcer_name }}</span>
+                                                            <img src="{% static 'industry/img/profile.jpg' %}" alt="enforcer photo">
                                                         </div>
                                                     </div>
                                                     <div class="col-12 budget-text">
@@ -269,11 +273,12 @@
                                         <div class="row mbottom-lg-25">
                                             <div class="col-12">
                                                 <span class="section-title">پژوهشگران</span>
-                                                {#                                                <button type="button"#}
-                                                {#                                                        class="border-button section-button"#}
-                                                {#                                                        data-toggle="modal"#}
-                                                {#                                                        data-target="#researcherRequest">درخواست#}
-                                                {#                                                </button>#}
+                                                <button type="button"
+                                                        class="border-button section-button"
+                                                        data-toggle="modal"
+                                                        data-target="#researcherRequest">
+                                                    درخواست
+                                                </button>
                                                 <div class="section">
                                                     <div class="row">
                                                         <div class="col-12 text-center">

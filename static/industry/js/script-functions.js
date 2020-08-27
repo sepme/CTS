@@ -166,7 +166,7 @@ function dialog_comment_init() {
                 });
 
                 comment_form[0].reset();
-                comment_form.find("#description").css("height", "fit-content");
+                comment_form.find("#description").css("height", "41px");
                 comment_form.closest(".section").find("textarea#description").removeClass("error");
                 comment_form.closest(".section").find('.error').remove();
                 comment_form.closest(".section").find('.file-name').html("");

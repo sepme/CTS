@@ -1,0 +1,113 @@
+{% load static %}
+{% load date_tags %}
+{% load message_tags %}
+<div class="modal fade" id="researcherRequest" tabindex="-1" role="dialog" aria-labelledby="researcherRequestLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="researcherRequestLabel">
+
+                </h6>
+                <button type="button" class="close close__redirect" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="researcher-request-ajax" method="post" action="">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="container text-right">
+                        <img class="center-head" src="{% static 'img/time.svg' %}" alt="cooperation image">
+                        <p style="margin: 25px auto;">
+                            پیش از ارسال درخواست لازم است حداقل و حداکثر زمانی را که در هفته می توانید به این پروژه
+                            اختصاص دهید را مشخص کنید.
+                        </p>
+                        <div class="apply">
+                            <div class="row">
+                                <label>
+                                    <input type="text" class="project"
+                                           name="project_id"
+                                           value="{{ project_pk }}"
+                                           hidden>
+                                </label>
+                                <div class="col-6">
+                                    <div class="form-group num-input-control">
+{#                                        <div class="input-group-prepend">#}
+{#                                            <span class="input-group-text"> - </span>#}
+{#                                        </div>#}
+                                        <label for="id_researcher_count">حداکثر تعداد:</label>
+                                        {{ requestResearcherForm.researcher_count }}
+{#                                        <div class="input-group-append">#}
+{#                                            <span class="input-group-text">+</span>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group num-input-control">
+{#                                        <div class="input-group-prepend">#}
+{#                                            <span class="input-group-text"> - </span>#}
+{#                                        </div>#}
+                                        <label for="id_least_hour"> ساعت کار(ساعت):</label>
+                                        {{ requestResearcherForm.least_hour }}
+{#                                        <div class="input-group-append">#}
+{#                                            <span class="input-group-text">+</span>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="accept-project">
+                        ارسال درخواست
+                    </button>
+                </div>
+            </form>
+            {#            </div>#}
+            {#            <form method="POST" url="{% url 'researcher:apply_project' %}" class="apply_Project">#}
+            {#                {% csrf_token %}#}
+            {#                <div class="modal-body">#}
+            {#                    <div class="container text-right">#}
+            {#                        <img class="center-head" src="{% static 'img/time.svg' %}" alt="cooperation image">#}
+            {#                        <p style="margin: 25px auto;">#}
+            {#                            پیش از ارسال درخواست لازم است حداقل و حداکثر زمانی را که در هفته می توانید به این پروژه اختصاص دهید را مشخص کنید.#}
+            {#                        </p>#}
+            {#                        <div class="apply">#}
+            {#                            <div class="row">#}
+            {#                                <input type="text" id="apply_project_id" name="id" hidden>#}
+            {#                                <div class="col-md-6">#}
+            {#                                    <div class="form-group">#}
+            {#                                        <div class="input-group-prepend">#}
+            {#                                            <span class="input-group-text"> - </span>#}
+            {#                                        </div>#}
+            {#                                        <label for="least_hours">حداقل ساعت:</label>#}
+            {#                                        <input type="number" name="least_hours" id="least_hours" class="w-100 form-control">#}
+            {#                                        <div class="input-group-append">#}
+            {#                                            <span class="input-group-text">+</span>#}
+            {#                                        </div>#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                                <div class="col-md-6">#}
+            {#                                    <div class="form-group">#}
+            {#                                        <div class="input-group-prepend">#}
+            {#                                            <span class="input-group-text">-</span>#}
+            {#                                        </div>#}
+            {#                                        <label for="most_hours">حداکثر ساعت:</label>#}
+            {#                                        <input type="number" name="most_hours" id="most_hours" class="w-100 form-control">#}
+            {#                                        <div class="input-group-append">#}
+            {#                                            <span class="input-group-text">+</span>#}
+            {#                                        </div>#}
+            {#                                    </div>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#                <div class="modal-footer">#}
+            {#                    <button type="submit" class="btn btn-primary confirm_project" id="accept-project">#}
+            {#                        ارسال درخواست#}
+            {#                    </button>#}
+            {#                </div>#}
+            {#            </form>#}
+        </div>
+    </div>
+</div>

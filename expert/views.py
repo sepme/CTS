@@ -131,22 +131,21 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
                     researchers.append(com.researcher_user)
             if len(researchers) == 0:
                 continue
-            for researcher in researchers:
-                techniques = [tech.technique.technique_title for tech in
-                                researcher.techniqueinstance_set.all()]
-                researcher_applied = {
-                    'id'        : researcher.pk,
-                    'profile'   : researcher.researcherprofile,
-                    'techniques': techniques,
-                }
-                researchers_applied.append(researcher_applied)
+            # for researcher in researchers:
+            #     techniques = [tech.technique.technique_title for tech in
+            #                     researcher.techniqueinstance_set.all()]
+            #     researcher_applied = {
+            #         'id'        : researcher.pk,
+            #         'profile'   : researcher.researcherprofile,
+            #         'techniques': techniques,
+            #     }
+            #     researchers_applied.append(researcher_applied)
             appending = {
                 'project': project.project_form.persian_title,
                 'id': project.pk,
                 "researchers_applied": researchers_applied
             }
             projects_data.append(appending)
-
         context = {}
         if len(projects_data) != 0:
             context = {'applications': projects_data}
