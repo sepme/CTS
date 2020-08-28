@@ -280,11 +280,11 @@ class ProjectForm(models.Model):
     def __str__(self):
         return self.english_title
 
-    @property
-    def required_technique(self):
-        expert_requested = expertModels.ExpertRequestedProject.objects.all().filter(project=self.project).filter(
-            expert=self.project.expert_accepted).first()
-        return expert_requested.required_technique.all()
+    # @property
+    # def required_technique(self):
+    #     expert_requested = expertModels.ExpertRequestedProject.objects.all().filter(project=self.project).filter(
+    #         expert=self.project.expert_accepted).first()
+    #     return expert_requested.required_technique.all()
 
 
 class Project(models.Model):
