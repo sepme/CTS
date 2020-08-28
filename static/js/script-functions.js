@@ -505,4 +505,34 @@ $(window).on("load", function () {
         });
         $(item).attr("autocomplete", "on");
     });
+
+    // Initial carousel steps
+    let carousel = $("#stepCarouselIndicators");
+    if (carousel.length) {
+
+        carousel.carousel({
+            interval: false,
+            wrap: false,
+        });
+
+        carousel.find("button.next-step").click(function () {
+            carousel.carousel("next");
+        });
+        carousel.find("button.back-step").click(function () {
+            carousel.carousel("prev");
+        });
+        carousel.on('slid.bs.carousel', function () {
+            console.log(carousel.find(".carousel-item.active").is(":first-child"));
+            if (carousel.find(".carousel-item.active").is(":first-child")) {
+                carousel.find("button.back-step").addClass("d-none");
+            } else if (carousel.find(".carousel-item.active").is(":last-child")) {
+                carousel.find("button.next-step").addClass("d-none");
+                carousel.find("button[type='submit']").removeClass("d-none");
+            } else {
+                carousel.find("button.back-step").removeClass("d-none");
+                carousel.find("button.next-step").removeClass("d-none");
+                carousel.find("button[type='submit']").addClass("d-none");
+            }
+        })
+    }
 });

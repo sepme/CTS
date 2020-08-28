@@ -6222,7 +6222,7 @@ table .fas.fa-trash-alt:hover {
     cursor: pointer;
 }
 
-.rounded-name-profile.clickable:hover img:after{
+.rounded-name-profile.clickable:hover img:after {
     content: '';
     position: absolute;
     top: 0;
@@ -6338,4 +6338,28 @@ table .fas.fa-trash-alt:hover {
 .horizontal-avatar-list .avatar-item .info button:hover {
     background: #3CCD1C;
     color: white;
+}
+
+#stepCarouselIndicators .carousel-indicators li {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    background-color: #c9c9c9;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 6px;
+    opacity: 1;
+}
+
+#stepCarouselIndicators .carousel-indicators {
+    padding-right: 0;
+}
+
+#stepCarouselIndicators .carousel-indicators .active {
+    background-color: #3CCD1C;
+}
+
+#stepCarouselIndicators.carousel {
+    padding-bottom: 50px;
 }

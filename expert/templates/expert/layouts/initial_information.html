@@ -10,180 +10,223 @@
             <div class="modal-body">
                 <form enctype="multipart/form-data" action="{% url 'expert:index' %}" method="post" novalidate>
                     {% csrf_token %}
-                    <div class="divide__line text-right">
-                        <span class="w__title">اطلاعات شخصی</span>
-                        <span class="__line"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label for="FullName">نام و نام خانوادگی</label>
-                                {% if form.fullname.errors %}
-                                    {{ form.fullname|attr:"id:FullName"|attr:"class:error w-100" }}
-                                {% else %}
-                                    {{ form.fullname|attr:"id:FullName"|attr:"class:w-100" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.fullname.errors %}</span>
+                    <div id="stepCarouselIndicators" class="carousel text-center" data-interval="false">
+                        <ol class="carousel-indicators">
+                            <li data-target="#stepCarouselIndicators" data-slide-to="0" class="active"></li>
+                            <li data-target="#stepCarouselIndicators" data-slide-to="1"></li>
+                            <li data-target="#stepCarouselIndicators" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="divide__line text-right">
+                                    <span class="w__title">اطلاعات شخصی</span>
+                                    <span class="__line"></span>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="MelliCode">کد ملی</label>
-                                {% if form.national_code.errors %}
-                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100"|attr:"placeholder:449****841" }}
-                                {% else %}
-                                    {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100"|attr:"placeholder:449****841" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.national_code.errors %}</span>
-                                </div>
-                            </div>
-                            <div class="form-group form-group-auto-check">
-                                <label for="userID">شناسه کاربری</label>
-                                 {% comment %} <input type="text" class="w-100" id="userID"> {% endcomment %}
-                                {% if form.userId.errors %}
-                                    {{ form.userId |attr:"class:error w-100" |attr:"id:userID" }}
-                                {% else %}
-                                    {{ form.userId |attr:"class:w-100" |attr:"id:userID" }}
-                                {% endif %}
-                                <div class="userId-error">
-                                    <div class="error">
-                                        <span class="error-body">{{ form.userId.errors }}</span>
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="FullName">نام و نام خانوادگی</label>
+                                            {% if form.fullname.errors %}
+                                                {{ form.fullname|attr:"id:FullName"|attr:"class:error w-100" }}
+                                            {% else %}
+                                                {{ form.fullname|attr:"id:FullName"|attr:"class:w-100" }}
+                                            {% endif %}
+                                            <div class="error">
+                                                <span class="error-body">{% render_field form.fullname.errors %}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="MelliCode">کد ملی</label>
+                                            {% if form.national_code.errors %}
+                                                {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100"|attr:"placeholder:449****841" }}
+                                            {% else %}
+                                                {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100"|attr:"placeholder:449****841" }}
+                                            {% endif %}
+                                            <div class="error">
+                                                <span class="error-body">{% render_field form.national_code.errors %}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group form-group-auto-check">
+                                            <label for="userID">شناسه کاربری</label>
+                                            {% comment %} <input type="text" class="w-100" id="userID"> {% endcomment %}
+                                            {% if form.userId.errors %}
+                                                {{ form.userId |attr:"class:error w-100" |attr:"id:userID" }}
+                                            {% else %}
+                                                {{ form.userId |attr:"class:w-100" |attr:"id:userID" }}
+                                            {% endif %}
+                                            <div class="userId-error">
+                                                <div class="error">
+                                                    <span class="error-body">{{ form.userId.errors }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group__status">
+                                                <div class="success-status">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                                <div class="spinner-border text-secondary" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                <div class="fail-status">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {#                            <div class="form-group">#}
+                                        {#                                <label for="Address">آدرس</label>#}
+                                        {#                                {% if form.address.errors %}#}
+                                        {#                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+                                        {#                                {% else %}#}
+                                        {#                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
+                                        {#                                {% endif %}#}
+                                        {#                                <div class="error">#}
+                                        {#                                    <span class="error-body">{% render_field form.address.errors %}</span>#}
+                                        {#                                </div>#}
+                                        {#                            </div>#}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group text-center">
+                                            <label for="upload-input" class="upload text-center">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </label>
+                                            <img src="{% static 'expert/img/profile.jpg' %}" alt="profile"
+                                                 class="profile"
+                                                 width="150px" height="150px">
+                                            <input type="file" id="upload-input" name="photo"
+                                                   accept="image/png, image/jpeg">
+                                            {{ form.photo |attr:'id:upload-input' |attr:'accept:image/png, image/jpeg' }}
+                                            <div class="col-lg-7 text-center">
+                                                <div class="error">
+                                                    {{ form.photo.errors }}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group__status">
-                                    <div class="success-status">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                    <div class="spinner-border text-secondary" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                    <div class="fail-status">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                </div>
                             </div>
-                            {#                            <div class="form-group">#}
-                            {#                                <label for="Address">آدرس</label>#}
-                            {#                                {% if form.address.errors %}#}
-                            {#                                    {{ form.address|attr:"id:Address"|attr:"class:error w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
-                            {#                                {% else %}#}
-                            {#                                    {{ form.address|attr:"id:Address"|attr:"class:w-100"|attr:"rows: 4"|attr:"placeholder:تهران - میدان انقلاب - ..." }}#}
-                            {#                                {% endif %}#}
-                            {#                                <div class="error">#}
-                            {#                                    <span class="error-body">{% render_field form.address.errors %}</span>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group text-center">
-                                <label for="upload-input" class="upload text-center">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </label>
-                                <img src="{% static 'expert/img/profile.jpg' %}" alt="profile" class="profile"
-                                     width="150px" height="150px">
-                                <input type="file" id="upload-input" name="photo" accept="image/png, image/jpeg">
-                                {{ form.photo |attr:'id:upload-input' |attr:'accept:image/png, image/jpeg' }}
-                                <div class="col-lg-7 text-center">
-                                    <div class="error">
-                                        {{ form.photo.errors }}
-                                    </div>
+                            <div class="carousel-item">
+                                <div class="divide__line text-right">
+                                    <span class="w__title">اطلاعات شغلی</span>
+                                    <span class="__line"></span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divide__line text-right">
-                        <span class="w__title">اطلاعات شغلی</span>
-                        <span class="__line"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label for="Field">حوزه تخصصی</label>
-                                {% if form.special_field.errors %}
-                                    {{ form.special_field|attr:"id:Field"|attr:"class:error w-100" }}
-                                {% else %}
-                                    {{ form.special_field|attr:"id:Field"|attr:"class:w-100" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.special_field.errors %}</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="rankLabel" for="rank">مرتبه علمی</label>
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="Field">حوزه تخصصی</label>
+                                            {% if form.special_field.errors %}
+                                                {{ form.special_field|attr:"id:Field"|attr:"class:error w-100" }}
+                                            {% else %}
+                                                {{ form.special_field|attr:"id:Field"|attr:"class:w-100" }}
+                                            {% endif %}
+                                            <div class="error">
+                                                <span class="error-body">{% render_field form.special_field.errors %}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="rankLabel" for="rank">مرتبه علمی</label>
 
-                                {% if form.scientific_rank.errors %}
-                                    <select id="rank" class="error" name="scientific_rank">
-                                {% else %}
-                                    <select id="rank" name="scientific_rank">
-                                {% endif %}
-                                <option selected dir="rtl" disabled>انتخاب کنید ...</option>
-                                {% for option in form.scientific_rank %}
-                                    {% if not forloop.first %}
-                                        {{ option }}
-                                    {% endif %}
-                                {% endfor %}
-                                </select>
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.scientific_rank.errors %}</span>
+                                            {% if form.scientific_rank.errors %}
+                                                <select id="rank" class="error" name="scientific_rank">
+                                            {% else %}
+                                                <select id="rank" name="scientific_rank">
+                                            {% endif %}
+                                            <option selected dir="rtl" disabled>انتخاب کنید ...</option>
+                                            {% for option in form.scientific_rank %}
+                                                {% if not forloop.first %}
+                                                    {{ option }}
+                                                {% endif %}
+                                            {% endfor %}
+                                            </select>
+                                            <div class="error">
+                                                <span class="error-body">{% render_field form.scientific_rank.errors %}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Uni">دانشگاه محل فعالیت</label>
+                                            {% if form.university.errors %}
+                                                {{ form.university|attr:"id:Uni"|attr:"class:error w-100" }}
+                                            {% else %}
+                                                {{ form.university|attr:"id:Uni"|attr:"class:w-100" }}
+                                            {% endif %}
+                                            <div class="error">
+                                                <span class="error-body">{% render_field form.university.errors %}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+
+                                        </div>
+                                        <div class="form-group">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4"></div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="Uni">دانشگاه محل فعالیت</label>
-                                {% if form.university.errors %}
-                                    {{ form.university|attr:"id:Uni"|attr:"class:error w-100" }}
-                                {% else %}
-                                    {{ form.university|attr:"id:Uni"|attr:"class:w-100" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.university.errors %}</span>
+                            <div class="carousel-item">
+                                <div class="divide__line text-right">
+                                    <span class="w__title">اطلاعات تماس</span>
+                                    <span class="__line"></span>
                                 </div>
-                            </div>
-                            <div class="form-group">
-
-                            </div>
-                            <div class="form-group">
-
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="HomeNum">تلفن منزل</label>
+                                            {% if form.home_number.errors %}
+                                                {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100"|attr:"placeholder:021*******" }}
+                                            {% else %}
+                                                {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100"|attr:"placeholder:021*******" }}
+                                            {% endif %}
+                                            <div class="error">
+                                                <span class="error-body">{% render_field form.home_number.errors %}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="PhoneNum">تلفن همراه</label>
+                                            {% if form.phone_number.errors %}
+                                                {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100"|attr:"placeholder:09*********" }}
+                                            {% else %}
+                                                {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100"|attr:"placeholder:09*********" }}
+                                            {% endif %}
+                                            <div class="error">
+                                                <span class="error-body">{% render_field form.phone_number.errors %}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4"></div>
-                    </div>
-                    <div class="divide__line text-right">
-                        <span class="w__title">اطلاعات تماس</span>
-                        <span class="__line"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label for="HomeNum">تلفن منزل</label>
-                                {% if form.home_number.errors %}
-                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:error w-100"|attr:"placeholder:021*******" }}
-                                {% else %}
-                                    {{ form.home_number|attr:"id:HomeNum"|attr:"class:w-100"|attr:"placeholder:021*******" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.home_number.errors %}</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="PhoneNum">تلفن همراه</label>
-                                {% if form.phone_number.errors %}
-                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:error w-100"|attr:"placeholder:09*********" }}
-                                {% else %}
-                                    {{ form.phone_number|attr:"id:PhoneNum"|attr:"class:w-100"|attr:"placeholder:09*********" }}
-                                {% endif %}
-                                <div class="error">
-                                    <span class="error-body">{% render_field form.phone_number.errors %}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">ثبت تغییرات</button>
+                        <button type="button" class="btn btn-primary mb-3 mt-3 pl-4 pr-4 back-step d-none">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"></path>
+                                <path fill-rule="evenodd"
+                                      d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"></path>
+                            </svg>
+                            قبلی
+                        </button>
+                        <button type="button" class="btn btn-primary mb-3 mt-3 pl-4 pr-4 next-step">
+                            بعدی
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left"
+                                 fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"></path>
+                                <path fill-rule="evenodd"
+                                      d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
+                            </svg>
+                        </button>
+                        <button type="submit" class="btn btn-primary mb-3 mt-3 pl-4 pr-4 d-none">
+                            ثبت تغییرات
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+                            </svg>
+                        </button>
                     </div>
                 </form>
             </div>
