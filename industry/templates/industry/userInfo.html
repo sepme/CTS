@@ -51,7 +51,7 @@
                                     <div class="row mt-3" style="direction: ltr!important;">
                                         <div class="col-lg-6 text-center">
                                             <div style="position: relative">
-                                                <label for="id_photo" class="upload text-center">
+                                                <label for="upload-input" class="upload text-center">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </label>
                                                 <img
@@ -61,7 +61,7 @@
                                                             src="{% static 'industry/img/profile.jpg' %}"
                                                         {% endif %}
                                                             alt="profile" class="profile" width="150px" height="150px">
-                                                {% render_field RandD_form.photo accept="image/png, image/jpeg" %}
+                                                {% render_field RandD_form.photo id="upload-input" accept="image/png, image/jpeg" class="d-none" %}
                                             </div>
                                             <div class="mt-1">بارگزاری تصویر پروفایل</div>
                                         </div>
@@ -70,6 +70,35 @@
                                                 <div class="form-group">
                                                     <label for="id_RandDname">نام واحد</label>
                                                     {% render_field RandD_form.RandDname class+="w-100" readonly="true" %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group form-group-auto-check">
+                                                        <label for="userID">شناسه کاربری</label>
+                                                        {% if RandD_form.userId.errors %}
+                                                            {{ RandD_form.userId |attr:"class:error w-100" |attr:"id:userID" }}
+                                                        {% else %}
+                                                            {{ RandD_form.userId |attr:"class:w-100" |attr:"id:userID" }}
+                                                        {% endif %}
+                                                        <div class="userId-error">
+                                                            <div class="error">
+                                                                <span class="error-body">{{ RandD_form.userId.errors }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group__status">
+                                                            <div class="success-status">
+                                                                <i class="fas fa-check"></i>
+                                                            </div>
+                                                            <div class="spinner-border text-secondary"
+                                                                 role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+                                                            <div class="fail-status">
+                                                                <i class="fas fa-times"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row mr-0 ml-0">
@@ -131,7 +160,7 @@
                                     <div class="row mt-3" style="direction: ltr!important;">
                                         <div class="col-lg-6 text-center">
                                             <div style="position: relative">
-                                                <label for="id_photo" class="upload text-center">
+                                                <label for="upload-input" class="upload text-center">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </label>
                                                 <img
@@ -143,7 +172,7 @@
                                                             alt="profile" class="profile" width="150px" height="150px">
                                                 {#                                            <input name="photo" type="file" id="id_photo" accept="image/png, image/jpeg"#}
                                                 {#                                                   hidden>#}
-                                                {% render_field researchgroup_form.photo accept="image/png, image/jpeg" %}
+                                                {% render_field researchgroup_form.photo id="upload-input" accept="image/png, image/jpeg" %}
                                             </div>
                                             <div class="mt-1">بارگزاری تصویر پروفایل</div>
                                         </div>
@@ -152,6 +181,33 @@
                                                 <div class="form-group">
                                                     <label for="id_name">نام مجموعه</label>
                                                     {% render_field researchgroup_form.name class+="w-100" readonly="true" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group form-group-auto-check">
+                                                    <label for="userID">شناسه کاربری</label>
+                                                    {% if researchgroup_form.userId.errors %}
+                                                        {{ researchgroup_form.userId |attr:"class:error w-100" |attr:"id:userID" }}
+                                                    {% else %}
+                                                        {{ researchgroup_form.userId |attr:"class:w-100" |attr:"id:userID" }}
+                                                    {% endif %}
+                                                    <div class="userId-error">
+                                                        <div class="error">
+                                                            <span class="error-body">{{ researchgroup_form.userId.errors }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group__status">
+                                                        <div class="success-status">
+                                                            <i class="fas fa-check"></i>
+                                                        </div>
+                                                        <div class="spinner-border text-secondary"
+                                                             role="status">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
+                                                        <div class="fail-status">
+                                                            <i class="fas fa-times"></i>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
