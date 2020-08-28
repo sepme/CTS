@@ -176,13 +176,6 @@ class SignupEmail(generic.FormView):
             unique_url = LOCAL_URL + '/signup/' + temp_user.account_type + '/' + str(temp_user.unique)
             message = 'EmailValidation\nyour url:\n' + unique_url
             try:
-                # send_mail(
-                #     subject=subject,
-                #     message=message,
-                #     from_email=settings.EMAIL_HOST_USER,
-                #     recipient_list=[email],
-                #     fail_silently=False
-                # )
                 email_template = get_template('registration/email_template.html')
                 msg = EmailMultiAlternatives(subject=subject, body=message, from_email=settings.EMAIL_HOST_USER,
                                              to=[email])
@@ -210,13 +203,6 @@ def signup_email_ajax(request):
         message = unique_url
         data = {'success': 'successful'}
         try:
-            # send_mail(
-            #     subject=subject,
-            #     message=message,
-            #     from_email=settings.EMAIL_HOST_USER,
-            #     recipient_list=[email],
-            #     fail_silently=False
-            # )
             html_template = get_template('registration/email_template.html')
             email_template = html_template.render({'message': message, 'proper_text': 'تکمیل ثبت نام'})
             msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
@@ -657,12 +643,13 @@ def ContactUS(request):
         contact = form.save()
         subject = "تماس با ما - " + contact.fullname
         message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(contact.fullname ,contact.email, contact.context)
-        html_template = get_template('registration/contactUs_sendEmail.html')
-        email_template = html_template.render({"message" : message})
-        msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                        to=[settings.EMAIL_HOST_USER])
-        msg.attach_alternative(email_template, "text/html")
-        msg.send()
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
+            fail_silently=False
+        )
         return JsonResponse(data={"success": 'success'})
     else:
         return JsonResponse(data=form.errors, status=400)
@@ -684,10 +671,9 @@ def ContactUS(request):
     #     msg.send()
     #     return super().form_valid(form)
 
-# @method_decorator(login_required(login_url='/login/'), name='dispatch')
+@method_decorator(login_required(login_url='/login/'), name='dispatch')
 def AddOpinion(request):
     form = forms.FeedBackForm(request.POST)
-    print(request.POST.get("data"))
     if form.is_valid():
         user_type = find_account_type(request.user)
         feedBack = models.FeedBack(email=form.cleaned_data['email'],
@@ -701,11 +687,13 @@ def AddOpinion(request):
         subject = 'بازخورد از کاربر'
         message = "با عرض سلام\n کاربر با نوع خساب کاربری {} بازخوردی ارسال کرده است.\n{}".format(user_type, form.cleaned_data['opinion'])
         try:
-            email_template = render_to_string('registration/email_template.html', {"message" : message})
-            msg = EmailMultiAlternatives(subject=subject, body=message, from_email=settings.EMAIL_HOST_USER,
-                                            to=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"])
-            msg.attach_alternative(email_template, "text/html")
-            msg.send(fail_silently=True)
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
+                fail_silently=False
+            )
         except TimeoutError:
             return JsonResponse(data={"success" : "success"}, status=400)
         return JsonResponse(data={"success" : "success"})
