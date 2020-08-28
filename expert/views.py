@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import get_template
 from django.forms import model_to_dict
 from django.core.exceptions import PermissionDenied
@@ -543,12 +543,19 @@ def accept_project(request):
             استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
             با تشکر
             """.format(str(expert_user.expertform), str(project), str(project.industry_creator.profile))
-            html_templateForAdmin = get_template('registration/projectRequest_template.html')
-            email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
-            msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
-                                                 to=[settings.EMAIL_HOST_USER, ])
-            msgForAdmin.attach_alternative(email_templateForAdmin, 'text/html')
-            msgForAdmin.send()
+            send_mail(
+                subject=subjectForAdmin,
+                message=messageForAdmin,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
+                fail_silently=False
+            )
+            # html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            # email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
+            # msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
+            #                                      to=[settings.EMAIL_HOST_USER, ])
+            # msgForAdmin.attach_alternative(email_templateForAdmin, 'text/html')
+            # msgForAdmin.send()
 
             subjectForExpert = "درخواست قرار ملاقات"
             messageForExpert = """با سلام و احترام\n
