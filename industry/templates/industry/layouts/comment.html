@@ -4,11 +4,6 @@
 <div class="project-info-tabs comment-tabs">
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
          aria-orientation="vertical">
-        {% if comments %}
-            <a class='nav-link active d-none' data-toggle='pill' role='tab' aria-controls='v-pills-home'
-               aria-selected='true'
-               id="v-pills-expert-{{ expert_pk }}"></a>
-        {% endif %}
     </div>
 </div>
 <div class="section">
@@ -27,64 +22,64 @@
     {% endif %}
     <div class="industry-comment"></div>
     <div class="project-comment-innerDiv">
-        <div class="no-comment" style="{% if project_pk %}{% if not comments %}display:block;{% endif %}{% endif %}">
+        <div class="no-comment">
             <img src="{% static 'img/no_message.svg' %}" alt="no message">
             <h6 dir="rtl">نظری درباره این پروژه ثبت نشده!</h6>
             <pre>در صورتی که درباره پروژه سوال یا ابهامی دارید می توانید در این قسمت آن را مطرح کنید.</pre>
         </div>
         <div class="comments">
-            {% if comments %}
-                {% for comment in comments %}
-                    {% if comment.sender_type == "industry" %}
-                        <div class='my-comment' id='{{ comment.pk }}'>
-                            <div class='comment-profile'></div>
-                            <span class='comment-tools'>
-                            <div class='btn-group dropright'>
-                                <button type='button' class='dropdown-toggle' data-toggle='dropdown'
-                                        aria-haspopup='true'
-                                        aria-expanded='false'>
-                                       <i class='fas fa-cog'></i>
-                                </button>
-                                <div class='dropdown-menu'>
-                                    <div class='dropdown-item'>
-                                        <i class='fas fa-trash-alt'></i>
-                                        <span>حذف پیام</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </span>
-                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>
-                                <pre>{{ comment.text }}</pre>
-                                {% if comment.attachment != "None" %}
-                                    <a href='{{ comment.attachment }}' class='attached-file'>
-                                        <i class='fas fa-paperclip'></i>
-                                        <span>{% file_name comment.attachment %}</span>
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% elif comment.sender_type == "expert" %}
-                        <div class='your-comment'>
-                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>
-                                <span class='comment-tools'></span>
-                                <pre>{{ comment.text }}</pre>
-                                {% if comment.attachment != "None" %}
-                                    <a href='{{ comment.attachment }}' class='attached-file'>
-                                        <i class='fas fa-paperclip'></i>
-                                        <span>{% file_name comment.attachment %}</span>
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% elif comment.sender_type == "system" %}
-                        <div class='system-comment'>
-                            <div class='comment-body' dir='ltr'>
-                                <pre>{{ comment.text }}</pre>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+{#            {% if comments %}#}
+{#                {% for comment in comments %}#}
+{#                    {% if comment.sender_type == "industry" %}#}
+{#                        <div class='my-comment' id='{{ comment.pk }}'>#}
+{#                            <div class='comment-profile'></div>#}
+{#                            <span class='comment-tools'>#}
+{#                            <div class='btn-group dropright'>#}
+{#                                <button type='button' class='dropdown-toggle' data-toggle='dropdown'#}
+{#                                        aria-haspopup='true'#}
+{#                                        aria-expanded='false'>#}
+{#                                       <i class='fas fa-cog'></i>#}
+{#                                </button>#}
+{#                                <div class='dropdown-menu'>#}
+{#                                    <div class='dropdown-item'>#}
+{#                                        <i class='fas fa-trash-alt'></i>#}
+{#                                        <span>حذف پیام</span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </span>#}
+{#                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>#}
+{#                                <pre>{{ comment.text }}</pre>#}
+{#                                {% if comment.attachment != "None" %}#}
+{#                                    <a href='{{ comment.attachment }}' class='attached-file'>#}
+{#                                        <i class='fas fa-paperclip'></i>#}
+{#                                        <span>{% file_name comment.attachment %}</span>#}
+{#                                    </a>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    {% elif comment.sender_type == "expert" %}#}
+{#                        <div class='your-comment'>#}
+{#                            <div class='comment-body {% if comment.attachment != "None" %}attached{% endif %}'>#}
+{#                                <span class='comment-tools'></span>#}
+{#                                <pre>{{ comment.text }}</pre>#}
+{#                                {% if comment.attachment != "None" %}#}
+{#                                    <a href='{{ comment.attachment }}' class='attached-file'>#}
+{#                                        <i class='fas fa-paperclip'></i>#}
+{#                                        <span>{% file_name comment.attachment %}</span>#}
+{#                                    </a>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    {% elif comment.sender_type == "system" %}#}
+{#                        <div class='system-comment'>#}
+{#                            <div class='comment-body' dir='ltr'>#}
+{#                                <pre>{{ comment.text }}</pre>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            {% endif %}#}
         </div>
         <div class="add-comment" id="{% if project_pk %}{{ project_pk }}{% endif %}">
             <form action="" method="POST" enctype="multipart/form-data" id="comment-form">
@@ -94,7 +89,7 @@
                         <input type="text" name="project_id" id="project_id"
                                value="{% if project_pk %}{{ project_pk }}{% endif %}" hidden>
                         <input type="text" name="expert_id" id="expert_id"
-                               value="{% if project_pk %}{{ expert_pk }}{% endif %}" hidden>
+                               value="" hidden>
                         <input type="text" name="comment_replyed" id="comment_replyed" value="None" hidden>
                         <div class="send-comment-container">
                             <button class="image-btn-circle" type="submit"></button>

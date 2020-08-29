@@ -195,20 +195,26 @@ function setTab(data) {
 
 function expertResume() {
     $("[data-target='#expertResume']").click(function () {
+        let modal = $('#expertResume');
         if ($('.modal#showProject').length) {
             $('#showProject').modal('hide');
-            $('#expertResume').modal('show');
+            modal.modal('show');
             $('#expertResume .close__redirect').click(function () {
-                $('#expertResume').modal('hide');
+                modal.modal('hide');
                 $('#showProject').modal('show');
             });
         } else {
-            $('#expertResume').modal('show');
+            modal.modal('show');
             $('#expertResume .close__redirect').click(function () {
-                $('#expertResume').modal('hide');
+                modal.modal('hide');
             });
         }
-        let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        if ($(this).hasClass("rounded-name-profile")) {
+            let tab = `<a class='nav-link active d-none' data-toggle='pill' role='tab' aria-controls='v-pills-home'
+                aria-selected='true' id="v-pills-expert-${$(this).attr("id")}" ></a>`;
+            modal.find(".comment-tabs div").html(tab);
+        }
+        let id = modal.find(".comment-tabs .nav-link.active").attr("id").replace("v-pills-expert-", "");
         $.ajax({
             method: 'GET',
             url: '/expert/get_resume',
@@ -294,6 +300,8 @@ function expertResume() {
                 } else {
                     $('.languages').html(data.languages);
                 }
+
+                getComments(id, modal.find("#project_id").val());
             },
         });
     });
@@ -465,7 +473,7 @@ function newItem_label() {
 function getComments(expert_id, project_id) {
     $.ajax({
         method: 'GET',
-        url: 'get_comment/',
+        url: '/industry/get_comment/',
         dataType: 'json',
         data: {
             expert_id: expert_id,

@@ -5411,9 +5411,9 @@ nav[aria-label="breadcrumb"] ol {
 }
 
 .industry-logo-preview > img {
-    height: 150px;
+    height: 120px;
     width: 120px;
-    min-height: 150px;
+    min-height: 120px;
     min-width: 120px;
     border-radius: 5px;
     border: 1px solid #bdbdbd;
@@ -6206,7 +6206,7 @@ table .fas.fa-trash-alt:hover {
 }
 
 .rounded-name-profile span {
-    margin: auto 0.25rem auto 1rem;
+    margin: auto 0.1rem auto 0.70rem;
     font-weight: 500;
 }
 
