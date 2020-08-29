@@ -9,11 +9,12 @@
                     <span aria-hidden="true"></span>
                 </button>
             </div>
-            <form id="ajax-project-setting" action="{% url 'industry:project-setting' %}" data-url="{% url 'expert:show-technique' %}">
+            <form id="ajax-project-setting" action="{% url 'industry:project-setting' %}"
+                  data-url="{% url 'expert:show-technique' %}">
                 <div class="modal-body">
 
                     <div class="divide__line text-right mb-4">
-                        <span class="w__title RandD__form-item">درخواست استاد</span>
+                        <span class="w__title">درخواست استاد</span>
                         <span class="__line"></span>
                     </div>
 
@@ -31,7 +32,7 @@
                     </div>
 
                     <div class="divide__line text-right mb-4 mt-5">
-                        <span class="w__title RandD__form-item">مهارت های پژوهشی</span>
+                        <span class="w__title">مهارت های پژوهشی</span>
                         <span class="__line"></span>
                     </div>
 
@@ -70,6 +71,34 @@
                                         <input name="techniques" id="tags" value="" class="w-100 no-click"/>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divide__line text-right mb-4 mt-5">
+                        <span class="w__title">سایر</span>
+                        <span class="__line"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1 d-md-block d-none"></div>
+                        <div class="col-md-10">
+                            <div class="form-group form-check mb-0">
+                                <input type="checkbox" class="form-check-input inp-cbx" id="autoAddProject"
+                                       name="autoAddProject" value=1 hidden checked>
+                                    <label class="form-check-label cbx mb-0" for="autoAddProject">
+                                        <span class="mt-2">
+                                            <svg class="inline-svg bi bi-check2" viewBox="0 0 16 16"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                      d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+                                            </svg>
+                                        </span>
+                                        <span>
+                                            <h6>دسترسی به پژوهشگران</h6>
+                                            امکان درخواست، مشاهده رزومه و انتخاب پژوهشگران متقاضی برای پروژه‌تان را خودتان انجام دهید.
+                                        </span>
+                                </label>
                             </div>
                         </div>
                     </div>
