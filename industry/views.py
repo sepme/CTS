@@ -269,6 +269,8 @@ def refuse_expert(request):
 # this function is called when the industry user comments on a project
 @permission_required('industry.be_industry', login_url='/login/')
 def submit_comment(request):
+    print(request.POST)
+    print(request.FILES)
     form = forms.CommentForm(request.POST, request.FILES)
     if form.is_valid():
         project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
@@ -533,7 +535,7 @@ def checkUserId(request):
         user_id = request.POST.get("user_id")
         if not bool(USER_ID_PATTERN.match(user_id)):
             return JsonResponse({"invalid_input": True})
-        if user_id != request.user.industry_user:
+        if user_id != request.user.industryuser:
             if models.IndustryUser.objects.filter(userId=user_id).count():
                 return JsonResponse({"is_unique": False, "invalid_input": False})
         return JsonResponse({"is_unique": True, "invalid_input": False})
@@ -606,8 +608,8 @@ def ProjectSetting(request):
 لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
 در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
 با آرزوی موفقیت، 
-چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
-                    "projectName"  : project.persian_title})
+چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
+                   projectName=project.project_form.persian_title)
         else: 
             project.expert_suggested = expert
             message="""با سلام
@@ -616,8 +618,9 @@ def ProjectSetting(request):
     لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
     در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
     با آرزوی موفقیت، 
-    چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
-                        "projectName"  : project.persian_title})
+    چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
+                       projectName=project.project_form.persian_title)
+        models.ProjectForm.persian_title
         subject = 'تقاضای پیوستن به پروژه'
         html_templateForAdmin = get_template('registration/projectRequest_template.html')
         email_templateForAdmin = html_templateForAdmin.render({'message': message})
@@ -629,7 +632,7 @@ def ProjectSetting(request):
                                 text=message,
                                 type=0)
         newMessage.save()
-        newMessage.receiver.add(expert)
+        newMessage.receiver.add(expert.user)
         project.save()
         return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 

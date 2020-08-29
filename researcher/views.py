@@ -63,7 +63,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = forms.InitialInfoForm
     success_url = "/researcher/"
     login_url = '/login/'
-    permission_required = ('researcher.be_researcher',)
+    permission_required = ('researcher.be_researcher',"researcher.is_active")
 
     def get(self, request, *args, **kwargs):
         researcher = models.ResearcherUser.objects.get(user=request.user)

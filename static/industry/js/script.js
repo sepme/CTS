@@ -538,7 +538,7 @@ function addComment(data) {
         "           </span>" +
         "<pre>" + data.description + "</pre>";
     if (data.attachment !== "None") {
-        new_comment += "<a href='/" + data.attachment + "' class='attached-file'>" +
+        new_comment += "<a href='" + data.attachment + "' class='attached-file'>" +
             "   <i class='fas fa-paperclip'></i>" +
             "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
             "</a>";
