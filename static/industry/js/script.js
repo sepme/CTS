@@ -628,7 +628,7 @@ $(document).ready(function () {
                             console.log("close");
                         },
                         select: function (event, ui) {
-                            let expert = `<div class="selected-expert">
+                            let expert = `<div class="selected-expert mb-2">
                                                 <img src="${ui.item.photo}" alt="${ui.item.value}" width="60px" height="60px">
                                                 <div class="selected-expert__details text-right">
                                                     <div>${ui.item.value}</div>
@@ -641,17 +641,10 @@ $(document).ready(function () {
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </div>`;
-                            thisElement.closest(".form-group").closest("div.col-md-10").html(expert);
-                            $(".selected-expert .selected-expert__delete-item").click(function () {
-                                let select_expert = `<div class="form-group">
-                                            <label for="searchExpert">نام/id استاد</label>
-                                            <div>
-                                                <input type="text" class="w-100 auto-complete-input" id="searchExpert"
-                                                    name="search_expert">
-                                            </div>
-                                        </div>`;
-                                $(this).closest(".selected-expert").closest("div.col-md-10").html(select_expert);
-                                selecting_expert($("#searchExpert"));
+                            thisElement.closest(".form-group").closest("div.col-md-10").append(expert);
+                            thisElement.val("");
+                            $(".selected-expert:last-child .selected-expert__delete-item").click(function () {
+                                $(this).closest(".selected-expert").remove();
                             });
                         }
                     }).data("ui-autocomplete")._renderItem = function (ul, item) {
@@ -879,6 +872,7 @@ $(document).ready(function () {
                         $('.add-comment').attr('style', "display : block");
                         $('.image-btn-circle').prop('disabled', false);
                         setTab(data);
+                        console.log(data);
                         dialog_comment_init();
                         // if (data.status === 1) {
                         //     $(".row.add-comment").css("display", "none");
