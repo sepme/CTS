@@ -7,7 +7,7 @@
 {% block modals %}
     {% include 'industry/layouts/expertResume.html' with project_pk=project_pk %}
     {% include 'industry/layouts/researcher_info.html' %}
-    {% include 'industry/layouts/researcher_request.html' %}
+    {% include 'industry/layouts/researcher_request.html' with form=researcherRequestFrom %}
 {% endblock %}
 
 {% block name %}{{ request.user.industryuser.profile }}{% endblock %}
