@@ -5584,6 +5584,18 @@ hr.vertical-line:after {
     top: 5%;
 }
 
+.project-progress .step-container:nth-child(2) {
+    top: 27%;
+}
+
+.project-progress .step-container:nth-child(3) {
+    top: 49%;
+}
+
+.project-progress .step-container:nth-child(4) {
+    top: 71%;
+}
+
 .project-progress .step-container:nth-child(5) {
     top: 93%;
 }

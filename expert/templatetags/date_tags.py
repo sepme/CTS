@@ -73,12 +73,10 @@ def project_progress(project_pk):
     if Project.objects.filter(id=project_pk).exists():
         project = Project.objects.get(id=project_pk)
         if project.is_date_valid():
-            total_days = (project.date_finished - project.date_project_started).total_seconds()
-            pass_days = (datetime.date.today() - project.date_project_started).total_seconds()
+            total_days = (project.date_finished - project.date_start).total_seconds()
+            pass_days = (datetime.date.today() - project.date_start).total_seconds()
             if total_days:
-                amount = 100 * pass_days / total_days
-                if amount > 89:
-                    amount = 89
+                amount = 89 * pass_days / total_days
                 return str("{:.2f}".format(amount))
         return None
 
