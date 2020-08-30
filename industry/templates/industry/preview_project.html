@@ -34,7 +34,7 @@
 
         @media (min-width: 992px) {
             .project-progress .line-100:after {
-                height: calc({% project_progress  project_pk %}% + 6%);
+                height: calc({% project_progress  project_pk %}% + 5%);
             }
 
             .project-progress .step-container:nth-child(2) {
@@ -146,7 +146,7 @@
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
-{% comment %} <<<<<<< HEAD
+                                                        {% comment %} <<<<<<< HEAD
                                                         {% for enforcer in enforcers %}
                                                             <div class="rounded-name-profile clickable mt-2"
                                                                 id="enforcer-name"
@@ -161,19 +161,20 @@
                                                             </div>
                                                         {% endfor %}
 ======= {% endcomment %}
-                                                    {% for enforcer in enforcers %}
-                                                        <div class="rounded-name-profile clickable mt-2"
-                                                             id="{{ enforcer.id }}"
-                                                             data-toggle="modal" data-target="#expertResume">
-                                                            <span>{{ enforcer.name }}</span>
-                                                            {% if enforcer.photo %}
-                                                                <img src="{{enforcer.photo}}" alt="enforcer photo">
-                                                            {% else %}
-                                                                <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                    alt="Enforcer Photo">
-                                                            {% endif %}
-                                                        </div>
-                                                    {% endfor %}
+                                                        {% for enforcer in enforcers %}
+                                                            <div class="rounded-name-profile clickable mt-2"
+                                                                 id="{{ enforcer.id }}"
+                                                                 data-toggle="modal" data-target="#expertResume">
+                                                                <span>{{ enforcer.name }}</span>
+                                                                {% if enforcer.photo %}
+                                                                    <img src="{{ enforcer.photo }}"
+                                                                         alt="enforcer photo">
+                                                                {% else %}
+                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                         alt="Enforcer Photo">
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endfor %}
                                                     </div>
                                                     <div class="col-12 budget-text">
                                                         <div class="pre-header">
@@ -265,9 +266,7 @@
                                                                     توضیح و اهمیت آن را
                                                                     تبیین کنید.
                                                                 </div>
-                                                                <div class="answer">
-                                                                    {{ projectForm.main_problem_and_importance }}
-                                                                </div>
+                                                                <div class="answer">{{ projectForm.main_problem_and_importance }}</div>
                                                             </div>
                                                             <div>
                                                                 <div class="question">
@@ -280,9 +279,7 @@
                                                                     خدمات
                                                                     درمانی یا ... حاصل می شود؟
                                                                 </div>
-                                                                <div class="answer">
-                                                                    {{ projectForm.progress_profitability }}
-                                                                </div>
+                                                                <div class="answer">{{ projectForm.progress_profitability }}</div>
                                                             </div>
                                                             {% comment %} <div>
                                                                             <div class="question">
@@ -316,8 +313,13 @@
                                                                     {% for researcher in researcher_accepted %}
                                                                         <div class="item">
                                                                             <div class="avatar-item">
-                                                                                <img src="/media/{{ researcher.photo }}"
-                                                                                     alt="{{ researcher.fullname }}پروفایل ">
+                                                                                {% if researcher.photo %}
+                                                                                    <img src="/media/{{ researcher.photo }}"
+                                                                                         alt="{{ researcher.fullname }}پروفایل ">
+                                                                                {% else %}
+                                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                                         alt="{{ researcher.fullname }}پروفایل ">
+                                                                                {% endif %}
                                                                                 <div class="info">
                                                                                     <h3>{{ researcher.fullname }}</h3>
                                                                                     <button value="{{ project_pk }}"
