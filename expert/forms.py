@@ -31,7 +31,7 @@ class InitialInfoForm(forms.ModelForm):
             # 'photo'           : {'required': "عکس نمی تواند خالی باشد."} ,
             'fullname'        : {'required': "نام و نام خانوادگی نمی تواند خالی باشد."},
             'special_field'   : {'required': "حوزه تخصصی نمی تواند خالی باشد."},
-            'national_code'   : {'required': "کد ملی نمی تواند خالی باشد."},
+            # 'national_code'   : {'required': "کد ملی نمی تواند خالی باشد."},
             'scientific_rank' : {'required': 'مرتبه علمی نباید خالی باشد.'},
             'university'      : {'required': "دانشگاه مورد نظر نمی تواند خالی باشد."},
             'home_number'     : {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
@@ -57,7 +57,8 @@ class InitialInfoForm(forms.ModelForm):
     def clean_national_code(self):
         national_code = self.cleaned_data.get('national_code')
         if national_code is None:
-            raise forms.ValidationError("کد ملی نمی تواند خالی باشد.")
+            return national_code
+            # raise forms.ValidationError("کد ملی نمی تواند خالی باشد.")
         try:
             int(national_code)
         except ValueError:

@@ -24,8 +24,9 @@ from ChamranTeamSite import settings
 from industry.models import IndustryForm, Comment
 from expert import models as expert_models
 from . import models, forms
-from expert.models import ExpertUser
-from researcher.models import Technique
+from expert.models import ExpertUser, RequestResearcher
+from expert.forms import RequestResearcherForm
+from researcher.models import Technique, RequestedProject
 from chamran_admin.models import Message
 
 USER_ID_PATTERN = re.compile('[\w]+')
@@ -553,6 +554,7 @@ def checkUserId(request):
 
 @permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):
+    print(request.POST)
     if request.method == "GET":
         project = models.Project.objects.get(id=request.GET.get('id'))
         data = { "techniques": []}
@@ -582,8 +584,9 @@ def ProjectSetting(request):
             data['suggestedExpert'].append(expertData)
         return JsonResponse(data=data)
     elif request.method == "POST":
-        expertId = request.POST['uuid']
-        if expertId == "":
+        expert_ids = request.POST.getlist(' ')
+        # expertId = request.POST['uuid']
+        if len(expert_ids) == 0:
             return JsonResponse({
                 'expertId': 'استاد نمی تواند خالی باشد.',
             }, status=400)
@@ -592,58 +595,62 @@ def ProjectSetting(request):
             return JsonResponse({
                 'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
             }, status=400)
-        try:
-            expert = ExpertUser.objects.get(userId=expertId)
-        except:
-            return JsonResponse({
-                'expertId': 'چنین استادی وجود ندارد.',
-            }, status=400)
-
-        data = {'addExpert': False}
+        # try:
+        #     expert = ExpertUser.objects.get(userId=expertId)
+        # except:
+        #     return JsonResponse({
+        #         'expertId': 'چنین استادی وجود ندارد.',
+        #     }, status=400)
         project = models.Project.objects.get(id=request.POST['id'])
         projectform = project.project_form
         for technique in technique_list:
             projectform.techniques.add(Technique.objects.get_or_create(\
                                                technique_title=technique[:-2])[0])
         projectform.save()
-        if expert.autoAddProject:
-            project.expert_accepted.add(expert)
-            project.date_start = datetime.date.today()
-            project.status = 2
-            expert.status = 'involved'
-            expert.save()
-            data['addExpert'] = True
-            message="""با سلام
-مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
-با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
-لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
-در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
-با آرزوی موفقیت، 
-چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
-                   projectName=project.project_form.persian_title)
-        else: 
-            project.expert_suggested.add(expert)
-            message="""با سلام
+        data = {"experts": []}
+        for expert_id in expert_ids:
+            expert = ExpertUser.objects.get(id=expert_id)
+            expertResult = {"id": expert}
+            if expert.autoAddProject:
+                project.expert_accepted.add(expert)
+                project.date_start = datetime.date.today()
+                project.status = 2
+                expert.status = 'involved'
+                expert.save()
+                expertResult['addExpert'] = True
+                message="""با سلام
     مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
-    با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
+    با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
     لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
     در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
     با آرزوی موفقیت، 
     چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
-                       projectName=project.project_form.persian_title)
-        models.ProjectForm.persian_title
-        subject = 'تقاضای پیوستن به پروژه'
-        html_templateForAdmin = get_template('registration/projectRequest_template.html')
-        email_templateForAdmin = html_templateForAdmin.render({'message': message})
-        email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                    to=[expert.user.get_username(), ])
-        email.attach_alternative(email_templateForAdmin, 'text/html')
-        email.send()
-        newMessage = Message(title=subject,
-                                text=message,
-                                type=0)
-        newMessage.save()
-        newMessage.receiver.add(expert.user)
+                    projectName=project.project_form.persian_title)
+            else: 
+                expertResult['addExpert'] = False
+                project.expert_suggested.add(expert)
+                message="""با سلام
+        مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
+        با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
+        لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
+        در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
+        با آرزوی موفقیت، 
+        چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
+                        projectName=project.project_form.persian_title)
+            models.ProjectForm.persian_title
+            subject = 'تقاضای پیوستن به پروژه'
+            html_templateForAdmin = get_template('registration/projectRequest_template.html')
+            email_templateForAdmin = html_templateForAdmin.render({'message': message})
+            email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                        to=[expert.user.get_username(), ])
+            email.attach_alternative(email_templateForAdmin, 'text/html')
+            email.send()
+            newMessage = Message(title=subject,
+                                    text=message,
+                                    type=0)
+            newMessage.save()
+            newMessage.receiver.add(expert.user)
+            data['experts'].append(expertResult)
         project.save()
         return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 
@@ -682,11 +689,58 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
             researcher = {
                 "id": researcher.pk,
                 "fullname": researcher.researcherprofile.fullname,
-                "photo": researcher.researcherprofile.photo
+                "photo": researcher.researcherprofile.photo                
             }
             context['researcher_accepted'].append(researcher)
+        context['researchers_applied'] = []
+        researcherRequested = RequestedProject.objects.filter(project=project)
+        for requested in researcherRequested:
+            researcher = requested.researcher
+            researcher_applied = {
+                'id': researcher.pk,
+                "fullname": researcher.researcherprofile.fullname,
+                "photo": researcher.researcherprofile.photo,
+                "status": requested.status 
+            }
+            if requested.status == "unseen":
+                requested.status = "pending"
+                requested.save()
+            context['researchers_applied'].append(researcher_applied)
+        context['reseacherRequestAbility'] = project.reseacherRequestAbility
+        if project.reseacherRequestAbility:
+            try:
+                requestResearcher = RequestResearcher.objects.get(project=project)
+                context['researcherRequestFrom'] = RequestResearcherForm(initial={
+                                                    "least_hour" : requestResearcher.least_hour,
+                                                    "researcher_count": requestResearcher.researcher_count})
+            except:
+                context['researcherRequestFrom'] = RequestResearcherForm()
         return context
-    
+
+@permission_required('expert.be_industry', login_url='/login/')
+def industryRequestResearcher(request):
+    project = models.Project.objects.get(id=request.POST['project_id'])
+    form = RequestResearcherForm(request.POST)
+    if form.is_valid():
+        expert = project.expert_accepted.all().first()
+        least_hour = form.cleaned_data['least_hour']
+        researcher_count = form.cleaned_data['researcher_count']
+        try:
+            researcher_request = RequestResearcher.objects.get(project=project)
+            researcher_request.researcher_count = researcher_count
+            researcher_request.least_hour = least_hour
+            researcher_request.save()
+        except:
+            researcher_request = RequestResearcher(project=project
+                                                   , expert=expert
+                                                   , researcher_count=researcher_count
+                                                   , least_hour=least_hour)
+
+            researcher_request.save()
+
+        return JsonResponse({"successfull": "successfull"})
+    else:
+        return JsonResponse(data=form.errors, status=400)    
 
 # def show_active_project(request, code):
 #     project = get_object_or_404(models.Project, code=kwargs["code"])

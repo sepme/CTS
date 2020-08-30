@@ -803,12 +803,12 @@ def AddComment(request):
                           , attachment=attachment
                           , project=project
                           , researcher_user=request.user.researcheruser
-                          , expert_user=project.expert_accepted
+                          , expert_user=project.expert_accepted.all().first()
                           , sender_type="researcher"
                           , status='unseen')
         comment.save()
         if attachment is not None:
-            url = comment.attachment.url[comment.attachment.url.find('media', 2):]
+            url = comment.attachment.url
             data = {
                 'success': 'successful',
                 'attachment': url,
