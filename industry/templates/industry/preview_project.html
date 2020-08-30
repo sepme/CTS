@@ -308,17 +308,40 @@
                                                 <div class="section">
                                                     <div class="row">
                                                         <div class="col-12 text-center">
-                                                            {% if researcher_accepted %}
+                                                            {% if researcher_accepted or researchers_applied %}
                                                                 <div class="horizontal-avatar-list owl-carousel owl-theme">
                                                                     {% for researcher in researcher_accepted %}
                                                                         <div class="item">
                                                                             <div class="avatar-item">
                                                                                 {% if researcher.photo %}
                                                                                     <img src="/media/{{ researcher.photo }}"
-                                                                                         alt="{{ researcher.fullname }}پروفایل ">
+                                                                                        alt="{{ researcher.fullname }}پروفایل ">
                                                                                 {% else %}
                                                                                     <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                                         alt="{{ researcher.fullname }}پروفایل ">
+                                                                                            alt="{{ researcher.fullname }}پروفایل ">
+                                                                                {% endif %}
+                                                                                <div class="info">
+                                                                                    <h3>{{ researcher.fullname }}</h3>
+                                                                                    <button value="{{ project_pk }}"
+                                                                                            id="{{ researcher.id }}"
+                                                                                            data-url="{% url 'researcher:show_resume_preview' %}"
+                                                                                            data-toggle="modal"
+                                                                                            data-target="#researcherInfo">
+                                                                                        رزومه
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                    {% for researcher in researchers_applied %}
+                                                                        <div class="item">
+                                                                            <div class="avatar-item">
+                                                                                {% if researcher.photo %}
+                                                                                    <img src="/media/{{ researcher.photo }}"
+                                                                                        alt="{{ researcher.fullname }}پروفایل ">
+                                                                                {% else %}
+                                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                                            alt="{{ researcher.fullname }}پروفایل ">
                                                                                 {% endif %}
                                                                                 <div class="info">
                                                                                     <h3>{{ researcher.fullname }}</h3>

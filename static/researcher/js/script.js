@@ -1212,7 +1212,7 @@ function setComment(data) {
             if (data[i].attachment !== "None") {
                 comment_body_classes += " attached";
                 attachment = `
-                    <a href='/${data[i].attachment}' class='attached-file'>
+                    <a href='${data[i].attachment}' class='attached-file'>
                         <i class='fas fa-paperclip'></i>
                         <span>${data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1)}</span>
                     </a>
@@ -1291,7 +1291,7 @@ function addComment(data) {
     if (data.attachment !== "None") {
         comment_body_classes += " attached";
         attachment = `
-                    <a href='/${data.attachment}' class='attached-file'>
+                    <a href='${data.attachment}' class='attached-file'>
                         <i class='fas fa-paperclip'></i>
                         <span>${data.attachment.substring(data.attachment.lastIndexOf("/") + 1)}</span>
                     </a>
