@@ -309,11 +309,10 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', through='expert.ExpertRequestedProject',
                                             verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied", blank=True)
-    expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
-                                                                                                    "شده",
-                                        related_name="expert_accepted", blank=True, null=True)
-    expert_suggested = models.ForeignKey("expert.ExpertUser", verbose_name="استاد پیشنهادی", on_delete=models.CASCADE,
-                                        related_name="expert_suggested", blank=True, null=True)
+    expert_accepted = models.ManyToManyField('expert.ExpertUser', verbose_name="استاد پذیرفته شده",
+                                        related_name="expert_accepted", blank=True)
+    expert_suggested = models.ManyToManyField("expert.ExpertUser", verbose_name="استاد پیشنهادی",
+                                        related_name="expert_suggested", blank=True)
     expert_messaged = models.ManyToManyField('expert.ExpertUser', blank=True, related_name="expert_messaged",
                                              verbose_name='اساتیدی که پیام داده اند')
     industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
@@ -335,6 +334,7 @@ class Project(models.Model):
     expert_banned = models.ManyToManyField("expert.ExpertUser", verbose_name="اساتید رد شده",
                                            related_name="expert_banned", blank=True)
     executive_info = models.TextField(verbose_name="توضیحات اجرایی", null=True, blank=True)
+    reseacherRequestAbility = models.BooleanField(verbose_name="قابلیت درخواست پژوهشگر", default=True, null=True)
 
     def __str__(self):
         return self.project_form.english_title

@@ -24,10 +24,6 @@ ACCELERATOR = "384025"
 USER_ID_PATTERN = re.compile('[\w]+$')
 
 
-def get_url(rawUrl):
-    return rawUrl[rawUrl.find('media', 2):]
-
-
 def gregorian_to_numeric_jalali(date):
     j_date = JalaliDate(date)
     return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
@@ -883,15 +879,18 @@ def show_resume_preview(request):
     if researcherProfile.resume:
         researcher_information['resume'] = researcherProfile.resume.url
         researcher_information['resume_name'] = researcherProfile.resume.name
-    
+
     for tech in models.TechniqueInstance.objects.filter(researcher=researcher):
-        researcher_information['techniques'].append(tech.technique.technique_title)
+        researcher_information['techniques'].append({
+                                                    "name" : tech.technique.technique_title,
+                                                    "level" : tech.level,
+                                                    })
     project = get_object_or_404(Project, pk=request.GET["project_id"])
     comments = []
     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
     for comment in comment_list:
         try:
-            url = get_url(comment.attachment.url)
+            url = comment.attachment.url
         except:
             url = "None"
         comments.append({

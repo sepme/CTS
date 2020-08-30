@@ -142,13 +142,19 @@
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
-                                                        <div class="rounded-name-profile clickable mt-2"
-                                                             id="enforcer-name"
-                                                             data-toggle="modal" data-target="#expertResume">
-                                                            <span>{{ enforcer_name }}</span>
-                                                            <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                 alt="enforcer photo">
-                                                        </div>
+                                                        {% for enforcer in enforcers %}
+                                                            <div class="rounded-name-profile clickable mt-2"
+                                                                id="enforcer-name"
+                                                                data-toggle="modal" data-target="#expertResume" value={{enforcer.id}}>
+                                                                <span>{{ enforcer.name }}</span>
+                                                                {% if enforcer.photo %}
+                                                                    <img src="{{enforcer.photo}}" alt="enforcer photo">
+                                                                {% else %}
+                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                        alt="Enforcer Photo">
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endfor %}
                                                     </div>
                                                     <div class="col-12 budget-text">
                                                         <div class="pre-header">

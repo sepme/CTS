@@ -1281,8 +1281,8 @@ $(document).ready(function () {
                 console.log(data);
                 for (let index = 0; index < data.techniques.length; index++)
                     tech += `<div class="technique-item">
-                                <span class="technique-name">${data.techniques[index]}</span>
-                                <span class="grade grade__A"></span>
+                                <span class="technique-name">${data.techniques[index].name}</span>
+                                <span class="grade grade__${data.techniques[index].level}"></span>
                              </div>`;
                 // tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
                 $("#technique-list").html(tech);

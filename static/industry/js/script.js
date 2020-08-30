@@ -208,7 +208,8 @@ function expertResume() {
                 $('#expertResume').modal('hide');
             });
         }
-        let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        // let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+        let id = $(this).attr("value");
         $.ajax({
             method: 'GET',
             url: '/expert/get_resume',
@@ -216,7 +217,10 @@ function expertResume() {
             data: {id: id},
             success: function (data) {
                 console.log(data);
-                $("#expertResume #expert_photo").attr("src", data.photo);
+                if (data.photo)
+                    $("#expertResume #expert_photo").attr("src", data.photo);
+                else
+                    $("#expertResume #expert_photo").attr("src", "/static/expert/img/profile.jpg");
                 $("#expert_name").html(data.name);
                 $("#expert_uni").html(data.university);
                 $("#expert_field").html(data.scientific_rank + " " + data.special_field);
@@ -1356,8 +1360,8 @@ $(document).ready(function () {
                 console.log(data);
                 for (let index = 0; index < data.techniques.length; index++)
                     tech += `<div class="technique-item">
-                                <span class="technique-name">${data.techniques[index]}</span>
-                                <span class="grade grade__A"></span>
+                                <span class="technique-name">${data.techniques[index].name}</span>
+                                <span class="grade grade__${data.techniques[index].level}"></span>
                              </div>`;
                 // tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
                 $("#technique-list").html(tech);
