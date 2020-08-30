@@ -795,8 +795,7 @@ def CommentForIndustry(request):
         return JsonResponse(form.errors, status=400)
 
 
-@permission_required([], login_url='/login/')
-def ShowTechnique(request):
+def showAllTechniques():
     TYPE = (
         'molecular_biology',
         'immunology',
@@ -817,6 +816,11 @@ def ShowTechnique(request):
     for q in query:
         if len(q) > 1:
             data[q[-1]] = q[:-1]
+    return data
+
+@permission_required([], login_url='/login/')
+def ShowTechnique():
+    data = showAllTechniques(request)
     return JsonResponse(data=data)
 
 
