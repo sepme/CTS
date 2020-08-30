@@ -597,7 +597,7 @@ def ProjectSetting(request):
             data['suggestedExpert'].append(expertData)
         return JsonResponse(data=data)
     elif request.method == "POST":
-        expert_ids = request.POST.getlist(' ')
+        expert_ids = request.POST.getlist('expert_ids')
         # expertId = request.POST['uuid']
         if len(expert_ids) == 0:
             return JsonResponse({
@@ -675,7 +675,9 @@ def searchUserId(request):
     for expert in suggestedExperts:
         expertData = {
             "userId" : expert.userId,
+            "id" : expert.pk,
             "fullname" : expert.expertform.fullname,
+            "autoAdd" : expert.autoAddProject,
         }
         if expert.expertform.photo:
             expertData['photo'] = expert.expertform.photo.url
