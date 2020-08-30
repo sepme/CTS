@@ -564,9 +564,9 @@ def checkUserId(request):
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('industry.be_industry', login_url='/login/')
-def ProjectSetting(request, id):
+def ProjectSetting(request):
     if request.method == "GET":
-        project = models.Project.objects.get(id=id)#request.GET.get('id'))
+        project = models.Project.objects.get(id=request.GET.get('id'))
         data = {
             "techniques": showAllTechniques(),
             "projectTechniques": [],

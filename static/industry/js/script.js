@@ -610,7 +610,7 @@ $(document).ready(function () {
                         availableTags.push(
                             {
                                 "value": fullname,
-                                "id": data.experts[i].userId,
+                                "userId": data.experts[i].userId,
                                 "photo": data.experts[i].photo,
                                 "label": `
                                     <span><div>${data.experts[i].fullname}</div><div>${data.experts[i].userId}</div></span>
@@ -635,7 +635,7 @@ $(document).ready(function () {
                                                 <img src="${ui.item.photo}" alt="${ui.item.value}" width="60px" height="60px">
                                                 <div class="selected-expert__details text-right">
                                                     <div>${ui.item.value}</div>
-                                                    <div dir="ltr">${ui.item.id}</div>
+                                                    <div dir="ltr">${ui.item.userId}</div>
                                                 </div>
                                                 <div class="selected-expert__status text-warning">
                                                     در انتظار تایید
@@ -1177,21 +1177,22 @@ $(document).ready(function () {
             let projectSetting = $("#projectSetting");
             $.ajax({
                 method: 'GET',
-                url: projectSettingForm.attr("data-url"),
+                url: projectSettingForm.attr("action"),
                 dataType: 'json',
-                data: {'id': "None"},
+                data: {'id': pk},
                 success: function (data) {
+                    console.log(data);
                     let source = [];
-                    for (let i = 0; i <= Object.keys(data).length - 1; i++) {
+                    for (let i = 0; i <= Object.keys(data.techniques).length - 1; i++) {
                         let item = {};
-                        item["title"] = Object.keys(data)[i];
+                        item["title"] = Object.keys(data.techniques)[i];
                         item["key"] = i + 1;
-                        if (Object.values(data)[i].length) {
+                        if (Object.values(data.techniques)[i].length) {
                             item["folder"] = true;
                             let children = [];
-                            for (let j = 0; j < Object.values(data)[i].length; j++) {
+                            for (let j = 0; j < Object.values(data.techniques)[i].length; j++) {
                                 let child_item = {};
-                                child_item["title"] = Object.values(data)[i][j];
+                                child_item["title"] = Object.values(data.techniques)[i][j];
                                 child_item["key"] = i + "." + j;
                                 children.push(child_item);
                             }
@@ -1246,6 +1247,52 @@ $(document).ready(function () {
                         },
                     });
                     // select_technique("#projectSetting");
+
+                    // show experts
+                    for (let i = 0; i < data.acceptedExpert.length; i++) {
+                        let expert = `<div class="selected-expert mb-2" id="${data.acceptedExpert[i].id}">
+                                                <img src="${data.acceptedExpert[i].photo}" 
+                                                    alt="${data.acceptedExpert[i].fullname}" width="60px" height="60px">
+                                                <div class="selected-expert__details text-right">
+                                                    <div>${data.acceptedExpert[i].fullname}</div>
+                                                    <div dir="ltr">${data.acceptedExpert[i].userId}</div>
+                                                </div>
+                                                <div class="selected-expert__status text-success">
+                                                    تایید شده
+                                                </div>
+                                                <button type="button" class="selected-expert__delete-item">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>`;
+                        projectSettingForm.find("#searchExpert").closest(".form-group").closest("div.col-md-10").append(expert);
+                        projectSetting.find(".selected-expert:last-child .selected-expert__delete-item").click(function () {
+                            $(this).closest(".selected-expert").remove();
+                        });
+                    }
+                    for (let i = 0; i < data.suggestedExpert.length; i++) {
+                        let expert = `<div class="selected-expert mb-2" id="${data.suggestedExpert[i].id}">
+                                                <img src="${data.suggestedExpert[i].photo}" 
+                                                    alt="${data.suggestedExpert[i].fullname}" width="60px" height="60px">
+                                                <div class="selected-expert__details text-right">
+                                                    <div>${data.suggestedExpert[i].fullname}</div>
+                                                    <div dir="ltr">${data.suggestedExpert[i].userId}</div>
+                                                </div>
+                                                <div class="selected-expert__status text-warning">
+                                                    در انتظار تایید
+                                                </div>
+                                                <button type="button" class="selected-expert__delete-item">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>`;
+                        projectSettingForm.find("#searchExpert").closest(".form-group").closest("div.col-md-10").append(expert);
+                        projectSetting.find(".selected-expert:last-child .selected-expert__delete-item").click(function () {
+                            $(this).closest(".selected-expert").remove();
+                        });
+                    }
+                    // preview projectTechniques
+                    for (let i = 0; i < data.projectTechniques.length; i++) {
+                        $('#tags').addTag(data.projectTechniques[i]);
+                    }
                 },
             });
             // change default border and focus event of this tagInput
@@ -1271,10 +1318,10 @@ $(document).ready(function () {
             event.preventDefault();
             let data = [];
             let id = $(this).attr("id");
-            let uuid = "";
-            if (projectSettingForm.find("#searchExpert").length === 0) {
-                uuid = projectSettingForm.find(".selected-expert").find(".selected-expert__details div:last-child").text();
-            }
+            let expertIds = [];
+            $.each(projectSettingForm.find(".selected-expert"), function () {
+                expertIds = $(this).attr("id");
+            });
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data[index] = $(this).find("span").text();
             });
@@ -1282,7 +1329,7 @@ $(document).ready(function () {
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('action'),
-                data: {technique: data, id: id, uuid: uuid},
+                data: {technique: data, id: id, expertIds: expertIds},
                 dataType: 'json',
                 success: function (data) {
                     iziToast.success({
