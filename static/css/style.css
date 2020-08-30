@@ -1949,6 +1949,7 @@ hr {
 
 .res-table-container table td {
     padding: 5px 0.75rem !important;
+    max-width: 300px;
 }
 
 table {
