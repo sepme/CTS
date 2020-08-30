@@ -7,7 +7,9 @@
 {% block modals %}
     {% include 'industry/layouts/expertResume.html' with project_pk=project_pk %}
     {% include 'industry/layouts/researcher_info.html' %}
-    {% include 'industry/layouts/researcher_request.html' with form=researcherRequestFrom %}
+    {% if reseacherRequestAbility %}
+        {% include 'industry/layouts/researcher_request.html' with form=researcherRequestFrom %}
+    {% endif %}
 {% endblock %}
 
 {% block name %}{{ request.user.industryuser.profile }}{% endblock %}
@@ -301,12 +303,14 @@
                                         <div class="row mbottom-lg-25">
                                             <div class="col-12">
                                                 <span class="section-title">پژوهشگران</span>
-                                                <button type="button"
-                                                        class="border-button section-button"
-                                                        data-toggle="modal"
-                                                        data-target="#researcherRequest">
-                                                    درخواست
-                                                </button>
+                                                {% if reseacherRequestAbility %}
+                                                    <button type="button"
+                                                            class="border-button section-button"
+                                                            data-toggle="modal"
+                                                            data-target="#researcherRequest">
+                                                        درخواست
+                                                    </button>
+                                                {% endif %}
                                                 <div class="section">
                                                     <div class="row">
                                                         <div class="col-12 text-center">
@@ -317,10 +321,10 @@
                                                                             <div class="avatar-item">
                                                                                 {% if researcher.photo %}
                                                                                     <img src="/media/{{ researcher.photo }}"
-                                                                                        alt="{{ researcher.fullname }}پروفایل ">
+                                                                                         alt="{{ researcher.fullname }}پروفایل ">
                                                                                 {% else %}
                                                                                     <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                                            alt="{{ researcher.fullname }}پروفایل ">
+                                                                                         alt="{{ researcher.fullname }}پروفایل ">
                                                                                 {% endif %}
                                                                                 <div class="info">
                                                                                     <h3>{{ researcher.fullname }}</h3>
@@ -340,10 +344,10 @@
                                                                             <div class="avatar-item">
                                                                                 {% if researcher.photo %}
                                                                                     <img src="/media/{{ researcher.photo }}"
-                                                                                        alt="{{ researcher.fullname }}پروفایل ">
+                                                                                         alt="{{ researcher.fullname }}پروفایل ">
                                                                                 {% else %}
                                                                                     <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                                            alt="{{ researcher.fullname }}پروفایل ">
+                                                                                         alt="{{ researcher.fullname }}پروفایل ">
                                                                                 {% endif %}
                                                                                 <div class="info">
                                                                                     <h3>{{ researcher.fullname }}</h3>
@@ -351,7 +355,8 @@
                                                                                             id="{{ researcher.id }}"
                                                                                             data-url="{% url 'researcher:show_resume_preview' %}"
                                                                                             data-toggle="modal"
-                                                                                            data-target="#researcherInfo">
+                                                                                            data-target="#researcherInfo"
+                                                                                            class="is_applied">
                                                                                         رزومه
                                                                                     </button>
                                                                                 </div>

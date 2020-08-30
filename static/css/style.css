@@ -6410,3 +6410,7 @@ table .fas.fa-trash-alt:hover {
 #stepCarouselIndicators.carousel {
     padding-bottom: 50px;
 }
+
+.owl-carousel.owl-rtl .owl-item:hover {
+    z-index: 10;
+}
