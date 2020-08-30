@@ -79,7 +79,6 @@ class IndustryUser(models.Model):
         else:
             return "R_G"
 
-
 # def upload_and_rename_profile(instance, file_name):
 #     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
 
@@ -125,7 +124,7 @@ class IndustryForm(models.Model):
             if self.photo.name:
                 self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
-
+ 
     def compressImage(self, photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
@@ -310,11 +309,10 @@ class Project(models.Model):
     expert_applied = models.ManyToManyField('expert.ExpertUser', through='expert.ExpertRequestedProject',
                                             verbose_name="اساتید درخواست داده",
                                             related_name="experts_applied", blank=True)
-    expert_accepted = models.ForeignKey('expert.ExpertUser', on_delete=models.CASCADE, verbose_name="استاد پذیرفته "
-                                                                                                    "شده",
-                                        related_name="expert_accepted", blank=True, null=True)
-    expert_suggested = models.ForeignKey("expert.ExpertUser", verbose_name="استاد پیشنهادی", on_delete=models.CASCADE,
-                                         related_name="expert_suggested", blank=True, null=True)
+    expert_accepted = models.ManyToManyField('expert.ExpertUser', verbose_name="استاد پذیرفته شده",
+                                        related_name="expert_accepted", blank=True)
+    expert_suggested = models.ManyToManyField("expert.ExpertUser", verbose_name="استاد پیشنهادی",
+                                        related_name="expert_suggested", blank=True)
     expert_messaged = models.ManyToManyField('expert.ExpertUser', blank=True, related_name="expert_messaged",
                                              verbose_name='اساتیدی که پیام داده اند')
     industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
@@ -336,6 +334,7 @@ class Project(models.Model):
     expert_banned = models.ManyToManyField("expert.ExpertUser", verbose_name="اساتید رد شده",
                                            related_name="expert_banned", blank=True)
     executive_info = models.TextField(verbose_name="توضیحات اجرایی", null=True, blank=True)
+    reseacherRequestAbility = models.BooleanField(verbose_name="قابلیت درخواست پژوهشگر", default=True, null=True)
 
     def __str__(self):
         return self.project_form.english_title
@@ -401,10 +400,10 @@ class Comment(models.Model):
     )
     replied_text = models.CharField(max_length=150, blank=True, null=True)
     sender_type = models.CharField(max_length=10, choices=SENDER)
-    project = models.ForeignKey(Project, on_delete=models.DO_NOTHING, blank=True, null=True)
-    industry_user = models.ForeignKey(IndustryUser, on_delete=models.DO_NOTHING, null=True, blank=True)
-    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.DO_NOTHING, null=True, blank=True)
-    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.DO_NOTHING, null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
+    industry_user = models.ForeignKey(IndustryUser, on_delete=models.SET_NULL, null=True, blank=True)
+    expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.SET_NULL, null=True, blank=True)
+    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.SET_NULL, null=True, blank=True)
 
     attachment = models.FileField(upload_to=upload_comment, blank=True, null=True)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")

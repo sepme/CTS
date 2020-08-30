@@ -222,7 +222,10 @@ function expertResume() {
             data: {id: id},
             success: function (data) {
                 console.log(data);
-                $("#expertResume #expert_photo").attr("src", data.photo);
+                if (data.photo)
+                    $("#expertResume #expert_photo").attr("src", data.photo);
+                else
+                    $("#expertResume #expert_photo").attr("src", "/static/expert/img/profile.jpg");
                 $("#expert_name").html(data.name);
                 $("#expert_uni").html(data.university);
                 $("#expert_field").html(data.scientific_rank + " " + data.special_field);
@@ -546,7 +549,7 @@ function addComment(data) {
         "           </span>" +
         "<pre>" + data.description + "</pre>";
     if (data.attachment !== "None") {
-        new_comment += "<a href='/" + data.attachment + "' class='attached-file'>" +
+        new_comment += "<a href='" + data.attachment + "' class='attached-file'>" +
             "   <i class='fas fa-paperclip'></i>" +
             "   <span>" + data.attachment.substring(data.attachment.lastIndexOf("/") + 1) + "</span>" +
             "</a>";
@@ -1358,8 +1361,8 @@ $(document).ready(function () {
                 console.log(data);
                 for (let index = 0; index < data.techniques.length; index++)
                     tech += `<div class="technique-item">
-                                <span class="technique-name">${data.techniques[index]}</span>
-                                <span class="grade grade__A"></span>
+                                <span class="technique-name">${data.techniques[index].name}</span>
+                                <span class="grade grade__${data.techniques[index].level}"></span>
                              </div>`;
                 // tech += "<span class='border-span'>" + data.techniques[index] + "</span>";
                 $("#technique-list").html(tech);

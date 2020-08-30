@@ -910,7 +910,7 @@ function addComment(data) {
     // "</i>"
     ;
     if (data.attachment !== "None") {
-        new_comment += "<a href='/" +
+        new_comment += "<a href='" +
             data.attachment +
             "'><i class='fas fa-paperclip'></i></a>";
     }

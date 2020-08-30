@@ -146,13 +146,34 @@
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
+{% comment %} <<<<<<< HEAD
+                                                        {% for enforcer in enforcers %}
+                                                            <div class="rounded-name-profile clickable mt-2"
+                                                                id="enforcer-name"
+                                                                data-toggle="modal" data-target="#expertResume" value={{enforcer.id}}>
+                                                                <span>{{ enforcer.name }}</span>
+                                                                {% if enforcer.photo %}
+                                                                    <img src="{{enforcer.photo}}" alt="enforcer photo">
+                                                                {% else %}
+                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                        alt="Enforcer Photo">
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endfor %}
+======= {% endcomment %}
+                                                    {% for enforcer in enforcers %}
                                                         <div class="rounded-name-profile clickable mt-2"
-                                                             id="{{ expert_pk }}"
+                                                             id="{{ enforcer.id }}"
                                                              data-toggle="modal" data-target="#expertResume">
-                                                            <span>{{ enforcer_name }}</span>
-                                                            <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                 alt="enforcer photo">
+                                                            <span>{{ enforcer.name }}</span>
+                                                            {% if enforcer.photo %}
+                                                                <img src="{{enforcer.photo}}" alt="enforcer photo">
+                                                            {% else %}
+                                                                <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                    alt="Enforcer Photo">
+                                                            {% endif %}
                                                         </div>
+                                                    {% endfor %}
                                                     </div>
                                                     <div class="col-12 budget-text">
                                                         <div class="pre-header">

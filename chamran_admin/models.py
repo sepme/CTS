@@ -124,7 +124,7 @@ class TempUser(models.Model):
 class FeedBack(models.Model):
     email       = models.EmailField(max_length=254, null=True, blank=True)
     opinion     = models.TextField(max_length=1000)
-    user        = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user        = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     user_type   = models.CharField(max_length=20)
     user_info   = models.CharField(max_length=100)
     time_create = models.DateTimeField(auto_now_add=True)

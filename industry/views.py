@@ -108,7 +108,7 @@ def ActiveProject(request, project, data):
     data['accepted'] = True
     data['project'] = project
     data['project_pk'] = project.id
-    data['expert_pk'] = project.expert_accepted.id
+    # data['expert_pk'] = project.expert_accepted.id
     industryform = request.user.industryuser.profile
     data['projectForm'] = model_to_dict(project.project_form)
     projectDate = {
@@ -123,8 +123,17 @@ def ActiveProject(request, project, data):
     data["industry_name"] = industryform.name
     if industryform.photo:
         data["industry_logo"] = industryform.photo.url
-    data['enforcer_name'] = str(project.expert_accepted.expertform)
-    data['enforcer_id'] = project.expert_accepted.pk
+    data['enforcers'] = []
+    for expert in project.expert_accepted.all():
+        expertData = {
+            "name": str(expert.expertform),
+            "id": expert.pk
+        }
+        if expert.expertform.photo:
+            expertData['photo'] = expert.expertform.photo.url
+        data['enforcers'].append(expertData)
+    # data['enforcer_name'] = str(project.expert_accepted.expertform)
+    # data['enforcer_id'] = project.expert_accepted.pk
     data["executive_info"] = project.executive_info
     data["budget_amount"] = project.project_form.required_budget
 
@@ -208,29 +217,30 @@ def GetComment(request):
         if comment.sender_type == 'expert' or comment.sender_type == 'system':
             comment.status = "seen"
             comment.save()
-    if project.expert_accepted:
-        if project.expert_accepted == expert:
-            data = {
-                'comment': response,
-                'accepted': True,
-                'enforcer': True
-            }
-        else:
-            data = {
-                'comment': response,
-                'accepted': True,
-                'enforcer': False
-            }
-        return JsonResponse(data=data)
-    if expert in project.expert_applied.all():
+    # if project.expert_accepted:
+    if expert in project.expert_accepted.all():
+        data = {
+            'comment': response,
+            'accepted': True,
+            'enforcer': True
+        }
+    elif expert in project.expert_applied.all():
         data = {
             'comment': response,
             'accepted': False,
             'applied': True
         }
+    if project.expert_accepted.all().count:
+        data = {
+            'comment': response,
+            'accepted': True,
+            'enforcer': False,
+            'applied': False
+        }
     else:
         data = {
             'comment': response,
+            'accepted': False,
             'accepted': False,
             'applied': False
         }
@@ -241,7 +251,7 @@ def GetComment(request):
 def accept_project(request):
     expert = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
-    project.expert_accepted = expert
+    project.expert_accepted.add(expert)
     project.date_start = datetime.date.today()
     project.status = 2
     project.save()
@@ -270,6 +280,8 @@ def refuse_expert(request):
 # this function is called when the industry user comments on a project
 @permission_required('industry.be_industry', login_url='/login/')
 def submit_comment(request):
+    print(request.POST)
+    print(request.FILES)
     form = forms.CommentForm(request.POST, request.FILES)
     if form.is_valid():
         project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
@@ -534,7 +546,7 @@ def checkUserId(request):
         user_id = request.POST.get("user_id")
         if not bool(USER_ID_PATTERN.match(user_id)):
             return JsonResponse({"invalid_input": True})
-        if user_id != request.user.industry_user:
+        if user_id != request.user.industryuser:
             if models.IndustryUser.objects.filter(userId=user_id).count():
                 return JsonResponse({"is_unique": False, "invalid_input": False})
         return JsonResponse({"is_unique": True, "invalid_input": False})
@@ -546,8 +558,8 @@ def ProjectSetting(request):
         data = { "techniques": []}
         for tech in project.project_form.techniques.all():
             data['techniques'].append(tech.technique_title)
-        if project.expert_accepted:
-            expert = project.expert_accepted
+        data['acceptedExpert'] = []
+        for expert in project.expert_accepted.all():
             expertData = { 
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
@@ -556,9 +568,9 @@ def ProjectSetting(request):
             }
             if expert.expertform.photo:
                 expertData['photo'] = expert.expertform.photo.url
-            data['expert'] = expertData
-        elif project.expert_suggested:
-            expert = project.expert_suggested
+            data['acceptedExpert'].append(expertData)
+        data['suggestedExpert'] = []
+        for expert in project.expert_suggested.all():
             expertData = { 
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
@@ -567,7 +579,7 @@ def ProjectSetting(request):
             }
             if expert.expertform.photo:
                 expertData['photo'] = expert.expertform.photo.url
-            data['expert'] = expertData
+            data['suggestedExpert'].append(expertData)
         return JsonResponse(data=data)
     elif request.method == "POST":
         expertId = request.POST['uuid']
@@ -595,7 +607,7 @@ def ProjectSetting(request):
                                                technique_title=technique[:-2])[0])
         projectform.save()
         if expert.autoAddProject:
-            project.expert_accepted = expert
+            project.expert_accepted.add(expert)
             project.date_start = datetime.date.today()
             project.status = 2
             expert.status = 'involved'
@@ -607,18 +619,19 @@ def ProjectSetting(request):
 لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
 در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
 با آرزوی موفقیت، 
-چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
-                    "projectName"  : project.persian_title})
+چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
+                   projectName=project.project_form.persian_title)
         else: 
-            project.expert_suggested = expert
+            project.expert_suggested.add(expert)
             message="""با سلام
     مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
     با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
     لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
     در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
     با آرزوی موفقیت، 
-    چمران‌تیم""".format({"industryName" : project.industry_creator.profile.name,
-                        "projectName"  : project.persian_title})
+    چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
+                       projectName=project.project_form.persian_title)
+        models.ProjectForm.persian_title
         subject = 'تقاضای پیوستن به پروژه'
         html_templateForAdmin = get_template('registration/projectRequest_template.html')
         email_templateForAdmin = html_templateForAdmin.render({'message': message})
@@ -630,7 +643,7 @@ def ProjectSetting(request):
                                 text=message,
                                 type=0)
         newMessage.save()
-        newMessage.receiver.add(expert)
+        newMessage.receiver.add(expert.user)
         project.save()
         return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 

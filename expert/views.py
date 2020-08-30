@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.core import serializers
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import get_template
 from django.forms import model_to_dict
 from django.core.exceptions import PermissionDenied
@@ -62,13 +62,13 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
 
         if expert_user.status != "signed_up":
-            allProjects = Project.objects.filter(status=1).exclude(expert_banned=expert_user)
+            allProjects = Project.objects.filter(status=1).exclude(expert_banned__in=[expert_user,])
             context['allProjects'] = allProjects
-            newProjects = allProjects.exclude(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+            newProjects = allProjects.exclude(expert_applied__in=[expert_user,]).exclude(expert_accepted__in=[expert_user,])
             context['newProjects'] = newProjects
-            appliedProjects = allProjects.filter(expert_applied__in=[expert_user,]).exclude(expert_accepted=expert_user)
+            appliedProjects = allProjects.filter(expert_applied__in=[expert_user,]).exclude(expert_accepted__in=[expert_user,])
             context['appliedProjects'] = appliedProjects
-            context['activeProjects'] = Project.objects.filter(status=2).filter(expert_accepted=expert_user)
+            context['activeProjects'] = Project.objects.filter(status=2).filter(expert_accepted__in=[expert_user,])
             context['doneProjects'] = ExpertProjectHistory.objects.filter(expert=expert_user)
         return context
 
@@ -104,7 +104,7 @@ class ResearcherRequest(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         expert_user = get_object_or_404(ExpertUser, user=self.request.user)
-        projects_list = Project.objects.filter(expert_accepted=expert_user)
+        projects_list = Project.objects.filter(expert_accepted__in=[expert_user,])
         projects_data = []
         for project in projects_list:
             researchers_applied = []
@@ -440,9 +440,6 @@ def show_project_view(request):
     id = request.GET.get('id')
     project = Project.objects.get(id=id)
     data = {}
-    if project.expert_accepted is not None:
-        if project.expert_accepted.user == request.user:
-            ActiveProjcet(request, project, data)
     return UsualShowProject(request, project, data)
 
 
@@ -543,12 +540,13 @@ def accept_project(request):
             استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
             با تشکر
             """.format(str(expert_user.expertform), str(project), str(project.industry_creator.profile))
-            html_templateForAdmin = get_template('registration/projectRequest_template.html')
-            email_templateForAdmin = html_templateForAdmin.render({'message': messageForAdmin})
-            msgForAdmin = EmailMultiAlternatives(subject=subjectForAdmin, from_email=settings.EMAIL_HOST_USER,
-                                                 to=[settings.EMAIL_HOST_USER, ])
-            msgForAdmin.attach_alternative(email_templateForAdmin, 'text/html')
-            msgForAdmin.send()
+            send_mail(
+                subject=subjectForAdmin,
+                message=messageForAdmin,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com"],
+                fail_silently=False
+            )
 
             subjectForExpert = "درخواست قرار ملاقات"
             messageForExpert = """با سلام و احترام\n
@@ -840,7 +838,6 @@ def GetResume(request):
         scientific_rank = 'پژوهشگر'
     data = {
         'name': expert_form.fullname,
-        'photo': expert_form.photo.url,
         "university": expert_form.university,
         "scientific_rank": scientific_rank,
         "special_field": expert_form.special_field,
@@ -859,6 +856,9 @@ def GetResume(request):
         "awards": expert_form.awards,
         'languages': expert_form.languages,
     }
+    if expert_form.photo:
+        data['photo'] = expert_form.photo.url
+
     if expert_form.resume:
         data['resume'] = expert_form.resume.url
 
@@ -919,8 +919,14 @@ def ActiveProjcet(request, project, data):
     data["status"] = "active"
     data["industry_name"] = industryform.name
     data["industry_logo"] = industryform.photo.url
-    data['enforcer_name'] = str(project.expert_accepted.expertform)
-    data["executive_info"] = project.executive_info
+    data['enforcers'] = []
+    for expert in project.expert_accepted.all():
+        data['enforcers'].append({
+            "name": str(expert.expertform),
+            "id": expert.pk
+        })
+    # data['enforcer_name'] = str(project.expert_accepted.expertform)
+    # data["executive_info"] = project.executive_info
     data["budget_amount"] = project.project_form.required_budget
     data['timeScheduling'] = projectDate
     data["techniques"] = []
@@ -1173,13 +1179,19 @@ def ActiveProject(request, project, data):
     data["industry_name"] = industryform.name
     if industryform.photo:
         data["industry_logo"] = industryform.photo.url
-    data['enforcer_name'] = str(project.expert_accepted.expertform)
-    data['enforcer_id'] = project.expert_accepted.pk
+    data['enforcers'] = []
+    for expert in project.expert_accepted.all():
+        data['enforcers'].append({
+            "name": str(expert.expertform),
+            "id": expert.pk
+        })
+    # data['enforcer_name'] = str(project.expert_accepted.expertform)
+    # data['enforcer_id'] = project.expert_accepted.pk
     data["executive_info"] = project.executive_info
     data["budget_amount"] = project.project_form.required_budget
 
     data['comments'] = []
-    for comment in project.get_comments().exclude(industry_user=None).filter(expert_user=project.expert_accepted):
+    for comment in project.get_comments().exclude(industry_user=None).filter(expert_user=request.user.expertuser):
         try:
             # TODO
             url = comment.attachment.url
@@ -1197,7 +1209,7 @@ def ActiveProject(request, project, data):
             comment.save()
     data['deadline'] = 'نا مشخص'
     data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
-    evaluation_history = project.expert_accepted.industryevaluateexpert_set.filter(project=project)
+    evaluation_history = project.expert_accepted.all().get(user=request.user).industryevaluateexpert_set.filter(project=project)
     data['status'] = project.status
     data['vote'] = False
     try:
@@ -1230,7 +1242,8 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
 
     def get(self, request, *args, **kwargs):
         project = get_object_or_404(Project, code=kwargs["code"])
-        if project.expert_accepted.user != request.user:
+        if not project.expert_accepted.all().filter(user=request.user).count():
+        # if project.expert_accepted.user != request.user:
             raise PermissionDenied
         return super().get(request, *args, **kwargs)
 
