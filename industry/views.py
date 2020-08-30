@@ -121,6 +121,7 @@ def ActiveProject(request, project, data):
     }
     data['timeScheduling'] = projectDate
     data['title'] = project.project_form.persian_title
+    data['eng_title'] = project.project_form.english_title
     data["industry_name"] = industryform.name
     if industryform.photo:
         data["industry_logo"] = industryform.photo.url
