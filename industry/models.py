@@ -79,6 +79,7 @@ class IndustryUser(models.Model):
         else:
             return "R_G"
 
+
 # def upload_and_rename_profile(instance, file_name):
 #     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
 
@@ -124,7 +125,7 @@ class IndustryForm(models.Model):
             if self.photo.name:
                 self.photo = self.compressImage(self.photo)
         super(IndustryForm, self).save(*args, **kwargs)
- 
+
     def compressImage(self, photo):
         imageTemproary = Image.open(photo).convert('RGB')
         outputIoStream = BytesIO()
@@ -313,7 +314,7 @@ class Project(models.Model):
                                                                                                     "شده",
                                         related_name="expert_accepted", blank=True, null=True)
     expert_suggested = models.ForeignKey("expert.ExpertUser", verbose_name="استاد پیشنهادی", on_delete=models.CASCADE,
-                                        related_name="expert_suggested", blank=True, null=True)
+                                         related_name="expert_suggested", blank=True, null=True)
     expert_messaged = models.ManyToManyField('expert.ExpertUser', blank=True, related_name="expert_messaged",
                                              verbose_name='اساتیدی که پیام داده اند')
     industry_creator = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
@@ -366,6 +367,13 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-date_submitted_by_industry']
+
+    def is_date_valid(self):
+        if self.date_project_started is not None and self.date_finished is not None and \
+                self.date_phase_two_deadline is not None and self.date_phase_three_deadline is not None and \
+                self.date_start:
+            return True
+        return False
 
 
 def upload_comment(instance, file_name):

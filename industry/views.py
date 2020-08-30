@@ -106,6 +106,7 @@ def usualShow(request, project):
 
 def ActiveProject(request, project, data):
     data['accepted'] = True
+    data['project'] = project
     data['project_pk'] = project.id
     data['expert_pk'] = project.expert_accepted.id
     industryform = request.user.industryuser.profile

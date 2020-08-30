@@ -1157,6 +1157,7 @@ def submitData(request):
 
 def ActiveProject(request, project, data):
     data['accepted'] = True
+    data['project'] = project
     data['project_pk'] = project.id
     industryform = project.industry_creator.profile
     data['projectForm'] = model_to_dict(project.project_form)

@@ -5510,7 +5510,11 @@ nav[aria-label="breadcrumb"] ol {
     direction: rtl;
 }
 
-.project-progress:after {
+hr.vertical-line {
+    border: 0;
+}
+
+hr.vertical-line:after {
     content: '';
     position: absolute;
     top: 0;
@@ -5519,6 +5523,16 @@ nav[aria-label="breadcrumb"] ol {
     height: 100%;
     background-color: #C6CAC6;
 }
+
+/*.project-progress:after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 100%;*/
+/*    width: 1px;*/
+/*    height: 100%;*/
+/*    background-color: #C6CAC6;*/
+/*}*/
 
 @media (max-width: 992px) {
     .project-progress {
@@ -5535,6 +5549,26 @@ nav[aria-label="breadcrumb"] ol {
     .project-progress {
         display: block;
     }
+}
+
+.project-progress-disabled {
+    filter: blur(2px);
+}
+
+.project-progress-no-access {
+    direction: rtl;
+    width: max-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotateZ(-45deg);
+    background-color: #f7fdf8;
+    color: #3ccd1c;
+    font-weight: 500;
+    border: 1px dashed #3ccd1c;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    z-index: 1;
 }
 
 .project-progress .step-container {
