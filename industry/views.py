@@ -25,8 +25,9 @@ from industry.models import IndustryForm, Comment
 from expert import models as expert_models
 from . import models, forms
 from expert.models import ExpertUser, RequestResearcher
+from expert.views import showAllTechniques
 from expert.forms import RequestResearcherForm
-from researcher.models import Technique, RequestedProject
+from researcher.models import Technique, RequestedProject, ResearcherUser
 from chamran_admin.models import Message
 
 USER_ID_PATTERN = re.compile('[\w]+')
@@ -281,23 +282,32 @@ def refuse_expert(request):
 # this function is called when the industry user comments on a project
 @permission_required('industry.be_industry', login_url='/login/')
 def submit_comment(request):
-    print(request.POST)
-    print(request.FILES)
     form = forms.CommentForm(request.POST, request.FILES)
     if form.is_valid():
         project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
-        expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
         description = form.cleaned_data['description']
         attachment = form.cleaned_data['attachment']
-        new_comment = Comment.objects.create(project=project,
-                                             industry_user=request.user.industryuser,
-                                             sender_type="industry",
-                                             expert_user=expert_user,
-                                             description=description,
-                                             attachment=attachment,
-                                             status='unseen')
+        if "expert_id" in request.POST.keys():
+            expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
+            new_comment = Comment.objects.create(project=project,
+                                                industry_user=request.user.industryuser,
+                                                sender_type="industry",
+                                                expert_user=expert_user,
+                                                description=description,
+                                                attachment=attachment,
+                                                status='unseen')
+        elif "researcher_id" in request.POST.keys():
+            researcher_user = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+            new_comment = Comment.objects.create(project=project,
+                                                industry_user=request.user.industryuser,
+                                                sender_type="industry",
+                                                researcher_user=researcher_user,
+                                                description=description,
+                                                attachment=attachment,
+                                                status='unseen')
+        else:
+            return JsonResponse(data={'message': "Didn\'t send any id."}, status=400)
         new_comment.save()
-        print(new_comment.attachment.name)
         if attachment is not None:
             url = new_comment.attachment.url
             data = {
@@ -553,13 +563,15 @@ def checkUserId(request):
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('industry.be_industry', login_url='/login/')
-def ProjectSetting(request):
-    print(request.POST)
+def ProjectSetting(request, id):
     if request.method == "GET":
-        project = models.Project.objects.get(id=request.GET.get('id'))
-        data = { "techniques": []}
+        project = models.Project.objects.get(id=id)#request.GET.get('id'))
+        data = {
+            "techniques": showAllTechniques(),
+            "projectTechniques": [],
+             }
         for tech in project.project_form.techniques.all():
-            data['techniques'].append(tech.technique_title)
+            data['projectTechniques'].append(tech.technique_title)
         data['acceptedExpert'] = []
         for expert in project.expert_accepted.all():
             expertData = { 
