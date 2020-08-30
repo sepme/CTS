@@ -5,7 +5,7 @@
 {% block title %} جزییات پروژه {{ title }}{% endblock %}
 
 {% block modals %}
-    {% include 'industry/layouts/expertResume.html' %}
+    {% include 'industry/layouts/expertResume.html' with project_pk=project_pk %}
     {% include 'industry/layouts/researcher_info.html' %}
     {% include 'industry/layouts/researcher_request.html' %}
 {% endblock %}
@@ -92,19 +92,19 @@
                                     <span class="step-date">
                                         <div class="first_phase">{{ timeScheduling.firstPhase }}</div>
                                     </span>
-                                    <span class="step-name">فاز اول</span>
+                                    <span class="step-name">جمع آوری داده</span>
                                 </div>
                                 <div class="step-container {% is_active project_pk=project_pk phase=2 %}">
                                     <span class="step-date">
                                         <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
                                     </span>
-                                    <span class="step-name">فاز دوم</span>
+                                    <span class="step-name">تحلیل داده ها</span>
                                 </div>
                                 <div class="step-container {% is_active project_pk=project_pk phase=3 %}">
                                     <span class="step-date">
                                         <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
                                     </span>
-                                    <span class="step-name">فاز سوم</span>
+                                    <span class="step-name">سابمیت مقاله</span>
                                 </div>
                                 <div class="step-container {% is_active project_pk=project_pk phase=4 %}">
                                     <span class="step-date">
@@ -128,7 +128,7 @@
                                     <span class="section-title">مشخصات پروژه</span>
                                     <div class="section">
                                         <div class="row mbottom-lg-25">
-                                            <div class="col-md-9">
+                                            <div class="col-md-8">
                                                 <div class="row m-top-10">
                                                     <div class="col-md-6">
                                                         <div class="pre-header">
@@ -142,6 +142,7 @@
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
+{% comment %} <<<<<<< HEAD
                                                         {% for enforcer in enforcers %}
                                                             <div class="rounded-name-profile clickable mt-2"
                                                                 id="enforcer-name"
@@ -155,6 +156,20 @@
                                                                 {% endif %}
                                                             </div>
                                                         {% endfor %}
+======= {% endcomment %}
+                                                    {% for enforcer in enforcers %}
+                                                        <div class="rounded-name-profile clickable mt-2"
+                                                             id="{{ enforcer.id }}"
+                                                             data-toggle="modal" data-target="#expertResume">
+                                                            <span>{{ enforcer.name }}</span>
+                                                            {% if enforcer.photo %}
+                                                                <img src="{{enforcer.photo}}" alt="enforcer photo">
+                                                            {% else %}
+                                                                <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                    alt="Enforcer Photo">
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
                                                     </div>
                                                     <div class="col-12 budget-text">
                                                         <div class="pre-header">
@@ -166,16 +181,18 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="pre-header">
-                                                            <span>توضیحات اجرایی</span>
+                                                {% if executive_info %}
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="pre-header">
+                                                                <span>توضیحات اجرایی</span>
+                                                            </div>
+                                                            <pre id="executive-info">{{ executive_info }}</pre>
                                                         </div>
-                                                        <pre id="executive-info">{{ executive_info }}</pre>
                                                     </div>
-                                                </div>
+                                                {% endif %}
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="industry-logo-preview text-left">
                                                     {% if industry_logo %}
                                                         <img id="industry_logo"
@@ -191,7 +208,7 @@
                                                     <div class="budget">
                                                         <div class="budget-header">بودجه</div>
                                                         <div class="budget-content">
-                                                            <div class="budget-amount">1000</div>
+                                                            <div class="budget-amount">{{ budget_amount }}</div>
                                                             <div>ریال</div>
                                                         </div>
                                                     </div>
@@ -327,9 +344,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
-                            {% include 'industry/layouts/comment.html' with comments=comments project_pk=project_pk expert_pk=expert_pk %}
-                        </div>
+                        {#                        <div class="col-12">#}
+                        {#                            {% include 'industry/layouts/comment.html' with comments=comments project_pk=project_pk expert_pk=expert_pk %}#}
+                        {#                        </div>#}
                     </div>
                 </div>
             </div>

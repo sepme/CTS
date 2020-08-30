@@ -5411,9 +5411,9 @@ nav[aria-label="breadcrumb"] ol {
 }
 
 .industry-logo-preview > img {
-    height: 150px;
+    height: 120px;
     width: 120px;
-    min-height: 150px;
+    min-height: 120px;
     min-width: 120px;
     border-radius: 5px;
     border: 1px solid #bdbdbd;
@@ -6206,7 +6206,7 @@ table .fas.fa-trash-alt:hover {
 }
 
 .rounded-name-profile span {
-    margin: auto 0.25rem auto 1rem;
+    margin: auto 0.1rem auto 0.70rem;
     font-weight: 500;
 }
 
@@ -6222,7 +6222,7 @@ table .fas.fa-trash-alt:hover {
     cursor: pointer;
 }
 
-.rounded-name-profile.clickable:hover img:after{
+.rounded-name-profile.clickable:hover img:after {
     content: '';
     position: absolute;
     top: 0;
@@ -6338,4 +6338,28 @@ table .fas.fa-trash-alt:hover {
 .horizontal-avatar-list .avatar-item .info button:hover {
     background: #3CCD1C;
     color: white;
+}
+
+#stepCarouselIndicators .carousel-indicators li {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    background-color: #c9c9c9;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 6px;
+    opacity: 1;
+}
+
+#stepCarouselIndicators .carousel-indicators {
+    padding-right: 0;
+}
+
+#stepCarouselIndicators .carousel-indicators .active {
+    background-color: #3CCD1C;
+}
+
+#stepCarouselIndicators.carousel {
+    padding-bottom: 50px;
 }
