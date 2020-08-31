@@ -122,6 +122,7 @@ def ActiveProject(request, project, data):
     }
     data['timeScheduling'] = projectDate
     data['title'] = project.project_form.persian_title
+    data['eng_title'] = project.project_form.english_title
     data["industry_name"] = industryform.name
     if industryform.photo:
         data["industry_logo"] = industryform.photo.url
@@ -601,7 +602,7 @@ def ProjectSetting(request):
             data['suggestedExpert'].append(expertData)
         return JsonResponse(data=data)
     elif request.method == "POST":
-        expert_ids = request.POST.getlist(' ')
+        expert_ids = request.POST.getlist('expert_ids')
         # expertId = request.POST['uuid']
         if len(expert_ids) == 0:
             return JsonResponse({

@@ -1949,6 +1949,7 @@ hr {
 
 .res-table-container table td {
     padding: 5px 0.75rem !important;
+    max-width: 300px;
 }
 
 table {
@@ -6408,4 +6409,8 @@ table .fas.fa-trash-alt:hover {
 
 #stepCarouselIndicators.carousel {
     padding-bottom: 50px;
+}
+
+.owl-carousel.owl-rtl .owl-item:hover {
+    z-index: 10;
 }

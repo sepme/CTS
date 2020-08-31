@@ -34,17 +34,14 @@
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    {% url 'expert:researcherRequest' as researcherRequest_path %}
-                                    {% if request.path == researcherRequest_path %}
-{#                                        <div class="request-response">#}
-{#                                            <button class="border-button confirm-researcher"#}
-{#                                                    id="researcher-confirm-" value="">تایید#}
-{#                                            </button>#}
-{#                                            <button class="border-button fail-button refuse-researcher"#}
-{#                                                    id="researcher-reject-" value="">رد#}
-{#                                            </button>#}
-{#                                        </div>#}
-                                    {% endif %}
+                                    <div class="request-response">
+                                        <button class="border-button confirm-researcher"
+                                                id="researcher-confirm-" value="">تایید
+                                        </button>
+                                        <button class="border-button fail-button refuse-researcher"
+                                                id="researcher-reject-" value="">رد
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
