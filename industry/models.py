@@ -344,6 +344,10 @@ class Project(models.Model):
         return project_comments
 
     @property
+    def firstExpert(self):
+        return self.expert_accepted.all().first()
+
+    @property
     def time_left(self):
         delta = relativedelta(self.date_finished, datetime.date.today())
         if delta.years != 0:
