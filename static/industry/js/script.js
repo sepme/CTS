@@ -315,7 +315,7 @@ function expertResume() {
                         modal.find(".optional-part").addClass("d-none");
                         modal.find('.researcher_count').closest("li").addClass("d-none");
                         modal.find('.has_industrial_research').closest("li").addClass("d-none");
-                         modal.find('.awards').closest("li").addClass("d-none");
+                        modal.find('.awards').closest("li").addClass("d-none");
                     });
                 }
 
@@ -355,7 +355,9 @@ function setIndustryComment(data) {
 
 function setComment(data) {
     console.log(data);
-    let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    if($(".comment-tabs .active").length){
+        let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    }
     // data = data.comment;
     let comments_code = "";
     let profile = $("#profile").attr('src');
@@ -1374,21 +1376,28 @@ $(document).ready(function () {
     }
 
     //End Project Setting Technique Selection
+    function returnFileType(type) {
+        type = type.toLowerCase();
+        if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png"
+            || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
+            return type;
+        } else if (type === "jpeg")
+            return "jpg";
+        return "unknown";
+    }
 
     $("button[data-target='#researcherInfo']").click(function () {
+        let modal = $("#researcherInfo");
         let id = $(this).attr("id");
         let url = $(this).attr("data-url");
         let project_id = $(this).attr("value");
-        console.log("id ", id);
-        console.log("url ", url);
-        console.log("p_id ", project_id);
         $.ajax({
             method: 'GET',
             url: url,
             dataType: 'json',
             data: {id: id, project_id: project_id},
             success: function (data) {
-                // console.log(data);
+                console.log(data);
                 if (data.status === "justComment") {
                     $('.request-response').attr("style", "display : none;");
                     $(".confirm-researcher").prop('disabled', true);
@@ -1399,7 +1408,7 @@ $(document).ready(function () {
                     $(".refuse-researcher").prop('disabled', false);
                 }
                 $("#researcherInfo").find(".add-comment").attr("id", project_id);
-                $(".researcher_id").attr("value", id);
+                modal.find(".researcher_id").attr("value", id);
                 $(".project_id").attr("value", project_id);
                 if (data.photo)
                     $('#researcher_photo').attr("src", data.photo);
@@ -1436,7 +1445,7 @@ $(document).ready(function () {
                 let scientific_record = JSON.parse(data.scientific_record);
                 if (scientific_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < scientific_record.length; i++) {
+                    for (let i = 0; i < scientific_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + scientific_record[i].fields.major + "</td>" +
                             "<td>" + scientific_record[i].fields.grade + "</td>" +
@@ -1453,7 +1462,7 @@ $(document).ready(function () {
                 let executive_record = JSON.parse(data.executive_record);
                 if (executive_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < executive_record.length; i++) {
+                    for (let i = 0; i < executive_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + executive_record[i].fields.post + "</td>" +
                             "<td>" + executive_record[i].fields.place + "</td>" +
@@ -1518,7 +1527,7 @@ $(document).ready(function () {
                     $(".modal#researcherInfo").find(".no-comment").attr("style", "display : none;");
                 else
                     $(".modal#researcherInfo").find(".no-comment").attr("style", "display : block;");
-                setComment(data.comments, $(".modal#researcherInfo"));
+                setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
             error: function (data) {
