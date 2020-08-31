@@ -291,17 +291,32 @@ function expertResume() {
                 } else {
                     $('#expert_paper_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
-                $('.researcher_count').html(data.researcher_count);
-                $('.has_industrial_research').html(data.has_industrial_research);
-                if (data.awards === '') {
-                    $('.awards').closest("li").css("display", "none");
-                } else {
-                    $('.awards').html(data.awards);
+                if (data.researcher_count) {
+                    $('.researcher_count').html(data.researcher_count);
+                    modal.find('.researcher_count').closest("li").removeClass("d-none");
                 }
-                if (data.languages === '') {
-                    $(".foreign-lang").closest("li").css("display", "none");
-                } else {
-                    $('.languages').html(data.languages);
+                if (data.has_industrial_research) {
+                    $('.has_industrial_research').html(data.has_industrial_research);
+                    modal.find('.has_industrial_research').closest("li").removeClass("d-none");
+                }
+                if (data.awards) {
+                    $('.awards').html(data.awards);
+                    modal.find('.awards').closest("li").removeClass("d-none");
+                }
+
+                // if (data.languages === '') {
+                //     $(".foreign-lang").closest("li").css("display", "none");
+                // } else {
+                //     $('.languages').html(data.languages);
+                // }
+                if (data.awards !== '' || data.researcher_count || data.has_industrial_research || data.languages) {
+                    modal.find(".optional-part").removeClass("d-none");
+                    modal.on("hidden.bs.modal", function () {
+                        modal.find(".optional-part").addClass("d-none");
+                        modal.find('.researcher_count').closest("li").addClass("d-none");
+                        modal.find('.has_industrial_research').closest("li").addClass("d-none");
+                         modal.find('.awards').closest("li").addClass("d-none");
+                    });
                 }
 
                 getComments(id, modal.find("#project_id").val());
@@ -1265,17 +1280,11 @@ $(document).ready(function () {
                                                     <div>${data.acceptedExpert[i].fullname}</div>
                                                     <div dir="ltr">${data.acceptedExpert[i].userId}</div>
                                                 </div>
-                                                <div class="selected-expert__status text-success">
+                                                <div class="selected-expert__status text-success ml-3">
                                                     تایید شده
                                                 </div>
-                                                <button type="button" class="selected-expert__delete-item">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
                                             </div>`;
                         projectSettingForm.find("#searchExpert").closest(".form-group").closest("div.col-md-10").append(expert);
-                        projectSetting.find(".selected-expert:last-child .selected-expert__delete-item").click(function () {
-                            $(this).closest(".selected-expert").remove();
-                        });
                     }
                     for (let i = 0; i < data.suggestedExpert.length; i++) {
                         let expert = `<div class="selected-expert mb-2" id="${data.suggestedExpert[i].id}">
@@ -1285,17 +1294,11 @@ $(document).ready(function () {
                                                     <div>${data.suggestedExpert[i].fullname}</div>
                                                     <div dir="ltr">${data.suggestedExpert[i].userId}</div>
                                                 </div>
-                                                <div class="selected-expert__status text-warning">
+                                                <div class="selected-expert__status text-warning ml-3">
                                                     در انتظار تایید
                                                 </div>
-                                                <button type="button" class="selected-expert__delete-item">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
                                             </div>`;
                         projectSettingForm.find("#searchExpert").closest(".form-group").closest("div.col-md-10").append(expert);
-                        projectSetting.find(".selected-expert:last-child .selected-expert__delete-item").click(function () {
-                            $(this).closest(".selected-expert").remove();
-                        });
                     }
                     // preview projectTechniques
                     for (let i = 0; i < data.projectTechniques.length; i++) {
