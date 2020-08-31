@@ -575,6 +575,7 @@ def ProjectSetting(request):
         data = {
             "techniques": showAllTechniques(),
             "projectTechniques": [],
+            "requestResearcher": project.reseacherRequestAbility,
              }
         for tech in project.project_form.techniques.all():
             data['projectTechniques'].append(tech.technique_title)
@@ -602,6 +603,7 @@ def ProjectSetting(request):
             data['suggestedExpert'].append(expertData)
         return JsonResponse(data=data)
     elif request.method == "POST":
+        print(request.POST)
         expert_ids = request.POST.getlist('expert_ids')
         # expertId = request.POST['uuid']
         if len(expert_ids) == 0:
@@ -613,14 +615,13 @@ def ProjectSetting(request):
             return JsonResponse({
                 'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
             }, status=400)
-        # try:
-        #     expert = ExpertUser.objects.get(userId=expertId)
-        # except:
-        #     return JsonResponse({
-        #         'expertId': 'چنین استادی وجود ندارد.',
-        #     }, status=400)
         project = models.Project.objects.get(id=request.POST['id'])
         projectform = project.project_form
+        if 'requestResearcher' in request.POST.keys():
+            project.reseacherRequestAbility = request.POST['requestResearcher']
+        else:
+            project.reseacherRequestAbility = False
+        projectform.techniques.clear()
         for technique in technique_list:
             projectform.techniques.add(Technique.objects.get_or_create(\
                                                technique_title=technique[:-2])[0])
@@ -629,6 +630,12 @@ def ProjectSetting(request):
         for expert_id in expert_ids:
             expert = ExpertUser.objects.get(id=expert_id)
             expertResult = {"id": expert}
+            if expert in project.expert_accepted.all():
+                expertResult['addExpert'] = True
+                continue
+            elif expert in project.expert_suggested.all():
+                expertResult['addExpert'] = False
+                continue
             if expert.autoAddProject:
                 project.expert_accepted.add(expert)
                 project.date_start = datetime.date.today()
