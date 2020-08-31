@@ -196,12 +196,17 @@ def show_project_ajax(request):
 
 @permission_required('industry.be_industry', login_url='/login/')
 def GetComment(request):
-    expert_id = request.GET.get('expert_id')
     project_id = request.GET.get('project_id')
     project = get_object_or_404(models.Project, pk=project_id)
-    expert = get_object_or_404(ExpertUser, pk=expert_id)
     all_comments = models.Comment.objects.filter(project=project)
-    comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)
+    if "expert_id"  in request.GET.keys():
+        expert = get_object_or_404(ExpertUser, pk=request.GET.get('expert_id'))
+        comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)
+    elif "researcher_id"  in request.GET.keys():
+        researcher = get_object_or_404(ResearcherUser, pk=request.GET.get('researcher_id'))
+        comments = all_comments.filter(researcher_user=researcher).exclude(industry_user=None)
+    else:
+        return JsonResponse(data={"message": "Didn't send researcher or expert id"}, status=400)
     response = []
     for comment in comments:
         try:
@@ -216,7 +221,7 @@ def GetComment(request):
             'attachment': url,
         }
         response.append(temp)
-        if comment.sender_type == 'expert' or comment.sender_type == 'system':
+        if comment.sender_type != 'industry':
             comment.status = "seen"
             comment.save()
     # if project.expert_accepted:
@@ -232,7 +237,7 @@ def GetComment(request):
             'accepted': False,
             'applied': True
         }
-    if project.expert_accepted.all().count:
+    elif project.expert_accepted.all().count:
         data = {
             'comment': response,
             'accepted': True,
@@ -245,7 +250,7 @@ def GetComment(request):
             'accepted': False,
             'accepted': False,
             'applied': False
-        }
+        } 
     return JsonResponse(data=data)
 
 
@@ -563,9 +568,9 @@ def checkUserId(request):
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('industry.be_industry', login_url='/login/')
-def ProjectSetting(request, id):
+def ProjectSetting(request):
     if request.method == "GET":
-        project = models.Project.objects.get(id=id)#request.GET.get('id'))
+        project = models.Project.objects.get(id=request.GET.get('id'))
         data = {
             "techniques": showAllTechniques(),
             "projectTechniques": [],
@@ -674,7 +679,9 @@ def searchUserId(request):
     for expert in suggestedExperts:
         expertData = {
             "userId" : expert.userId,
+            "id" : expert.pk,
             "fullname" : expert.expertform.fullname,
+            "autoAdd" : expert.autoAddProject,
         }
         if expert.expertform.photo:
             expertData['photo'] = expert.expertform.photo.url

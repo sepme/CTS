@@ -687,6 +687,16 @@ def ShowProject(request):
         json_response['request_status'] = requestedProject.status
     except:
         json_response['request_status'] = ""
+    json_response['experts'] = []
+    for expert in project.expert_accepted.all():
+        json_response['experts'].append({
+            "id": expert.pk,
+            "fullname": expert.expertform.__str__(),
+        })
+    json_response['industry'] = {
+        "id": porject.industry_creator.pk,
+        "name": project.industry_creator.profile.__str__(),
+    }
     return JsonResponse(json_response)
 
 
@@ -799,13 +809,27 @@ def AddComment(request):
     if form.is_valid():
         description = form.cleaned_data['description']
         attachment = form.cleaned_data['attachment']
-        comment = Comment(description=description
-                          , attachment=attachment
-                          , project=project
-                          , researcher_user=request.user.researcheruser
-                          , expert_user=project.expert_accepted.all().first()
-                          , sender_type="researcher"
-                          , status='unseen')
+        if "expert_id" in request.POST.keys():
+            try:
+             expert = project.expert_accepted.all().get(pk=request.POST['expert_id'])
+            except:
+                return JsonResponse({"message": "the expert_id is invalid."}, status=400)
+            comment = Comment(description=description
+                            , attachment=attachment
+                            , project=project
+                            , researcher_user=request.user.researcheruser
+                            , expert_user=project.expert_accepted.all().first()
+                            , sender_type="researcher"
+                            , status='unseen')
+        elif "industry_id" in request.POST.keys():
+            comment = Comment(description=description
+                            , attachment=attachment
+                            , project=project
+                            , researcher_user=request.user.researcheruser
+                            , industry_user=project.industry_creator
+                            , sender_type="researcher"
+                            , status='unseen')
+
         comment.save()
         if attachment is not None:
             url = comment.attachment.url
