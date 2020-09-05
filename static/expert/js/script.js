@@ -267,6 +267,15 @@ $(document).ready(function () {
     search_input(".search_message");
     researcherRequest();
 
+    // Auto scroll to active project tab when exists
+    let activeTab = $(".tab-pane#nav-active-projects");
+    if (activeTab.length && activeTab.find(".card").length) {
+        $("#nav-all-projects-tab").removeClass("active");
+        $("#nav-active-projects-tab").addClass("active");
+        $("#nav-all-projects").removeClass('show active');
+        activeTab.tab('show');
+    }
+
     $('.content').scroll(function () {
         if ($(".content").scrollTop() > 300) {
             $("a.top-button").addClass('show');
