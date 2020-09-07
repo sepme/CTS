@@ -126,72 +126,76 @@ function dialog_comment_init() {
             $(".send-comment-container .comment-input").removeClass("attached");
         });
     });
-    let comment_form = $('#comment-form');
-    $(comment_form).off("submit");
-    comment_form.submit(function (event) {
-        event.preventDefault();
-        comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
-        comment_form.find("label").addClass("progress-cursor");
-        comment_form.find("input#project_id").attr('value', comment_form.closest(".add-comment").attr("id"));
-        if ($(this).find("#expert_id").val() === "") {
-            $("#expert_id").attr('value', $(this).closest(".row").find(".comment-tabs .active").attr("id")
-                .replace("v-pills-expert-", ""));
-        }
-        console.log($("#project_id").val());
-        console.log($("#expert_id").val());
-        let thisUrl = "/industry/submit_comment/";
-        let data = new FormData(comment_form.get(0));
-        $.ajax({
-            method: 'POST',
-            url: thisUrl,
-            data: data,
-            type: "ajax",
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                    .prop("disabled", false);
-                comment_form.find("label").removeClass("progress-cursor");
-                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                let PCID = $(".project-comment-innerDiv");
-                if (PCID.find(".no-comment").length > 0) {
-                    PCID.find(".no-comment").remove();
-                }
-                let comment_code = addComment(data);
-                PCID.find(".comments").append(comment_code);
-                iziToast.success({
-                    rtl: true,
-                    message: "پیام با موفقیت ارسال شد!",
-                    position: 'bottomLeft'
-                });
 
-                comment_form[0].reset();
-                comment_form.find("#description").css("height", "41px");
-                comment_form.closest(".section").find("textarea#description").removeClass("error");
-                comment_form.closest(".section").find('.error').remove();
-                comment_form.closest(".section").find('.file-name').html("");
-                comment_form.closest(".section").find(".send-comment-container .comment-input").removeClass("attached");
-                comment_form.closest(".section").find('.comments').animate({scrollTop: comment_form.closest(".section").find('.comments').prop("scrollHeight")}, 1000);
-            },
-            error: function (data) {
-                let obj = JSON.parse(data.responseText);
-                comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
-                    .prop("disabled", false);
-                comment_form.find("label").removeClass("progress-cursor");
-                comment_form.closest(".fixed-back").find(".card").removeClass("wait");
-                if (obj.description) {
-                    $("#description").closest("div").append("<div class='error'>" +
-                        "<span class='error-body'>" +
-                        "<ul class='errorlist'>" +
-                        "<li>" + obj.description + "</li>" +
-                        "</ul>" +
-                        "</span>" +
-                        "</div>");
-                    $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                }
-            },
+
+    $(".add-comment:not('.row')").each(function () {
+        let comment_form = $(this).find('#comment-form');
+        console.log($(this).closest(".modal").attr("id"));
+        $(comment_form).off("submit");
+        comment_form.submit(function (event) {
+            event.preventDefault();
+            comment_form.find("button[type='submit']").css("color", "transparent").addClass("loading-btn").attr("disabled", "true");
+            comment_form.find("label").addClass("progress-cursor");
+            comment_form.find("input#project_id").attr('value', comment_form.closest(".add-comment").attr("id"));
+            if ($(this).find("#expert_id").val() === "" && comment_form.closest(".modal").attr("id") !== "researcherInfo") {
+                $("#expert_id").attr('value', $(this).closest(".row").find(".comment-tabs .active").attr("id")
+                    .replace("v-pills-expert-", ""));
+            }
+            let thisUrl = "/industry/submit_comment/";
+            let data = new FormData(comment_form.get(0));
+            $.ajax({
+                method: 'POST',
+                url: thisUrl,
+                data: data,
+                type: "ajax",
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    comment_form.find("label").removeClass("progress-cursor");
+                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                    let PCID = $(".project-comment-innerDiv");
+                    if (PCID.find(".no-comment").length > 0) {
+                        PCID.find(".no-comment").remove();
+                    }
+                    let comment_code = addComment(data);
+                    PCID.find(".comments").append(comment_code);
+                    iziToast.success({
+                        rtl: true,
+                        message: "پیام با موفقیت ارسال شد!",
+                        position: 'bottomLeft'
+                    });
+
+                    comment_form[0].reset();
+                    comment_form.find("#description").css("height", "41px");
+                    comment_form.closest(".section").find("textarea#description").removeClass("error");
+                    comment_form.closest(".section").find('.error').remove();
+                    comment_form.closest(".section").find('.file-name').html("");
+                    comment_form.closest(".section").find(".send-comment-container .comment-input").removeClass("attached");
+                    comment_form.closest(".section").find('.comments').animate({scrollTop: comment_form.closest(".section").find('.comments').prop("scrollHeight")}, 1000);
+                },
+                error: function (data) {
+                    let obj = JSON.parse(data.responseText);
+                    comment_form.find("button[type='submit']").css("color", "#ffffff").removeClass("loading-btn")
+                        .prop("disabled", false);
+                    comment_form.find("label").removeClass("progress-cursor");
+                    comment_form.closest(".fixed-back").find(".card").removeClass("wait");
+                    if (obj.description) {
+                        $("#description").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.description + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("textarea#description").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
+                },
+            });
         });
     });
+
     // add emoji to comment
     // $(".new-comment-tools > .fa-smile").click(function () {
     //     alert("Not working");

@@ -291,17 +291,32 @@ function expertResume() {
                 } else {
                     $('#expert_paper_record').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
-                $('.researcher_count').html(data.researcher_count);
-                $('.has_industrial_research').html(data.has_industrial_research);
-                if (data.awards === '') {
-                    $('.awards').closest("li").css("display", "none");
-                } else {
-                    $('.awards').html(data.awards);
+                if (data.researcher_count) {
+                    $('.researcher_count').html(data.researcher_count);
+                    modal.find('.researcher_count').closest("li").removeClass("d-none");
                 }
-                if (data.languages === '') {
-                    $(".foreign-lang").closest("li").css("display", "none");
-                } else {
-                    $('.languages').html(data.languages);
+                if (data.has_industrial_research) {
+                    $('.has_industrial_research').html(data.has_industrial_research);
+                    modal.find('.has_industrial_research').closest("li").removeClass("d-none");
+                }
+                if (data.awards) {
+                    $('.awards').html(data.awards);
+                    modal.find('.awards').closest("li").removeClass("d-none");
+                }
+
+                // if (data.languages === '') {
+                //     $(".foreign-lang").closest("li").css("display", "none");
+                // } else {
+                //     $('.languages').html(data.languages);
+                // }
+                if (data.awards !== '' || data.researcher_count || data.has_industrial_research || data.languages) {
+                    modal.find(".optional-part").removeClass("d-none");
+                    modal.on("hidden.bs.modal", function () {
+                        modal.find(".optional-part").addClass("d-none");
+                        modal.find('.researcher_count').closest("li").addClass("d-none");
+                        modal.find('.has_industrial_research').closest("li").addClass("d-none");
+                        modal.find('.awards').closest("li").addClass("d-none");
+                    });
                 }
 
                 getComments(id, modal.find("#project_id").val());
@@ -340,7 +355,9 @@ function setIndustryComment(data) {
 
 function setComment(data) {
     console.log(data);
-    let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    if($(".comment-tabs .active").length){
+        let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
+    }
     // data = data.comment;
     let comments_code = "";
     let profile = $("#profile").attr('src');
@@ -1265,17 +1282,11 @@ $(document).ready(function () {
                                                     <div>${data.acceptedExpert[i].fullname}</div>
                                                     <div dir="ltr">${data.acceptedExpert[i].userId}</div>
                                                 </div>
-                                                <div class="selected-expert__status text-success">
+                                                <div class="selected-expert__status text-success ml-3">
                                                     تایید شده
                                                 </div>
-                                                <button type="button" class="selected-expert__delete-item">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
                                             </div>`;
                         projectSettingForm.find("#searchExpert").closest(".form-group").closest("div.col-md-10").append(expert);
-                        projectSetting.find(".selected-expert:last-child .selected-expert__delete-item").click(function () {
-                            $(this).closest(".selected-expert").remove();
-                        });
                     }
                     for (let i = 0; i < data.suggestedExpert.length; i++) {
                         let expert = `<div class="selected-expert mb-2" id="${data.suggestedExpert[i].id}">
@@ -1285,17 +1296,11 @@ $(document).ready(function () {
                                                     <div>${data.suggestedExpert[i].fullname}</div>
                                                     <div dir="ltr">${data.suggestedExpert[i].userId}</div>
                                                 </div>
-                                                <div class="selected-expert__status text-warning">
+                                                <div class="selected-expert__status text-warning ml-3">
                                                     در انتظار تایید
                                                 </div>
-                                                <button type="button" class="selected-expert__delete-item">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
                                             </div>`;
                         projectSettingForm.find("#searchExpert").closest(".form-group").closest("div.col-md-10").append(expert);
-                        projectSetting.find(".selected-expert:last-child .selected-expert__delete-item").click(function () {
-                            $(this).closest(".selected-expert").remove();
-                        });
                     }
                     // preview projectTechniques
                     for (let i = 0; i < data.projectTechniques.length; i++) {
@@ -1371,21 +1376,28 @@ $(document).ready(function () {
     }
 
     //End Project Setting Technique Selection
+    function returnFileType(type) {
+        type = type.toLowerCase();
+        if (type === "pdf" || type === "doc" || type === "gif" || type === "jpg" || type === "png"
+            || type === "ppt" || type === "txt" || type === "wmv" || type === "zip") {
+            return type;
+        } else if (type === "jpeg")
+            return "jpg";
+        return "unknown";
+    }
 
     $("button[data-target='#researcherInfo']").click(function () {
+        let modal = $("#researcherInfo");
         let id = $(this).attr("id");
         let url = $(this).attr("data-url");
         let project_id = $(this).attr("value");
-        console.log("id ", id);
-        console.log("url ", url);
-        console.log("p_id ", project_id);
         $.ajax({
             method: 'GET',
             url: url,
             dataType: 'json',
             data: {id: id, project_id: project_id},
             success: function (data) {
-                // console.log(data);
+                console.log(data);
                 if (data.status === "justComment") {
                     $('.request-response').attr("style", "display : none;");
                     $(".confirm-researcher").prop('disabled', true);
@@ -1396,7 +1408,7 @@ $(document).ready(function () {
                     $(".refuse-researcher").prop('disabled', false);
                 }
                 $("#researcherInfo").find(".add-comment").attr("id", project_id);
-                $(".researcher_id").attr("value", id);
+                modal.find(".researcher_id").attr("value", id);
                 $(".project_id").attr("value", project_id);
                 if (data.photo)
                     $('#researcher_photo').attr("src", data.photo);
@@ -1433,7 +1445,7 @@ $(document).ready(function () {
                 let scientific_record = JSON.parse(data.scientific_record);
                 if (scientific_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < scientific_record.length; i++) {
+                    for (let i = 0; i < scientific_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + scientific_record[i].fields.major + "</td>" +
                             "<td>" + scientific_record[i].fields.grade + "</td>" +
@@ -1450,7 +1462,7 @@ $(document).ready(function () {
                 let executive_record = JSON.parse(data.executive_record);
                 if (executive_record.length !== 0) {
                     let table_row = "";
-                    for (i = 0; i < executive_record.length; i++) {
+                    for (let i = 0; i < executive_record.length; i++) {
                         table_row = table_row + "<tr>" +
                             "<td>" + executive_record[i].fields.post + "</td>" +
                             "<td>" + executive_record[i].fields.place + "</td>" +
@@ -1515,7 +1527,7 @@ $(document).ready(function () {
                     $(".modal#researcherInfo").find(".no-comment").attr("style", "display : none;");
                 else
                     $(".modal#researcherInfo").find(".no-comment").attr("style", "display : block;");
-                setComment(data.comments, $(".modal#researcherInfo"));
+                setComment(data.comments);
                 //TODO(@sepehrmetanat): Add Researcher Techniques using a method on related Model
             },
             error: function (data) {

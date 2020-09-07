@@ -32,6 +32,7 @@ from chamran_admin.models import Message
 
 USER_ID_PATTERN = re.compile('[\w]+')
 
+
 # function name says it all :)
 def gregorian_to_numeric_jalali(date):
     if date:
@@ -79,7 +80,7 @@ def usualShow(request, project):
     data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(data['key_words']):
         data['key_words'][ind] = value.__str__()
-    
+
     tempTech = []
     for tech in data['techniques']:
         tempTech.append(tech.technique_title)
@@ -114,11 +115,11 @@ def ActiveProject(request, project, data):
     industryform = request.user.industryuser.profile
     data['projectForm'] = model_to_dict(project.project_form)
     projectDate = {
-     "start":   gregorian_to_numeric_jalali(project.date_start),
-     "firstPhase":   gregorian_to_numeric_jalali(project.date_project_started),
-     "secondPhase":   gregorian_to_numeric_jalali(project.date_phase_two_deadline),
-     "thirdPhase":  gregorian_to_numeric_jalali(project.date_phase_three_deadline),
-     "finished":   gregorian_to_numeric_jalali(project.date_finished),
+        "start": gregorian_to_numeric_jalali(project.date_start),
+        "firstPhase": gregorian_to_numeric_jalali(project.date_project_started),
+        "secondPhase": gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+        "thirdPhase": gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+        "finished": gregorian_to_numeric_jalali(project.date_finished),
     }
     data['timeScheduling'] = projectDate
     data['title'] = project.project_form.persian_title
@@ -200,10 +201,10 @@ def GetComment(request):
     project_id = request.GET.get('project_id')
     project = get_object_or_404(models.Project, pk=project_id)
     all_comments = models.Comment.objects.filter(project=project)
-    if "expert_id"  in request.GET.keys():
+    if "expert_id" in request.GET.keys():
         expert = get_object_or_404(ExpertUser, pk=request.GET.get('expert_id'))
         comments = all_comments.filter(expert_user=expert).exclude(industry_user=None)
-    elif "researcher_id"  in request.GET.keys():
+    elif "researcher_id" in request.GET.keys():
         researcher = get_object_or_404(ResearcherUser, pk=request.GET.get('researcher_id'))
         comments = all_comments.filter(researcher_user=researcher).exclude(industry_user=None)
     else:
@@ -251,7 +252,7 @@ def GetComment(request):
             'accepted': False,
             'accepted': False,
             'applied': False
-        } 
+        }
     return JsonResponse(data=data)
 
 
@@ -296,21 +297,30 @@ def submit_comment(request):
         if request.POST["expert_id"] != "":
             expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
             new_comment = Comment.objects.create(project=project,
+<<<<<<< HEAD
                                                 industry_user=request.user.industryuser,
                                                 sender_type="industry",
                                                 expert_user=expert_user,
                                                 description=description,
                                                 attachment=attachment,
                                                 status='unseen')
+=======
+                                                 industry_user=request.user.industryuser,
+                                                 sender_type="industry",
+                                                 expert_user=expert_user,
+                                                 description=description,
+                                                 attachment=attachment,
+                                                 status='unseen')
+>>>>>>> eb3b7e638652d79d2fc668f908040fb2e56957d9
         elif request.POST["researcher_id"] != "":
             researcher_user = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
             new_comment = Comment.objects.create(project=project,
-                                                industry_user=request.user.industryuser,
-                                                sender_type="industry",
-                                                researcher_user=researcher_user,
-                                                description=description,
-                                                attachment=attachment,
-                                                status='unseen')
+                                                 industry_user=request.user.industryuser,
+                                                 sender_type="industry",
+                                                 researcher_user=researcher_user,
+                                                 description=description,
+                                                 attachment=attachment,
+                                                 status='unseen')
         else:
             return JsonResponse(data={'message': "Didn\'t send any id."}, status=400)
         new_comment.save()
@@ -446,7 +456,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
                     industryForm.tax_declaration = form.cleaned_data['tax_declaration']
                     industryForm.services_products = form.cleaned_data['services_products']
                     industryForm.awards_honors = form.cleaned_data['awards_honors']
-                    industry_user.userId = form.cleaned_data['userId']                    
+                    industry_user.userId = form.cleaned_data['userId']
                 else:
                     print('the R&D errors are:', form.errors)
                     context = self.get_context_data()
@@ -557,6 +567,7 @@ class ProjectListView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListV
             context['photo'] = industry.profile.photo
         return context
 
+
 @permission_required('industry.be_industry', login_url='/login/')
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
@@ -568,6 +579,7 @@ def checkUserId(request):
                 return JsonResponse({"is_unique": False, "invalid_input": False})
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
+
 @permission_required('industry.be_industry', login_url='/login/')
 def ProjectSetting(request):
     if request.method == "GET":
@@ -576,17 +588,21 @@ def ProjectSetting(request):
             "techniques": showAllTechniques(),
             "projectTechniques": [],
             "requestResearcher": project.reseacherRequestAbility,
-             }
+        }
         for tech in project.project_form.techniques.all():
             data['projectTechniques'].append(tech.technique_title)
         data['acceptedExpert'] = []
         acceptedExpertId = []
         for expert in project.expert_accepted.all():
+<<<<<<< HEAD
             acceptedExpertId.append(expert.pk)
             expertData = { 
+=======
+            expertData = {
+>>>>>>> eb3b7e638652d79d2fc668f908040fb2e56957d9
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
-                "userId"  : expert.userId,
+                "userId": expert.userId,
                 "accepted": True,
             }
             if expert.expertform.photo:
@@ -594,13 +610,17 @@ def ProjectSetting(request):
             data['acceptedExpert'].append(expertData)
         data['suggestedExpert'] = []
         for expert in project.expert_suggested.all():
+<<<<<<< HEAD
             if expert.pk in acceptedExpertId:
                 project.expert_suggested.remove(expert)
                 continue
             expertData = { 
+=======
+            expertData = {
+>>>>>>> eb3b7e638652d79d2fc668f908040fb2e56957d9
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
-                "userId"  : expert.userId,
+                "userId": expert.userId,
                 "accepted": False,
             }
             if expert.expertform.photo:
@@ -628,8 +648,8 @@ def ProjectSetting(request):
             project.reseacherRequestAbility = False
         projectform.techniques.clear()
         for technique in technique_list:
-            projectform.techniques.add(Technique.objects.get_or_create(\
-                                               technique_title=technique[:-2])[0])
+            projectform.techniques.add(Technique.objects.get_or_create( \
+                technique_title=technique[:-2])[0])
         projectform.save()
         data = {"experts": []}
         for expert_id in expert_ids:
@@ -648,58 +668,60 @@ def ProjectSetting(request):
                 expert.status = 'involved'
                 expert.save()
                 expertResult['addExpert'] = True
-                message="""با سلام
+                message = """با سلام
     مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
     با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
     لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
     در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
     با آرزوی موفقیت، 
     چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
-                    projectName=project.project_form.persian_title)
-            else: 
+                        projectName=project.project_form.persian_title)
+            else:
                 expertResult['addExpert'] = False
                 project.expert_suggested.add(expert)
-                message="""با سلام
+                message = """با سلام
         مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
         با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
         لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
         در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
         با آرزوی موفقیت، 
         چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
-                        projectName=project.project_form.persian_title)
+                            projectName=project.project_form.persian_title)
             models.ProjectForm.persian_title
             subject = 'تقاضای پیوستن به پروژه'
             html_templateForAdmin = get_template('registration/projectRequest_template.html')
             email_templateForAdmin = html_templateForAdmin.render({'message': message})
             email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                        to=[expert.user.get_username(), ])
+                                           to=[expert.user.get_username(), ])
             email.attach_alternative(email_templateForAdmin, 'text/html')
             email.send()
             newMessage = Message(title=subject,
-                                    text=message,
-                                    type=0)
+                                 text=message,
+                                 type=0)
             newMessage.save()
             newMessage.receiver.add(expert.user)
             data['experts'].append(expertResult)
         project.save()
         return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 
+
 def searchUserId(request):
     searchKey = request.POST['searchKey']
-    suggestedExperts = ExpertUser.objects.filter((Q(userId__icontains=searchKey)| \
-                                                Q(expertform__fullname__icontains=searchKey)))
+    suggestedExperts = ExpertUser.objects.filter((Q(userId__icontains=searchKey) | \
+                                                  Q(expertform__fullname__icontains=searchKey)))
     data = {"experts": []}
     for expert in suggestedExperts:
         expertData = {
-            "userId" : expert.userId,
-            "id" : expert.pk,
-            "fullname" : expert.expertform.fullname,
-            "autoAdd" : expert.autoAddProject,
+            "userId": expert.userId,
+            "id": expert.pk,
+            "fullname": expert.expertform.fullname,
+            "autoAdd": expert.autoAddProject,
         }
         if expert.expertform.photo:
             expertData['photo'] = expert.expertform.photo.url
         data['experts'].append(expertData)
     return JsonResponse(data=data)
+
 
 class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = "industry/preview_project.html"
@@ -721,7 +743,7 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
             researcher = {
                 "id": researcher.pk,
                 "fullname": researcher.researcherprofile.fullname,
-                "photo": researcher.researcherprofile.photo                
+                "photo": researcher.researcherprofile.photo
             }
             context['researcher_accepted'].append(researcher)
         context['researchers_applied'] = []
@@ -732,7 +754,7 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
                 'id': researcher.pk,
                 "fullname": researcher.researcherprofile.fullname,
                 "photo": researcher.researcherprofile.photo,
-                "status": requested.status 
+                "status": requested.status
             }
             if requested.status == "unseen":
                 requested.status = "pending"
@@ -743,11 +765,12 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
             try:
                 requestResearcher = RequestResearcher.objects.get(project=project)
                 context['researcherRequestFrom'] = RequestResearcherForm(initial={
-                                                    "least_hour" : requestResearcher.least_hour,
-                                                    "researcher_count": requestResearcher.researcher_count})
+                    "least_hour": requestResearcher.least_hour,
+                    "researcher_count": requestResearcher.researcher_count})
             except:
                 context['researcherRequestFrom'] = RequestResearcherForm()
         return context
+
 
 @permission_required('expert.be_industry', login_url='/login/')
 def industryRequestResearcher(request):
@@ -772,8 +795,8 @@ def industryRequestResearcher(request):
 
         return JsonResponse({"successfull": "successfull"})
     else:
-        return JsonResponse(data=form.errors, status=400)    
+        return JsonResponse(data=form.errors, status=400)
 
-# def show_active_project(request, code):
+    # def show_active_project(request, code):
 #     project = get_object_or_404(models.Project, code=kwargs["code"])
 #     ActiveProject(request)
