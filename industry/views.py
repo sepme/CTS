@@ -293,7 +293,7 @@ def submit_comment(request):
         project = models.Project.objects.filter(id=int(request.POST['project_id'])).first()
         description = form.cleaned_data['description']
         attachment = form.cleaned_data['attachment']
-        if "expert_id" in request.POST.keys():
+        if request.POST["expert_id"] != "":
             expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
             new_comment = Comment.objects.create(project=project,
                                                 industry_user=request.user.industryuser,
@@ -302,7 +302,7 @@ def submit_comment(request):
                                                 description=description,
                                                 attachment=attachment,
                                                 status='unseen')
-        elif "researcher_id" in request.POST.keys():
+        elif request.POST["researcher_id"] != "":
             researcher_user = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
             new_comment = Comment.objects.create(project=project,
                                                 industry_user=request.user.industryuser,
@@ -580,7 +580,9 @@ def ProjectSetting(request):
         for tech in project.project_form.techniques.all():
             data['projectTechniques'].append(tech.technique_title)
         data['acceptedExpert'] = []
+        acceptedExpertId = []
         for expert in project.expert_accepted.all():
+            acceptedExpertId.append(expert.pk)
             expertData = { 
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
@@ -592,6 +594,9 @@ def ProjectSetting(request):
             data['acceptedExpert'].append(expertData)
         data['suggestedExpert'] = []
         for expert in project.expert_suggested.all():
+            if expert.pk in acceptedExpertId:
+                project.expert_suggested.remove(expert)
+                continue
             expertData = { 
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
