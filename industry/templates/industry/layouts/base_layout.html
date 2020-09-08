@@ -237,71 +237,82 @@
             $('.select-usage .form-check label.form-check-label').click(function () {
                 $(".select-usage svg > g").attr("fill", "#808080");
                 $(this).find("svg > g").attr("fill", "#3ccd1c");
-                $(".select-usage button").prop("disabled", false);
+                initialInformation.find("button.next-step").prop("disabled", false);
+                if ($(this).attr("for") === "firstUsage") {
+                    initialInformation.find("form input[name='industry_type']").attr("value", "industry");
+                    initialInformation.find(".RandD__form-item").removeClass("d-none");
+                    initialInformation.find(".RGroup__form-item").addClass("d-none");
+                } else {
+                    initialInformation.find("form input[name='industry_type']").attr("value", "research_group");
+                    initialInformation.find(".RGroup__form-item").removeClass("d-none");
+                    initialInformation.find(".RandD__form-item").addClass("d-none");
+                }
             });
 
             initialInformation.modal('toggle');
 
-            $(".select-usage button").click(function () {
-                if (selectUsage.find("input[type='radio']:checked").val() === "industry") {
-                    {#$('#selectUsage').modal('toggle');#}
-                    {#$('#initialInformation').modal('toggle');#}
-                    $('.industry-form form').find("input[name='industry_type']").attr("value", "industry");
-                    $(".select-usage").addClass("d-none");
-                    $(".industry-form").removeClass("d-none");
-                    $(".RandD__form-item").css("display", "block");
-                    initialInformation.find(".initial-step-dots div").removeClass("active");
-                    initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");
-                } else if (selectUsage.find("input[type='radio']:checked").val() === "research_group") {
-                    {#$('#selectUsage').modal('toggle');#}
-                    {#$('#initialInformation').modal('toggle');#}
-                    $('.industry-form form').find("input[name='industry_type']").attr("value", "group");
-                    $(".select-usage").addClass("d-none");
-                    $(".industry-form").removeClass("d-none");
-                    initialInformation.find(".initial-step-dots div").removeClass("active");
-                    initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");
-                    $(".RGroup__form-item").css("display", "block");
-                } else {
-                    iziToast.error({
-                        rtl: true,
-                        message: "لطفا یکی از گزینه های بالا را انتخاب کنید!",
-                        position: 'bottomLeft'
-                    });
-                }
-            });
+            {#$(".select-usage button").click(function () {#}
+            {#    if (selectUsage.find("input[type='radio']:checked").val() === "industry") {#}
+            {#        console.log("industry");#}
+            {#$('#selectUsage').modal('toggle');#}
+            {#$('#initialInformation').modal('toggle');#}
+            {#$('.industry-form form').find("input[name='industry_type']").attr("value", "industry");#}
+            {#$(".select-usage").addClass("d-none");#}
+            {#$(".industry-form").removeClass("d-none");#}
+            {#$(".RandD__form-item").css("display", "block");#}
+            {#initialInformation.find(".initial-step-dots div").removeClass("active");#}
+            {#initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");#}
+            //} else if (selectUsage.find("input[type='radio']:checked").val() === "research_group") {
+            {#    console.log("rg");#}
+            {#$('#selectUsage').modal('toggle');#}
+            {#$('#initialInformation').modal('toggle');#}
+            {#$('.industry-form form').find("input[name='industry_type']").attr("value", "group");#}
+            {#$(".select-usage").addClass("d-none");#}
+            {#$(".industry-form").removeClass("d-none");#}
+            {#initialInformation.find(".initial-step-dots div").removeClass("active");#}
+            {#initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");#}
+            {#$(".RGroup__form-item").css("display", "block");#}
+            //} else {
+            {#    iziToast.error({#}
+            {#        rtl: true,#}
+            {#        message: "لطفا یکی از گزینه های بالا را انتخاب کنید!",#}
+            {#        position: 'bottomLeft'#}
+            {#    });#}
+            //}
+            //});
 
-            $('#initialInformation .back-step').click(function () {
-                if ($(".industry-form").hasClass("state-2")) {
-                    $(".RandD__form-item").css("display", "none");
-                    $(".RGroup__form-item").css("display", "none");
-                    $(".select-usage").removeClass("d-none");
-                    $(".industry-form").addClass("d-none");
-                    initialInformation.find(".initial-step-dots div").removeClass("active");
-                    initialInformation.find(".initial-step-dots div:first-child").addClass("active");
-                } else if ($(".industry-form").hasClass("state-3")) {
-                    industryForm.addClass("state-2");
-                    industryForm.removeClass("state-3");
-                    $('#initialInformation .next-step').removeClass("d-none");
-                    industryForm.find("button[type='submit']").addClass("d-none");
-                    $(".third-step-view").addClass("d-none");
-                    $(".second-step-view").removeClass("d-none");
-                    initialInformation.find(".initial-step-dots div").removeClass("active");
-                    initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");
-                }
-            });
+            {#$('#initialInformation .back-step').click(function () {#}
+            {#    if ($(".industry-form").hasClass("state-2")) {#}
+            {#        $(".RandD__form-item").css("display", "none");#}
+            {#        $(".RGroup__form-item").css("display", "none");#}
+            {#        $(".select-usage").removeClass("d-none");#}
+            {#        $(".industry-form").addClass("d-none");#}
+            {#        initialInformation.find(".initial-step-dots div").removeClass("active");#}
+            {#        initialInformation.find(".initial-step-dots div:first-child").addClass("active");#}
+            {#    } else if ($(".industry-form").hasClass("state-3")) {#}
+            {#        industryForm.addClass("state-2");#}
+            {#        industryForm.removeClass("state-3");#}
+            {#        $('#initialInformation .next-step').removeClass("d-none");#}
+            {#        industryForm.find("button[type='submit']").addClass("d-none");#}
+            {#        $(".third-step-view").addClass("d-none");#}
+            {#        $(".second-step-view").removeClass("d-none");#}
+            {#        initialInformation.find(".initial-step-dots div").removeClass("active");#}
+            {#        initialInformation.find(".initial-step-dots div:nth-child(2)").addClass("active");#}
+            {#    }#}
+            //});
 
-            $('#initialInformation .next-step').click(function () {
-                if (industryForm.hasClass("state-2")) {
-                    industryForm.addClass("state-3");
-                    industryForm.removeClass("state-2");
-                    $('#initialInformation .next-step').addClass("d-none");
-                    industryForm.find("button[type='submit']").removeClass("d-none");
-                    $(".third-step-view").removeClass("d-none");
-                    $(".second-step-view").addClass("d-none");
-                    initialInformation.find(".initial-step-dots div").removeClass("active");
-                    initialInformation.find(".initial-step-dots div:last-child").addClass("active");
-                }
-            });
+            {#$('#initialInformation .next-step').click(function () {#}
+            {#    if (industryForm.hasClass("state-2")) {#}
+            {#        industryForm.addClass("state-3");#}
+            {#        industryForm.removeClass("state-2");#}
+            {#        $('#initialInformation .next-step').addClass("d-none");#}
+            {#        industryForm.find("button[type='submit']").removeClass("d-none");#}
+            {#        $(".third-step-view").removeClass("d-none");#}
+            {#        $(".second-step-view").addClass("d-none");#}
+            {#        initialInformation.find(".initial-step-dots div").removeClass("active");#}
+            {#        initialInformation.find(".initial-step-dots div:last-child").addClass("active");#}
+            {#    }#}
+            //});
 
         });
 
@@ -316,7 +327,7 @@
             method: "POST",
             url: $(this).attr("action"),
             data: $(this).serialize(),
-            datatype:"json",
+            datatype: "json",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 $(`

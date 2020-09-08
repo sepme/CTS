@@ -82,6 +82,7 @@ function showQuestion() {
             success: function (data) {
                 if (data.question_status === "waiting") {
                     $('.close-answer').hide();
+                    dialog.find(".modal-footer").append(`<button class="default-btn w-100" disabled>پاسخ های این سوال بسته شده است!</button>`);
                     $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("در حال بررسی");
                 } else if (data.question_status === "not_answered") {
@@ -90,6 +91,7 @@ function showQuestion() {
                     dialog.find(".question-status").html("فعال");
                 } else if (data.question_status === "answered") {
                     $('.close-answer').hide();
+                    dialog.find(".modal-footer").append(`<button class="default-btn w-100" disabled>پاسخ های این سوال بسته شده است!</button>`);
                     $('.close-answer').prop('disabled', true);
                     dialog.find(".question-status").html("پاسخ داده شده");
                 }
@@ -126,6 +128,13 @@ function showQuestion() {
                 question_dialog_init();
                 $(".modal-backdrop div.lds-roller").css("display", "none");
                 dialog.css("display", "block");
+
+                dialog.on('hidden.bs.modal', function () {
+                    $(this).find(".all-answers").html("");
+                    if ($(this).find(".modal-footer button:not(.close-answer)").length) {
+                        $(this).find(".modal-footer button:not(.close-answer)").remove();
+                    }
+                });
             },
             error: function (data) {
 
@@ -257,6 +266,15 @@ $(document).ready(function () {
     init_dialog_btn(".technique", ".technique-dialog-main");
     search_input(".search_message");
     researcherRequest();
+
+    // Auto scroll to active project tab when exists
+    let activeTab = $(".tab-pane#nav-active-projects");
+    if (activeTab.length && activeTab.find(".card").length) {
+        $("#nav-all-projects-tab").removeClass("active");
+        $("#nav-active-projects-tab").addClass("active");
+        $("#nav-all-projects").removeClass('show active');
+        activeTab.tab('show');
+    }
 
     $('.content').scroll(function () {
         if ($(".content").scrollTop() > 300) {
@@ -1077,6 +1095,29 @@ $(document).ready(function () {
     if (window.location.href.indexOf('questions') > -1) {
         // init_dialog_btn(".show-btn", ".show-question");
 
+        $(".close-answer").click(function () {
+            let id = $(this).attr("id");
+            let modalFooter = $(this).closest(".modal-footer");
+            $.ajax({
+                method: 'GET',
+                url: '/expert/terminate_research_question/',
+                dataType: 'json',
+                data: {id: id},
+                success: function (data) {
+                    modalFooter.find("button.close-answer").hide().prop("disabled", true);
+                    modalFooter.append(`<button class="default-btn w-100" disabled>پاسخ های این سوال بسته شده است!</button>`);
+                    iziToast.success({
+                        rtl: true,
+                        message: "از این به بعد پاسخی برای این سوال دریافت نخواهد شد.",
+                        position: 'bottomLeft'
+                    });
+                },
+                error: function (data) {
+
+                },
+            });
+        });
+
         function getAllQuestions() {
             return $(".tab-content div.card").toArray();
         }
@@ -1205,27 +1246,6 @@ $(document).ready(function () {
     //****************************************//
     //  End Questions Page
     //****************************************//
-    $(".close-answer").click(function () {
-        let id = $(this).attr("id");
-        $.ajax({
-            method: 'GET',
-            url: '/expert/terminate_research_question/',
-            dataType: 'json',
-            data: {id: id},
-            success: function (data) {
-                $('.close-answer').remove();
-
-                iziToast.success({
-                    rtl: true,
-                    message: "از این به بعد پاسخی برای این سوال دریافت نخواهد شد.",
-                    position: 'bottomLeft'
-                });
-            },
-            error: function (data) {
-
-            },
-        });
-    });
 
 
     /*
