@@ -36,17 +36,6 @@
                                                 <span class="error-body">{% render_field form.fullname.errors %}</span>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="MelliCode">کد ملی</label>
-                                            {% if form.national_code.errors %}
-                                                {{ form.national_code|attr:"id:MelliCode"|attr:"class:error w-100"|attr:"placeholder:449****841" }}
-                                            {% else %}
-                                                {{ form.national_code|attr:"id:MelliCode"|attr:"class:w-100"|attr:"placeholder:449****841" }}
-                                            {% endif %}
-                                            <div class="error">
-                                                <span class="error-body">{% render_field form.national_code.errors %}</span>
-                                            </div>
-                                        </div>
                                         <div class="form-group form-group-auto-check">
                                             <label for="userID">شناسه کاربری</label>
                                             {% comment %} <input type="text" class="w-100" id="userID"> {% endcomment %}
