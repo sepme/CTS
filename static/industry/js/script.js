@@ -381,14 +381,14 @@ function setComment(data) {
                             </div>
                         </span>
                         <pre>${data[i].text}</pre>
-                        ${data[i].attachment !== "None" ? 
-                            `<a href='${data[i].attachment}' class='attached-file'>
+                        ${data[i].attachment !== "None" ?
+                `<a href='${data[i].attachment}' class='attached-file'>
                                 <i class='fas fa-paperclip'></i>
                                 <span>${data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1)}</span>
-                            </a>` 
-                        : 
-                            ""
-                        }
+                            </a>`
+                :
+                ""
+            }
                     </div>
                 </div>                                
             `;
@@ -403,13 +403,13 @@ function setComment(data) {
                         <span class='comment-tools'></span>
                         <pre>${data[i].text}</pre>
                         ${data[i].attachment !== "None" ?
-                            `<a href='${data[i].attachment}' class='attached-file'>
+                `<a href='${data[i].attachment}' class='attached-file'>
                                 <i class='fas fa-paperclip'></i>
                                 <span>${data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1)}</span>
                             </a>`
-                        :
-                            ""
-                        }
+                :
+                ""
+            }
                     </div>
                 </div>
             `;
@@ -1193,6 +1193,8 @@ $(document).ready(function () {
             let pk = $(this).closest(".card").find("button.default-btn").attr("id");
             $(".modal#projectSetting").find("form#ajax-project-setting").attr("id", pk);
             let projectSetting = $("#projectSetting");
+            projectSetting.find(".selected-expert").remove();
+            projectSetting.find("#tags_tagsinput .tag").remove();
             $.ajax({
                 method: 'GET',
                 url: projectSettingForm.attr("action"),
@@ -1299,11 +1301,6 @@ $(document).ready(function () {
                     for (let i = 0; i < data.projectTechniques.length; i++) {
                         $('#tags').addTag(data.projectTechniques[i]);
                     }
-
-                    projectSetting.on('hidden.bs.modal', function () {
-                        $(this).find(".selected-expert").remove();
-                        $(this).find("#tags_tagsinput .tag").remove();
-                    });
                 },
             });
             // change default border and focus event of this tagInput
@@ -1350,6 +1347,7 @@ $(document).ready(function () {
                         position: 'bottomLeft',
                     });
                     $('#projectSetting').modal('hide');
+                    setTimeout(location.reload.bind(location), 1500);
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);
