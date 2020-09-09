@@ -248,6 +248,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             profile.home_number = form.cleaned_data['home_number']
             profile.phone_number = form.cleaned_data['phone_number']
             profile.grade = form.cleaned_data['grade']
+            profile.awards = form.cleaned_data['awards']
             if form.cleaned_data['resume'] is not None:
                 profile.resume = form.cleaned_data['resume']
             # if form.cleaned_data['team_work'] is not None:
@@ -462,7 +463,9 @@ class Question(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
             question = models.ResearchQuestionInstance.objects.filter(
                 researcher=researcheruser).reverse().first()
             answer = question.answer
-            context['answerName'] = answer.name.split(".com-")[-1]
+            domain = question.researcher.user.get_username().split("@")[-1]            
+            file_name = answer.name.split(domain)[-1][1:]
+            context['answerName'] = file_name
             context["answerType"] = answer.name.split(".")[-1]
             if context["answerType"] == "jpeg":
                 context["answerType"] = "jpg"
@@ -694,7 +697,7 @@ def ShowProject(request):
             "fullname": expert.expertform.__str__(),
         })
     json_response['industry'] = {
-        "id": porject.industry_creator.pk,
+        "id": project.industry_creator.pk,
         "name": project.industry_creator.profile.__str__(),
     }
     return JsonResponse(json_response)
@@ -829,7 +832,8 @@ def AddComment(request):
                             , industry_user=project.industry_creator
                             , sender_type="researcher"
                             , status='unseen')
-
+        else:
+            return JsonResponse({"error": "There is no expert or industry Id"}, status=400)
         comment.save()
         if attachment is not None:
             url = comment.attachment.url

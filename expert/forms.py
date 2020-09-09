@@ -25,13 +25,12 @@ class InitialInfoForm(forms.ModelForm):
     userId = forms.CharField(max_length=150, required=False)
     class Meta:
         model = ExpertForm
-        fields = ['photo', 'fullname', 'special_field', 'national_code', 'scientific_rank',
+        fields = ['photo', 'fullname', 'special_field', 'scientific_rank',
                   'university', 'home_number', 'phone_number']
         error_messages = {
             # 'photo'           : {'required': "عکس نمی تواند خالی باشد."} ,
             'fullname'        : {'required': "نام و نام خانوادگی نمی تواند خالی باشد."},
             'special_field'   : {'required': "حوزه تخصصی نمی تواند خالی باشد."},
-            # 'national_code'   : {'required': "کد ملی نمی تواند خالی باشد."},
             'scientific_rank' : {'required': 'مرتبه علمی نباید خالی باشد.'},
             'university'      : {'required': "دانشگاه مورد نظر نمی تواند خالی باشد."},
             'home_number'     : {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
@@ -53,21 +52,6 @@ class InitialInfoForm(forms.ModelForm):
         if has_number(fullname):
             raise forms.ValidationError('نام نباید شامل عدد باشد.')
         return fullname
-
-    def clean_national_code(self):
-        national_code = self.cleaned_data.get('national_code')
-        if national_code is None:
-            return national_code
-            # raise forms.ValidationError("کد ملی نمی تواند خالی باشد.")
-        try:
-            int(national_code)
-        except ValueError:
-            raise forms.ValidationError('کد ملی باید یک عدد باشد.')
-
-        if len(national_code) != 10:
-            raise forms.ValidationError('کد ملی باید ده رقمی باشد.')
-
-        return national_code
 
     def clean_userId(self):
         data = self.cleaned_data["userId"]
@@ -132,6 +116,21 @@ class ExpertInfoForm(forms.ModelForm):
             raise ValidationError('فقط شامل حروف و اعداد و خط زیر است.')
         return data
     
+
+    def clean_national_code(self):
+        national_code = self.cleaned_data.get('national_code')
+        if national_code is None:
+            return national_code
+            # raise forms.ValidationError("کد ملی نمی تواند خالی باشد.")
+        try:
+            int(national_code)
+        except ValueError:
+            raise forms.ValidationError('کد ملی باید یک عدد باشد.')
+
+        if len(national_code) != 10:
+            raise forms.ValidationError('کد ملی باید ده رقمی باشد.')
+
+        return national_code
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
