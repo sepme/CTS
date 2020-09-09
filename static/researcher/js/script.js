@@ -508,6 +508,17 @@ $(document).ready(function () {
         exe_record_option();
         research_record_option();
 
+        $("[data-target='#newScientificRecord']").click(function () {
+            let modal = $("#newScientificRecord");
+            modal.find("#Studying").on("change", function () {
+                if ($(this).is(":checked")) {
+                    modal.find("input#year").prop("readonly", true).attr({"value": "0000", "style": "color: transparent"});
+                } else {
+                    modal.find("input#year").prop("readonly", false).attr({"value": "", "style": "color: #8d8d8d"});
+                }
+            });
+        });
+
         let scientificForm = $('#ajax-sci-form');
         scientificForm.submit(function (event) {
             event.preventDefault();

@@ -4630,6 +4630,10 @@ span.border-span {
     margin-top: 0;
 }
 
+.form-group input:read-only, .form-group input:disabled {
+    background-color: #eee;
+}
+
 .cbx {
     -webkit-user-select: none;
     user-select: none;
