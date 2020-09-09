@@ -6418,3 +6418,31 @@ table .fas.fa-trash-alt:hover {
 .owl-carousel.owl-rtl .owl-item:hover {
     z-index: 10;
 }
+
+/**********
+      Date Picker
+**********/
+.bootstrap-datetimepicker-widget table td.today::before {
+    border-bottom-color: #3ccd1c !important;
+}
+
+.bootstrap-datetimepicker-widget table td.active.today::before {
+    border-bottom-color: #fff !important;
+}
+
+.bootstrap-datetimepicker-widget table td.active, .bootstrap-datetimepicker-widget table td.active:hover {
+    background-color: #3ccd1c !important;
+}
+
+.bootstrap-datetimepicker-widget {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none!important;
+}
+
+.list-unstyled {
+    padding-right: 0;
+}
+
+/**********
+      End Date Picker
+**********/
