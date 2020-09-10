@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="row" style="direction: ltr!important">
-                        <div class="col-lg-4 col-xs-3">
+                        <div class="d-none d-lg-block col-lg-4 col-xs-3">
                             {% if not project.is_date_valid %}
                                 <div class="project-progress-no-access">این قسمت در دسترس نیست!</div>
                             {% endif %}
@@ -150,21 +150,6 @@
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
-                                                        {% comment %} <<<<<<< HEAD
-                                                        {% for enforcer in enforcers %}
-                                                            <div class="rounded-name-profile clickable mt-2"
-                                                                id="enforcer-name"
-                                                                data-toggle="modal" data-target="#expertResume" value={{enforcer.id}}>
-                                                                <span>{{ enforcer.name }}</span>
-                                                                {% if enforcer.photo %}
-                                                                    <img src="{{enforcer.photo}}" alt="enforcer photo">
-                                                                {% else %}
-                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                        alt="Enforcer Photo">
-                                                                {% endif %}
-                                                            </div>
-                                                        {% endfor %}
-======= {% endcomment %}
                                                         {% for enforcer in enforcers %}
                                                             <div class="rounded-name-profile clickable mt-2"
                                                                  id="{{ enforcer.id }}"
@@ -221,6 +206,57 @@
                                                             <div>ریال</div>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mbottom-lg-25">
+                                            <div class="d-block d-lg-none col">
+                                                <span class="section-title">تایم لاین پروژه</span>
+                                                <div class="section">
+                                                    {% if not project.is_date_valid %}
+                                                        <div class="project-progress-no-access">این قسمت در دسترس نیست!
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="project-progress mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
+                                                        <div class="step-container active">
+                                    <span class="step-date">
+                                        <div class="start">
+                                            {{ timeScheduling.start }}
+                                        </div>
+                                    </span>
+                                                            <span class="step-name">
+                                        شروع پروژه
+                                    </span>
+                                                        </div>
+                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">
+                                    <span class="step-date">
+                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>
+                                    </span>
+                                                            <span class="step-name">جمع آوری داده</span>
+                                                        </div>
+                                                        <div class="step-container {% is_active project_pk=project_pk phase=2 %}">
+                                    <span class="step-date">
+                                        <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
+                                    </span>
+                                                            <span class="step-name">تحلیل داده ها</span>
+                                                        </div>
+                                                        <div class="step-container {% is_active project_pk=project_pk phase=3 %}">
+                                    <span class="step-date">
+                                        <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
+                                    </span>
+                                                            <span class="step-name">سابمیت مقاله</span>
+                                                        </div>
+                                                        <div class="step-container {% is_active project_pk=project_pk phase=4 %}">
+                                    <span class="step-date">
+                                        <div class="date_finished">{{ timeScheduling.finished }}</div>
+                                    </span>
+                                                            <span class="step-name">اتمام پروژه</span>
+                                                        </div>
+                                                        <div class="line-100">
+                                                            <div class="arrow"></div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="vertical-line">
                                                 </div>
                                             </div>
                                         </div>
