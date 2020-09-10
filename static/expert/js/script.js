@@ -1450,7 +1450,7 @@ function projectDetail(data) {
     $("#industry_logo").attr("src", data.industry_logo);
     $(".budget-amount").html(data.budget_amount);
     setDates(data.timeScheduling);
-    setMajors(data);
+    setProblemStatement(data);
     setValue(data);
     setComment(data.comments);
     researcherRequest();
@@ -1554,7 +1554,7 @@ showInfo.click(function (event) {
                     keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
                 }
                 $(".techniques").html(keys_code);
-                setMajors(data);
+                setProblemStatement(data);
                 setValue(data);
                 setComment(data.comments, $(".modal#showProject"));
                 // vote_dialog_init(".showProject");
@@ -1590,115 +1590,148 @@ function deleteComment(comment) {
     });
 }
 
-function setRole(data) {
-    let role = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.policy +
-        "</div></div>";
-    $(".project-info-content").html(role);
+function setEthicalConsider(data, status) {
+    let role = `<div>
+                    <div class="question">
+                        <span class="question-mark"><i class='far fa-question-circle'></i></span> 
+                        <span>
+                            ملاحظات اخلاقی
+                        </span>
+                        <div class='answer'></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="question">
+                        <span class="question-mark"><i class='far fa-question-circle'></i></span> 
+                        <span>
+                            محدودیت های اجرایی طرح و روش کاهش آن ها
+                        </span>
+                        <div class='answer'></div>
+                    </div>
+                </div>`;
+    $(".project-info-content" + status).html(role);
 }
 
-function setResources(data) {
-    let resources = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.required_lab_equipment +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.required_method +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "لطفا مراحل انجام پروژه خود را مشخص کنید." +
-        "</div>" +
-        "<div class='answer'>" +
-        data.project_phase +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        numbersComma(data.required_budget) + " ریال" +
-        "</div>" +
-        "</div>";
-    $(".project-info-content").html(resources);
+function setGoal(data, status) {
+    let goal = `<div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+اهداف اصلی                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+اهداف فرعی                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+اهداف کاربردی                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+سوالات پژوهش                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+فرضیات پژوهش                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                `;
+    $(".project-info-content" + status).html(goal);
 }
 
-function setApproach(data) {
-    let approach = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
-        "</div>" +
-        "<div class='answer'>" +
-        data.approach +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "این راه حل چه مشکلاتی می‌تواند داشته باشد؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.potential_problems +
-        "</div></div>";
-    $(".project-info-content").html(approach);
+function setProcedure(data, status) {
+    let procedure = `<div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+خلاصه ضرورت اجرا                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+روش محاسبه حجم نمونه و تعداد آن                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+روش تجزیه و تحلیل داده ها                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                        `;
+    $(".project-info-content" + status).html(procedure);
 }
 
-function setMajors(data) {
-    let majors = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید." +
-        "</div>" +
-        "<div class='answer'>" +
-        data.main_problem_and_importance +
-        "</div></div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.progress_profitability +
-        "</div></div>";
-    $(".project-info-content").html(majors);
+function setProblemStatement(data, status) {
+    let problemStatement = `<div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>                                    
+خلاصه ضرورت اجرا                                    
+                                </div>
+                                <div class='answer'></div>
+                            </div>
+                            <div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>                                    
+مشروح بیان مسئله و ضرورت اجرا                                    
+                                </div>
+                                <div class='answer'></div>
+                            </div>
+                            <div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>                                    
+سابقه طرح و بررسی متون                                    
+                                </div>
+                                <div class='answer'></div>
+                            </div>`;
+    $(".project-info-content" + status).html(problemStatement);
 }
 
 // "<div>" +
@@ -1714,19 +1747,19 @@ function setMajors(data) {
 
 function setValue(data) {
     $("#v-pills-roles-tab").click(function () {
-        setRole(data);
+        setEthicalConsider(data);
         $('*').persiaNumber();
     });
     $("#v-pills-resources-tab").click(function () {
-        setResources(data);
+        setGoal(data);
         $('*').persiaNumber();
     });
     $("#v-pills-approaches-tab").click(function () {
-        setApproach(data);
+        setProcedure(data);
         $('*').persiaNumber();
     });
     $("#v-pills-majors-tab").click(function () {
-        setMajors(data);
+        setProblemStatement(data);
         $('*').persiaNumber();
     });
 }
