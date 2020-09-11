@@ -808,19 +808,16 @@ def showAllTechniques():
         'cellular_biology',
         'research_methodology',
     )
-    query = []
-    for tp in TYPE:
-        query.append(list(Technique.objects.filter(technique_type=tp).values_list('technique_title', flat=True)))
-        query[-1].append(tp)
+    all_techniques = models.Technique.get_technique_list()
     data = {}
-    for q in query:
-        if len(q) > 1:
-            data[q[-1]] = q[:-1]
+    for key in all_techniques.keys():
+        if len(all_techniques[key]) != 0:
+            data[key] = all_techniques[key]
     return data
 
 @permission_required([], login_url='/login/')
 def ShowTechnique():
-    data = showAllTechniques(request)
+    data = showAllTechniques()
     return JsonResponse(data=data)
 
 
