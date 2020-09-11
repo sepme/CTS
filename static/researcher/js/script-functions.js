@@ -697,12 +697,26 @@ function question() {
     $(".confirmation .close-upload").click(function () {
         $(this).closest("form").find("input.upload-answer").next().slideUp("slow").closest("div.col-12").css("padding-bottom", "0px");
     });
+
     $("input.upload-answer").on("change", function () {
-        $(this).closest("div").find("img.upload-img").css("display", "none");
-        $(this).next("img.file-img").css("display", "block");
-        let fileName = $(this).val().split("\\").pop();
-        $(this).next().find(".upload-file-text").css("padding-top", "5px")
-            .html(fileName);
+        let ext = this.value.match(/\.([^\.]+)$/)[1];
+        switch (ext) {
+            case 'zip':
+            case 'rar':
+                $(this).closest("div").find("img.upload-img").css("display", "none");
+                $(this).next("img.file-img").css("display", "block");
+                let fileName = $(this).val().split("\\").pop();
+                $(this).next().find(".upload-file-text").css("padding-top", "5px")
+                    .html(fileName);
+                break;
+            default:
+                iziToast.error({
+                    rtl: true,
+                    message: "فایل ارسالی  شما لازم است به فرمت rar یا zip باشد!",
+                    position: 'bottomLeft'
+                });
+                this.value = '';
+        }
     });
 
 }

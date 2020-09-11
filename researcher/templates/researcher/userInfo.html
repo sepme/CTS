@@ -365,6 +365,21 @@
                         </div>
                         <div class="card box flow-root-display w-100">
                             <div class="box-header text-right">
+                                <h6>افتخارات</h6>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-12 text-right">
+                                        <div class="form-group">
+                                            <span class="sub-header">چند نمونه از بهترین افتخارات - مقالات خاص، جوایز و ...- به همراه سال وقوع</span>
+                                            {% render_field form.awards id="honours" class="w-100 mt-0" dir="rtl" placeholder="اینجا وارد کنید ..." rows="5"%}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card box flow-root-display w-100">
+                            <div class="box-header text-right">
                                 <h6>اطلاعات تکمیلی</h6>
                             </div>
                             <div class="box-body">
@@ -429,7 +444,7 @@
                                                             </label>
                                                         </div>
                                                         <input type="file" class="form-control-file"
-                                                                   id="uploadResume" name="resume" hidden>
+                                                               id="uploadResume" name="resume" hidden>
                                                     {% endif %}
                                                 </div>
                                             </div>
