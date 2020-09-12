@@ -633,14 +633,14 @@ if (window.location.href.indexOf("researcher/technique/") > -1) {
         $(".modal .all-techniques").slideDown('slow');
         $(".modal input#technique-name").addClass("expand");
         $(".modal .select-technique i").removeClass("fa-plus").addClass("fa-search");
-        $(".modal label[for='technique-name']").html("جستجو تکنیک");
+        $(".modal label[for='technique-name']").html("جستجو مهارت");
 
     }
 
     function express() {
         slide_up().done(remove_class());
         $(".modal .select-technique i").removeClass("fa-search").addClass("fa-plus");
-        $(".modal label[for='technique-name']").html("نام تکنیک");
+        $(".modal label[for='technique-name']").html("نام مهارت");
     }
 
     $(".modal .select-technique").click(function () {
