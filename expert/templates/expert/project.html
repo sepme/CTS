@@ -151,15 +151,6 @@
                                                             {{ enforcer_name }}
                                                         </div>
                                                     </div>
-                                                    <div class="col-12 budget-text">
-                                                        <div class="pre-header">
-                                                            <span>بودجه</span>
-                                                        </div>
-                                                        <div id="budget-content">
-                                                            <span class="budget-amount">{{ budget_amount }}</span>
-                                                            <span>ریال</span>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 {% if executive_info %}
                                                     <div class="row">
@@ -188,7 +179,7 @@
                                                     <div class="budget">
                                                         <div class="budget-header">بودجه</div>
                                                         <div class="budget-content">
-                                                            <div class="budget-amount">1000</div>
+                                                            <div class="budget-amount">{{ budget_amount }}</div>
                                                             <div>ریال</div>
                                                         </div>
                                                     </div>
@@ -206,25 +197,25 @@
                                                            data-toggle="pill"
                                                            role="tab" aria-controls="v-pills-majors"
                                                            aria-selected="true">
-                                                            شاخص ها
+                                                            بیان مسئله
                                                         </a>
                                                         <a class="nav-link" id="v-pills-approaches-tab"
                                                            data-toggle="pill"
                                                            role="tab" aria-controls="v-pills-approaches"
                                                            aria-selected="false">
-                                                            راهکار ها
+                                                            روش اجرا
                                                         </a>
                                                         <a class="nav-link" id="v-pills-resources-tab"
                                                            data-toggle="pill"
                                                            role="tab" aria-controls="v-pills-resources"
                                                            aria-selected="false">
-                                                            منابع مورد نیاز
+                                                            اهداف
                                                         </a>
                                                         <a class="nav-link" id="v-pills-roles-tab"
                                                            data-toggle="pill"
                                                            role="tab" aria-controls="v-pills-roles"
                                                            aria-selected="false">
-                                                            قوانین
+                                                            ملاحظات اخلاقی
                                                         </a>
                                                     </div>
                                                 </div>
@@ -236,10 +227,7 @@
                                                             <span class="question-mark">
                                                                 <i class="far fa-question-circle"></i>
                                                             </span>
-                                                                    لطفا مشکل اصلی که پروژه به حل آن پرداخته
-                                                                    را
-                                                                    توضیح و اهمیت آن را
-                                                                    تبیین کنید.
+                                                                    خلاصه ضرورت اجرا
                                                                 </div>
                                                                 <div class="answer">{{ projectForm.main_problem_and_importance }}</div>
                                                             </div>
@@ -248,24 +236,19 @@
                                                             <span class="question-mark">
                                                                 <i class="far fa-question-circle"></i>
                                                             </span>
-                                                                    در صورت حل این مشکل، چه پیشرفتی در شیوه
-                                                                    های
-                                                                    درمانی / تجهیزات پزشکی /
-                                                                    خدمات
-                                                                    درمانی یا ... حاصل می شود؟
+                                                                    مشروح بیان مسئله و ضرورت اجرا
                                                                 </div>
                                                                 <div class="answer">{{ projectForm.progress_profitability }}</div>
                                                             </div>
-                                                            {% comment %} <div>
-                                                                            <div class="question">
+                                                            <div>
+                                                                <div class="question">
                                                             <span class="question-mark">
                                                                 <i class="far fa-question-circle"></i>
                                                             </span>
-                                                                                برآورد شما از سود مالی این پروژه چگونه
-                                                                                است؟
-                                                                            </div>
-                                                                            <div class="answer">{{ project.project_form.predict_profit }}</div>
-                                                                        </div> {% endcomment %}
+                                                                    سابقه طرح و بررسی متون
+                                                                </div>
+                                                                <div class="answer">{{ project.project_form.predict_profit }}</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -340,13 +323,22 @@
         $("#v-pills-roles-tab").click(function () {
             let policy = "{{ projectForm.policy|escapejs }}";
             let role = `<div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟
+                    <div class="question">
+                        <span class="question-mark"><i class='far fa-question-circle'></i></span>
+                        <span>
+                            ملاحظات اخلاقی
+                        </span>
+                        <div class='answer'></div>
+                    </div>
                 </div>
-                <div class='answer'>${policy}</div>
+                <div>
+                    <div class="question">
+                        <span class="question-mark"><i class='far fa-question-circle'></i></span>
+                        <span>
+                            محدودیت های اجرایی طرح و روش کاهش آن ها
+                        </span>
+                        <div class='answer'></div>
+                    </div>
                 </div>`;
             $(".project-info-content").html(role);
             $('*').persiaNumber();
@@ -356,88 +348,129 @@
             let required_method = "{{ projectForm.required_method|escapejs }}";
             let project_phase = "{{ projectForm.project_phase|escapejs }}";
             let required_budget = numbersComma("{{ projectForm.required_budget }}");
-            let resources = `<div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟
-                </div>
-                <div class='answer'>${required_lab_equipment}</div>
-                </div>
-                <div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟
-                </div>
-                <div class='answer'>${required_method}</div>
+            let goal = `<div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+اهداف اصلی
+                    </div>
+                    <div class='answer'></div>
                 </div>
                 <div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                لطفا مراحل انجام پروژه خود را مشخص کنید.
-                </div>
-                <div class='answer'>${project_phase}</div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+اهداف فرعی
+                    </div>
+                    <div class='answer'></div>
                 </div>
                 <div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                پروژه شما به چه مقدار بودجه نیاز دارد؟
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+اهداف کاربردی
+                    </div>
+                    <div class='answer'></div>
                 </div>
-                <div class='answer'>${required_budget} ریال</div>
-                </div>`;
-            $(".project-info-content").html(resources);
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+سوالات پژوهش
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+فرضیات پژوهش
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                `;
+            $(".project-info-content").html(goal);
             $('*').persiaNumber();
         });
         $("#v-pills-approaches-tab").click(function () {
             let approach_ans = "{{ projectForm.approach|escapejs }}";
             let potential_problems = "{{ projectForm.potential_problems|escapejs }}";
-            let approach = `<div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید.
-                </div>
-                <div class='answer'>${approach_ans}</div>
-                </div>
-                <div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                این راه حل چه مشکلاتی می‌تواند داشته باشد؟
-                </div>
-                <div class='answer'>${potential_problems}</div></div>`;
-            $(".project-info-content").html(approach);
+            let procedure = `<div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>
+خلاصه ضرورت اجرا
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>
+مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>
+روش محاسبه حجم نمونه و تعداد آن
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>
+روش تجزیه و تحلیل داده ها
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                        `;
+            $(".project-info-content").html(procedure);
             $('*').persiaNumber();
         });
         $("#v-pills-majors-tab").click(function () {
             let main_problem_and_importance = "{{ projectForm.main_problem_and_importance|escapejs }}";
             let progress_profitability = "{{ projectForm.progress_profitability|escapejs }}";
-            let majors = `<div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید.
-                </div>
-                <div class='answer'>${main_problem_and_importance}</div></div>
-                <div>
-                <div class='question'>
-                <span class='question-mark'>
-                <i class='far fa-question-circle'></i>
-                </span>
-                در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟
-                </div>
-                <div class='answer'>${progress_profitability}</div></div>`;
-            $(".project-info-content").html(majors);
+            let problemStatement = `<div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>
+خلاصه ضرورت اجرا
+                                </div>
+                                <div class='answer'></div>
+                            </div>
+                            <div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>
+مشروح بیان مسئله و ضرورت اجرا
+                                </div>
+                                <div class='answer'></div>
+                            </div>
+                            <div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>
+سابقه طرح و بررسی متون
+                                </div>
+                                <div class='answer'></div>
+                            </div>`;
+            $(".project-info-content").html(problemStatement);
             $('*').persiaNumber();
         });
         //"<div>" +

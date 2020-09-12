@@ -12,118 +12,148 @@ function numbersComma(num) {
     return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 }
 
-function setRole(data, status) {
-    let role = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "از لحاظ نکات اخلاقی (کار با نمونه انسانی، حیوانی، مواد رادیواکتیو و...)، پروژه شما با چه چالش هایی روبه رو است؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.policy +
-        "</div></div>";
+function setEthicalConsider(data, status) {
+    let role = `<div>
+                    <div class="question">
+                        <span class="question-mark"><i class='far fa-question-circle'></i></span> 
+                        <span>
+                            ملاحظات اخلاقی
+                        </span>
+                        <div class='answer'></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="question">
+                        <span class="question-mark"><i class='far fa-question-circle'></i></span> 
+                        <span>
+                            محدودیت های اجرایی طرح و روش کاهش آن ها
+                        </span>
+                        <div class='answer'></div>
+                    </div>
+                </div>`;
     $(".project-info-content" + status).html(role);
 }
 
-function setResources(data, status) {
-    let resources = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "جهت انجام پروژه خود به چه امکانات یا آزمایشگاه هایی احتیاج دارید؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.required_lab_equipment +
-        "</div>" +
-        "</div>";
-    // if (data.required_technique.length != 0) {
-    resources += "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "جهت انجام پروژه خود به چه تخصص ها و چه تکنیک ها آزمایشگاهی ای احتیاج دارید؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.required_method +
-        "</div>" +
-        "</div>";
-    // }
-    resources += "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "لطفا مراحل انجام پروژه خود را مشخص کنید." +
-        "</div>" +
-        "<div class='answer'>" +
-        data.project_phase +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "پروژه شما به چه مقدار بودجه نیاز دارد؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        numbersComma(data.required_budget) +
-        " ریال" +
-        "</div>" +
-        "</div>";
-    $(".project-info-content" + status).html(resources);
+function setGoal(data, status) {
+    let goal = `<div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+اهداف اصلی                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+اهداف فرعی                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+اهداف کاربردی                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+سوالات پژوهش                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                <div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>                                    
+فرضیات پژوهش                       
+                    </div>
+                    <div class='answer'></div>
+                </div>
+                `;
+    $(".project-info-content" + status).html(goal);
 }
 
-function setApproach(data, status) {
-    let approach = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "لطفا راه حل خود را برای حل این مشکل به طور خلاصه توضیح دهید." +
-        "</div>" +
-        "<div class='answer'>" +
-        data.approach +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "این راه حل چه مشکلاتی می‌تواند داشته باشد؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.potential_problems +
-        "</div></div>";
-    $(".project-info-content" + status).html(approach);
+function setProcedure(data, status) {
+    let procedure = `<div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+خلاصه ضرورت اجرا                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+روش محاسبه حجم نمونه و تعداد آن                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                     <div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>                                    
+روش تجزیه و تحلیل داده ها                            
+                        </div>
+                        <div class='answer'></div>
+                     </div>
+                        `;
+    $(".project-info-content" + status).html(procedure);
 }
 
-function setMajors(data, status) {
-    let majors = "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "لطفا مشکل اصلی که پروژه به حل آن پرداخته را توضیح و اهمیت آن را تبیین کنید." +
-        "</div>" +
-        "<div class='answer'>" +
-        data.main_problem_and_importance +
-        "</div></div>" +
-        "<div>" +
-        "<div class='question'>" +
-        "<span class='question-mark'>" +
-        "<i class='far fa-question-circle'></i>" +
-        "</span>" +
-        "در صورت حل این مشکل، چه پیشرفتی در شیوه های درمانی / تجهیزات پزشکی / خدمات درمانی یا ... حاصل می شود؟" +
-        "</div>" +
-        "<div class='answer'>" +
-        data.progress_profitability +
-        "</div></div>";
-    $(".project-info-content" + status).html(majors);
+function setProblemStatement(data, status) {
+    let problemStatement = `<div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>                                    
+خلاصه ضرورت اجرا                                    
+                                </div>
+                                <div class='answer'></div>
+                            </div>
+                            <div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>                                    
+مشروح بیان مسئله و ضرورت اجرا                                    
+                                </div>
+                                <div class='answer'></div>
+                            </div>
+                            <div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>                                    
+سابقه طرح و بررسی متون                                    
+                                </div>
+                                <div class='answer'></div>
+                            </div>`;
+    $(".project-info-content" + status).html(problemStatement);
 }
 
 // "<div>" +
@@ -140,19 +170,19 @@ function setMajors(data, status) {
 
 function setValue(data, status) {
     $("#v-pills-roles-tab" + status).click(function () {
-        setRole(data, status);
+        setEthicalConsider(data, status);
         $('*').persiaNumber();
     });
     $("#v-pills-resources-tab" + status).click(function () {
-        setResources(data, status);
+        setGoal(data, status);
         $('*').persiaNumber();
     });
     $("#v-pills-approaches-tab" + status).click(function () {
-        setApproach(data, status);
+        setProcedure(data, status);
         $('*').persiaNumber();
     });
     $("#v-pills-majors-tab" + status).click(function () {
-        setMajors(data, status);
+        setProblemStatement(data, status);
         $('*').persiaNumber();
     });
 }
@@ -354,80 +384,73 @@ function setIndustryComment(data) {
 }
 
 function setComment(data) {
-    console.log(data);
-    if($(".comment-tabs .active").length){
-        let id = $(".comment-tabs .active").attr("id").replace("v-pills-expert-", "");
-    }
+    console.log("comment ", data);
     // data = data.comment;
     let comments_code = "";
-    let profile = $("#profile").attr('src');
     for (let i = 0; i < data.length; i++) {
         if (data[i].sender_type === "industry") { //industry
             let comment_body_classes = "comment-body";
             if (data[i].attachment !== "None") {
                 comment_body_classes += " attached";
             }
-            comments_code += "<div class='my-comment'>" +
-                "   <div class='comment-profile'></div>" +
-                "   <div class='" + comment_body_classes + "'>" +
-                "       <span class='comment-tools'>" +
-                "               <div class='btn-group dropright'>" +
-                "                   <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
-                "                       <i class='fas fa-cog'></i>" +
-                "                   </button>" +
-                "                   <div class='dropdown-menu'>" +
-                // "                       <div class='dropdown-item'>" +
-                // "                           <i class='fas fa-pen'></i>" +
-                // "                           <span>ویرایش پیام</span>" +
-                // "                       </div>" +
-                "                       <div class='dropdown-item'>" +
-                "                           <i class='fas fa-trash-alt'></i>" +
-                "                           <span>حذف پیام</span>" +
-                "                       </div>" +
-                "                   </div>" +
-                "               </div>" +
-                // "               <i class='fas fa-reply'>" +
-                // "                   <div class='reply'></div>" +
-                // "               </i>" +
-                "           </span>" +
-                "<pre>" + data[i].text + "</pre>";
-            if (data[i].attachment !== "None") {
-                comments_code += "<a href='" + data[i].attachment + "' class='attached-file'>" +
-                    "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
-                    "</a>";
+            comments_code += `
+                <div class='my-comment'>
+                    <div class='comment-profile'></div>
+                    <div class='${comment_body_classes}'>
+                        <span class='comment-tools'>
+                            <div class='btn-group dropright'>
+                                <button type='button' class='dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                                    <i class='fas fa-cog'></i>
+                                </button>
+                                <div class='dropdown-menu'>
+                                    <div class='dropdown-item'>
+                                       <i class='fas fa-trash-alt'></i>
+                                       <span>حذف پیام</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                        <pre>${data[i].text}</pre>
+                        ${data[i].attachment !== "None" ?
+                `<a href='${data[i].attachment}' class='attached-file'>
+                                <i class='fas fa-paperclip'></i>
+                                <span>${data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1)}</span>
+                            </a>`
+                :
+                ""
             }
-            comments_code += "" +
-                "   </div>" +
-                "</div>";
-        } else if (data[i].sender_type === "expert") { //expert
+                    </div>
+                </div>                                
+            `;
+        } else if (data[i].sender_type === "expert" || data[i].sender_type === "researcher") { //expert or researcher
             let comment_body_classes = "comment-body";
             if (data[i].attachment !== "None") {
                 comment_body_classes += " attached";
             }
-            comments_code += "<div class='your-comment'>" +
-                "<div class='" + comment_body_classes + "' dir='ltr'>" +
-                "<span class='comment-tools'>" +
-                // "   <i class='fas fa-reply'" + data[i].pk + "></i>" +
-                "</span>" +
-                "<pre>" + data[i].text + "</pre>";
-            if (data[i].attachment !== "None") {
-                comments_code += "<a href='" + data[i].attachment + "' class='attached-file'>" +
-                    "   <i class='fas fa-paperclip'></i>" +
-                    "   <span>" + data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1) + "</span>" +
-                    "</a>";
+            comments_code += `
+                <div class='your-comment'>
+                    <div class='${comment_body_classes}' dir='ltr'>
+                        <span class='comment-tools'></span>
+                        <pre>${data[i].text}</pre>
+                        ${data[i].attachment !== "None" ?
+                `<a href='${data[i].attachment}' class='attached-file'>
+                                <i class='fas fa-paperclip'></i>
+                                <span>${data[i].attachment.substring(data[i].attachment.lastIndexOf("/") + 1)}</span>
+                            </a>`
+                :
+                ""
             }
-            comments_code += "" +
-                "   </div>" +
-                "</div>";
+                    </div>
+                </div>
+            `;
         } else { //system
-            comments_code += "<div class='system-comment'>" +
-                "<div class='comment-body' dir='ltr'>" +
-                "<pre>" +
-                data[i].text +
-                "</pre>" +
-                "</div>" +
-                "</div>";
+            comments_code += `
+                <div class='system-comment'>
+                    <div class='comment-body' dir='ltr'>
+                        <pre>${data[i].text}</pre>
+                    </div>
+                </div>
+            `;
         }
     }
     $('.comments').html(comments_code).animate({scrollTop: $('.comments').prop("scrollHeight")}, 1000);
@@ -841,7 +864,7 @@ $(document).ready(function () {
         $("#industry_logo").attr("src", data.industry_logo);
         $(".budget-amount").html(data.budget_amount);
         setDates(data.timeScheduling);
-        setMajors(data, "-detail");
+        setProblemStatement(data, "-detail");
         setValue(data, "-detail");
         setTab(data);
         // modalPreview(".project-details");
@@ -874,7 +897,7 @@ $(document).ready(function () {
                             + "</span>"
                         );
                     }
-                    setMajors(data, "-preview");
+                    setProblemStatement(data, "-preview");
                     setValue(data, "-preview");
                     if (data.status !== 1 && data.status !== 2) {
                         dialog.find('.add-comment').attr('style', 'display : none');
@@ -1200,6 +1223,8 @@ $(document).ready(function () {
             let pk = $(this).closest(".card").find("button.default-btn").attr("id");
             $(".modal#projectSetting").find("form#ajax-project-setting").attr("id", pk);
             let projectSetting = $("#projectSetting");
+            projectSetting.find(".selected-expert").remove();
+            projectSetting.find("#tags_tagsinput .tag").remove();
             $.ajax({
                 method: 'GET',
                 url: projectSettingForm.attr("action"),
@@ -1306,11 +1331,6 @@ $(document).ready(function () {
                     for (let i = 0; i < data.projectTechniques.length; i++) {
                         $('#tags').addTag(data.projectTechniques[i]);
                     }
-
-                    projectSetting.on('hidden.bs.modal', function () {
-                        $(this).find(".selected-expert").remove();
-                        $(this).find("#tags_tagsinput .tag").remove();
-                    });
                 },
             });
             // change default border and focus event of this tagInput
@@ -1357,6 +1377,7 @@ $(document).ready(function () {
                         position: 'bottomLeft',
                     });
                     $('#projectSetting').modal('hide');
+                    setTimeout(location.reload.bind(location), 1500);
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);

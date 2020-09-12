@@ -608,7 +608,7 @@ div.row.cover-page {
 
 #initialInformation .RandD__form-item,
 #initialInformation .RGroup__form-item {
-    display: none;
+    /*display: none;*/
 }
 
 .select-usage {
@@ -665,7 +665,7 @@ div.row.cover-page {
     border: 1px solid #bdbdbd;
 }
 
-.select-usage .radio-group .form-check .form-check-input:checked + label {
+.select-usageselect-usage .radio-group .form-check .form-check-input:checked + label {
     background-color: #f7fdf8;
     border-color: #3CCD1C;
 }

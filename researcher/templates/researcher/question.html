@@ -48,7 +48,7 @@
                                 نیاز است که توانایی‌ها و انگیزه شما برای شرکت در کارهای تحقیقاتی محک زده شود.
                                 در همین راستا، مرحله‌ای برای پژوهشگران تازه‌وارد در نظر گرفته شده
                                 تا توانایی‌های علمی و مهارت‌های فردی در ابعاد کوچک مورد آزمایش قرار بگیرد.
-                                <br>
+                                 <br>
                                 بعد از شروع این مرحله، یک سوال پژوهشی در اختیار شما قرار می‌گیرد و شما یک هفته فرصت
                                 دارید تا به این سوال پژوهشی پاسخ دهید.
                                 این سوال پژوهشی، توسط یکی از اساتید عضو چمران تیم طراحی شده و در واقع تکه‌ای از یک پروژه
@@ -68,10 +68,10 @@
                         </div>
                     </div>
                     <div class="row mt-5 mb-5">
-                        <div class="col-md-4">
-                            picture
+                        <div class="col-xl-4 col-lg-5">
+                            <img class="rounded-0" src="{% static 'researcher/img/how_to_answer.svg' %}" alt="how_to_answer image">
                         </div>
-                        <div class="col-md-8 text-right">
+                        <div class="col-xl-8 col-lg-7 text-right">
                             <h6>نحوه پاسخ دهی</h6>
                             <hr>
                             <p style="text-align: right;">
@@ -109,8 +109,8 @@
                             </p>
                         </div>
                     </div>
-                    <div class="row mb-5">
-                        <div class="col-md-8 text-right">
+                    <div class="row mb-5 flex-column-reverse flex-lg-row">
+                        <div class="col-xl-8 col-lg-7 text-right">
                             <h6>نحوه امتیازدهی</h6>
                             <hr>
 
@@ -125,22 +125,22 @@
                                 پژوهشی جدید برای عضویت اقدام نمایند.
                             </p>
                         </div>
-                        <div class="col-md-4">
-                            picture
+                        <div class="col-xl-4 col-lg-5">
+                            <img class="rounded-0" src="{% static 'researcher/img/how_to_mark.svg' %}" alt="how_to_mark image">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 text-center">
-{#                            <p>#}
-{#                                پیشنهاد می‌شود جهت یادگیری «نحوه جستجوی هدفمند مقالات در بانک مقالات» ویدیوی زیر را#}
-{#                                مشاهده نمایید.#}
-{#                            </p>#}
+                            {#                            <p>#}
+                            {#                                پیشنهاد می‌شود جهت یادگیری «نحوه جستجوی هدفمند مقالات در بانک مقالات» ویدیوی زیر را#}
+                            {#                                مشاهده نمایید.#}
+                            {#                            </p>#}
                             {#                            <video width="550" height="350" controls>#}
                             {#                                <source src="/media/VIDEO0041.mp4" type="video/mp4">#}
                             {#                                Your browser does not support the video tag.#}
                             {#                            </video>                            #}
                             {% if not answered %}
-                                <p>
+                                <p class="text-center" style="font-weight: 700!important;">
                                     اگر برای شروع این مرحله آماده هستید، کافی است روی دکمه زیر کلیک کنید.
                                 </p>
                                 <button class="start-question">

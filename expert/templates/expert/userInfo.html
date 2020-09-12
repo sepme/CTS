@@ -159,7 +159,14 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="MelliCode">کد ملی</label>
-                                                {{ expert_info_form.national_code|attr:"id:MelliCode"|attr:"readonly:True"|attr:"class:w-100" }}
+                                                {% if form.national_code.errors %}
+                                                    {{ expert_info_form.national_code|attr:"id:MelliCode"|attr:"class:error w-100" }}
+                                                {% else %}
+                                                    {{ expert_info_form.national_code|attr:"id:MelliCode"|attr:"class:w-100" }}
+                                                {% endif %}
+                                                <div class="error">
+                                                    <span class="error-body">{{ form.national_code.errors }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -169,7 +176,7 @@
                                         <div class="form-group">
                                             <label for="Field">حوزه تخصصی</label>
                                             {% if form.special_field.errors %}
-                                                {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:error w-50" }}
+                                                {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:error w-100" }}
                                             {% else %}
                                                 {{ expert_info_form.special_field|attr:"id:Field"|attr:"class:w-100" }}
                                             {% endif %}
@@ -702,7 +709,7 @@
                                                    name="autoAddProject" value=1 hidden
                                                    {% if autoAddProject %}checked{% endif %}>
                                             <label class="form-check-label cbx mb-0" for="autoAddProject">
-                                                <span class="mt-2">
+                                                <span>
                                                     <svg class="inline-svg bi bi-check2" viewBox="0 0 16 16"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd"

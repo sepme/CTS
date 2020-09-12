@@ -117,7 +117,7 @@
         <div class="hr"></div>
         <ul class="list-group">
             {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
-                <a href="#" class="forbidden__access">
+                <a href="javascript:void(0)" class="forbidden__access">
             {% else %}
                 {% url "researcher:index" as index_url %}
                 <a href="{{ index_url }}">
@@ -142,7 +142,7 @@
                 </li>
             </a>
             {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
-                <a href="#" class="forbidden__access">
+                <a href="javascript:void(0)" class="forbidden__access">
             {% else %}
                 {% url 'researcher:technique' as technique_url %}
                 <a href="{{ technique_url }}">
@@ -164,7 +164,7 @@
                 {% endif %}
                 <a href="{{ question_url }}">
             {% else %}
-                <a href="#" class="forbidden__access">
+                <a href="javascript:void(0)" class="forbidden__access question_-_uploaded">
             {% endif %}
             <li class="list-group-item text-right {% if request.get_full_path ==  question_url %}active{% endif %}">
                 <div>
@@ -174,7 +174,7 @@
             </li>
             </a>
             {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
-                <a href="#" class="forbidden__access">
+                <a href="javascript:void(0)" class="forbidden__access">
             {% else %}
                 {% url 'researcher:userInfo' as userInfo_url %}
                 <a href="{{ userInfo_url }}">
@@ -264,9 +264,13 @@
 </script>
 <script type="text/javascript">
     $(".forbidden__access").click(function () {
+        let message = "متاسفانه، شما اجازه دسترسی به این قسمت را ندارید!";
+        if ($(this).hasClass("question_-_uploaded")) {
+            message = "شما درگذشته این قسمت را تکمیل کرده اید!";
+        }
         iziToast.error({
             rtl: true,
-            message: "متاسفانه، شما اجازه دسترسی به این قسمت را ندارید!",
+            message: message,
             position: 'bottomLeft'
         });
     });

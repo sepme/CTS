@@ -123,7 +123,7 @@ class ResearcherProfileForm(forms.ModelForm):
     userId = forms.CharField(max_length=150, required=False)
     class Meta:
         model = models.ResearcherProfile
-        fields = ['fullname', 'major', 'national_code', 'grade', 'university',
+        fields = ['fullname', 'major', 'national_code', 'grade', 'university', 'awards',
                   'entry_year', 'student_number', 'address', 'home_number', 'phone_number',
                   'team_work', 'creative_thinking', 'interest_in_major', 'motivation',
                   'diligence', 'interest_in_learn', 'punctuality', 'data_collection',
@@ -134,6 +134,7 @@ class ResearcherProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['address'].required = False
+        self.fields['awards'].required = False
 
     def clean_userId(self):
         data = self.cleaned_data["userId"]

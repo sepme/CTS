@@ -158,6 +158,8 @@ LOGGING = {
         'file': {
             # exact format is not important, this is the minimum information
             'format': '%(asctime)s  %(levelname)-8s %(message)s',
+            'backupCount': 10, # keep at most 10 log files
+            'maxBytes': 5242880, # 5*1024*1024 bytes (5MB)
         },
     },
     'handlers': {

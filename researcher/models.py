@@ -145,6 +145,7 @@ class ResearcherProfile(models.Model):
     phone_number = models.CharField(max_length=50, verbose_name="تلفن همراه")
     email = models.EmailField(max_length=254, verbose_name="پست الکترونیکی")
     student_number = models.CharField(max_length=10, verbose_name="شماره دانشجویی")
+    awards = models.TextField(verbose_name="افتخارات",max_length=1000, null=True, blank=True)
 
     one = 1
     two = 2
