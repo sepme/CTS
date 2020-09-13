@@ -387,7 +387,7 @@ class Technique(models.Model):
 
     technique_type = models.CharField(max_length=30, choices=TYPE, blank=True)
     technique_title = models.CharField(max_length=300)
-    tutorial_link = models.CharField(max_length=500, null=True)
+    tutorial_link = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return self.technique_title

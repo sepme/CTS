@@ -110,7 +110,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'PK': project.pk,
                 'project_title': project.project_form.persian_title,
                 'keyword': project.project_form.key_words.all(),
-                'started': date_last(datetime.date.today(), project.date_start),
+                'started': date_last(datetime.date.today(), project.date_project_started),
                 'finished': date_last(datetime.date.today(), project.date_finished),
                 'need_hour': project.requestresearcher.least_hour,
             }
@@ -163,7 +163,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     'PK': project.pk,
                     'project_title': project.project_form.persian_title,
                     'keyword': project.project_form.key_words.all(),
-                    'started': date_last(datetime.date.today(), project.date_start),
+                    'started': date_last(datetime.date.today(), project.date_project_started),
                     'finished': date_last(datetime.date.today(), project.date_finished),
                     'need_hour': project.requestresearcher.least_hour,
                     'status': status,
@@ -645,13 +645,14 @@ def ajax_Technique_review(request):
 
 @permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def ShowProject(request):
+    researcher = request.user.researcheruser
     project = Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
     json_response['deadline'] = 'نا مشخص'
-    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        json_response['deadline'] = date_last(datetime.date.today(), project.date_phase_three_deadline)
+    if project.status == 1 and project.date_project_started and project.researcherRequestDeadline:
+        json_response['deadline'] = date_last(datetime.date.today(), project.researcherRequestDeadline)
     else:
-        json_response['deadline'] = date_last(project.date_project_started, project.date_phase_three_deadline)
+        json_response['deadline'] = date_last(project.date_project_started, project.researcherRequestDeadline)
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
@@ -681,9 +682,9 @@ def ShowProject(request):
         if (com.sender_type == 'expert' or com.sender_type == 'system') and com.status == 'not_seen':
             com.status = 'seen'
             com.save()
-    json_response['status'] = request.user.researcheruser.status.status
+    json_response['status'] = researcher.status.status
     try:
-        requestedProject = models.RequestedProject.objects.get(project=project)
+        requestedProject = models.RequestedProject.objects.get(project=project, researcher=researcher)
         json_response['request_status'] = requestedProject.status
     except:
         json_response['request_status'] = ""
@@ -740,13 +741,14 @@ def ApplyProject(request):
 
 @permission_required(('researcher.be_researcher', 'researcher.is_active'), login_url='/login/')
 def MyProject(request):
+    researcher = request.user.researcheruser
     project = Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
     json_response['deadline'] = 'نا مشخص'
-    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        json_response['deadline'] = date_last(datetime.date.today(), project.date_phase_three_deadline)
+    if project.status == 1 and project.date_project_started and project.researcherRequestDeadline:
+        json_response['deadline'] = date_last(datetime.date.today(), project.researcherRequestDeadline)
     else:
-        json_response['deadline'] = date_last(project.date_project_started, project.date_phase_three_deadline)
+        json_response['deadline'] = date_last(project.date_project_started, project.researcherRequestDeadline)
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
@@ -780,6 +782,22 @@ def MyProject(request):
     elif datetime.date.today() > project.date_phase_one_finished:
         if len(evaluation_history.filter(phase=1)) == 0:
             json_response['vote'] = "true"
+    json_response['status'] = researcher.status.status
+    try:
+        requestedProject = models.RequestedProject.objects.get(project=project, researcher=researcher)
+        json_response['request_status'] = requestedProject.status
+    except:
+        json_response['request_status'] = ""
+    json_response['experts'] = []
+    for expert in project.expert_accepted.all():
+        json_response['experts'].append({
+            "id": expert.pk,
+            "fullname": expert.expertform.__str__(),
+        })
+    json_response['industry'] = {
+        "id": project.industry_creator.pk,
+        "name": project.industry_creator.profile.__str__(),
+    }
     return JsonResponse(json_response)
 
 
