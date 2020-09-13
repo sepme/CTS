@@ -6254,8 +6254,11 @@ table .fas.fa-trash-alt:hover {
     border-radius: 15em;
     width: -moz-fit-content;
     width: fit-content;
-    direction: ltr;
     transition: all 0.25s;
+    display: flex;
+    white-space: nowrap;
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 .rounded-name-profile span {
