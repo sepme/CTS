@@ -77,7 +77,7 @@ class IndustryUser(models.Model):
         if RandDProfile.objects.filter(industry_user=self).exists():
             return "R&D"
         else:
-            return "R_G"
+            return "researchGroup"
 
 # def upload_and_rename_profile(instance, file_name):
 #     return os.path.join('{}/'.format(instance.name), 'profile.{}'.format(file_name.split('.')[-1]))
@@ -258,8 +258,8 @@ class Keyword(models.Model):
 
 class ProjectForm(models.Model):
     key_words = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
-    persian_title = models.CharField(max_length=128, verbose_name="عنوان پروژه فارسی")
-    english_title = models.CharField(max_length=128, verbose_name="عنوان پروژه انگلیسی")
+    persian_title = models.CharField(max_length=256, verbose_name="عنوان فارسی پروژه")
+    english_title = models.CharField(max_length=256, verbose_name="عنوان انگلیسی پروژه")
     research_methodology_choice = (
         (0, 'کیفی'),
         (1, 'کمی'),
@@ -286,18 +286,58 @@ class ProjectForm(models.Model):
     #         expert=self.project.expert_accepted).first()
     #     return expert_requested.required_technique.all()
 
+class ResearchProjectForm(models.Model):
+    #General Specification
+    key_words = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
+    persian_title = models.CharField(max_length=256, verbose_name="عنوان فارسی پروژه")
+    english_title = models.CharField(max_length=256, verbose_name="عنوان انگلیسی پروژه")
+    research_methodology_choice = (
+        ("case_series", 'بررسی بیماران'),
+        ("cross_sectional", 'مقطعی'),
+        ("case_control", 'موردی-شاهدی'),
+        ("cohort", 'هم گروهی'),
+        ("clinical_trail", 'کارآزمایی بالینی'),
+        ("experimental", 'علوم پایه'),
+    )
+    research_methodology = models.CharField(max_length=15 ,choices=research_methodology_choice, verbose_name="روش تحقیق")
+
+    #Problem Statement
+    summary_of_necessity = models.TextField(verbose_name="خلاصه ضرورت اجرا")
+    necessity_expression = models.TextField(verbose_name="مشروح بیان پروژه و ضرورت اجرا", null=True, blank=True)
+    research_history = models.TextField(verbose_name="سابقه طرح و بررسی متون", null=True, blank=True)
+
+    #Executive Method
+    summary_method = models.TextField(verbose_name="خلاصه روش اجرا")
+    required_equipment = models.TextField(verbose_name="مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن", null=True, blank=True)
+    sample_count_method = models.TextField(verbose_name="روش محاسبه حجم و تعداد نمونه", null=True, blank=True)
+    analyse_method = models.TextField(verbose_name="روش تجزیه و تحلیل داده ها", null=True, blank=True)
+
+    #Goals
+    main_goal = models.TextField(verbose_name="اهداف اصلی", null=True, blank=True)
+    secondary_goal = models.TextField(verbose_name="اهداف فرعی", null=True, blank=True)
+    practical_goal = models.TextField(verbose_name="اهداف کاربردی", null=True, blank=True)
+    research_question = models.TextField(verbose_name="سوالات پژوهش", null=True, blank=True)
+    reseach_assumptions = models.TextField(verbose_name="فرضیات پژوهش", null=True, blank=True)
+
+    #Morals Considerations
+    policy = models.TextField(verbose_name="ملاحظات اخلاقی", null=True, blank=True)
+    executive_restrictions = models.TextField(verbose_name="محدودیت های اجرایی و روش کاهش آن ها", null=True, blank=True)
+    
+    techniques = models.ManyToManyField(Technique, verbose_name="تکنیک های مورد نیاز")
+
+    def __str__(self):
+        return self.english_title
+
+
 
 class Project(models.Model):
-    project_form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه")
+    form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه", null=True, blank=True)
+    research_project_form = models.OneToOneField(ResearchProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه تحقیقاتی", null=True, blank=True)
     code = models.UUIDField(verbose_name="کد پروژه", default=uuid.uuid4, unique=True)
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
-    date_selected_by_expert = models.DateField(verbose_name="تاریخ درخواست پروژه توسط استاد", null=True, blank=True)
-    date_start = models.DateField(verbose_name="تاریخ اخذ پروژه توسط استاد", null=True, blank=True)
     date_project_started = models.DateField(verbose_name="تاریخ شروع پروژه", null=True, blank=True)
-    date_phase_two_deadline = models.DateField(verbose_name="ناریخ مهلت فاز دوم", null=True, blank=True)
-    date_phase_three_deadline = models.DateField(verbose_name="تاریخ مهلت فاز سوم", null=True, blank=True)
-    date_phase_one_finished = models.DateField(verbose_name="تاریخ پایان فاز اول", null=True, blank=True)
-    date_phase_two_finished = models.DateField(verbose_name="تاریخ پایان فاز دوم", null=True, blank=True)
+    researcherRequestDeadline = models.DateField(verbose_name="مهلت درخواست پژوهشگر", auto_now=False, auto_now_add=False, null=True, blank=True)
+    finish_date_suggested = models.DateField(verbose_name="تاریخ پیشنهادی اتمام پروژه", auto_now=False, auto_now_add=False, null=True, blank=True)
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', through='researcher.RequestedProject',
                                                 verbose_name="پژوهشگران درخواست داده",
@@ -336,8 +376,14 @@ class Project(models.Model):
     executive_info = models.TextField(verbose_name="توضیحات اجرایی", null=True, blank=True)
     reseacherRequestAbility = models.BooleanField(verbose_name="قابلیت درخواست پژوهشگر", default=True, null=True)
 
+    class Meta:
+        ordering = ['-date_submitted_by_industry']
+
     def __str__(self):
-        return self.project_form.english_title
+        try:
+            return self.form.english_title
+        except:
+            return self.research_project_form.english_title
 
     def get_comments(self):
         project_comments = Comment.objects.all().filter(project=self).reverse()
@@ -361,15 +407,19 @@ class Project(models.Model):
 
     @property
     def industryUnseenCommentCount(self):
-        comment = Comment.objects.filter(project__project_form=self.project_form)
+        comment = self.get_comments()
         expert_unseen = comment.filter(sender_type='expert').filter(status='unseen').filter(
             industry_user=self.industry_creator).count()
         system_unseen = comment.filter(sender_type='system').filter(status='unseen').filter(
             industry_user=self.industry_creator).count()
         return expert_unseen + system_unseen
 
-    class Meta:
-        ordering = ['-date_submitted_by_industry']
+    @property
+    def project_form(self):
+        try:
+            return self.form
+        except:
+            return self.research_project_form
 
     def is_date_valid(self):
         if self.date_project_started is not None and self.date_finished is not None and \

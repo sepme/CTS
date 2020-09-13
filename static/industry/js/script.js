@@ -1357,6 +1357,7 @@ $(document).ready(function () {
             let data = [];
             let id = $(this).attr("id");
             let expertIds = [];
+            let applicationDeadline = $("#ApplicationDeadline").val();
             $.each(projectSettingForm.find(".selected-expert"), function () {
                 expertIds.push($(this).attr("id"));
             });
@@ -1368,7 +1369,7 @@ $(document).ready(function () {
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('action'),
-                data: {technique: data, id: id, expert_ids: expertIds},
+                data: {technique: data, id: id, expert_ids: expertIds, researcherRequestDeadline: applicationDeadline},
                 dataType: 'json',
                 success: function (data) {
                     iziToast.success({
