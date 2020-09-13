@@ -5416,12 +5416,14 @@ nav[aria-label="breadcrumb"] ol {
 }
 
 .industry-logo-preview > img {
-    height: 120px;
-    width: 120px;
-    min-height: 120px;
-    min-width: 120px;
+    height: 150px;
+    width: 150px;
+    min-height: 150px;
+    min-width: 150px;
     border-radius: 5px;
     border: 1px solid #bdbdbd;
+    margin: auto;
+    display: block;
 }
 
 @media (max-width: 1200px) and  (min-width: 992px) {
@@ -6252,8 +6254,11 @@ table .fas.fa-trash-alt:hover {
     border-radius: 15em;
     width: -moz-fit-content;
     width: fit-content;
-    direction: ltr;
     transition: all 0.25s;
+    display: flex;
+    white-space: nowrap;
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 .rounded-name-profile span {
@@ -6422,6 +6427,10 @@ table .fas.fa-trash-alt:hover {
 /**********
       Date Picker
 **********/
+.datepicker {
+    direction: ltr;
+}
+
 .bootstrap-datetimepicker-widget table td.today::before {
     border-bottom-color: #3ccd1c !important;
 }
@@ -6436,13 +6445,107 @@ table .fas.fa-trash-alt:hover {
 
 .bootstrap-datetimepicker-widget {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: none!important;
+    border: none !important;
+}
+
+.bootstrap-datetimepicker-widget table td span.active {
+    background-color: #3ccd1c !important;
 }
 
 .list-unstyled {
     padding-right: 0;
 }
 
+.datepicker-days table tbody tr {
+    border-bottom: none;
+}
+
+/* *********** */
+.datepicker-plot-area {
+    font: 12px iranyekan;
+}
+
 /**********
       End Date Picker
 **********/
+
+.file-upload-min {
+    padding-bottom: 40px;
+    position: relative;
+    cursor: pointer;
+}
+
+.file-upload-min:before {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: 0;
+    background-color: #f7fdf8;
+    border: dashed #bdbdbd 1px;
+    height: 40px;
+    width: 100%;
+    border-radius: 0.25em;
+}
+
+.file-upload-min-value {
+    background-color: #3ccd1c;
+    color: #ffffff;
+    border-radius: 0.25em;
+    position: absolute;
+    padding: 2px 10px;
+    top: 29px;
+    right: 50%;
+    transform: translateX(50%);
+    width: -moz-max-content;
+    width: max-content;
+}
+
+.file-upload-min:hover:before {
+    border-color: #3ccd1c;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+.file-upload-min-value:hover {
+    cursor: pointer;
+}
+
+.rounded-icon {
+    background-color: #bdbdbd;
+    color: #ffffff;
+    padding: 10px;
+    width: 40px;
+    display: inline-block;
+    height: 40px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.rounded-icon > * {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.rounded-icon:hover {
+    text-decoration: none;
+    color: #ffffff;
+    box-shadow: none !important;
+}
+
+.rounded-icon.p-end_note-link {
+    background-color: #6e2fc5;
+    font-weight: 500;
+    box-shadow: 0 5px 15px rgba(110, 47, 197, .34);
+}
+
+.rounded-icon.p-telegram-link {
+    background-color: #32a5e0;
+    box-shadow: 0 5px 15px rgba(50, 165, 224, .34);
+}
+
+.rounded-icon.p-proposal-link {
+    background-color: #ee881e;
+    box-shadow: 0 5px 15px rgba(238, 131, 30, .34);
+}

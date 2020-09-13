@@ -1527,7 +1527,7 @@ showInfo.click(function (event) {
                 let btn = $("#accept-project").closest(".modal-footer").html();
                 $("#accept-project").closest(".modal-footer").html(
                     `<span tabindex="0" data-placement='right' data-toggle="tooltip" data-html="true"
-                        title="<p class='m-0' dir='rtl'>شما تکنیک های لازم برای پروژه را ثبت کرده اید!</p>">
+                        title="<p class='m-0' dir='rtl'>شما مهارت های پژوهشی لازم برای پروژه را ثبت کرده اید!</p>">
                         ${btn}
                     </span>`
                 );

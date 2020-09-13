@@ -297,12 +297,12 @@ def submit_comment(request):
         if request.POST["expert_id"] != "":
             expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
             new_comment = Comment.objects.create(project=project,
-                                                 industry_user=request.user.industryuser,
-                                                 sender_type="industry",
-                                                 expert_user=expert_user,
-                                                 description=description,
-                                                 attachment=attachment,
-                                                 status='unseen')
+                                                industry_user=request.user.industryuser,
+                                                sender_type="industry",
+                                                expert_user=expert_user,
+                                                description=description,
+                                                attachment=attachment,
+                                                status='unseen')
         elif request.POST["researcher_id"] != "":
             researcher_user = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
             new_comment = Comment.objects.create(project=project,
@@ -612,8 +612,10 @@ def ProjectSetting(request):
         for tech in project.project_form.techniques.all():
             data['projectTechniques'].append(tech.technique_title)
         data['acceptedExpert'] = []
+        acceptedExpertId = []
         for expert in project.expert_accepted.all():
-            expertData = {
+            acceptedExpertId.append(expert.pk)
+            expertData = { 
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
                 "userId": expert.userId,
@@ -624,7 +626,10 @@ def ProjectSetting(request):
             data['acceptedExpert'].append(expertData)
         data['suggestedExpert'] = []
         for expert in project.expert_suggested.all():
-            expertData = {
+            if expert.pk in acceptedExpertId:
+                project.expert_suggested.remove(expert)
+                continue
+            expertData = { 
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
                 "userId": expert.userId,

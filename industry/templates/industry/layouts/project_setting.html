@@ -38,19 +38,20 @@
                     <div class="row">
                         <div class="col-md-1 d-md-block d-none"></div>
 
-                        <div class="col-md-10 text-right">
+                        <div class="col-md-10 text-right">ای
 
                             <p class="mb-4">شما در این قسمت می توانید مهارت هایی که برای پروژه خود نیاز دارید را وارد
                                 کنید.</p>
 
                             <div class="row">
                                 <div class="col-md-8 text-right mbottom-lg-25">
-                                    <span class="section-title">لیست تکنیک ها</span>
+                                    <span class="section-title">لیست مهارت های پژوهشی </span>
                                     <div class="section">
                                         <div id="fancy-tree"></div>
                                     </div>
                                     <div dir="rtl" class="sub-header mtop-lg-25">
-                                        در صورتی که تکنیک مورد نطر خود را در لیست بالا نیافتید، آن را اینجا وارد کنید و
+                                        در صورتی که مهارت پژوهشی مورد نطر خود را در لیست بالا نیافتید، آن را اینجا وارد
+                                        کنید و
                                         کلید Enter
                                         را
                                         فشار دهید.
@@ -63,12 +64,41 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 text-right mbottom-lg-25">
-                                    <span class="section-title">تکنیک های انتخاب شده</span>
+                                    <span class="section-title">مهارت های پژوهشی انتخاب شده</span>
                                     <div class="section">
                                         <label for="tags"></label>
                                         <input name="techniques" id="tags" value="" class="w-100 no-click"/>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divide__line text-right mb-4 mt-5">
+                        <span class="w__title">ضمیمه ها</span>
+                        <span class="__line"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1 d-md-block d-none"></div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="telegramGroupLink">لینک گروه تلگرام</label>
+                                <input type="text" class="form-control" id="telegramGroupLink"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="endNoteFile" class="d-block file-upload-min">
+                                    بارگذاری فایل EndNote
+                                    <span class="file-upload-min-value">برای بارگذاری فایل کلیک کنید!</span>
+                                </label>
+                                <input type="file" id="endNoteFile" hidden/>
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="d-block file-upload-min" for="proposalFile">
+                                    بارگذاری فرم پروپوزال پژوهش
+                                    <span class="file-upload-min-value">برای بارگذاری فایل کلیک کنید!</span>
+                                </label>
+                                <input type="file" id="proposalFile" hidden/>
                             </div>
                         </div>
                     </div>
@@ -104,7 +134,7 @@
                                 <input type="text" class="form-control datetimepicker-input" id="ApplicationDeadline" name="researcherRequestDeadline"
                                        data-toggle="datetimepicker" data-target="#ApplicationDeadline"/>
                             </div>
-{#                            <div id="datetimepicker13"></div>#}
+                            {#                            <div id="datetimepicker13"></div>#}
                         </div>
                     </div>
                 </div>

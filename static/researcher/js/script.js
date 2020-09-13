@@ -1610,7 +1610,7 @@ function ShowPreviousProject(project) {
         "<span><i class='fas fa-calendar-alt'></i>این پروژه به  <span>8 ساعت</span> وقت در هفته نیاز دارد!</span>" +
         "<span><i class='fas fa-hourglass-end'></i>تا اتمام پروژه <span>" + project.finished + "</span> فرصت باقی است!</span>" +
         "<span><i class='fas fa-hourglass-end'></i>درأمد : <span>" + project.income + "</span> کسب کرده اید.</span>" +
-        "<span><i class='fas fa-hourglass-end'></i>تکنیک های مورد استفاده : <span>" + project.technique + "</span></span>" +
+        "<span><i class='fas fa-hourglass-end'></i>مهارت های پژوهشی مورد استفاده : <span>" + project.technique + "</span></span>" +
         "<button type='button' class='chamran-btn-info' id='" + project.PK + "'>مشاهده</button>" +
         "</div>";
     return show_project;
