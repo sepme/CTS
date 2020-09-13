@@ -296,7 +296,7 @@ class ResearchRecordForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['research_title'].required = False
         self.fields['researcher'].required = False
-        self.fields['co_researcher'].required = False
+        self.fields['liable'].required = False
 
     def clean_research_title(self):
         title = self.cleaned_data.get('research_title')
@@ -314,13 +314,13 @@ class ResearchRecordForm(forms.ModelForm):
             raise forms.ValidationError('نام مجری نمی تواند عدد باشد')
         return researcher
 
-    def clean_co_researcher(self):
-        co_researcher = self.cleaned_data.get('co_researcher')
-        if co_researcher == "":
+    def clean_liable(self):
+        liable = self.cleaned_data.get('liable')
+        if liable == "":
             raise forms.ValidationError('نام همکار نمی تواند خالی باشد')
-        if has_number(co_researcher):
+        if has_number(liable):
             raise forms.ValidationError('نام همکار نمی تواند عدد باشد')
-        return co_researcher
+        return liable
 
 
 class PaperRecordForm(forms.ModelForm):

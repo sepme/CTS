@@ -413,7 +413,11 @@
                                                             <tr class="row-research-{{ instance.pk }}">
                                                                 <td>{{ instance.research_title }}</td>
                                                                 <td>{{ instance.researcher }}</td>
-                                                                <td>{{ instance.co_researcher }}</td>
+                                                                {% if instance.liable == 'executor' %}
+                                                                    <td>مجری</td>
+                                                                {% else %}
+                                                                    <td>همکار</td>
+                                                                {% endif %}
                                                                 <td>
                                                                     {#                                                                    <i class='fas fa-pen' id='edit_exe'></i>#}
                                                                     <i class='fas fa-trash-alt delete_research'

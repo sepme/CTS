@@ -808,7 +808,7 @@ def showAllTechniques():
         'cellular_biology',
         'research_methodology',
     )
-    all_techniques = models.Technique.get_technique_list()
+    all_techniques = Technique.get_technique_list()
     data = {}
     for key in all_techniques.keys():
         if len(all_techniques[key]) != 0:
@@ -912,9 +912,9 @@ def ActiveProjcet(request, project, data):
     industryform = project.industry_creator.profile
     projectDate = [
         gregorian_to_numeric_jalali(project.date_start),
-        gregorian_to_numeric_jalali(project.date_project_started),
-        gregorian_to_numeric_jalali(project.date_phase_two_deadline),
-        gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+        # gregorian_to_numeric_jalali(project.date_project_started),
+        # gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+        # gregorian_to_numeric_jalali(project.date_phase_three_deadline),
         gregorian_to_numeric_jalali(project.date_finished),
     ]
     # data = {
@@ -1170,10 +1170,10 @@ def ActiveProject(request, project, data):
     industryform = project.industry_creator.profile
     data['projectForm'] = model_to_dict(project.project_form)
     projectDate = {
-        "start": gregorian_to_numeric_jalali(project.date_start),
+        # "start": gregorian_to_numeric_jalali(project.date_start),
         "firstPhase": gregorian_to_numeric_jalali(project.date_project_started),
-        "secondPhase": gregorian_to_numeric_jalali(project.date_phase_two_deadline),
-        "thirdPhase": gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+        # "secondPhase": gregorian_to_numeric_jalali(project.date_phase_two_deadline),
+        # "thirdPhase": gregorian_to_numeric_jalali(project.date_phase_three_deadline),
         "finished": gregorian_to_numeric_jalali(project.date_finished),
     }
     data['timeScheduling'] = projectDate

@@ -73,8 +73,8 @@ def project_progress(project_pk):
     if Project.objects.filter(id=project_pk).exists():
         project = Project.objects.get(id=project_pk)
         if project.is_date_valid():
-            total_days = (project.date_finished - project.date_start).total_seconds()
-            pass_days = (datetime.date.today() - project.date_start).total_seconds()
+            total_days = (project.date_finished - project.date_project_started).total_seconds()
+            pass_days = (datetime.date.today() - project.date_project_started).total_seconds()
             if total_days:
                 amount = 89 * pass_days / total_days
                 return str("{:.2f}".format(amount))
@@ -94,8 +94,8 @@ def date_to_percent(project_pk, phase, type):
                 date = project.date_phase_three_deadline
             else:
                 date = ""
-            total_days = (project.date_finished - project.date_start).total_seconds()
-            pass_days = (date - project.date_start).total_seconds()
+            total_days = (project.date_finished - project.date_project_started).total_seconds()
+            pass_days = (date - project.date_project_started).total_seconds()
             if total_days:
                 if type == "h":
                     return str(int((100 * pass_days / total_days) * 0.88 + 5))
@@ -119,8 +119,8 @@ def is_active(project_pk, phase):
                 date = project.date_finished
             else:
                 date = ""
-            pass_days_from_now = (datetime.date.today() - project.date_start).total_seconds()
-            pass_days = (date - project.date_start).total_seconds()
+            pass_days_from_now = (datetime.date.today() - project.date_project_started).total_seconds()
+            pass_days = (date - project.date_project_started).total_seconds()
             delta = pass_days - pass_days_from_now
             if delta > 0:
                 return ""

@@ -367,11 +367,16 @@ function show_research_record(id) {
         $(".research").html(table);
     }
 
+    let persian_liable = "";
+    if ($("#liable").val() == "executor")
+        persian_liable = "مجری";
+    else
+        persian_liable = "همکاری";
     let newRow = `
         <tr class="row-research-${id}">
             <td>${$("#subject").val()}</td>
             <td>${$("#admin").val()}</td>
-            <td>${$("#liable").val()}</td>
+            <td>${persian_liable}</td>
             <td>
                 <i class='fas fa-trash-alt delete_research'
                    value='${id}'></i>

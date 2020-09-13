@@ -23,7 +23,25 @@
                                 </div>
                                 <div class="form-group">
                                     <label for='liable'>مسئول اجرا/همکار</label>
-                                    {{ research_form.co_researcher|attr:"id:liable"|attr:"class:w-100" }}
+                                    {% comment %} {{ research_form.co_researcher|attr:"id:liable"|attr:"class:w-100" }} {% endcomment %}
+                                    {% if form.liable.errors %}
+                                        <select id="liable" class="error w-100" name="liable">
+                                    {% else %}
+                                        <select id="liable" name="liable" class="w-100">
+                                    {% endif %}
+                                    <option selected dir="rtl" disabled>انتخاب کنید ...</option>
+                                    {% for option in research_form.liable %}
+                                        {% if not forloop.first %}
+                                            {{ option }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </select>
+                                    {% comment %} <select id='rank' name="status">
+                                        <option selected dir='rtl'>انتخاب کنید ...</option>
+                                        <option value='1'>در دست اجرا</option>
+                                        <option value='2'>خاتمه یافته</option>
+                                        <option value='3'>متوقف</option>
+                                    </select> {% endcomment %}
                                 </div>
                                 <div class="form-group">
                                     <label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>

@@ -40,7 +40,7 @@ class ExpertUser(models.Model):
         ('inactivated', "غیر فعال - تویط مدیر سایت غیر فعال شده است."),
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
-    autoAddProject = models.BooleanField(verbose_name="اضافه شدن خودکار به پروژه", default=False)
+    autoAddProject = models.BooleanField(verbose_name="اضافه شدن خودکار به پروژه", default=True)
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
 
     class Meta:
@@ -228,15 +228,19 @@ class ResearchRecord(models.Model):
     )
     research_title = models.CharField(max_length=128, verbose_name="عنوان طرح")
     researcher = models.CharField(max_length=64, verbose_name="نام مجری")
-    co_researcher = models.CharField(max_length=512, verbose_name="همکار")
+    RESPONSIBLE_STATUS = (
+        ('co_researcher',"همکار"),
+        ("executor", "مجری")
+    )
+    liable = models.CharField(max_length=15, choices=RESPONSIBLE_STATUS, verbose_name="همکار", null=True)
     status = models.IntegerField(choices=STATUS_CHOICE, verbose_name="وضعیت")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
 class PaperRecord(models.Model):
-    research_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")
+    research_title = models.CharField(max_length=256, verbose_name="عنوان مقاله")
     date_published = models.CharField(max_length=15, verbose_name="تاریخ انتشار")
-    published_at = models.CharField(max_length=32, verbose_name="محل انتشار")
+    published_at = models.CharField(max_length=256, verbose_name="محل انتشار")
     impact_factor = models.FloatField(verbose_name="impact factor")
     citation = models.CharField(max_length=5, verbose_name="تعداد ارجاع")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")

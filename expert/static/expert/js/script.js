@@ -902,10 +902,15 @@ researchForm.submit(function (event) {
             researchForm.find("label").removeClass("progress-cursor");
             researchForm.closest(".fixed-back").find(".card").removeClass("wait");
             if (obj.co_researcher) {
+                let persian_liable = "";
+                if (obj.co_researcher == "executor")
+                    persian_liable = "مجری";
+                else
+                    persian_liable = "همکاری";
                 $("#liable").closest("div").append("<div class='error'>" +
                     "<span class='error-body'>" +
                     "<ul class='errorlist'>" +
-                    "<li>" + obj.co_researcher + "</li>" +
+                    "<li>" + persian_liable + "</li>" +
                     "</ul>" +
                     "</span>" +
                     "</div>");
