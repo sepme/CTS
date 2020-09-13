@@ -1262,49 +1262,95 @@ $(document).ready(function () {
                         }
                         source.push(item);
                     }
+
                     // initialize fancy tree
+                    function _svg(className, addClass) {
+                        let html = '';
+                        switch (className) {
+                            case "folder":
+                                html = '<svg class="bi bi-folder" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
+                                    '  <path d="M9.828 4a3 3 0 01-2.12-.879l-.83-.828A1 1 0 006.173 2H2.5a1 1 0 00-1 .981L1.546 4h-1L.5 3a2 2 0 012-2h3.672a2 2 0 011.414.586l.828.828A2 2 0 009.828 3v1z"/>\n' +
+                                    '  <path fill-rule="evenodd" d="M13.81 4H2.19a1 1 0 00-.996 1.09l.637 7a1 1 0 00.995.91h10.348a1 1 0 00.995-.91l.637-7A1 1 0 0013.81 4zM2.19 3A2 2 0 00.198 5.181l.637 7A2 2 0 002.826 14h10.348a2 2 0 001.991-1.819l.637-7A2 2 0 0013.81 3H2.19z" clip-rule="evenodd"/>\n' +
+                                    '</svg>';
+                                break;
+                            case "folderOpen":
+                                html = '<svg class="bi bi-folder-minus" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
+                                    '  <path fill-rule="evenodd" d="M9.828 4H2.19a1 1 0 00-.996 1.09l.637 7a1 1 0 00.995.91H9v1H2.826a2 2 0 01-1.991-1.819l-.637-7a1.99 1.99 0 01.342-1.31L.5 3a2 2 0 012-2h3.672a2 2 0 011.414.586l.828.828A2 2 0 009.828 3h3.982a2 2 0 011.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0013.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 011-.98h3.672a1 1 0 01.707.293z" clip-rule="evenodd"/>\n' +
+                                    '  <path fill-rule="evenodd" d="M11 11.5a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>\n' +
+                                    '</svg>';
+                                break;
+                            case "checkbox":
+                                html = '<svg class="bi bi-square" width="16px" height="16px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
+                                    '  <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>\n' +
+                                    '</svg>';
+                                break;
+                            case "checkboxSelected":
+                                html = '<svg class="bi bi-check-square" width="16px" height="16px" viewBox="0 0 16 16" fill="#3ccd1c" xmlns="http://www.w3.org/2000/svg">\n' +
+                                    '  <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>\n' +
+                                    '  <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>\n' +
+                                    '</svg>';
+                                break;
+                            case "checkboxUnknown":
+                                html = '<svg class="bi bi-dash-square" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
+                                    '  <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>\n' +
+                                    '  <path fill-rule="evenodd" d="M3.5 8a.5.5 0 01.5-.5h8a.5.5 0 010 1H4a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>\n' +
+                                    '</svg>';
+                                break;
+                            case "expanderClosed":
+                                html = '<svg class="bi bi-chevron-left" width="16px" height="16px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
+                                    '  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" clip-rule="evenodd"/>\n' +
+                                    '</svg>';
+                                break;
+                            case "expanderOpen":
+                                html = '<svg class="bi bi-chevron-down" width="16px" height="16px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
+                                    '  <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"/>\n' +
+                                    '</svg>';
+                                break;
+                            case "empty":
+                                break
+
+                        }
+                        return {html: html};
+                    }
+
                     projectSetting.find("#fancy-tree").off();
                     projectSetting.find("#fancy-tree").fancytree({
                         extensions: ["glyph"],
-                        checkbox: false,
-                        selectMode: 1,
+                        checkbox: true,
+                        selectMode: 2,
                         checkboxAutoHide: true,
                         clickFolderMode: 2,
+                        icon: false,
                         lazyLoad: function (event, data) {
                             // data.result = {url: "https://cdn.rawgit.com/mar10/fancytree/72e03685/demo/ajax-sub2.json"};
                         },
                         activate: function (event, data) {
-                            $('#tags').addTag(data.node.title);
+
                         },
                         select: function (event, data) {
-
+                            if (data.node.isSelected()) {
+                                if (!data.node.isFolder()) {
+                                    if ($('#tags_tagsinput').find(".tag span:contains(" + data.node.title + ")").length === 0) {
+                                        $('#tags').addTag(data.node.title);
+                                    }
+                                }
+                            } else {
+                                $('#tags').removeTag(data.node.title);
+                            }
                         },
                         source: source,
                         glyph: {
                             preset: "awesome5",
                             map: {
-                                _addClass: "",
-                                checkbox: "fas fa-square",
-                                checkboxSelected: "fas fa-check-square",
-                                checkboxUnknown: "fas fa-square",
-                                radio: "fas fa-circle",
-                                radioSelected: "fas fa-circle",
-                                radioUnknown: "fas fa-dot-circle",
-                                dragHelper: "fas fa-arrow-right",
-                                dropMarker: "fas fa-long-arrow-right",
-                                error: "fas fa-exclamation-triangle",
+                                checkbox: _svg("checkbox"),
+                                checkboxSelected: _svg("checkboxSelected"),
+                                checkboxUnknown: _svg("checkboxUnknown"),
                                 expanderClosed: "fas fa-chevron-left",
                                 expanderLazy: "fas fa-angle-right",
                                 expanderOpen: "fas fa-chevron-down",
-                                loading: "fas fa-spinner fa-pulse",
-                                nodata: "fas fa-meh",
-                                noExpander: "",
-                                // Default node icons.
-                                // (Use tree.options.icon callback to define custom icons based on node data)
-                                doc: "fas fa-screwdriver",
-                                docOpen: "fas fa-screwdriver",
-                                folder: "fas fa-folder",
-                                folderOpen: "fas fa-folder-open"
+                                doc: _svg("empty"),
+                                folder: _svg("folder"),
+                                folderOpen: _svg("folderOpen")
                             }
                         },
                     });
@@ -1342,6 +1388,12 @@ $(document).ready(function () {
                     // preview projectTechniques
                     for (let i = 0; i < data.projectTechniques.length; i++) {
                         $('#tags').addTag(data.projectTechniques[i]);
+                        let tree = $("#fancy-tree").fancytree("getTree");
+                        let node = tree.findFirst(data.projectTechniques[i]);
+                        if (node) {
+                            node.setSelected();
+                            node.getParent().setExpanded();
+                        }
                     }
                 },
             });

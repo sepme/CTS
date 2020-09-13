@@ -2503,6 +2503,17 @@ span.fancytree-active span.fancytree-title {
     list-style: none;
 }
 
+span.fancytree-node.fancytree-folder {
+    margin-top: 5px;
+    display: inline-block;
+}
+
+.fancytree-selected {
+    color: #3ccd1c;
+    background-color: #f7fdf8;
+    border-radius: 0.25em;
+}
+
 /* show Project style*/
 .establish-time, .time-left {
     width: fit-content;

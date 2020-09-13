@@ -157,15 +157,17 @@
                                                             </div>
                                                         {% endfor %}
                                                     </div>
-                                                    <div class="col-12">
-                                                        <div class="pre-header">
-                                                            <span>بودجه</span>
+                                                    {% if budget_amount %}
+                                                        <div class="col-12">
+                                                            <div class="pre-header">
+                                                                <span>بودجه</span>
+                                                            </div>
+                                                            <div id="budget-content">
+                                                                <span class="budget-amount">{{ budget_amount }}</span>
+                                                                <span>ریال</span>
+                                                            </div>
                                                         </div>
-                                                        <div id="budget-content">
-                                                            <span class="budget-amount">{{ budget_amount }}</span>
-                                                            <span>ریال</span>
-                                                        </div>
-                                                    </div>
+                                                    {% endif %}
                                                 </div>
                                                 {% if executive_info %}
                                                     <div class="row">

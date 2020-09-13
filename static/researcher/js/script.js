@@ -1303,7 +1303,7 @@ function setComment(data) {
                                 </div>
                             </div>
             `;
-        } else if (data[i].sender_type === "expert") { //expert
+        } else if (data[i].sender_type === "expert" || data[i].sender_type === "industry") { //expert
             let comment_body_classes = "comment-body";
             if (data[i].attachment !== "None") {
                 comment_body_classes += " attached";
