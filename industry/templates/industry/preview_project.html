@@ -135,18 +135,10 @@
                                 <div class="col-lg-12 text-right">
                                     <span class="section-title">مشخصات پروژه</span>
                                     <div class="section">
-                                        <div class="row mbottom-lg-25">
-                                            <div class="col-md-8">
+                                        <div class="row mbottom-lg-25 flex-column-reverse flex-md-row">
+                                            <div class="col-md-9">
                                                 <div class="row m-top-10">
-                                                    <div class="col-md-6">
-                                                        <div class="pre-header">
-                                                            <span>کارفرما</span>
-                                                        </div>
-                                                        <div id="industry-name">
-                                                            {{ industry_name }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         <div class="pre-header">
                                                             <span>مجری</span>
                                                         </div>
@@ -165,7 +157,7 @@
                                                             </div>
                                                         {% endfor %}
                                                     </div>
-                                                    <div class="col-12 budget-text">
+                                                    <div class="col-12">
                                                         <div class="pre-header">
                                                             <span>بودجه</span>
                                                         </div>
@@ -186,8 +178,8 @@
                                                     </div>
                                                 {% endif %}
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="industry-logo-preview text-left">
+                                            <div class="col-md-3">
+                                                <div class="industry-logo-preview text-left mt-4">
                                                     {% if industry_logo %}
                                                         <img id="industry_logo"
                                                              src="{{ industry_logo }}"
@@ -198,15 +190,32 @@
                                                              alt="industry-logo" width="150px" height="150px">
                                                     {% endif %}
                                                 </div>
-                                                <div class="budget-section">
-                                                    <div class="budget">
-                                                        <div class="budget-header">بودجه</div>
-                                                        <div class="budget-content">
-                                                            <div class="budget-amount">{{ budget_amount }}</div>
-                                                            <div>ریال</div>
-                                                        </div>
+                                                <div class="text-center">
+                                                    <div class="pre-header">
+                                                        <span>کارفرما</span>
                                                     </div>
+                                                    <div>{{ industry_name }}</div>
                                                 </div>
+                                                <div class="text-center mt-3">
+                                                    <a href="#" class="p-telegram-link rounded-circle rounded-icon">
+                                                        <i class="fab fa-telegram-plane" style="font-size: 20px"></i>
+                                                    </a>
+                                                    <a href="#" class="p-end_note-link rounded-circle rounded-icon">
+                                                        <span>EN</span>
+                                                    </a>
+                                                    <a href="#" class="p-proposal-link rounded-circle rounded-icon">
+                                                        <i class="fas fa-file-pdf" style="font-size: 18px"></i>
+                                                    </a>
+                                                </div>
+                                                {#                                                <div class="budget-section">#}
+                                                {#                                                    <div class="budget">#}
+                                                {#                                                        <div class="budget-header">بودجه</div>#}
+                                                {#                                                        <div class="budget-content">#}
+                                                {#                                                            <div class="budget-amount">{{ budget_amount }}</div>#}
+                                                {#                                                            <div>ریال</div>#}
+                                                {#                                                        </div>#}
+                                                {#                                                    </div>#}
+                                                {#                                                </div>#}
                                             </div>
                                         </div>
                                         <div class="row mbottom-lg-25">

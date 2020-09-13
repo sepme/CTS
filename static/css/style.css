@@ -5416,12 +5416,14 @@ nav[aria-label="breadcrumb"] ol {
 }
 
 .industry-logo-preview > img {
-    height: 120px;
-    width: 120px;
-    min-height: 120px;
-    min-width: 120px;
+    height: 150px;
+    width: 150px;
+    min-height: 150px;
+    min-width: 150px;
     border-radius: 5px;
     border: 1px solid #bdbdbd;
+    margin: auto;
+    display: block;
 }
 
 @media (max-width: 1200px) and  (min-width: 992px) {
@@ -6503,4 +6505,44 @@ table .fas.fa-trash-alt:hover {
 
 .file-upload-min-value:hover {
     cursor: pointer;
+}
+
+.rounded-icon {
+    background-color: #bdbdbd;
+    color: #ffffff;
+    padding: 10px;
+    width: 40px;
+    display: inline-block;
+    height: 40px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.rounded-icon > * {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.rounded-icon:hover {
+    text-decoration: none;
+    color: #ffffff;
+    box-shadow: none !important;
+}
+
+.rounded-icon.p-end_note-link {
+    background-color: #6e2fc5;
+    font-weight: 500;
+    box-shadow: 0 5px 15px rgba(110, 47, 197, .34);
+}
+
+.rounded-icon.p-telegram-link {
+    background-color: #32a5e0;
+    box-shadow: 0 5px 15px rgba(50, 165, 224, .34);
+}
+
+.rounded-icon.p-proposal-link {
+    background-color: #ee881e;
+    box-shadow: 0 5px 15px rgba(238, 131, 30, .34);
 }
