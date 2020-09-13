@@ -1197,6 +1197,18 @@ $(document).ready(function () {
 
     // initial utils for Project Setting Modal
     if ($('#projectSetting').length) {
+
+        let fileInput = $(".file-upload-min").closest(".form-group").find("input");
+        fileInput.on("change", function () {
+            let fileName = $(this).val().split("\\").pop();
+            let label = $(this).closest(".form-group").find(".file-upload-min");
+            if ($(this).val() !== "") {
+                label.find(".file-upload-min-value").text(fileName);
+            } else {
+                label.find(".file-upload-min-value").text("برای بارگذاری فایل کلیک کنید!");
+            }
+        })
+
         // initial selected techniques tagInput
         $('#projectSetting #tags').tagsInput({
             'height': '100%',
