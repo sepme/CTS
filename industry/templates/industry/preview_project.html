@@ -10,11 +10,138 @@
     {% if reseacherRequestAbility %}
         {% include 'industry/layouts/researcher_request.html' with form=researcherRequestFrom %}
     {% endif %}
+    
+    <div class="modal fade" id="addTask" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="addTaskLabel">
+                    افزودن تسک
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="add-task-ajax" method="post" action="">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="container text-right">
+                        <div class="row">
+                            <label>
+                                <input type="text" class="project"
+                                       name="project_id"
+                                       value="{{ project_pk }}"
+                                       hidden>
+                            </label>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="id_task_title">عنوان</label>
+                                    <textarea class="form-control" id="id_task_title" rows="2"></textarea>
+                                </div>
+                                <div class="ct-task-option d-flex">
+                                    <div class="ct-task-due ct-option-btn">
+                                        <button id="id_task_due" type="button" class=""
+                                            data-toggle="datetimepicker" data-target="#id_card_deadline">
+                                                <svg width="1em" height="1em"
+                                                    viewBox="0 0 16 16" class="bi bi-clock"
+                                                    fill="currentColor"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                <path fill-rule="evenodd"
+                                                    d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="ct-task-assignee ct-option-btn">
+                                        <button>
+                                            <svg width="1em" height="1em"
+                                                viewBox="0 0 16 16"
+                                                class="bi bi-person-plus"
+                                                fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="ct-task-delete ct-option-btn d-none">
+                                        <button>
+                                            <svg width="1em" height="1em"
+                                                viewBox="0 0 16 16" class="bi bi-trash"
+                                                fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                                <path fill-rule="evenodd"
+                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="accept-project">
+                        ثبت
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <div class="modal fade" id="addDeadline" tabindex="-1" role="dialog" aria-labelledby="addDeadlineLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-right" id="addDeadlineLabel">
+                    افزودن ددلاین
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="add-card-ajax" method="post" action="">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="container text-right">
+                        <div class="row">
+                            <label>
+                                <input type="text" class="project"
+                                       name="project_id"
+                                       value="{{ project_pk }}"
+                                       hidden>
+                            </label>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="id_card_title">عنوان</label>
+                                    <input type="text" class="form-control" id="id_card_title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="id_card_deadline">مهلت</label>
+                                    <input id="id_card_deadline" type="text" class="form-control datetimepicker-input" name="id_card_deadline"
+                                       data-toggle="datetimepicker" data-target="#id_card_deadline">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="accept-project">
+                        ثبت
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block name %}{{ request.user.industryuser.profile }}{% endblock %}
 
 {% block style %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
     <style type="text/css">
         {#@media (min-width: 768px) and (max-width: 992px) {#}
         {#    .project-progress .line-100:after {#}
@@ -79,7 +206,15 @@
                         </div>
                     </div>
                     <div class="row" style="direction: ltr!important">
-                        <div class="d-none d-lg-block col-lg-4 col-xs-3">
+                        <div class="d-none d-lg-block col-lg-4 col-xs-3 mt-3">
+                            <span class="section-title">تایم لاین پروژه</span>
+                            <button type="button"
+                                class="border-button section-button"
+                                data-toggle="modal"
+                                data-target="#addDeadline">
+                                    افزودن ددلاین
+                            </button>
+                            <div class="section overflow-auto" style="height:calc(100% - 30px);">
                             {% if not project.is_date_valid %}
                                 <div class="project-progress-no-access">این قسمت در دسترس نیست!</div>
                             {% endif %}
@@ -94,33 +229,10 @@
                                         شروع پروژه
                                     </span>
                                 </div>
-                                <div class="step-container {% is_active project_pk=project_pk phase=1 %}">
-                                    <span class="step-date">
-                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>
-                                    </span>
-                                    <span class="step-name">جمع آوری داده</span>
-                                </div>
-                                <div class="step-container {% is_active project_pk=project_pk phase=2 %}">
-                                    <span class="step-date">
-                                        <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
-                                    </span>
-                                    <span class="step-name">تحلیل داده ها</span>
-                                </div>
-                                <div class="step-container {% is_active project_pk=project_pk phase=3 %}">
-                                    <span class="step-date">
-                                        <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
-                                    </span>
-                                    <span class="step-name">سابمیت مقاله</span>
-                                </div>
-                                <div class="step-container {% is_active project_pk=project_pk phase=4 %}">
-                                    <span class="step-date">
-                                        <div class="date_finished">{{ timeScheduling.finished }}</div>
-                                    </span>
-                                    <span class="step-name">اتمام پروژه</span>
-                                </div>
                                 <div class="line-100">
                                     <div class="arrow"></div>
                                 </div>
+                            </div>
                             </div>
                             <hr class="vertical-line">
                         </div>
@@ -136,7 +248,7 @@
                                     <span class="section-title">مشخصات پروژه</span>
                                     <div class="section">
                                         <div class="row mbottom-lg-25 flex-column-reverse flex-md-row">
-                                            <div class="col-md-9">
+                                            <div class="col-md-8 col-lg-9">
                                                 <div class="row m-top-10">
                                                     <div class="col-md-12">
                                                         <div class="pre-header">
@@ -180,7 +292,7 @@
                                                     </div>
                                                 {% endif %}
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4 col-lg-3">
                                                 <div class="industry-logo-preview text-left mt-4">
                                                     {% if industry_logo %}
                                                         <img id="industry_logo"
@@ -223,6 +335,12 @@
                                         <div class="row mbottom-lg-25">
                                             <div class="d-block d-lg-none col">
                                                 <span class="section-title">تایم لاین پروژه</span>
+                                                <button type="button"
+                                                    class="border-button section-button"
+                                                    data-toggle="modal"
+                                                    data-target="#addDeadline">
+                                                        افزودن ددلاین
+                                                </button>
                                                 <div class="section w-100 overflow-auto">
                                                     {% if not project.is_date_valid %}
                                                         <div class="project-progress-no-access">این قسمت در دسترس نیست!
@@ -276,7 +394,7 @@
                                                 <button type="button"
                                                         class="border-button section-button"
                                                         data-toggle="modal"
-                                                        data-target="#">
+                                                        data-target="#addTask">
                                                     افزودن تسک
                                                 </button>
                                                 <div class="section">
@@ -303,8 +421,8 @@
                                                             </div>
                                                             <div class="ct-checklist-item__detail">
                                                                 <div class="ct-checklist__text">
-                                                                    <span class="atMention me" title="Reza Basereh">@reza_basereh</span>
-                                                                    دکمه «بستن پاسخ»؛ موقعی که پاسخی هنوز نیست، نباشه
+                                                                    <span class="atMention me" title="Reza Mottaghi">@reza_mottaghi</span>
+                                                                    استخراج داده های آزمایشگاهی بیماران 101 تا 150
                                                                 </div>
                                                                 <div class="ct-checklist-item__control d-flex">
                                                                     <div class="ct-checklist-item-due">
@@ -700,6 +818,19 @@
                     items: 3
                 }
             }
+        });
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="{% static 'js/fa.js' %}"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#id_card_deadline, #id_task_due').datetimepicker({
+                locale: 'fa',
+                format: 'YYYY/MM/DD',
+                showToday: true,
+            });
         });
     </script>
 {% endblock %}

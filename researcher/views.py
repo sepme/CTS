@@ -119,7 +119,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             temp = {
                 'project_title': project["project"].project_form.persian_title,
                 'keyword': project["project"].project_form.key_words.all(),
-                'started': date_last(datetime.date.today(), project["project"].date_start),
+                'started': date_last(datetime.date.today(), project["project"].date_project_started),
                 'finished': date_last(datetime.date.today(), project["project"].date_finished),
                 'need_hour': project["project"].requestresearcher.least_hour,
                 'missedTechinque': project["missedTechnique"],
