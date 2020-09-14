@@ -135,10 +135,8 @@ def ActiveProject(request, project, data):
         if expert.expertform.photo:
             expertData['photo'] = expert.expertform.photo.url
         data['enforcers'].append(expertData)
-    # data['enforcer_name'] = str(project.expert_accepted.expertform)
-    # data['enforcer_id'] = project.expert_accepted.pk
     data["executive_info"] = project.executive_info
-    data["budget_amount"] = project.project_form.required_budget
+    # data["budget_amount"] = project.project_form.required_budget
 
     data['comments'] = []
     for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
@@ -623,7 +621,12 @@ def ProjectSetting(request):
             "techniques": showAllTechniques(),
             "projectTechniques": [],
             "requestResearcher": project.reseacherRequestAbility,
+            "telegram_group": project.telegram_group,
         }
+        if project.end_note:
+            data['end_note'] = project.end_note.url
+        if project.proposal:
+            data['proposal'] = project.proposal.url
         for tech in project.project_form.techniques.all():
             data['projectTechniques'].append(tech.technique_title)
         data['acceptedExpert'] = []
@@ -655,24 +658,20 @@ def ProjectSetting(request):
             data['suggestedExpert'].append(expertData)
         return JsonResponse(data=data)
     elif request.method == "POST":
-        print(request.POST)
         expert_ids = request.POST.getlist('expert_ids')
-        # expertId = request.POST['uuid']
-        # if len(expert_ids) == 0:
-        #     return JsonResponse({
-        #         'expertId': 'استاد نمی تواند خالی باشد.',
-        #     }, status=400)
         technique_list = request.POST.getlist('technique')
-        # if len(technique_list) == 0:
-        #     return JsonResponse({
-        #         'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
-        #     }, status=400)
         project = models.Project.objects.get(id=request.POST['id'])
         projectform = project.project_form
         if 'requestResearcher' in request.POST.keys():
             project.reseacherRequestAbility = request.POST['requestResearcher']
         else:
             project.reseacherRequestAbility = False
+        if 'telegram_group' in request.POST.keys():
+            project.telegram_group = request.POST['telegram_group']
+        if 'end_note' in request.FILES.keys():
+            project.end_note = request.FILES['end_note']
+        if 'proposal' in request.FILES.keys():
+            project.proposal = request.FILES['proposal']
         if len(technique_list) != 0:
             projectform.techniques.clear()
             for technique in technique_list:
@@ -767,6 +766,12 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         context = super().get_context_data(**kwargs)
         project = get_object_or_404(models.Project, code=kwargs["code"])
         context = ActiveProject(request=self.request, project=project, data=context)
+        context['telegram_group'] = project.telegram_group
+        if project.end_note:
+            context['end_note'] = project.end_note.url
+        
+        if project.proposal:
+            context['proposal'] = project.proposal.url
         context['researcher_accepted'] = []
         for researcher in project.researcher_accepted.all():
             researcher = {

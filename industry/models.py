@@ -286,6 +286,7 @@ class ProjectForm(models.Model):
     #         expert=self.project.expert_accepted).first()
     #     return expert_requested.required_technique.all()
 
+
 class ResearchProjectForm(models.Model):
     #General Specification
     key_words = models.ManyToManyField(Keyword, verbose_name="کلمات کلیدی")
@@ -329,6 +330,8 @@ class ResearchProjectForm(models.Model):
         return self.english_title
 
 
+def projectFiles(instance, file_name):
+    return os.path.join(str(instance))
 
 class Project(models.Model):
     form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه", null=True, blank=True)
@@ -375,6 +378,9 @@ class Project(models.Model):
                                            related_name="expert_banned", blank=True)
     executive_info = models.TextField(verbose_name="توضیحات اجرایی", null=True, blank=True)
     reseacherRequestAbility = models.BooleanField(verbose_name="قابلیت درخواست پژوهشگر", default=True, null=True)
+    telegram_group = models.CharField(verbose_name="لینک تلگرام", max_length=256, null=True, blank=True)
+    end_note = models.FileField(verbose_name="فایل endNote", upload_to=projectFiles, max_length=128, null=True, blank=True)
+    proposal = models.FileField(verbose_name="فایل پروپوزال", upload_to=projectFiles, max_length=128, null=True, blank=True)
 
     class Meta:
         ordering = ['-date_submitted_by_industry']
@@ -420,6 +426,41 @@ class Project(models.Model):
             return self.form
         else:
             return self.research_project_form
+
+    @property
+    def involved_user(self):
+        expertUsers = []
+        for expert in self.expert_accepted.all():
+            expertInfo = {
+                "username": expert.userId,
+                "fullname": expert.expertform.fullname
+            }
+            if expert.expertform.photo:
+                expertInfo["photo"] = expert.expertform.photo.url
+            expertUsers.append(expertInfo)
+        
+        researcherUsers = []
+        for researcher in self.researcher_accepted.all():
+            researcherInfo = {
+                "username": researcher.userId,
+                "fullname": researcher.researcherprofile.fullname
+            }
+            if researcher.researcherprofile.photo:
+                researcherInfo["photo"] = researcher.researcherprofile.photo.url
+            researcherUsers.append(researcherInfo)
+
+        industryInfo = {
+            "username" : self.industry_creator.userId,
+            "fullname" : self.industry_creator.profile.name
+        }
+        if self.industry_creator.profile.photo:
+            industryInfo['photo'] = self.industry_creator.profile.photo.url
+        data = {
+            "expertUsers": expertUsers,
+            "researcherUsers": researcherUsers,
+            "industryUser": industryInfo
+        }
+        return data
 
     def is_date_valid(self):
         return True

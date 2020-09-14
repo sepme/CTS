@@ -536,7 +536,6 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
-            console.log(data);
             if (data.accepted) {
                 $(".accept-request").hide();
                 $(".accept-request").prop('disabled', true);
@@ -1451,7 +1450,7 @@ $(document).ready(function () {
         //## submitting project setting form
         projectSettingForm.submit(function (event) {
             event.preventDefault();
-            let data = [];
+            let techs = [];
             let id = $(this).attr("id");
             let expertIds = [];
             let applicationDeadline = $("#ApplicationDeadline").val();
@@ -1459,14 +1458,25 @@ $(document).ready(function () {
                 expertIds.push($(this).attr("id"));
             });
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
-                data[index] = $(this).find("span").text();
+                techs[index] = $(this).find("span").text();
             });
             console.log(expertIds);
-            $.ajax({
+            let formData = new FormData();
+            var files = $('#proposalFile')[0].files[0];
+            formData.append('proposalFile',files);
+            
+            var endNote = $('#endNoteFile')[0].files[0];
+            formData.append('endNoteFile',endNote);
+            let data = {technique: techs,
+                        id: id,
+                        expert_ids: expertIds,
+                        researcherRequestDeadline: applicationDeadline,
+                        requestResearcher: $("#autoAddProject").val() }
+            $.ajax({ 
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('action'),
-                data: {technique: data, id: id, expert_ids: expertIds, researcherRequestDeadline: applicationDeadline},
+                data: data,
                 dataType: 'json',
                 success: function (data) {
                     iziToast.success({
@@ -1475,7 +1485,7 @@ $(document).ready(function () {
                         position: 'bottomLeft',
                     });
                     $('#projectSetting').modal('hide');
-                    setTimeout(location.reload.bind(location), 1500);
+                    setTimeout(location.reload.bind(location), 15000);
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);

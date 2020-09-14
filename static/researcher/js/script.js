@@ -247,7 +247,7 @@ function setProcedure(data) {
     $(".project-info-content").html(procedure);
 }
 
-function setProblemStatement(data, status) {
+function setProblemStatement(data) {
     let problemStatement = `<div>
                                 <div class='question'>
                                     <span class='question-mark'>
@@ -277,7 +277,7 @@ function setProblemStatement(data, status) {
                                 </div>
                                 <div class='answer'>${data.research_history}</div>
                             </div>`;
-    $(".project-info-content" + status).html(problemStatement);
+    $(".project-info-content").html(problemStatement);
 }
 
 function setValue(data) {

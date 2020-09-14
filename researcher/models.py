@@ -49,12 +49,16 @@ def get_resumeFile_path(instance, filename):
     return os.path.join('resume', folder_name, filename)
 
 def addResearchTechniques(researcher, evaluator):
-    researchTechniques = Technique.objects.filter(technique_type='research_methodology')
-    for tech in researchTechniques:
-        techniqueInstance = TechniqueInstance.objects.get_or_create(researcher=researcher
-                                                            ,technique=tech
-                                                            ,level="A"
-                                                            ,evaluator=evaluator)
+    searching_technique = Technique.objects.get(technique_title='Searching')
+    techniqueInstance = TechniqueInstance.objects.get_or_create(researcher=researcher
+                                                        ,technique=searching_technique
+                                                        ,level="A"
+                                                        ,evaluator=evaluator)
+    Ref_technique = Technique.objects.get(technique_title='Reference Management (Endnote/Mendeley/...)')
+    techniqueInstance = TechniqueInstance.objects.get_or_create(researcher=researcher
+                                                        ,technique=Ref_technique
+                                                        ,level="A"
+                                                        ,evaluator=evaluator)
     return
 
 class ResearcherUser(models.Model):

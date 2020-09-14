@@ -394,25 +394,29 @@
                                                                     </span>
                                                                     خلاصه ضرورت اجرا
                                                                 </div>
-                                                                <div class="answer">{{ projectForm.main_problem_and_importance }}</div>
+                                                                <div class="answer">{{ projectForm.summary_of_necessity }}</div>
                                                             </div>
                                                             <div>
-                                                                <div class="question">
-                                                                    <span class="question-mark">
-                                                                        <i class="far fa-question-circle"></i>
-                                                                    </span>
-                                                                    مشروح بیان مساله و ضرورت اجرا
-                                                                </div>
-                                                                <div class="answer">{{ projectForm.progress_profitability }}</div>
+                                                                {% if projectForm.necessity_expression %}
+                                                                    <div class="question">
+                                                                        <span class="question-mark">
+                                                                            <i class="far fa-question-circle"></i>
+                                                                        </span>
+                                                                        مشروح بیان مساله و ضرورت اجرا
+                                                                    </div>
+                                                                    <div class="answer">{{ projectForm.necessity_expression }}</div>
+                                                                {% endif %}
                                                             </div>
                                                             <div>
-                                                                <div class="question">
-                                                                    <span class="question-mark">
-                                                                        <i class="far fa-question-circle"></i>
-                                                                    </span>
-                                                                    سابقه طرح و بررسی متون
-                                                                </div>
-                                                                <div class="answer">{{ project.project_form.predict_profit }}</div>
+                                                                {% if projectForm.research_history %}
+                                                                    <div class="question">
+                                                                        <span class="question-mark">
+                                                                            <i class="far fa-question-circle"></i>
+                                                                        </span>
+                                                                        سابقه طرح و بررسی متون
+                                                                    </div>
+                                                                    <div class="answer">{{ projectForm.research_history }}</div>
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -513,127 +517,145 @@
     <script type="text/javascript">
         $("#v-pills-roles-tab").click(function () {
             let policy = "{{ projectForm.policy|escapejs }}";
-            let role = `<div>
-                    <div class="question">
-                        <span class="question-mark"><i class='far fa-question-circle'></i></span>
-                        <span>
-                            ملاحظات اخلاقی
-                        </span>
-                        <div class='answer'></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="question">
-                        <span class="question-mark"><i class='far fa-question-circle'></i></span>
-                        <span>
-                            محدودیت های اجرایی طرح و روش کاهش آن ها
-                        </span>
-                        <div class='answer'></div>
-                    </div>
-                </div>`;
+            let executive_restrictions = "{{executive_restrictions |escapejs}}"
+            let role = "";
+            if (policy)
+                role += `<div>
+                            <div class="question">
+                                <span class="question-mark"><i class='far fa-question-circle'></i></span>
+                                <span>
+                                    ملاحظات اخلاقی
+                                </span>
+                                <div class='answer'>${policy}</div>
+                            </div>
+                        </div>`;
+            if (executive_restrictions)
+                role+= `<div>
+                            <div class="question">
+                                <span class="question-mark"><i class='far fa-question-circle'></i></span>
+                                <span>
+                                    محدودیت های اجرایی طرح و روش کاهش آن ها
+                                </span>
+                                <div class='answer'>${executive_restrictions}</div>
+                            </div>
+                        </div>`;
             $(".project-info-content").html(role);
             $('*').persiaNumber();
         });
         $("#v-pills-resources-tab").click(function () {
-            let required_lab_equipment = "{{ projectForm.required_lab_equipment|escapejs }}";
-            let required_method = "{{ projectForm.required_method|escapejs }}";
-            let project_phase = "{{ projectForm.project_phase|escapejs }}";
-            let required_budget = numbersComma("{{ projectForm.required_budget }}");
-            let goal = `<div>
-                    <div class='question'>
-                        <span class='question-mark'>
-                            <i class='far fa-question-circle'></i>
-                        </span>
-اهداف اصلی
-                    </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+            let main_goal = "{{ projectForm.main_goal|escapejs }}";
+            let secondary_goal = "{{ projectForm.secondary_goal|escapejs }}";
+            let practical_goal = "{{ projectForm.practical_goal|escapejs }}";
+            let research_question = "{{ projectForm.research_question|escapejs }}";
+            let reseach_assumptions = "{{ reseach_assumptions|escapejs}}"
+            let goal = "";
+            if (main_goal)
+                goal +=`<div>
+                            <div class='question'>
+                                <span class='question-mark'>
+                                    <i class='far fa-question-circle'></i>
+                                </span>
+        اهداف اصلی
+                            </div>
+                            <div class='answer'>${main_goal}</div>
+                        </div>`;
+        if (secondary_goal)
+            goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>
 اهداف فرعی
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${secondary_goal}</div>
+                </div>`;
+    if (practical_goal)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>
 اهداف کاربردی
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${practical_goal}</div>
+                </div>`;
+    if (research_question)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>
 سوالات پژوهش
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${research_question}</div>
+                </div>`;
+    if (reseach_assumptions)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>
 فرضیات پژوهش
                     </div>
-                    <div class='answer'></div>
+                    <div class='answer'>${reseach_assumptions}</div>
                 </div>
                 `;
             $(".project-info-content").html(goal);
             $('*').persiaNumber();
         });
         $("#v-pills-approaches-tab").click(function () {
-            let approach_ans = "{{ projectForm.approach|escapejs }}";
-            let potential_problems = "{{ projectForm.potential_problems|escapejs }}";
+            let summary_method = "{{ projectForm.summary_method|escapejs }}";
+            console.log(summary_method);
+            let required_equipment = "{{ projectForm.required_equipment|escapejs }}";
+            let sample_count_method = "{{ projectForm.sample_count_method|escapejs }}";
+            let analyse_method = "{{ projectForm.analyse_method|escapejs }}";
             let procedure = `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>
-خلاصه ضرورت اجرا
+خلاصه روش اجرا
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
-                        <div class='question'>
-                            <span class='question-mark'>
-                                <i class='far fa-question-circle'></i>
-                            </span>
-مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن
-                        </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${summary_method}</div>
+                     </div>`;
+        if (required_equipment)
+            procedure +=`<div>
+                            <div class='question'>
+                                <span class='question-mark'>
+                                    <i class='far fa-question-circle'></i>
+                                </span>
+    مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن
+                            </div>
+                            <div class='answer'>${required_equipment}</div>
+                        </div>`;
+        if (sample_count_method)
+            procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>
 روش محاسبه حجم نمونه و تعداد آن
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${sample_count_method}</div>
+                     </div>`;
+        if (analyse_method)
+            procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>
 روش تجزیه و تحلیل داده ها
                         </div>
-                        <div class='answer'></div>
+                        <div class='answer'>${analyse_method}</div>
                      </div>
                         `;
             $(".project-info-content").html(procedure);
             $('*').persiaNumber();
         });
         $("#v-pills-majors-tab").click(function () {
-            let main_problem_and_importance = "{{ projectForm.main_problem_and_importance|escapejs }}";
-            let progress_profitability = "{{ projectForm.progress_profitability|escapejs }}";
+            let summary_of_necessity = "{{ projectForm.summary_of_necessity|escapejs }}";
+            let necessity_expression = "{{ projectForm.necessity_expression|escapejs }}";
+            let research_history = "{{ projectForm.research_history|escapejs }}";
             let problemStatement = `<div>
                                 <div class='question'>
                                     <span class='question-mark'>
@@ -641,25 +663,27 @@
                                     </span>
 خلاصه ضرورت اجرا
                                 </div>
-                                <div class='answer'></div>
-                            </div>
-                            <div>
-                                <div class='question'>
-                                    <span class='question-mark'>
-                                        <i class='far fa-question-circle'></i>
-                                    </span>
-مشروح بیان مسئله و ضرورت اجرا
-                                </div>
-                                <div class='answer'></div>
-                            </div>
-                            <div>
-                                <div class='question'>
+                                <div class='answer'>${summary_of_necessity}</div>
+                            </div>`;
+            if (necessity_expression)
+                problemStatement +=`<div>
+                                        <div class='question'>
+                                            <span class='question-mark'>
+                                                <i class='far fa-question-circle'></i>
+                                            </span>
+        مشروح بیان مسئله و ضرورت اجرا
+                                        </div>
+                                        <div class='answer'>${necessity_expression}</div>
+                                    </div>
+                            <div>`;
+            if (research_history)
+                problemStatement += `<div class='question'>
                                     <span class='question-mark'>
                                         <i class='far fa-question-circle'></i>
                                     </span>
 سابقه طرح و بررسی متون
                                 </div>
-                                <div class='answer'></div>
+                                <div class='answer'>${research_history}</div>
                             </div>`;
             $(".project-info-content").html(problemStatement);
             $('*').persiaNumber();
