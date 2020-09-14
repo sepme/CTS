@@ -649,6 +649,99 @@ $(document).ready(function () {
                 $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
             }
         });
+        
+        taskList.find(".ct-checklist-item-delete").click(function () {
+            $(this).closest(".ct-checklist__item").remove();
+        });
+        
+        let addTaskForm = $("form#add-task-ajax");
+        addTaskForm.submit(function(event) {
+            event.preventDefault();
+            
+            let title = addTaskForm.find("#id_task_title").val();
+            let pk = taskList.find(".ct-checklist__item").length + 1;
+
+            let task = `<div class="ct-checklist__item d-flex">
+                                                            <div class="ct-checklist-item__checkbox">
+                                                                <div class="form-group form-check">
+                                                                    <input type="checkbox"
+                                                                           class="form-check-input inp-cbx"
+                                                                           id="checkList#${pk}"
+                                                                           name="requestResearcher" value=1 hidden>
+                                                                    <label class="form-check-label cbx mb-0"
+                                                                           for="checkList#${pk}">
+                                                                        <span>
+                                                                            <svg class="inline-svg bi bi-check2"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+                                                                            </svg>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ct-checklist-item__detail">
+                                                                <div class="ct-checklist__text">${title}</div>
+                                                                <div class="ct-checklist-item__control d-flex">
+                                                                    <div class="ct-checklist-item-due">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16" class="bi bi-clock"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="ct-checklist-item-assignee">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 class="bi bi-person-plus"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="ct-checklist-item-delete">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16" class="bi bi-trash"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>`;
+            taskList.append(task);
+            
+            taskList.find(".ct-checklist__item:last-child .ct-checklist-item__checkbox input[type='checkbox']").click(function () {
+                if ($(this).is(":checked")) {
+                    let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
+                    $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`<del>${text}</del>`);
+                } else {
+                    let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text del").html();
+                    $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
+                }
+            });
+            
+            taskList.find(".ct-checklist__item:last-child .ct-checklist-item-delete").click(function () {
+                $(this).closest(".ct-checklist__item").remove();
+            });
+            $("#addTask").modal("hide");
+        });
+        
     }
     //****************************************//
     //  End Task Bar
@@ -666,6 +759,25 @@ $(document).ready(function () {
     //  End New Project
     //****************************************//
 
+
+    let addDeadlineForm = $("form#add-card-ajax");
+    if(addDeadlineForm.length) {
+        addDeadlineForm.submit(function(event) {
+            event.preventDefault();
+            let title = addDeadlineForm.find("#id_card_title").val();
+            let due = addDeadlineForm.find("#id_card_deadline").val();
+            let progressItem = `<div class="step-container">
+                                    <span class="step-date">
+                                        <div class="second_phase">${due}</div>
+                                    </span>
+                                    <span class="step-name">${title}</span>
+                                </div>`;
+            $(progressItem).insertBefore('.project-progress .line-100');
+            $("#addDeadline").modal("hide");
+        });
+    }
+    
+    
     function selecting_expert(element) {
         element.on("keyup", function () {
             const thisElement = $(this);
@@ -1229,7 +1341,7 @@ $(document).ready(function () {
 
     // initial utils for Project Setting Modal
     if ($('#projectSetting').length) {
-
+        
         let fileInput = $(".file-upload-min").closest(".form-group").find("input");
         fileInput.on("change", function () {
             let fileName = $(this).val().split("\\").pop();
@@ -1438,6 +1550,17 @@ $(document).ready(function () {
 
         });
 
+        //## show date picker on check
+        projectSettingForm.find("#researcherAccess").on("change", function() {
+            if ($(this).is(":checked")) {
+                    console.log("1");
+                   projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
+            } else {
+                console.log("0");
+               projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
+            }
+        });
+        
         //## ignore submit form on press Enter key
         projectSettingForm.on('keyup keypress', function (e) {
             let keyCode = e.keyCode || e.which;
@@ -1460,23 +1583,19 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 techs[index] = $(this).find("span").text();
             });
-            console.log(expertIds);
-            let formData = new FormData();
-            var files = $('#proposalFile')[0].files[0];
-            formData.append('proposalFile',files);
-            
-            var endNote = $('#endNoteFile')[0].files[0];
-            formData.append('endNoteFile',endNote);
-            let data = {technique: techs,
-                        id: id,
-                        expert_ids: expertIds,
-                        researcherRequestDeadline: applicationDeadline,
-                        requestResearcher: $("#autoAddProject").val() }
-            $.ajax({ 
+            let requestResearcher = $("#autoAddProject").val();
+            let telegram_group = projectSettingForm.find("#telegramGroupLink").val();
+            let end_note = projectSettingForm.find("#endNoteFile").val();
+            let proposal = projectSettingForm.find("#proposalFile").val();
+            $.ajax({
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('action'),
-                data: data,
+                data: {
+                    technique: data, id: id, expert_ids: expertIds, researcherRequestDeadline: applicationDeadline, telegram_group: telegram_group, end_note: end_note,
+                    proposal:proposal, requestResearcher: requestResearcher,
+                    
+                },
                 dataType: 'json',
                 success: function (data) {
                     iziToast.success({
