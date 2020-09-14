@@ -333,6 +333,15 @@ $(document).ready(function () {
         }
     });
 
+// Auto scroll to active project tab when exists
+    let activeTab = $(".tab-pane#nav-active-projects");
+    if (activeTab.length && activeTab.find(".card").length) {
+        $("#nav-all-projects-tab").removeClass("active");
+        $("#nav-active-projects-tab").addClass("active");
+        $("#nav-all-projects").removeClass('show active');
+        activeTab.tab('show');
+    }
+
     function auto_focus_code(element) {
         console.log("auto focus not working correctly\nNeEd To FiX!");
         // if (element.is(":first-child")) {
@@ -1315,7 +1324,7 @@ function setComment(data) {
                                 </div>
                             </div>
             `;
-        } else if (data[i].sender_type === "expert") { //expert
+        } else if (data[i].sender_type === "expert" || data[i].sender_type === "industry") { //expert
             let comment_body_classes = "comment-body";
             if (data[i].attachment !== "None") {
                 comment_body_classes += " attached";

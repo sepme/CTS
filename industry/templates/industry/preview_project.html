@@ -16,41 +16,41 @@
 
 {% block style %}
     <style type="text/css">
-        @media (min-width: 768px) and (max-width: 992px) {
-            .project-progress .line-100:after {
-                width: calc({% project_progress  project_pk %}% + 6%);
-            }
-
-            .project-progress .step-container:nth-child(2) {
-                right: {% date_to_percent project_pk=project_pk phase=1 type="w" %}%;
-            }
-
-            .project-progress .step-container:nth-child(3) {
-                right: {% date_to_percent project_pk=project_pk phase=2 type="w" %}%;
-            }
-
-            .project-progress .step-container:nth-child(4) {
-                right: {% date_to_percent project_pk=project_pk phase=3 type="w" %}%;
-            }
-        }
-
-        @media (min-width: 992px) {
-            .project-progress .line-100:after {
-                height: calc({% project_progress  project_pk %}% + 6%);
-            }
-
-            .project-progress .step-container:nth-child(2) {
-                top: {% date_to_percent project_pk=project_pk phase=1 type="h" %}%;
-            }
-
-            .project-progress .step-container:nth-child(3) {
-                top: {% date_to_percent project_pk=project_pk phase=2 type="h" %}%;
-            }
-
-            .project-progress .step-container:nth-child(4) {
-                top: {% date_to_percent project_pk=project_pk phase=3 type="h" %}%;
-            }
-        }
+        {#@media (min-width: 768px) and (max-width: 992px) {#}
+        {#    .project-progress .line-100:after {#}
+        {#        width: calc({% project_progress  project_pk %}% + 6%);#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(2) {#}
+        {#        right: {% date_to_percent project_pk=project_pk phase=1 type="w" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(3) {#}
+        {#        right: {% date_to_percent project_pk=project_pk phase=2 type="w" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(4) {#}
+        {#        right: {% date_to_percent project_pk=project_pk phase=3 type="w" %}%;#}
+        {#    }#}
+        {# }#}
+        {##}
+        {#@media (min-width: 992px) {#}
+        {#    .project-progress .line-100:after {#}
+        {#        height: calc({% project_progress  project_pk %}% + 6%);#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(2) {#}
+        {#        top: {% date_to_percent project_pk=project_pk phase=1 type="h" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(3) {#}
+        {#        top: {% date_to_percent project_pk=project_pk phase=2 type="h" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(4) {#}
+        {#        top: {% date_to_percent project_pk=project_pk phase=3 type="h" %}%;#}
+        {#    }#}
+        {# }#}
     </style>
 {% endblock %}
 
@@ -72,7 +72,7 @@
         <div class="col-lg-12 text-right">
             <div class="card box flow-root-display w-100">
                 <div class="box-body">
-                    <div class="row mbottom-lg-25 d-block d-lg-none ">
+                    <div class="row mbottom-lg-25 d-block d-lg-none">
                         <div class="col-lg-12 text-right">
                             <h6>پروژه <span>{{ title }}</span></h6>
                             <h6>{{ eng_title }}</h6>
@@ -157,15 +157,17 @@
                                                             </div>
                                                         {% endfor %}
                                                     </div>
-                                                    <div class="col-12">
-                                                        <div class="pre-header">
-                                                            <span>بودجه</span>
+                                                    {% if budget_amount %}
+                                                        <div class="col-12">
+                                                            <div class="pre-header">
+                                                                <span>بودجه</span>
+                                                            </div>
+                                                            <div id="budget-content">
+                                                                <span class="budget-amount">{{ budget_amount }}</span>
+                                                                <span>ریال</span>
+                                                            </div>
                                                         </div>
-                                                        <div id="budget-content">
-                                                            <span class="budget-amount">{{ budget_amount }}</span>
-                                                            <span>ریال</span>
-                                                        </div>
-                                                    </div>
+                                                    {% endif %}
                                                 </div>
                                                 {% if executive_info %}
                                                     <div class="row">
@@ -221,51 +223,131 @@
                                         <div class="row mbottom-lg-25">
                                             <div class="d-block d-lg-none col">
                                                 <span class="section-title">تایم لاین پروژه</span>
-                                                <div class="section">
+                                                <div class="section w-100 overflow-auto">
                                                     {% if not project.is_date_valid %}
                                                         <div class="project-progress-no-access">این قسمت در دسترس نیست!
                                                         </div>
                                                     {% endif %}
                                                     <div class="project-progress mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
-                                                        <div class="step-container active">
-                                    <span class="step-date">
-                                        <div class="start">
-                                            {{ timeScheduling.start }}
-                                        </div>
-                                    </span>
-                                                            <span class="step-name">
-                                        شروع پروژه
-                                    </span>
-                                                        </div>
-                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">
-                                    <span class="step-date">
-                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>
-                                    </span>
-                                                            <span class="step-name">جمع آوری داده</span>
-                                                        </div>
+                                                        {#                                                        <div class="step-container active">#}
+                                                        {#                                    <span class="step-date">#}
+                                                        {#                                        <div class="start">#}
+                                                        {#                                            {{ timeScheduling.start }}#}
+                                                        {#                                        </div>#}
+                                                        {#                                    </span>#}
+                                                        {#                                                            <span class="step-name">#}
+                                                        {#                                        شروع پروژه#}
+                                                        {#                                    </span>#}
+                                                        {#                                                        </div>#}
+                                                        {#                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">#}
+                                                        {#                                    <span class="step-date">#}
+                                                        {#                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>#}
+                                                        {#                                    </span>#}
+                                                        {#                                                            <span class="step-name">جمع آوری داده</span>#}
+                                                        {#                                                        </div>#}
                                                         <div class="step-container {% is_active project_pk=project_pk phase=2 %}">
-                                    <span class="step-date">
-                                        <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
-                                    </span>
+                                                            <span class="step-date">
+                                                                <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
+                                                            </span>
                                                             <span class="step-name">تحلیل داده ها</span>
                                                         </div>
-                                                        <div class="step-container {% is_active project_pk=project_pk phase=3 %}">
-                                    <span class="step-date">
-                                        <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
-                                    </span>
+                                                        <div class="step-container">
+                                                            <span class="step-date">
+                                                                <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
+                                                            </span>
                                                             <span class="step-name">سابمیت مقاله</span>
                                                         </div>
-                                                        <div class="step-container {% is_active project_pk=project_pk phase=4 %}">
-                                    <span class="step-date">
-                                        <div class="date_finished">{{ timeScheduling.finished }}</div>
-                                    </span>
+                                                        <div class="step-container">
+                                                            <span class="step-date">
+                                                                <div class="date_finished">{{ timeScheduling.finished }}</div>
+                                                            </span>
                                                             <span class="step-name">اتمام پروژه</span>
                                                         </div>
                                                         <div class="line-100">
                                                             <div class="arrow"></div>
                                                         </div>
                                                     </div>
-                                                    <hr class="vertical-line">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mbottom-lg-25">
+                                            <div class="col">
+                                                <span class="section-title">لیست وظایف</span>
+                                                <button type="button"
+                                                        class="border-button section-button"
+                                                        data-toggle="modal"
+                                                        data-target="#">
+                                                    افزودن تسک
+                                                </button>
+                                                <div class="section">
+                                                    <div class="ct-checklist">
+                                                        <div class="ct-checklist__item d-flex">
+                                                            <div class="ct-checklist-item__checkbox">
+                                                                <div class="form-group form-check">
+                                                                    <input type="checkbox"
+                                                                           class="form-check-input inp-cbx"
+                                                                           id="checkList#1"
+                                                                           name="requestResearcher" value=1 hidden>
+                                                                    <label class="form-check-label cbx mb-0"
+                                                                           for="checkList#1">
+                                                                        <span>
+                                                                            <svg class="inline-svg bi bi-check2"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+                                                                            </svg>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ct-checklist-item__detail">
+                                                                <div class="ct-checklist__text">
+                                                                    <span class="atMention me" title="Reza Basereh">@reza_basereh</span>
+                                                                    دکمه «بستن پاسخ»؛ موقعی که پاسخی هنوز نیست، نباشه
+                                                                </div>
+                                                                <div class="ct-checklist-item__control d-flex">
+                                                                    <div class="ct-checklist-item-due">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16" class="bi bi-clock"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="ct-checklist-item-assignee">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 class="bi bi-person-plus"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="ct-checklist-item-delete">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16" class="bi bi-trash"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
