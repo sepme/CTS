@@ -16,41 +16,41 @@
 
 {% block style %}
     <style type="text/css">
-        @media (min-width: 768px) and (max-width: 992px) {
-            .project-progress .line-100:after {
-                width: calc({% project_progress  project_pk %}% + 6%);
-            }
-
-            .project-progress .step-container:nth-child(2) {
-                right: {% date_to_percent project_pk=project_pk phase=1 type="w" %}%;
-            }
-
-            .project-progress .step-container:nth-child(3) {
-                right: {% date_to_percent project_pk=project_pk phase=2 type="w" %}%;
-            }
-
-            .project-progress .step-container:nth-child(4) {
-                right: {% date_to_percent project_pk=project_pk phase=3 type="w" %}%;
-            }
-        }
-
-        @media (min-width: 992px) {
-            .project-progress .line-100:after {
-                height: calc({% project_progress  project_pk %}% + 6%);
-            }
-
-            .project-progress .step-container:nth-child(2) {
-                top: {% date_to_percent project_pk=project_pk phase=1 type="h" %}%;
-            }
-
-            .project-progress .step-container:nth-child(3) {
-                top: {% date_to_percent project_pk=project_pk phase=2 type="h" %}%;
-            }
-
-            .project-progress .step-container:nth-child(4) {
-                top: {% date_to_percent project_pk=project_pk phase=3 type="h" %}%;
-            }
-        }
+        {#@media (min-width: 768px) and (max-width: 992px) {#}
+        {#    .project-progress .line-100:after {#}
+        {#        width: calc({% project_progress  project_pk %}% + 6%);#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(2) {#}
+        {#        right: {% date_to_percent project_pk=project_pk phase=1 type="w" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(3) {#}
+        {#        right: {% date_to_percent project_pk=project_pk phase=2 type="w" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(4) {#}
+        {#        right: {% date_to_percent project_pk=project_pk phase=3 type="w" %}%;#}
+        {#    }#}
+        {# }#}
+        {##}
+        {#@media (min-width: 992px) {#}
+        {#    .project-progress .line-100:after {#}
+        {#        height: calc({% project_progress  project_pk %}% + 6%);#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(2) {#}
+        {#        top: {% date_to_percent project_pk=project_pk phase=1 type="h" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(3) {#}
+        {#        top: {% date_to_percent project_pk=project_pk phase=2 type="h" %}%;#}
+        {#    }#}
+        {##}
+        {#    .project-progress .step-container:nth-child(4) {#}
+        {#        top: {% date_to_percent project_pk=project_pk phase=3 type="h" %}%;#}
+        {#    }#}
+        {# }#}
     </style>
 {% endblock %}
 
@@ -72,7 +72,7 @@
         <div class="col-lg-12 text-right">
             <div class="card box flow-root-display w-100">
                 <div class="box-body">
-                    <div class="row mbottom-lg-25 d-block d-lg-none ">
+                    <div class="row mbottom-lg-25 d-block d-lg-none">
                         <div class="col-lg-12 text-right">
                             <h6>پروژه <span>{{ title }}</span></h6>
                             <h6>{{ eng_title }}</h6>
@@ -223,51 +223,50 @@
                                         <div class="row mbottom-lg-25">
                                             <div class="d-block d-lg-none col">
                                                 <span class="section-title">تایم لاین پروژه</span>
-                                                <div class="section">
+                                                <div class="section w-100 overflow-auto">
                                                     {% if not project.is_date_valid %}
                                                         <div class="project-progress-no-access">این قسمت در دسترس نیست!
                                                         </div>
                                                     {% endif %}
                                                     <div class="project-progress mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
-                                                        <div class="step-container active">
-                                    <span class="step-date">
-                                        <div class="start">
-                                            {{ timeScheduling.start }}
-                                        </div>
-                                    </span>
-                                                            <span class="step-name">
-                                        شروع پروژه
-                                    </span>
-                                                        </div>
-                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">
-                                    <span class="step-date">
-                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>
-                                    </span>
-                                                            <span class="step-name">جمع آوری داده</span>
-                                                        </div>
+{#                                                        <div class="step-container active">#}
+{#                                    <span class="step-date">#}
+{#                                        <div class="start">#}
+{#                                            {{ timeScheduling.start }}#}
+{#                                        </div>#}
+{#                                    </span>#}
+{#                                                            <span class="step-name">#}
+{#                                        شروع پروژه#}
+{#                                    </span>#}
+{#                                                        </div>#}
+{#                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">#}
+{#                                    <span class="step-date">#}
+{#                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>#}
+{#                                    </span>#}
+{#                                                            <span class="step-name">جمع آوری داده</span>#}
+{#                                                        </div>#}
                                                         <div class="step-container {% is_active project_pk=project_pk phase=2 %}">
-                                    <span class="step-date">
-                                        <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
-                                    </span>
+                                                            <span class="step-date">
+                                                                <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
+                                                            </span>
                                                             <span class="step-name">تحلیل داده ها</span>
                                                         </div>
-                                                        <div class="step-container {% is_active project_pk=project_pk phase=3 %}">
-                                    <span class="step-date">
-                                        <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
-                                    </span>
+                                                        <div class="step-container">
+                                                            <span class="step-date">
+                                                                <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
+                                                            </span>
                                                             <span class="step-name">سابمیت مقاله</span>
                                                         </div>
-                                                        <div class="step-container {% is_active project_pk=project_pk phase=4 %}">
-                                    <span class="step-date">
-                                        <div class="date_finished">{{ timeScheduling.finished }}</div>
-                                    </span>
+                                                        <div class="step-container">
+                                                            <span class="step-date">
+                                                                <div class="date_finished">{{ timeScheduling.finished }}</div>
+                                                            </span>
                                                             <span class="step-name">اتمام پروژه</span>
                                                         </div>
                                                         <div class="line-100">
                                                             <div class="arrow"></div>
                                                         </div>
                                                     </div>
-                                                    <hr class="vertical-line">
                                                 </div>
                                             </div>
                                         </div>
