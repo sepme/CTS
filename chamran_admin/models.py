@@ -158,6 +158,7 @@ class Task(models.Model):
     involved_user = models.ManyToManyField(User, verbose_name="کاربران درگیر", related_name="involved_user")
     registration_date = models.DateField(verbose_name="تاریخ ثبت", auto_now=False, auto_now_add=True)
     deadline = models.DateField(verbose_name="تاریخ پایان", auto_now=False, auto_now_add=False)
+    done = models.BooleanField(verbose_name="انجام شده", default=False)
 
     def __str__(self):
         return str(self.card) + " - " + str(self.deadline)

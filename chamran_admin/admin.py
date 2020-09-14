@@ -24,3 +24,5 @@ class News(admin.ModelAdmin):
 
 admin.site.register(models.FeedBack)
 admin.site.register(models.ContactUs)
+admin.site.register(models.Card)
+admin.site.register(models.Task)

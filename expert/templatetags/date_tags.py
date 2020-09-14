@@ -83,45 +83,47 @@ def project_progress(project_pk):
 
 @register.simple_tag
 def date_to_percent(project_pk, phase, type):
-    if Project.objects.filter(id=project_pk).exists():
-        project = Project.objects.get(id=project_pk)
-        if project.is_date_valid():
-            if phase == 1:
-                date = project.date_project_started
-            elif phase == 2:
-                date = project.date_phase_two_deadline
-            elif phase == 3:
-                date = project.date_phase_three_deadline
-            else:
-                date = ""
-            total_days = (project.date_finished - project.date_project_started).total_seconds()
-            pass_days = (date - project.date_project_started).total_seconds()
-            if total_days:
-                if type == "h":
-                    return str(int((100 * pass_days / total_days) * 0.88 + 5))
-                elif type == "w":
-                    return str(int(81 * pass_days / total_days))
-        return None
+    return None
+    # if Project.objects.filter(id=project_pk).exists():
+    #     project = Project.objects.get(id=project_pk)
+    #     if project.is_date_valid():
+    #         if phase == 1:
+    #             date = project.date_project_started
+    #         elif phase == 2:
+    #             date = project.date_phase_two_deadline
+    #         elif phase == 3:
+    #             date = project.finish_date_suggested
+    #         else:
+    #             date = ""
+    #         total_days = (project.date_finished - project.date_project_started).total_seconds()
+    #         pass_days = (date - project.date_project_started).total_seconds()
+    #         if total_days:
+    #             if type == "h":
+    #                 return str(int((100 * pass_days / total_days) * 0.88 + 5))
+    #             elif type == "w":
+    #                 return str(int(81 * pass_days / total_days))
+    #     return None
 
 
 @register.simple_tag
 def is_active(project_pk, phase):
-    if Project.objects.filter(id=project_pk).exists() and phase is not None:
-        project = Project.objects.get(id=project_pk)
-        if project.is_date_valid():
-            if phase == 1:
-                date = project.date_project_started
-            elif phase == 2:
-                date = project.date_phase_two_deadline
-            elif phase == 3:
-                date = project.date_phase_three_deadline
-            elif phase == 4:
-                date = project.date_finished
-            else:
-                date = ""
-            pass_days_from_now = (datetime.date.today() - project.date_project_started).total_seconds()
-            pass_days = (date - project.date_project_started).total_seconds()
-            delta = pass_days - pass_days_from_now
-            if delta > 0:
-                return ""
-            return "active"
+    return ""
+    # if Project.objects.filter(id=project_pk).exists() and phase is not None:
+    #     project = Project.objects.get(id=project_pk)
+    #     if project.is_date_valid():
+    #         if phase == 1:
+    #             date = project.date_project_started
+    #         elif phase == 2:
+    #             date = project.date_phase_two_deadline
+    #         elif phase == 3:
+    #             date = project.finish_date_suggested
+    #         elif phase == 4:
+    #             date = project.date_finished
+    #         else:
+    #             date = ""
+    #         pass_days_from_now = (datetime.date.today() - project.date_project_started).total_seconds()
+    #         pass_days = (date - project.date_project_started).total_seconds()
+    #         delta = pass_days - pass_days_from_now
+    #         if delta > 0:
+    #             return ""
+    #         return "active"

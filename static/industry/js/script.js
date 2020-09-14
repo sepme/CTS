@@ -13,72 +13,81 @@ function numbersComma(num) {
 }
 
 function setEthicalConsider(data, status) {
-    let role = `<div>
+    let role = "";
+    if (data.policy)
+        role +=`<div>
                     <div class="question">
                         <span class="question-mark"><i class='far fa-question-circle'></i></span> 
                         <span>
                             ملاحظات اخلاقی
                         </span>
-                        <div class='answer'></div>
+                        <div class='answer'>${data.policy}</div>
                     </div>
-                </div>
-                <div>
+                </div>`;
+    if (data.executive_restrictions)
+        role += `<div>
                     <div class="question">
                         <span class="question-mark"><i class='far fa-question-circle'></i></span> 
                         <span>
                             محدودیت های اجرایی طرح و روش کاهش آن ها
                         </span>
-                        <div class='answer'></div>
+                        <div class='answer'>${data.executive_restrictions}</div>
                     </div>
                 </div>`;
     $(".project-info-content" + status).html(role);
 }
 
 function setGoal(data, status) {
-    let goal = `<div>
+    let goal = "";
+    if (data.main_goal)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 اهداف اصلی                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.main_goal}</div>
+                </div>`;
+    if (data.secondary_goal)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 اهداف فرعی                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.secondary_goal}</div>
+                </div>`;
+    if (data.practical_goal)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 اهداف کاربردی                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.practical_goal}</div>
+                </div>`;
+    if (data.research_question)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 سوالات پژوهش                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.research_question}</div>
+                </div>`;
+    if (data.reseach_assumptions)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 فرضیات پژوهش                       
                     </div>
-                    <div class='answer'></div>
+                    <div class='answer'>${data.reseach_assumptions}</div>
                 </div>
                 `;
     $(".project-info-content" + status).html(goal);
@@ -92,36 +101,38 @@ function setProcedure(data, status) {
                             </span>                                    
 خلاصه ضرورت اجرا                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${data.summary_method}</div>
+                     </div>`;
+    if (data.required_equipment)
+        procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>                                    
 مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${data.required_equipment}</div>
+                     </div>`;
+    if (data.sample_count_method)
+        procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>                                    
 روش محاسبه حجم نمونه و تعداد آن                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${data.sample_count_method}</div>
+                     </div>`;
+    if (data.analyse_method)
+        procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>                                    
 روش تجزیه و تحلیل داده ها                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                        `;
+                        <div class='answer'>${data.analyse_method}</div>
+                     </div>`;
     $(".project-info-content" + status).html(procedure);
 }
 
@@ -133,25 +144,27 @@ function setProblemStatement(data, status) {
                                     </span>                                    
 خلاصه ضرورت اجرا                                    
                                 </div>
-                                <div class='answer'></div>
-                            </div>
-                            <div>
+                                <div class='answer'>${data.summary_of_necessity}</div>
+                            </div>`;
+    if (data.necessity_expression)
+        problemStatement += `<div>
                                 <div class='question'>
                                     <span class='question-mark'>
                                         <i class='far fa-question-circle'></i>
                                     </span>                                    
 مشروح بیان مسئله و ضرورت اجرا                                    
                                 </div>
-                                <div class='answer'></div>
-                            </div>
-                            <div>
+                                <div class='answer'>${data.necessity_expression}</div>
+                            </div>`;
+    if (data.research_history)
+        problemStatement += `<div>
                                 <div class='question'>
                                     <span class='question-mark'>
                                         <i class='far fa-question-circle'></i>
                                     </span>                                    
 سابقه طرح و بررسی متون                                    
                                 </div>
-                                <div class='answer'></div>
+                                <div class='answer'>${data.research_history}</div>
                             </div>`;
     $(".project-info-content" + status).html(problemStatement);
 }
@@ -523,6 +536,7 @@ function getComments(expert_id, project_id) {
             project_id: project_id
         },
         success: function (data) {
+            console.log(data);
             if (data.accepted) {
                 $(".accept-request").hide();
                 $(".accept-request").prop('disabled', true);

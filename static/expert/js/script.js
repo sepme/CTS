@@ -1548,13 +1548,15 @@ showInfo.click(function (event) {
                 $("#showProject").find(".modal-header .modal-title").html(data.persian_title + "<br>" + data.english_title);
                 $("#showProject").find(".establish-time .time-body").html(data.date);
                 $("#showProject").find(".time-left .time-body").html(data.deadline);
-                const keys = JSON.parse(data.key_words);
+                // const keys = JSON.parse(data.key_words);
                 let keys_code = '';
-                for (let i = 0; i < keys.length; i++) {
-                    keys_code = keys_code + "<span class='border-span'>" + keys[i].pk + "</span>"
+                for (let i = 0; i < data.key_words; i++) {
+                    keys_code = keys_code + "<span class='border-span'>" + data.key_words[i] + "</span>"
                 }
                 $(".techniques").html(keys_code);
+                console.log("---------");
                 setProblemStatement(data);
+                console.log("+++++++");
                 setValue(data);
                 setComment(data.comments, $(".modal#showProject"));
                 // vote_dialog_init(".showProject");
@@ -1590,79 +1592,87 @@ function deleteComment(comment) {
     });
 }
 
-function setEthicalConsider(data, status) {
-    let role = `<div>
+function setEthicalConsider(data) {
+    let role = "";
+    if (data.policy)
+        role +=`<div>
                     <div class="question">
                         <span class="question-mark"><i class='far fa-question-circle'></i></span> 
                         <span>
                             ملاحظات اخلاقی
                         </span>
-                        <div class='answer'></div>
+                        <div class='answer'>${data.policy}</div>
                     </div>
-                </div>
-                <div>
+                </div>`;
+    if (data.executive_restrictions)
+        role += `<div>
                     <div class="question">
                         <span class="question-mark"><i class='far fa-question-circle'></i></span> 
                         <span>
                             محدودیت های اجرایی طرح و روش کاهش آن ها
                         </span>
-                        <div class='answer'></div>
+                        <div class='answer'>${data.executive_restrictions}</div>
                     </div>
                 </div>`;
-    $(".project-info-content" + status).html(role);
+    $(".project-info-content" ).html(role);
 }
 
-function setGoal(data, status) {
-    let goal = `<div>
+function setGoal(data) {
+    let goal = "";
+    if (data.main_goal)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 اهداف اصلی                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.main_goal}</div>
+                </div>`;
+    if (data.secondary_goal)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 اهداف فرعی                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.secondary_goal}</div>
+                </div>`;
+    if (data.practical_goal)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 اهداف کاربردی                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.practical_goal}</div>
+                </div>`;
+    if (data.research_question)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 سوالات پژوهش                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                <div>
+                    <div class='answer'>${data.research_question}</div>
+                </div>`;
+    if (data.reseach_assumptions)
+        goal +=`<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
                         </span>                                    
 فرضیات پژوهش                       
                     </div>
-                    <div class='answer'></div>
-                </div>
-                `;
-    $(".project-info-content" + status).html(goal);
+                    <div class='answer'>${data.reseach_assumptions}</div>
+                </div>`;
+    $(".project-info-content" ).html(goal);
 }
 
-function setProcedure(data, status) {
+function setProcedure(data) {
     let procedure = `<div>
                         <div class='question'>
                             <span class='question-mark'>
@@ -1670,40 +1680,42 @@ function setProcedure(data, status) {
                             </span>                                    
 خلاصه ضرورت اجرا                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${data.summary_method}</div>
+                     </div>`;
+    if (data.required_equipment)
+        procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>                                    
 مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${data.required_equipment}</div>
+                     </div>`;
+    if (data.sample_count_method)
+        procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>                                    
 روش محاسبه حجم نمونه و تعداد آن                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                     <div>
+                        <div class='answer'>${data.sample_count_method}</div>
+                     </div>`;
+    if (data.analyse_method)
+        procedure +=`<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
                             </span>                                    
 روش تجزیه و تحلیل داده ها                            
                         </div>
-                        <div class='answer'></div>
-                     </div>
-                        `;
-    $(".project-info-content" + status).html(procedure);
+                        <div class='answer'>${data.analyse_method}</div>
+                     </div>`;
+    $(".project-info-content").html(procedure);
 }
 
-function setProblemStatement(data, status) {
+function setProblemStatement(data) {
     let problemStatement = `<div>
                                 <div class='question'>
                                     <span class='question-mark'>
@@ -1711,25 +1723,27 @@ function setProblemStatement(data, status) {
                                     </span>                                    
 خلاصه ضرورت اجرا                                    
                                 </div>
-                                <div class='answer'></div>
-                            </div>
-                            <div>
+                                <div class='answer'>${data.summary_of_necessity}</div>
+                            </div>`;
+    if (data.necessity_expression)
+        problemStatement += `<div>
                                 <div class='question'>
                                     <span class='question-mark'>
                                         <i class='far fa-question-circle'></i>
                                     </span>                                    
 مشروح بیان مسئله و ضرورت اجرا                                    
                                 </div>
-                                <div class='answer'></div>
-                            </div>
-                            <div>
+                                <div class='answer'>${data.necessity_expression}</div>
+                            </div>`;
+    if (data.research_history)
+        problemStatement += `<div>
                                 <div class='question'>
                                     <span class='question-mark'>
                                         <i class='far fa-question-circle'></i>
                                     </span>                                    
 سابقه طرح و بررسی متون                                    
                                 </div>
-                                <div class='answer'></div>
+                                <div class='answer'>${data.research_history}</div>
                             </div>`;
     $(".project-info-content" + status).html(problemStatement);
 }

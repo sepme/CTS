@@ -5,6 +5,7 @@ from . import models
 
 @admin.register(models.Comment)
 @admin.register(models.ProjectForm)
+@admin.register(models.ResearchProjectForm)
 @admin.register(models.Project)
 @admin.register(models.ProjectHistory)
 @admin.register(models.Keyword)

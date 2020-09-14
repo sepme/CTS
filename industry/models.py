@@ -416,17 +416,18 @@ class Project(models.Model):
 
     @property
     def project_form(self):
-        try:
+        if self.form is not None:
             return self.form
-        except:
+        else:
             return self.research_project_form
 
     def is_date_valid(self):
-        if self.date_project_started is not None and self.date_finished is not None and \
-                self.date_phase_two_deadline is not None and self.date_phase_three_deadline is not None and \
-                self.date_start:
-            return True
-        return False
+        return True
+        # if self.date_project_started is not None and self.date_finished is not None and \
+        #         self.date_phase_two_deadline is not None and self.finish_date_suggested is not None and \
+        #         self.date_start:
+        #     return True
+        # return False
 
 
 def upload_comment(instance, file_name):

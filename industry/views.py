@@ -44,6 +44,8 @@ def gregorian_to_numeric_jalali(date):
 
 # returns the difference between the two dates. e.g. 3 ruz, 5 sal, ...
 def date_dif(start_date, deadline_date):
+    if start_date == None:
+        return "نا مشخص"
     delta = relativedelta(deadline_date, start_date)
     if delta.years != 0:
         return str(delta.years) + ' سال'
@@ -73,10 +75,10 @@ def get_comments_with_expert(request):
 def usualShow(request, project):
     data = model_to_dict(project.project_form)
     data['deadline'] = 'نا مشخص'
-    if project.status == 1 and project.date_project_started and project.date_phase_three_deadline:
-        data['deadline'] = date_dif(datetime.datetime.now().date(), project.date_phase_three_deadline)
+    if project.status == 1 and project.date_project_started and project.finish_date_suggested:
+        data['deadline'] = date_dif(datetime.datetime.now().date(), project.finish_date_suggested)
     else:
-        data['deadline'] = date_dif(project.date_project_started, project.date_phase_three_deadline)
+        data['deadline'] = date_dif(project.date_project_started, project.finish_date_suggested)
     data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(data['key_words']):
         data['key_words'][ind] = value.__str__()
@@ -115,10 +117,7 @@ def ActiveProject(request, project, data):
     industryform = request.user.industryuser.profile
     data['projectForm'] = model_to_dict(project.project_form)
     projectDate = {
-        "start": gregorian_to_numeric_jalali(project.date_start),
-        "firstPhase": gregorian_to_numeric_jalali(project.date_project_started),
-        "secondPhase": gregorian_to_numeric_jalali(project.date_phase_two_deadline),
-        "thirdPhase": gregorian_to_numeric_jalali(project.date_phase_three_deadline),
+        "start": gregorian_to_numeric_jalali(project.date_project_started),
         "finished": gregorian_to_numeric_jalali(project.date_finished),
     }
     data['timeScheduling'] = projectDate
@@ -161,19 +160,19 @@ def ActiveProject(request, project, data):
     data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     evaluation_history = project.industry_creator.expertevaluateindustry_set.filter(project=project)
     data['status'] = project.status
-    data['vote'] = False
-    try:
-        if datetime.date.today() > project.date_finished:
-            if len(evaluation_history.filter(phase=3)) == 0:
-                data['vote'] = True
-        elif datetime.date.today() > project.date_phase_two_finished:
-            if len(evaluation_history.filter(phase=2)) == 0:
-                data['vote'] = True
-        elif datetime.date.today() > project.date_phase_one_finished:
-            if len(evaluation_history.filter(phase=1)) == 0:
-                data['vote'] = True
-    except:
-        pass
+    # data['vote'] = False
+    # try:
+    #     if datetime.date.today() > project.date_finished:
+    #         if len(evaluation_history.filter(phase=3)) == 0:
+    #             data['vote'] = True
+    #     elif datetime.date.today() > project.date_phase_two_finished:
+    #         if len(evaluation_history.filter(phase=2)) == 0:
+    #             data['vote'] = True
+    #     elif datetime.date.today() > project.date_phase_one_finished:
+    #         if len(evaluation_history.filter(phase=1)) == 0:
+    #             data['vote'] = True
+    # except:
+    #     pass
 
     data["techniques"] = []
     # }
@@ -190,6 +189,7 @@ def ActiveProject(request, project, data):
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     if project.status == 1 or project.status == 0:
+        print("SHOW  USUAl PROJECT")
         data = usualShow(request, project)
         return JsonResponse(data)
     else:
@@ -367,7 +367,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def form_valid(self, form):
         industry_user = models.IndustryUser.objects.get(user=self.request.user)
-        if form.cleaned_data["industry_type"] == 'group':
+        if form.cleaned_data["industry_type"] == 'research_group':
             groupForm = forms.ResearchGroupBasicInfoForm(self.request.POST, self.request.FILES)
             if groupForm.is_valid():
                 interfacePerson = form.save()
@@ -507,7 +507,22 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
                 newProject = models.Project(research_project_form=newProjectForm, industry_creator=industry)
                 newProject.save()
-                return super().post(request,)
+                subject = 'ثبت پروژه جدید'
+                message = """با سلام و احترام
+                کاربر صنعت با نام کاربری {}
+                پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
+                با تشکر""".format(request.user.username, newProjectForm.persian_title, JalaliDate(datetime.date.today()))
+                try:
+                    send_mail(
+                        subject=subject,
+                        message=message,
+                        from_email=settings.EMAIL_HOST_USER,
+                        recipient_list=[settings.EMAIL_HOST_USER, "sepehr.metanat@gmail.com", ],
+                        fail_silently=False
+                    )
+                except TimeoutError:
+                    return HttpResponse('Timeout Error!!')
+                return HttpResponseRedirect(reverse("industry:index"))
             else:
                 print("research project form errors")
                 print(form.errors.keys())

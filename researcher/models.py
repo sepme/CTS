@@ -524,7 +524,7 @@ class ResearchQuestionInstance(models.Model):
                 permission = Permission.objects.get(content_type=ctype, codename='is_active')
                 user.user_permissions.add(permission)
                 user.save()
-                addResearchTechniques(self.researcher, research_question.expert.expertform.__str__())
+                addResearchTechniques(self.researcher, self.research_question.expert.expertform.__str__())
             elif perv.is_correct == "not_seen" and self.is_correct == "wrong":                
                 status = self.researcher.status
                 researcher = self.researcher
