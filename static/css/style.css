@@ -6564,3 +6564,55 @@ table .fas.fa-trash-alt:hover {
     background-color: #ee881e;
     box-shadow: 0 5px 15px rgba(238, 131, 30, .34);
 }
+
+.ct-checklist__item {
+
+}
+
+.ct-checklist__item .ct-checklist-item__checkbox .form-check {
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.ct-checklist__item .ct-checklist-item__detail {
+    padding-left: 100px;
+    position: relative;
+    width: 100%;
+}
+
+.ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control button {
+    background-color: rgba(9, 30, 66, .04);
+    color: #262626;
+    border: none;
+    border-radius: 0.25em;
+    margin-right: 5px;
+    padding: 3px 7px;
+}
+
+.ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control button:hover {
+    background-color: #e0e1e2;
+}
+
+.ct-checklist__item .ct-checklist__text {
+    font-weight: 400;
+    padding-top: 5px;
+    margin-bottom: 0;
+}
+
+.ct-checklist__item .ct-checklist__text .atMention {
+    color: #000;
+    font-weight: bold;
+    direction: ltr;
+    display: ruby;
+}
+
+.ct-checklist__item .ct-checklist__text .atMention.me {
+    color: #3ccd1c;
+}
+

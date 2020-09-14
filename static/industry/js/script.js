@@ -623,6 +623,25 @@ $(document).ready(function () {
         }
     });
     //****************************************//
+    //  Task Bar
+    //****************************************//
+    let taskList = $(".ct-checklist");
+    if (taskList.length) {
+        taskList.find(".ct-checklist-item__checkbox input[type='checkbox']").click(function () {
+            if ($(this).is(":checked")) {
+                let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
+                $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`<del>${text}</del>`);
+            } else {
+                let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text del").html();
+                $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
+            }
+        });
+    }
+    //****************************************//
+    //  End Task Bar
+    //****************************************//
+
+    //****************************************//
     //  New Project
     //****************************************//
     if (window.location.href.indexOf("/industry/newProject/") !== -1) {
