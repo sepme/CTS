@@ -77,7 +77,7 @@ $(".preview-project").click(function () {
             setProblemStatement(data);
             setValue(data);
             setComment(data.comments);
-            let status = data.status;
+            let status = data.request_status;
             dialog.find(".modal-footer button").removeClass("confirm-project btn-primary").prop("disabled", true)
                 .css("opacity", 1);
             switch (status) {

@@ -139,3 +139,25 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.fullname
+
+class Card(models.Model):
+    title = models.CharField(verbose_name="عنوان", max_length=256)
+    description = models.TextField(verbose_name="توضیحات")
+    creator = models.ForeignKey(User, verbose_name="سازنده", on_delete=models.SET_NULL, null=True)
+    registration_date = models.DateField(verbose_name="تاریخ ثبت", auto_now=False, auto_now_add=True)
+    deadline = models.DateField(verbose_name="تاریخ پایان", auto_now=False, auto_now_add=False)
+
+    def __str__(self):
+        return self.title + " - " + self.creator.get_username()
+
+
+class Task(models.Model):
+    card = models.ForeignKey(Card, verbose_name="کارت", on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, verbose_name="سازنده", on_delete=models.SET_NULL, null=True, related_name="creator")
+    description = models.TextField(verbose_name="توضیحات", null=True, blank=True)
+    involved_user = models.ManyToManyField(User, verbose_name="کاربران درگیر", related_name="involved_user")
+    registration_date = models.DateField(verbose_name="تاریخ ثبت", auto_now=False, auto_now_add=True)
+    deadline = models.DateField(verbose_name="تاریخ پایان", auto_now=False, auto_now_add=False)
+
+    def __str__(self):
+        return str(self.card) + " - " + str(self.deadline)

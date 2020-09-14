@@ -893,11 +893,11 @@ $(document).ready(function () {
                     researchForm.find("input").prop("disabled", false).removeClass("progress-cursor");
                     researchForm.find("label").removeClass("progress-cursor");
                     researchForm.closest(".fixed-back").find(".card").removeClass("wait");
-                    if (obj.co_researcher) {
+                    if (obj.liable) {
                         $("#liable").closest("div").append("<div class='error'>" +
                             "<span class='error-body'>" +
                             "<ul class='errorlist'>" +
-                            "<li>" + obj.co_researcher + "</li>" +
+                            "<li>" + obj.liable + "</li>" +
                             "</ul>" +
                             "</span>" +
                             "</div>");

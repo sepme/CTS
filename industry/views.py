@@ -261,7 +261,7 @@ def accept_project(request):
     expert = ExpertUser.objects.filter(pk=request.POST['expert_id']).first()
     project = models.Project.objects.filter(pk=request.POST['project_id']).first()
     project.expert_accepted.add(expert)
-    project.date_start = datetime.date.today()
+    project.date_project_started = datetime.date.today()
     project.status = 2
     project.save()
     expert.status = 'involved'
@@ -485,7 +485,36 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     login_url = '/login/'
     permission_required = ('industry.be_industry',)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        industry = self.request.user.industryuser
+        if industry.industry_type == 'researchGroup':
+            context['form'] = forms.ResearchProjectForm()
+        return context
+
     def post(self, request, *args, **kwargs):
+        industry = self.request.user.industryuser
+        if industry.industry_type == 'researchGroup':            
+            form = forms.ResearchProjectForm(request.POST)
+            if form.is_valid():
+                print("form is validated")
+                print(form.cleaned_data.keys())
+                newProjectForm = form.save()
+
+                key_words = self.request.POST['key_words'].split(',')
+                for word in key_words:
+                    newProjectForm.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
+
+                newProject = models.Project(research_project_form=newProjectForm, industry_creator=industry)
+                newProject.save()
+                return super().post(request,)
+            else:
+                print("research project form errors")
+                print(form.errors.keys())
+                # print(form.errors['key_words'])
+                context = self.get_context_data()
+                context['form'] = form
+                return render(request=request, template_name=self.template_name, context=context)
         form = forms.ProjectForm(request.POST)
         if form.is_valid():
             persian_title = form.cleaned_data['persian_title']
@@ -521,7 +550,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
             for word in key_words:
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
-            new_project = models.Project(project_form=new_project_form, industry_creator=request.user.industryuser)
+            new_project = models.Project(form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
             subject = 'ثبت پروژه جدید'
             message = """با سلام و احترام
@@ -614,76 +643,78 @@ def ProjectSetting(request):
         print(request.POST)
         expert_ids = request.POST.getlist('expert_ids')
         # expertId = request.POST['uuid']
-        if len(expert_ids) == 0:
-            return JsonResponse({
-                'expertId': 'استاد نمی تواند خالی باشد.',
-            }, status=400)
+        # if len(expert_ids) == 0:
+        #     return JsonResponse({
+        #         'expertId': 'استاد نمی تواند خالی باشد.',
+        #     }, status=400)
         technique_list = request.POST.getlist('technique')
-        if len(technique_list) == 0:
-            return JsonResponse({
-                'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
-            }, status=400)
+        # if len(technique_list) == 0:
+        #     return JsonResponse({
+        #         'message': 'متاسفانه بدون انتخاب تکنیک‌های موردنظر، امکان ارسال درخواست وجود ندارد.',
+        #     }, status=400)
         project = models.Project.objects.get(id=request.POST['id'])
         projectform = project.project_form
         if 'requestResearcher' in request.POST.keys():
             project.reseacherRequestAbility = request.POST['requestResearcher']
         else:
             project.reseacherRequestAbility = False
-        projectform.techniques.clear()
-        for technique in technique_list:
-            projectform.techniques.add(Technique.objects.get_or_create( \
-                technique_title=technique[:-2])[0])
-        projectform.save()
+        if len(technique_list) != 0:
+            projectform.techniques.clear()
+            for technique in technique_list:
+                projectform.techniques.add(Technique.objects.get_or_create( \
+                    technique_title=technique[:-2])[0])
+            projectform.save()
         data = {"experts": []}
-        for expert_id in expert_ids:
-            expert = ExpertUser.objects.get(id=expert_id)
-            expertResult = {"id": expert}
-            if expert in project.expert_accepted.all():
-                expertResult['addExpert'] = True
-                continue
-            elif expert in project.expert_suggested.all():
-                expertResult['addExpert'] = False
-                continue
-            if expert.autoAddProject:
-                project.expert_accepted.add(expert)
-                project.date_start = datetime.date.today()
-                project.status = 2
-                expert.status = 'involved'
-                expert.save()
-                expertResult['addExpert'] = True
-                message = """با سلام
-    مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
-    با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
-    لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
-    در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
-    با آرزوی موفقیت، 
-    چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
-                        projectName=project.project_form.persian_title)
-            else:
-                expertResult['addExpert'] = False
-                project.expert_suggested.add(expert)
-                message = """با سلام
+        if len(expert_ids) != 0:
+            for expert_id in expert_ids:
+                expert = ExpertUser.objects.get(id=expert_id)
+                expertResult = {"id": expert}
+                if expert in project.expert_accepted.all():
+                    expertResult['addExpert'] = True
+                    continue
+                elif expert in project.expert_suggested.all():
+                    expertResult['addExpert'] = False
+                    continue
+                if expert.autoAddProject:
+                    project.expert_accepted.add(expert)
+                    project.date_project_started = datetime.date.today()
+                    project.status = 2
+                    expert.status = 'involved'
+                    expert.save()
+                    expertResult['addExpert'] = True
+                    message = """با سلام
         مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
-        با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
+        با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
         لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
         در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
         با آرزوی موفقیت، 
         چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
                             projectName=project.project_form.persian_title)
-            models.ProjectForm.persian_title
-            subject = 'تقاضای پیوستن به پروژه'
-            html_templateForAdmin = get_template('registration/projectRequest_template.html')
-            email_templateForAdmin = html_templateForAdmin.render({'message': message})
-            email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                           to=[expert.user.get_username(), ])
-            email.attach_alternative(email_templateForAdmin, 'text/html')
-            email.send()
-            newMessage = Message(title=subject,
-                                 text=message,
-                                 type=0)
-            newMessage.save()
-            newMessage.receiver.add(expert.user)
-            data['experts'].append(expertResult)
+                else:
+                    expertResult['addExpert'] = False
+                    project.expert_suggested.add(expert)
+                    message = """با سلام
+            مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
+            با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
+            لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
+            در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
+            با آرزوی موفقیت، 
+            چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
+                                projectName=project.project_form.persian_title)
+                models.ProjectForm.persian_title
+                subject = 'تقاضای پیوستن به پروژه'
+                html_templateForAdmin = get_template('registration/projectRequest_template.html')
+                email_templateForAdmin = html_templateForAdmin.render({'message': message})
+                email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+                                            to=[expert.user.get_username(), ])
+                email.attach_alternative(email_templateForAdmin, 'text/html')
+                email.send()
+                newMessage = Message(title=subject,
+                                    text=message,
+                                    type=0)
+                newMessage.save()
+                newMessage.receiver.add(expert.user)
+                data['experts'].append(expertResult)
         project.save()
         return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 

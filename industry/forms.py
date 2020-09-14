@@ -297,6 +297,67 @@ class IndustryInfoForm(forms.ModelForm):
         return data
 
 
+class ResearchProjectForm(forms.ModelForm):
+    key_words = forms.CharField(max_length=1000, required=False)
+    
+    class Meta:
+        model = models.ResearchProjectForm
+        exclude = ['techniques', 'key_words']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['persian_title'].required = False
+        self.fields['english_title'].required = False
+        self.fields['research_methodology'].required = False
+        self.fields['summary_of_necessity'].required = False
+        self.fields['summary_method'].required = False
+
+    def clean_persian_title(self):
+        data = self.cleaned_data["persian_title"]
+        if data == "":
+            raise ValidationError("عنوان فارسی پروژه نمی تواند خالی باشد.")
+        for item in data:
+            if 65 <= ord(item) <= 90:
+                raise ValidationError(_("به فارسی تایپ شود لطفا"))
+            if 97 <= ord(item) <= 122:
+                raise ValidationError(_("به فارسی تایپ شود لطفا"))
+        return data
+
+    def clean_english_title(self):
+        data = self.cleaned_data["english_title"]
+        if data == "":
+            raise ValidationError("عنوان انگلیسی پروژه نمی تواند خالی باشد.")
+        for item in data:
+            if 1750 > ord(item) > 1560:
+                raise ValidationError(_("به انگلیسی تایپ شود لطفا"))
+        return data
+
+    def clean_key_words(self):
+        data = self.cleaned_data["key_words"]
+        if data == "":
+            raise ValidationError("کلید واژه نمی تواند خالی باشد.")
+        return data
+    
+
+    def clean_research_methodology(self):
+        data = self.cleaned_data["research_methodology"]
+        if data == "":
+            raise ValidationError("روش تحقیق نمی تواند خالی باشد.")
+        return data
+
+    def clean_summary_of_necessity(self):
+        data = self.cleaned_data["summary_of_necessity"]
+        if data == "":
+            raise ValidationError("خلاصه ضرورت اجرا نمی تواند خالی باشد.")
+        return data
+
+    def clean_summary_method(self):
+        data = self.cleaned_data["summary_method"]
+        if data == "":
+            raise ValidationError("خلاصه روش اجرا نمی تواند خالی باشد.")
+        return data
+
+
 class ProjectForm(forms.Form):
     key_words = forms.CharField(required=False)
     potential_problems = forms.CharField(required=False ,widget=forms.Textarea)
@@ -336,7 +397,7 @@ class ProjectForm(forms.Form):
                 raise ValidationError(_("به فارسی تایپ شود لطفا"))
         return data
 
-    def clean_project_title_english(self):
+    def clean_english_title(self):
         data = self.cleaned_data["english_title"]
         for item in data:
             if 1750 > ord(item) > 1560:

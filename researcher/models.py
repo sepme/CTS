@@ -26,7 +26,8 @@ def profileUpload(instance, filename):
 
 def get_answerFile_path(instance, filename):
     full_filename = "answer-" + instance.researcher.user.username + "-" + filename
-    folder_name = instance.research_question.expert.user.username + '-' + instance.research_question.question_title
+    # folder_name = instance.research_question.expert.user.username + '-' + instance.research_question.question_title
+    folder_name = str(instance.research_question.pk)
     path = os.path.join('Research Question', folder_name)
     return os.path.join(path, full_filename)
 
@@ -47,6 +48,14 @@ def get_resumeFile_path(instance, filename):
         folder_name = str(instance.technique_instance.researcher)
     return os.path.join('resume', folder_name, filename)
 
+def addResearchTechniques(researcher, evaluator):
+    researchTechniques = Technique.objects.filter(technique_type='research_methodology')
+    for tech in researchTechniques:
+        techniqueInstance = TechniqueInstance.objects.get_or_create(researcher=researcher
+                                                            ,technique=tech
+                                                            ,level="A"
+                                                            ,evaluator=evaluator)
+    return
 
 class ResearcherUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -94,7 +103,9 @@ class Status(models.Model):
         if self.inactivate_duration:
             if today > self.inactivate_duration:
                 return False
-        return True
+            else:
+                return True
+        return False
 
     @property
     def remainingTime(self):
@@ -376,7 +387,7 @@ class Technique(models.Model):
 
     technique_type = models.CharField(max_length=30, choices=TYPE, blank=True)
     technique_title = models.CharField(max_length=300)
-    tutorial_link = models.CharField(max_length=500, null=True)
+    tutorial_link = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return self.technique_title
@@ -384,24 +395,24 @@ class Technique(models.Model):
     @staticmethod
     def get_technique_list():
         technique_list = {
-            "molecular_biology": [technique.technique_title for technique in
+            "Molecular Biology": [technique.technique_title for technique in
                                   Technique.objects.filter(technique_type='molecular_biology')],
-            "immunology": [technique.technique_title for technique in
+            "Immunology": [technique.technique_title for technique in
                            Technique.objects.filter(technique_type='immunology')],
-            "imaging": [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')],
-            "histology": [technique.technique_title for technique in
+            "Imaging": [technique.technique_title for technique in Technique.objects.filter(technique_type='imaging')],
+            "Histology": [technique.technique_title for technique in
                           Technique.objects.filter(technique_type='histology')],
-            "general_lab": [technique.technique_title for technique in
+            "General Lab": [technique.technique_title for technique in
                             Technique.objects.filter(technique_type='general_lab')],
-            "animal_lab": [technique.technique_title for technique in
+            "Animal Lab": [technique.technique_title for technique in
                            Technique.objects.filter(technique_type='animal_lab')],
-            "lab_safety": [technique.technique_title for technique in
+            "Lab Safety": [technique.technique_title for technique in
                            Technique.objects.filter(technique_type='lab_safety')],
-            "biochemistry": [technique.technique_title for technique in
+            "Biochemistry": [technique.technique_title for technique in
                              Technique.objects.filter(technique_type='biochemistry')],
-            "cellular_biology": [technique.technique_title for technique in
+            "Cellular Biology": [technique.technique_title for technique in
                                  Technique.objects.filter(technique_type='cellular_biology')],
-            "research_methodology": [technique.technique_title for technique in
+            "Research Methodology": [technique.technique_title for technique in
                                      Technique.objects.filter(technique_type='research_methodology')],
         }
         return technique_list
@@ -513,6 +524,7 @@ class ResearchQuestionInstance(models.Model):
                 permission = Permission.objects.get(content_type=ctype, codename='is_active')
                 user.user_permissions.add(permission)
                 user.save()
+                addResearchTechniques(self.researcher, research_question.expert.expertform.__str__())
             elif perv.is_correct == "not_seen" and self.is_correct == "wrong":                
                 status = self.researcher.status
                 researcher = self.researcher
