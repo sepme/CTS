@@ -787,6 +787,8 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         context['researchers_applied'] = []
         researcherRequested = RequestedProject.objects.filter(project=project)
         for requested in researcherRequested:
+            # if researcher in project.researcher_accepted.all():
+            #     continue
             researcher = requested.researcher
             researcher_applied = {
                 'id': researcher.pk,
