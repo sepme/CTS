@@ -131,7 +131,7 @@ class RandDInfoForm(forms.ModelForm):
 
 class ResearchGroupInfoForm(forms.ModelForm):
     userId = forms.CharField(max_length=150, required=False)
-    photo = forms.ImageField(widget=forms.FileInput)
+    photo = forms.ImageField(widget=forms.FileInput, required=False)
 
     class Meta:
         model = models.ResearchGroupProfile

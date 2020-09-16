@@ -419,12 +419,16 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             context['type_form'] = "R&D"
             context['RandD_form'] = forms.RandDInfoForm(instance=profile,
                                                         initial={
+                                                            "userId": industry_user .userId,
                                                             'RandD_type': profile.RandD_type,
                                                             "RandDname": profile.name})
         else:
             context['type_form'] = "group"
             context['researchgroup_form'] = forms.ResearchGroupInfoForm(instance=profile,
-                                                                        initial={'type_group': profile.type_group})
+                                                                        initial={
+                                                                            "userId": industry_user .userId,
+                                                                            'type_group': profile.type_group
+                                                                            })
         return context
 
     def post(self, request):
