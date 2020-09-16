@@ -419,12 +419,16 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             context['type_form'] = "R&D"
             context['RandD_form'] = forms.RandDInfoForm(instance=profile,
                                                         initial={
+                                                            "userId": industry_user .userId,
                                                             'RandD_type': profile.RandD_type,
                                                             "RandDname": profile.name})
         else:
             context['type_form'] = "group"
             context['researchgroup_form'] = forms.ResearchGroupInfoForm(instance=profile,
-                                                                        initial={'type_group': profile.type_group})
+                                                                        initial={
+                                                                            "userId": industry_user .userId,
+                                                                            'type_group': profile.type_group
+                                                                            })
         return context
 
     def post(self, request):
@@ -783,6 +787,8 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         context['researchers_applied'] = []
         researcherRequested = RequestedProject.objects.filter(project=project)
         for requested in researcherRequested:
+            # if researcher in project.researcher_accepted.all():
+            #     continue
             researcher = requested.researcher
             researcher_applied = {
                 'id': researcher.pk,

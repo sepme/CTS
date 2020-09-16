@@ -1583,7 +1583,7 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 techs[index] = $(this).find("span").text();
             });
-            let requestResearcher = $("#autoAddProject").val();
+            let requestResearcher = $("#researcherAccess").val();
             let telegram_group = projectSettingForm.find("#telegramGroupLink").val();
             let end_note = projectSettingForm.find("#endNoteFile").val();
             let proposal = projectSettingForm.find("#proposalFile").val();
@@ -1592,7 +1592,7 @@ $(document).ready(function () {
                 method: 'POST',
                 url: $(this).attr('action'),
                 data: {
-                    technique: data, id: id, expert_ids: expertIds, researcherRequestDeadline: applicationDeadline, telegram_group: telegram_group, end_note: end_note,
+                    technique: techs, id: id, expert_ids: expertIds, researcherRequestDeadline: applicationDeadline, telegram_group: telegram_group, end_note: end_note,
                     proposal:proposal, requestResearcher: requestResearcher,
                     
                 },
@@ -1604,7 +1604,7 @@ $(document).ready(function () {
                         position: 'bottomLeft',
                     });
                     $('#projectSetting').modal('hide');
-                    setTimeout(location.reload.bind(location), 15000);
+                    setTimeout(location.reload.bind(location), 1500);
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);
