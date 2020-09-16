@@ -26,7 +26,7 @@ SECRET_KEY = 'rj@5yk@^&q&ecfrd=x1@&$k(j99w0!hq#)&$%s2o-z5e)kmbg2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['chamranteam.ir', '127.0.0.1']
+ALLOWED_HOSTS = ['chamranteam.ir', '127.0.0.1', "www.chamranteam.ir"]
 
 # Application definition
 
@@ -169,31 +169,40 @@ LOGGING = {
         'file-debug' : {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'filename': os.path.join(BASE_DIR, "logs", 'debug.log'),
             'formatter': 'file',
         },
         'file-info' : {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'info.log'),
+            'filename': os.path.join(BASE_DIR, "logs", 'info.log'),
             'formatter': 'file',
         },
         'file-warning' : {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'warning.log'),
+            'filename': os.path.join(BASE_DIR, "logs", 'warning.log'),
             'formatter': 'file',
         },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
     },
     'loggers': {
         'django.request': {
-            'handlers': ['file-debug', 'file-info', 'file-warning'],
+            'handlers': ['file-debug', 'file-info', 'file-warning', "mail_admins"],
             'level': 'DEBUG',  # change debug level as appropiate
             'propagate': False,
         },
         'django.request': {
-            'handlers': ['file-debug', 'file-info', 'file-warning'],
+            'handlers': ['file-debug', 'file-info', 'file-warning', "mail_admins"],
             'level': 'INFO',  # change debug level as appropiate
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['file-debug', 'file-info', 'file-warning', "mail_admins"],
+            'level': 'ERROR',  # change debug level as appropiate
             'propagate': False,
         },
     },
@@ -270,6 +279,13 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+ADMINS = [('jafarzadeh', 'a.jafarzadeh1998@gmail.com')
+         ,('basereh', "rzbasereh1@gmail.com")
+         ,('metanat', "sepehr.metanat@gmail.com")]
+MAILER_LIST = ['a.jafarzadeh1998@gmail.com',
+               "rzbasereh1@gmail.com",
+               "sepehr.metanat@gmail.com",]
+SERVER_EMAIL= 'info@chamranteam.ir'
 EMAIL_HOST = 'mail.chamranteam.ir'
 EMAIL_HOST_USER = 'info@chamranteam.ir'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
