@@ -1,6 +1,7 @@
 aiohttp==3.4.4
 async-timeout==3.0.0
 attrs==18.2.0
+beautifulsoup4==4.9.1
 captcha==0.3
 certifi==2018.8.24
 chardet==3.0.4
@@ -29,7 +30,7 @@ python-dateutil==2.7.3
 python-dotenv==0.9.1
 pytz==2018.5
 requests==2.22.0
-selenium==3.141.0
+# selenium==3.141.0
 six==1.11.0
 urllib3==1.24.2
 whitenoise==4.1.2

@@ -1,10 +1,9 @@
 import requests, urllib, io
 from bs4 import BeautifulSoup as bs
-from requests import Session
 
 def sendAjaxrequest(head, url, data):
 
-    session = Session()
+    session = requests.Session()
     session.head(head)
     response = session.post(url=url,
                             data=data,
