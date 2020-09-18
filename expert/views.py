@@ -1048,10 +1048,10 @@ def checkUserId(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def CollectData(request):
     if not TempExpertForm.objects.filter(expertUser=request.user.expertuser).count():
-        link = request.POST['link']
+        url = request.POST['link']
         # link = "https://isid.research.ac.ir/Reza_Malekzadeh"
         try:
-            collectedData = webScraping.webScraping(link=link)
+            collectedData = webScraping.webScraping(url=url)
         except:
             return JsonResponse(data={}, status=400)
         scientific_rank = ""
@@ -1074,7 +1074,6 @@ def CollectData(request):
         elif "مربی" in collectedData['information'][0]:
             scientific_rank = 1
             special_field = collectedData['information'][0][5:]
-        TempExpertForm
         tempForm = TempExpertForm(expertUser=request.user.expertuser,
                                 fullname=collectedData['fullname'],
                                 special_field=special_field,
