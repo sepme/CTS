@@ -3857,6 +3857,7 @@ a.top-button i {
 .border-button:hover {
     background-color: #3CCD1C;
     color: #ffffff;
+    text-decoration: none;
 }
 
 .border-button.warning-button {
