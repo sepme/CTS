@@ -82,7 +82,6 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 expert_form.special_field = form.cleaned_data['special_field']
                 expert_form.scientific_rank = form.cleaned_data['scientific_rank']
                 expert_form.university = form.cleaned_data['university']
-                expert_form.home_number = form.cleaned_data['home_number']
                 expert_form.phone_number = form.cleaned_data['phone_number']
                 if form.cleaned_data['national_code']:
                     expert_form.national_code = form.cleaned_data['national_code']
@@ -1038,10 +1037,13 @@ def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
         if not bool(USER_ID_PATTERN.match(user_id)):
-            return JsonResponse({"invalid_input": True})
+            return JsonResponse({"invalid_input": True,
+                                "message":"فقط از حروف، اعداد و '_' استفاده شود. "})
         if user_id != request.user.expertuser.userId:
             if ExpertUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False, "invalid_input": False})
+                return JsonResponse({"is_unique": False
+                                    ,"invalid_input": False
+                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
 

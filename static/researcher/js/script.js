@@ -412,7 +412,8 @@ $(document).ready(function () {
                 thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
                     .removeClass("fail");
                 thisFormGroup.find(".form-group__status").addClass("check");
-                thisFormGroup.find("input").removeClass("error");
+                thisFormGroup.find("input").removeClass("error").css("color", "").prev().css("color", "");
+                $("#userID").closest("div").find(".error").remove();
                 $.ajax({
                     method: "POST",
                     url: "/researcher/checkUserId",
@@ -420,13 +421,27 @@ $(document).ready(function () {
                     success: function (data) {
                         thisFormGroup.find(".form-group__status").removeClass("check");
                         if (data.invalid_input) {
+                            $("#userID").closest("div").append("<div class='error userId'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + data.message + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
-                            thisFormGroup.find("input").addClass("error");
+                            thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         } else if (data.is_unique) {
                             thisFormGroup.find(".form-group__status").addClass("success");
                         } else {
+                            $("#userID").closest("div").append("<div class='error userId'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + data.message + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
-                            thisFormGroup.find("input").addClass("error");
+                            thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         }
                     },
                     error: function (data) {

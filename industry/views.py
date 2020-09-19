@@ -30,7 +30,7 @@ from expert.forms import RequestResearcherForm
 from researcher.models import Technique, RequestedProject, ResearcherUser
 from chamran_admin.models import Message
 
-USER_ID_PATTERN = re.compile('[\w]+')
+USER_ID_PATTERN = re.compile('[\w]+$')
 
 
 # function name says it all :)
@@ -610,10 +610,13 @@ def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
         if not bool(USER_ID_PATTERN.match(user_id)):
-            return JsonResponse({"invalid_input": True})
-        if user_id != request.user.industryuser:
+            return JsonResponse({"invalid_input": True,
+                                "message":"فقط از حروف، اعداد و '_' استفاده شود. "})
+        if user_id != request.user.industryuser.userId:
             if models.IndustryUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False, "invalid_input": False})
+                return JsonResponse({"is_unique": False
+                                    ,"invalid_input": False
+                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
 
