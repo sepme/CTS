@@ -316,10 +316,7 @@ class SignupUser(generic.FormView):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
-        try:            
-            message = Message.objects.filter(title="خوش آمدگویی").first()
-        except:
-            message = None
+        message = Message.objects.filter(title="خوش‌آمدگویی").first()
         if message is None:
 
             context= """با سلام،
@@ -328,9 +325,9 @@ class SignupUser(generic.FormView):
 لطفا برای آشنایی بیشتر با امکانات حساب کاربری‌تان، قسمت‌های مختلف آن را از طریق منوی سمت راست، بررسی بفرمایید.
 با توجه به این که نسخه فعلی این سامانه، نسخه آزمایشی‌ست، برای ارتقای هر چه بیشتر قابلیت‌ها و امکانات، نیازمند حضور گرم و پرشور شما هستیم.
 به همین منظور، می‌توانید برای انتقال تجربیات کاربری و یا پیشنهادهای‌تان، می‌توانید از طریق شماره تلفن 09102143451 و یا فرم ارسال گزارش (تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) با ما در ارتباط باشید.
-با آرزوی موفیت،
+با آرزوی موفقیت،
 چمران‌تیم """
-            message = Message(title="خوش آمدگویی",
+            message = Message(title="خوش‌آمدگویی",
                             text=context,
                             type=0)
             message.save() 
