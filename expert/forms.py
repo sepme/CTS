@@ -33,7 +33,7 @@ class InitialInfoForm(forms.ModelForm):
             'special_field'   : {'required': "حوزه تخصصی نمی تواند خالی باشد."},
             'scientific_rank' : {'required': 'مرتبه علمی نباید خالی باشد.'},
             'university'      : {'required': "دانشگاه مورد نظر نمی تواند خالی باشد."},
-            'home_number'     : {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
+            # 'home_number'     : {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
             'phone_number'    : {'required': "شماره تلفن همراه نمی تواند خالی باشد."},
         }
     # photo = forms.FileField(max_length=255, error_messages={'required': "عکس نمی تواند خالی باشد."})
@@ -58,18 +58,6 @@ class InitialInfoForm(forms.ModelForm):
         if not bool(USER_ID_PATTERN.match(data)):
             raise ValidationError('فقط شامل حروف و اعداد و خط زیر است.')
         return data
-
-    def clean_home_number(self):
-        home_number = self.cleaned_data.get('home_number')
-        try:
-            int(home_number)
-        except ValueError:
-            raise forms.ValidationError('شماره تلفن منزل باید یک عدد باشد.')
-
-        if len(home_number) != 11:
-            raise forms.ValidationError('شماره تلفن منزل باید یازده رقمی باشد.')
-
-        return home_number
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
@@ -146,6 +134,8 @@ class ExpertInfoForm(forms.ModelForm):
 
     def clean_home_number(self):
         home_number = self.cleaned_data.get('home_number')
+        if home_number == "":
+            return home_number
         try:
             int(home_number)
         except ValueError:
