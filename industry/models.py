@@ -462,6 +462,19 @@ class Project(models.Model):
         }
         return data
 
+    def get_involved_user(self, userId):
+        try:
+            return self.researcher_accepted.get(userId=userId).user
+        except:
+            try:
+                return self.expert_accepted.get(userId=userId).user
+            except:
+                if self.industry_creator.userId == userId:
+                    return self.industry_creator.user
+                else:
+                    return None
+                    
+
     def is_date_valid(self):
         return True
         # if self.date_project_started is not None and self.date_finished is not None and \
