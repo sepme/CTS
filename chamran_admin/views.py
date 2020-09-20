@@ -7,7 +7,7 @@ from django.views import generic, View
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required , permission_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -23,7 +23,7 @@ from chamran_admin.models import Message
 from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
-from industry.models import IndustryUser, Comment
+from industry.models import IndustryUser, Comment, Project
 
 LOCAL_URL = 'chamranteam.ir'
 
@@ -707,3 +707,68 @@ def AddOpinion(request):
         return JsonResponse(data={"success" : "success"})
     return JsonResponse(data=form.errors, status=400)
         
+@permission_required(perm=[], login_url="/login")
+def addCard(request):
+    form = forms.CardForm()
+    project = Project.objects.get(id=request.POST['project_id'])
+    if form.is_valid():
+        newCard = models.Card.object.create(title=form.cleaned_data['title'],
+                                            deadline=form.cleaned_data['deadline'])
+        newCard.creator = request.user
+        newCard.project = project
+        newCard.save()
+        return JsonResponse(data={})
+    else:
+        return JsonResponse(data=form.errors, status=400)
+
+@permission_required(perm=[], login_url="/login")
+def cardList(request):
+    try:
+        project = Project.objects.get(id=request.POST["project_id"])
+    except:
+        return JsonResponse(data={"message": "Project Id is Invalid.",}, status=400)
+    allCards = models.Card.objects.filter(project=project)
+    cardInfo = []
+    for card in allCards:
+        cardInfo.append({
+            "title": card.title,
+            "deadline": card.deadline,
+        })
+    return JsonResponse(data={"cardInfo": cardInfo})
+
+@permission_required(perm=[], login_url="/login")
+def addTask(request):
+    if request.POST['description'] == "":
+        return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
+    description = request.POST['description']
+    project = Project.objects.filter(id=request.user.POST['project_id'])
+    user = request.user
+    accoun_type = find_account_type(user)
+    involved_users_list = request.POST.getlist('involved_users')
+    task = models.Task.objects.create(project=project
+                              ,creator=user
+                              ,deadline="daedline"
+                              ,description=description)
+    for userId in involved_users_list:
+        user = project.get_involved_user(userId)
+        if user is not None and user not in task.involved_user.all():
+            task.involved_user.add(user)
+    task.save()
+    return JsonResponse(data={"message": "task completely added."})
+
+@permission_required(perm=[], login_url="/login")
+def taskList(request):
+    try:
+        project = Project.objects.get(id=request.POST["project_id"])
+    except:
+        return JsonResponse(data={"message": "Project Id is Invalid.",}, status=400)
+
+    allTasks = models.Task.objects.filter(project=project)
+    taskInfo = []
+    for task in allTasks:
+        taskInfo.append({
+                        'description': task.description,
+                        'involved_user': [find_user(user).userId for user in task.involved_user.all()],
+                        'deadline': task.deadline,
+                    })
+    return JsonResponse(data={"taskInfo": taskInfo})

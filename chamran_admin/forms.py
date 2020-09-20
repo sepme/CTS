@@ -152,3 +152,23 @@ class FeedBackForm(forms.ModelForm):
         widgets = {
             'opinion': forms.Textarea(),
         }
+
+class CardForm(forms.ModelForm):
+    
+    class Meta:
+        model = models.Card
+        fields = ['title', 'deadline']
+
+    def clean_title(self):
+        data = self.cleaned_data["title"]
+        if data == "":
+            raise ValidationError("عنوان نمی تواند خالی باشد.")
+        return data
+    
+    def clean_deadline(self):
+        data = self.cleaned_data["deadline"]
+        if data == "":
+            raise ValidationError("زمان پایان نمی تواند خالی باشد.")
+        return data
+    
+    
