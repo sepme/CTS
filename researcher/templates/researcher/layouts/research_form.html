@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 text-right">
                                 <div class="form-group">
                                     <label for='subject'>عنوان طرح پژوهشی</label>
                                     <input type='text' id='subject' class='w-100' name="title">
@@ -21,9 +21,22 @@
                                     <label for='admin'>نام مجری</label>
                                     <input type='text' id='admin' class='w-100' name="presenter">
                                 </div>
+                                <div class="form-check form-check-inline custom-circle-radio">
+                                    <input class="form-check-input" type="radio" name="exampleRadios"
+                                           id="exampleRadios1" value="option1" checked>
+                                    <label class="form-check-label" for="exampleRadios1">
+                                        مسئول اجرا
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline custom-circle-radio">
+                                    <input class="form-check-input" type="radio" name="exampleRadios"
+                                           id="exampleRadios2" value="option2">
+                                    <label class="form-check-label" for="exampleRadios2">
+                                        همکار
+                                    </label>
+                                </div>
                                 <div class="form-group">
-                                    <label for='liable'>مسئول اجرا/همکار</label>
-                                    <input type='text' id='liable' class='w-100' name="responsible">
+                                    <label for='liable'></label><input type='text' id='liable' class='w-100' name="responsible">
                                 </div>
                                 <div class="form-group">
                                     <label class='rankLabel' for='rank' style='width:245px'>وضعیت طرح پژوهشی</label>
@@ -39,7 +52,8 @@
                                 </div>
                             </div>
                             <div class="col-md-6 d-none d-md-flex">
-                                <img src="{% static '/img/research.svg' %}" alt="research img" class="form-image" width="100%">
+                                <img src="{% static '/img/research.svg' %}" alt="research img" class="form-image"
+                                     width="100%">
                             </div>
                         </div>
                     </div>

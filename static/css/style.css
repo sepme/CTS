@@ -6585,7 +6585,10 @@ table .fas.fa-trash-alt:hover {
     padding: 3px 7px;
 }
 
-.ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control button:hover, , .ct-option-btn button:hover {
+.ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control button:hover,
+
+,
+.ct-option-btn button:hover {
     background-color: #e0e1e2;
 }
 
@@ -6609,5 +6612,41 @@ table .fas.fa-trash-alt:hover {
 
 .ct-checklist__item .ct-checklist__text .atMention.me {
     color: #3ccd1c;
+}
+
+
+.custom-circle-radio {
+    margin-right: 0;
+    margin-left: 0.75rem;
+}
+
+.custom-circle-radio input {
+    visibility: visible;
+    margin-left: 0.3125rem;
+    margin-right: 0;
+}
+
+.custom-circle-radio label {
+    position: relative;
+    right: 5px;
+}
+
+.custom-circle-radio input:checked + label {
+    border: none;
+    box-shadow: none;
+}
+
+/*.custom-circle-radio .form-check-label::before {*/
+/*    background-color: darkorange;*/
+/*}*/
+
+.form-check-input:checked ~ .form-check-label::before {
+    color: #fff;
+    border-color: #7B1FA2;
+    background-color: #7B1FA2;
+}
+
+.modal .form-check-input {
+    height: unset;
 }
 
