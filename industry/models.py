@@ -331,7 +331,7 @@ class ResearchProjectForm(models.Model):
 
 
 def projectFiles(instance, file_name):
-    return os.path.join(str(instance))
+    return os.path.join("projects", str(instance), file_name)
 
 class Project(models.Model):
     form = models.OneToOneField(ProjectForm, on_delete=models.CASCADE, verbose_name="فرم پروژه", null=True, blank=True)

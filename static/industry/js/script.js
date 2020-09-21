@@ -1403,6 +1403,13 @@ $(document).ready(function () {
                 data: {'id': pk},
                 success: function (data) {
                     console.log(data);
+                    $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
+                
+                    if (data.end_note_fileName)
+                        $(".end-note-file-name").text(data.end_note_fileName);
+                    if (data.proposal_filaName)
+                        $(".proposal-file-name").text(data.proposal_filaName);
+
                     let source = [];
                     for (let i = 0; i <= Object.keys(data.techniques).length - 1; i++) {
                         let item = {};
@@ -1588,30 +1595,31 @@ $(document).ready(function () {
         //## submitting project setting form
         projectSettingForm.submit(function (event) {
             event.preventDefault();
-            let techs = [];
+            let data = new FormData(projectSettingForm.get(0));
+            // let techs = [];
             let id = $(this).attr("id");
-            let expertIds = [];
+            // let expertIds = [];
             let applicationDeadline = $("#ApplicationDeadline").val();
             $.each(projectSettingForm.find(".selected-expert"), function () {
-                expertIds.push($(this).attr("id"));
+                data.append("expert_ids",$(this).attr("id"));
             });
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
-                techs[index] = $(this).find("span").text();
+                data.append("technique", $(this).find("span").text());
+                // techs[index] = $(this).find("span").text();
             });
             let requestResearcher = $("#researcherAccess").val();
             let telegram_group = projectSettingForm.find("#telegramGroupLink").val();
-            let end_note = projectSettingForm.find("#endNoteFile").val();
-            let proposal = projectSettingForm.find("#proposalFile").val();
+            data.set('id', id);
+            data.set('telegram_group', telegram_group);
+            data.set('researcherRequestDeadline', applicationDeadline);
+            data.set('requestResearcher', requestResearcher);
             $.ajax({
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('action'),
-                data: {
-                    technique: techs, id: id, expert_ids: expertIds, researcherRequestDeadline: applicationDeadline, telegram_group: telegram_group, end_note: end_note,
-                    proposal:proposal, requestResearcher: requestResearcher,
-                    
-                },
-                dataType: 'json',
+                data: data,
+                processData: false,
+                contentType: false,
                 success: function (data) {
                     iziToast.success({
                         rtl: true,

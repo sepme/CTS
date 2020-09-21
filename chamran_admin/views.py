@@ -31,6 +31,15 @@ LOCAL_URL = 'chamranteam.ir'
 def jalali_date(jdate):
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
 
+def exchangePersainNumToEnglish(date):
+    changed = ""
+    for item in date:
+        try:
+            changed += str(int(item))
+        except:
+            changed += "-"
+    return changed
+
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
@@ -709,8 +718,10 @@ def addCard(request):
     form = forms.CardForm()
     project = Project.objects.get(id=request.POST['project_id'])
     if form.is_valid():
+        deadline = exchangePersainNumToEnglish(form.cleaned_data['deadline'])
+        deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
         newCard = models.Card.object.create(title=form.cleaned_data['title'],
-                                            deadline=form.cleaned_data['deadline'])
+                                            deadline=deadline)
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
@@ -729,7 +740,7 @@ def cardList(request):
     for card in allCards:
         cardInfo.append({
             "title": card.title,
-            "deadline": card.deadline,
+            "deadline": str(card.deadline).replace("-","/"),
         })
     return JsonResponse(data={"cardInfo": cardInfo})
 
@@ -742,9 +753,11 @@ def addTask(request):
     user = request.user
     accoun_type = find_account_type(user)
     involved_users_list = request.POST.getlist('involved_users')
+    deadline = exchangePersainNumToEnglish(request.POST['deadline'])
+    deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
     task = models.Task.objects.create(project=project
                               ,creator=user
-                              ,deadline="daedline"
+                              ,deadline=deadline
                               ,description=description)
     for userId in involved_users_list:
         user = project.get_involved_user(userId)
@@ -766,6 +779,6 @@ def taskList(request):
         taskInfo.append({
                         'description': task.description,
                         'involved_user': [find_user(user).userId for user in task.involved_user.all()],
-                        'deadline': task.deadline,
+                        'deadline': str(task.deadline).replace("-","/"),
                     })
     return JsonResponse(data={"taskInfo": taskInfo})
