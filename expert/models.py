@@ -93,7 +93,7 @@ class ExpertForm(models.Model):
     scientific_rank = models.IntegerField(choices=scientific_rank_choice, verbose_name="مرتبه علمی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه محل فعالیت")
     home_address = models.CharField(max_length=512, verbose_name="ادرس منزل", blank=True)
-    home_number = models.CharField(max_length=15, verbose_name="شماره منزل", null=True)
+    home_number = models.CharField(max_length=15, verbose_name="شماره منزل", null=True, blank=True)
     phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن همراه", null=True)
     keywords = models.ManyToManyField('industry.Keyword', verbose_name="علایق پژوهشی", blank=True)
     eq_test = models.OneToOneField(EqTest, on_delete=models.SET_NULL, verbose_name="تست EQ", blank=True, null=True)

@@ -79,8 +79,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['status'] = researcher.status.status
         if researcher.status.status == 'deactivated':
             return context
-        all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gte=0)]
-        all_projects = Project.objects.filter(id__in=all_projects)
+        all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gt=0)]
+        all_projects = Project.objects.filter(id__in=all_projects).filter(researcherRequestDeadline__gte=timezone.now())
         new_projects = all_projects.exclude(researcher_applied__in=[researcher])
         applied_projects = all_projects.filter(researcher_applied__in=[researcher])
         technique_title = [str(item.technique) for item in researcher.techniqueinstance_set.all()]
@@ -111,8 +111,8 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'project_title': project.project_form.persian_title,
                 'keyword': project.project_form.key_words.all(),
                 'started': date_last(datetime.date.today(), project.date_project_started),
-                'finished': date_last(datetime.date.today(), project.date_finished),
                 'need_hour': project.requestresearcher.least_hour,
+                "expiration" : date_last(project.researcherRequestDeadline, datetime.date.today()),
             }
             new_project_list.append(temp)
         for project in missedProjects:
@@ -122,6 +122,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'started': date_last(datetime.date.today(), project["project"].date_project_started),
                 'finished': date_last(datetime.date.today(), project["project"].date_finished),
                 'need_hour': project["project"].requestresearcher.least_hour,
+                "expiration" : date_last(project.researcherRequestDeadline, datetime.date.today()),
                 'missedTechinque': project["missedTechnique"],
                 "satisfiedTechniques": project['satisfiedTechniques'],
             }
@@ -164,8 +165,9 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     'project_title': project.project_form.persian_title,
                     'keyword': project.project_form.key_words.all(),
                     'started': date_last(datetime.date.today(), project.date_project_started),
-                    'finished': date_last(datetime.date.today(), project.date_finished),
+
                     'need_hour': project.requestresearcher.least_hour,
+                    "expiration" : date_last(project.researcherRequestDeadline, datetime.date.today()),
                     'status': status,
                 }
                 my_project_list.append(temp)
@@ -958,10 +960,13 @@ def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
         if not bool(USER_ID_PATTERN.match(user_id)):
-            return JsonResponse({"invalid_input": True})
+            return JsonResponse({"invalid_input": True,
+                                "message":"فقط از حروف، اعداد و '_' استفاده شود. "})
         if user_id != request.user.researcheruser.userId:
             if models.ResearcherUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False, "invalid_input": False})
+                return JsonResponse({"is_unique": False
+                                    ,"invalid_input": False
+                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('researcher.be_researcher', login_url='/login/')

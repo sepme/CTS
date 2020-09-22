@@ -517,19 +517,42 @@ class ResearchQuestionInstance(models.Model):
         if self.id:
             perv = ResearchQuestionInstance.objects.get(id=self.id)
             if perv.is_correct == "not_seen" and self.is_correct == "correct":
-                message = Message.objects.get(id=2)
+                message = Message.objects.filter(title="تایید سوال پژوهشی").first()
+                if message is None:
+                    context = """با سلام،
+پژوهشگر گرامی، پاسخ سوال پژوهشی شما پذیرفته شد.
+به این ترتیب، پیوستن شما به مجموعه پژوهشگران «چمران‌تیم» را تبریک می‌گوییم و امیدواریم شاهد پیشرفت شما در زمینه پژوهش باشیم.
+از این پس می‌توانید از طریق قسمت «پروژه‌ها» برای شرکت در پروژه‌های تعریف‌شده توسط مجموعه‌های پژوهشی، درخواست ارسال کنید. 
+البته در نظر داشته باشید که برای شرکت در هر پروژه‌ای، لازم است مهارت‌های پژوهشی آن پروژه را قبلا کسب کرده باشید. به همین خاطر، توصیه می‌کنیم به قسمت «مهارت‌های پژوهشی» حساب کاربری‌تان هم سر بزنید و با افزایش تعداد مهارت‌های‌تان، شانس خود را برای شرکت در پروژه‌ها افزایش دهید.
+همچنین، با تکمیل یا بارگذاری رزومه علمی‌تان از طریق قسمت «اطلاعات کاربری»، می‌توانید توانمندی‌های خود را در هنگام انتخاب شدن‌تان توسط استاد و یا مجموعه پژوهشی، نشان دهید.
+با آرزوی موفقیت، 
+چمران‌تیم"""
+                    message = Message.objects.create(title="تایید سوال پژوهشی",
+                                                     text=context,
+                                                     type=0)
                 message.receiver.add(self.researcher.user)
                 message.save()
                 status = self.researcher.status
                 status.status = "free"
                 status.save()
-                user = self.researcher.user
-                ctype = ContentType.objects.get_for_model(ResearcherUser)
-                permission = Permission.objects.get(content_type=ctype, codename='is_active')
-                user.user_permissions.add(permission)
-                user.save()
                 addResearchTechniques(self.researcher, self.research_question.expert.expertform.__str__())
             elif perv.is_correct == "not_seen" and self.is_correct == "wrong":                
+                title = "رد سوال پژوهشی"
+                message = Message.objects.filter(title=title).first()
+                if message is None:
+                    text = """با سلام،
+    پژوهشگر گرامی، متاسفانه پاسخ شما به سوال پژوهشی (در مهلت یک هفته‌ای ارسال نشد / به دلیل نداشتن کیفیت مناسب، مورد قبول واقع نشد).
+    علی‌رغم میل درونی، حساب کاربری شما به مدت دو هفته به حالت تعلیق در خواهد آمد و پس از آن، مجددا می‌توانید در یک سوال پژوهشی شرکت نمایید.
+    امیدواریم دو هفته‌ی دیگر هم شما را ببینیم.
+    در ضمن، در صورتی که فکر می‌کنید این پیام به اشتباه ارسال شده است، می‌توانید مراتب اعتراض خود را از طریق شماره تلفن ۰۹۱۰۲۱۴۳۴۵۱ و یا فرم ارسال گزارش (با کلیک بر روی تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) ارسال فرمایید.
+    با آرزوی موفقیت،
+    چمران‌تیم"""
+                    messageType = 1
+                    message = Message.objects.create(title=title,
+                                                     text=text,
+                                                     type=messageType)
+                message.receiver.add(answer.researcher.user)
+                message.save()
                 status = self.researcher.status
                 researcher = self.researcher
                 status.status = 'deactivated'

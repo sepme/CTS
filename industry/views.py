@@ -29,8 +29,9 @@ from expert.views import showAllTechniques
 from expert.forms import RequestResearcherForm
 from researcher.models import Technique, RequestedProject, ResearcherUser
 from chamran_admin.models import Message
+from chamran_admin.views import exchangePersainNumToEnglish
 
-USER_ID_PATTERN = re.compile('[\w]+')
+USER_ID_PATTERN = re.compile('[\w]+$')
 
 
 # function name says it all :)
@@ -134,6 +135,8 @@ def ActiveProject(request, project, data):
         }
         if expert.expertform.photo:
             expertData['photo'] = expert.expertform.photo.url
+        else:
+            expertData['photo'] = "/static/industry/img/profile.jpg"
         data['enforcers'].append(expertData)
     data["executive_info"] = project.executive_info
     # data["budget_amount"] = project.project_form.required_budget
@@ -610,10 +613,13 @@ def checkUserId(request):
     if request.is_ajax() and request.method == "POST":
         user_id = request.POST.get("user_id")
         if not bool(USER_ID_PATTERN.match(user_id)):
-            return JsonResponse({"invalid_input": True})
-        if user_id != request.user.industryuser:
+            return JsonResponse({"invalid_input": True,
+                                "message":"فقط از حروف، اعداد و '_' استفاده شود. "})
+        if user_id != request.user.industryuser.userId:
             if models.IndustryUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False, "invalid_input": False})
+                return JsonResponse({"is_unique": False
+                                    ,"invalid_input": False
+                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
         return JsonResponse({"is_unique": True, "invalid_input": False})
 
 
@@ -625,11 +631,16 @@ def ProjectSetting(request):
             "techniques": showAllTechniques(),
             "projectTechniques": [],
             "requestResearcher": project.reseacherRequestAbility,
+            "researcherRequestDeadline": "",
             "telegram_group": project.telegram_group,
         }
+        if project.researcherRequestDeadline is not None:
+            data["researcherRequestDeadline"] = str(project.researcherRequestDeadline).replace("-","/")
         if project.end_note:
+            data['end_note_fileName'] = project.end_note.name.split("/")[-1]
             data['end_note'] = project.end_note.url
         if project.proposal:
+            data['proposal_filaName'] = project.proposal.name.split("/")[-1]
             data['proposal'] = project.proposal.url
         for tech in project.project_form.techniques.all():
             data['projectTechniques'].append(tech.technique_title)
@@ -645,6 +656,8 @@ def ProjectSetting(request):
             }
             if expert.expertform.photo:
                 expertData['photo'] = expert.expertform.photo.url
+            else:
+                expertData['photo'] = "/static/industry/img/profile.jpg"
             data['acceptedExpert'].append(expertData)
         data['suggestedExpert'] = []
         for expert in project.expert_suggested.all():
@@ -659,6 +672,8 @@ def ProjectSetting(request):
             }
             if expert.expertform.photo:
                 expertData['photo'] = expert.expertform.photo.url
+            else:
+                expertData['photo'] = "/static/industry/img/profile.jpg"
             data['suggestedExpert'].append(expertData)
         return JsonResponse(data=data)
     elif request.method == "POST":
@@ -667,9 +682,18 @@ def ProjectSetting(request):
         project = models.Project.objects.get(id=request.POST['id'])
         projectform = project.project_form
         if 'requestResearcher' in request.POST.keys():
-            project.reseacherRequestAbility = request.POST['requestResearcher']
+            if request.POST['researcherRequestDeadline'] == "":
+                return  JsonResponse(data={"message": "مهلت اعتبار درخواست نمی تواند خالی باشد.",
+                                           "researcherRequestDeadline": "مهلت اعتبار درخواست نمی تواند خالی باشد."},status=400)
+            project.reseacherRequestAbility = True
+            date = exchangePersainNumToEnglish(request.POST['researcherRequestDeadline'])
+            project.researcherRequestDeadline = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         else:
             project.reseacherRequestAbility = False
+            project.researcherRequestDeadline = None
+        # if request.POST['researcherRequestDeadline'] != "":
+        #     date = exchangePersainNumToEnglish(request.POST['researcherRequestDeadline'])
+        #     project.researcherRequestDeadline = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         if 'telegram_group' in request.POST.keys():
             project.telegram_group = request.POST['telegram_group']
         if 'end_note' in request.FILES.keys():
@@ -751,6 +775,8 @@ def searchUserId(request):
         }
         if expert.expertform.photo:
             expertData['photo'] = expert.expertform.photo.url
+        else:
+            expertData['photo'] = "/static/industry/img/profile.jpg"
         data['experts'].append(expertData)
     return JsonResponse(data=data)
 

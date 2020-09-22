@@ -939,7 +939,8 @@ $(document).ready(function () {
                 thisFormGroup.find(".form-group__status").removeClass("check").removeClass("success")
                     .removeClass("fail");
                 thisFormGroup.find(".form-group__status").addClass("check");
-                thisFormGroup.find("input").removeClass("error");
+                thisFormGroup.find("input").removeClass("error").css("color", "").prev().css("color", "");
+                $("#userID").closest("div").find(".error").remove();
                 $.ajax({
                     method: "POST",
                     url: "/industry/checkUserId",
@@ -948,13 +949,27 @@ $(document).ready(function () {
                         console.log(data);
                         thisFormGroup.find(".form-group__status").removeClass("check");
                         if (data.invalid_input) {
+                            $("#userID").closest("div").append("<div class='error userId'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + data.message + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
-                            thisFormGroup.find("input").addClass("error");
+                            thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         } else if (data.is_unique) {
                             thisFormGroup.find(".form-group__status").addClass("success");
                         } else {
+                            $("#userID").closest("div").append("<div class='error userId'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + data.message + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
-                            thisFormGroup.find("input").addClass("error");
+                            thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         }
                     },
                     error: function (data) {
@@ -1388,6 +1403,22 @@ $(document).ready(function () {
                 data: {'id': pk},
                 success: function (data) {
                     console.log(data);
+                    console.log(data.requestResearcher);
+                    if (data.requestResearcher){
+                        $("#researcherAccess").attr("value", 1);
+                        projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
+                        $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
+                    }
+                    else{
+                        // $("#researcherAccess").click();
+                        $("#researcherAccess").attr("value", "");
+                        projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
+                    }
+                    if (data.end_note_fileName)
+                        $(".end-note-file-name").text(data.end_note_fileName);
+                    if (data.proposal_filaName)
+                        $(".proposal-file-name").text(data.proposal_filaName);
+
                     let source = [];
                     for (let i = 0; i <= Object.keys(data.techniques).length - 1; i++) {
                         let item = {};
@@ -1555,9 +1586,11 @@ $(document).ready(function () {
             if ($(this).is(":checked")) {
                     console.log("1");
                    projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
+                   $("#researcherAccess").attr("value", 1);
             } else {
                 console.log("0");
                projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
+               $("#researcherAccess").attr("value", 0);
             }
         });
         
@@ -1573,30 +1606,34 @@ $(document).ready(function () {
         //## submitting project setting form
         projectSettingForm.submit(function (event) {
             event.preventDefault();
-            let techs = [];
+            let data = new FormData(projectSettingForm.get(0));
+            // let techs = [];
             let id = $(this).attr("id");
-            let expertIds = [];
+            // let expertIds = [];
             let applicationDeadline = $("#ApplicationDeadline").val();
             $.each(projectSettingForm.find(".selected-expert"), function () {
-                expertIds.push($(this).attr("id"));
+                data.append("expert_ids",$(this).attr("id"));
             });
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
-                techs[index] = $(this).find("span").text();
-            });
-            let requestResearcher = $("#researcherAccess").val();
+                data.append("technique", $(this).find("span").text());
+                // techs[index] = $(this).find("span").text();
+            });            
+            
             let telegram_group = projectSettingForm.find("#telegramGroupLink").val();
-            let end_note = projectSettingForm.find("#endNoteFile").val();
-            let proposal = projectSettingForm.find("#proposalFile").val();
+            data.set('id', id);
+            data.set('telegram_group', telegram_group);
+            data.set('researcherRequestDeadline', applicationDeadline);
+            if ($("#researcherAccess").val() == 1)
+                data.set('requestResearcher', true);
+            $("#ApplicationDeadline").removeClass("error").css("color", "").prev().css("color", "");
+            $("#ApplicationDeadline").closest("div").find(".error").remove();
             $.ajax({
                 traditional: true,
                 method: 'POST',
                 url: $(this).attr('action'),
-                data: {
-                    technique: techs, id: id, expert_ids: expertIds, researcherRequestDeadline: applicationDeadline, telegram_group: telegram_group, end_note: end_note,
-                    proposal:proposal, requestResearcher: requestResearcher,
-                    
-                },
-                dataType: 'json',
+                data: data,
+                processData: false,
+                contentType: false,
                 success: function (data) {
                     iziToast.success({
                         rtl: true,
@@ -1618,6 +1655,16 @@ $(document).ready(function () {
                         message: message,
                         position: 'bottomLeft'
                     });
+                    if (obj.researcherRequestDeadline){
+                        $("#ApplicationDeadline").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.researcherRequestDeadline + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("#ApplicationDeadline").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
                 }
             });
         });

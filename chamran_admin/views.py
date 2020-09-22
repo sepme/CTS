@@ -7,7 +7,7 @@ from django.views import generic, View
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required , permission_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -23,13 +23,22 @@ from chamran_admin.models import Message
 from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
-from industry.models import IndustryUser, Comment
+from industry.models import IndustryUser, Comment, Project
 
 LOCAL_URL = 'chamranteam.ir'
 
 
 def jalali_date(jdate):
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
+
+def exchangePersainNumToEnglish(date):
+    changed = ""
+    for item in date:
+        try:
+            changed += str(int(item))
+        except:
+            changed += "-"
+    return changed
 
 
 def get_message_detail(request, message_id):
@@ -316,10 +325,7 @@ class SignupUser(generic.FormView):
         user = User(username=username, email=email)
         user.set_password(password)
         user.save()
-        try:            
-            message = Message.objects.filter(title="خوش آمدگویی").first()
-        except:
-            message = None
+        message = Message.objects.filter(title="خوش‌آمدگویی").first()
         if message is None:
 
             context= """با سلام،
@@ -328,9 +334,9 @@ class SignupUser(generic.FormView):
 لطفا برای آشنایی بیشتر با امکانات حساب کاربری‌تان، قسمت‌های مختلف آن را از طریق منوی سمت راست، بررسی بفرمایید.
 با توجه به این که نسخه فعلی این سامانه، نسخه آزمایشی‌ست، برای ارتقای هر چه بیشتر قابلیت‌ها و امکانات، نیازمند حضور گرم و پرشور شما هستیم.
 به همین منظور، می‌توانید برای انتقال تجربیات کاربری و یا پیشنهادهای‌تان، می‌توانید از طریق شماره تلفن 09102143451 و یا فرم ارسال گزارش (تصویر علامت تعجب در گوشه بالا سمت چپ صفحه نمایش) با ما در ارتباط باشید.
-با آرزوی موفیت،
+با آرزوی موفقیت،
 چمران‌تیم """
-            message = Message(title="خوش آمدگویی",
+            message = Message(title="خوش‌آمدگویی",
                             text=context,
                             type=0)
             message.save() 
@@ -707,3 +713,72 @@ def AddOpinion(request):
         return JsonResponse(data={"success" : "success"})
     return JsonResponse(data=form.errors, status=400)
         
+@permission_required(perm=[], login_url="/login")
+def addCard(request):
+    form = forms.CardForm()
+    project = Project.objects.get(id=request.POST['project_id'])
+    if form.is_valid():
+        deadline = exchangePersainNumToEnglish(form.cleaned_data['deadline'])
+        deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
+        newCard = models.Card.object.create(title=form.cleaned_data['title'],
+                                            deadline=deadline)
+        newCard.creator = request.user
+        newCard.project = project
+        newCard.save()
+        return JsonResponse(data={})
+    else:
+        return JsonResponse(data=form.errors, status=400)
+
+@permission_required(perm=[], login_url="/login")
+def cardList(request):
+    try:
+        project = Project.objects.get(id=request.POST["project_id"])
+    except:
+        return JsonResponse(data={"message": "Project Id is Invalid.",}, status=400)
+    allCards = models.Card.objects.filter(project=project)
+    cardInfo = []
+    for card in allCards:
+        cardInfo.append({
+            "title": card.title,
+            "deadline": str(card.deadline).replace("-","/"),
+        })
+    return JsonResponse(data={"cardInfo": cardInfo})
+
+@permission_required(perm=[], login_url="/login")
+def addTask(request):
+    if request.POST['description'] == "":
+        return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
+    description = request.POST['description']
+    project = Project.objects.filter(id=request.user.POST['project_id'])
+    user = request.user
+    accoun_type = find_account_type(user)
+    involved_users_list = request.POST.getlist('involved_users')
+    deadline = exchangePersainNumToEnglish(request.POST['deadline'])
+    deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
+    task = models.Task.objects.create(project=project
+                              ,creator=user
+                              ,deadline=deadline
+                              ,description=description)
+    for userId in involved_users_list:
+        user = project.get_involved_user(userId)
+        if user is not None and user not in task.involved_user.all():
+            task.involved_user.add(user)
+    task.save()
+    return JsonResponse(data={"message": "task completely added."})
+
+@permission_required(perm=[], login_url="/login")
+def taskList(request):
+    try:
+        project = Project.objects.get(id=request.POST["project_id"])
+    except:
+        return JsonResponse(data={"message": "Project Id is Invalid.",}, status=400)
+
+    allTasks = models.Task.objects.filter(project=project)
+    taskInfo = []
+    for task in allTasks:
+        taskInfo.append({
+                        'description': task.description,
+                        'involved_user': [find_user(user).userId for user in task.involved_user.all()],
+                        'deadline': str(task.deadline).replace("-","/"),
+                    })
+    return JsonResponse(data={"taskInfo": taskInfo})

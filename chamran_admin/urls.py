@@ -26,4 +26,8 @@ urlpatterns = [
     path('newsForm/', views.NewsForm.as_view(), name='createNews'),
     path('contactUs/', views.ContactUS ,name='contactUs'),
     path("opinion", views.AddOpinion ,name="addOpinion"),
+    path("addCard/", views.addCard, name="add-Card"),
+    path("addTask/", views.addTask, name="add-Task"),
+    path("card-list", views.cardList, name="card-list"),
+    path("task-list", views.taskList, name="task-list"),
 ]
