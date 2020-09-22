@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from ChamranTeamSite import settings
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
@@ -377,7 +377,7 @@ class Project(models.Model):
     expert_banned = models.ManyToManyField("expert.ExpertUser", verbose_name="اساتید رد شده",
                                            related_name="expert_banned", blank=True)
     executive_info = models.TextField(verbose_name="توضیحات اجرایی", null=True, blank=True)
-    reseacherRequestAbility = models.BooleanField(verbose_name="قابلیت درخواست پژوهشگر", default=True, null=True)
+    reseacherRequestAbility = models.BooleanField(verbose_name="قابلیت درخواست پژوهشگر", default=False, null=True)
     telegram_group = models.CharField(verbose_name="لینک تلگرام", max_length=256, null=True, blank=True)
     end_note = models.FileField(verbose_name="فایل endNote", upload_to=projectFiles, max_length=128, null=True, blank=True)
     proposal = models.FileField(verbose_name="فایل پروپوزال", upload_to=projectFiles, max_length=128, null=True, blank=True)

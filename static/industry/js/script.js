@@ -1403,8 +1403,17 @@ $(document).ready(function () {
                 data: {'id': pk},
                 success: function (data) {
                     console.log(data);
-                    $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
-                
+                    console.log(data.requestResearcher);
+                    if (data.requestResearcher){
+                        $("#researcherAccess").attr("value", 1);
+                        projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
+                        $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
+                    }
+                    else{
+                        // $("#researcherAccess").click();
+                        $("#researcherAccess").attr("value", "");
+                        projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
+                    }
                     if (data.end_note_fileName)
                         $(".end-note-file-name").text(data.end_note_fileName);
                     if (data.proposal_filaName)
@@ -1577,9 +1586,11 @@ $(document).ready(function () {
             if ($(this).is(":checked")) {
                     console.log("1");
                    projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
+                   $("#researcherAccess").attr("value", 1);
             } else {
                 console.log("0");
                projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
+               $("#researcherAccess").attr("value", 0);
             }
         });
         
@@ -1606,13 +1617,16 @@ $(document).ready(function () {
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data.append("technique", $(this).find("span").text());
                 // techs[index] = $(this).find("span").text();
-            });
-            let requestResearcher = $("#researcherAccess").val();
+            });            
+            
             let telegram_group = projectSettingForm.find("#telegramGroupLink").val();
             data.set('id', id);
             data.set('telegram_group', telegram_group);
             data.set('researcherRequestDeadline', applicationDeadline);
-            data.set('requestResearcher', requestResearcher);
+            if ($("#researcherAccess").val() == 1)
+                data.set('requestResearcher', true);
+            $("#ApplicationDeadline").removeClass("error").css("color", "").prev().css("color", "");
+            $("#ApplicationDeadline").closest("div").find(".error").remove();
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -1641,6 +1655,16 @@ $(document).ready(function () {
                         message: message,
                         position: 'bottomLeft'
                     });
+                    if (obj.researcherRequestDeadline){
+                        $("#ApplicationDeadline").closest("div").append("<div class='error'>" +
+                            "<span class='error-body'>" +
+                            "<ul class='errorlist'>" +
+                            "<li>" + obj.researcherRequestDeadline + "</li>" +
+                            "</ul>" +
+                            "</span>" +
+                            "</div>");
+                        $("#ApplicationDeadline").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+                    }
                 }
             });
         });

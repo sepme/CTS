@@ -631,9 +631,11 @@ def ProjectSetting(request):
             "techniques": showAllTechniques(),
             "projectTechniques": [],
             "requestResearcher": project.reseacherRequestAbility,
-            "researcherRequestDeadline": str(project.researcherRequestDeadline).replace("-","/"),
+            "researcherRequestDeadline": "",
             "telegram_group": project.telegram_group,
         }
+        if project.researcherRequestDeadline is not None:
+            data["researcherRequestDeadline"] = str(project.researcherRequestDeadline).replace("-","/")
         if project.end_note:
             data['end_note_fileName'] = project.end_note.name.split("/")[-1]
             data['end_note'] = project.end_note.url
@@ -680,12 +682,18 @@ def ProjectSetting(request):
         project = models.Project.objects.get(id=request.POST['id'])
         projectform = project.project_form
         if 'requestResearcher' in request.POST.keys():
-            project.reseacherRequestAbility = request.POST['requestResearcher']
-        else:
-            project.reseacherRequestAbility = False
-        if "researcherRequestDeadline" in request.POST.keys():
+            if request.POST['researcherRequestDeadline'] == "":
+                return  JsonResponse(data={"message": "مهلت اعتبار درخواست نمی تواند خالی باشد.",
+                                           "researcherRequestDeadline": "مهلت اعتبار درخواست نمی تواند خالی باشد."},status=400)
+            project.reseacherRequestAbility = True
             date = exchangePersainNumToEnglish(request.POST['researcherRequestDeadline'])
             project.researcherRequestDeadline = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        else:
+            project.reseacherRequestAbility = False
+            project.researcherRequestDeadline = None
+        # if request.POST['researcherRequestDeadline'] != "":
+        #     date = exchangePersainNumToEnglish(request.POST['researcherRequestDeadline'])
+        #     project.researcherRequestDeadline = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         if 'telegram_group' in request.POST.keys():
             project.telegram_group = request.POST['telegram_group']
         if 'end_note' in request.FILES.keys():
