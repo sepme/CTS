@@ -4900,6 +4900,10 @@ img.center-head {
     cursor: pointer;
 }
 
+.form-control {
+    font-size: inherit;
+}
+
 .apply_Project .form-control,
 .apply .form-control {
     padding: 10px 40px;
@@ -6465,14 +6469,71 @@ table .fas.fa-trash-alt:hover {
     border-bottom: none;
 }
 
-/* *********** */
-.datepicker-plot-area {
-    font: 12px iranyekan;
-}
-
 /**********
       End Date Picker
 **********/
+
+
+/**********
+      Persian Date Picker
+**********/
+
+.datepicker-plot-area {
+    font: 12px iranyekan;
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.datepicker-plot-area .datepicker-navigator .pwt-btn-next:hover, .datepicker-plot-area .datepicker-navigator .pwt-btn-switch:hover, .datepicker-plot-area .datepicker-navigator .pwt-btn-prev:hover {
+    border-radius: 0.25rem;
+    background-color: #e9ecef;
+}
+
+.datepicker-plot-area .datepicker-day-view .month-grid-box .header .header-row-cell {
+    color: #3ccd1c;
+}
+
+.datepicker-plot-area .datepicker-day-view .month-grid-box .header .header-row {
+    border-bottom: 1px solid #eee;
+}
+
+table.table-days tbody tr {
+    border-bottom: none;
+}
+
+.datepicker-plot-area .datepicker-day-view .table-days td span {
+    width: calc(100% - 1px);
+    transition: all 0.3s;
+}
+
+.datepicker-plot-area .datepicker-day-view .table-days td.selected span, .datepicker-plot-area .datepicker-year-view .year-item.selected, .datepicker-plot-area .datepicker-month-view .month-item.selected {
+    text-shadow: none;
+}
+
+.datepicker-plot-area .datepicker-day-view .table-days td.selected span .datepicker-plot-area .datepicker-day-view .table-days td:hover, .datepicker-plot-area .datepicker-day-view .table-days td:not(.selected) span:hover, .datepicker-plot-area .datepicker-year-view .year-item:not(.selected):hover, .datepicker-plot-area .datepicker-month-view .month-item:not(.selected):hover {
+    color: #3ccd1c;
+    background-color: #e3f8e6;
+    border-radius: 0.25em;
+}
+
+.datepicker-plot-area .datepicker-day-view .table-days td.selected span {
+    background-color: #3ccd1c;
+    border-radius: 50%;
+}
+
+.datepicker-plot-area .datepicker-month-view .month-item.selected, .datepicker-plot-area .datepicker-year-view .year-item.selected {
+    background-color: #3ccd1c;
+    border-radius: 0.25rem;
+}
+
+.datepicker-plot-area .datepicker-day-view .table-days td.today span {
+    border-radius: 50%;
+}
+
+/**********
+      End Persian Date Picker
+**********/
+
 
 .file-upload-min {
     padding-bottom: 40px;
