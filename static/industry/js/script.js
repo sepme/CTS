@@ -15,7 +15,7 @@ function numbersComma(num) {
 function setEthicalConsider(data, status) {
     let role = "";
     if (data.policy)
-        role +=`<div>
+        role += `<div>
                     <div class="question">
                         <span class="question-mark"><i class='far fa-question-circle'></i></span> 
                         <span>
@@ -40,7 +40,7 @@ function setEthicalConsider(data, status) {
 function setGoal(data, status) {
     let goal = "";
     if (data.main_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -50,7 +50,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.main_goal}</div>
                 </div>`;
     if (data.secondary_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -60,7 +60,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.secondary_goal}</div>
                 </div>`;
     if (data.practical_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -70,7 +70,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.practical_goal}</div>
                 </div>`;
     if (data.research_question)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -80,7 +80,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.research_question}</div>
                 </div>`;
     if (data.reseach_assumptions)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -104,7 +104,7 @@ function setProcedure(data, status) {
                         <div class='answer'>${data.summary_method}</div>
                      </div>`;
     if (data.required_equipment)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -114,7 +114,7 @@ function setProcedure(data, status) {
                         <div class='answer'>${data.required_equipment}</div>
                      </div>`;
     if (data.sample_count_method)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -124,7 +124,7 @@ function setProcedure(data, status) {
                         <div class='answer'>${data.sample_count_method}</div>
                      </div>`;
     if (data.analyse_method)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -649,15 +649,15 @@ $(document).ready(function () {
                 $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
             }
         });
-        
+
         taskList.find(".ct-checklist-item-delete").click(function () {
             $(this).closest(".ct-checklist__item").remove();
         });
-        
+
         let addTaskForm = $("form#add-task-ajax");
-        addTaskForm.submit(function(event) {
+        addTaskForm.submit(function (event) {
             event.preventDefault();
-            
+
             let title = addTaskForm.find("#id_task_title").val();
             let pk = taskList.find(".ct-checklist__item").length + 1;
 
@@ -725,7 +725,7 @@ $(document).ready(function () {
                                                             </div>
                                                         </div>`;
             taskList.append(task);
-            
+
             taskList.find(".ct-checklist__item:last-child .ct-checklist-item__checkbox input[type='checkbox']").click(function () {
                 if ($(this).is(":checked")) {
                     let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
@@ -735,13 +735,13 @@ $(document).ready(function () {
                     $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
                 }
             });
-            
+
             taskList.find(".ct-checklist__item:last-child .ct-checklist-item-delete").click(function () {
                 $(this).closest(".ct-checklist__item").remove();
             });
             $("#addTask").modal("hide");
         });
-        
+
     }
     //****************************************//
     //  End Task Bar
@@ -761,23 +761,44 @@ $(document).ready(function () {
 
 
     let addDeadlineForm = $("form#add-card-ajax");
-    if(addDeadlineForm.length) {
-        addDeadlineForm.submit(function(event) {
+    if (addDeadlineForm.length) {
+        addDeadlineForm.submit(function (event) {
             event.preventDefault();
             let title = addDeadlineForm.find("#id_card_title").val();
             let due = addDeadlineForm.find("#id_card_deadline").val();
-            let progressItem = `<div class="step-container">
+            $.ajax({
+                method: "POST",
+                url: "/addCard",
+                data: "",
+                success: function (data) {
+                    console.log(data);
+                    let progressItem = `<div class="step-container">
                                     <span class="step-date">
-                                        <div class="second_phase">${due}</div>
+                                        <div>${due}</div>
                                     </span>
                                     <span class="step-name">${title}</span>
                                 </div>`;
-            $(progressItem).insertBefore('.project-progress .line-100');
-            $("#addDeadline").modal("hide");
+                    $(progressItem).insertBefore('.project-progress .line-100');
+                    $("#addDeadline").modal("hide");
+                    iziToast.success({
+                        rtl: true,
+                        message: "آیتم با موفقیت اضافه شد!",
+                        position: 'bottomLeft'
+                    });
+                },
+                error: function (data) {
+                    console.log(data);
+                    iziToast.error({
+                        rtl: true,
+                        message: "درخواست شما با مشکل مواجه شد!\nلطفا دوباره تکرار کنید.",
+                        position: 'bottomLeft'
+                    });
+                }
+            });
         });
     }
-    
-    
+
+
     function selecting_expert(element) {
         element.on("keyup", function () {
             const thisElement = $(this);
@@ -950,24 +971,24 @@ $(document).ready(function () {
                         thisFormGroup.find(".form-group__status").removeClass("check");
                         if (data.invalid_input) {
                             $("#userID").closest("div").append("<div class='error userId'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + data.message + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
+                                "<span class='error-body'>" +
+                                "<ul class='errorlist'>" +
+                                "<li>" + data.message + "</li>" +
+                                "</ul>" +
+                                "</span>" +
+                                "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         } else if (data.is_unique) {
                             thisFormGroup.find(".form-group__status").addClass("success");
                         } else {
                             $("#userID").closest("div").append("<div class='error userId'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + data.message + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
+                                "<span class='error-body'>" +
+                                "<ul class='errorlist'>" +
+                                "<li>" + data.message + "</li>" +
+                                "</ul>" +
+                                "</span>" +
+                                "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         }
@@ -1356,7 +1377,7 @@ $(document).ready(function () {
 
     // initial utils for Project Setting Modal
     if ($('#projectSetting').length) {
-        
+
         let fileInput = $(".file-upload-min").closest(".form-group").find("input");
         fileInput.on("change", function () {
             let fileName = $(this).val().split("\\").pop();
@@ -1404,12 +1425,11 @@ $(document).ready(function () {
                 success: function (data) {
                     console.log(data);
                     console.log(data.requestResearcher);
-                    if (data.requestResearcher){
+                    if (data.requestResearcher) {
                         $("#researcherAccess").attr("value", 1);
                         projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
                         $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
-                    }
-                    else{
+                    } else {
                         // $("#researcherAccess").click();
                         $("#researcherAccess").attr("value", "");
                         projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
@@ -1582,18 +1602,18 @@ $(document).ready(function () {
         });
 
         //## show date picker on check
-        projectSettingForm.find("#researcherAccess").on("change", function() {
+        projectSettingForm.find("#researcherAccess").on("change", function () {
             if ($(this).is(":checked")) {
-                    console.log("1");
-                   projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
-                   $("#researcherAccess").attr("value", 1);
+                console.log("1");
+                projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
+                $("#researcherAccess").attr("value", 1);
             } else {
                 console.log("0");
-               projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
-               $("#researcherAccess").attr("value", 0);
+                projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
+                $("#researcherAccess").attr("value", 0);
             }
         });
-        
+
         //## ignore submit form on press Enter key
         projectSettingForm.on('keyup keypress', function (e) {
             let keyCode = e.keyCode || e.which;
@@ -1612,13 +1632,13 @@ $(document).ready(function () {
             // let expertIds = [];
             let applicationDeadline = $("#ApplicationDeadline").val();
             $.each(projectSettingForm.find(".selected-expert"), function () {
-                data.append("expert_ids",$(this).attr("id"));
+                data.append("expert_ids", $(this).attr("id"));
             });
             $.each($("#tags_tagsinput").find(".tag"), function (index, value) {
                 data.append("technique", $(this).find("span").text());
                 // techs[index] = $(this).find("span").text();
-            });            
-            
+            });
+
             let telegram_group = projectSettingForm.find("#telegramGroupLink").val();
             data.set('id', id);
             data.set('telegram_group', telegram_group);
@@ -1655,7 +1675,7 @@ $(document).ready(function () {
                         message: message,
                         position: 'bottomLeft'
                     });
-                    if (obj.researcherRequestDeadline){
+                    if (obj.researcherRequestDeadline) {
                         $("#ApplicationDeadline").closest("div").append("<div class='error'>" +
                             "<span class='error-body'>" +
                             "<ul class='errorlist'>" +
