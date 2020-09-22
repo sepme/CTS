@@ -29,7 +29,7 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col">
-                                    <div class="project-techniques">
+                                    <div class="project-techniques mine">
                                         <div>
                                             <span>مهارت موجود من</span>
                                             <span class="primary-technique">مهارت پژوهشی به درد نخور من</span>
@@ -98,7 +98,7 @@
                 <div class="tab-pane fade show active" id="nav-all-projects" role="tabpanel"
                      aria-labelledby="nav-all-projects-tab">
                     {% for project in new_project_list %}
-                        <div class="card box flow-root-display w-100">
+                        <div class="card box flow-root-display w-100" id="{{ project.PK }}">
                             <div class="box-header">
                                 <h6>
                                     {{ project.project_title }}
@@ -176,7 +176,7 @@
                 <div class="tab-pane fade" id="nav-active-projects" role="tabpanel"
                      aria-labelledby="nav-active-projects-tab">
                     {% for project in my_project_list %}
-                        <div class="card box flow-root-display w-100">
+                        <div class="card box flow-root-display w-100" id="{{ project.PK }}">
                             <div class="box-header">
                                 <h6>
                                     {{ project.project_title }}
@@ -250,7 +250,7 @@
                 <div class="tab-pane fade" id="nav-missed-projects" role="tabpanel"
                      aria-labelledby="nav-missed-projects-tab">
                     {% for project in missed_project_list %}
-                        <div class="card box flow-root-display w-100">
+                        <div class="card box flow-root-display w-100" id="{{ project.PK }}">
                             <div class="box-header">
                                 <h6>
                                     {{ project.project_title }}
@@ -361,9 +361,4 @@
 {% block script %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
-    <script type="text/javascript">
-        $("[data-target='#previewKeywords']").click(function () {
-            console.log("show all clicked!");
-        });
-    </script>
 {% endblock %}

@@ -127,7 +127,7 @@ $("#accept-project").click(function () {
 function setEthicalConsider(data) {
     let role = "";
     if (data.policy)
-        role +=`<div>
+        role += `<div>
                     <div class="question">
                         <span class="question-mark"><i class='far fa-question-circle'></i></span> 
                         <span>
@@ -152,7 +152,7 @@ function setEthicalConsider(data) {
 function setGoal(data, status) {
     let goal = "";
     if (data.main_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -162,7 +162,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.main_goal}</div>
                 </div>`;
     if (data.secondary_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -172,7 +172,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.secondary_goal}</div>
                 </div>`;
     if (data.practical_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -182,7 +182,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.practical_goal}</div>
                 </div>`;
     if (data.research_question)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -192,7 +192,7 @@ function setGoal(data, status) {
                     <div class='answer'>${data.research_question}</div>
                 </div>`;
     if (data.reseach_assumptions)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -215,7 +215,7 @@ function setProcedure(data) {
                         <div class='answer'>${data.summary_method}</div>
                      </div>`;
     if (data.required_equipment)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -225,7 +225,7 @@ function setProcedure(data) {
                         <div class='answer'>${data.required_equipment}</div>
                      </div>`;
     if (data.sample_count_method)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -235,7 +235,7 @@ function setProcedure(data) {
                         <div class='answer'>${data.sample_count_method}</div>
                      </div>`;
     if (data.analyse_method)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -331,6 +331,39 @@ $(document).ready(function () {
         } else {
             $("a.top-button").removeClass('show');
         }
+    });
+
+    // Show index project techniques on open techniques modal
+    let indexTechniques = {};
+    $(".tab-pane .card").each(function () {
+        let cardID = $(this).attr("id");
+        let techList = {};
+        let missed = [], all = [];
+        $(this).find(".project-techniques span:not('.show-all')").each(function () {
+            all.push($(this).text());
+            if ($(this).hasClass("missed-technique")) {
+                missed.push($(this).text());
+            }
+        });
+        techList["all"] = all;
+        techList["missed"] = missed;
+        indexTechniques[cardID] = techList;
+    });
+
+    $("span.show-all[data-target='#previewKeywords']").click(function () {
+        let cardID = $(this).closest(".card.box").attr("id");
+        let modal = $("#previewKeywords");
+        modal.find(".project-techniques:not('.mine') div").html("");
+        for (let i = 0; i < indexTechniques[cardID]["all"].length; i++) {
+            let missed = false;
+            if (missed) {
+                modal.find(".project-techniques:not('.mine') div").append(`<span class="missed-technique">${indexTechniques[cardID]["all"][i]}</span>`)
+            } else {
+                modal.find(".project-techniques:not('.mine') div").append(`<span>${indexTechniques[cardID]["all"][i]}</span>`)
+            }
+        }
+        console.log(indexTechniques);
+        console.log(indexTechniques[cardID]);
     });
 
 // Auto scroll to active project tab when exists
@@ -1711,19 +1744,19 @@ function isOverflow(element) {
     return (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)
 }
 
-// $("#active-project").click(function () {
-//     $(".your-project .card.box").each(function () {
-//         if (isOverflow($(this).find(".project-techniques")[0])) {
-//             $(this).find(".project-techniques").addClass("do-not-touch");
-//             while (isOverflow($(this).find(".project-techniques")[0])) {
-//                 $(this).find(".project-techniques span:nth-last-child(2)").remove();
-//             }
-//         } else {
-//             $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
-//         }
-//
-//     });
-// });
+$("#active-project").click(function () {
+    $(".your-project .card.box").each(function () {
+        if (isOverflow($(this).find(".project-techniques")[0])) {
+            $(this).find(".project-techniques").addClass("do-not-touch");
+            while (isOverflow($(this).find(".project-techniques")[0])) {
+                $(this).find(".project-techniques span:nth-last-child(2)").remove();
+            }
+        } else {
+            $(this).find(".project-techniques:not(.do-not-touch) span:last-child").css("display", "none");
+        }
+
+    });
+});
 //
 // $("#new-projects").click(function () {
 //     $(".new-project").attr("style", "display :block");
