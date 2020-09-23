@@ -1,12 +1,3 @@
-$(window).on("load", function () {
-    init_windowSize();
-    load_dialog();
-    $('*').persiaNumber();
-}).on("resize", function () {
-    init_windowSize();
-    load_dialog();
-});
-
 function numbersComma(num) {
     let newNum = num.toString();
     return newNum.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
@@ -305,6 +296,7 @@ function expertResume() {
                     $('#expert-executive-info').html(`<tr><td colspan="5">هیچ اطلاعاتی توسط کاربر ثبت نشده</td></tr>`);
                 }
                 let research_record = JSON.parse(data.research_record);
+                console.log(research_record);
                 if (research_record.length !== 0) {
                     let table_row = "";
                     for (let i = 0; i < research_record.length; i++) {
@@ -626,6 +618,66 @@ function addComment(data) {
     //             "</div>";
     return new_comment;
 }
+
+let requestForm = $("#researcher-request-ajax");
+requestForm.submit(function (event) {
+    console.log("------");
+    event.preventDefault();
+    let thisUrl = "/industry/request_researcher/";
+    let form = new FormData(requestForm.get(0));
+    $("#id_least_hour").removeClass("error").css("color", "").prev().css("color", "");
+    $("#id_researcher_count").removeClass("error").css("color", "").prev().css("color", "");
+    $('.error').remove();
+    $.ajax({
+        method: 'POST',
+        url: thisUrl,
+        data: form,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما با موفقیت ثبت شد!",
+                position: 'bottomLeft'
+            });
+            // requestForm[0].reset();
+            requestForm.closest(".modal").modal("hide");
+        },
+        error: function (data) {
+            let obj = JSON.parse(data.responseText);
+            if (obj.least_hour) {
+                $("#id_least_hour").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.least_hour + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("#id_least_hour").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            if (obj.researcher_count) {
+                $("#id_researcher_count").closest("div").append("<div class='error'>" +
+                    "<span class='error-body'>" +
+                    "<ul class='errorlist'>" +
+                    "<li>" + obj.researcher_count + "</li>" +
+                    "</ul>" +
+                    "</span>" +
+                    "</div>");
+                $("#id_researcher_count").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
+            }
+            display_error(requestForm);
+        },
+    });
+});
+
+$(window).on("load", function () {
+    init_windowSize();
+    load_dialog();
+    $('*').persiaNumber();
+}).on("resize", function () {
+    init_windowSize();
+    load_dialog();
+});
 
 $(document).ready(function () {
     $('.content').scroll(function () {
@@ -1604,11 +1656,9 @@ $(document).ready(function () {
         //## show date picker on check
         projectSettingForm.find("#researcherAccess").on("change", function () {
             if ($(this).is(":checked")) {
-                console.log("1");
                 projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
                 $("#researcherAccess").attr("value", 1);
             } else {
-                console.log("0");
                 projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
                 $("#researcherAccess").attr("value", 0);
             }
@@ -1880,56 +1930,5 @@ $(document).ready(function () {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         }
-    });
-});
-
-let requestForm = $("#researcher-request-ajax");
-requestForm.submit(function (event) {
-    console.log("------");
-    event.preventDefault();
-    let thisUrl = "/industry/request_researcher/";
-    let form = new FormData(requestForm.get(0));
-    $("#id_least_hour").removeClass("error").css("color", "").prev().css("color", "");
-    $("#id_researcher_count").removeClass("error").css("color", "").prev().css("color", "");
-    $('.error').remove();
-    $.ajax({
-        method: 'POST',
-        url: thisUrl,
-        data: form,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            iziToast.success({
-                rtl: true,
-                message: "درخواست شما با موفقیت ثبت شد!",
-                position: 'bottomLeft'
-            });
-            // requestForm[0].reset();
-            requestForm.closest(".modal").modal("hide");
-        },
-        error: function (data) {
-            let obj = JSON.parse(data.responseText);
-            if (obj.least_hour) {
-                $("#id_least_hour").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.least_hour + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("#id_least_hour").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            if (obj.researcher_count) {
-                $("#id_researcher_count").closest("div").append("<div class='error'>" +
-                    "<span class='error-body'>" +
-                    "<ul class='errorlist'>" +
-                    "<li>" + obj.researcher_count + "</li>" +
-                    "</ul>" +
-                    "</span>" +
-                    "</div>");
-                $("#id_researcher_count").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-            }
-            display_error(requestForm);
-        },
     });
 });

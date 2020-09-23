@@ -6711,3 +6711,7 @@ table.table-days tbody tr {
     height: unset;
 }
 
+.iziToast > .iziToast-body .iziToast-message, .iziToast > .iziToast-body .iziToast-title {
+    white-space: pre;
+}
+

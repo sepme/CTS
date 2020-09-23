@@ -911,8 +911,18 @@
             src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $('#id_card_deadline').pDatepicker({
+            $('#id_card_deadline, #id_task_due').pDatepicker({
                 format: 'YYYY/MM/DD',
+                onShow: function (unix) {
+                    let datePicker = $(".datepicker-container");
+                    if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
+                        if (datePicker.offset().top > 310) {
+                            datePicker.css("top", datePicker.offset().top - 310);
+                        } else {
+                            datePicker.css("top", 0);
+                        }
+                    }
+                },
             });
         });
     </script>
