@@ -725,22 +725,22 @@ def ProjectSetting(request):
                     expert.save()
                     expertResult['addExpert'] = True
                     message = """با سلام
-        مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
-        با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
-        لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
-        در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
-        با آرزوی موفقیت، 
+مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
+با توجه به این که قابلیت پیوستن شما به پروژه‌ها بدون اجازه شما فراهم است، شما به این پروژه اضافه شدید. 
+لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
+در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
+با آرزوی موفقیت، 
         چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
                             projectName=project.project_form.persian_title)
                 else:
                     expertResult['addExpert'] = False
                     project.expert_suggested.add(expert)
                     message = """با سلام
-            مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
-            با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
-            لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
-            در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
-            با آرزوی موفقیت، 
+مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
+با توجه به این که قابلیت پیوستن شما به پروژه‌ها تنها با اجازه شما فراهم است، از طریق قسمت «پیام‌ها» می‌توانید درخواست‌شان را قبول و یا رد کنید . 
+لطفا برای بررسی پروژه مذکور، حساب کاربری‌تان را بررسی بفرمایید.
+در ضمن، شما می‌توانید برای تغییر این قابلیت، قسمت «اطلاعات کاربری» حساب کاربری‌تان را نیز مشاهده بفرمایید.
+با آرزوی موفقیت، 
             چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
                                 projectName=project.project_form.persian_title)
                 models.ProjectForm.persian_title
@@ -754,6 +754,9 @@ def ProjectSetting(request):
                 newMessage = Message(title=subject,
                                     text=message,
                                     type=0)
+                if not expertResult['addExpert']:
+                    newMessage.project = project
+                    newMessage.is_project_suggested = "no-answer"
                 newMessage.save()
                 newMessage.receiver.add(expert.user)
                 data['experts'].append(expertResult)

@@ -48,9 +48,18 @@ class Message(models.Model):
     attachment = models.FileField(upload_to=upload_to, blank=True, null=True, verbose_name="ضمیمه")
     receiver = models.ManyToManyField(User, verbose_name="گیرندگان")
     code  = models.UUIDField(verbose_name='کد پیام', default=uuid.uuid4, unique=True)
+    SUG_STATUS = (
+        ("none", "درخواستی ثبت نشده است."),
+        ("no-answer", "نامشخص"),
+        ("confirmed", " قبول شده"),
+        ("rejected", "رد شده"),
+    )
+    is_project_suggested = models.CharField(verbose_name="پیام پیشنهاد از صنعت", max_length=9,
+                                            default="none", choices=SUG_STATUS, null=True)
+    project = models.ForeignKey("industry.Project", verbose_name="پروژه پیشنهادی", on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.title + " - " + str(self.pk)
 
     def get_short_text(self):
         if len(self.text) > 30:

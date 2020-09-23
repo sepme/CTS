@@ -104,7 +104,7 @@
                                     {{ project.project_title }}
                                 </h6>
                                 <div class="data-modified">
-                                    <span>{{ project.started }}   قبل </span>
+                                    <span>{{ project.started }} {% if project.started != "امروز" %}  قبل{% endif %} </span>
                                 </div>
                                 <div class="project-techniques">
                                     <ul class="mix-list hover">
@@ -182,7 +182,7 @@
                                     {{ project.project_title }}
                                 </h6>
                                 <div class="data-modified">
-                                    <span>{{ project.started }}   قبل </span>
+                                    <span>{{ project.started }} {% if project.started != "امروز" %}  قبل{% endif %} </span>
                                 </div>
                                 <div class="notification">
                                     <i class="far fa-comment-alt center-abs"></i>
@@ -256,7 +256,7 @@
                                     {{ project.project_title }}
                                 </h6>
                                 <div class="data-modified">
-                                    <span>{{ project.started }}   قبل </span>
+                                    <span>{{ project.started }} {% if project.started != "امروز" %}  قبل{% endif %} </span>
                                 </div>
                                 <div class="project-techniques">
                                     <ul class="mix-list hover">
