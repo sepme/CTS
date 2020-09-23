@@ -706,6 +706,26 @@ $(document).ready(function () {
             $(this).closest(".ct-checklist__item").remove();
         });
 
+        $('#id_task_due').pDatepicker({
+            format: 'YYYY/MM/DD',
+            onShow: function (unix) {
+                let datePicker = $(".datepicker-container");
+                if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
+                    if (datePicker.offset().top > 310) {
+                        datePicker.css("top", datePicker.offset().top - 310);
+                    } else {
+                        datePicker.css("top", 0);
+                    }
+                }
+            },
+            dayPicker: {
+                onSelect: function (unix) {
+                    let pdate = new persianDate(unix);
+                    $('#id_task_due').html(pdate.format("YYYY/MM/DD"));
+                },
+            },
+        });
+
         let addTaskForm = $("form#add-task-ajax");
         addTaskForm.submit(function (event) {
             event.preventDefault();
