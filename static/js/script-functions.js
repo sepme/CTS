@@ -296,6 +296,25 @@ if (window.location.href.indexOf('messages') > -1) {
                         $(".message-expand").addClass("show");
                         $(".preview-message .box-header h6").html(data.title);
                         $(".preview-message .box-body pre").html(data.text);
+                        $(".request-response").attr("style", "display: none");
+                        $(".result_suggested").remove();
+                        $("#project-confirm").prop("disabled", true);
+                        $("#project-reject").prop("disabled", true);
+                        if (data.is_project_suggested == "no-answer"){
+                            $(".request-response").attr("style", "display: block");
+                            $("#project-confirm").prop("disabled", false);
+                            $("#project-reject").prop("disabled", false);
+                            $("#project-confirm").attr("value", id);
+                            $("#project-reject").attr("value", id);
+                        }
+                        else if(data.is_project_suggested == "confirmed")
+                            $(".request-response").closest(".row").append(`<div class='result_suggested col-12 text-left'>
+                                                                            این پروژه توسط شما پذیرفته شده است.
+                                                                            </div>`);
+                        else if(data.is_project_suggested == "refused")
+                            $(".request-response").closest(".row").append(`<div class='result_suggested col-12 text-left'>
+                                                                            این پروژه توسط شما رد شده است.
+                                                                            </div>`);
                         // let fileName = data.attachment.substring(data.attachment.lastIndexOf("/") + 1).toUpperCase();
                         if (data.attachment) {
                             let file_type = data.attachment.substring(data.attachment.lastIndexOf(".") + 1).toUpperCase();
@@ -535,4 +554,64 @@ $(window).on("load", function () {
             }
         })
     }
+});
+
+$("#project-confirm").click(function(event){            
+    $.ajax({
+        method: 'POST',
+        url: '/expert/set_suggested_project_state/',
+        data: {message_id:$(this).val(), status:"confirm"},
+        dataType: 'json',
+        success: function (data) {
+            iziToast.success({
+                rtl: true,
+                message: "شما به پروژه اضافه شدید.",
+                position: 'bottomLeft'
+            });
+            $(".request-response").attr("style", "display: none");
+            $(this).prop("disabled", true);
+            $("#project-reject").prop("disabled", true);
+            $(".request-response").closest(".row").append(`<div class='result_suggested col-12 text-left'>
+                                                                    این پروژه توسط شما پذیرفته شده است.
+                                                                    </div>`);
+        },
+        error: function (data) {
+            console.log(data);
+            iziToast.error({
+                rtl: true,
+                message: "درخواست شما با مشکل روبه رو شده است!",
+                position: 'bottomLeft'
+            });
+        }
+    });
+});
+
+$("#project-reject").click(function(event){
+    $.ajax({
+        method: 'POST',
+        url: '/expert/set_suggested_project_state/',
+        data: {message_id:$(this).val(), status: "reject"},
+        dataType: 'json',
+        success: function (data) {
+            iziToast.success({
+                rtl: true,
+                message: "درخواست مجموعه پژوهشی با موفقیت رد شد.",
+                position: 'bottomLeft'
+            });
+            $(".request-response").attr("style", "display: none");
+            $(this).prop("disabled", true);
+            $("#project-confirm").prop("disabled", true);
+            $(".request-response").closest(".row").append(`<div class='result_suggested col-12 text-left'>
+                                                                    این پروژه توسط شما رد شده است.
+                                                                    </div>`);
+        },
+        error: function (data) {
+            console.log(data);
+            iziToast.error({
+                rtl: true,
+                message: "درخواست شما با مشکل روبه رو شده است!",
+                position: 'bottomLeft'
+            });
+        }
+    });
 });

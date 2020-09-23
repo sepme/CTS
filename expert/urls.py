@@ -39,4 +39,5 @@ urlpatterns = [
     path("submit_data/", views.submitData),
     # path("testPhoto", views.testPhoto),
     path("project/<uuid:code>", views.show_active_project.as_view(), name="show_active_project"),
+    path("set_suggested_project_state/", views.set_suggested_project_state, name="set_suggested_project_state"),
 ]

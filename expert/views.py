@@ -1242,3 +1242,18 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         if project.researcher_accepted.all():
             context['researcherComment'] = project.get_comments().exclude(researcher_user=project.researcher_accepted.all()[0]).exclude(expert_user=None)
         return context
+
+@permission_required(perm="expert.be_expert", login_url='/login/')
+def set_suggested_project_state(request):
+    expert = request.user.expertuser
+    message = Message.objects.get(pk=request.POST['message_id'])
+    if request.POST["status"] == "confirm":
+        message.is_project_suggested = "confirmed"
+        message.project.expert_suggested.remove(expert)
+        message.project.expert_accepted.add(expert)
+    elif request.POST["status"] == "reject":
+        message.is_project_suggested = "rejected"
+        message.project.expert_suggested.remove(expert)
+    message.project.save()
+    message.save() 
+    return JsonResponse(data={})

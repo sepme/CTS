@@ -56,6 +56,7 @@ def get_message_detail(request, message_id):
         'code': message.code,
         'type': message.type,
         'attachment': attachment,
+        "is_project_suggested": message.is_project_suggested,
     })
 
 

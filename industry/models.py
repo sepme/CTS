@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from ChamranTeamSite import settings
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
+
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
 from persiantools.jdatetime import JalaliDate
