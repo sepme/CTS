@@ -30,6 +30,7 @@ from expert.forms import RequestResearcherForm
 from researcher.models import Technique, RequestedProject, ResearcherUser
 from chamran_admin.models import Message
 from chamran_admin.views import exchangePersainNumToEnglish
+from chamran_admin.forms import CardForm
 
 USER_ID_PATTERN = re.compile('[\w]+$')
 
@@ -838,6 +839,7 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
                     "researcher_count": requestResearcher.researcher_count})
             except:
                 context['researcherRequestFrom'] = RequestResearcherForm()
+        context['form'] = CardForm()
         return context
 
 

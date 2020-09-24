@@ -24,6 +24,7 @@ from researcher.models import ExecutiveRecord as ResearcherExecutiveRecord
 from researcher.models import ResearcherUser, ResearcherProfile, Technique, \
                               StudiousRecord, TechniqueInstance, RequestedProject
 from chamran_admin.models import Message
+from chamran_admin.forms import CardForm
 
 USER_ID_PATTERN = re.compile("[\w]+$")
 
@@ -1241,6 +1242,7 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
             context['researcher_accepted'].append(researcher)
         if project.researcher_accepted.all():
             context['researcherComment'] = project.get_comments().exclude(researcher_user=project.researcher_accepted.all()[0]).exclude(expert_user=None)
+        context['form'] = CardForm()
         return context
 
 @permission_required(perm="expert.be_expert", login_url='/login/')
