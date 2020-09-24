@@ -141,7 +141,7 @@ class ResearcherProfile(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", verbose_name="مشخصات فردی",
                                            on_delete=models.CASCADE, blank=True, null=True)
     fullname = models.CharField(max_length=300, verbose_name="نام و نام خانوادگی")
-    photo = models.ImageField(upload_to=profileUpload, max_length=255, blank=True, null=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=256, blank=True, null=True)
     birth_year = models.DateField(auto_now=False, auto_now_add=False, verbose_name="سال تولد", null=True, blank=True)
     major = models.CharField(max_length=300, verbose_name="رشته تحصیلی")
     national_code = models.CharField(max_length=10, verbose_name="کد ملی")
@@ -294,8 +294,8 @@ class StudiousRecord(models.Model):
     researcherProfile = models.ForeignKey("ResearcherProfile", verbose_name="سوابق پژوهشی", on_delete=models.CASCADE)
 
     title = models.CharField(max_length=300, verbose_name="عنوان طرح پژوهشی")
-    presenter = models.CharField(max_length=50, verbose_name="نام مجری")
-    responsible = models.CharField(max_length=50, verbose_name="مسئول اجرا / همکار")
+    presenter = models.CharField(max_length=256, verbose_name="نام مجری")
+    responsible = models.CharField(max_length=256, verbose_name="مسئول اجرا / همکار")
     STATUS_CHOICE = (
         (1, 'در دست اجرا'),
         (2, 'خاتمه یافته'),
@@ -329,7 +329,7 @@ class ResearcherHistory(models.Model):
 class ResearcherEvaluation(models.Model):
     researcher = models.ForeignKey('ResearcherUser', on_delete=models.CASCADE)
     evaluator = models.ForeignKey("expert.ExpertUser", on_delete=models.CASCADE, null=True, blank=True)
-    project_title = models.CharField(max_length=128, verbose_name="عنوان پروژه")
+    project_title = models.CharField(max_length=127, verbose_name="عنوان پروژه")
     phase = models.IntegerField(verbose_name="فاز شماره : ")
 
     one = 1
@@ -504,11 +504,11 @@ class ResearchQuestionInstance(models.Model):
     hand_out_date = models.DateTimeField(verbose_name="تاریخ واگذاری", default=now)
     answer = models.FileField(upload_to=get_answerFile_path, verbose_name="پاسخ", null=True, blank=True)
     is_answered = models.BooleanField(verbose_name="پاسخ داده شده", default=False)
-    is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices={
+    is_correct = models.CharField(max_length=10, verbose_name="تایید استاد", choices=(
         ('not_seen', 'بررسی نشده'),
         ('correct', 'صحیح'),
         ('wrong', 'غلط'),
-    }, default='not_seen')
+    ), default='not_seen')
 
     def __str__(self):
         return str(self.research_question) + ' - ' + self.researcher.user.username

@@ -119,7 +119,7 @@ class ExpertForm(models.Model):
     number_of_grants = models.CharField(max_length=10, verbose_name="تعداد گرنت", blank=True, null=True)
     # technique = models.ManyToManyField('researcher.Technique', verbose_name="تکنیک" , blank=True, null=True)
     languages = models.TextField(verbose_name="تسلط بر زبان های خارجی", blank=True, null=True)
-    photo = models.ImageField(upload_to=profileUpload, max_length=255, null=True, blank=True)
+    photo = models.ImageField(upload_to=profileUpload, max_length=256, null=True, blank=True)
     resume = models.FileField(verbose_name="رزومه استاد", upload_to=profileUpload, max_length=511,
                               null=True, blank=True)
 
@@ -200,10 +200,10 @@ class ExpertForm(models.Model):
 
 
 class ScientificRecord(models.Model):
-    degree = models.CharField(max_length=32, verbose_name="مقطع تحصیلی")
-    major = models.CharField(max_length=64, verbose_name="رشته تحصیلی")
+    degree = models.CharField(max_length=256, verbose_name="مقطع تحصیلی")
+    major = models.CharField(max_length=128, verbose_name="رشته تحصیلی")
     university = models.CharField(max_length=128, verbose_name="دانشگاه")
-    city = models.CharField(max_length=32, verbose_name="شهر")
+    city = models.CharField(max_length=128, verbose_name="شهر")
     date_of_graduation = models.CharField(max_length=10, verbose_name="سال اخذ مدرک")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
@@ -212,11 +212,11 @@ class ScientificRecord(models.Model):
 
 
 class ExecutiveRecord(models.Model):
-    executive_post = models.CharField(max_length=64, verbose_name="سمت")
+    executive_post = models.CharField(max_length=256, verbose_name="سمت")
     date_start_post = models.CharField(max_length=15, verbose_name="تاریخ شروع")
     date_end_post = models.CharField(max_length=15, verbose_name="تاریخ پایان")
-    city = models.CharField(max_length=32, verbose_name="شهر")
-    organization = models.CharField(max_length=32, verbose_name="مجل خدمت")
+    city = models.CharField(max_length=128, verbose_name="شهر")
+    organization = models.CharField(max_length=256, verbose_name="مجل خدمت")
     expert_form = models.ForeignKey(ExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
 
 
@@ -226,8 +226,8 @@ class ResearchRecord(models.Model):
         (2, 'خاتمه یافته'),
         (3, 'متوقف')
     )
-    research_title = models.CharField(max_length=128, verbose_name="عنوان طرح")
-    researcher = models.CharField(max_length=64, verbose_name="نام مجری")
+    research_title = models.CharField(max_length=256, verbose_name="عنوان طرح")
+    researcher = models.CharField(max_length=128, verbose_name="نام مجری")
     RESPONSIBLE_STATUS = (
         ('co_researcher',"همکار"),
         ("executor", "مجری")
@@ -429,9 +429,9 @@ class TempExpertForm(models.Model):
 
 class TempPaperRecord(models.Model):
     tempExpertForm = models.ForeignKey(TempExpertForm, on_delete=models.CASCADE, verbose_name="فرم استاد")
-    research_title = models.CharField(max_length=128, verbose_name="عنوان مقاله")
+    research_title = models.CharField(max_length=256, verbose_name="عنوان مقاله")
     date_published = models.CharField(max_length=15, verbose_name="تاریخ انتشار")
-    published_at = models.CharField(max_length=32, verbose_name="محل انتشار")
+    published_at = models.CharField(max_length=256, verbose_name="محل انتشار")
     impact_factor = models.FloatField(verbose_name="impact factor")
     citation = models.CharField(max_length=5, verbose_name="تعداد ارجاع")
 
