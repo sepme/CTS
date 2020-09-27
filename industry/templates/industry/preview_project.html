@@ -2,6 +2,7 @@
 {% load static %}
 {% load gregorian_to_jalali %}
 {% load date_tags %}
+{% load widget_tweaks %}
 {% block title %} جزییات پروژه {{ title }}{% endblock %}
 
 {% block modals %}
@@ -145,8 +146,7 @@
                     </h6>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="add-card-ajax" method="post" action="">
-                    {% csrf_token %}
+                <form id="add-card-ajax">
                     <div class="modal-body">
                         <div class="container text-right">
                             <div class="row">
@@ -159,13 +159,11 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="id_card_title">عنوان</label>
-                                        <input type="text" class="form-control" id="id_card_title">
+                                        {% render_field form.title class="form-control" id="id_card_title" %}
                                     </div>
                                     <div class="form-group">
                                         <label for="id_card_deadline">مهلت</label>
-                                        <input id="id_card_deadline" type="text"
-                                               class="form-control datetimepicker-input" name="id_card_deadline"
-                                               data-toggle="datetimepicker" data-target="#id_card_deadline">
+                                        {% render_field form.deadline id="id_card_deadline" class="form-control datetimepicker-input" name="id_card_deadline" data-toggle="datetimepicker" data-target="#id_card_deadline" %}
                                     </div>
                                 </div>
                             </div>

@@ -841,7 +841,7 @@ $(document).ready(function () {
             $.ajax({
                 method: "POST",
                 url: "/addCard",
-                data: "",
+                data: addDeadlineForm.serialize(),
                 success: function (data) {
                     console.log(data);
                     let progressItem = `<div class="step-container">
