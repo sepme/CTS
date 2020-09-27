@@ -488,7 +488,8 @@ class RequestedProject(models.Model):
         ('unseen', "unseen"),
         ('pending', 'pending'),
         ('accepted', "accepted"),
-        ('refused', 'refused')
+        ('rejected', 'rejected'),
+        ('removed', 'removed'),
     )
     status = models.CharField(verbose_name="وضعیت درخواست", max_length=10, choices=STATUS, default='unseen')
 

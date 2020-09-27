@@ -226,7 +226,7 @@ function show_scientific_record(id) {
         "<td>" + $("#edu-city").val() + "</td>" +
         "<td>" + $("#edu-year").val() + "</td>" +
         "<td>" +
-        "<i class='fas fa-pen' id='edit_edu'></i>" +
+        // "<i class='fas fa-pen' id='edit_edu'></i>" +
         "<i class='fas fa-trash-alt' id='delete_edu'></i>" +
         "</td>" +
         "</tr>" +
@@ -324,7 +324,7 @@ function show_executive_record(id) {
         "<td>" + $("#workplace").val() + "</td>" +
         "<td>" + $("#exe-city").val() + "</td>" +
         "<td>" +
-        "<i class='fas fa-pen' id='edit_exe'></i>" +
+        // "<i class='fas fa-pen' id='edit_exe'></i>" +
         "<i class='fas fa-trash-alt' id='delete_exe'></i>" +
         "</td>" +
         "</tr>" +
@@ -415,7 +415,7 @@ function show_research_record(id) {
         "<td>" + $("#admin").val() + "</td>" +
         "<td>" + $("#liable").val() + "</td>" +
         "<td>" +
-        "<i class='fas fa-pen' id='edit_stu'></i>" +
+        // "<i class='fas fa-pen' id='edit_stu'></i>" +
         "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
         "</td>" +
         "</tr>" +
@@ -505,7 +505,7 @@ function show_paper_record(id) {
         "<td>" + $("#impact-factor").val() + "</td>" +
         "<td>" + $("#referring-num").val() + "</td>" +
         "<td>" +
-        "<i class='fas fa-pen' id='edit_art'></i>" +
+        // "<i class='fas fa-pen' id='edit_art'></i>" +
         "<i class='fas fa-trash-alt' id='edit_art'></i>" +
         "</td>" +
         "</tr>" +

@@ -36,7 +36,7 @@ class InitialInfoForm(forms.ModelForm):
             # 'home_number'     : {'required': "شماره تلفن منزل نمی تواند خالی باشد."},
             'phone_number'    : {'required': "شماره تلفن همراه نمی تواند خالی باشد."},
         }
-    # photo = forms.FileField(max_length=255, error_messages={'required': "عکس نمی تواند خالی باشد."})
+    # photo = forms.FileField(max_length=256, error_messages={'required': "عکس نمی تواند خالی باشد."})
     # fullname = forms.CharField(max_length=128, error_messages={'required': "نام و نام خانوادگی نمی تواند خالی باشد."})
     # special_field = forms.CharField(max_length=256, error_messages={'required': "حوزه تخصصی نمی تواند خالی باشد."})
     # national_code = forms.CharField(error_messages={'required': "کد ملی نمی تواند خالی باشد."})

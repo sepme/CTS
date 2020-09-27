@@ -1282,12 +1282,17 @@ $(document).ready(function () {
                 // console.log(data);
                 if (data.status === "justComment") {
                     $('.request-response').attr("style", "display : none;");
+                    $('.remove-researcher').attr("style", "display : none;");
                     $(".confirm-researcher").prop('disabled', true);
                     $(".refuse-researcher").prop('disabled', true);
+                    $("#researcher-remove-").prop('disabled', true);
                 } else {
                     $('.request-response').attr("style", "display : block;");
+                    $('.remove-researcher').attr("style", "display : block;");
                     $(".confirm-researcher").prop('disabled', false);
                     $(".refuse-researcher").prop('disabled', false);
+                    $("#researcher-remove-").prop('disabled', false);
+                    $("#researcher-remove-").attr("value", id);
                 }
                 $("#researcherInfo").find(".add-comment").attr("id", project_id);
                 $(".researcher_id").attr("value", id);
@@ -1889,6 +1894,45 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
             }
         });
     });
+    $("#researcher-remove-").click(function(event){
+        const thisBtn = $(this);
+        let project_id = $(".project_id").val();
+        console.log(project_id);
+        console.log($(this).val());
+        // $.ajax({
+        //     method: "POST",
+        //     url: '/researcher/reject-researcher/',
+        //     dataType: "json",
+        //     data: {
+        //         researcher_id: $(this).attr("id"),
+        //         project_id: project_id,
+        //     },
+        //     success: function (data) {
+        //         iziToast.success({
+        //             rtl: true,
+        //             message: "پژوهشگر با موفقیت حذف شد.",
+        //             position: 'bottomLeft'
+        //         });
+        //         $(thisBtn).closest(".card").closest("div.col-12").remove();
+        //         if ($(".container > .row:nth-child(3)").find("div").length === 0) {
+        //             $(".container > .row:nth-child(3)").html(
+        //                 `<div class="col-12 text-center">
+        //                     <div class="empty-page">
+        //                         <div class="empty-page-container">
+        //                             <img src="../../static/img/empty-tray.svg" alt="">
+        //                             <pre>هنوز پژوهشگری برای پروژه‌های شما درخواست نداده است.</pre>
+        //                         </div>
+        //                     </div>
+        //                 </div>`
+        //             );
+        //         }
+        //     },
+        //     error: function (data) {
+        //         console.log("Error");
+        //     }
+        // });
+    });
+
     $(".refuse-researcher").click(function () {
         const thisBtn = $(this);
         $.ajax({
