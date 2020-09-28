@@ -4753,6 +4753,8 @@ input[type="number"] {
     letter-spacing: 1px;
 }
 
+/* Button */
+
 .btn {
 
 }
@@ -4781,6 +4783,12 @@ input[type="number"] {
 .btn-primary.focus, .btn-primary:focus {
     box-shadow: 0 0 0 0.2rem rgba(50, 177, 22, .5);
 }
+
+.btn-link {
+    color: #3ccd1c;
+}
+
+/* End Button */
 
 .modal {
     overflow-y: auto;
@@ -6616,8 +6624,13 @@ table.table-days tbody tr {
     box-shadow: 0 5px 15px rgba(238, 131, 30, .34);
 }
 
-.ct-checklist__item {
+.ct-checklist__item:not(.onEdit) {
+    cursor: pointer;
+    display: flex;
+}
 
+.ct-checklist__item.onEdit .ct-checklist-item__checkbox {
+    display: none;
 }
 
 .ct-checklist__item .ct-checklist-item__checkbox .form-check {
@@ -6631,10 +6644,21 @@ table.table-days tbody tr {
     width: 100%;
 }
 
+.ct-checklist__item.onEdit .ct-checklist-item__detail {
+    padding-left: 0;
+}
+
 .ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control {
     position: absolute;
     top: 0;
+    left: -15px;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.ct-checklist__item:not(.onEdit):hover .ct-checklist-item__detail .ct-checklist-item__control {
     left: 0;
+    opacity: 1;
 }
 
 .ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control button, .ct-option-btn button {
@@ -6646,16 +6670,15 @@ table.table-days tbody tr {
     padding: 3px 7px;
 }
 
-.ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control button:hover,
-
-,
 .ct-option-btn button:hover {
-    background-color: #e0e1e2;
+    color: #3ccd1c;
+    background-color: #e3f8e6;
 }
 
 .ct-option-btn.dropdown-toggle::after {
     border-right: none;
     border-left: none;
+    display: none;
 }
 
 .ct-checklist__item .ct-checklist__text {
@@ -6664,17 +6687,25 @@ table.table-days tbody tr {
     margin-bottom: 0;
 }
 
-.ct-checklist__item .ct-checklist__text .atMention {
+.ct-checklist__item .ct-checklist__text del {
+    display: block;
+    color: #999999;
+}
+
+.ct-checklist__item .ct-checklist__text .atMention, pre .atMention {
     color: #000;
     font-weight: bold;
     direction: ltr;
     display: ruby;
 }
 
-.ct-checklist__item .ct-checklist__text .atMention.me {
+.ct-checklist__item .ct-checklist__text .atMention.me, pre .atMention.me {
     color: #3ccd1c;
 }
 
+.ct-checklist__item .ct-checklist__text del .atMention.me, pre .atMention.me {
+    color: #666;
+}
 
 .custom-circle-radio {
     margin-right: 0;
@@ -6715,3 +6746,26 @@ table.table-days tbody tr {
     white-space: pre;
 }
 
+.dropdown-menu {
+    font-size: 13px;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #3ccd1c;
+}
+
+pre[contenteditable="true"] {
+    display: block;
+    width: 100%;
+    min-height: calc(2.5em + 1rem + 2px);
+    padding: .375rem .75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    background-color: #F8FDF7;
+    margin-top: 0;
+}

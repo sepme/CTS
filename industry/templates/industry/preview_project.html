@@ -33,15 +33,15 @@
                                            value="{{ project_pk }}"
                                            hidden>
                                 </label>
-                                <div class="col">
+                                <div class="col-12">
                                     <div class="form-group">
                                         <label for="id_task_title">عنوان</label>
-                                        <textarea class="form-control" id="id_task_title" rows="2"></textarea>
+                                        <pre contenteditable="true" id="id_task_title"></pre>
                                     </div>
-                                    <div class="ct-task-option d-flex">
+                                    <div class="ct-task-option d-flex" style="margin-bottom: -45px">
                                         <div class="ct-task-due ct-option-btn">
                                             <button id="id_task_due" type="button" class=""
-                                                    data-toggle="datetimepicker" data-target="#id_card_deadline">
+                                                    data-toggle="datetimepicker" data-target="#id_card_deadline" style="padding: 7px 10px;" dir="ltr">
                                                 <svg width="1em" height="1em"
                                                      viewBox="0 0 16 16" class="bi bi-clock"
                                                      fill="currentColor"
@@ -58,7 +58,7 @@
                                                 <button class="btn btn-secondary dropdown-toggle ct-option-btn"
                                                         type="button" id="dropdownAssignment"
                                                         data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                        aria-expanded="false"  style="padding: 5px 9px;">
                                                     <svg width="1em" height="1em"
                                                          viewBox="0 0 16 16"
                                                          class="bi bi-person-plus"
@@ -71,38 +71,38 @@
                                                 <div class="dropdown-menu text-right"
                                                      aria-labelledby="dropdownAssignment">
                                                     <h6 class="dropdown-header">رئیس پروژه</h6>
-                                                    <div class="dropdown-item d-flex" type="button">
+                                                    <div class="dropdown-item d-flex" type="button" data-value="{{ project.involved_user.industryUser.username }}">
                                                         <img src="{{ project.involved_user.industryUser.photo }}"
-                                                             width="50px"
+                                                             width="50px" class="ml-1"
                                                              alt="{{ project.involved_user.industryUser.fullname }}">
-                                                        <div>{{ project.involved_user.industryUser.fullname }}<span> ({{ project.involved_user.industryUser.username }}) </span>
+                                                        <div class="mt-auto mb-auto">{{ project.involved_user.industryUser.fullname }}<span> ({{ project.involved_user.industryUser.username }}@) </span>
                                                         </div>
                                                     </div>
                                                     <h6 class="dropdown-header">استاد</h6>
                                                     {% for user in project.involved_user.expertUsers %}
-                                                        <div class="dropdown-item d-flex" type="button">
+                                                        <div class="dropdown-item d-flex" type="button" data-value="{{ user.username }}">
                                                             {% if user.photo %}
                                                                 <img src="{{ user.photo }}" alt="{{ user.fullname }}"
-                                                                     width="50px">
+                                                                     width="50px" class="ml-1">
                                                             {% else %}
                                                                 <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                     alt="{{ user.fullname }} " width="50px">
+                                                                     alt="{{ user.fullname }} " width="50px" class="ml-1">
                                                             {% endif %}
-                                                            <div>{{ user.fullname }}<span> ({{ user.username }}) </span>
+                                                            <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
                                                             </div>
                                                         </div>
                                                     {% endfor %}
                                                     <h6 class="dropdown-header">پژوهشگر</h6>
                                                     {% for user in project.involved_user.researcherUsers %}
-                                                        <div class="dropdown-item d-flex" type="button">
+                                                        <div class="dropdown-item d-flex" type="button" data-value="{{ user.username }}">
                                                             {% if user.photo %}
                                                                 <img src="{{ user.photo }}" alt="{{ user.fullname }}"
-                                                                     width="50px">
+                                                                     width="50px" class="ml-1">
                                                             {% else %}
                                                                 <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                     alt="{{ user.fullname }} " width="50px">
+                                                                     alt="{{ user.fullname }} " width="50px" class="ml-1">
                                                             {% endif %}
-                                                            <div>{{ user.fullname }}<span> ({{ user.username }}) </span>
+                                                            <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
                                                             </div>
                                                         </div>
                                                     {% endfor %}
@@ -446,7 +446,7 @@
                                                 </button>
                                                 <div class="section">
                                                     <div class="ct-checklist">
-                                                        <div class="ct-checklist__item d-flex">
+                                                        <div class="ct-checklist__item">
                                                             <div class="ct-checklist-item__checkbox">
                                                                 <div class="form-group form-check">
                                                                     <input type="checkbox"
@@ -467,10 +467,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="ct-checklist-item__detail">
-                                                                <div class="ct-checklist__text">
-                                                                    <span class="atMention me" title="Reza Mottaghi">@reza_mottaghi</span>
-                                                                    استخراج داده های آزمایشگاهی بیماران 101 تا 150
-                                                                </div>
+                                                                <div class="ct-checklist__text"><span class="atMention me" title="Reza Mottaghi">@reza_mottaghi</span>استخراج داده های آزمایشگاهی بیماران 101 تا 150</div>
                                                                 <div class="ct-checklist-item__control d-flex">
                                                                     <div class="ct-checklist-item-due">
                                                                         <button>
