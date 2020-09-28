@@ -860,12 +860,28 @@ def GetResume(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def confirmResearcher(request):
     try:
-        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        # researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
         project = get_object_or_404(Project, pk=request.POST['project_id'])
+        application = RequestedProject.objects.filter(project=project).get(researcher__pk=request.POST['researcher_id'])
+        application.status = 'accepted'
+        researcher = application.researcher
         project.researcher_accepted.add(researcher)
         researcher.status.status = 'involved'
         project.save()
         researcher.status.save()
+        application.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={}, status=400)
+
+@permission_required('expert.be_expert', login_url='/login/')
+def deleteResearcher(request):
+    try:
+        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(models.Project, pk=request.POST['project_id'])
+        project.researcher_accepted.remove(researcher)
+        project.researcher_banned.add(researcher)
+        project.save()
         return JsonResponse(data={})
     except:
         return JsonResponse(data={}, status=400)
@@ -874,11 +890,13 @@ def confirmResearcher(request):
 @permission_required('expert.be_expert', login_url='/login/')
 def refuseResearcher(request):
     try:
-        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        # researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
         project = get_object_or_404(Project, pk=request.POST['project_id'])
-        project.researcher_accepted.remove(researcher)
+        application = RequestedProject.objects.filter(project=project).get(researcher__pk=request.POST['researcher_id'])
+        researcher = application.researcher
         project.researcher_banned.add(researcher)
         project.save()
+        application.delete()
         return JsonResponse(data={})
     except:
         return JsonResponse(data={}, status=400)

@@ -950,7 +950,11 @@ def show_resume_preview(request):
             comment.save()
     researcher_information['comments'] = comments
     try:
-        researcher_information['status'] = researcher.requestedproject_set.get(project=project).status
+        requestedproject = researcher.requestedproject_set.get(project=project)
+        if requestedproject.status == 'unseen':
+            requestedproject.status = 'pending'
+            requestedproject.save()
+        researcher_information['status'] = requestedproject.status
     except:
         researcher_information['status'] = 'justComment'
     return JsonResponse(researcher_information)

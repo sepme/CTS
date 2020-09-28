@@ -207,7 +207,7 @@ function show_scientific_record(pk) {
         "<td>" + $("#edu-city").val() + "</td>" +
         "<td>" + $("#year").val() + "</td>" +
         "<td>" +
-        "<i class='fas fa-pen' id='edit_edu'></i>" +
+        // "<i class='fas fa-pen' id='edit_edu'></i>" +
         "<i class='fas fa-trash-alt delete_edu' value=" + pk + "></i>" +
         "</td>" +
         "</tr></tbody>";
@@ -301,7 +301,7 @@ function show_executive_record(pk) {
         "<td>" + $("#from").val() + "</td>" +
         "<td>" + $("#until").val() + "</td>" +
         "<td>" +
-        "<i class='fas fa-pen' id='edit_exe'></i>" +
+        // "<i class='fas fa-pen' id='edit_exe'></i>" +
         "<i class='fas fa-trash-alt delete_exe' value=" + pk + "></i>" +
         "</td>" +
         "</tr></tbody>";
@@ -393,7 +393,7 @@ function show_research_record(pk) {
             "<td>" + $("#liable").val() + "</td>" +
             "<td>در دست اجرا</td>" +
             "<td>" +
-            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            // "<i class='fas fa-pen' id='edit_stu'></i>" +
             "<i class='fas fa-trash-alt delete_stu' value=" + pk + "></i>" +
             "</td>" +
             "</tr></tbody>";
@@ -404,7 +404,7 @@ function show_research_record(pk) {
             "<td>" + $("#liable").val() + "</td>" +
             "<td>خاتمه یافته</td>" +
             "<td>" +
-            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            // "<i class='fas fa-pen' id='edit_stu'></i>" +
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr></tbody>";
@@ -415,7 +415,8 @@ function show_research_record(pk) {
             "<td>" + $("#liable").val() + "</td>" +
             "<td>متوقف</td>" +
             "<td>" +
-            "<i class='fas fa-pen' id='edit_stu'></i>" +
+            "<i class='fas
+            ' id='edit_stu'></i>" +
             "<i class='fas fa-trash-alt' id='edit_stu'></i>" +
             "</td>" +
             "</tr></tbody>";

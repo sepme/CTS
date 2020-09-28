@@ -815,11 +815,11 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
             }
             context['researcher_accepted'].append(researcher)
         context['researchers_applied'] = []
-        researcherRequested = RequestedProject.objects.filter(project=project)
+        researcherRequested = RequestedProject.objects.filter(project=project).exclude(status="removed")
         for requested in researcherRequested:
-            # if researcher in project.researcher_accepted.all():
-            #     continue
             researcher = requested.researcher
+            if researcher in project.researcher_accepted.all():
+                continue
             researcher_applied = {
                 'id': researcher.pk,
                 "fullname": researcher.researcherprofile.fullname,
@@ -867,6 +867,55 @@ def industryRequestResearcher(request):
         return JsonResponse({"successfull": "successfull"})
     else:
         return JsonResponse(data=form.errors, status=400)
+
+@permission_required('industry.be_industry', login_url='/login/')
+def confirmResearcher(request):
+    try:
+        # researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(models.Project, pk=request.POST['project_id'])
+        application = RequestedProject.objects.filter(project=project).get(researcher__pk=request.POST['researcher_id'])
+        print(application)
+        application.status = 'accepted'
+        researcher = application.researcher
+        project.researcher_accepted.add(researcher)
+        researcher.status.status = 'involved'
+        project.save()
+        researcher.status.save()
+        application.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={}, status=400)
+
+
+@permission_required('industry.be_industry', login_url='/login/')
+def rejectResearcher(request):
+    try:
+        # researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(models.Project, pk=request.POST['project_id'])
+        application = RequestedProject.objects.filter(project=project).get(researcher__pk=request.POST['researcher_id'])
+        project.researcher_banned.add(application.researcher)
+        application.delete()
+        project.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={}, status=400)
+
+@permission_required('industry.be_industry', login_url='/login/')
+def deleteResearcher(request):
+    try:
+        researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
+        project = get_object_or_404(models.Project, pk=request.POST['project_id'])
+        project.researcher_accepted.remove(researcher)
+        project.researcher_banned.add(researcher)
+        project.save()
+        researcher.status.status = "free"
+        researcher.status.save()
+        application = RequestedProject.objects.filter(project=project).get(researcher=researcher)
+        application.status = "removed"
+        application.save()
+        return JsonResponse(data={})
+    except:
+        return JsonResponse(data={}, status=400)
 
     # def show_active_project(request, code):
 #     project = get_object_or_404(models.Project, code=kwargs["code"])

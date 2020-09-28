@@ -20,4 +20,7 @@ urlpatterns = [
     path("project/<uuid:code>", views.show_active_project.as_view(), name="show_active_project"),
     path("project-setting/", views.ProjectSetting, name="project-setting"),
     path("request_researcher/", views.industryRequestResearcher, name="request_researcher"),
+    path("delete_researcher/", views.deleteResearcher, name="deleteResearcher"),
+    path("confirm_researcher/", views.confirmResearcher, name="confirmResearcher"),
+    path("reject_researcher/", views.rejectResearcher, name="rejectResearcher"),
 ]
