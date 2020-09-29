@@ -1003,6 +1003,11 @@ input, textarea, select, div.tagsinput {
     position: relative;
 }
 
+input[type="number"], input.number_input {
+    direction: ltr;
+    text-align: right;
+}
+
 div.tagsinput {
     padding: 10px 10px 0;
     height: fit-content !important;

@@ -300,18 +300,17 @@ if (window.location.href.indexOf('messages') > -1) {
                         $(".result_suggested").remove();
                         $("#project-confirm").prop("disabled", true);
                         $("#project-reject").prop("disabled", true);
-                        if (data.is_project_suggested == "no-answer"){
+                        if (data.is_project_suggested == "no-answer") {
                             $(".request-response").attr("style", "display: block");
                             $("#project-confirm").prop("disabled", false);
                             $("#project-reject").prop("disabled", false);
                             $("#project-confirm").attr("value", id);
                             $("#project-reject").attr("value", id);
-                        }
-                        else if(data.is_project_suggested == "confirmed")
+                        } else if (data.is_project_suggested == "confirmed")
                             $(".request-response").closest(".row").append(`<div class='result_suggested col-12 text-left'>
                                                                             این پروژه توسط شما پذیرفته شده است.
                                                                             </div>`);
-                        else if(data.is_project_suggested == "refused")
+                        else if (data.is_project_suggested == "refused")
                             $(".request-response").closest(".row").append(`<div class='result_suggested col-12 text-left'>
                                                                             این پروژه توسط شما رد شده است.
                                                                             </div>`);
@@ -541,11 +540,13 @@ $(window).on("load", function () {
             carousel.carousel("prev");
         });
         carousel.on('slid.bs.carousel', function () {
-            console.log(carousel.find(".carousel-item.active").is(":first-child"));
             if (carousel.find(".carousel-item.active").is(":first-child")) {
+                carousel.find("button.next-step").removeClass("d-none");
                 carousel.find("button.back-step").addClass("d-none");
+                carousel.find("button[type='submit']").addClass("d-none");
             } else if (carousel.find(".carousel-item.active").is(":last-child")) {
                 carousel.find("button.next-step").addClass("d-none");
+                carousel.find("button.back-step").removeClass("d-none");
                 carousel.find("button[type='submit']").removeClass("d-none");
             } else {
                 carousel.find("button.back-step").removeClass("d-none");
@@ -556,11 +557,11 @@ $(window).on("load", function () {
     }
 });
 
-$("#project-confirm").click(function(event){            
+$("#project-confirm").click(function (event) {
     $.ajax({
         method: 'POST',
         url: '/expert/set_suggested_project_state/',
-        data: {message_id:$(this).val(), status:"confirm"},
+        data: {message_id: $(this).val(), status: "confirm"},
         dataType: 'json',
         success: function (data) {
             iziToast.success({
@@ -586,11 +587,11 @@ $("#project-confirm").click(function(event){
     });
 });
 
-$("#project-reject").click(function(event){
+$("#project-reject").click(function (event) {
     $.ajax({
         method: 'POST',
         url: '/expert/set_suggested_project_state/',
-        data: {message_id:$(this).val(), status: "reject"},
+        data: {message_id: $(this).val(), status: "reject"},
         dataType: 'json',
         success: function (data) {
             iziToast.success({
