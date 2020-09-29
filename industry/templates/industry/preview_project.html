@@ -41,7 +41,8 @@
                                     <div class="ct-task-option d-flex" style="margin-bottom: -45px">
                                         <div class="ct-task-due ct-option-btn">
                                             <button id="id_task_due" type="button" class=""
-                                                    data-toggle="datetimepicker" data-target="#id_card_deadline" style="padding: 7px 10px;" dir="ltr">
+                                                    data-toggle="datetimepicker" data-target="#id_card_deadline"
+                                                    style="padding: 7px 10px;" dir="ltr">
                                                 <svg width="1em" height="1em"
                                                      viewBox="0 0 16 16" class="bi bi-clock"
                                                      fill="currentColor"
@@ -58,7 +59,7 @@
                                                 <button class="btn btn-secondary dropdown-toggle ct-option-btn"
                                                         type="button" id="dropdownAssignment"
                                                         data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false"  style="padding: 5px 9px;">
+                                                        aria-expanded="false" style="padding: 5px 9px;">
                                                     <svg width="1em" height="1em"
                                                          viewBox="0 0 16 16"
                                                          class="bi bi-person-plus"
@@ -71,7 +72,8 @@
                                                 <div class="dropdown-menu text-right"
                                                      aria-labelledby="dropdownAssignment">
                                                     <h6 class="dropdown-header">رئیس پروژه</h6>
-                                                    <div class="dropdown-item d-flex" type="button" data-value="{{ project.involved_user.industryUser.username }}">
+                                                    <div class="dropdown-item d-flex" type="button"
+                                                         data-value="{{ project.involved_user.industryUser.username }}">
                                                         <img src="{{ project.involved_user.industryUser.photo }}"
                                                              width="50px" class="ml-1"
                                                              alt="{{ project.involved_user.industryUser.fullname }}">
@@ -80,13 +82,15 @@
                                                     </div>
                                                     <h6 class="dropdown-header">استاد</h6>
                                                     {% for user in project.involved_user.expertUsers %}
-                                                        <div class="dropdown-item d-flex" type="button" data-value="{{ user.username }}">
+                                                        <div class="dropdown-item d-flex" type="button"
+                                                             data-value="{{ user.username }}">
                                                             {% if user.photo %}
                                                                 <img src="{{ user.photo }}" alt="{{ user.fullname }}"
                                                                      width="50px" class="ml-1">
                                                             {% else %}
                                                                 <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                     alt="{{ user.fullname }} " width="50px" class="ml-1">
+                                                                     alt="{{ user.fullname }} " width="50px"
+                                                                     class="ml-1">
                                                             {% endif %}
                                                             <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
                                                             </div>
@@ -94,13 +98,15 @@
                                                     {% endfor %}
                                                     <h6 class="dropdown-header">پژوهشگر</h6>
                                                     {% for user in project.involved_user.researcherUsers %}
-                                                        <div class="dropdown-item d-flex" type="button" data-value="{{ user.username }}">
+                                                        <div class="dropdown-item d-flex" type="button"
+                                                             data-value="{{ user.username }}">
                                                             {% if user.photo %}
                                                                 <img src="{{ user.photo }}" alt="{{ user.fullname }}"
                                                                      width="50px" class="ml-1">
                                                             {% else %}
                                                                 <img src="{% static 'industry/img/profile.jpg' %}"
-                                                                     alt="{{ user.fullname }} " width="50px" class="ml-1">
+                                                                     alt="{{ user.fullname }} " width="50px"
+                                                                     class="ml-1">
                                                             {% endif %}
                                                             <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
                                                             </div>
@@ -388,50 +394,72 @@
                                                         data-target="#addDeadline">
                                                     افزودن ددلاین
                                                 </button>
-                                                <div class="section w-100 overflow-auto">
-                                                    {% if not project.is_date_valid %}
-                                                        <div class="project-progress-no-access">این قسمت در دسترس نیست!
-                                                        </div>
-                                                    {% endif %}
-                                                    <div class="project-progress mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
-                                                        {#                                                        <div class="step-container active">#}
-                                                        {#                                    <span class="step-date">#}
-                                                        {#                                        <div class="start">#}
-                                                        {#                                            {{ timeScheduling.start }}#}
-                                                        {#                                        </div>#}
-                                                        {#                                    </span>#}
-                                                        {#                                                            <span class="step-name">#}
-                                                        {#                                        شروع پروژه#}
-                                                        {#                                    </span>#}
-                                                        {#                                                        </div>#}
-                                                        {#                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">#}
-                                                        {#                                    <span class="step-date">#}
-                                                        {#                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>#}
-                                                        {#                                    </span>#}
-                                                        {#                                                            <span class="step-name">جمع آوری داده</span>#}
-                                                        {#                                                        </div>#}
-                                                        <div class="step-container {% is_active project_pk=project_pk phase=2 %}">
-                                                            <span class="step-date">
-                                                                <div class="second_phase">{{ timeScheduling.secondPhase }}</div>
-                                                            </span>
-                                                            <span class="step-name">تحلیل داده ها</span>
-                                                        </div>
-                                                        <div class="step-container">
-                                                            <span class="step-date">
-                                                                <div class="third_phase">{{ timeScheduling.thirdPhase }}</div>
-                                                            </span>
-                                                            <span class="step-name">سابمیت مقاله</span>
-                                                        </div>
-                                                        <div class="step-container">
-                                                            <span class="step-date">
-                                                                <div class="date_finished">{{ timeScheduling.finished }}</div>
-                                                            </span>
-                                                            <span class="step-name">اتمام پروژه</span>
-                                                        </div>
-                                                        <div class="line-100">
-                                                            <div class="arrow"></div>
+                                                <div class="section w-100">
+                                                    <div class="scroll-left">
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                             class="bi bi-chevron-left h-100" fill="currentColor"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="overflow-auto">
+                                                        {% if not project.is_date_valid %}
+                                                            <div class="project-progress-no-access">این قسمت در دسترس
+                                                                نیست!
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="project-progress mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
+                                                            {#                                                        <div class="step-container active">#}
+                                                            {#                                    <span class="step-date">#}
+                                                            {#                                        <div class="start">#}
+                                                            {#                                            {{ timeScheduling.start }}#}
+                                                            {#                                        </div>#}
+                                                            {#                                    </span>#}
+                                                            {#                                                            <span class="step-name">#}
+                                                            {#                                        شروع پروژه#}
+                                                            {#                                    </span>#}
+                                                            {#                                                        </div>#}
+                                                            {#                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">#}
+                                                            {#                                    <span class="step-date">#}
+                                                            {#                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>#}
+                                                            {#                                    </span>#}
+                                                            {#                                                            <span class="step-name">جمع آوری داده</span>#}
+                                                            {#                                                        </div>#}
+                                                            <div class="step-container active">
+                                                                <span class="step-date">{{ timeScheduling.start }}</span>
+                                                                <span class="step-name">تحلیل داده ها</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">1سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">سابمیت مقاله2</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">سابمیت مقاله3</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">4سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">5سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="line-100">
+                                                                <div class="arrow"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -467,7 +495,10 @@
                                                                 </div>
                                                             </div>
                                                             <div class="ct-checklist-item__detail">
-                                                                <div class="ct-checklist__text"><span class="atMention me" title="Reza Mottaghi">@reza_mottaghi</span>استخراج داده های آزمایشگاهی بیماران 101 تا 150</div>
+                                                                <div class="ct-checklist__text"><span
+                                                                        class="atMention me" title="Reza Mottaghi">@reza_mottaghi</span>استخراج
+                                                                    داده های آزمایشگاهی بیماران 101 تا 150
+                                                                </div>
                                                                 <div class="ct-checklist-item__control d-flex">
                                                                     <div class="ct-checklist-item-due">
                                                                         <button>

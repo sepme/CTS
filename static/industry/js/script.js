@@ -952,7 +952,9 @@ $(document).ready(function () {
     //  End New Project
     //****************************************//
 
-
+    //****************************************//
+    //  Deadline Progress
+    //****************************************//
     let addDeadlineForm = $("form#add-card-ajax");
     if (addDeadlineForm.length) {
         addDeadlineForm.submit(function (event) {
@@ -991,6 +993,15 @@ $(document).ready(function () {
         });
     }
 
+    let deadLineProgress = $(".project-progress");
+    if (deadLineProgress.length) {
+        if($(window).width() < 992) {
+
+        }
+    }
+    //****************************************//
+    //  End Deadline Progress
+    //****************************************//
 
     function selecting_expert(element) {
         element.on("keyup", function () {
@@ -1913,14 +1924,13 @@ $(document).ready(function () {
                 //     $(".confirm-researcher").prop('disabled', true);
                 //     $(".refuse-researcher").prop('disabled', true);
                 //     $(".delete-researcher").prop('disabled', true);
-                if (data.status === "pending"){
+                if (data.status === "pending") {
                     $('.request-response').attr("style", "display : block;");
                     $(".confirm-researcher").prop('disabled', false);
                     $(".refuse-researcher").prop('disabled', false);
                     $(".confirm-researcher").attr('value', id);
                     $(".refuse-researcher").attr('value', id);
-                }
-                else if(data.status === "accepted"){
+                } else if (data.status === "accepted") {
                     $('.remove-researcher').attr("style", "display : block;");
                     $(".delete-researcher").prop('disabled', false);
                     $(".delete-researcher").attr('value', id);
@@ -2085,88 +2095,88 @@ $(document).ready(function () {
     });
 });
 
-$("#researcher-confirm-").click(function(event) {
-   let researcher_id = $(this).val();
-   let project_id = $("#project_id").val();
-   $(".confirm-researcher").prop('disabled', true);
-   $(".refuse-researcher").prop('disabled', true);
-   $.ajax({
-    method: 'POST',
-    url: '/industry/confirm_researcher/',
-    dataType: 'json',
-    data: {researcher_id: researcher_id, project_id: project_id},
-    success: function (data) {
-        iziToast.success({
-                rtl: true,
-                message: "درخواست شما با موفقیت ثبت شد!",
-                position: 'bottomLeft'
-            });
-    },
-    error: function(data){
-        $(".confirm-researcher").prop('disabled', false);
-        $(".refuse-researcher").prop('disabled', false);
-        iziToast.error({
-                rtl: true,
-                message: "اتصال با سرور با مشکل رو به رو شده است.",
-                position: 'bottomLeft'
-            });
-    }
-    });
-});
-
-$("#researcher-reject-").click(function(event) {
+$("#researcher-confirm-").click(function (event) {
     let researcher_id = $(this).val();
     let project_id = $("#project_id").val();
     $(".confirm-researcher").prop('disabled', true);
     $(".refuse-researcher").prop('disabled', true);
     $.ajax({
-     method: 'POST',
-     url: '/industry/reject_researcher/',
-     dataType: 'json',
-     data: {researcher_id: researcher_id, project_id: project_id},
-     success: function (data) {
-         iziToast.success({
+        method: 'POST',
+        url: '/industry/confirm_researcher/',
+        dataType: 'json',
+        data: {researcher_id: researcher_id, project_id: project_id},
+        success: function (data) {
+            iziToast.success({
                 rtl: true,
                 message: "درخواست شما با موفقیت ثبت شد!",
                 position: 'bottomLeft'
             });
-     },
-     error: function(data){
-        $(".confirm-researcher").prop('disabled', false);
-        $(".refuse-researcher").prop('disabled', false);        
-        iziToast.error({
+        },
+        error: function (data) {
+            $(".confirm-researcher").prop('disabled', false);
+            $(".refuse-researcher").prop('disabled', false);
+            iziToast.error({
                 rtl: true,
                 message: "اتصال با سرور با مشکل رو به رو شده است.",
                 position: 'bottomLeft'
             });
-     }
-     });
- });
+        }
+    });
+});
 
- $("#researcher-remove-").click(function(event) {
+$("#researcher-reject-").click(function (event) {
+    let researcher_id = $(this).val();
+    let project_id = $("#project_id").val();
+    $(".confirm-researcher").prop('disabled', true);
+    $(".refuse-researcher").prop('disabled', true);
+    $.ajax({
+        method: 'POST',
+        url: '/industry/reject_researcher/',
+        dataType: 'json',
+        data: {researcher_id: researcher_id, project_id: project_id},
+        success: function (data) {
+            iziToast.success({
+                rtl: true,
+                message: "درخواست شما با موفقیت ثبت شد!",
+                position: 'bottomLeft'
+            });
+        },
+        error: function (data) {
+            $(".confirm-researcher").prop('disabled', false);
+            $(".refuse-researcher").prop('disabled', false);
+            iziToast.error({
+                rtl: true,
+                message: "اتصال با سرور با مشکل رو به رو شده است.",
+                position: 'bottomLeft'
+            });
+        }
+    });
+});
+
+$("#researcher-remove-").click(function (event) {
     let researcher_id = $(this).val();
     let project_id = $("#project_id").val();
     $(".delete-researcher").prop("disabled", true);
     $.ajax({
-     method: 'POST',
-     url: '/industry/delete_researcher/',
-     dataType: 'json',
-     data: {researcher_id: researcher_id, project_id: project_id},
-     success: function (data) {
-         iziToast.success({
+        method: 'POST',
+        url: '/industry/delete_researcher/',
+        dataType: 'json',
+        data: {researcher_id: researcher_id, project_id: project_id},
+        success: function (data) {
+            iziToast.success({
                 rtl: true,
                 message: "پژوهشگر با موفقیت حذف شد.",
                 position: 'bottomLeft'
             });
-     },
-     error: function(data){
-        console.log(data);
-        $(".delete-researcher").prop("disabled", false);
-        iziToast.error({
+        },
+        error: function (data) {
+            console.log(data);
+            $(".delete-researcher").prop("disabled", false);
+            iziToast.error({
                 rtl: true,
                 message: "اتصال با سرور با مشکل رو به رو شده است.",
                 position: 'bottomLeft'
             });
-     }
-     });
- });
+        }
+    });
+});

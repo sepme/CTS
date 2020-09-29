@@ -2383,6 +2383,7 @@ button:hover, button:focus {
     margin-top: 0;
     padding-top: 5px;
     border-top: 1px solid rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
 .section.no-border {
@@ -5623,8 +5624,23 @@ hr.vertical-line:after {
 }
 
 @media (max-width: 992px) {
+
+    .section > .scroll-left {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        padding: 10px;
+        width: 50px;
+        font-size: 30px;
+        background: rgb(255, 255, 255);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(0, 212, 255, 0) 100%);
+        z-index: 3;
+    }
+
     .project-progress .step-container {
-        width: 100px;
+        width: max-content;
+        width: -moz-max-content;
         top: 16%;
         margin-left: 1rem;
     }
@@ -5635,7 +5651,7 @@ hr.vertical-line:after {
     }
 
     .project-progress .step-container:nth-child(5) {
-        right: 81%;
+        right: 0;
         top: 16%;
     }
 
@@ -5776,7 +5792,7 @@ hr.vertical-line:after {
         border-radius: 50%;
         border: 1px solid #3CCD1C;
         background-color: #ffffff;
-        z-index: 9999;
+        z-index: 2;
     }
 }
 
@@ -6094,7 +6110,7 @@ hr.vertical-line:after {
     .line-100 {
         height: 4px;
         width: 100%;
-        top: 60%;
+        top: calc(50% - 2px);
         left: 0;
         -webkit-transform: translateY(-50%);
         -moz-transform: translateY(-50%);
