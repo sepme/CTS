@@ -31,14 +31,19 @@ LOCAL_URL = 'chamranteam.ir'
 def jalali_date(jdate):
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
 
-def exchangePersainNumToEnglish(date):
-    changed = ""
-    for item in date:
-        try:
-            changed += str(int(item))
-        except:
-            changed += "-"
-    return changed
+def JalaliToGregorianDate(date):
+    # date += "-"
+    # print(date)
+    # for i in range(len(date)):        
+    #     try:
+    #         date[i] = str(int(date[i]))
+    #     except:
+    #         pass
+    #         # pureDate = "-"
+    # print(date)
+    datePart = date.split("/")
+    return JalaliDate(year=int(datePart[0]), month=int(datePart[1]), day=int(datePart[2]))\
+                    .to_gregorian()
 
 
 def get_message_detail(request, message_id):
@@ -719,7 +724,7 @@ def addCard(request):
     form = forms.CardForm()
     project = Project.objects.get(id=request.POST['project_id'])
     if form.is_valid():
-        deadline = exchangePersainNumToEnglish(form.cleaned_data['deadline'])
+        deadline = JalaliToGregorianDate(form.cleaned_data['deadline'])
         deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
         newCard = models.Card.object.create(title=form.cleaned_data['title'],
                                             deadline=deadline)
@@ -747,6 +752,7 @@ def cardList(request):
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
+    print(request.POST)
     if request.POST['description'] == "":
         return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
     description = request.POST['description']
@@ -754,8 +760,9 @@ def addTask(request):
     user = request.user
     accoun_type = find_account_type(user)
     involved_users_list = request.POST.getlist('involved_users')
-    deadline = exchangePersainNumToEnglish(request.POST['deadline'])
-    deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
+    deadline = JalaliToGregorianDate(request.POST['deadline'])
+    print(deadline)
+    # deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
     task = models.Task.objects.create(project=project
                               ,creator=user
                               ,deadline=deadline
