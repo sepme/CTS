@@ -82,7 +82,9 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gt=0)]
         all_projects = Project.objects.filter(id__in=all_projects).filter(researcherRequestDeadline__gte=timezone.now())
         new_projects = all_projects.exclude(researcher_applied__in=[researcher])
-        applied_projects = all_projects.filter(researcher_applied__in=[researcher])
+        applied_projects = [re.project for re in models.RequestedProject.objects\
+                                                        .filter(researcher=researcher)\
+                                                        .filter(status__in=["unseen", "pending"])]
         technique_title = [str(item.technique) for item in researcher.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(technique_title__in=technique_title)
         projects = []
