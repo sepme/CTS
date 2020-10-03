@@ -995,26 +995,41 @@ $(document).ready(function () {
         });
     }
 
-    let deadLineProgress = $(".project-progress");
+    let deadLineProgress = $(".project-progress.project-progress-sm");
     if (deadLineProgress.length) {
         if ($(window).width() < 992) {
-            deadLineProgress.closest(".overflow-auto").scroll(function () {
+            let deadLineProgressOverFlow = deadLineProgress.closest(".overflow-auto");
+            if (deadLineProgressOverFlow.find(".project-progress").offset().left <= deadLineProgressOverFlow.offset().left - 50) {
+                deadLineProgressOverFlow.prev(".scroll-left").removeClass("d-none");
+            }
+            deadLineProgressOverFlow.scroll(function () {
                 if ($(this).find(".project-progress").offset().left > $(this).offset().left - 50) {
                     $(this).prev(".scroll-left").addClass("d-none");
                 } else {
                     $(this).prev(".scroll-left").removeClass("d-none");
                 }
 
-                let fixRight = $(this).find(".project-progress").offset().left - $(this).find(".project-progress").outerWidth();
-                let right = $(this).offset().left - $(this).outerWidth();
-                console.log(fixRight);
-                console.log(right);
-                console.log("---");
-                if (fixRight > right - 50) {
+                let rightPos = $(this).find(".project-progress").offset().left + $(this).find(".project-progress").outerWidth();
+                let fixRightPos = $(this).offset().left + $(this).outerWidth();
+                if (rightPos - fixRightPos < 50) {
                     $(this).next(".scroll-right").addClass("d-none");
                 } else {
                     $(this).next(".scroll-right").removeClass("d-none");
                 }
+            });
+
+            let w_diff = deadLineProgress.outerWidth() - deadLineProgressOverFlow.outerWidth();
+            deadLineProgressOverFlow.prev(".scroll-left").click(function () {
+                console.log("pre left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
+                $(this).next(".overflow-auto").animate({scrollLeft: $(this).next(".overflow-auto").find(".project-progress").offset().left - 50}, 300);
+                console.log("left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
+            });
+            deadLineProgressOverFlow.next(".scroll-right").click(function () {
+                let leftLoc = $(this).prev(".overflow-auto").find(".project-progress").offset().left + 50 - w_diff;
+                console.log("pre right * ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
+                console.log("pre right ", leftLoc);
+                $(this).prev(".overflow-auto").animate({scrollLeft: leftLoc}, 300);
+                console.log("right ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
             });
         }
     }
