@@ -842,8 +842,10 @@ $(document).ready(function () {
         let addTaskForm = $("form#add-task-ajax");
         addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item").click(function () {
             let mentionVal = $(this).attr("data-value");
-            let title = addTaskForm.find("#id_task_title").html();
-            addTaskForm.find("#id_task_title").html(`<span class="atMention me" title="">@${mentionVal}</span>` + title);
+            $(this).addClass("selected");
+
+            // let title = addTaskForm.find("#id_task_title").html();
+            // addTaskForm.find("#id_task_title").html(`<span class="atMention me" title="">@${mentionVal}</span>` + title);
         });
         addTaskForm.submit(function (event) {
             event.preventDefault();
