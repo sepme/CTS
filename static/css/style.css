@@ -6820,3 +6820,44 @@ pre[contenteditable="true"] {
     background-color: #F8FDF7;
     margin-top: 0;
 }
+
+.tagId-list {
+    list-style: none;
+    direction: ltr;
+}
+
+.tagId-list.inline-list li {
+    float: right;
+}
+
+.tagId-list .tagId-item {
+    background-color: #f5f6f7;
+    margin-left: 0.25rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5rem;
+}
+
+.tagId-list .tagId-item svg.bi-x {
+    border-radius: 50%;
+}
+
+.tagId-list .tagId-item svg.bi-x:hover {
+    color: #ffffff;
+    background-color: #ff4545;
+    cursor: pointer;
+}
+
+.dropdown-item.selected {
+    background-color: #f7fdf8;
+    position: relative;
+}
+
+.dropdown-item.selected:after {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    background-color: #3ccd1c;
+}
