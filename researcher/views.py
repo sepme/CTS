@@ -959,19 +959,6 @@ def show_resume_preview(request):
         researcher_information['status'] = 'justComment'
     return JsonResponse(researcher_information)
 
-@permission_required('researcher.be_researcher', login_url='/login/')
-def checkUserId(request):
-    if request.is_ajax() and request.method == "POST":
-        user_id = request.POST.get("user_id")
-        if not bool(USER_ID_PATTERN.match(user_id)):
-            return JsonResponse({"invalid_input": True,
-                                "message":"فقط از حروف، اعداد و '_' استفاده شود. "})
-        if user_id != request.user.researcheruser.userId:
-            if models.ResearcherUser.objects.filter(userId=user_id).count():
-                return JsonResponse({"is_unique": False
-                                    ,"invalid_input": False
-                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
-        return JsonResponse({"is_unique": True, "invalid_input": False})
 
 @permission_required('researcher.be_researcher', login_url='/login/')
 def forbidden_access(request):
