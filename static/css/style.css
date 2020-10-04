@@ -5641,7 +5641,37 @@ hr.vertical-line:after {
         background: rgb(255, 255, 255);
         background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(0, 212, 255, 0) 100%);
         z-index: 3;
+        transition: all 0.3s;
     }
+
+    .section > .scroll-left:hover {
+        color: #3ccd1c;
+        padding-left: 5px;
+        padding-right: 15px;
+        cursor: pointer;
+    }
+
+    .section > .scroll-right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        padding: 10px;
+        width: 50px;
+        font-size: 30px;
+        background: rgb(255, 255, 255);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 1) 100%);
+        z-index: 3;
+        transition: all 0.3s;
+    }
+
+    .section > .scroll-right:hover {
+        color: #3ccd1c;
+        padding-left: 15px;
+        padding-right: 5px;
+        cursor: pointer;
+    }
+
 
     .project-progress .step-container {
         width: max-content;
@@ -6789,4 +6819,45 @@ pre[contenteditable="true"] {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     background-color: #F8FDF7;
     margin-top: 0;
+}
+
+.tagId-list {
+    list-style: none;
+    direction: ltr;
+}
+
+.tagId-list.inline-list li {
+    float: right;
+}
+
+.tagId-list .tagId-item {
+    background-color: #f5f6f7;
+    margin-left: 0.25rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 5rem;
+}
+
+.tagId-list .tagId-item svg.bi-x {
+    border-radius: 50%;
+}
+
+.tagId-list .tagId-item svg.bi-x:hover {
+    color: #ffffff;
+    background-color: #ff4545;
+    cursor: pointer;
+}
+
+.dropdown-item.selected {
+    background-color: #f7fdf8;
+    position: relative;
+}
+
+.dropdown-item.selected:after {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    background-color: #3ccd1c;
 }

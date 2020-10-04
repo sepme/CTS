@@ -840,15 +840,33 @@ $(document).ready(function () {
         });
 
         let addTaskForm = $("form#add-task-ajax");
-        addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item").click(function () {
+        addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item:not(.selected)").click(function () {
             let mentionVal = $(this).attr("data-value");
-            let title = addTaskForm.find("#id_task_title").html();
-            addTaskForm.find("#id_task_title").html(`<span class="atMention me" title="">@${mentionVal}</span>` + title);
+            $(this).addClass("selected");
+            addTaskForm.find(".tagId-list").append(`<li class="tagId-item">
+                                            <span>@${mentionVal}</span>
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x"
+                                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                                            </svg>
+                                        </li>`);
+            let thisDropItem = $(this);
+            addTaskForm.find(".tagId-list .tagId-item:last-child").click(function () {
+                $(this).closest(".tagId-item").remove();
+                thisDropItem.removeClass("selected");
+            });
+            // let title = addTaskForm.find("#id_task_title").html();
+            // addTaskForm.find("#id_task_title").html(`<span class="atMention me" title="">@${mentionVal}</span>` + title);
         });
         addTaskForm.submit(function (event) {
             event.preventDefault();
-
             let title = addTaskForm.find("#id_task_title").html();
+            let mentions = [];
+            addTaskForm.find(".tagId-list .tagId-item").each(function () {
+                mentions.push($(this).find("span").text());
+                title = `<span class="atMention">${$(this).find("span").text()}</span> ` + title;
+            });
             let pk = taskList.find(".ct-checklist__item").length + 1;
 
             let task = `<div class="ct-checklist__item d-flex">
@@ -929,6 +947,10 @@ $(document).ready(function () {
             taskList.find(".ct-checklist__item:last-child .ct-checklist-item-delete").click(function () {
                 $(this).closest(".ct-checklist__item").remove();
             });
+            addTaskForm.find("#id_task_title").html("");
+            addTaskForm.find(".tagId-list").html("");
+            addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item.selected").removeClass("selected");
+
             $("#addTask").modal("hide");
         });
     }
@@ -963,7 +985,7 @@ $(document).ready(function () {
             let due = addDeadlineForm.find("#id_card_deadline").val();
             $.ajax({
                 method: "POST",
-                url: "/addCard",
+                url: "/addCard/",
                 data: addDeadlineForm.serialize(),
                 success: function (data) {
                     console.log(data);
@@ -993,10 +1015,42 @@ $(document).ready(function () {
         });
     }
 
-    let deadLineProgress = $(".project-progress");
+    let deadLineProgress = $(".project-progress.project-progress-sm");
     if (deadLineProgress.length) {
-        if($(window).width() < 992) {
+        if ($(window).width() < 992) {
+            let deadLineProgressOverFlow = deadLineProgress.closest(".overflow-auto");
+            if (deadLineProgressOverFlow.find(".project-progress").offset().left <= deadLineProgressOverFlow.offset().left - 50) {
+                deadLineProgressOverFlow.prev(".scroll-left").removeClass("d-none");
+            }
+            deadLineProgressOverFlow.scroll(function () {
+                if ($(this).find(".project-progress").offset().left > $(this).offset().left - 50) {
+                    $(this).prev(".scroll-left").addClass("d-none");
+                } else {
+                    $(this).prev(".scroll-left").removeClass("d-none");
+                }
 
+                let rightPos = $(this).find(".project-progress").offset().left + $(this).find(".project-progress").outerWidth();
+                let fixRightPos = $(this).offset().left + $(this).outerWidth();
+                if (rightPos - fixRightPos < 50) {
+                    $(this).next(".scroll-right").addClass("d-none");
+                } else {
+                    $(this).next(".scroll-right").removeClass("d-none");
+                }
+            });
+            // TODO: left and right animation not working properly
+            let w_diff = deadLineProgress.outerWidth() - deadLineProgressOverFlow.outerWidth();
+            deadLineProgressOverFlow.prev(".scroll-left").click(function () {
+                console.log("pre left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
+                $(this).next(".overflow-auto").animate({scrollLeft: $(this).next(".overflow-auto").find(".project-progress").offset().left - 50}, 300);
+                console.log("left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
+            });
+            deadLineProgressOverFlow.next(".scroll-right").click(function () {
+                let leftLoc = $(this).prev(".overflow-auto").find(".project-progress").offset().left + 50 - w_diff;
+                console.log("pre right * ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
+                console.log("pre right ", leftLoc);
+                $(this).prev(".overflow-auto").animate({scrollLeft: leftLoc}, 300);
+                console.log("right ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
+            });
         }
     }
     //****************************************//
@@ -1914,25 +1968,16 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id, project_id: project_id},
             success: function (data) {
-                console.log(data);
-                $('.remove-researcher').attr("style", "display : none;");
-                $('.request-response').attr("style", "display : none;");
-                $(".delete-researcher").prop('disabled', true);
-                $(".confirm-researcher").prop('disabled', true);
-                $(".refuse-researcher").prop('disabled', true);
                 // if (data.status === "justComment") {
                 //     $(".confirm-researcher").prop('disabled', true);
                 //     $(".refuse-researcher").prop('disabled', true);
                 //     $(".delete-researcher").prop('disabled', true);
                 if (data.status === "pending") {
-                    $('.request-response').attr("style", "display : block;");
-                    $(".confirm-researcher").prop('disabled', false);
-                    $(".refuse-researcher").prop('disabled', false);
+                    $('.request-response').removeClass("d-none");
                     $(".confirm-researcher").attr('value', id);
                     $(".refuse-researcher").attr('value', id);
                 } else if (data.status === "accepted") {
-                    $('.remove-researcher').attr("style", "display : block;");
-                    $(".delete-researcher").prop('disabled', false);
+                    $('.remove-researcher').removeClass("d-none");
                     $(".delete-researcher").attr('value', id);
                 }
                 $("#researcherInfo").find(".add-comment").attr("id", project_id);
@@ -2095,9 +2140,44 @@ $(document).ready(function () {
     });
 });
 
+function researcher_remove_func() {
+    $("#researcher-remove-").click(function (event) {
+        let researcher_id = $(this).val();
+        let project_id = $("#project_id").val();
+        let parent = $(this).closest(".remove-researcher");
+        $(".delete-researcher").prop("disabled", true);
+        $.ajax({
+            method: 'POST',
+            url: '/industry/delete_researcher/',
+            dataType: 'json',
+            data: {researcher_id: researcher_id, project_id: project_id},
+            success: function (data) {
+                parent.addClass("d-none");
+                iziToast.success({
+                    rtl: true,
+                    message: "پژوهشگر با موفقیت حذف شد.",
+                    position: 'bottomLeft'
+                });
+            },
+            error: function (data) {
+                $(".delete-researcher").prop("disabled", false);
+                iziToast.error({
+                    rtl: true,
+                    message: "اتصال با سرور با مشکل رو به رو شده است.",
+                    position: 'bottomLeft'
+                });
+            }
+        });
+    });
+}
+
+researcher_remove_func();
+
+
 $("#researcher-confirm-").click(function (event) {
     let researcher_id = $(this).val();
     let project_id = $("#project_id").val();
+    let parent = $(this).closest(".request-response");
     $(".confirm-researcher").prop('disabled', true);
     $(".refuse-researcher").prop('disabled', true);
     $.ajax({
@@ -2106,6 +2186,9 @@ $("#researcher-confirm-").click(function (event) {
         dataType: 'json',
         data: {researcher_id: researcher_id, project_id: project_id},
         success: function (data) {
+            parent.addClass("d-none");
+            parent.next(".remove-researcher").removeClass("d-none");
+            researcher_remove_func();
             iziToast.success({
                 rtl: true,
                 message: "درخواست شما با موفقیت ثبت شد!",
@@ -2127,6 +2210,7 @@ $("#researcher-confirm-").click(function (event) {
 $("#researcher-reject-").click(function (event) {
     let researcher_id = $(this).val();
     let project_id = $("#project_id").val();
+    let parent = $(this).closest(".request-response");
     $(".confirm-researcher").prop('disabled', true);
     $(".refuse-researcher").prop('disabled', true);
     $.ajax({
@@ -2135,6 +2219,7 @@ $("#researcher-reject-").click(function (event) {
         dataType: 'json',
         data: {researcher_id: researcher_id, project_id: project_id},
         success: function (data) {
+            parent.addClass("d-none");
             iziToast.success({
                 rtl: true,
                 message: "درخواست شما با موفقیت ثبت شد!",
@@ -2144,34 +2229,6 @@ $("#researcher-reject-").click(function (event) {
         error: function (data) {
             $(".confirm-researcher").prop('disabled', false);
             $(".refuse-researcher").prop('disabled', false);
-            iziToast.error({
-                rtl: true,
-                message: "اتصال با سرور با مشکل رو به رو شده است.",
-                position: 'bottomLeft'
-            });
-        }
-    });
-});
-
-$("#researcher-remove-").click(function (event) {
-    let researcher_id = $(this).val();
-    let project_id = $("#project_id").val();
-    $(".delete-researcher").prop("disabled", true);
-    $.ajax({
-        method: 'POST',
-        url: '/industry/delete_researcher/',
-        dataType: 'json',
-        data: {researcher_id: researcher_id, project_id: project_id},
-        success: function (data) {
-            iziToast.success({
-                rtl: true,
-                message: "پژوهشگر با موفقیت حذف شد.",
-                position: 'bottomLeft'
-            });
-        },
-        error: function (data) {
-            console.log(data);
-            $(".delete-researcher").prop("disabled", false);
             iziToast.error({
                 rtl: true,
                 message: "اتصال با سرور با مشکل رو به رو شده است.",

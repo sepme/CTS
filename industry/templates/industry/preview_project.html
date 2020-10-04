@@ -34,11 +34,13 @@
                                            hidden>
                                 </label>
                                 <div class="col-12">
-                                    <div class="form-group">
+                                    <div class="form-group mb-1">
                                         <label for="id_task_title">عنوان</label>
                                         <pre contenteditable="true" id="id_task_title"></pre>
                                     </div>
-                                    <div class="ct-task-option d-flex" style="margin-bottom: -45px">
+                                    <ul class="tagId-list inline-list"></ul>
+                                    <div class="ct-task-option d-flex"
+                                         style="position: absolute;bottom: -50px;right: 0;">
                                         <div class="ct-task-due ct-option-btn">
                                             <button id="id_task_due" type="button" class=""
                                                     data-toggle="datetimepicker" data-target="#id_card_deadline"
@@ -133,7 +135,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="accept-project">
+                        <button type="submit" class="btn btn-primary" id="accept-project" style="z-index: 2">
                             ثبت
                         </button>
                     </div>
@@ -395,7 +397,7 @@
                                                     افزودن ددلاین
                                                 </button>
                                                 <div class="section w-100">
-                                                    <div class="scroll-left">
+                                                    <div class="scroll-left d-none">
                                                         <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                              class="bi bi-chevron-left h-100" fill="currentColor"
                                                              xmlns="http://www.w3.org/2000/svg">
@@ -409,7 +411,7 @@
                                                                 نیست!
                                                             </div>
                                                         {% endif %}
-                                                        <div class="project-progress mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
+                                                        <div class="project-progress project-progress-sm mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
                                                             {#                                                        <div class="step-container active">#}
                                                             {#                                    <span class="step-date">#}
                                                             {#                                        <div class="start">#}
@@ -454,12 +456,63 @@
                                                                 <span class="step-date">۱۳۹۹/۶/۲۰</span>
                                                                 <span class="step-name">6سابمیت مقاله</span>
                                                             </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
+                                                            <div class="step-container">
+                                                                <span class="step-date">۱۳۹۹/۶/۲۰</span>
+                                                                <span class="step-name">6سابمیت مقاله</span>
+                                                            </div>
                                                             <div class="line-100">
                                                                 <div class="arrow"></div>
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    <div class="scroll-right d-none">
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                             class="bi bi-chevron-right h-100" fill="currentColor"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path>
+                                                        </svg>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
