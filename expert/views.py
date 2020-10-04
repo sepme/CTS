@@ -923,7 +923,7 @@ def ActiveProjcet(request, project, data):
         })
     # data['enforcer_name'] = str(project.expert_accepted.expertform)
     # data["executive_info"] = project.executive_info
-    data["budget_amount"] = project.project_form.required_budget
+    # data["budget_amount"] = project.project_form.required_budget
     data['timeScheduling'] = projectDate
     data["techniques"] = []
     # }
@@ -1186,7 +1186,7 @@ def ActiveProject(request, project, data):
     # data['enforcer_name'] = str(project.expert_accepted.expertform)
     # data['enforcer_id'] = project.expert_accepted.pk
     data["executive_info"] = project.executive_info
-    data["budget_amount"] = project.project_form.required_budget
+    # data["budget_amount"] = project.project_form.required_budget
 
     data['comments'] = []
     for comment in project.get_comments().exclude(industry_user=None).filter(expert_user=request.user.expertuser):
