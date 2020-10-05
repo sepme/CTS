@@ -1684,7 +1684,7 @@ $(document).ready(function () {
                         $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
                     } else {
                         // $("#researcherAccess").click();
-                        $("#researcherAccess").attr("value", "");
+                        $("#researcherAccess").attr("value", "").prop("checked", false);
                         projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
                     }
                     if (data.end_note_fileName)
