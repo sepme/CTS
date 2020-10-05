@@ -784,6 +784,7 @@ def taskList(request):
                         'deadline': str(task.deadline).replace("-","/"),
                     })
     return JsonResponse(data={"taskInfo": taskInfo})
+
 @permission_required(perm=[], login_url='/login/')
 def checkUserId(request):
     if request.is_ajax() and request.method == "POST":

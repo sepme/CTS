@@ -28,8 +28,8 @@ from expert.models import ExpertUser, RequestResearcher
 from expert.views import showAllTechniques
 from expert.forms import RequestResearcherForm
 from researcher.models import Technique, RequestedProject, ResearcherUser
-from chamran_admin.models import Message
-from chamran_admin.views import exchangePersainNumToEnglish
+from chamran_admin.models import Message, Task, Card
+from chamran_admin.views import exchangePersainNumToEnglish, find_user
 from chamran_admin.forms import CardForm
 
 USER_ID_PATTERN = re.compile('[\w]+$')
@@ -823,8 +823,26 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
                     "least_hour": requestResearcher.least_hour,
                     "researcher_count": requestResearcher.researcher_count})
             except:
-                context['researcherRequestFrom'] = RequestResearcherForm()
+                 context['researcherRequestFrom'] = RequestResearcherForm()
         context['form'] = CardForm()
+        allTasks = Task.objects.filter(project=project)
+        taskInfo = []
+        for task in allTasks:
+            taskInfo.append({
+                            'description': task.description,
+                            'involved_user': [find_user(user).userId for user in task.involved_user.all()],
+                            'deadline': gregorian_to_numeric_jalali(task.deadline),
+                        })
+        context['task_list'] = taskInfo
+
+        allCards = Card.objects.filter(project=project)
+        cardInfo = []
+        for card in allCards:
+            cardInfo.append({
+                "title": card.title,
+                "deadline": gregorian_to_numeric_jalali(card.deadline),
+            })
+        context['card_list'] = cardInfo
         return context
 
 
