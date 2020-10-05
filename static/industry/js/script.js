@@ -1037,19 +1037,14 @@ $(document).ready(function () {
                     $(this).next(".scroll-right").removeClass("d-none");
                 }
             });
-            // TODO: left and right animation not working properly
-            let w_diff = deadLineProgress.outerWidth() - deadLineProgressOverFlow.outerWidth();
+            let w_diff = deadLineProgress.outerWidth() - deadLineProgressOverFlow.outerWidth() - deadLineProgressOverFlow.offset().left;
             deadLineProgressOverFlow.prev(".scroll-left").click(function () {
-                console.log("pre left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
-                $(this).next(".overflow-auto").animate({scrollLeft: $(this).next(".overflow-auto").find(".project-progress").offset().left - 50}, 300);
-                console.log("left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
+                let scrollAmount =  $(this).next(".overflow-auto").find(".project-progress").offset().left * -1 - w_diff - deadLineProgressOverFlow.outerWidth();
+                $(this).next(".overflow-auto").animate({scrollLeft: scrollAmount}, 300);
             });
             deadLineProgressOverFlow.next(".scroll-right").click(function () {
-                let leftLoc = $(this).prev(".overflow-auto").find(".project-progress").offset().left + 50 - w_diff;
-                console.log("pre right * ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
-                console.log("pre right ", leftLoc);
-                $(this).prev(".overflow-auto").animate({scrollLeft: leftLoc}, 300);
-                console.log("right ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
+                let scrollAmount =  $(this).prev(".overflow-auto").find(".project-progress").offset().left * -1 - w_diff + deadLineProgressOverFlow.outerWidth();
+                $(this).prev(".overflow-auto").animate({scrollLeft: scrollAmount}, 300);
             });
         }
     }
