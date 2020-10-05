@@ -4,14 +4,18 @@ from django.http import JsonResponse
 from industry.models import IndustryUser, Project
 from expert.models import ExpertUser
 from researcher.models import ResearcherUser
+import uuid
 
 def projectName(request, project_id):
     try:
-        project = Project.objects.get(project)
+        project = Project.objects.get(code=project_id)        
         data = {
-            'project_name': project.project_form.name,
-            'creator': project.creator,
+            'project_name': project.project_form.persian_title,
+            'creator': project.industry_creator.profile.name,
+            'creator_photo': "None",
         }
+        if project.industry_creator.profile.photo:
+            data['creator_photo'] = project.industry_creator.profile.photo.url        
         return JsonResponse(data=data)
     except:
         return JsonResponse(data={"error": "the project_id is invalid"}, status=400)

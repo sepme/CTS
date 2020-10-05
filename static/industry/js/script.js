@@ -1242,7 +1242,7 @@ $(document).ready(function () {
                 $("#userID").closest("div").find(".error").remove();
                 $.ajax({
                     method: "POST",
-                    url: "/industry/checkUserId",
+                    url: "/checkUserId",
                     data: {"user_id": $(this).val()},
                     success: function (data) {
                         console.log(data);

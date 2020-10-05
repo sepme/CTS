@@ -30,4 +30,5 @@ urlpatterns = [
     path("addTask/", views.addTask, name="add-Task"),
     path("card-list", views.cardList, name="card-list"),
     path("task-list", views.taskList, name="task-list"),
+    path("checkUserId", views.checkUserId, name="checkUserId"),
 ]

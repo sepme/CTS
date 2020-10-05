@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from dateutil.relativedelta import relativedelta
 from django.http import JsonResponse
@@ -26,7 +27,7 @@ from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
 
 LOCAL_URL = 'chamranteam.ir'
-
+USER_ID_PATTERN = re.compile('[\w]+$')
 
 def jalali_date(jdate):
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
@@ -798,3 +799,25 @@ def taskList(request):
             'deadline': str(task.deadline).replace("-", "/"),
         })
     return JsonResponse(data={"taskInfo": taskInfo})
+@permission_required(perm=[], login_url='/login/')
+def checkUserId(request):
+    if request.is_ajax() and request.method == "POST":
+        user_id = request.POST.get("user_id")
+        if not bool(USER_ID_PATTERN.match(user_id)):
+            return JsonResponse({"invalid_input": True,
+                                "message":"فقط از حروف، اعداد و '_' استفاده شود. "})
+        user_account = find_user(request.user)
+        if user_id != user_account.userId:
+            if IndustryUser.objects.filter(userId=user_id).count():
+                return JsonResponse({"is_unique": False
+                                    ,"invalid_input": False
+                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
+            if ExpertUser.objects.filter(userId=user_id).count():
+                return JsonResponse({"is_unique": False
+                                    ,"invalid_input": False
+                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
+            if ResearcherUser.objects.filter(userId=user_id).count():
+                return JsonResponse({"is_unique": False
+                                    ,"invalid_input": False
+                                    ,"message": "این نام کاربری قبلا استفاده شده است."})
+        return JsonResponse({"is_unique": True, "invalid_input": False})
