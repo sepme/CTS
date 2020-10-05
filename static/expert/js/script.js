@@ -1621,8 +1621,8 @@ function setEthicalConsider(data) {
                         <span>
                             ملاحظات اخلاقی
                         </span>
-                        <div class='answer'>${data.policy}</div>
                     </div>
+                    <div class='answer'>${data.policy}</div>
                 </div>`;
     if (data.executive_restrictions)
         role += `<div>
@@ -1631,8 +1631,8 @@ function setEthicalConsider(data) {
                         <span>
                             محدودیت های اجرایی طرح و روش کاهش آن ها
                         </span>
-                        <div class='answer'>${data.executive_restrictions}</div>
                     </div>
+                    <div class='answer'>${data.executive_restrictions}</div>
                 </div>`;
     $(".project-info-content" ).html(role);
 }
