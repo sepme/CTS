@@ -7,7 +7,7 @@ from django.views import generic, View
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required , permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -31,6 +31,7 @@ LOCAL_URL = 'chamranteam.ir'
 def jalali_date(jdate):
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
 
+
 def exchangePersainNumToEnglish(date):
     changed = ""
     for item in date:
@@ -49,7 +50,7 @@ def get_message_detail(request, message_id):
     if message.attachment:
         attachment = message.attachment.url
     return JsonResponse({
-        'id' : message.id,
+        'id': message.id,
         'text': message.text,
         'date': jalali_date(JalaliDate(message.date)),
         'title': message.title,
@@ -141,8 +142,8 @@ class Home(generic.TemplateView):
     template_name = "index.html"
 
     # def get(self, request, *args,g **kwargs):
-        # return HttpResponseRedirect(reverse('chamran:login'))
-    
+    # return HttpResponseRedirect(reverse('chamran:login'))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         top_news = []
@@ -160,7 +161,7 @@ class Home(generic.TemplateView):
             })
         context['top_news'] = top_news
         return context
-    
+
 
 class SignupEmail(generic.FormView):
     form_class = forms.RegisterEmailForm
@@ -246,7 +247,7 @@ def login_ajax(request):
                     if user.status.status is not "deactivated":
                         user.status.status = "deactivated"
                         user.status.save()
-                    if permission in entry_user.user_permissions.all() :
+                    if permission in entry_user.user_permissions.all():
                         entry_user.user_permissions.remove(permission)
                         entry_user.save()
                 data['type'] = 'researcher'
@@ -273,6 +274,7 @@ def login_ajax(request):
         print('form error')
         return JsonResponse(form.errors, status=400)
 
+
 def addGroup(user, group_name):
     if not Group.objects.filter(name=group_name).exists():
         newGroup = Group(name=group_name)
@@ -292,6 +294,7 @@ def addGroup(user, group_name):
         group = Group.objects.get(name=group_name)
         group.user_set.add(user)
         group.save()
+
 
 class SignupUser(generic.FormView):
     form_class = forms.RegisterUserForm
@@ -329,7 +332,7 @@ class SignupUser(generic.FormView):
         message = Message.objects.filter(title="خوش‌آمدگویی").first()
         if message is None:
 
-            context= """با سلام،
+            context = """با سلام،
 به چمران‌تیم خوش آمدید.
 امیدواریم در کنار شما، بتوانیم قدمی هر چند کوچک برداریم برای کاربردی و صنعتی شدن پژوهش‌ها در کشور.
 لطفا برای آشنایی بیشتر با امکانات حساب کاربری‌تان، قسمت‌های مختلف آن را از طریق منوی سمت راست، بررسی بفرمایید.
@@ -338,9 +341,9 @@ class SignupUser(generic.FormView):
 با آرزوی موفقیت،
 چمران‌تیم """
             message = Message(title="خوش‌آمدگویی",
-                            text=context,
-                            type=0)
-            message.save() 
+                              text=context,
+                              type=0)
+            message.save()
         else:
             message.receiver.add(user)
             message.save()
@@ -500,7 +503,7 @@ class RecoverPasswordConfirm(generic.FormView):
                 except ResearcherUser.DoesNotExist:
                     raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
         return super().get(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['username'] = "username"
@@ -539,16 +542,16 @@ def notFound500(request):
     return render(request, '404Template.html', {})
 
 
-def Handler403(request, exception):    
+def Handler403(request, exception):
     if not request.user.has_perm('researcher.is_active') and request.user.groups.filter(name="Researcher").exists():
         researcher = request.user.researcheruser
-        if researcher.status.is_deactivated :
+        if researcher.status.is_deactivated:
             remaining = researcher.status.remainingTime
-            context = {'day'    : remaining['day'],
-                       'hour'   : remaining['hour'],
-                       'minute' : remaining['minute'],
-                       'second' : remaining['second'],
-                      }        
+            context = {'day': remaining['day'],
+                       'hour': remaining['hour'],
+                       'minute': remaining['minute'],
+                       'second': remaining['second'],
+                       }
             return render(request=request, template_name='researcher/forbid_access.html', context=context)
         else:
             researcher.status.status = "not_answered"
@@ -604,6 +607,7 @@ def DeleteComment(request):
         return JsonResponse({}, 400)
     return JsonResponse({'successful': "successful"})
 
+
 class News(generic.ListView):
     template_name = "chamran_admin/news_list.html"
     model = models.News
@@ -613,19 +617,19 @@ class News(generic.ListView):
         news_list = []
         for news in context["object_list"]:
             news_list.append({
-                "uuid"    : news.uuid,
-                "title"   : news.title,
-                'text'    : news.text,
-                'summary' : news.summary,
-                'link'    : news.link,
-                'writer'  : news.writer,
-                'topPicture' : news.topPicture.url[news.topPicture.url.find('media', 2)-1:],
-                'attachment' : news.attachment,
-                'date_submitted' : jalali_date(JalaliDate(news.date_submitted)),
+                "uuid": news.uuid,
+                "title": news.title,
+                'text': news.text,
+                'summary': news.summary,
+                'link': news.link,
+                'writer': news.writer,
+                'topPicture': news.topPicture.url[news.topPicture.url.find('media', 2) - 1:],
+                'attachment': news.attachment,
+                'date_submitted': jalali_date(JalaliDate(news.date_submitted)),
             })
         context['news_list'] = news_list
         return context
-    
+
 
 class NewsDetail(generic.DetailView):
     template_name = 'chamran_admin/news_detail.html'
@@ -635,29 +639,32 @@ class NewsDetail(generic.DetailView):
         context = super().get_context_data(**kwargs)
         news = context['news']
         context["news"] = {
-                "uuid"    : news.uuid,
-                "title"   : news.title,
-                'text'    : news.text,
-                'summary' : news.summary,
-                'link'    : news.link,
-                'writer'  : news.writer,
-                'topPicture' : news.topPicture.url[news.topPicture.url.find('media', 2)-1:],
-                'attachment' : news.attachment,
-                'date_submitted' : jalali_date(JalaliDate(news.date_submitted)),
-            }
+            "uuid": news.uuid,
+            "title": news.title,
+            'text': news.text,
+            'summary': news.summary,
+            'link': news.link,
+            'writer': news.writer,
+            'topPicture': news.topPicture.url[news.topPicture.url.find('media', 2) - 1:],
+            'attachment': news.attachment,
+            'date_submitted': jalali_date(JalaliDate(news.date_submitted)),
+        }
         return context
-    
+
 
 class NewsForm(generic.FormView):
     template_name = "chamran_admin/newsForm.html"
     form_class = forms.NewsForm
-    
+
+
 def ContactUS(request):
     form = forms.ContactForm(request.POST)
     if form.is_valid():
         contact = form.save()
         subject = "تماس با ما - " + contact.fullname
-        message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(contact.fullname ,contact.email, contact.context)
+        message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(contact.fullname,
+                                                                                                       contact.email,
+                                                                                                       contact.context)
         send_mail(
             subject=subject,
             message=message,
@@ -669,22 +676,23 @@ def ContactUS(request):
     else:
         return JsonResponse(data=form.errors, status=400)
 
+
 # class ContactUS(generic.FormView):
 #     template_name = 'chamran_admin/contactUs.html'
 #     form_class = forms.ContactForm
 #     success_url = "/"
 
 
-    # def form_valid(self, form):
-    #     subject = "تماس با ما - " + form.cleaned_data['fullName']
-    #     message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(form.cleaned_data['fullName'] ,form.cleaned_data['email'], form.cleaned_data['text'])
-    #     html_template = get_template('registration/contactUs_sendEmail.html')
-    #     email_template = html_template.render({"message" : message})
-    #     msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-    #                                     to=[settings.EMAIL_HOST_USER])
-    #     msg.attach_alternative(email_template, "text/html")
-    #     msg.send()
-    #     return super().form_valid(form)
+# def form_valid(self, form):
+#     subject = "تماس با ما - " + form.cleaned_data['fullName']
+#     message = "{}  با ایمیل {} از طریق تماس با ما این پیام را ارسال کرده است. پیام :\n\t{}".format(form.cleaned_data['fullName'] ,form.cleaned_data['email'], form.cleaned_data['text'])
+#     html_template = get_template('registration/contactUs_sendEmail.html')
+#     email_template = html_template.render({"message" : message})
+#     msg = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
+#                                     to=[settings.EMAIL_HOST_USER])
+#     msg.attach_alternative(email_template, "text/html")
+#     msg.send()
+#     return super().form_valid(form)
 
 @method_decorator(login_required(login_url='/login/'), name='dispatch')
 def AddOpinion(request):
@@ -692,15 +700,17 @@ def AddOpinion(request):
     if form.is_valid():
         user_type = find_account_type(request.user)
         feedBack = models.FeedBack(email=form.cleaned_data['email'],
-                                    opinion=form.cleaned_data['opinion'],
-                                    user_type=user_type,
-                                    user_info=request.META['HTTP_USER_AGENT'],
-                                    )
+                                   opinion=form.cleaned_data['opinion'],
+                                   user_type=user_type,
+                                   user_info=request.META['HTTP_USER_AGENT'],
+                                   )
         feedBack.user = request.user
         feedBack.save()
-        
+
         subject = 'بازخورد از کاربر'
-        message = "با عرض سلام\n کاربر با نوع خساب کاربری {} بازخوردی ارسال کرده است.\n{}".format(user_type, form.cleaned_data['opinion'])
+        message = "با عرض سلام\n کاربر با نوع خساب کاربری {} بازخوردی ارسال کرده است.\n{}".format(user_type,
+                                                                                                  form.cleaned_data[
+                                                                                                      'opinion'])
         try:
             send_mail(
                 subject=subject,
@@ -710,10 +720,11 @@ def AddOpinion(request):
                 fail_silently=False
             )
         except TimeoutError:
-            return JsonResponse(data={"success" : "success"}, status=400)
-        return JsonResponse(data={"success" : "success"})
+            return JsonResponse(data={"success": "success"}, status=400)
+        return JsonResponse(data={"success": "success"})
     return JsonResponse(data=form.errors, status=400)
-        
+
+
 @permission_required(perm=[], login_url="/login")
 def addCard(request):
     form = forms.CardForm()
@@ -730,36 +741,39 @@ def addCard(request):
     else:
         return JsonResponse(data=form.errors, status=400)
 
+
 @permission_required(perm=[], login_url="/login")
 def cardList(request):
     try:
         project = Project.objects.get(id=request.POST["project_id"])
     except:
-        return JsonResponse(data={"message": "Project Id is Invalid.",}, status=400)
+        return JsonResponse(data={"message": "Project Id is Invalid.", }, status=400)
     allCards = models.Card.objects.filter(project=project)
     cardInfo = []
     for card in allCards:
         cardInfo.append({
             "title": card.title,
-            "deadline": str(card.deadline).replace("-","/"),
+            "deadline": str(card.deadline).replace("-", "/"),
         })
     return JsonResponse(data={"cardInfo": cardInfo})
+
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
     if request.POST['description'] == "":
         return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
     description = request.POST['description']
-    project = Project.objects.filter(id=request.user.POST['project_id'])
+    project = Project.objects.get(id=request.POST['project_id'])
     user = request.user
     accoun_type = find_account_type(user)
     involved_users_list = request.POST.getlist('involved_users')
-    deadline = exchangePersainNumToEnglish(request.POST['deadline'])
-    deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
     task = models.Task.objects.create(project=project
-                              ,creator=user
-                              ,deadline=deadline
-                              ,description=description)
+                                      , creator=user
+                                      , description=description)
+    if request.POST['deadline']:
+        deadline = exchangePersainNumToEnglish(request.POST['deadline'])
+        deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
+        task.deadline = deadline
     for userId in involved_users_list:
         user = project.get_involved_user(userId)
         if user is not None and user not in task.involved_user.all():
@@ -767,19 +781,20 @@ def addTask(request):
     task.save()
     return JsonResponse(data={"message": "task completely added."})
 
+
 @permission_required(perm=[], login_url="/login")
 def taskList(request):
     try:
         project = Project.objects.get(id=request.POST["project_id"])
     except:
-        return JsonResponse(data={"message": "Project Id is Invalid.",}, status=400)
+        return JsonResponse(data={"message": "Project Id is Invalid.", }, status=400)
 
     allTasks = models.Task.objects.filter(project=project)
     taskInfo = []
     for task in allTasks:
         taskInfo.append({
-                        'description': task.description,
-                        'involved_user': [find_user(user).userId for user in task.involved_user.all()],
-                        'deadline': str(task.deadline).replace("-","/"),
-                    })
+            'description': task.description,
+            'involved_user': [find_user(user).userId for user in task.involved_user.all()],
+            'deadline': str(task.deadline).replace("-", "/"),
+        })
     return JsonResponse(data={"taskInfo": taskInfo})
