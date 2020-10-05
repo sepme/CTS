@@ -5576,7 +5576,7 @@ hr.vertical-line:after {
 @media (max-width: 992px) {
     .project-progress {
         display: flex;
-        min-height: 100px;
+        min-height: 175px;
     }
 
     .project-progress:after {

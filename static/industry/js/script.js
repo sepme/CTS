@@ -12,8 +12,8 @@ function setEthicalConsider(data, status) {
                         <span>
                             ملاحظات اخلاقی
                         </span>
-                        <div class='answer'>${data.policy}</div>
                     </div>
+                    <div class='answer'>${data.policy}</div>
                 </div>`;
     if (data.executive_restrictions)
         role += `<div>
@@ -22,8 +22,8 @@ function setEthicalConsider(data, status) {
                         <span>
                             محدودیت های اجرایی طرح و روش کاهش آن ها
                         </span>
-                        <div class='answer'>${data.executive_restrictions}</div>
                     </div>
+                    <div class='answer'>${data.executive_restrictions}</div>
                 </div>`;
     $(".project-info-content" + status).html(role);
 }
@@ -834,7 +834,7 @@ $(document).ready(function () {
             dayPicker: {
                 onSelect: function (unix) {
                     let pdate = new persianDate(unix);
-                    $('#id_task_due').append(pdate.format("YYYY/MM/DD"));
+                    $('#id_task_due span').html(pdate.format("YYYY/MM/DD"));
                 },
             },
         });
@@ -859,17 +859,29 @@ $(document).ready(function () {
             // let title = addTaskForm.find("#id_task_title").html();
             // addTaskForm.find("#id_task_title").html(`<span class="atMention me" title="">@${mentionVal}</span>` + title);
         });
+
         addTaskForm.submit(function (event) {
             event.preventDefault();
+            let data = {"project_id": addTaskForm.find("input[name='project_id']").val()};
             let title = addTaskForm.find("#id_task_title").html();
+            data["description"] = title;
             let mentions = [];
             addTaskForm.find(".tagId-list .tagId-item").each(function () {
                 mentions.push($(this).find("span").text());
                 title = `<span class="atMention">${$(this).find("span").text()}</span> ` + title;
             });
+            data["involved_users"] = mentions;
+            data["deadline"] = "";
+            if ($('#id_task_due span').html() !== "") {
+                data["deadline"] = $('#id_task_due').attr("value");
+            }
             let pk = taskList.find(".ct-checklist__item").length + 1;
-
-            let task = `<div class="ct-checklist__item d-flex">
+            $.ajax({
+                method: "POST",
+                url: "/addTask/",
+                data: data,
+                success: function (data) {
+                    let task = `<div class="ct-checklist__item d-flex">
                                                             <div class="ct-checklist-item__checkbox">
                                                                 <div class="form-group form-check">
                                                                     <input type="checkbox"
@@ -932,26 +944,39 @@ $(document).ready(function () {
                                                                 </div>
                                                             </div>
                                                         </div>`;
-            taskList.append(task);
-
-            taskList.find(".ct-checklist__item:last-child .ct-checklist-item__checkbox input[type='checkbox']").click(function () {
-                if ($(this).is(":checked")) {
-                    let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
-                    $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`<del>${text}</del>`);
-                } else {
-                    let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text del").html();
-                    $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
+                    taskList.append(task);
+                    taskList.find(".ct-checklist__item:last-child .ct-checklist-item__checkbox input[type='checkbox']").click(function () {
+                        if ($(this).is(":checked")) {
+                            let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
+                            $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`<del>${text}</del>`);
+                        } else {
+                            let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text del").html();
+                            $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
+                        }
+                    });
+                    taskList.find(".ct-checklist__item:last-child .ct-checklist-item-delete").click(function () {
+                        $(this).closest(".ct-checklist__item").remove();
+                    });
+                    addTaskForm.find("#id_task_title").html("");
+                    addTaskForm.find(".tagId-list").html("");
+                    addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item.selected").removeClass("selected");
+                    $("#addTask").modal("hide");
+                    iziToast.success({
+                        rtl: true,
+                        message: "تسک با موفقیت اضافه شد!",
+                        position: 'bottomLeft'
+                    });
+                },
+                error: function (data) {
+                    console.log(data);
+                    iziToast.error({
+                        rtl: true,
+                        message: data,
+                        position: 'bottomLeft'
+                    });
                 }
             });
 
-            taskList.find(".ct-checklist__item:last-child .ct-checklist-item-delete").click(function () {
-                $(this).closest(".ct-checklist__item").remove();
-            });
-            addTaskForm.find("#id_task_title").html("");
-            addTaskForm.find(".tagId-list").html("");
-            addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item.selected").removeClass("selected");
-
-            $("#addTask").modal("hide");
         });
     }
     //****************************************//
@@ -1037,19 +1062,14 @@ $(document).ready(function () {
                     $(this).next(".scroll-right").removeClass("d-none");
                 }
             });
-            // TODO: left and right animation not working properly
-            let w_diff = deadLineProgress.outerWidth() - deadLineProgressOverFlow.outerWidth();
+            let w_diff = deadLineProgress.outerWidth() - deadLineProgressOverFlow.outerWidth() - deadLineProgressOverFlow.offset().left;
             deadLineProgressOverFlow.prev(".scroll-left").click(function () {
-                console.log("pre left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
-                $(this).next(".overflow-auto").animate({scrollLeft: $(this).next(".overflow-auto").find(".project-progress").offset().left - 50}, 300);
-                console.log("left ", $(this).next(".overflow-auto").find(".project-progress").offset().left);
+                let scrollAmount = $(this).next(".overflow-auto").find(".project-progress").offset().left * -1 - w_diff - deadLineProgressOverFlow.outerWidth();
+                $(this).next(".overflow-auto").animate({scrollLeft: scrollAmount}, 300);
             });
             deadLineProgressOverFlow.next(".scroll-right").click(function () {
-                let leftLoc = $(this).prev(".overflow-auto").find(".project-progress").offset().left + 50 - w_diff;
-                console.log("pre right * ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
-                console.log("pre right ", leftLoc);
-                $(this).prev(".overflow-auto").animate({scrollLeft: leftLoc}, 300);
-                console.log("right ", $(this).prev(".overflow-auto").find(".project-progress").offset().left);
+                let scrollAmount = $(this).prev(".overflow-auto").find(".project-progress").offset().left * -1 - w_diff + deadLineProgressOverFlow.outerWidth();
+                $(this).prev(".overflow-auto").animate({scrollLeft: scrollAmount}, 300);
             });
         }
     }
@@ -1689,7 +1709,7 @@ $(document).ready(function () {
                         $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
                     } else {
                         // $("#researcherAccess").click();
-                        $("#researcherAccess").attr("value", "");
+                        $("#researcherAccess").attr("value", "").prop("checked", false);
                         projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
                     }
                     if (data.end_note_fileName)
