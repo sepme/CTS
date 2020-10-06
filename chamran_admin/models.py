@@ -168,7 +168,7 @@ class Task(models.Model):
     description = models.TextField(verbose_name="توضیحات", null=True, blank=True)
     involved_user = models.ManyToManyField(User, verbose_name="کاربران درگیر", related_name="involved_user")
     registration_date = models.DateField(verbose_name="تاریخ ثبت", auto_now=False, auto_now_add=True)
-    deadline = models.DateField(verbose_name="تاریخ پایان", auto_now=False, auto_now_add=False)
+    deadline = models.DateField(verbose_name="تاریخ پایان", auto_now=False, auto_now_add=False, null=True, blank=True)
     done = models.BooleanField(verbose_name="انجام شده", default=False)
 
     def __str__(self):

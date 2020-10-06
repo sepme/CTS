@@ -15,7 +15,6 @@ urlpatterns = [
     path('get_comment/', views.GetComment),
     path('accept_request/', views.accept_project),
     path('refuse_request/', views.refuse_expert),
-    path("checkUserId", views.checkUserId, name="checkUserId"),
     path("search_user_id", views.searchUserId, name="searchUserId"),
     path("project/<uuid:code>", views.show_active_project.as_view(), name="show_active_project"),
     path("project-setting/", views.ProjectSetting, name="project-setting"),
