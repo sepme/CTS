@@ -25,6 +25,7 @@ from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
+from bot_api.views import updateTask, updateCard
 
 LOCAL_URL = 'chamranteam.ir'
 USER_ID_PATTERN = re.compile('[\w]+$')
@@ -738,6 +739,9 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
+        updateCard(projectId=project.id,
+                   title=newCard.title,
+                   deadline=newCard.deadline)
         return JsonResponse(data={})
     else:
         return JsonResponse(data=form.errors, status=400)
@@ -775,11 +779,17 @@ def addTask(request):
         deadline = exchangePersainNumToEnglish(request.POST['deadline'])
         deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
         task.deadline = deadline
+    involved_username = []
     for userId in involved_users_list:
         user = project.get_involved_user(userId)
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user)
+            involved_username.append(user.user.get_username())
     task.save()
+    updateTask(projectId=project.id,
+               description=description,
+               deadline=task.deadline, 
+               involved_username=involved_username)
     return JsonResponse(data={"message": "task completely added."})
 
 
