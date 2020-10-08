@@ -246,7 +246,7 @@ def login_ajax(request):
                 if user.status.is_deactivated:
                     ctype = ContentType.objects.get_for_model(ResearcherUser)
                     permission = Permission.objects.get(content_type=ctype, codename='is_active')
-                    if user.status.status is not "deactivated":
+                    if user.status.status != "deactivated":
                         user.status.status = "deactivated"
                         user.status.save()
                     if permission in entry_user.user_permissions.all():
