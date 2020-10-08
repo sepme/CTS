@@ -4652,6 +4652,10 @@ span.border-span {
     background-color: #eee;
 }
 
+small.s-90 {
+    font-size: 90%;
+}
+
 .cbx {
     -webkit-user-select: none;
     user-select: none;
