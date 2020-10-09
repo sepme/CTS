@@ -19,6 +19,7 @@ urlpatterns = [
     path('delete_scientific/', views.DeleteScientificRecord, name='delete_scientific'),
     path('delete_executive/', views.DeleteExecutiveRecord, name='delete_executive'),
     path('delete_studious/', views.DeleteStudiousRecord, name='delete_studious'),
+    path("project/<uuid:code>", views.show_active_project.as_view(), name="show_active_project"),
     path('show_project/', views.ShowProject, name='show_project'),
     path('applyProject/', views.ApplyProject, name="apply_project"),
     path('comment/', views.AddComment, name='comment'),

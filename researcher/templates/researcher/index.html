@@ -233,10 +233,11 @@
                                         </div>
                                     </div>
                                     <div class="col-2">
-                                        <button type="button" class="default-btn preview-project" id="{{ project.PK }}"
-                                                data-toggle="modal" data-target="#showProject">
-                                            مشاهده
-                                        </button>
+                                        <a href="{% url 'researcher:show_active_project' code=project.code %}">
+                                            <button class="default-btn" type="button" id="{{ project.id }}">
+                                                مشاهده
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
