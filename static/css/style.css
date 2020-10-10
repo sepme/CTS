@@ -2642,7 +2642,7 @@ span.title-back {
 @media (max-width: 767px) {
     .nav-pills, .nav-tabs-container .nav-tabs {
         position: relative;
-        overflow: hidden;
+        overflow: auto;
         white-space: nowrap;
         width: 100%;
         margin-bottom: -7px;
@@ -3162,7 +3162,7 @@ div.no-project > span.disable-border-button {
     margin: 0 5px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .box .box-header {
         display: block;
     }
@@ -3206,7 +3206,7 @@ div.no-project > span.disable-border-button {
     text-overflow: ellipsis;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .box .box-header h6,
     .box .box-header h5 {
         text-align: justify;
@@ -4000,6 +4000,19 @@ a.top-button i {
 
 .box .box-header .notification i {
     font-size: 19px;
+}
+
+@media (max-width: 768px) {
+    .box .box-header .active-status,
+    .box .box-header .notification,
+    .box .box-header .wait-status,
+    .box .box-header .check-status,
+    .box .box-header .check-status,
+    .box .box-header .reject-status,
+    .box .box-header .project-setting,
+    .box .box-header .complete-status {
+        transform: translateY(0) !important;
+    }
 }
 
 .box .box-header .notification span {

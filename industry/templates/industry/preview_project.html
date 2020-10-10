@@ -936,7 +936,7 @@
             src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $('#id_card_deadline').pDatepicker({
+            $('#id_card_deadline, #requestDeadline').pDatepicker({
                 format: 'YYYY/MM/DD',
                 onShow: function (unix) {
                     let datePicker = $(".datepicker-container");
