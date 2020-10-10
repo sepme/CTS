@@ -97,7 +97,7 @@ def updateBotUser(typeUser, projectId ,username, fullname, photo):
         "projectId": projectId,
         "username": username,
         "fullname": fullname,
-        "photo": photo,
+        "photo": "none",
     }
     if photo:
         data['photo'] = photo.url
