@@ -1937,7 +1937,7 @@ $(document).ready(function () {
                         position: 'bottomLeft',
                     });
                     $('#projectSetting').modal('hide');
-                    setTimeout(location.reload.bind(location), 1500);
+                    setTimeout(location.reload.bind(location), 15);
                 },
                 error: function (data) {
                     let obj = JSON.parse(data.responseText);
