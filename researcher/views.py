@@ -15,10 +15,12 @@ from django.contrib.auth.decorators import permission_required
 
 from django.utils import timezone
 
+from chamran_admin.views import exchangePersainNumToEnglish, find_user
+
 from . import models, forms, persianNumber
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
-from chamran_admin.models import Message
+from chamran_admin.models import Message, Task, Card
 
 ACCELERATOR = "384025"
 USER_ID_PATTERN = re.compile('[\w]+$')
@@ -59,7 +61,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
     form_class = forms.InitialInfoForm
     success_url = "/researcher/"
     login_url = '/login/'
-    permission_required = ('researcher.be_researcher',"researcher.is_active")
+    permission_required = ('researcher.be_researcher', "researcher.is_active")
 
     def get(self, request, *args, **kwargs):
         researcher = models.ResearcherUser.objects.get(user=request.user)
@@ -98,7 +100,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             if len(missedTechnique):
                 missedProjects.append({'project': project,
                                        "missedTechnique": missedTechnique,
-                                       "satisfiedTechniques":satisfiedTechniques})
+                                       "satisfiedTechniques": satisfiedTechniques})
             else:
                 projects.append(project)
         new_project_list = []
@@ -162,12 +164,13 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     status = "رد شده"
                 temp = {
                     'PK': project.pk,
+                    'code': project.code,
                     'project_title': project.project_form.persian_title,
                     'keyword': project.project_form.key_words.all(),
                     'started': date_last(datetime.date.today(), project.date_project_started),
 
                     'need_hour': project.requestresearcher.least_hour,
-                    "expiration" : date_last(project.researcherRequestDeadline, datetime.date.today()),
+                    "expiration": date_last(project.researcherRequestDeadline, datetime.date.today()),
                     'status': status,
                 }
                 my_project_list.append(temp)
@@ -284,7 +287,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
 
         if 'phone_number' in form.errors.keys():
             context['phone_number_error'] = form.errors['phone_number']
-        
+
         if 'userId' in form.errors.keys():
             context['userId_error'] = form.errors['userId']
         return render(request, 'researcher/userInfo.html', context=context)
@@ -462,7 +465,7 @@ class Question(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
             question = models.ResearchQuestionInstance.objects.filter(
                 researcher=researcheruser).reverse().first()
             answer = question.answer
-            domain = question.researcher.user.get_username().split("@")[-1]            
+            domain = question.researcher.user.get_username().split("@")[-1]
             file_name = answer.name.split(domain)[-1][1:]
             context['answerName'] = file_name
             context["answerType"] = answer.name.split(".")[-1]
@@ -481,7 +484,7 @@ class Question(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
         if 'accelerator' in request.POST.keys() and researcherStatus.status != 'deactivated':
             if request.POST['accelerator'] == ACCELERATOR:
                 title = "تایید سوال پژوهشی"
-                text =  """با سلام،
+                text = """با سلام،
 پژوهشگر گرامی، پاسخ سوال پژوهشی شما پذیرفته شد.
 به این ترتیب، پیوستن شما به مجموعه پژوهشگران «چمران‌تیم» را تبریک می‌گوییم و امیدواریم شاهد پیشرفت شما در زمینه پژوهش باشیم.
 از این پس می‌توانید از طریق قسمت «پروژه‌ها» برای شرکت در پروژه‌های تعریف‌شده توسط مجموعه‌های پژوهشی، درخواست ارسال کنید. 
@@ -723,7 +726,7 @@ def ApplyProject(request):
     if form.is_valid():
         project = get_object_or_404(Project, id=request.POST['id'])
         least_hour = form.cleaned_data['least_hours']
-        most_hour = form.cleaned_data['most_hours']        
+        most_hour = form.cleaned_data['most_hours']
         apply_project = models.RequestedProject(researcher=researcher,
                                                 project=project,
                                                 least_hours_offered=least_hour,
@@ -831,24 +834,24 @@ def AddComment(request):
         attachment = form.cleaned_data['attachment']
         if "expert_id" in request.POST.keys():
             try:
-             expert = project.expert_accepted.all().get(pk=request.POST['expert_id'])
+                expert = project.expert_accepted.all().get(pk=request.POST['expert_id'])
             except:
                 return JsonResponse({"message": "the expert_id is invalid."}, status=400)
             comment = Comment(description=description
-                            , attachment=attachment
-                            , project=project
-                            , researcher_user=request.user.researcheruser
-                            , expert_user=project.expert_accepted.all().first()
-                            , sender_type="researcher"
-                            , status='unseen')
+                              , attachment=attachment
+                              , project=project
+                              , researcher_user=request.user.researcheruser
+                              , expert_user=project.expert_accepted.all().first()
+                              , sender_type="researcher"
+                              , status='unseen')
         elif "industry_id" in request.POST.keys():
             comment = Comment(description=description
-                            , attachment=attachment
-                            , project=project
-                            , researcher_user=request.user.researcheruser
-                            , industry_user=project.industry_creator
-                            , sender_type="researcher"
-                            , status='unseen')
+                              , attachment=attachment
+                              , project=project
+                              , researcher_user=request.user.researcheruser
+                              , industry_user=project.industry_creator
+                              , sender_type="researcher"
+                              , status='unseen')
         else:
             return JsonResponse({"error": "There is no expert or industry Id"}, status=400)
         comment.save()
@@ -920,16 +923,16 @@ def show_resume_preview(request):
     }
     if researcherProfile.photo:
         researcher_information['photo'] = researcherProfile.photo.url
-    
+
     if researcherProfile.resume:
         researcher_information['resume'] = researcherProfile.resume.url
         researcher_information['resume_name'] = researcherProfile.resume.name
 
     for tech in models.TechniqueInstance.objects.filter(researcher=researcher):
         researcher_information['techniques'].append({
-                                                    "name" : tech.technique.technique_title,
-                                                    "level" : tech.level,
-                                                    })
+            "name": tech.technique.technique_title,
+            "level": tech.level,
+        })
     project = get_object_or_404(Project, pk=request.GET["project_id"])
     comments = []
     comment_list = project.comment_set.all().filter(researcher_user=researcher).exclude(sender_type='system')
@@ -966,11 +969,11 @@ def forbidden_access(request):
     status = researcher.status
     if status.is_deactivated:
         remaining = researcher.status.remainingTime
-        context = {'day'    : remaining['day'],
-                    'hour'   : remaining['hour'],
-                    'minute' : remaining['minute'],
-                    'second' : remaining['second'],
-                    }        
+        context = {'day': remaining['day'],
+                   'hour': remaining['hour'],
+                   'minute': remaining['minute'],
+                   'second': remaining['second'],
+                   }
         return render(request=request, template_name='researcher/forbid_access.html', context=context)
     else:
         if status.status == "deactivated":
@@ -982,23 +985,175 @@ def forbidden_access(request):
             request.user.save()
         return HttpResponseRedirect(reverse("researcher:index"))
 
+
 @permission_required('researcher.be_researcher', login_url='/login/')
 def getProjectTechniques(request):
     try:
         project = Project.objects.get(pk=request.POST['project_id'])
     except:
-        return JsonResponse(data={"error" : "The Project Id is wrong."}, status=400)
+        return JsonResponse(data={"error": "The Project Id is wrong."}, status=400)
     researcher = request.user.researcheruser
     data = {
-        "researcher_techniques" : [],
-        "project_techniques" : []
+        "researcher_techniques": [],
+        "project_techniques": []
     }
     for tech in models.TechniqueInstance.objects.filter(researcher=researcher):
         data['researcher_techniques'].append(tech.technique.technique_title)
-    
+
     for tech in project.project_form.techniques.all():
         data['project_techniques'].append(tech.technique_title)
     return JsonResponse(data=data)
+
+
+def ActiveProject(request, project, data):
+    data['accepted'] = True
+    data['project'] = project
+    data['project_pk'] = project.id
+    # data['expert_pk'] = project.expert_accepted.id
+    industryform = project.industry_creator.profile
+    data['projectForm'] = model_to_dict(project.project_form)
+    projectDate = {
+        "start": gregorian_to_numeric_jalali(project.date_project_started),
+        "finished": gregorian_to_numeric_jalali(project.date_finished),
+    }
+    data['timeScheduling'] = projectDate
+    data['title'] = project.project_form.persian_title
+    data['eng_title'] = project.project_form.english_title
+    data["industry_name"] = industryform.name
+    if industryform.photo:
+        data["industry_logo"] = industryform.photo.url
+    data['enforcers'] = []
+    for expert in project.expert_accepted.all():
+        expertData = {
+            "name": str(expert.expertform),
+            "id": expert.pk
+        }
+        if expert.expertform.photo:
+            expertData['photo'] = expert.expertform.photo.url
+        else:
+            expertData['photo'] = "/static/industry/img/profile.jpg"
+        data['enforcers'].append(expertData)
+    data["executive_info"] = project.executive_info
+    # data["budget_amount"] = project.project_form.required_budget
+
+    data['comments'] = []
+    for comment in Comment.objects.filter(project=project).exclude(industry_user=None):
+        try:
+            url = comment.attachment.url
+        except:
+            url = "None"
+        data['comments'].append({
+            'id': comment.id,
+            'text': comment.description,
+            'sender_type': comment.sender_type,
+            'attachment': url,
+            'pk': comment.pk,
+        })
+        if comment.sender_type == "expert" or comment.sender_type == "system":
+            comment.status = "seen"
+            comment.save()
+    data['deadline'] = 'نا مشخص'
+    data['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
+    evaluation_history = project.industry_creator.expertevaluateindustry_set.filter(project=project)
+    data['status'] = project.status
+    # data['vote'] = False
+    # try:
+    #     if datetime.date.today() > project.date_finished:
+    #         if len(evaluation_history.filter(phase=3)) == 0:
+    #             data['vote'] = True
+    #     elif datetime.date.today() > project.date_phase_two_finished:
+    #         if len(evaluation_history.filter(phase=2)) == 0:
+    #             data['vote'] = True
+    #     elif datetime.date.today() > project.date_phase_one_finished:
+    #         if len(evaluation_history.filter(phase=1)) == 0:
+    #             data['vote'] = True
+    # except:
+    #     pass
+
+    data["techniques"] = []
+    # }
+    # projectRequest = expert_models.ExpertRequestedProject.objects.filter(project=project).filter(
+    #     expert=project.expert_accepted).first()
+    for technique in project.project_form.techniques.all():
+        data["techniques"].append(technique.__str__())
+
+    return data
+
+
+class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+    template_name = "researcher/project.html"
+    permission_required = ('researcher.be_researcher',)
+    login_url = "/login/"
+
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, code=kwargs["code"])
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = get_object_or_404(Project, code=kwargs["code"])
+        context = ActiveProject(request=self.request, project=project, data=context)
+        context['telegram_group'] = project.telegram_group
+        if project.end_note:
+            context['end_note'] = project.end_note.url
+
+        if project.proposal:
+            context['proposal'] = project.proposal.url
+        context['researcher_accepted'] = []
+        for researcher in project.researcher_accepted.all():
+            researcher = {
+                "id": researcher.pk,
+                "fullname": researcher.researcherprofile.fullname,
+                "photo": researcher.researcherprofile.photo
+            }
+            context['researcher_accepted'].append(researcher)
+        # context['researchers_applied'] = []
+        # researcherRequested = RequestedProject.objects.filter(project=project).exclude(status="removed")
+        # for requested in researcherRequested:
+        #     researcher = requested.researcher
+        #     if researcher in project.researcher_accepted.all():
+        #         continue
+        #     researcher_applied = {
+        #         'id': researcher.pk,
+        #         "fullname": researcher.researcherprofile.fullname,
+        #         "photo": researcher.researcherprofile.photo,
+        #         "status": requested.status
+        #     }
+        #     if requested.status == "unseen":
+        #         requested.status = "pending"
+        #         requested.save()
+        #     context['researchers_applied'].append(researcher_applied)
+        # context['reseacherRequestAbility'] = project.reseacherRequestAbility
+        # if project.reseacherRequestAbility:
+        #     try:
+        #         requestResearcher = RequestResearcher.objects.get(project=project)
+        #         context['researcherRequestFrom'] = RequestResearcherForm(initial={
+        #             "least_hour": requestResearcher.least_hour,
+        #             "researcher_count": requestResearcher.researcher_count})
+        #     except:
+        #         context['researcherRequestFrom'] = RequestResearcherForm()
+        # context['form'] = CardForm()
+        allTasks = Task.objects.filter(project=project)
+        taskInfo = []
+        for task in allTasks:
+            taskInfo.append({
+                'description': task.description,
+                'involved_user': [find_user(user).userId for user in task.involved_user.all()],
+                'deadline': gregorian_to_numeric_jalali(task.deadline),
+                'done': task.done
+            })
+        context['task_list'] = taskInfo
+
+        allCards = Card.objects.filter(project=project)
+        cardInfo = []
+        for card in allCards:
+            cardInfo.append({
+                "title": card.title,
+                "deadline": gregorian_to_numeric_jalali(card.deadline),
+            })
+        context['card_list'] = cardInfo
+        return context
+
 
 TECHNIQUES = {
     'Polymerase Chain Reaction': 'Molecular Biology',

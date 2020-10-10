@@ -3156,10 +3156,25 @@ div.no-project > span.disable-border-button {
 }
 
 .box .box-header {
-    display: block;
+    display: flex;
     border-bottom: 1px solid #00000033;
     padding: 10px 15px;
     margin: 0 5px;
+}
+
+@media (max-width: 700px) {
+    .box .box-header {
+        display: block;
+    }
+}
+
+.box .box-header div.box-option-container {
+    display: flex;
+    margin-right: auto;
+}
+
+.box .box-header div.box-option-container > *:first-child {
+    margin-right: auto;
 }
 
 .box.has-image .box-header {
@@ -3185,7 +3200,18 @@ div.no-project > span.disable-border-button {
 .box .box-header h6,
 .box .box-header h5 {
     display: inline-block;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 700px) {
+    .box .box-header h6,
+    .box .box-header h5 {
+        text-align: justify;
+        white-space: unset;
+    }
 }
 
 .box .box-header div.data-modified {
@@ -3896,6 +3922,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -3907,6 +3934,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -3918,6 +3946,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -3929,6 +3958,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -3940,6 +3970,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -3951,6 +3982,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -3962,6 +3994,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     float: left;
@@ -3993,6 +4026,7 @@ a.top-button i {
     position: relative;
     top: 50%;
     left: 0;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     float: left;

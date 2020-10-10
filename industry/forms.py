@@ -53,7 +53,7 @@ class RandDBasicInfoForm(forms.ModelForm):
 
     def clean_registration_number(self):
         data = self.cleaned_data["registration_number"]
-        if data is "":
+        if data == "":
             raise ValidationError(_("شماره ثبت نمی تواند خالی باشد."))
         try:
             int(data)
@@ -65,7 +65,7 @@ class RandDBasicInfoForm(forms.ModelForm):
 
     def clean_date_of_foundation(self):
         data = self.cleaned_data["date_of_foundation"]
-        if data is "":
+        if data == "":
             raise ValidationError(_("سال تاسیس نمی تواند خالی باشد."))
         try:
             int(data)

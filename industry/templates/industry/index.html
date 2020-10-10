@@ -37,7 +37,9 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
                             <h6>{{ project.project_form.persian_title }}</h6>
-                            <span class="check-status"></span>
+                            <div class="box-option-container">
+                                <span class="check-status"></span>
+                            </div>
                         </div>
                         <div class="box-body">
                             <div class="row">
@@ -68,17 +70,18 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
                             <h6>{{ project.project_form.persian_title }}</h6>
-                            <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <span class="active-status">
-                                <i class="fas fa-spinner fc-white center-abs"></i>
-                            </span>
-                            <div class="notification">
-                                <i class="far fa-comment-alt center-abs"></i>
-                                {% if project.industryUnseenCommentCount %}
-                                    <span class="unseen-comments">{{ project.industryUnseenCommentCount }}</span>
-                                {% endif %}
+                            <div class="box-option-container">
+
+                                <div class="notification">
+                                    <i class="far fa-comment-alt center-abs"></i>
+                                    {% if project.industryUnseenCommentCount %}
+                                        <span class="unseen-comments">{{ project.industryUnseenCommentCount }}</span>
+                                    {% endif %}
+                                </div>
+                                <span class="active-status"><i class="fas fa-spinner fc-white center-abs"></i></span>
+                                <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
+                                    <i class="fas fa-cog"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="box-body">
@@ -120,15 +123,17 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
                             <h6>{{ project.project_form.persian_title }}</h6>
-                            <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <span class="active-status"></span>
-                            <div class="notification">
-                                <i class="far fa-comment-alt center-abs"></i>
-                                {% if project.industryUnseenCommentCount %}
-                                    <span class="unseen-comments">{{ project.industryUnseenCommentCount }}</span>
-                                {% endif %}
+                            <div class="box-option-container">
+                                <div class="notification">
+                                    <i class="far fa-comment-alt center-abs"></i>
+                                    {% if project.industryUnseenCommentCount %}
+                                        <span class="unseen-comments">{{ project.industryUnseenCommentCount }}</span>
+                                    {% endif %}
+                                </div>
+                                <span class="active-status"></span>
+                                <div class="project-setting" data-toggle="modal" data-target="#projectSetting">
+                                    <i class="fas fa-cog"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="box-body">
@@ -200,12 +205,14 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header">
                             <h6>{{ project.project_form.persian_title }}</h6>
-                            <span class="reject-status"></span>
-                            <div class="notification">
-                                <i class="far fa-comment-alt center-abs"></i>
-                                {% if project.industryUnseenCommentCount %}
-                                    <span class="unseen-comments">{{ project.industryUnseenCommentCount }}</span>
-                                {% endif %}
+                            <div class="box-option-container">
+                                <div class="notification">
+                                    <i class="far fa-comment-alt center-abs"></i>
+                                    {% if project.industryUnseenCommentCount %}
+                                        <span class="unseen-comments">{{ project.industryUnseenCommentCount }}</span>
+                                    {% endif %}
+                                </div>
+                                <span class="reject-status"></span>
                             </div>
                         </div>
                         <div class="box-body">
