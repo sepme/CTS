@@ -3216,7 +3216,9 @@ div.no-project > span.disable-border-button {
 
 .box .box-header div.data-modified {
     float: left;
+    display: contents;
 }
+
 
 .box .box-header .box-object-left {
     float: left;
@@ -3376,6 +3378,7 @@ div.no-project > span.disable-border-button {
 .box .box-header div.project-techniques, .custom-techniques {
     margin-left: 5px;
     float: left;
+    display: block;
 }
 
 .box.has-image.third-width .box-header .box-score {
