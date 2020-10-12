@@ -157,6 +157,9 @@ class Card(models.Model):
     deadline = models.DateField(verbose_name="تاریخ پایان", auto_now=False, auto_now_add=False)
     project = models.ForeignKey("industry.Project", verbose_name="پروژه مرتبط", on_delete=models.CASCADE, null=True, blank=True)
 
+    class Meta:
+         ordering = ['deadline']
+
     def __str__(self):
         return self.title + " - " + self.creator.get_username()
 
@@ -171,5 +174,8 @@ class Task(models.Model):
     deadline = models.DateField(verbose_name="تاریخ پایان", auto_now=False, auto_now_add=False, null=True, blank=True)
     done = models.BooleanField(verbose_name="انجام شده", default=False)
 
+    class Meta:
+         ordering = ['registration_date']
+
     def __str__(self):
-        return str(self.project) + " - " + str(self.deadline)
+        return str(self.project) + " - " + str(self.registration_date)

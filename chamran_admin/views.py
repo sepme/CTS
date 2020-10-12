@@ -766,26 +766,35 @@ def addTask(request):
     description = request.POST['description']
     project = Project.objects.get(id=request.POST['project_id'])
     user = request.user
-    task = models.Task.objects.create(project=project
-                                      , creator=user
-                                      , description=description)    
+    if request.POST["id"]:
+        task = models.Task.objects.get(id=request.POST['id'])
+        task.description = request.POST['description']
+    else:
+        task = models.Task.objects.create(project=project
+                                        , creator=user
+                                        , description=description)
     deadline = None
-    if 'deadline' in request.POST.keys():
+    if request.POST['deadline']:
         task.deadline = JalaliToGregorianDate(request.POST['deadline'])
         deadline = task.deadline
-    involved_users_list = request.POST.getlist('involved_users')
+    involved_users_list = request.POST.getlist('involved_users[]')
     involved_username = []
     for userId in involved_users_list:
-        user = project.get_involved_user(userId)
+        user = project.get_involved_user(userId[1:])
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user)
-            involved_username.append(user.user.get_username())
+            involved_username.append(user.get_username())
     task.save()
 
-    updateTask(projectId=project.id,
-               description=description,
-               deadline=deadline, 
-               involved_username=involved_username)
+    if deadline is None :
+        updateTask(projectId=project.id,
+                description=description,
+                involved_username=involved_username)
+    else:
+        updateTask(projectId=project.id,
+                description=description,
+                deadline=jalali_date(JalaliDate(deadline)), 
+                involved_username=involved_username)
     return JsonResponse(data={"message": "task completely added."})
 
 
