@@ -28,28 +28,35 @@
                                            value="{{ project_pk }}"
                                            hidden>
                                 </label>
-                                <div class="col-6">
+                                <div class="col-12">
                                     <div class="form-group num-input-control">
-{#                                        <div class="input-group-prepend">#}
-{#                                            <span class="input-group-text"> - </span>#}
-{#                                        </div>#}
+                                        {#                                        <div class="input-group-prepend">#}
+                                        {#                                            <span class="input-group-text"> - </span>#}
+                                        {#                                        </div>#}
                                         <label for="id_researcher_count">حداکثر تعداد:</label>
                                         {{ form.researcher_count }}
-{#                                        <div class="input-group-append">#}
-{#                                            <span class="input-group-text">+</span>#}
-{#                                        </div>#}
+                                        {#                                        <div class="input-group-append">#}
+                                        {#                                            <span class="input-group-text">+</span>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12">
                                     <div class="form-group num-input-control">
-{#                                        <div class="input-group-prepend">#}
-{#                                            <span class="input-group-text"> - </span>#}
-{#                                        </div>#}
+                                        {#                                        <div class="input-group-prepend">#}
+                                        {#                                            <span class="input-group-text"> - </span>#}
+                                        {#                                        </div>#}
                                         <label for="id_least_hour"> ساعت کار(ساعت):</label>
                                         {{ form.least_hour }}
-{#                                        <div class="input-group-append">#}
-{#                                            <span class="input-group-text">+</span>#}
-{#                                        </div>#}
+                                        {#                                        <div class="input-group-append">#}
+                                        {#                                            <span class="input-group-text">+</span>#}
+                                        {#                                        </div>#}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group num-input-control">
+                                        <label for="requestDeadline"> مهلت درخواست:</label>
+                                        <input type="text"
+                                               id="requestDeadline" name="researcherRequestDeadline">
                                     </div>
                                 </div>
                             </div>

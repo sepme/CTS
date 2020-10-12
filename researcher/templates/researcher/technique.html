@@ -13,7 +13,8 @@
     <div class="row">
         <div class="col-12 text-right">
             <h3 class="h3 p-top-15 border-bottom">مهارت‌های پژوهشی</h3>
-            <button class="add-new-technique top-page-button border-button" data-toggle="modal" data-target="#addNewTechnique">
+            <button class="add-new-technique top-page-button border-button" data-toggle="modal"
+                    data-target="#addNewTechnique">
                 <i class="fas fa-plus"></i>
                 <span>افزودن مهارت پژوهشی جدید</span>
             </button>
@@ -26,11 +27,13 @@
                     <div class="card box flow-root-display w-100">
                         <div class="box-header text-right">
                             <h6>{{ tech.technique.technique_title }}</h6>
-                            <div class="box-object-left">
-                                <a href="{{ tech.technique.tutorial_link }}">
-                                    <i class="fas fa-film"></i>
-                                    <span class="info-text">ویدیو آموزشی</span>
-                                </a>
+                            <div class="box-option-container">
+                                <div class="box-object-left">
+                                    <a href="{{ tech.technique.tutorial_link }}">
+                                        <i class="fas fa-film"></i>
+                                        <span class="info-text">ویدیو آموزشی</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <div class="box-body">
@@ -71,7 +74,8 @@
                                 </div>
                                 {% if tech.level %}
                                     <div class="col-md-2 col-2">
-                                        <button id="{{ tech.id }}" class="default-btn show-btn new-review-request" data-toggle="modal" data-target="#reviewRequest">
+                                        <button id="{{ tech.id }}" class="default-btn show-btn new-review-request"
+                                                data-toggle="modal" data-target="#reviewRequest">
                                             ارتقا نمره
                                         </button>
                                     </div>
@@ -86,13 +90,13 @@
                     {#                            <img src="{% static 'img/no_project.svg' %}" alt="logo" class="icon">#}
                     {#                            <h4>متاسفانه، هنوز تکنیکی ثبت نکرده اید!</h4>#}
                     {#                            <p>#}
-{#                                                    تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد#}
-{#                                                    استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از#}
-{#                                                    یک تکنیک هستند.#}
-{#                                                    تکنیک‌های رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما پیشنهاد#}
-{#                                                    می‌شود#}
-{#                                                    که شما تکنیک‌های مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید.#}
-{#                                                    برای افزودن یک تکنیک به حساب کاربری خود، بر روی دکمه#}
+                    {#                                                    تکنیک‌ها به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد#}
+                    {#                                                    استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از#}
+                    {#                                                    یک تکنیک هستند.#}
+                    {#                                                    تکنیک‌های رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما پیشنهاد#}
+                    {#                                                    می‌شود#}
+                    {#                                                    که شما تکنیک‌های مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید.#}
+                    {#                                                    برای افزودن یک تکنیک به حساب کاربری خود، بر روی دکمه#}
                     {#                            </p>#}
                     {#                            <span class="disable-border-button">#}
                     {#                                    <i class="fas fa-plus"></i>#}
@@ -109,7 +113,8 @@
                                 <img src="{% static 'img/empty_technique.svg' %}" alt="">
                                 <h5>اولین مهارت پژوهشی خود را ثبت کنید!</h5>
                                 <pre>مهارت هاپژوهشی‌ به معنای مهارت‌های آزمایشگاهی‌ای هستند که شما قرار است در پروژه‌ها مورد استفاده قرار بگیرند؛ به عنوان مثال، RT-PCR و یا H&E Staining هر کدام نمونه‌هایی از یک مهارت پژوهشی هستند. مهارت هاپژوهشی‌ رکن اصلی فعالیت شما در چمران تیم هستند؛ چرا که تنها پروژه‌هایی به شما پیشنهاد می‌شود که شما مهارت های پژوهشی‌ مورد نیاز آن را در حساب کاربری‌تان ثبت کرده باشید. برای افزودن یک مهارت پژوهشی به حساب کاربری خود، بر روی دکمه زیر کلیک کنید.</pre>
-                                <button class="add-new-technique border-button" data-toggle="modal" data-target="#addNewTechnique">
+                                <button class="add-new-technique border-button" data-toggle="modal"
+                                        data-target="#addNewTechnique">
                                     <i class="fas fa-plus"></i>
                                     <span>افزودن مهارت پژوهشی جدید</span>
                                 </button>

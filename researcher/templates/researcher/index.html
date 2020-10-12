@@ -103,19 +103,22 @@
                                 <h6>
                                     {{ project.project_title }}
                                 </h6>
-                                <div class="data-modified">
-                                    <span>{{ project.started }} {% if project.started != "امروز" %}  قبل{% endif %} </span>
-                                </div>
-                                <div class="project-techniques">
-                                    <ul class="mix-list hover">
-                                        {% for keyword in project.keyword %}
-                                            <li>{{ keyword.name }}</li>
-                                        {% endfor %}
-                                    </ul>
+                                <div class="box-option-container">
+                                    <div class="project-techniques">
+                                        <ul class="mix-list hover">
+                                            {% for keyword in project.keyword %}
+                                                <li>{{ keyword.name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="data-modified">
+                                    <span>{{ project.started }} {% if project.started != "امروز" %}
+                                        قبل{% endif %} </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="box-body">
-                                <div class="row">
+                                <div class="row w-100">
                                     <div class="col-6">
                                         <div class="row">
                                             <div class="col-6">
@@ -181,19 +184,22 @@
                                 <h6>
                                     {{ project.project_title }}
                                 </h6>
-                                <div class="data-modified">
-                                    <span>{{ project.started }} {% if project.started != "امروز" %}  قبل{% endif %} </span>
-                                </div>
-                                <div class="notification">
-                                    <i class="far fa-comment-alt center-abs"></i>
-                                    {% unseen_researcher_msgs project.PK request.user as count %}
-                                    {% if count %}
-                                        <span class="unseen-comments">{{ count }}</span>
-                                    {% endif %}
+                                <div class="box-option-container">
+                                    <div class="notification">
+                                        <i class="far fa-comment-alt center-abs"></i>
+                                        {% unseen_researcher_msgs project.PK request.user as count %}
+                                        {% if count %}
+                                            <span class="unseen-comments">{{ count }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="data-modified">
+                                    <span>{{ project.started }} {% if project.started != "امروز" %}
+                                        قبل{% endif %} </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="box-body">
-                                <div class="row">
+                                <div class="row w-100">
                                     <div class="col-5">
                                         <div class="row">
                                             <div class="col-6">
@@ -227,10 +233,11 @@
                                         </div>
                                     </div>
                                     <div class="col-2">
-                                        <button type="button" class="default-btn preview-project" id="{{ project.PK }}"
-                                                data-toggle="modal" data-target="#showProject">
-                                            مشاهده
-                                        </button>
+                                        <a href="{% url 'researcher:show_active_project' code=project.code %}">
+                                            <button class="default-btn" type="button" id="{{ project.id }}">
+                                                مشاهده
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -255,19 +262,22 @@
                                 <h6>
                                     {{ project.project_title }}
                                 </h6>
-                                <div class="data-modified">
-                                    <span>{{ project.started }} {% if project.started != "امروز" %}  قبل{% endif %} </span>
-                                </div>
-                                <div class="project-techniques">
-                                    <ul class="mix-list hover">
-                                        {% for keyword in project.keyword %}
-                                            <li>{{ keyword.name }}</li>
-                                        {% endfor %}
-                                    </ul>
+                                <div class="box-option-container">
+                                    <div class="project-techniques">
+                                        <ul class="mix-list hover">
+                                            {% for keyword in project.keyword %}
+                                                <li>{{ keyword.name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="data-modified">
+                                    <span>{{ project.started }} {% if project.started != "امروز" %}
+                                        قبل{% endif %} </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="box-body">
-                                <div class="row">
+                                <div class="row w-100">
                                     <div class="col-6">
                                         <div class="row">
                                             <div class="col-6">

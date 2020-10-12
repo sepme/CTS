@@ -33,6 +33,7 @@ from chamran_admin.models import Message, Task, Card
 from chamran_admin.views import JalaliToGregorianDate, find_user
 
 from chamran_admin.forms import CardForm
+from bot_api.views import sendProjectData, updateBotUser
 
 USER_ID_PATTERN = re.compile('[\w]+$')
 
@@ -301,12 +302,12 @@ def submit_comment(request):
         if request.POST["expert_id"] != "":
             expert_user = get_object_or_404(ExpertUser, pk=request.POST['expert_id'])
             new_comment = Comment.objects.create(project=project,
-                                                industry_user=request.user.industryuser,
-                                                sender_type="industry",
-                                                expert_user=expert_user,
-                                                description=description,
-                                                attachment=attachment,
-                                                status='unseen')
+                                                 industry_user=request.user.industryuser,
+                                                 sender_type="industry",
+                                                 expert_user=expert_user,
+                                                 description=description,
+                                                 attachment=attachment,
+                                                 status='unseen')
         elif request.POST["researcher_id"] != "":
             researcher_user = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
             new_comment = Comment.objects.create(project=project,
@@ -425,16 +426,16 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
             context['type_form'] = "R&D"
             context['RandD_form'] = forms.RandDInfoForm(instance=profile,
                                                         initial={
-                                                            "userId": industry_user .userId,
+                                                            "userId": industry_user.userId,
                                                             'RandD_type': profile.RandD_type,
                                                             "RandDname": profile.name})
         else:
             context['type_form'] = "group"
             context['researchgroup_form'] = forms.ResearchGroupInfoForm(instance=profile,
                                                                         initial={
-                                                                            "userId": industry_user .userId,
+                                                                            "userId": industry_user.userId,
                                                                             'type_group': profile.type_group
-                                                                            })
+                                                                        })
         return context
 
     def post(self, request):
@@ -502,7 +503,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
     def post(self, request, *args, **kwargs):
         industry = self.request.user.industryuser
-        if industry.industry_type == 'researchGroup':            
+        if industry.industry_type == 'researchGroup':
             form = forms.ResearchProjectForm(request.POST)
             if form.is_valid():
                 print("form is validated")
@@ -515,11 +516,13 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
                 newProject = models.Project(research_project_form=newProjectForm, industry_creator=industry)
                 newProject.save()
+                sendProjectData(newProject)
                 subject = 'ثبت پروژه جدید'
                 message = """با سلام و احترام
                 کاربر صنعت با نام کاربری {}
                 پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
-                با تشکر""".format(request.user.username, newProjectForm.persian_title, JalaliDate(datetime.date.today()))
+                با تشکر""".format(request.user.username, newProjectForm.persian_title,
+                                  JalaliDate(datetime.date.today()))
                 try:
                     send_mail(
                         subject=subject,
@@ -575,6 +578,7 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
+            sendProjectData(new_project)
             subject = 'ثبت پروژه جدید'
             message = """با سلام و احترام
             کاربر صنعت با نام کاربری {}
@@ -636,7 +640,7 @@ def ProjectSetting(request):
         acceptedExpertId = []
         for expert in project.expert_accepted.all():
             acceptedExpertId.append(expert.pk)
-            expertData = { 
+            expertData = {
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
                 "userId": expert.userId,
@@ -652,7 +656,7 @@ def ProjectSetting(request):
             if expert.pk in acceptedExpertId:
                 project.expert_suggested.remove(expert)
                 continue
-            expertData = { 
+            expertData = {
                 "id": expert.pk,
                 "fullname": expert.expertform.__str__(),
                 "userId": expert.userId,
@@ -710,6 +714,11 @@ def ProjectSetting(request):
                     project.status = 2
                     expert.status = 'involved'
                     expert.save()
+                    updateBotUser(typeUser="expert",
+                                  projectId=project.id,
+                                  username=expert.user.username,
+                                  fullname=expert.expertform.fullname,
+                                  photo=expert.expertform.photo)
                     expertResult['addExpert'] = True
                     message = """با سلام
 مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
@@ -735,12 +744,12 @@ def ProjectSetting(request):
                 html_templateForAdmin = get_template('registration/projectRequest_template.html')
                 email_templateForAdmin = html_templateForAdmin.render({'message': message})
                 email = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER,
-                                            to=[expert.user.get_username(), ])
+                                               to=[expert.user.get_username(), ])
                 email.attach_alternative(email_templateForAdmin, 'text/html')
                 email.send()
                 newMessage = Message(title=subject,
-                                    text=message,
-                                    type=0)
+                                     text=message,
+                                     type=0)
                 if not expertResult['addExpert']:
                     newMessage.project = project
                     newMessage.is_project_suggested = "no-answer"
@@ -789,7 +798,7 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         context['telegram_group'] = project.telegram_group
         if project.end_note:
             context['end_note'] = project.end_note.url
-        
+
         if project.proposal:
             context['proposal'] = project.proposal.url
         context['researcher_accepted'] = []
@@ -824,16 +833,17 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
                     "least_hour": requestResearcher.least_hour,
                     "researcher_count": requestResearcher.researcher_count})
             except:
-                 context['researcherRequestFrom'] = RequestResearcherForm()
+                context['researcherRequestFrom'] = RequestResearcherForm()
         context['form'] = CardForm()
         allTasks = Task.objects.filter(project=project)
         taskInfo = []
         for task in allTasks:
             taskInfo.append({
-                            'description': task.description,
-                            'involved_user': [find_user(user).userId for user in task.involved_user.all()],
-                            'deadline': gregorian_to_numeric_jalali(task.deadline),
-                        })
+                'description': task.description,
+                'involved_user': [find_user(user).userId for user in task.involved_user.all()],
+                'deadline': gregorian_to_numeric_jalali(task.deadline),
+                'done': task.done
+            })
         context['task_list'] = taskInfo
 
         allCards = Card.objects.filter(project=project)
@@ -872,18 +882,23 @@ def industryRequestResearcher(request):
     else:
         return JsonResponse(data=form.errors, status=400)
 
+
 @permission_required('industry.be_industry', login_url='/login/')
 def confirmResearcher(request):
     try:
         # researcher = get_object_or_404(ResearcherUser, pk=request.POST['researcher_id'])
         project = get_object_or_404(models.Project, pk=request.POST['project_id'])
         application = RequestedProject.objects.filter(project=project).get(researcher__pk=request.POST['researcher_id'])
-        print(application)
         application.status = 'accepted'
         researcher = application.researcher
         project.researcher_accepted.add(researcher)
         researcher.status.status = 'involved'
         project.save()
+        updateBotUser(typeUser='researcher',
+                      projectId=project.id,
+                      username=researcher.user.username,
+                      fullname=researcher.researcherprofile.fullname,
+                      photo=researcher.researcherprofile.photo)
         researcher.status.save()
         application.save()
         return JsonResponse(data={})
@@ -903,6 +918,7 @@ def rejectResearcher(request):
         return JsonResponse(data={})
     except:
         return JsonResponse(data={}, status=400)
+
 
 @permission_required('industry.be_industry', login_url='/login/')
 def deleteResearcher(request):

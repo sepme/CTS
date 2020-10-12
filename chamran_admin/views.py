@@ -25,6 +25,7 @@ from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
+from bot_api.views import updateTask, updateCard
 
 LOCAL_URL = 'chamranteam.ir'
 USER_ID_PATTERN = re.compile('[\w]+$')
@@ -239,7 +240,7 @@ def login_ajax(request):
                 if user.status.is_deactivated:
                     ctype = ContentType.objects.get_for_model(ResearcherUser)
                     permission = Permission.objects.get(content_type=ctype, codename='is_active')
-                    if user.status.status is not "deactivated":
+                    if user.status.status != "deactivated":
                         user.status.status = "deactivated"
                         user.status.save()
                     if permission in entry_user.user_permissions.all():
@@ -732,6 +733,9 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
+        updateCard(projectId=project.id,
+                   title=newCard.title,
+                   deadline=newCard.deadline)
         return JsonResponse(data={})
     else:
         return JsonResponse(data=form.errors, status=400)
@@ -763,21 +767,27 @@ def addTask(request):
     user = request.user
     accoun_type = find_account_type(user)
     involved_users_list = request.POST.getlist('involved_users')
-    deadline = JalaliToGregorianDate(request.POST['deadline'])
     print(deadline)
     # deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
     task = models.Task.objects.create(project=project
                                       , creator=user
                                       , description=description)
     if request.POST['deadline']:
-        deadline = exchangePersainNumToEnglish(request.POST['deadline'])
-        deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
+        # deadline = exchangePersainNumToEnglish(request.POST['deadline'])
+        deadline = JalaliToGregorianDate(request.POST['deadline'])
+        # deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
         task.deadline = deadline
+    involved_username = []
     for userId in involved_users_list:
         user = project.get_involved_user(userId)
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user)
+            involved_username.append(user.user.get_username())
     task.save()
+    updateTask(projectId=project.id,
+               description=description,
+               deadline=task.deadline, 
+               involved_username=involved_username)
     return JsonResponse(data={"message": "task completely added."})
 
 

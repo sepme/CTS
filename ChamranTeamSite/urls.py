@@ -8,6 +8,7 @@ from chamran_admin import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('chamran_admin.urls')),
+    path('api/', include("bot_api.urls")),
     path('expert/', include('expert.urls')),
     path('researcher/', include('researcher.urls')),
     path('industry/', include('industry.urls')),
