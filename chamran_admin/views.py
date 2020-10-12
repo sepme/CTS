@@ -723,12 +723,13 @@ def AddOpinion(request):
 
 @permission_required(perm=[], login_url="/login")
 def addCard(request):
-    form = forms.CardForm()
+    print(request.POST)
+    form = forms.CardForm(request.POST)
     project = Project.objects.get(id=request.POST['project_id'])
     if form.is_valid():
         deadline = JalaliToGregorianDate(form.cleaned_data['deadline'])
-        deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
-        newCard = models.Card.object.create(title=form.cleaned_data['title'],
+        # deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
+        newCard = models.Card.objects.create(title=form.cleaned_data['title'],
                                             deadline=deadline)
         newCard.creator = request.user
         newCard.project = project
@@ -738,6 +739,7 @@ def addCard(request):
                    deadline=newCard.deadline)
         return JsonResponse(data={})
     else:
+        print(form.errors)
         return JsonResponse(data=form.errors, status=400)
 
 
@@ -759,24 +761,19 @@ def cardList(request):
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
-    print(request.POST)
     if request.POST['description'] == "":
         return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
     description = request.POST['description']
     project = Project.objects.get(id=request.POST['project_id'])
     user = request.user
-    accoun_type = find_account_type(user)
-    involved_users_list = request.POST.getlist('involved_users')
-    print(deadline)
-    # deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
     task = models.Task.objects.create(project=project
                                       , creator=user
-                                      , description=description)
-    if request.POST['deadline']:
-        # deadline = exchangePersainNumToEnglish(request.POST['deadline'])
-        deadline = JalaliToGregorianDate(request.POST['deadline'])
-        # deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
-        task.deadline = deadline
+                                      , description=description)    
+    deadline = None
+    if 'deadline' in request.POST.keys():
+        task.deadline = JalaliToGregorianDate(request.POST['deadline'])
+        deadline = task.deadline
+    involved_users_list = request.POST.getlist('involved_users')
     involved_username = []
     for userId in involved_users_list:
         user = project.get_involved_user(userId)
@@ -784,9 +781,10 @@ def addTask(request):
             task.involved_user.add(user)
             involved_username.append(user.user.get_username())
     task.save()
+
     updateTask(projectId=project.id,
                description=description,
-               deadline=task.deadline, 
+               deadline=deadline, 
                involved_username=involved_username)
     return JsonResponse(data={"message": "task completely added."})
 
