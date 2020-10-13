@@ -210,7 +210,7 @@
 
 {% block style %}
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
+          href="{% static 'libs/TempusDominusBootstrap4/5.0.0_alpha14/tempusdominus-bootstrap-4.min.css' %}"/>
     <style type="text/css">
         {#@media (min-width: 768px) and (max-width: 992px) {#}
         {#    .project-progress .line-100:after {#}
@@ -915,7 +915,7 @@
         //        "</div></div>";
     </script>
     <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+            src="{% static 'libs/OwlCarousel2/2.3.4/owl.carousel.min.js' %}"></script>
     <script type="text/javascript">
         $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
             deleteComment($(this).closest('.my-comment'));
@@ -954,9 +954,8 @@
     {#            });#}
     {#        });#}
     {#    </script>#}
-    <script type="text/javascript" src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
-    <script type="text/javascript"
-            src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    <script type="text/javascript" src="{% static 'libs/PersianDate/1.1.0/persian-date.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'libs/PersianDatepicker/1.2.0/persian-datepicker.min.js' %}"></script>
     <script type="text/javascript">
         $(function () {
             $('#id_card_deadline, #requestDeadline').pDatepicker({

@@ -1,12 +1,14 @@
 {% extends "industry/layouts/base_layout.html" %}
 {% load static %}
 {% load widget_tweaks %}
+
 {% block title %}پذیرش پروژه{% endblock %}
+
 {% block header %}
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+    <link rel="stylesheet" href="{% static 'libs/ionRangeSlider/2.3.0/ion.rangeSlider.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'industry/css/inputTags.min.css' %}">
 {% endblock %}
+
 {% block name %}{{ request.user.industryuser.profile }}{% endblock %}
 
 {% block content %}
@@ -54,15 +56,15 @@
                         </div>
                         <div class="row mbottom-10" style="margin-top: 5px">
                             <div class="col-lg-12 text-right">
-                                    <label for="id_key_words" style="z-index: 2">کلیدواژه ها</label>
-                                    {% if form.key_words.errors %}
-                                        {% render_field form.key_words class="error w-100" %}
-                                    {% else %}
-                                        {% render_field form.key_words class="w-100" %}
-                                    {% endif %}
-                                    <div class="error">
-                                        <span class="error-body">{% render_field form.key_words.errors %}</span>
-                                    </div>
+                                <label for="id_key_words" style="z-index: 2">کلیدواژه ها</label>
+                                {% if form.key_words.errors %}
+                                    {% render_field form.key_words class="error w-100" %}
+                                {% else %}
+                                    {% render_field form.key_words class="w-100" %}
+                                {% endif %}
+                                <div class="error">
+                                    <span class="error-body">{% render_field form.key_words.errors %}</span>
+                                </div>
                                 <div class="div-info">
                                     * پس از وارد کردن کلیدواژه کلید Enter را فشار دهید، برای حذف کلیدواژه های قبلی می
                                     توانید
@@ -101,7 +103,8 @@
                             <div class="col-2 text-middle">
                                 <input type="radio" id="id_research_methodology_4" name="research_methodology"
                                        class="label-check-radio" value="clinical_trail">
-                                <label for="id_research_methodology_4" style="position: relative">کارآزمایی بالینی</label>
+                                <label for="id_research_methodology_4" style="position: relative">کارآزمایی
+                                    بالینی</label>
                             </div>
                             <div class="col-2 text-right">
                                 <input type="radio" id="id_research_methodology_5" name="research_methodology"
@@ -362,9 +365,10 @@
         <i class="fas fa-angle-up"></i>
     </a>
 {% endblock %}
+
 {% block script %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/mahmoud-eskandari/NumToPersian/dist/num2persian-min.js"></script>
+    <script src="{% static 'libs/ionRangeSlider/2.3.0/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'libs/Num2Persian/num2persian-min.js' %}"></script>
     <script src="{% static 'industry/js/inputTags.jquery.min.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         $('#keys').inputTags();
