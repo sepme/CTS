@@ -495,11 +495,11 @@
                                                                     <div class="form-group form-check">
                                                                         <input type="checkbox"
                                                                                class="form-check-input inp-cbx"
-                                                                               id="checkList#1"
+                                                                               id="checkList#{{ task.id }}"
                                                                                name="requestResearcher" value=1 hidden
                                                                                {% if task.done %}checked{% endif %}>
                                                                         <label class="form-check-label cbx mb-0"
-                                                                               for="checkList#1">
+                                                                               for="checkList#{{ task.id }}">
                                                                         <span>
                                                                             <svg class="inline-svg bi bi-check2"
                                                                                  viewBox="0 0 16 16"
@@ -512,12 +512,20 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="ct-checklist-item__detail">
-                                                                    <div class="ct-checklist__text">{% if task.done %}
-                                                                        <del>{% endif %}
-                                                                        {% for tag in task.involved_user %}
-                                                                            <span class="atMention">@{{ tag }}</span>{% endfor %}
-                                                                        {{ task.description }}{% if task.done %}
-                                                                            </del>{% endif %}</div>
+                                                                    {% spaceless %}
+                                                                        <div class="ct-checklist__text">
+                                                                            {% if task.done %}
+                                                                                <del>
+                                                                            {% endif %}
+                                                                            {% for tag in task.involved_user %}
+                                                                                <span class="atMention me">@{{ tag }}</span>
+                                                                            {% endfor %}
+                                                                            {{ task.description }}
+                                                                            {% if task.done %}
+                                                                                </del>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    {% endspaceless %}
                                                                     <div class="ct-checklist-item__control d-flex">
                                                                         <div class="ct-checklist-item-due">
                                                                             <button>

@@ -839,6 +839,7 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         taskInfo = []
         for task in allTasks:
             taskInfo.append({
+                'id': task.id,
                 'description': task.description,
                 'involved_user': [find_user(user).userId for user in task.involved_user.all()],
                 'deadline': gregorian_to_numeric_jalali(task.deadline),
