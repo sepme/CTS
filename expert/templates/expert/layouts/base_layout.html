@@ -9,18 +9,15 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
     <link rel="stylesheet" href="{% static 'expert/css/pageLoader.css' %}">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'libs/jQuery/UI/1.12.1/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/5.15.1/css/all.min.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{% static 'libs/Swiper/4.5.0/swiper.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/iziToast/1.4.0/iziToast.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/jQuery/tagsinput/1.3.6/jquery.tagsinput.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/OwlCarousel2/2.3.4/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/OwlCarousel2/2.3.4/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/comments.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'expert/css/style.css' %}">
@@ -215,14 +212,14 @@
         </ul>
     </div>
 </div>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'libs/jQuery/3.5.1/jquery.min.js' %}"></script>
+<script src="{% static 'libs/jQuery/UI/1.12.1/jquery-ui.min.js' %}"></script>
 {#<script type="text/javascript" src="{% static 'expert/js/pageLoader.js' %}"></script>#}
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/jquery.fancytree-all-deps.min.js"></script>
+<script src="{% static 'libs/Propper/1.14.7/popper.min.js' %}"></script>
+<script src="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/iziToast/1.4.0/iziToast.min.js' %}"></script>
+<script src="{% static 'libs/jQuery/tagsinput/1.3.6/jquery.tagsinput.min.js' %}"></script>
+<script src="{% static 'libs/FancyTree/2.30.2/fancytree-all-deps.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/persianumber.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>

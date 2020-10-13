@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="{% static 'expert/css/persian-datepicker.min.css' %}"
           xmlns="http://www.w3.org/1999/html">
     <link rel="stylesheet" href="{% static 'expert/css/datepicker-style.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.30.2/skin-awesome/ui.fancytree.min.css"
-          rel="stylesheet">
+    <link href="{% static 'libs/FancyTree/2.30.2/ui.fancytree.min.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block name %}{{ request.user.expertuser.expertform }}{% endblock %}
