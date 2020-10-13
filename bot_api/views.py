@@ -119,7 +119,7 @@ def sendMessage(projectId, text):
     response = requests.post(url="https://chamranteam.pythonanywhere.com/send_message/",json=data)
     return
 
-def updateTask(projectId, description, deadline, involved_username):
+def updateTask(projectId, description, involved_username, deadline=None):
     data = {
         "id": projectId,
         "description": description,

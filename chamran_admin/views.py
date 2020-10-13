@@ -33,36 +33,30 @@ USER_ID_PATTERN = re.compile('[\w]+$')
 def jalali_date(jdate):
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
 
-
-def exchangePersainNumToEnglish(date):
-    changed = ""
-    for item in date:
-        try:
-            changed += str(int(item))
-        except:
-            changed += "-"
-    return changed
-
+def JalaliToGregorianDate(date):
+    datePart = date.split("/")
+    return JalaliDate(year=int(datePart[0]), month=int(datePart[1]), day=int(datePart[2]))\
+        .to_gregorian()
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
     if not message.read_by.filter(username=request.user.username).exists():
         message.read_by.add(request.user)
-    attachment = None
+        attachment = None
     if message.attachment:
         attachment = message.attachment.url
-    return JsonResponse({
-        'id': message.id,
-        'text': message.text,
-        'date': jalali_date(JalaliDate(message.date)),
-        'title': message.title,
-        'code': message.code,
-        'type': message.type,
-        'attachment': attachment,
-        "is_project_suggested": message.is_project_suggested,
-    })
-
-
+        return JsonResponse({
+            'id': message.id,
+            'text': message.text,
+            'date': jalali_date(JalaliDate(message.date)),
+            'title': message.title,
+            'code': message.code,
+            'type': message.type,
+            'attachment': attachment,
+            "is_project_suggested": message.is_project_suggested,
+            })
+            
+            
 class MessagesView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'chamran_admin/messages.html'
     login_url = "/login"
@@ -729,12 +723,13 @@ def AddOpinion(request):
 
 @permission_required(perm=[], login_url="/login")
 def addCard(request):
-    form = forms.CardForm()
+    print(request.POST)
+    form = forms.CardForm(request.POST)
     project = Project.objects.get(id=request.POST['project_id'])
     if form.is_valid():
-        deadline = exchangePersainNumToEnglish(form.cleaned_data['deadline'])
-        deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
-        newCard = models.Card.object.create(title=form.cleaned_data['title'],
+        deadline = JalaliToGregorianDate(form.cleaned_data['deadline'])
+        # deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
+        newCard = models.Card.objects.create(title=form.cleaned_data['title'],
                                             deadline=deadline)
         newCard.creator = request.user
         newCard.project = project
@@ -744,6 +739,7 @@ def addCard(request):
                    deadline=newCard.deadline)
         return JsonResponse(data={})
     else:
+        print(form.errors)
         return JsonResponse(data=form.errors, status=400)
 
 
@@ -770,26 +766,35 @@ def addTask(request):
     description = request.POST['description']
     project = Project.objects.get(id=request.POST['project_id'])
     user = request.user
-    accoun_type = find_account_type(user)
-    involved_users_list = request.POST.getlist('involved_users')
-    task = models.Task.objects.create(project=project
-                                      , creator=user
-                                      , description=description)
+    if request.POST["id"]:
+        task = models.Task.objects.get(id=request.POST['id'])
+        task.description = request.POST['description']
+    else:
+        task = models.Task.objects.create(project=project
+                                        , creator=user
+                                        , description=description)
+    deadline = None
     if request.POST['deadline']:
-        deadline = exchangePersainNumToEnglish(request.POST['deadline'])
-        deadline = datetime.datetime.strptime(deadline, "%Y-%m-%d").date()
-        task.deadline = deadline
+        task.deadline = JalaliToGregorianDate(request.POST['deadline'])
+        deadline = task.deadline
+    involved_users_list = request.POST.getlist('involved_users[]')
     involved_username = []
     for userId in involved_users_list:
-        user = project.get_involved_user(userId)
+        user = project.get_involved_user(userId[1:])
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user)
-            involved_username.append(user.user.get_username())
+            involved_username.append(user.get_username())
     task.save()
-    updateTask(projectId=project.id,
-               description=description,
-               deadline=task.deadline, 
-               involved_username=involved_username)
+
+    if deadline is None :
+        updateTask(projectId=project.id,
+                description=description,
+                involved_username=involved_username)
+    else:
+        updateTask(projectId=project.id,
+                description=description,
+                deadline=jalali_date(JalaliDate(deadline)), 
+                involved_username=involved_username)
     return JsonResponse(data={"message": "task completely added."})
 
 

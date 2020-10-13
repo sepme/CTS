@@ -154,10 +154,10 @@ class FeedBackForm(forms.ModelForm):
         }
 
 class CardForm(forms.ModelForm):
-    
+    deadline = forms.CharField(max_length=32, required=False)
     class Meta:
         model = models.Card
-        fields = ['title', 'deadline']
+        fields = ['title',]
 
     def clean_title(self):
         data = self.cleaned_data["title"]
