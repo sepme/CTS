@@ -5,10 +5,9 @@
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <title>خطا 403(عدم اجازه ورود)</title>
     {% load static %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css">
+    <link rel="stylesheet" href="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/5.15.1/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/iziToast/1.4.0/iziToast.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
 </head>
@@ -28,10 +27,10 @@
 <form action="{% url 'chamran:login' %}">
     <button type="submit">بازگشت به خانه</button>
 </form>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+<script src="{% static 'libs/jQuery/3.5.1/jquery.min.js' %}"></script>
+<script src="{% static 'libs/Propper/1.14.7/popper.min.js' %}"></script>
+<script src="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/iziToast/1.4.0/iziToast.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

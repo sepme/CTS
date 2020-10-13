@@ -5,12 +5,11 @@
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    <link rel="stylesheet" href="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/5.15.1/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/OwlCarousel2/2.3.4/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/OwlCarousel2/2.3.4/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/iziToast/1.4.0/iziToast.min.css' %}">
     <link rel="stylesheet" href="{% static 'theme-ct/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'theme-ct/css/res.css' %}">
     {#	<link rel="shortcut icon" href="{{$setting->icon}}"/>#}
@@ -36,7 +35,8 @@
         <nav id="nav">
             <ul>
                 <li class="goToDiv" data-div="top" data-next="AboutUs">
-                    <a href="{% if request.path == "/" %}#top{% else %}{% url 'chamran:home' %}{% endif %}">صفحه اصلی</a>
+                    <a href="{% if request.path == "/" %}#top{% else %}{% url 'chamran:home' %}{% endif %}">صفحه
+                        اصلی</a>
                 </li>
                 <li class="goToDiv" data-div="AboutUs" data-next="whyUs"><a href="/#AboutUs">درباره ما</a></li>
                 <li class="goToDiv" data-div="whyUs" data-next="Cooperation"><a href="/#whyUs">مزایای عضویت</a></li>
@@ -75,17 +75,19 @@
                 <div class="contact-us text-right">
                     <h2>تماس با ما</h2>
                     <div class='fullname'></div>
-                        <input type="text" name="fullname" id='fullname' class="form-control" placeholder="نام و نام خانوادگی">
+                    <input type="text" name="fullname" id='fullname' class="form-control"
+                           placeholder="نام و نام خانوادگی">
                     {% comment %} </div> {% endcomment %}
                     <div class="email"></div>
-                        <input type="text" name="email" id="email" class="form-control" placeholder="پست الکترونیک">
+                    <input type="text" name="email" id="email" class="form-control" placeholder="پست الکترونیک">
                     <div class="context"></div>
-                        <textarea name="context" id='context' class="form-control" rows="5" placeholder="پیام شما"></textarea>
+                    <textarea name="context" id='context' class="form-control" rows="5"
+                              placeholder="پیام شما"></textarea>
                     {% comment %} </div> {% endcomment %}
                     <button type="submit" id="submit" class="btn btn-contact">ارسال</button>
                 </div>
-            <span id="Loader">منتظر بمانید...</span>
-            <div id="res" class="margin-20"></div>
+                <span id="Loader">منتظر بمانید...</span>
+                <div id="res" class="margin-20"></div>
             </form>
             {#            {!! Form::close() !!}#}
         </div>
@@ -161,12 +163,12 @@
     </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="{% static 'libs/jQuery/3.5.1/jquery.min.js' %}"></script>
+<script src="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.js' %}"></script>
 <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+        src="{% static 'libs/OwlCarousel2/2.3.4/owl.carousel.min.js' %}"></script>
 <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+        src="{% static 'libs/iziToast/1.4.0/iziToast.min.js' %}"></script>
 <script type="text/javascript">
     $('#navicon').click(function () {
         $('#nav').slideToggle();
@@ -250,13 +252,13 @@
         $(".fullname").find("div.error").remove();
         $("input#context").removeClass("error").css("color", "").prev().css("color", "");
         $(".context").find("div.error").remove();
-        
+
         $.ajax({
             method: 'POST',
             url: "/contactUs/",
             dataType: 'json',
             data: $(this).serialize().toString(),
-            success: function(data){
+            success: function (data) {
                 contactForm[0].reset();
                 iziToast.success({
                     rtl: true,
@@ -264,7 +266,7 @@
                     position: 'bottomLeft'
                 });
             },
-            error: function(data){
+            error: function (data) {
                 $(".loading").css('display', "none");
                 $(".owl-carousel").css('display', "block");
                 let obj = JSON.parse(data.responseText);
