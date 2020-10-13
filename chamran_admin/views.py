@@ -766,7 +766,7 @@ def addTask(request):
     description = request.POST['description']
     project = Project.objects.get(id=request.POST['project_id'])
     user = request.user
-    if request.POST["id"]:
+    if request.POST.get("id", None):
         task = models.Task.objects.get(id=request.POST['id'])
         task.description = request.POST['description']
     else:
