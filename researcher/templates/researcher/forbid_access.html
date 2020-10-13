@@ -8,12 +8,11 @@
     <title></title>
     {% load static %}
     <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+    <link rel="stylesheet" href="{% static 'libs/jQuery/UI/1.12.1/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome/5.15.1/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/Swiper/4.5.0/swiper.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/iziToast/1.4.0/iziToast.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
 </head>
@@ -71,11 +70,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'libs/jQuery/3.5.1/jquery.min.js' %}"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+<script src="{% static 'libs/Propper/1.14.7/popper.min.js' %}"></script>
+<script src="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/iziToast/1.4.0/iziToast.min.js' %}"></script>
 <script type="text/javascript">
     let day = $('.day').html();
     let hour = $('.hour').html();
