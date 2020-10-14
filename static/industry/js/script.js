@@ -160,18 +160,6 @@ function setProblemStatement(data, status) {
     $(".project-info-content" + status).html(problemStatement);
 }
 
-// "<div>" +
-// "<div class='question'>" +
-// "<span class='question-mark'>" +
-// "<i class='far fa-question-circle'></i>" +
-// "</span>" +
-// "برآورد شما از سود مالی این پروژه چگونه است؟" +
-// "</div>" +
-// "<div class='answer'>" +
-// numbersComma(data.predict_profit) +
-// " ریال" +
-// "</div></div>";
-
 function setValue(data, status) {
     $("#v-pills-roles-tab" + status).click(function () {
         setEthicalConsider(data, status);
@@ -692,6 +680,7 @@ $(document).ready(function () {
     //****************************************//
     let taskList = $(".ct-checklist");
     if (taskList.length) {
+        // show checked/unchecked task state
         taskList.find(".ct-checklist-item__checkbox input[type='checkbox']").click(function () {
             if ($(this).is(":checked")) {
                 let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
@@ -702,118 +691,72 @@ $(document).ready(function () {
             }
         });
 
-        taskList.find(".ct-checklist-item__detail .ct-checklist__text").click(function () {
-            if ($(this).find('pre[contenteditable="true"]').length === 0) {
-                let text = $(this).html();
-                let checklistItem = $(this).closest(".ct-checklist__item");
-                checklistItem.addClass("onEdit");
-                $(this).html(`<pre contenteditable="true">${text}</pre>`);
-                let dropdown_list = $(".modal#addTask .ct-task-assignee .dropdown-menu").html();
-                checklistItem.append(`
-                    <div class="ct-checklist-item__footer">
-                        <div class="float-left mt-1">
-                            <div class="ct-task-option d-flex">
-                                        <div class="ct-task-due ct-option-btn">
-                                            <button id="edit_task_due" type="button" class=""
-                                                    data-toggle="datetimepicker" style="padding: 6px 10px;" dir="ltr">
-                                                <svg width="1em" height="1em"
-                                                     viewBox="0 0 16 16" class="bi bi-clock"
-                                                     fill="currentColor"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                          d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
-                                                    <path fill-rule="evenodd"
-                                                          d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div class="ct-task-assignee ct-option-btn">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle ct-option-btn"
-                                                        type="button" id="dropdownAssignment"
-                                                        data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false"  style="padding: 4px 9px;">
-                                                    <svg width="1em" height="1em"
-                                                         viewBox="0 0 16 16"
-                                                         class="bi bi-person-plus"
-                                                         fill="currentColor"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd"
-                                                              d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
-                                                    </svg>
-                                                </button>
-                                                <div class="dropdown-menu text-right"
-                                                     aria-labelledby="dropdownAssignment">
-                                                    ${dropdown_list}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ct-task-delete ct-option-btn d-none">
-                                            <button>
-                                                <svg width="1em" height="1em"
-                                                     viewBox="0 0 16 16" class="bi bi-trash"
-                                                     fill="currentColor"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
-                                                    <path fill-rule="evenodd"
-                                                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                        </div>
-                        <div class="">
-                            <button class="save-change btn btn-primary btn-sm">ذخیره</button>
-                            <button class="cancel-change btn btn-link text-dark btn-sm">
-                                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" 
-                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z">
-                                    </path>
-                                </svg> 
-                            </button>
-                        </div>
-                    </div>`);
-
-                checklistItem.find(".ct-checklist-item__footer .ct-task-assignee.ct-option-btn .dropdown-item").click(function () {
+        // edit task
+        function init_task_options(taskItem) {
+            taskItem.find(".ct-checklist-item__detail .ct-checklist__text").click(function () {
+                if ($(this).hasClass("d-none") === false) {
+                    // close all onEdit tasks
+                    taskList.find(".ct-checklist__item").removeClass("onEdit");
+                    taskList.find(".ct-checklist__item").find(".ct-checklist-item__footer").addClass("d-none");
+                    taskList.find(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__pre")
+                        .addClass("d-none");
+                    taskList.find(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text")
+                        .removeClass("d-none");
+                    // show edit fields
+                    let checklistItem = $(this).closest(".ct-checklist__item");
+                    $(this).addClass("d-none");
+                    checklistItem.addClass("onEdit");
+                    checklistItem.find(".ct-checklist-item__footer").removeClass("d-none");
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").removeClass("d-none");
+                    // init cancel editing btn
+                    checklistItem.find(".ct-checklist-item__footer button.cancel-change").click(function () {
+                        checklistItem.removeClass("onEdit");
+                        let text = checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").html();
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre pre").html(text);
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
+                        checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
+                    });
+                    // init save edit btn
+                    checklistItem.find(".ct-checklist-item__footer button.save-change").click(function () {
+                        checklistItem.removeClass("onEdit");
+                        let text = checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre pre").html();
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").html(text);
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
+                        checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
+                    });
+                }
+                // edit task mention users
+                $(this).find(".ct-checklist-item__footer .ct-task-assignee.ct-option-btn .dropdown-item").click(function () {
                     let mentionVal = $(this).attr("data-value");
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text pre").html(`<span class="atMention me" title="">@${mentionVal}</span>` + text);
+                    $(this).close(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text pre")
+                        .html(`<span class="atMention me" title="">@${mentionVal}</span>` + text);
                 });
+                // init edit task due
+                // $('#edit_task_due').pDatepicker({
+                //     format: 'YYYY/MM/DD',
+                //     onShow: function (unix) {
+                //         let datePicker = $(".datepicker-container");
+                //         if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
+                //             if (datePicker.offset().top > 310) {
+                //                 datePicker.css("top", datePicker.offset().top - 310);
+                //             } else {
+                //                 datePicker.css("top", 0);
+                //             }
+                //         }
+                //     },
+                //     dayPicker: {
+                //         onSelect: function (unix) {
+                //             let pdate = new persianDate(unix);
+                //             $('#edit_task_due').append(pdate.format("YYYY/MM/DD"));
+                //         },
+                //     },
+                // });
+            });
+        }
 
-                $('#edit_task_due').pDatepicker({
-                    format: 'YYYY/MM/DD',
-                    onShow: function (unix) {
-                        let datePicker = $(".datepicker-container");
-                        if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
-                            if (datePicker.offset().top > 310) {
-                                datePicker.css("top", datePicker.offset().top - 310);
-                            } else {
-                                datePicker.css("top", 0);
-                            }
-                        }
-                    },
-                    dayPicker: {
-                        onSelect: function (unix) {
-                            let pdate = new persianDate(unix);
-                            $('#edit_task_due').append(pdate.format("YYYY/MM/DD"));
-                        },
-                    },
-                });
-
-                checklistItem.find(".ct-checklist-item__footer button.cancel-change").click(function () {
-                    checklistItem.removeClass("onEdit");
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").html(text);
-                    checklistItem.find(".ct-checklist-item__footer").remove();
-                });
-
-                checklistItem.find(".ct-checklist-item__footer button.save-change").click(function () {
-                    checklistItem.removeClass("onEdit");
-                    text = checklistItem.find(".ct-checklist-item__detail .ct-checklist__text pre").html();
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").html(text);
-                    checklistItem.find(".ct-checklist-item__footer").remove();
-                });
-            }
-        });
+        init_task_options(taskList.find(".ct-checklist__item"));
 
         taskList.find(".ct-checklist-item-delete").click(function () {
             $(this).closest(".ct-checklist__item").remove();
@@ -864,6 +807,7 @@ $(document).ready(function () {
             event.preventDefault();
             let data = {"project_id": addTaskForm.find("input[name='project_id']").val()};
             let title = addTaskForm.find("#id_task_title").html();
+            let dropdown_list = "";
             data["description"] = title;
             let mentions = [];
             addTaskForm.find(".tagId-list .tagId-item").each(function () {
@@ -903,6 +847,9 @@ $(document).ready(function () {
                                                             </div>
                                                             <div class="ct-checklist-item__detail">
                                                                 <div class="ct-checklist__text">${title}</div>
+                                                                <div class="ct-checklist__pre d-none">
+                                                                    <pre contenteditable="true">${title}</pre>
+                                                                </div>
                                                                 <div class="ct-checklist-item__control d-flex">
                                                                     <div class="ct-checklist-item-due">
                                                                         <button>
@@ -942,9 +889,86 @@ $(document).ready(function () {
                                                                         </button>
                                                                     </div>
                                                                 </div>
+                                                                <div class="ct-checklist-item__footer d-none">
+                                                                        <div class="float-left mt-1">
+                                                                            <div class="ct-task-option d-flex">
+                                                                                <div class="ct-task-due ct-option-btn">
+                                                                                    <button class="edit_task_due"
+                                                                                            type="button" style="padding: 6px 10px;"
+                                                                                            dir="ltr">
+                                                                                        <svg width="1em" height="1em"
+                                                                                             viewBox="0 0 16 16"
+                                                                                             class="bi bi-clock"
+                                                                                             fill="currentColor"
+                                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                                            <path fill-rule="evenodd"
+                                                                                                  d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                                                            <path fill-rule="evenodd"
+                                                                                                  d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="ct-task-assignee ct-option-btn">
+                                                                                    <div class="dropdown">
+                                                                                        <button class="btn btn-secondary dropdown-toggle ct-option-btn dropdownAssignment"
+                                                                                                type="button"
+                                                                                                data-toggle="dropdown"
+                                                                                                aria-haspopup="true"
+                                                                                                aria-expanded="false"
+                                                                                                style="padding: 4px 9px;">
+                                                                                            <svg width="1em"
+                                                                                                 height="1em"
+                                                                                                 viewBox="0 0 16 16"
+                                                                                                 class="bi bi-person-plus"
+                                                                                                 fill="currentColor"
+                                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                                <path fill-rule="evenodd"
+                                                                                                      d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                                            </svg>
+                                                                                        </button>
+                                                                                        <div class="dropdown-menu text-right"
+                                                                                             aria-labelledby="dropdownAssignment">
+                                                                                            ${dropdown_list}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="ct-task-delete ct-option-btn d-none">
+                                                                                    <button>
+                                                                                        <svg width="1em" height="1em"
+                                                                                             viewBox="0 0 16 16"
+                                                                                             class="bi bi-trash"
+                                                                                             fill="currentColor"
+                                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                                                                            <path fill-rule="evenodd"
+                                                                                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="">
+                                                                            <button class="save-change btn btn-primary btn-sm" data-id="{{ task.id }}">
+                                                                                ذخیره
+                                                                            </button>
+                                                                            <button class="cancel-change btn btn-link text-dark btn-sm">
+                                                                                <svg width="2em" height="2em"
+                                                                                     viewBox="0 0 16 16" class="bi bi-x"
+                                                                                     fill="currentColor"
+                                                                                     xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path fill-rule="evenodd"
+                                                                                          d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z">
+                                                                                    </path>
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                             </div>
                                                         </div>`;
                     taskList.append(task);
+                    // init new task options
+                    init_task_options(taskList.find(".ct-checklist__item:last-child"));
+
                     taskList.find(".ct-checklist__item:last-child .ct-checklist-item__checkbox input[type='checkbox']").click(function () {
                         if ($(this).is(":checked")) {
                             let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
@@ -954,12 +978,15 @@ $(document).ready(function () {
                             $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
                         }
                     });
+
                     taskList.find(".ct-checklist__item:last-child .ct-checklist-item-delete").click(function () {
                         $(this).closest(".ct-checklist__item").remove();
                     });
+                    // clear modal
                     addTaskForm.find("#id_task_title").html("");
                     addTaskForm.find(".tagId-list").html("");
                     addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item.selected").removeClass("selected");
+                    // close modal and show success toast
                     $("#addTask").modal("hide");
                     iziToast.success({
                         rtl: true,
