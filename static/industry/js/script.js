@@ -749,7 +749,7 @@ $(document).ready(function () {
                 let deleteItem = $(this);
                 let data = {
                     "delete": true,
-                    "pk": deleteItem.attr("data-value")
+                    "pk": deleteItem.closest(".ct-checklist__item").attr("data-value")
                 };
                 $.ajax({
                     method: "POST",
@@ -757,7 +757,7 @@ $(document).ready(function () {
                     data: data,
                     success: function (data) {
                         deleteItem.closest(".ct-checklist__item").remove();
-                        // close modal and show success toast
+                        // show success toast
                         iziToast.success({
                             rtl: true,
                             message: "تسک با موفقیت حذف شد!",
@@ -779,7 +779,7 @@ $(document).ready(function () {
                 let checkBox = $(this);
                 let data = {
                     "done": checkBox.is(":checked"),
-                    "pk": checkBox.attr("data-value")
+                    "pk": checkBox.closest(".ct-checklist__item").attr("data-value")
                 };
                 $.ajax({
                     method: "POST",
@@ -793,7 +793,7 @@ $(document).ready(function () {
                             let text = checkBox.closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text del").html();
                             checkBox.closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
                         }
-                        // close modal and show success toast
+                        // show success toast
                         iziToast.success({
                             rtl: true,
                             message: "تسک با موفقیت حذف شد!",

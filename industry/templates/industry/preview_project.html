@@ -490,13 +490,12 @@
                                                 <div class="section">
                                                     <div class="ct-checklist">
                                                         {% for task in task_list %}
-                                                            <div class="ct-checklist__item">
+                                                            <div class="ct-checklist__item" data-value="{{ task.id }}">
                                                                 <div class="ct-checklist-item__checkbox">
                                                                     <div class="form-group form-check">
                                                                         <input type="checkbox"
                                                                                class="form-check-input inp-cbx"
                                                                                id="checkList#{{ task.id }}"
-                                                                               data-value="{{ task.id }}"
                                                                                name="requestResearcher" value=1 hidden
                                                                                {% if task.done %}checked{% endif %}>
                                                                         <label class="form-check-label cbx mb-0"
@@ -555,7 +554,7 @@
                                                                                 </svg>
                                                                             </button>
                                                                         </div>
-                                                                        <div class="ct-checklist-item-delete" data-value="{{ task.id }}">
+                                                                        <div class="ct-checklist-item-delete">
                                                                             <button>
                                                                                 <svg width="1em" height="1em"
                                                                                      viewBox="0 0 16 16"
