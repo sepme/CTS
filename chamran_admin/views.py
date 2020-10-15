@@ -761,6 +761,19 @@ def cardList(request):
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
+    print(request.POST)
+    if request.POST.get('check', None):
+        task = models.Task.objects.get(pk=request.POST['pk'])
+        CHECK = {'true': True, 'false': False}
+        task.done = CHECK[request.POST['check']]
+        task.save()
+        return JsonResponse(data={'success': 'success'})
+
+    if request.POST.get('delete', None):
+        task = models.Task.objects.get(pk=request.POST['pk'])
+        task.delete()
+        return JsonResponse(data={'success': 'success'})
+
     if request.POST['description'] == "":
         return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
     description = request.POST['description']

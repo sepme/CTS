@@ -778,7 +778,7 @@ $(document).ready(function () {
             taskItem.find(".ct-checklist-item__checkbox input[type='checkbox']").click(function () {
                 let checkBox = $(this);
                 let data = {
-                    "done": checkBox.is(":checked"),
+                    "check": checkBox.is(":checked"),
                     "pk": checkBox.closest(".ct-checklist__item").attr("data-value")
                 };
                 $.ajax({
