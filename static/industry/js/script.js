@@ -680,16 +680,6 @@ $(document).ready(function () {
     //****************************************//
     let taskList = $(".ct-checklist");
     if (taskList.length) {
-        // show checked/unchecked task state
-        taskList.find(".ct-checklist-item__checkbox input[type='checkbox']").click(function () {
-            if ($(this).is(":checked")) {
-                let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
-                $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`<del>${text}</del>`);
-            } else {
-                let text = $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text del").html();
-                $(this).closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
-            }
-        });
 
         // edit task
         function init_task_options(taskItem) {
@@ -754,13 +744,75 @@ $(document).ready(function () {
                 //     },
                 // });
             });
+            // delete task
+            taskItem.find(".ct-checklist-item-delete").click(function () {
+                let deleteItem = $(this);
+                let data = {
+                    "delete": true,
+                    "pk": deleteItem.attr("data-value")
+                };
+                $.ajax({
+                    method: "POST",
+                    url: "/addTask/",
+                    data: data,
+                    success: function (data) {
+                        deleteItem.closest(".ct-checklist__item").remove();
+                        // close modal and show success toast
+                        iziToast.success({
+                            rtl: true,
+                            message: "تسک با موفقیت حذف شد!",
+                            position: 'bottomLeft'
+                        });
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        iziToast.error({
+                            rtl: true,
+                            message: data,
+                            position: 'bottomLeft'
+                        });
+                    }
+                });
+            });
+            //check or uncheck task
+            taskItem.find(".ct-checklist-item__checkbox input[type='checkbox']").click(function () {
+                let checkBox = $(this);
+                let data = {
+                    "done": checkBox.is(":checked"),
+                    "pk": checkBox.attr("data-value")
+                };
+                $.ajax({
+                    method: "POST",
+                    url: "/addTask/",
+                    data: data,
+                    success: function (data) {
+                        if (checkBox.is(":checked")) {
+                            let text = checkBox.closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html();
+                            checkBox.closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`<del>${text}</del>`);
+                        } else {
+                            let text = checkBox.closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text del").html();
+                            checkBox.closest(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text").html(`${text}`);
+                        }
+                        // close modal and show success toast
+                        iziToast.success({
+                            rtl: true,
+                            message: "تسک با موفقیت حذف شد!",
+                            position: 'bottomLeft'
+                        });
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        iziToast.error({
+                            rtl: true,
+                            message: data,
+                            position: 'bottomLeft'
+                        });
+                    }
+                });
+            });
         }
 
         init_task_options(taskList.find(".ct-checklist__item"));
-
-        taskList.find(".ct-checklist-item-delete").click(function () {
-            $(this).closest(".ct-checklist__item").remove();
-        });
 
         $('#id_task_due').pDatepicker({
             format: 'YYYY/MM/DD',
