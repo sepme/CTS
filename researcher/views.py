@@ -116,7 +116,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'keyword': project.project_form.key_words.all(),
                 'started': date_last(datetime.date.today(), project.date_project_started),
                 'need_hour': project.requestresearcher.least_hour,
-                "expiration" : date_last(project['project'].researcherRequestDeadline, datetime.date.today()),
+                "expiration" : date_last(project.researcherRequestDeadline, datetime.date.today()),
             }
             new_project_list.append(temp)
         for project in missedProjects:
