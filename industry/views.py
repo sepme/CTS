@@ -33,7 +33,7 @@ from chamran_admin.models import Message, Task, Card
 from chamran_admin.views import JalaliToGregorianDate, find_user
 
 from chamran_admin.forms import CardForm
-from bot_api.views import sendProjectData, updateBotUser
+from bot_api.views import sendMessage
 
 USER_ID_PATTERN = re.compile('[\w]+$')
 
@@ -516,7 +516,6 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
                 newProject = models.Project(research_project_form=newProjectForm, industry_creator=industry)
                 newProject.save()
-                sendProjectData(newProject)
                 subject = 'ثبت پروژه جدید'
                 message = """با سلام و احترام
                 کاربر صنعت با نام کاربری {}
@@ -578,7 +577,6 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
-            sendProjectData(new_project)
             subject = 'ثبت پروژه جدید'
             message = """با سلام و احترام
             کاربر صنعت با نام کاربری {}
@@ -714,11 +712,6 @@ def ProjectSetting(request):
                     project.status = 2
                     expert.status = 'involved'
                     expert.save()
-                    updateBotUser(typeUser="expert",
-                                  projectId=project.id,
-                                  username=expert.user.username,
-                                  fullname=expert.expertform.fullname,
-                                  photo=expert.expertform.photo)
                     expertResult['addExpert'] = True
                     message = """با سلام
 مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
@@ -728,6 +721,8 @@ def ProjectSetting(request):
 با آرزوی موفقیت، 
         چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
                             projectName=project.project_form.persian_title)
+                    text = "استاد {fullname}، به پروژه پیوست.".format({"fullname": expert.expertform.fullname})
+                    sendMessage(project=project, text=text)
                 else:
                     expertResult['addExpert'] = False
                     project.expert_suggested.add(expert)
@@ -895,11 +890,8 @@ def confirmResearcher(request):
         project.researcher_accepted.add(researcher)
         researcher.status.status = 'involved'
         project.save()
-        updateBotUser(typeUser='researcher',
-                      projectId=project.id,
-                      username=researcher.user.username,
-                      fullname=researcher.researcherprofile.fullname,
-                      photo=researcher.researcherprofile.photo)
+        text = "پژوهشگر {fullname}، به پروژه پیوست.".format({"fullname": researcher.researcherprofile.fullname})
+        sendMessage(project=project, text=text)
         researcher.status.save()
         application.save()
         return JsonResponse(data={})

@@ -25,10 +25,16 @@ from . import models, forms
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
-from bot_api.views import updateTask, updateCard
+from bot_api.views import sendMessage
 
 LOCAL_URL = 'chamranteam.ir'
 USER_ID_PATTERN = re.compile('[\w]+$')
+
+def gregorian_to_numeric_jalali(date):
+    if date is None:
+        return "نامشخص"
+    j_date = JalaliDate(date)
+    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
 def jalali_date(jdate):
     return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
@@ -734,9 +740,9 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
-        updateCard(projectId=project.id,
-                   title=newCard.title,
-                   deadline=newCard.deadline)
+        text = "فاز {title} به پروژه اضافه شده است و لازم است تا تاریخ {deadline} انجام شود.".\
+                format({"title": newCard.title, "deadline": newCard.deadline})
+        sendMessage(project=project, text=text)
         return JsonResponse(data={})
     else:
         print(form.errors)
@@ -792,22 +798,31 @@ def addTask(request):
         deadline = task.deadline
     involved_users_list = request.POST.getlist('involved_users[]')
     involved_username = []
+    involved_user_username = ""
     for userId in involved_users_list:
-        user = project.get_involved_user(userId[1:])
+        user, account_type = project.get_involved_user(userId[1:])
+        if account_type == 'researcher':
+            involved_user_username += user.researcherprofile.fullname + "\n"
+        elif account_type == 'expert':
+            involved_user_username += user.expertform.fullname + "\n"
+        elif account_type == "industry":
+            involved_user_username += user.profile.name + "\n"
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user)
             involved_username.append(user.get_username())
     task.save()
 
     if deadline is None :
-        updateTask(projectId=project.id,
-                description=description,
-                involved_username=involved_username)
+        text = """وظیفه {title} به {involved_user} محول شده است.
+        برای اطلاعات بیشتر می‌توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید. """.\
+            format({"title":task.description,"involved_user":involved_user_username})
     else:
-        updateTask(projectId=project.id,
-                description=description,
-                deadline=jalali_date(JalaliDate(deadline)), 
-                involved_username=involved_username)
+        text = """وظیفه {title} به {involved_user} محول شده و لازم است تا تاریخ {deadline} انجام شود.
+برای اطلاعات بیشتر می‌توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید. """.\
+                format({"title":task.description,
+                        "involved_user":involved_user_username,
+                        "deadline": gregorian_to_numeric_jalali(task.deadline)})
+    sendMessage(project=project, text=text)
     return JsonResponse(data={"message": "task completely added."})
 
 
