@@ -470,7 +470,7 @@ class Project(models.Model):
                 return self.expert_accepted.get(userId=userId), "expert"
             except:
                 if self.industry_creator.userId == userId:
-                    return self.industry_creator.user, "industry"
+                    return self.industry_creator, "industry"
                 else:
                     return None, None
                     
