@@ -890,7 +890,7 @@ def confirmResearcher(request):
         project.researcher_accepted.add(researcher)
         researcher.status.status = 'involved'
         project.save()
-        text = "پژوهشگر {fullname}، به پروژه پیوست.".format({"fullname": researcher.researcherprofile.fullname})
+        text = "پژوهشگر {}, به پروژه پیوست.".format(researcher.researcherprofile.fullname)
         sendMessage(project=project, text=text)
         researcher.status.save()
         application.save()
