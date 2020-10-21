@@ -264,7 +264,7 @@ def allTaskHandler(chat_id):
 
 def startHandler(chat_id):
     bot_welcome = """
-       به ربات تلگرامی چمران تیم خوش آمدید.
+به ربات تلگرامی چمران تیم خوش آمدید.
        """
     bot.sendMessage(chat_id=chat_id, text=bot_welcome)
     return HttpResponse('ok')
@@ -333,9 +333,17 @@ def telegramHandler(request):
         return HttpResponse("ok")
 
 
-def sendMessage(project, text):
-    for gp in project.group_set.all():
-        bot.sendMessage(chat_id=gp.group_id, text=text)
+def sendMessage(project, text, url=None):
+    if url is None:
+        for gp in project.group_set.all():
+            bot.sendMessage(chat_id=gp.group_id, text=text)
+    else:
+        keyboard = [[telegram.InlineKeyboardButton("مشاهده برای مرکز پژوهشی", url=url)],]
+        reply_markup = telegram.InlineKeyboardMarkup(keyboard)
+        print(url)
+        for gp in project.group_set.all():
+            pass
+            # bot.sendMessage(chat_id=gp.group_id, text=text, reply_markup=reply_markup)
 
 
 # @csrf_exempt

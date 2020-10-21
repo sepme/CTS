@@ -797,8 +797,7 @@ def addTask(request):
         task.deadline = JalaliToGregorianDate(request.POST['deadline'])
         deadline = task.deadline
     involved_users_list = request.POST.getlist('involved_users[]')
-    involved_username = []
-    involved_user_username = ""
+    involved_user_username = "\n"
     for userId in involved_users_list:
         user, account_type = project.get_involved_user(userId[1:])
         if account_type == 'researcher':
@@ -821,7 +820,8 @@ def addTask(request):
                 format(task.description,
                        involved_user_username,
                        gregorian_to_numeric_jalali(task.deadline))
-    sendMessage(project=project, text=text)
+    url = "https://chamranteam.ir/industry/project/"+ str(project.code)
+    sendMessage(project=project, text=text, url=url)
     return JsonResponse(data={"message": "task completely added."})
 
 
