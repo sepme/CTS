@@ -518,9 +518,9 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 newProject.save()
                 subject = 'ثبت پروژه جدید'
                 message = """با سلام و احترام
-                کاربر صنعت با نام کاربری {}
-                پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
-                با تشکر""".format(request.user.username, newProjectForm.persian_title,
+کاربر صنعت با نام کاربری {}
+پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
+با تشکر""".format(request.user.username, newProjectForm.persian_title,
                                   JalaliDate(datetime.date.today()))
                 try:
                     send_mail(
@@ -579,9 +579,9 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             new_project.save()
             subject = 'ثبت پروژه جدید'
             message = """با سلام و احترام
-            کاربر صنعت با نام کاربری {}
-            پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
-            با تشکر""".format(request.user.username, persian_title, JalaliDate(datetime.date.today()))
+کاربر صنعت با نام کاربری {}
+پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
+با تشکر""".format(request.user.username, persian_title, JalaliDate(datetime.date.today()))
             try:
                 send_mail(
                     subject=subject,
@@ -721,7 +721,7 @@ def ProjectSetting(request):
 با آرزوی موفقیت، 
         چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
                             projectName=project.project_form.persian_title)
-                    text = "استاد {fullname}، به پروژه پیوست.".format({"fullname": expert.expertform.fullname})
+                    text = "استاد {}، به پروژه پیوست.".format(expert.expertform.fullname)
                     sendMessage(project=project, text=text)
                 else:
                     expertResult['addExpert'] = False

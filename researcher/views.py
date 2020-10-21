@@ -402,8 +402,8 @@ def AddTechnique(request):
             method_fa = "مقاله"
         subject = 'Technique Validation'
         message = """کاربر به نام کاربری {} و به نام {} ، تکنیک {} را افزوده است.
-        برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام نمایید.
-        با تشکر""".format(request.user.username, request.user.researcheruser.researcherprofile.fullname,
+برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام نمایید.
+با تشکر""".format(request.user.username, request.user.researcheruser.researcherprofile.fullname,
                           technique_title, method_fa, request.user.username)
         try:
             send_mail(
@@ -591,9 +591,9 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
                 question.is_answered = True
                 subject = 'Research Question Validation'
                 message = """با عرض سلام و خسته نباشید.
-                پژوهشگر {} به نام {} به سوال پژوهشی {} پاسخ داده است.
-                لطفا پاسخ پژوهشگر را ارزیابی نمایید.
-                با تشکر""".format(self.request.user.username,
+پژوهشگر {} به نام {} به سوال پژوهشی {} پاسخ داده است.
+لطفا پاسخ پژوهشگر را ارزیابی نمایید.
+با تشکر""".format(self.request.user.username,
                                   self.request.user.researcheruser.researcherprofile.fullname,
                                   question.research_question.question_title)
                 email = question.research_question.expert.user.username
@@ -632,9 +632,9 @@ def ajax_Technique_review(request):
         technique_review.save()
         subject = 'Research Question Validation'
         message = """با عرض سلام و خسته نباشید.
-        پژوهشگر {}  با نام کاربری {} در خواست ارتفا سطح تکنیک {} را از طریق {} داده است.
-        لطفا درخواست وی را ارزیابی نمایید.
-        با تشکر""".format(request.user.researcheruser.researcherprofile.fullname, request.user.username,
+پژوهشگر {}  با نام کاربری {} در خواست ارتفا سطح تکنیک {} را از طریق {} داده است.
+لطفا درخواست وی را ارزیابی نمایید.
+با تشکر""".format(request.user.researcheruser.researcherprofile.fullname, request.user.username,
                           technique.technique.technique_title, method)
         try:
             send_mail(

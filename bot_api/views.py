@@ -257,7 +257,7 @@ def allTaskHandler(chat_id):
 
 def startHandler(chat_id):
     bot_welcome = """
-       به ربات تلگرامی چمران تیم خوش آمدید.
+به ربات تلگرامی چمران تیم خوش آمدید.
        """
     bot.sendMessage(chat_id=chat_id, text=bot_welcome)
     return HttpResponse('ok')
@@ -326,8 +326,8 @@ def telegramHandler(request):
 
 
 def sendMessage(project, text):
-    for gp_id in project.group_set.all():
-        bot.sendMessage(chat_id=gp_id, text=text)
+    for gp in project.group_set.all():
+        bot.sendMessage(chat_id=gp.group_id, text=text)
 
 
 # @csrf_exempt

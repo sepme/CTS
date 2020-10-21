@@ -514,8 +514,8 @@ def accept_project(request):
         try:
             subjectForAdmin = "درخواست قرار ملاقات"
             messageForAdmin = """با سلام و احترام\n
-            استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
-            با تشکر
+استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
+با تشکر
             """.format(str(expert_user.expertform), str(project), str(project.industry_creator.profile))
             send_mail(
                 subject=subjectForAdmin,
@@ -527,8 +527,8 @@ def accept_project(request):
 
             subjectForExpert = "درخواست قرار ملاقات"
             messageForExpert = """با سلام و احترام\n
-            درخواست قرار ملاقات شما برای پروژه {} برای ادمین ارسال شد.\n
-            با تشکر
+درخواست قرار ملاقات شما برای پروژه {} برای ادمین ارسال شد.\n
+با تشکر
             """.format(str(project))
             html_templateForAdmin = get_template('registration/projectRequest_template.html')
             email_templateForAdmin = html_templateForAdmin.render({'message': messageForExpert})
