@@ -140,6 +140,8 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.dateparse import parse_date
+from django.core.mail import send_mail
+from ChamranTeamSite import settings
 
 from persiantools.jdatetime import JalaliDate
 
@@ -183,18 +185,23 @@ def inlineQuery(update):
     except:
         print("There isn't any project with this code : {}".format(projectId))
         return
-    query = update.inline_query.query
     keyboard = [[telegram.InlineKeyboardButton("تایید", callback_data=str(project.code))],]
     reply_markup = telegram.InlineKeyboardMarkup(keyboard)
+    if project.industry_creator.profile.photo:
+        photo_url = "https://chamranteam.ir" + project.industry_creator.profile.photo.url
+    else:
+        photo_url = ""
+    
     results = [
         telegram.InlineQueryResultArticle(
             id=uuid.uuid4(),
-            title=str(project.industry_creator),
-            description=project.persian_title,
-            thumb_url=project.industry_creator.photo_url,
+            title=project.industry_creator.profile.name,
+            description=project.project_form.persian_title,
+            thumb_url=photo_url,
             reply_markup=reply_markup,
             input_message_content=telegram.InputTextMessageContent(
-                "آیا مایل به متصل کردن گروه به پروژه {} هستید؟".format(project.persian_title))),]
+                "آیا مایل به متصل کردن گروه به پروژه {} هستید؟".\
+                format(project.project_form.persian_title))),]
     update.inline_query.answer(results, cache_time=15)
     return
 
@@ -233,18 +240,18 @@ def stageGroupAndProject(message):
             text = keyboard.text
             if text == "تایید":
                 try:
-                    gp = models.NewGroup.objects.get(group_id=message.chat.id)
-                    if gp.code is None:
-                        gp.code = keyboard.callback_data
+                    gp = models.NewGroup.objects.get(group_id=message.chat_id)
+                    if gp.projectCode is None:
+                        gp.projectCode = keyboard.callback_data
                         gp.save()
                 except:
                     bot.send_message(chat_id=message.chat_id,
                                      text="لطفا در ابتدا ربات چمران تیم را به گروه مرتبط به پروژه اضافه کنید.")
-            return HttpResponse("ok")
+            return 
 
 def addGroupToProject(callBack):
     code = callBack['data']
-    gp = models.NewGroup.objects.get(code=code)
+    gp = models.NewGroup.objects.get(projectCode=code)
     project = Project.objects.get(code=code)
     group = models.Group.objects.create(group_id=gp.group_id, project=project)
     gp.delete()
@@ -281,6 +288,7 @@ def telegramHandler(request):
 
         if message.reply_markup is not None:
             stageGroupAndProject(message)
+            return HttpResponse("ok")
 
         if len(message.new_chat_members):        
             addNewGroup(newMemberList=message.new_chat_members, chat_id=message.chat_id)
@@ -326,8 +334,8 @@ def telegramHandler(request):
 
 
 def sendMessage(project, text):
-    for gp_id in project.group_set.all():
-        bot.sendMessage(chat_id=gp_id, text=text)
+    for gp in project.group_set.all():
+        bot.sendMessage(chat_id=gp.group_id, text=text)
 
 
 # @csrf_exempt
