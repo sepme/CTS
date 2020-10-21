@@ -740,8 +740,8 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
-        text = "فاز {title} به پروژه اضافه شده است و لازم است تا تاریخ {deadline} انجام شود.".\
-                format({"title": newCard.title, "deadline": newCard.deadline})
+        text = "فاز {} به پروژه اضافه شده است و لازم است تا تاریخ {} انجام شود.".\
+                format(newCard.title,form.cleaned_data['deadline'])
         sendMessage(project=project, text=text)
         return JsonResponse(data={})
     else:
@@ -808,20 +808,19 @@ def addTask(request):
         elif account_type == "industry":
             involved_user_username += user.profile.name + "\n"
         if user is not None and user not in task.involved_user.all():
-            task.involved_user.add(user)
-            involved_username.append(user.get_username())
+            task.involved_user.add(user.user)
     task.save()
 
     if deadline is None :
-        text = """وظیفه {title} به {involved_user} محول شده است.
-        برای اطلاعات بیشتر می‌توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید. """.\
-            format({"title":task.description,"involved_user":involved_user_username})
-    else:
-        text = """وظیفه {title} به {involved_user} محول شده و لازم است تا تاریخ {deadline} انجام شود.
+        text = """وظیفه {} به {} محول شده است.
 برای اطلاعات بیشتر می‌توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید. """.\
-                format({"title":task.description,
-                        "involved_user":involved_user_username,
-                        "deadline": gregorian_to_numeric_jalali(task.deadline)})
+            format(task.description,involved_user_username)
+    else:
+        text = """وظیفه {} به {} محول شده و لازم است تا تاریخ {} انجام شود.
+برای اطلاعات بیشتر می‌توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید. """.\
+                format(task.description,
+                       involved_user_username,
+                       gregorian_to_numeric_jalali(task.deadline))
     sendMessage(project=project, text=text)
     return JsonResponse(data={"message": "task completely added."})
 
