@@ -22,45 +22,39 @@ from persiantools.jdatetime import JalaliDate
 
 from chamran_admin.models import Message
 from . import models, forms
+from .tools.tools import *
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
 from bot_api.views import sendMessage
 
+from industry.views import showActiveProject as industryShowActiveProject
+from expert.views import showActiveProject as expertShowActiveProject
+from researcher.views import showActiveProject as researcherShowActiveProject
+
 LOCAL_URL = 'chamranteam.ir'
 USER_ID_PATTERN = re.compile('[\w]+$')
 
-def gregorian_to_numeric_jalali(date):
-    if date is None:
-        return "نامشخص"
-    j_date = JalaliDate(date)
-    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
-def jalali_date(jdate):
-    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
-
-def JalaliToGregorianDate(date):
-    datePart = date.split("/")
-    return JalaliDate(year=int(datePart[0]), month=int(datePart[1]), day=int(datePart[2]))\
-        .to_gregorian()
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
+    attachment = None
     if not message.read_by.filter(username=request.user.username).exists():
         message.read_by.add(request.user)
         attachment = None
     if message.attachment:
         attachment = message.attachment.url
-        return JsonResponse({
-            'id': message.id,
-            'text': message.text,
-            'date': jalali_date(JalaliDate(message.date)),
-            'title': message.title,
-            'code': message.code,
-            'type': message.type,
-            'attachment': attachment,
-            "is_project_suggested": message.is_project_suggested,
-            })
+    return JsonResponse({
+        'id': message.id,
+        'text': message.text,
+        'date': jalali_date(JalaliDate(message.date)),
+        'title': message.title,
+        'code': message.code,
+        'type': message.type,
+        'attachment': attachment,
+        "is_project_suggested": message.is_project_suggested,
+        })
             
             
 class MessagesView(LoginRequiredMixin, generic.TemplateView):
@@ -99,45 +93,6 @@ class MessagesView(LoginRequiredMixin, generic.TemplateView):
         context['other_messages'] = other_messages
         context['account_type'] = find_account_type(self.request.user)
         return context
-
-
-def find_account_type(user):
-    expert = ExpertUser.objects.filter(user=user)
-    if expert.exists():
-        return 'expert'
-    industry = IndustryUser.objects.filter(user=user)
-    if industry.exists():
-        return 'industry'
-    researcher = ResearcherUser.objects.filter(user=user)
-    if researcher.exists():
-        return 'researcher'
-    else:
-        return False
-
-
-def find_user(user):
-    if find_account_type(user) == 'expert':
-        return user.expertuser
-    elif find_account_type(user) == 'researcher':
-        return user.researcheruser
-    elif find_account_type(user) == 'industry':
-        return user.industryuser
-    else:
-        return False
-
-
-def get_user_by_unique_id(unique):
-    expert = ExpertUser.objects.filter(unique__exact=unique)
-    researcher = ResearcherUser.objects.filter(unique__exact=unique)
-    industry = IndustryUser.objects.filter(unique__exact=unique)
-    if expert.exists():
-        return expert[0]
-    elif researcher.exists():
-        return researcher[0]
-    elif industry.exists():
-        return industry[0]
-    else:
-        return False
 
 
 class Home(generic.TemplateView):
@@ -820,7 +775,7 @@ def addTask(request):
                 format(task.description,
                        involved_user_username,
                        gregorian_to_numeric_jalali(task.deadline))
-    url = "https://chamranteam.ir/industry/project/"+ str(project.code)
+    url = "https://chamranteam.ir/project/"+ str(project.code)
     sendMessage(project=project, text=text, url=url)
     return JsonResponse(data={"message": "task completely added."})
 
@@ -864,3 +819,24 @@ def checkUserId(request):
                                     ,"invalid_input": False
                                     ,"message": "این نام کاربری قبلا استفاده شده است."})
         return JsonResponse({"is_unique": True, "invalid_input": False})
+
+
+class generalShowActiveProject(LoginRequiredMixin, generic.TemplateView):
+    login_url = "/login/"
+
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, code=kwargs["code"])
+        user = find_user(user=request.user)
+        user, user_account = project.get_involved_user(user.userId)
+        if user_account is None:
+            return Handler403(request=request, exception=Exception())
+
+        if user_account == "industry":
+            show_project = industryShowActiveProject()
+        elif user_account == "expert":
+            show_project = expertShowActiveProject()
+        elif user_account == "researcher":
+            show_project = researcherShowActiveProject()
+        
+        show_project.request = request
+        return show_project.get(request=request, *args, **kwargs)

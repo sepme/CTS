@@ -16,7 +16,7 @@ urlpatterns = [
     path('accept_request/', views.accept_project),
     path('refuse_request/', views.refuse_expert),
     path("search_user_id", views.searchUserId, name="searchUserId"),
-    path("project/<uuid:code>", views.show_active_project.as_view(), name="show_active_project"),
+    path("project/<uuid:code>", views.showActiveProject.as_view(), name="show_active_project"),
     path("project-setting/", views.ProjectSetting, name="project-setting"),
     path("request_researcher/", views.industryRequestResearcher, name="request_researcher"),
     path("delete_researcher/", views.deleteResearcher, name="deleteResearcher"),

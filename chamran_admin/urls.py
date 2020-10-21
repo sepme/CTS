@@ -31,4 +31,5 @@ urlpatterns = [
     path("card-list", views.cardList, name="card-list"),
     path("task-list", views.taskList, name="task-list"),
     path("checkUserId", views.checkUserId, name="checkUserId"),
+    path("project/<uuid:code>/", views.generalShowActiveProject.as_view(), name="generalShowActiveProject"),
 ]

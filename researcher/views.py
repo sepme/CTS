@@ -9,51 +9,17 @@ from django.core.serializers import serialize
 from django.conf import settings
 from django.forms import model_to_dict
 import os, random, datetime, re
-from persiantools.jdatetime import JalaliDate
-from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import permission_required
 
 from django.utils import timezone
 
-from chamran_admin.views import find_user
-
-from . import models, forms, persianNumber
+from . import models, forms
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
 from chamran_admin.models import Message, Task, Card
 
 ACCELERATOR = "384025"
 USER_ID_PATTERN = re.compile('[\w]+$')
-
-
-def gregorian_to_numeric_jalali(date):
-    j_date = JalaliDate(date)
-    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
-
-
-def date_last(date1, date2):
-    delta = relativedelta(date1, date2)
-    days_passed = abs(delta.days)
-    months_passed = abs(delta.months)
-    years_passed = abs(delta.years)
-    days = ""
-    months = ""
-    years = ""
-    if years_passed != 0:
-        years = persianNumber.convert(str(years_passed)) + " سال "
-    if months_passed != 0:
-        if years_passed != 0:
-            months = " و " + persianNumber.convert(str(months_passed)) + " ماه "
-        else:
-            months = persianNumber.convert(str(months_passed)) + " ماه "
-    if days_passed != 0:
-        if months_passed == 0 and years_passed == 0:
-            days = persianNumber.convert(str(days_passed)) + " روز "
-        else:
-            days = " و " + persianNumber.convert(str(days_passed)) + " روز "
-    if days_passed != 0 or months_passed != 0 or years_passed != 0:
-        return years + months + days
-    return "امروز"
 
 
 class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -1082,7 +1048,7 @@ def ActiveProject(request, project, data):
     return data
 
 
-class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = "researcher/project.html"
     permission_required = ('researcher.be_researcher',)
     login_url = "/login/"
