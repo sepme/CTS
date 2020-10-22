@@ -152,6 +152,9 @@ from .config import bot_token, URL, SECURITY_CODE
 import telegram
 import re, uuid ,json
 
+WHITE_MEDIUM_SMALL_SQUARE = '\U000025FD'
+CHECK_BOX_WITH_CHECK = '\U00002611\U0000FE0F'
+
 global bot
 global TOKEN
 TOKEN=bot_token
@@ -255,8 +258,12 @@ def addGroupToProject(callBack):
     project = Project.objects.get(code=code)
     group = models.Group.objects.create(group_id=gp.group_id, project=project)
     gp.delete()
-    bot.send_message(chat_id=group.group_id,
-                        text="این گروه به پروژه {} متصل شد.".format(project.project_form.persian_title))
+    text = """{check} این گروه به پروژه «{title}» متصل شد.
+{box} از این پس، رخدادهای مربوط به پروژه در این گروه یادآوری خواهد شد.""".\
+    format(check=CHECK_BOX_WITH_CHECK,
+           title=project.project_form.persian_title,
+           box=WHITE_MEDIUM_SMALL_SQUARE)
+    bot.send_message(chat_id=group.group_id,text=text)
     return HttpResponse("ok")
 
 def allTaskHandler(chat_id):

@@ -699,7 +699,7 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
-        text = """{diamond}یک ددلاین(سررسید) جدید برای پروژه شما تعریف شده است.
+        text = """{diamond}یک سررسید (ددلاین) جدید برای پروژه شما تعریف شده است.
 
 {label} نام : {title}
 {hourglass} مهلت انجام: {deadline}
@@ -734,7 +734,6 @@ def cardList(request):
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
-    print(request.POST)
     if request.POST.get('check', None):
         task = models.Task.objects.get(pk=request.POST['pk'])
         CHECK = {'true': True, 'false': False}
@@ -778,7 +777,7 @@ def addTask(request):
     task.save()
 
     if deadline is None :
-        text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+        text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
 
 {label} نام وظیفه : {title}
 {pencil} افراد مسئول : {users}
@@ -789,7 +788,7 @@ def addTask(request):
                    pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
-        text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+        text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
 
 {label} نام وظیفه : {title}
 {pencil} افراد مسئول : {users}
