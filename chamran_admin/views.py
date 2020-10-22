@@ -763,15 +763,15 @@ def addTask(request):
         task.deadline = JalaliToGregorianDate(request.POST['deadline'])
         deadline = task.deadline
     involved_users_list = request.POST.getlist('involved_users[]')
-    involved_user_name = []
+    involved_user_name  = []
     for userId in involved_users_list:
         user, account_type = project.get_involved_user(userId[1:])
         if account_type == 'researcher':
-            involved_user_name.append(user.researcherprofile.fullname)
+            involved_user_name .append(user.researcherprofile.fullname)
         elif account_type == 'expert':
-            involved_user_name.append(user.expertform.fullname)
+            involved_user_name .append(user.expertform.fullname)
         elif account_type == "industry":
-            involved_user_name.append(user.profile.name)
+            involved_user_name .append(user.profile.name) 
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user.user)
     task.save()
@@ -785,7 +785,7 @@ def addTask(request):
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
             format(diamond=SMALL_ORANGE_DIAMOND,
                    label=LABEL ,title=task.description,
-                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name),
+                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name ),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
         text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
@@ -797,7 +797,7 @@ def addTask(request):
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
                 format(diamond=SMALL_ORANGE_DIAMOND,
                    label=LABEL ,title=task.description,
-                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name),
+                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name ),
                    hourglass=HOURGLASS_NOT_DONE,deadline=gregorian_to_numeric_jalali(task.deadline),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
     url = "https://chamranteam.ir/project/"+ str(project.code)
