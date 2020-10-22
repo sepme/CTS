@@ -1,4 +1,4 @@
-import datetime
+import datetime, emoji
 import re
 
 from dateutil.relativedelta import relativedelta
@@ -35,7 +35,12 @@ from researcher.views import showActiveProject as researcherShowActiveProject
 LOCAL_URL = 'chamranteam.ir'
 USER_ID_PATTERN = re.compile('[\w]+$')
 
-
+SMALL_ORANGE_DIAMOND = "\U0001F538"
+SMALL_BLUE_DIAMOND ="\U0001F539"
+RED_TRIANGLE_POINTED_DOWN = "\U0001F53B"
+PENCIL_SELECTOR = "\U0000270F\U0000FE0F"
+LABEL = '\U0001F3F7'
+HOURGLASS_NOT_DONE = "\U000023F3"
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
@@ -684,7 +689,6 @@ def AddOpinion(request):
 
 @permission_required(perm=[], login_url="/login")
 def addCard(request):
-    print(request.POST)
     form = forms.CardForm(request.POST)
     project = Project.objects.get(id=request.POST['project_id'])
     if form.is_valid():
@@ -695,8 +699,14 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
-        text = "فاز {} به پروژه اضافه شده است و لازم است تا تاریخ {} انجام شود.".\
-                format(newCard.title,form.cleaned_data['deadline'])
+        text = """{diamond}یک ددلاین(سررسید) جدید برای پروژه شما تعریف شده است.
+{label} نام : {title}
+{hourglass} مهلت انجام: {deadline}
+{red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+                format(diamond=SMALL_BLUE_DIAMOND,
+                      label=LABEL, title=newCard.title,
+                      hourglass=HOURGLASS_NOT_DONE,deadline=form.cleaned_data['deadline'],
+                      red_triangle=RED_TRIANGLE_POINTED_DOWN)
         sendMessage(project=project, text=text)
         return JsonResponse(data={})
     else:
@@ -766,15 +776,25 @@ def addTask(request):
     task.save()
 
     if deadline is None :
-        text = """وظیفه {} به {} محول شده است.
-برای اطلاعات بیشتر می‌توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید. """.\
-            format(task.description,involved_user_username)
+        text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+{label} نام وظیفه : {title}
+{pencil} افراد مسئول : {users}
+{red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+            format(diamond=SMALL_ORANGE_DIAMOND,
+                   label=LABEL ,title=task.description,
+                   pencil=PENCIL_SELECTOR, users=involved_user_username,
+                   red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
-        text = """وظیفه {} به {} محول شده و لازم است تا تاریخ {} انجام شود.
-برای اطلاعات بیشتر می‌توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید. """.\
-                format(task.description,
-                       involved_user_username,
-                       gregorian_to_numeric_jalali(task.deadline))
+        text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+{label} نام وظیفه : {title}
+{pencil} افراد مسئول : {users}
+{hourglass} مهلت انجام : {deadline}
+{red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+                format(diamond=SMALL_ORANGE_DIAMOND,
+                   label=LABEL ,title=task.description,
+                   pencil=PENCIL_SELECTOR, users=involved_user_username,
+                   hourglass=HOURGLASS_NOT_DONE,deadline=gregorian_to_numeric_jalali(task.deadline),
+                   red_triangle=RED_TRIANGLE_POINTED_DOWN)
     url = "https://chamranteam.ir/project/"+ str(project.code)
     sendMessage(project=project, text=text, url=url)
     return JsonResponse(data={"message": "task completely added."})

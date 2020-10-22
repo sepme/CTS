@@ -338,7 +338,7 @@ def sendMessage(project, text, url=None):
         for gp in project.group_set.all():
             bot.sendMessage(chat_id=gp.group_id, text=text)
     else:
-        keyboard = [[telegram.InlineKeyboardButton("مشاهده", url=url)],]
+        keyboard = [[telegram.InlineKeyboardButton("مشاهده پروژه", url=url)],]
         reply_markup = telegram.InlineKeyboardMarkup(keyboard)
         for gp in project.group_set.all():
             bot.sendMessage(chat_id=gp.group_id, text=text, reply_markup=reply_markup)
