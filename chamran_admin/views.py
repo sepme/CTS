@@ -700,6 +700,7 @@ def addCard(request):
         newCard.project = project
         newCard.save()
         text = """{diamond}یک ددلاین(سررسید) جدید برای پروژه شما تعریف شده است.
+
 {label} نام : {title}
 {hourglass} مهلت انجام: {deadline}
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
@@ -778,8 +779,10 @@ def addTask(request):
 
     if deadline is None :
         text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+
 {label} نام وظیفه : {title}
 {pencil} افراد مسئول : {users}
+
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
             format(diamond=SMALL_ORANGE_DIAMOND,
                    label=LABEL ,title=task.description,
@@ -787,13 +790,15 @@ def addTask(request):
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
         text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+
 {label} نام وظیفه : {title}
 {pencil} افراد مسئول : {users}
 {hourglass} مهلت انجام : {deadline}
+
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
                 format(diamond=SMALL_ORANGE_DIAMOND,
                    label=LABEL ,title=task.description,
-                   pencil=PENCIL_SELECTOR, users=involved_user_username,
+                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name),
                    hourglass=HOURGLASS_NOT_DONE,deadline=gregorian_to_numeric_jalali(task.deadline),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
     url = "https://chamranteam.ir/project/"+ str(project.code)
