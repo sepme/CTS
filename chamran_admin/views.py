@@ -699,7 +699,8 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
-        text = """{diamond}یک ددلاین(سررسید) جدید برای پروژه شما تعریف شده است.
+        text = """{diamond}یک سررسید (ددلاین) جدید برای پروژه شما تعریف شده است.
+
 {label} نام : {title}
 {hourglass} مهلت انجام: {deadline}
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
@@ -732,7 +733,6 @@ def cardList(request):
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
-    print(request.POST)
     if request.POST.get('check', None):
         task = models.Task.objects.get(pk=request.POST['pk'])
         CHECK = {'true': True, 'false': False}
@@ -776,23 +776,27 @@ def addTask(request):
     task.save()
 
     if deadline is None :
-        text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+        text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
+
 {label} نام وظیفه : {title}
 {pencil} افراد مسئول : {users}
+
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
             format(diamond=SMALL_ORANGE_DIAMOND,
                    label=LABEL ,title=task.description,
                    pencil=PENCIL_SELECTOR, users=involved_user_username,
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
-        text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
+        text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
+
 {label} نام وظیفه : {title}
 {pencil} افراد مسئول : {users}
 {hourglass} مهلت انجام : {deadline}
+
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
                 format(diamond=SMALL_ORANGE_DIAMOND,
                    label=LABEL ,title=task.description,
-                   pencil=PENCIL_SELECTOR, users=involved_user_username,
+                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name),
                    hourglass=HOURGLASS_NOT_DONE,deadline=gregorian_to_numeric_jalali(task.deadline),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
 >>>>>>> 4c9168cba1b2069128ecd3a24eeae310178ca586
