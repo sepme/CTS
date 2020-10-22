@@ -1,4 +1,4 @@
-import datetime, emoji
+import datetime
 import re
 
 from dateutil.relativedelta import relativedelta
@@ -707,7 +707,8 @@ def addCard(request):
                       label=LABEL, title=newCard.title,
                       hourglass=HOURGLASS_NOT_DONE,deadline=form.cleaned_data['deadline'],
                       red_triangle=RED_TRIANGLE_POINTED_DOWN)
-        sendMessage(project=project, text=text)
+        url = "https://chamranteam.ir/project/"+ str(project.code)
+        sendMessage(project=project, text=text, url=url)
         return JsonResponse(data={})
     else:
         print(form.errors)
@@ -762,15 +763,15 @@ def addTask(request):
         task.deadline = JalaliToGregorianDate(request.POST['deadline'])
         deadline = task.deadline
     involved_users_list = request.POST.getlist('involved_users[]')
-    involved_user_username = "\n"
+    involved_user_name = []
     for userId in involved_users_list:
         user, account_type = project.get_involved_user(userId[1:])
         if account_type == 'researcher':
-            involved_user_username += user.researcherprofile.fullname + "\n"
+            involved_user_name.append(user.researcherprofile.fullname)
         elif account_type == 'expert':
-            involved_user_username += user.expertform.fullname + "\n"
+            involved_user_name.append(user.expertform.fullname)
         elif account_type == "industry":
-            involved_user_username += user.profile.name + "\n"
+            involved_user_name.append(user.profile.name)
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user.user)
     task.save()
@@ -782,7 +783,7 @@ def addTask(request):
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
             format(diamond=SMALL_ORANGE_DIAMOND,
                    label=LABEL ,title=task.description,
-                   pencil=PENCIL_SELECTOR, users=involved_user_username,
+                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
         text = """{diamond} یک وظیفه برای پروژه شما تعیین شده است.
