@@ -83,6 +83,9 @@ class ResearcherUser(models.Model):
     def score(self):
         return self.points * 23
 
+    def get_name(self):
+        return self.researcherprofile.fullname
+
 
 class Status(models.Model):
     researcher_user = models.OneToOneField("ResearcherUser", on_delete=models.CASCADE, blank=True, null=True)
