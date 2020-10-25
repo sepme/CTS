@@ -681,68 +681,316 @@ $(document).ready(function () {
     let taskList = $(".ct-checklist");
     if (taskList.length) {
 
+        let involved_users = {'expertUsers': [{'username': 'sepehr', 'fullname': 'سپهر متانت', 'photo': '/media/Expert%20Profile/expert%40gmail.com/photo_2019-02-15_13-45-24.jpg'}], 'researcherUsers': [{'username': 'reza', 'fullname': 'رضا باسره'}, {'username': 'ahmad', 'fullname': 'هادی کاظمی', 'photo': '/media/Researcher%20Profile/researcher1%40gmail.com/photo_2020-09-28_19-29-18.jpg'}], 'industryUser': {'username': 'None', 'fullname': 'چمران تیم', 'photo': '/media/Industry%20Profile/industry%40gmail.com/photo_2019-11-03_00-03-09.jpg'}};
+
+        // Function to get task values => (pk, text, due, assigns)
+        function get_task_values (task) {                
+            let taskText = task.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text();
+
+            let taskDue = null;
+            if (task.find(".ct-checklist-item__detail").hasClass("has-due")) {
+                taskDue = task.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text();
+            }
+            
+            let taskAssigns = [];
+            task.find(".ct-checklist-item__detail .ct-checklist__text .atMention").each(function () {
+                taskAssigns.push($(this).text());
+            });
+
+            return {
+                'pk': task.attr("data-value"),
+                'text': taskText,
+                'due': taskDue,
+                'assigns': taskAssigns,
+            };
+        }
+        
+        // Function to get pending task values => (pk, text, due, assigns)
+        function get_pending_task_values (task) {                
+            let taskText = task.find(".ct-checklist-item__detail .ct-checklist__pre pre").text();
+
+            let taskDue = null;
+            if (task.find(".ct-checklist-item__footer .ct-task-due span").text() !== "") {
+                taskDue = task.find(".ct-checklist-item__footer .ct-task-due span").text();
+            }
+            
+            let taskAssigns = [];
+            task.find(".ct-checklist-item__footer .ct-task-assignee .dropdown div.dropdown-item.selected").each(function () {
+                taskAssigns.push($(this).attr("data-value"));
+            });
+
+            return {
+                'pk': task.attr("data-value"),
+                'text': taskText,
+                'due': taskDue,
+                'assigns': taskAssigns,
+            };
+        }
+
+        // check task is change
+        function is_change (task) {
+            let taskValues = get_task_values(task);
+            let pendingTaskValues = get_pending_task_values(task);
+            if (taskValues.text !== pendingTaskValues.text || taskValues.due !== pendingTaskValues.due || taskValues.assigns.length !== pendingTaskValues.assigns.length) {
+                return true;
+            }
+            $.each(taskValues.assigns, function( key, value ) {
+                let index = $.inArray( value, pendingTaskValues.assigns );
+                if ( index === -1 ) {
+                    return true;
+                }
+            })
+            return false;
+        }
+
+        // Show task assignments
+        function show_task_assignments(task, assigns) {
+            let facePile = task.find(".ct-checklist-item__footer .ct-task-assignee ul.facepile-list");
+            let maxItem = 4;
+            if ($(window).width() < 420) {
+                maxItem = 1;
+            } else if ($(window).width() < 500) {
+                maxItem = 3;
+            }
+            facePile.html("");
+            let moreMembers = ``;
+            for (let i=0; i<assigns.length; i++) {
+                let item = {};
+                if (assigns[i].replace("@", "") === involved_users.industryUser.username) {
+                    item = {
+                        'username': involved_users.industryUser.username,
+                        'fullname': involved_users.industryUser.fullname,
+                        'photo': involved_users.industryUser.photo
+                    }
+                } else {
+                    let flag = true;
+                    for (let j=0; j<involved_users.expertUsers.length; j++) {
+                        if (assigns[i].replace("@", "") === involved_users.expertUsers[j].username) {
+                            item = {
+                                'username': involved_users.expertUsers[j].username,
+                                'fullname': involved_users.expertUsers[j].fullname,
+                                'photo': involved_users.expertUsers[j].photo
+                            }
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        for (let j=0; j<involved_users.researcherUsers.length; j++) {
+                            if (assigns[i].replace("@", "") === involved_users.researcherUsers[j].username) {
+                                item = {
+                                    'username': involved_users.researcherUsers[j].username,
+                                    'fullname': involved_users.researcherUsers[j].fullname,
+                                    'photo': involved_users.researcherUsers[j].photo
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                if (item.photo === undefined) {
+                    item.photo  = '/static/industry/img/profile.jpg';
+                }
+
+                if (i < maxItem) {
+                    facePile.append(`<li class="member" data-value="${item.username}">
+                        <div class="dropdown">
+                            <img src="${item.photo}"
+                                alt=""
+                                width="32px"
+                                class="dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            <div class="dropdown-menu">
+                                <div class="py-1 px-4 facepile-detail d-flex">
+                                    <img src="${item.photo}"
+                                        alt=""
+                                        width="50px">
+                                    <div class="ml-2">
+                                        <div class="full-name text-right">${item.fullname}</div>
+                                        <div class="uuid">@${item.username}</div>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-center danger-item delete-user"
+                                href="javascript: void(0);">
+                                    حذف از
+                                    لیست
+                                    <i class="fas fa-user-times float-inline-end"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </li>`);
+                } else {
+                    moreMembers += `
+                        <li class="py-1 px-4 facepile-detail d-flex" data-value="${item.username}">
+                            <a class="mr-2 text-center danger-item py-3 delete-user"
+                                href="javascript: void(0);">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            <div class="mr-2">
+                                <div class="full-name text-right">
+                                    ${item.fullname}
+                                </div>
+                                <div class="uuid">
+                                    @${item.username}
+                                </div>
+                            </div>
+                            <img src="${item.photo}"
+                                alt=""
+                                width="50px">
+                        </li>
+                    `;
+                }
+                facePile.closest(".ct-task-assignee")
+                    .find(`.dropdown div.dropdown-item[data-value='${item.username}']`).addClass("selected");
+            }
+
+            if (maxItem < assigns.length) {
+                facePile.append(`
+                    <li class="more-member">
+                        <div class="dropdown">
+                            <button class="btn-default dropdown-toggle no-arrow"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                +${assigns.length - maxItem}
+                            </button>
+                            <ul class="dropdown-menu">
+                                ${moreMembers}        
+                            </ul>
+                        </div>
+                    </li>`);
+            }
+
+            facePile.find(".delete-user").click(function () {
+                let taskItem = $(this).closest("li");
+                facePile.closest(".ct-task-assignee")
+                    .find(`.dropdown div.dropdown-item[data-value='${taskItem.attr("data-value")}']`).removeClass("selected");
+                let taskValues = get_pending_task_values(task);
+                show_task_assignments(task, taskValues.assigns);
+            });
+        }
+
+        // Show task edititing front 
+        function show_task_edit(task) {
+            
+            // Save open task in pendingTasks and hidden that
+            let openTask = taskList.find(".ct-checklist__item.onEdit");
+            if (openTask.length) {
+                if (is_change(openTask)) {
+                    openTask.addClass("draft");
+                }
+
+                openTask.removeClass("onEdit");
+                openTask.find(".ct-checklist-item__footer").addClass("d-none");
+                openTask.find(".ct-checklist-item__detail .ct-checklist__pre")
+                    .addClass("d-none");
+                openTask.find(".ct-checklist-item__detail .ct-checklist__text")
+                    .removeClass("d-none")
+            }
+
+            
+            // <If> exists is True use pendingTasks detail in edit <Else> use saved detail 
+            let taskValues = {};
+            if (task.hasClass("draft")) {
+                taskValues = get_pending_task_values(task);
+            } else {
+                taskValues = get_task_values(task);
+            }
+            console.log(taskValues);
+            let taskText = taskValues.text;
+            let taskDue = taskValues.due;
+            let taskAssigns = taskValues.assigns;
+
+            // Put task values in editing parts
+            task.find(".ct-checklist-item__detail .ct-checklist__text").addClass("d-none");
+            task.addClass("onEdit");
+            task.find(".ct-checklist-item__footer").removeClass("d-none");
+            task.find(".ct-checklist-item__footer .ct-task-due span").text(taskDue);
+            task.find(".ct-checklist-item__detail .ct-checklist__pre").removeClass("d-none")
+                        .find("pre").text(taskText);
+            
+            // Show assigns
+            show_task_assignments(task, taskAssigns);
+
+        }
+
         // edit task
         function init_task_options(taskItem) {
-            taskItem.find(".ct-checklist-item__detail .ct-checklist__text").click(function () {
-                if ($(this).hasClass("d-none") === false) {
-                    // close all onEdit tasks
-                    taskList.find(".ct-checklist__item").removeClass("onEdit");
-                    taskList.find(".ct-checklist__item").find(".ct-checklist-item__footer").addClass("d-none");
-                    taskList.find(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__pre")
-                        .addClass("d-none");
-                    taskList.find(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text")
-                        .removeClass("d-none");
-                    // show edit fields
-                    let checklistItem = $(this).closest(".ct-checklist__item");
-                    $(this).addClass("d-none");
-                    checklistItem.addClass("onEdit");
-                    checklistItem.find(".ct-checklist-item__footer").removeClass("d-none");
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").removeClass("d-none");
-                    // init cancel editing btn
-                    checklistItem.find(".ct-checklist-item__footer button.cancel-change").click(function () {
-                        checklistItem.removeClass("onEdit");
-                        let text = checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").html();
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre pre").html(text);
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
-                        checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
-                    });
-                    // init save edit btn
-                    checklistItem.find(".ct-checklist-item__footer button.save-change").click(function () {
-                        checklistItem.removeClass("onEdit");
-                        let text = checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre pre").html();
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").html(text);
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
-                        checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
-                    });
-                }
+            taskItem.find(".ct-checklist-item__detail .ct-checklist-item__control .ct-checklist-item-edit").click(function () {
+                let checklistItem = $(this).closest(".ct-checklist__item");
+                
+                show_task_edit(checklistItem);
+                
                 // edit task mention users
-                $(this).find(".ct-checklist-item__footer .ct-task-assignee.ct-option-btn .dropdown-item").click(function () {
-                    let mentionVal = $(this).attr("data-value");
-                    $(this).close(".ct-checklist__item").find(".ct-checklist-item__detail .ct-checklist__text pre")
-                        .html(`<span class="atMention me" title="">@${mentionVal}</span>` + text);
+                checklistItem.find(".ct-checklist-item__footer .ct-task-assignee.ct-option-btn div.dropdown-item").click(function () {
+                    if (!$(this).hasClass("selected")) {
+                        $(this).addClass("selected");
+                        let taskValues = get_pending_task_values(checklistItem);
+                        show_task_assignments(checklistItem, taskValues.assigns);
+                    }
                 });
-                // init edit task due
-                // $('#edit_task_due').pDatepicker({
-                //     format: 'YYYY/MM/DD',
-                //     onShow: function (unix) {
-                //         let datePicker = $(".datepicker-container");
-                //         if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
-                //             if (datePicker.offset().top > 310) {
-                //                 datePicker.css("top", datePicker.offset().top - 310);
-                //             } else {
-                //                 datePicker.css("top", 0);
-                //             }
-                //         }
-                //     },
-                //     dayPicker: {
-                //         onSelect: function (unix) {
-                //             let pdate = new persianDate(unix);
-                //             $('#edit_task_due').append(pdate.format("YYYY/MM/DD"));
-                //         },
-                //     },
-                // });
+
+                // init cancel editing btn
+                checklistItem.find(".ct-checklist-item__footer button.cancel-change").click(function () {
+                    checklistItem.removeClass("onEdit draft");
+                    let taskValues = get_task_values(checklistItem);
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text(taskValues.text);
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text(taskValues.due);
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
+                    checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
+                });
+                // init save edit btn
+                checklistItem.find(".ct-checklist-item__footer button.save-change").click(function () {
+                    // TODO: should add Ajax here
+                    checklistItem.removeClass("onEdit draft");
+                    let taskValues = get_pending_task_values(checklistItem);
+                    assigns = ``;
+                    for(let i=0; i<taskValues.assigns.length ; i++){
+                        assigns += ` <span class="atMention d-inline-block me">@${taskValues.assigns[i]}</span>`;
+                    }
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .atMention").remove();
+                    $(assigns).insertBefore(checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description"));
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text(taskValues.text);
+                    if (taskValues.due) {
+                        checklistItem.find(".ct-checklist-item__detail").addClass('has-due');
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").removeClass("d-none");
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text(taskValues.due);
+                    } else {
+                        checklistItem.find(".ct-checklist-item__detail").removeClass('has-due');
+                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").addClass("d-none");
+                    }
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
+                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
+                    checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
+                });
+            });
+            // init edit task due
+            taskItem.each(function () {
+                let thisItemBtn = $(`#id_task_due${$(this).attr('data-value')}`);
+                thisItemBtn.pDatepicker({
+                    format: 'YYYY/MM/DD',
+                    onShow: function (unix) {
+                        let datePicker = $(".datepicker-container");
+                        if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
+                            if (datePicker.offset().top > 310) {
+                                datePicker.css("top", datePicker.offset().top - 310);
+                            } else {
+                                datePicker.css("top", 0);
+                            }
+                        }
+                    },
+                    dayPicker: {
+                        onSelect: function (unix) {
+                            let pdate = new persianDate(unix);
+                            thisItemBtn.find("span").html(pdate.format("YYYY/MM/DD"));
+                        },
+                    },
+                });
             });
             // delete task
             taskItem.find(".ct-checklist-item-delete").click(function () {

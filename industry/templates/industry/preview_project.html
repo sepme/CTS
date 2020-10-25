@@ -3,6 +3,7 @@
 {% load gregorian_to_jalali %}
 {% load date_tags %}
 {% load widget_tweaks %}
+{% load custom_tag %}
 {% block title %} جزییات پروژه {{ title }}{% endblock %}
 
 {% block modals %}
@@ -431,9 +432,7 @@
                                                     </div>
                                                     <div class="overflow-auto">
                                                         {% if not project.is_date_valid %}
-                                                            <div class="project-progress-no-access">این قسمت در دسترس
-                                                                نیست!
-                                                            </div>
+                                                            <div class="project-progress-no-access">این قسمت در دسترس نیست!</div>
                                                         {% endif %}
                                                         <div class="project-progress project-progress-sm {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
                                                             {#                                                        <div class="step-container active">#}
@@ -511,25 +510,26 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="ct-checklist-item__detail">
+                                                                <div class="ct-checklist-item__detail {% if task.deadline %}has-due{% endif %}">
                                                                     <div class="ct-checklist__text">
                                                                         {% if task.done %}
                                                                             <del>
                                                                         {% endif %}
                                                                         {% for tag in task.involved_user %}
-                                                                            <span class="atMention me">@{{ tag }}</span>
+                                                                            <span class="atMention d-inline-block me">@{{ tag }}</span>
                                                                         {% endfor %}
-                                                                        {{ task.description }}
+                                                                            <span class="task-description">{{ task.description }}</span>
                                                                         {% if task.done %}
                                                                             </del>
                                                                         {% endif %}
                                                                     </div>
                                                                     <div class="ct-checklist__pre d-none">
-                                                                        <pre contenteditable="true">{{ task.description }}</pre>
+                                                                        <pre contenteditable="true"></pre>
                                                                     </div>
-                                                                    <div class="ct-checklist-item__control d-flex">
-                                                                        <div class="ct-checklist-item-due">
+                                    
+                                                                        <div class="ct-checklist-item-due ct-option-btn {% if not task.deadline %}d-none{% endif %}">
                                                                             <button>
+                                                                                <span>{{ task.deadline }}</span>
                                                                                 <svg width="1em" height="1em"
                                                                                      viewBox="0 0 16 16"
                                                                                      class="bi bi-clock"
@@ -542,15 +542,17 @@
                                                                                 </svg>
                                                                             </button>
                                                                         </div>
-                                                                        <div class="ct-checklist-item-assignee">
+                                                                    
+                                                                    <div class="ct-checklist-item__control d-flex">
+                                                                        <div class="ct-checklist-item-edit">
                                                                             <button>
                                                                                 <svg width="1em" height="1em"
                                                                                      viewBox="0 0 16 16"
-                                                                                     class="bi bi-person-plus"
+                                                                                     class="bi bi-pencil"
                                                                                      fill="currentColor"
                                                                                      xmlns="http://www.w3.org/2000/svg">
                                                                                     <path fill-rule="evenodd"
-                                                                                          d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                                          d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
                                                                                 </svg>
                                                                             </button>
                                                                         </div>
@@ -571,24 +573,8 @@
                                                                     <div class="ct-checklist-item__footer d-none">
                                                                         <div class="float-left mt-1">
                                                                             <div class="ct-task-option d-flex">
-                                                                                <div class="ct-task-due ct-option-btn">
-                                                                                    <button class="edit_task_due"
-                                                                                            type="button"
-                                                                                            style="padding: 6px 10px;"
-                                                                                            dir="ltr">
-                                                                                        <svg width="1em" height="1em"
-                                                                                             viewBox="0 0 16 16"
-                                                                                             class="bi bi-clock"
-                                                                                             fill="currentColor"
-                                                                                             xmlns="http://www.w3.org/2000/svg">
-                                                                                            <path fill-rule="evenodd"
-                                                                                                  d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
-                                                                                            <path fill-rule="evenodd"
-                                                                                                  d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
-                                                                                        </svg>
-                                                                                    </button>
-                                                                                </div>
-                                                                                <div class="ct-task-assignee ct-option-btn">
+                                                                                <div class="ct-task-assignee ct-option-btn d-flex">
+                                                                                    <ul class="facepile-list"></ul>
                                                                                     <div class="dropdown">
                                                                                         <button class="btn btn-secondary dropdown-toggle ct-option-btn dropdownAssignment"
                                                                                                 type="button"
@@ -626,7 +612,7 @@
                                                                                             <h6 class="dropdown-header">
                                                                                                 استاد</h6>
                                                                                             {% for user in project.involved_user.expertUsers %}
-                                                                                                <div class="dropdown-item d-flex"
+                                                                                                <div class="dropdown-item d-flex {% if user.username in task.involved_user %}selected{% endif %}"
                                                                                                      type="button"
                                                                                                      data-value="{{ user.username }}">
                                                                                                     {% if user.photo %}
@@ -648,7 +634,7 @@
                                                                                                 پژوهشگر
                                                                                             </h6>
                                                                                             {% for user in project.involved_user.researcherUsers %}
-                                                                                                <div class="dropdown-item d-flex"
+                                                                                                <div class="dropdown-item d-flex {% if user.username in task.involved_user %}selected{% endif %}"
                                                                                                      type="button"
                                                                                                      data-value="{{ user.username }}">
                                                                                                     {% if user.photo %}
@@ -669,17 +655,22 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="ct-task-delete ct-option-btn d-none">
-                                                                                    <button>
+                                                                                <div class="ct-task-due ct-option-btn">
+                                                                                    <button id="id_task_due{{ task.id }}"
+                                                                                            type="button"
+                                                                                            style="padding: 6px 10px;"
+                                                                                            dir="ltr">
                                                                                         <svg width="1em" height="1em"
                                                                                              viewBox="0 0 16 16"
-                                                                                             class="bi bi-trash"
+                                                                                             class="bi bi-clock"
                                                                                              fill="currentColor"
                                                                                              xmlns="http://www.w3.org/2000/svg">
-                                                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
                                                                                             <path fill-rule="evenodd"
-                                                                                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                                                                                  d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                                                            <path fill-rule="evenodd"
+                                                                                                  d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
                                                                                         </svg>
+                                                                                        <span>{% if task.deadline %}{{ task.deadline }}{% endif %}</span>
                                                                                     </button>
                                                                                 </div>
                                                                             </div>

@@ -627,7 +627,7 @@ def ProjectSetting(request):
             "telegram_group": project.telegram_group,
         }
         if project.researcherRequestDeadline is not None:
-            data["researcherRequestDeadline"] = str(JalaliDate(project.researcherRequestDeadline)).replace("-","/")
+            data["researcherRequestDeadline"] = str(JalaliDate(project.researcherRequestDeadline)).replace("-", "/")
         if project.end_note:
             data['end_note_fileName'] = project.end_note.name.split("/")[-1]
             data['end_note'] = project.end_note.url
@@ -675,9 +675,10 @@ def ProjectSetting(request):
         projectform = project.project_form
         if 'requestResearcher' in request.POST.keys():
             if request.POST['researcherRequestDeadline'] == "":
-                return  JsonResponse(data={"message": "مهلت اعتبار درخواست نمی تواند خالی باشد.",
-                                           "researcherRequestDeadline": "مهلت اعتبار درخواست نمی تواند خالی باشد."},status=400)
-            project.reseacherRequestAbility = True            
+                return JsonResponse(data={"message": "مهلت اعتبار درخواست نمی تواند خالی باشد.",
+                                          "researcherRequestDeadline": "مهلت اعتبار درخواست نمی تواند خالی باشد."},
+                                    status=400)
+            project.reseacherRequestAbility = True
             project.researcherRequestDeadline = JalaliToGregorianDate(request.POST['researcherRequestDeadline'])
         else:
             project.reseacherRequestAbility = False
@@ -838,13 +839,17 @@ class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.T
         allTasks = Task.objects.filter(project=project)
         taskInfo = []
         for task in allTasks:
-            taskInfo.append({
+            data = {
                 'id': task.id,
                 'description': task.description,
                 'involved_user': [find_user(user).userId for user in task.involved_user.all()],
-                'deadline': gregorian_to_numeric_jalali(task.deadline),
                 'done': task.done
-            })
+            }
+            if task.deadline:
+                data['deadline'] = gregorian_to_numeric_jalali(task.deadline)
+            else:
+                data['deadline'] = None
+            taskInfo.append(data)
         context['task_list'] = taskInfo
 
         allCards = Card.objects.filter(project=project)
