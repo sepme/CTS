@@ -163,7 +163,7 @@ class Card(models.Model):
     def __str__(self):
         return self.title + " - " + self.creator.get_username()
 
-
+from .tools.tools import *
 class Task(models.Model):
     card = models.ForeignKey(Card, verbose_name="کارت", on_delete=models.CASCADE, blank=True, null=True)
     project = models.ForeignKey("industry.Project", verbose_name="پروژه مرتبط", on_delete=models.CASCADE)
@@ -175,7 +175,10 @@ class Task(models.Model):
     done = models.BooleanField(verbose_name="انجام شده", default=False)
 
     class Meta:
-         ordering = ['registration_date']
+         ordering = ['deadline']
 
     def __str__(self):
         return str(self.project) + " - " + str(self.registration_date)
+    
+    def get_involved_users(self):
+        return [find_user(user).get_name() for user in self.involved_user.all()]

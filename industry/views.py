@@ -2,7 +2,6 @@ import datetime
 import os
 import re
 
-from dateutil.relativedelta import relativedelta
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core import serializers
@@ -24,43 +23,18 @@ from ChamranTeamSite import settings
 from industry.models import IndustryForm, Comment
 from expert import models as expert_models
 from . import models, forms
+from .tools.tools import *
 from expert.models import ExpertUser, RequestResearcher
 from expert.views import showAllTechniques
 from expert.forms import RequestResearcherForm
 from researcher.models import Technique, RequestedProject, ResearcherUser
 
 from chamran_admin.models import Message, Task, Card
-from chamran_admin.views import JalaliToGregorianDate, find_user
 
 from chamran_admin.forms import CardForm
-from bot_api.views import sendProjectData, updateBotUser
+from bot_api.views import sendMessage
 
 USER_ID_PATTERN = re.compile('[\w]+$')
-
-
-# function name says it all :)
-def gregorian_to_numeric_jalali(date):
-    if date:
-        j_date = JalaliDate(date)
-        return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
-    else:
-        return "نا مشخص"
-
-
-# returns the difference between the two dates. e.g. 3 ruz, 5 sal, ...
-def date_dif(start_date, deadline_date):
-    if start_date == None:
-        return "نا مشخص"
-    delta = relativedelta(deadline_date, start_date)
-    if delta.years != 0:
-        return str(delta.years) + ' سال'
-    elif delta.months != 0:
-        return str(delta.months) + ' ماه'
-    elif delta.days != 0:
-        return str(delta.days) + ' روز'
-    else:
-        return 'امروز'
-
 
 # is called through an ajax request. returns the comments on a particular project with a particular expert
 @permission_required('industry.be_industry', login_url='/login/')
@@ -516,12 +490,11 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
                 newProject = models.Project(research_project_form=newProjectForm, industry_creator=industry)
                 newProject.save()
-                sendProjectData(newProject)
                 subject = 'ثبت پروژه جدید'
                 message = """با سلام و احترام
-                کاربر صنعت با نام کاربری {}
-                پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
-                با تشکر""".format(request.user.username, newProjectForm.persian_title,
+کاربر صنعت با نام کاربری {}
+پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
+با تشکر""".format(request.user.username, newProjectForm.persian_title,
                                   JalaliDate(datetime.date.today()))
                 try:
                     send_mail(
@@ -578,12 +551,11 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 new_project_form.key_words.add(models.Keyword.objects.get_or_create(name=word)[0])
             new_project = models.Project(form=new_project_form, industry_creator=request.user.industryuser)
             new_project.save()
-            sendProjectData(new_project)
             subject = 'ثبت پروژه جدید'
             message = """با سلام و احترام
-            کاربر صنعت با نام کاربری {}
-            پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
-            با تشکر""".format(request.user.username, persian_title, JalaliDate(datetime.date.today()))
+کاربر صنعت با نام کاربری {}
+پروژه جدید به نام {} را در تاریخ {} ثبت نموده است.
+با تشکر""".format(request.user.username, persian_title, JalaliDate(datetime.date.today()))
             try:
                 send_mail(
                     subject=subject,
@@ -715,11 +687,6 @@ def ProjectSetting(request):
                     project.status = 2
                     expert.status = 'involved'
                     expert.save()
-                    updateBotUser(typeUser="expert",
-                                  projectId=project.id,
-                                  username=expert.user.username,
-                                  fullname=expert.expertform.fullname,
-                                  photo=expert.expertform.photo)
                     expertResult['addExpert'] = True
                     message = """با سلام
 مجموعه پژوهشی «{industryName}» تقاضای پیوستن شما به پروژه «{projectName}» را داشته‌اند.
@@ -729,6 +696,8 @@ def ProjectSetting(request):
 با آرزوی موفقیت، 
         چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
                             projectName=project.project_form.persian_title)
+                    text = "استاد {}، به پروژه پیوست.".format(expert.expertform.fullname)
+                    sendMessage(project=project, text=text)
                 else:
                     expertResult['addExpert'] = False
                     project.expert_suggested.add(expert)
@@ -781,7 +750,7 @@ def searchUserId(request):
     return JsonResponse(data=data)
 
 
-class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = "industry/preview_project.html"
     permission_required = ('industry.be_industry',)
     login_url = "/login/"
@@ -900,11 +869,8 @@ def confirmResearcher(request):
         project.researcher_accepted.add(researcher)
         researcher.status.status = 'involved'
         project.save()
-        updateBotUser(typeUser='researcher',
-                      projectId=project.id,
-                      username=researcher.user.username,
-                      fullname=researcher.researcherprofile.fullname,
-                      photo=researcher.researcherprofile.photo)
+        text = "پژوهشگر {}, به پروژه پیوست.".format(researcher.researcherprofile.fullname)
+        sendMessage(project=project, text=text)
         researcher.status.save()
         application.save()
         return JsonResponse(data={})
@@ -943,6 +909,6 @@ def deleteResearcher(request):
     except:
         return JsonResponse(data={}, status=400)
 
-    # def show_active_project(request, code):
+    # def showActiveProjectrequest, code):
 #     project = get_object_or_404(models.Project, code=kwargs["code"])
 #     ActiveProject(request)

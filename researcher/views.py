@@ -9,51 +9,17 @@ from django.core.serializers import serialize
 from django.conf import settings
 from django.forms import model_to_dict
 import os, random, datetime, re
-from persiantools.jdatetime import JalaliDate
-from dateutil.relativedelta import relativedelta
 from django.contrib.auth.decorators import permission_required
 
 from django.utils import timezone
 
-from chamran_admin.views import find_user
-
-from . import models, forms, persianNumber
+from . import models, forms
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
 from chamran_admin.models import Message, Task, Card
 
 ACCELERATOR = "384025"
 USER_ID_PATTERN = re.compile('[\w]+$')
-
-
-def gregorian_to_numeric_jalali(date):
-    j_date = JalaliDate(date)
-    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
-
-
-def date_last(date1, date2):
-    delta = relativedelta(date1, date2)
-    days_passed = abs(delta.days)
-    months_passed = abs(delta.months)
-    years_passed = abs(delta.years)
-    days = ""
-    months = ""
-    years = ""
-    if years_passed != 0:
-        years = persianNumber.convert(str(years_passed)) + " سال "
-    if months_passed != 0:
-        if years_passed != 0:
-            months = " و " + persianNumber.convert(str(months_passed)) + " ماه "
-        else:
-            months = persianNumber.convert(str(months_passed)) + " ماه "
-    if days_passed != 0:
-        if months_passed == 0 and years_passed == 0:
-            days = persianNumber.convert(str(days_passed)) + " روز "
-        else:
-            days = " و " + persianNumber.convert(str(days_passed)) + " روز "
-    if days_passed != 0 or months_passed != 0 or years_passed != 0:
-        return years + months + days
-    return "امروز"
 
 
 class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -116,7 +82,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'keyword': project.project_form.key_words.all(),
                 'started': date_last(datetime.date.today(), project.date_project_started),
                 'need_hour': project.requestresearcher.least_hour,
-                "expiration" : date_last(project['project'].researcherRequestDeadline, datetime.date.today()),
+                "expiration" : date_last(project.researcherRequestDeadline, datetime.date.today()),
             }
             new_project_list.append(temp)
         for project in missedProjects:
@@ -402,8 +368,8 @@ def AddTechnique(request):
             method_fa = "مقاله"
         subject = 'Technique Validation'
         message = """کاربر به نام کاربری {} و به نام {} ، تکنیک {} را افزوده است.
-        برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام نمایید.
-        با تشکر""".format(request.user.username, request.user.researcheruser.researcherprofile.fullname,
+برای ارزیابی گزینه {} را انتخاب کرده است. لطفا {}را ارزیابی کنید و نتیجه را اعلام نمایید.
+با تشکر""".format(request.user.username, request.user.researcheruser.researcherprofile.fullname,
                           technique_title, method_fa, request.user.username)
         try:
             send_mail(
@@ -591,9 +557,9 @@ class QuestionShow(LoginRequiredMixin, PermissionRequiredMixin, generic.Template
                 question.is_answered = True
                 subject = 'Research Question Validation'
                 message = """با عرض سلام و خسته نباشید.
-                پژوهشگر {} به نام {} به سوال پژوهشی {} پاسخ داده است.
-                لطفا پاسخ پژوهشگر را ارزیابی نمایید.
-                با تشکر""".format(self.request.user.username,
+پژوهشگر {} به نام {} به سوال پژوهشی {} پاسخ داده است.
+لطفا پاسخ پژوهشگر را ارزیابی نمایید.
+با تشکر""".format(self.request.user.username,
                                   self.request.user.researcheruser.researcherprofile.fullname,
                                   question.research_question.question_title)
                 email = question.research_question.expert.user.username
@@ -632,9 +598,9 @@ def ajax_Technique_review(request):
         technique_review.save()
         subject = 'Research Question Validation'
         message = """با عرض سلام و خسته نباشید.
-        پژوهشگر {}  با نام کاربری {} در خواست ارتفا سطح تکنیک {} را از طریق {} داده است.
-        لطفا درخواست وی را ارزیابی نمایید.
-        با تشکر""".format(request.user.researcheruser.researcherprofile.fullname, request.user.username,
+پژوهشگر {}  با نام کاربری {} در خواست ارتفا سطح تکنیک {} را از طریق {} داده است.
+لطفا درخواست وی را ارزیابی نمایید.
+با تشکر""".format(request.user.researcheruser.researcherprofile.fullname, request.user.username,
                           technique.technique.technique_title, method)
         try:
             send_mail(
@@ -1082,7 +1048,7 @@ def ActiveProject(request, project, data):
     return data
 
 
-class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = "researcher/project.html"
     permission_required = ('researcher.be_researcher',)
     login_url = "/login/"

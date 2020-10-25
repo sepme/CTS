@@ -57,6 +57,9 @@ class ExpertUser(models.Model):
     @property
     def score(self):
         return self.expert_point * 23
+    
+    def get_name(self):
+        return self.expertform.fullname
 
 
 class EqTest(models.Model):

@@ -22,39 +22,44 @@ from persiantools.jdatetime import JalaliDate
 
 from chamran_admin.models import Message
 from . import models, forms
+from .tools.tools import *
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
-from bot_api.views import updateTask, updateCard
+from bot_api.views import sendMessage
+
+from industry.views import showActiveProject as industryShowActiveProject
+from expert.views import showActiveProject as expertShowActiveProject
+from researcher.views import showActiveProject as researcherShowActiveProject
 
 LOCAL_URL = 'chamranteam.ir'
 USER_ID_PATTERN = re.compile('[\w]+$')
 
-def jalali_date(jdate):
-    return str(jdate.day) + ' ' + MessagesView.jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
-
-def JalaliToGregorianDate(date):
-    datePart = date.split("/")
-    return JalaliDate(year=int(datePart[0]), month=int(datePart[1]), day=int(datePart[2]))\
-        .to_gregorian()
+SMALL_ORANGE_DIAMOND = "\U0001F538"
+SMALL_BLUE_DIAMOND ="\U0001F539"
+RED_TRIANGLE_POINTED_DOWN = "\U0001F53B"
+PENCIL_SELECTOR = "\U0000270F\U0000FE0F"
+LABEL = '\U0001F3F7'
+HOURGLASS_NOT_DONE = "\U000023F3"
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
+    attachment = None
     if not message.read_by.filter(username=request.user.username).exists():
         message.read_by.add(request.user)
         attachment = None
     if message.attachment:
         attachment = message.attachment.url
-        return JsonResponse({
-            'id': message.id,
-            'text': message.text,
-            'date': jalali_date(JalaliDate(message.date)),
-            'title': message.title,
-            'code': message.code,
-            'type': message.type,
-            'attachment': attachment,
-            "is_project_suggested": message.is_project_suggested,
-            })
+    return JsonResponse({
+        'id': message.id,
+        'text': message.text,
+        'date': jalali_date(JalaliDate(message.date)),
+        'title': message.title,
+        'code': message.code,
+        'type': message.type,
+        'attachment': attachment,
+        "is_project_suggested": message.is_project_suggested,
+        })
             
             
 class MessagesView(LoginRequiredMixin, generic.TemplateView):
@@ -93,45 +98,6 @@ class MessagesView(LoginRequiredMixin, generic.TemplateView):
         context['other_messages'] = other_messages
         context['account_type'] = find_account_type(self.request.user)
         return context
-
-
-def find_account_type(user):
-    expert = ExpertUser.objects.filter(user=user)
-    if expert.exists():
-        return 'expert'
-    industry = IndustryUser.objects.filter(user=user)
-    if industry.exists():
-        return 'industry'
-    researcher = ResearcherUser.objects.filter(user=user)
-    if researcher.exists():
-        return 'researcher'
-    else:
-        return False
-
-
-def find_user(user):
-    if find_account_type(user) == 'expert':
-        return user.expertuser
-    elif find_account_type(user) == 'researcher':
-        return user.researcheruser
-    elif find_account_type(user) == 'industry':
-        return user.industryuser
-    else:
-        return False
-
-
-def get_user_by_unique_id(unique):
-    expert = ExpertUser.objects.filter(unique__exact=unique)
-    researcher = ResearcherUser.objects.filter(unique__exact=unique)
-    industry = IndustryUser.objects.filter(unique__exact=unique)
-    if expert.exists():
-        return expert[0]
-    elif researcher.exists():
-        return researcher[0]
-    elif industry.exists():
-        return industry[0]
-    else:
-        return False
 
 
 class Home(generic.TemplateView):
@@ -723,7 +689,6 @@ def AddOpinion(request):
 
 @permission_required(perm=[], login_url="/login")
 def addCard(request):
-    print(request.POST)
     form = forms.CardForm(request.POST)
     project = Project.objects.get(id=request.POST['project_id'])
     if form.is_valid():
@@ -734,9 +699,17 @@ def addCard(request):
         newCard.creator = request.user
         newCard.project = project
         newCard.save()
-        updateCard(projectId=project.id,
-                   title=newCard.title,
-                   deadline=newCard.deadline)
+        text = """{diamond}یک سررسید (ددلاین) جدید برای پروژه شما تعریف شده است.
+
+{label} نام : {title}
+{hourglass} مهلت انجام: {deadline}
+{red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+                format(diamond=SMALL_BLUE_DIAMOND,
+                      label=LABEL, title=newCard.title,
+                      hourglass=HOURGLASS_NOT_DONE,deadline=form.cleaned_data['deadline'],
+                      red_triangle=RED_TRIANGLE_POINTED_DOWN)
+        url = "https://chamranteam.ir/project/"+ str(project.code)
+        sendMessage(project=project, text=text, url=url)
         return JsonResponse(data={})
     else:
         print(form.errors)
@@ -761,6 +734,18 @@ def cardList(request):
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
+    if request.POST.get('check', None):
+        task = models.Task.objects.get(pk=request.POST['pk'])
+        CHECK = {'true': True, 'false': False}
+        task.done = CHECK[request.POST['check']]
+        task.save()
+        return JsonResponse(data={'success': 'success'})
+
+    if request.POST.get('delete', None):
+        task = models.Task.objects.get(pk=request.POST['pk'])
+        task.delete()
+        return JsonResponse(data={'success': 'success'})
+
     if request.POST['description'] == "":
         return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
     description = request.POST['description']
@@ -778,23 +763,45 @@ def addTask(request):
         task.deadline = JalaliToGregorianDate(request.POST['deadline'])
         deadline = task.deadline
     involved_users_list = request.POST.getlist('involved_users[]')
-    involved_username = []
+    involved_user_name  = []
     for userId in involved_users_list:
-        user = project.get_involved_user(userId[1:])
+        user, account_type = project.get_involved_user(userId[1:])
+        if account_type == 'researcher':
+            involved_user_name .append(user.researcherprofile.fullname)
+        elif account_type == 'expert':
+            involved_user_name .append(user.expertform.fullname)
+        elif account_type == "industry":
+            involved_user_name .append(user.profile.name) 
         if user is not None and user not in task.involved_user.all():
-            task.involved_user.add(user)
-            involved_username.append(user.get_username())
+            task.involved_user.add(user.user)
     task.save()
 
     if deadline is None :
-        updateTask(projectId=project.id,
-                description=description,
-                involved_username=involved_username)
+        text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
+
+{label} نام وظیفه : {title}
+{pencil} افراد مسئول : {users}
+
+{red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+            format(diamond=SMALL_ORANGE_DIAMOND,
+                   label=LABEL ,title=task.description,
+                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name ),
+                   red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
-        updateTask(projectId=project.id,
-                description=description,
-                deadline=jalali_date(JalaliDate(deadline)), 
-                involved_username=involved_username)
+        text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
+
+{label} نام وظیفه : {title}
+{pencil} افراد مسئول : {users}
+{hourglass} مهلت انجام : {deadline}
+
+{red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+                format(diamond=SMALL_ORANGE_DIAMOND,
+                   label=LABEL ,title=task.description,
+                   pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name ),
+                   hourglass=HOURGLASS_NOT_DONE,deadline=gregorian_to_numeric_jalali(task.deadline),
+                   red_triangle=RED_TRIANGLE_POINTED_DOWN)
+    url = "https://chamranteam.ir/project/"+ str(project.code)
+    sendMessage(project=project, text=text, url=url)
     return JsonResponse(data={"message": "task completely added."})
 
 
@@ -837,3 +844,24 @@ def checkUserId(request):
                                     ,"invalid_input": False
                                     ,"message": "این نام کاربری قبلا استفاده شده است."})
         return JsonResponse({"is_unique": True, "invalid_input": False})
+
+
+class generalShowActiveProject(LoginRequiredMixin, generic.TemplateView):
+    login_url = "/login/"
+
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, code=kwargs["code"])
+        user = find_user(user=request.user)
+        user, user_account = project.get_involved_user(user.userId)
+        if user_account is None:
+            return Handler403(request=request, exception=Exception())
+
+        if user_account == "industry":
+            show_project = industryShowActiveProject()
+        elif user_account == "expert":
+            show_project = expertShowActiveProject()
+        elif user_account == "researcher":
+            show_project = researcherShowActiveProject()
+        
+        show_project.request = request
+        return show_project.get(request=request, *args, **kwargs)

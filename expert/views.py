@@ -16,6 +16,7 @@ from itertools import chain
 import json, re
 
 from . import forms, webScraping
+from .tools.tools import *
 from .models import *
 
 from industry.models import *
@@ -27,29 +28,6 @@ from chamran_admin.models import Message
 from chamran_admin.forms import CardForm
 
 USER_ID_PATTERN = re.compile("[\w]+$")
-
-def gregorian_to_numeric_jalali(date):
-    if date is None:
-        return "نامشخص"
-    j_date = JalaliDate(date)
-    return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
-
-
-def calculate_deadline(finished, started):
-    if finished is None or started is None:
-        return 'تاریخ نامشخص'
-    diff = JalaliDate(finished) - JalaliDate(started)
-    days = diff.days
-    if days < 0:
-        return None
-    elif days < 7:
-        return '{} روز'.format(days)
-    elif days < 30:
-        return '{} هفته'.format(int(days / 7))
-    elif days < 365:
-        return '{} ماه'.format(int(days / 30))
-    else:
-        return '{} سال'.format(int(days / 365))
 
 
 class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
@@ -514,8 +492,8 @@ def accept_project(request):
         try:
             subjectForAdmin = "درخواست قرار ملاقات"
             messageForAdmin = """با سلام و احترام\n
-            استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
-            با تشکر
+استاد {} برای پروژه {} از مرکز {} در خواست قرار ملاقات بابت عقد قراداد داده است. خواهشمندم در اسرع وقت پیگیری نمایید.\n
+با تشکر
             """.format(str(expert_user.expertform), str(project), str(project.industry_creator.profile))
             send_mail(
                 subject=subjectForAdmin,
@@ -527,8 +505,8 @@ def accept_project(request):
 
             subjectForExpert = "درخواست قرار ملاقات"
             messageForExpert = """با سلام و احترام\n
-            درخواست قرار ملاقات شما برای پروژه {} برای ادمین ارسال شد.\n
-            با تشکر
+درخواست قرار ملاقات شما برای پروژه {} برای ادمین ارسال شد.\n
+با تشکر
             """.format(str(project))
             html_templateForAdmin = get_template('registration/projectRequest_template.html')
             email_templateForAdmin = html_templateForAdmin.render({'message': messageForExpert})
@@ -1219,7 +1197,7 @@ def ActiveProject(request, project, data):
     return data
 
 
-class show_active_project(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
     template_name = "expert/project.html"
     permission_required = ('expert.be_expert',)
     login_url = "/login/"
