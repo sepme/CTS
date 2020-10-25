@@ -26,6 +26,7 @@ def taskReminder():
         weeklyPeriod = task.deadline - datetime.timedelta(days=+7)
         dailyPeriod = task.deadline - datetime.timedelta(days=+1)
         today = datetime.datetime.now(datetime.timezone.utc).date()
+        print(task.description, " - ", str(task.deadline), " - weekly :" ,weeklyPeriod, " - daily :" ,dailyPeriod)
 
         if today > weeklyPeriod:
             break
@@ -74,7 +75,7 @@ def cardReminder():
 {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید."""
 
 
-    allCards = Card.objcets.all()
+    allCards = Card.objects.all()
     for card in allCards:
         weeklyPeriod = card.deadline - datetime.timedelta(days=+7)
         dailyPeriod = card.deadline - datetime.timedelta(days=+1)
@@ -111,7 +112,7 @@ def cardReminder():
     
     return
 
-if __name__ == "__main__":
+def reminder(request):
     try:
         taskReminder()
         cardReminder()
