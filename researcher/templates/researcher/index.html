@@ -233,11 +233,18 @@
                                         </div>
                                     </div>
                                     <div class="col-2">
-                                        <a href="{% url 'researcher:show_active_project' code=project.code %}">
-                                            <button class="default-btn" type="button" id="{{ project.id }}">
+                                        {% if project.status == "accepted" %}
+                                            <a href="{% url 'researcher:show_active_project' code=project.code %}">
+                                                <button class="default-btn" type="button" id="{{ project.id }}">
+                                                    مشاهده
+                                                </button>
+                                            </a>
+                                        {% else %}
+                                            <button type="button" class="default-btn preview-project" id="{{ project.PK }}"
+                                                    data-toggle="modal" data-target="#showProject">
                                                 مشاهده
                                             </button>
-                                        </a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

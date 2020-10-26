@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, re
 from django.views import generic
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, PermissionDenied
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.core.serializers import serialize
@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import permission_required
 from django.utils import timezone
 
 from . import models, forms
+from .tools.tools import *
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
 from chamran_admin.models import Message, Task, Card
@@ -52,7 +53,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         new_projects = all_projects.exclude(researcher_applied__in=[researcher])
         applied_projects = [re.project for re in models.RequestedProject.objects\
                                                         .filter(researcher=researcher)\
-                                                        .filter(status__in=["unseen", "pending"])]
+                                                        .filter(status__in=["unseen", "pending", "accepted"])]
         technique_title = [str(item.technique) for item in researcher.techniqueinstance_set.all()]
         technique = models.Technique.objects.filter(technique_title__in=technique_title)
         projects = []
@@ -121,13 +122,13 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
 
         my_project_list = []
         if len(applied_projects) != 0:
-            evaluation_history = models.ResearcherEvaluation.objects.filter(
-                project_title=applied_projects[0].project_form.english_title)
+            # evaluation_history = models.ResearcherEvaluation.objects.filter(
+            #     project_title=applied_projects[0].project_form.english_title)
             for project in applied_projects:
                 title = project.project_form.english_title
                 status = "در حال بررسی"
                 if researcher in project.researcher_accepted.all():
-                    status = "قبول"
+                    status = "accepted"
                 if researcher in project.researcher_banned.all():
                     status = "رد شده"
                 temp = {
@@ -259,6 +260,63 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
         if 'userId' in form.errors.keys():
             context['userId_error'] = form.errors['userId']
         return render(request, 'researcher/userInfo.html', context=context)
+
+
+class showActiveProject(LoginRequiredMixin, generic.TemplateView):
+    template_name = "researcher/project.html"
+    permission_required = ('researcher.be_researcher',)
+    login_url = "/login/"
+
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, code=kwargs["code"])
+        if request.user.researcheruser not in project.researcher_accepted.all():
+            raise PermissionDenied
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = get_object_or_404(Project, code=kwargs["code"])
+        context = ActiveProject(request=self.request, project=project, data=context)
+        context['telegram_group'] = project.telegram_group
+        if project.end_note:
+            context['end_note'] = project.end_note.url
+
+        if project.proposal:
+            context['proposal'] = project.proposal.url
+        context['researcher_accepted'] = []
+        for researcher in project.researcher_accepted.all():
+            researcher = {
+                "id": researcher.pk,
+                "fullname": researcher.researcherprofile.fullname,
+                "photo": researcher.researcherprofile.photo
+            }
+            context['researcher_accepted'].append(researcher)
+        allTasks = Task.objects.filter(project=project)
+        taskInfo = []
+        for task in allTasks:
+            data = {
+                'id': task.id,
+                'description': task.description,
+                'involved_user': [find_user(user).userId for user in task.involved_user.all()],
+                'done': task.done
+            }
+            if task.deadline:
+                data['deadline'] = gregorian_to_numeric_jalali(task.deadline)
+            else:
+                data['deadline'] = None
+            taskInfo.append(data)
+        context['task_list'] = taskInfo
+
+        allCards = Card.objects.filter(project=project)
+        cardInfo = []
+        for card in allCards:
+            cardInfo.append({
+                "title": card.title,
+                "deadline": gregorian_to_numeric_jalali(card.deadline),
+            })
+        context['card_list'] = cardInfo
+        return context
+
 
 
 @permission_required('researcher.be_researcher', login_url='/login/')
@@ -652,7 +710,7 @@ def ShowProject(request):
             'attachment': url,
         }
         json_response['comments'].append(temp)
-        if (com.sender_type == 'expert' or com.sender_type == 'system') and com.status == 'not_seen':
+        if (com.sender_type == 'expert' or com.sender_type == 'system') and com.status == 'unseen':
             com.status = 'seen'
             com.save()
     json_response['status'] = researcher.status.status
@@ -1048,79 +1106,6 @@ def ActiveProject(request, project, data):
     return data
 
 
-class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
-    template_name = "researcher/project.html"
-    permission_required = ('researcher.be_researcher',)
-    login_url = "/login/"
-
-    def get(self, request, *args, **kwargs):
-        project = get_object_or_404(Project, code=kwargs["code"])
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        project = get_object_or_404(Project, code=kwargs["code"])
-        context = ActiveProject(request=self.request, project=project, data=context)
-        context['telegram_group'] = project.telegram_group
-        if project.end_note:
-            context['end_note'] = project.end_note.url
-
-        if project.proposal:
-            context['proposal'] = project.proposal.url
-        context['researcher_accepted'] = []
-        for researcher in project.researcher_accepted.all():
-            researcher = {
-                "id": researcher.pk,
-                "fullname": researcher.researcherprofile.fullname,
-                "photo": researcher.researcherprofile.photo
-            }
-            context['researcher_accepted'].append(researcher)
-        # context['researchers_applied'] = []
-        # researcherRequested = RequestedProject.objects.filter(project=project).exclude(status="removed")
-        # for requested in researcherRequested:
-        #     researcher = requested.researcher
-        #     if researcher in project.researcher_accepted.all():
-        #         continue
-        #     researcher_applied = {
-        #         'id': researcher.pk,
-        #         "fullname": researcher.researcherprofile.fullname,
-        #         "photo": researcher.researcherprofile.photo,
-        #         "status": requested.status
-        #     }
-        #     if requested.status == "unseen":
-        #         requested.status = "pending"
-        #         requested.save()
-        #     context['researchers_applied'].append(researcher_applied)
-        # context['reseacherRequestAbility'] = project.reseacherRequestAbility
-        # if project.reseacherRequestAbility:
-        #     try:
-        #         requestResearcher = RequestResearcher.objects.get(project=project)
-        #         context['researcherRequestFrom'] = RequestResearcherForm(initial={
-        #             "least_hour": requestResearcher.least_hour,
-        #             "researcher_count": requestResearcher.researcher_count})
-        #     except:
-        #         context['researcherRequestFrom'] = RequestResearcherForm()
-        # context['form'] = CardForm()
-        allTasks = Task.objects.filter(project=project)
-        taskInfo = []
-        for task in allTasks:
-            taskInfo.append({
-                'description': task.description,
-                'involved_user': [find_user(user).userId for user in task.involved_user.all()],
-                'deadline': gregorian_to_numeric_jalali(task.deadline),
-                'done': task.done
-            })
-        context['task_list'] = taskInfo
-
-        allCards = Card.objects.filter(project=project)
-        cardInfo = []
-        for card in allCards:
-            cardInfo.append({
-                "title": card.title,
-                "deadline": gregorian_to_numeric_jalali(card.deadline),
-            })
-        context['card_list'] = cardInfo
-        return context
 
 
 TECHNIQUES = {
