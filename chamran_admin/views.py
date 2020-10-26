@@ -775,6 +775,7 @@ def addTask(request):
             task.involved_user.add(user.user)
     task.save()
 
+    url = "https://chamranteam.ir/project/"+ str(project.code)
     if deadline is None :
         text = """{diamond} یک وظیفه (تسک) برای پروژه شما تعیین شده است.
 
@@ -799,7 +800,26 @@ def addTask(request):
                    pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name ),
                    hourglass=HOURGLASS_NOT_DONE,deadline=gregorian_to_numeric_jalali(task.deadline),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
-    url = "https://chamranteam.ir/project/"+ str(project.code)
+        if task.deadline == datetime.date.today():
+            TEXT = """{red_exclamtion_1} فقط {remaind_time} تا پایان مهلت {field} زیر باقی مانده {red_exclamtion_2}
+
+{label} نام: {name}
+{pencil}افراد مسئول: {involved_users}
+{hourglass}مهلت انجام: {deadline}
+
+{red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+            format(red_exclamtion_1=RED_EXCLAMTION_MARK,
+                   remaind_time="یک روز",
+                   field="وظیفه (تسک)",
+                   label=LABEL,
+                   red_exclamtion_2=RED_EXCLAMTION_MARK,
+                   name=task.description,
+                   pencil=PENCIL_SELECTOR,
+                   involved_users=" ,".join(task.get_involved_users()),
+                   hourglass=HOURGLASS_NOT_DONE,
+                   deadline=gregorian_to_numeric_jalali(task.deadline),
+                   red_triangle=RED_TRIANGLE_POINTED_DOWN)
+            sendMessage(project=project, text=TEXT, url=url)
     sendMessage(project=project, text=text, url=url)
     return JsonResponse(data={"message": "task completely added."})
 
