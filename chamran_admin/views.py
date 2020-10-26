@@ -38,6 +38,7 @@ USER_ID_PATTERN = re.compile('[\w]+$')
 SMALL_ORANGE_DIAMOND = "\U0001F538"
 SMALL_BLUE_DIAMOND ="\U0001F539"
 RED_TRIANGLE_POINTED_DOWN = "\U0001F53B"
+RED_EXCLAMTION_MARK = "\U00002757"
 PENCIL_SELECTOR = "\U0000270F\U0000FE0F"
 LABEL = '\U0001F3F7'
 HOURGLASS_NOT_DONE = "\U000023F3"
@@ -800,7 +801,8 @@ def addTask(request):
                    pencil=PENCIL_SELECTOR, users=" ,".join(involved_user_name ),
                    hourglass=HOURGLASS_NOT_DONE,deadline=gregorian_to_numeric_jalali(task.deadline),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
-        if task.deadline == datetime.date.today():
+        is_tommorow = (task.deadline - datetime.timedelta(days=1)) == datetime.date.today()
+        if task.deadline == datetime.date.today() or is_tommorow:
             TEXT = """{red_exclamtion_1} فقط {remaind_time} تا پایان مهلت {field} زیر باقی مانده {red_exclamtion_2}
 
 {label} نام: {name}
