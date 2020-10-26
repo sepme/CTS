@@ -276,6 +276,13 @@ def startHandler(chat_id):
     bot.sendMessage(chat_id=chat_id, text=bot_welcome)
     return HttpResponse('ok')
 
+def helpHandler(chat_id):
+    # TODO : Hey;) write your text in the next line...
+    help_text = """{}"""
+    bot.sendMessage(chat_id=chat_id, text=help_text)
+    return HttpResponse('ok')
+
+
 @csrf_exempt
 def telegramHandler(request):
     if request.method == "GET":
@@ -328,16 +335,20 @@ def telegramHandler(request):
                         myColleagueHandler(chat_id=chat_id)
                     except:
                         bot.sendMessage(chat_id=chat_id, text="با عرض پوزش درحال حاضر اطلاعاتی در دسترس نیست.")
+                elif text == "/help":
+                    try:
+                        helpHandler(chat_id=chat_id)
+                    except:
+                        bot.sendMessage(chat_id=chat_id, text="با عرض پوزش درحال حاضر اطلاعاتی در دسترس نیست.")
 
         elif text == "/start":
             startHandler(chat_id=chat_id)
 
         else:
-            pass
-            # send_mail(subject="Fuck the Emojies",
-            # message=text,
-            # from_email=settings.EMAIL_HOST_USER,
-            # recipient_list=["a.jafarzadeh1998@gmail.com"],)
+            try:
+                helpHandler(chat_id=chat_id)
+            except:
+                bot.sendMessage(chat_id=chat_id, text="با عرض پوزش درحال حاضر اطلاعاتی در دسترس نیست.")
 
         return HttpResponse('ok')
     except:
