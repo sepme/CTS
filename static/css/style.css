@@ -6719,6 +6719,11 @@ table.table-days tbody tr {
     box-shadow: 0 5px 15px rgba(110, 47, 197, .34);
 }
 
+.rounded-icon.p-bot {
+    background-color: #32a5e0;
+    box-shadow: 0 5px 15px rgba(50, 165, 224, .34);
+}
+
 .rounded-icon.p-telegram-link {
     background-color: #32a5e0;
     box-shadow: 0 5px 15px rgba(50, 165, 224, .34);
@@ -7012,10 +7017,20 @@ pre[contenteditable="true"] {
     display: none;
 }
 
-@media (min-width: 576px){
-    
+@media (min-width: 576px) {
+
     .container, .container-sm {
         max-width: 100%;
     }
 
+}
+
+.text-primary {
+    color: #3CCD1C !important;
+}
+
+.input-group-text.css-hover:hover {
+    cursor: pointer;
+    color: #3CCD1C;
+    background-color: #e3f8e6;
 }

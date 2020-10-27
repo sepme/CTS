@@ -675,6 +675,22 @@ $(document).ready(function () {
             $("a.top-button").removeClass('show');
         }
     });
+
+    // init save clipboard
+    $(".js-copy-clipboard").click(function () {
+        if ($(this).hasClass("input-group-text")) {
+            let input = $(this).closest(".input-group").find("input")[0];
+            input.select();
+            input.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            iziToast.success({
+                rtl: true,
+                message: "کد پروژه با موفقیت کپی شد!",
+                position: 'bottomLeft'
+            });
+        }
+    });
+
     //****************************************//
     //  Task Bar
     //****************************************//
