@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'expert.apps.ExpertConfig',
     'researcher.apps.ResearcherConfig',
     'industry.apps.IndustryConfig',
+    'bot_api',
     'widget_tweaks',
     'captcha',
     'ckeditor',
@@ -233,8 +234,15 @@ WSGI_APPLICATION = 'ChamranTeamSite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chamrant_mysql_#1',
+        "USER": "chamrant_admin",
+        'PASSWORD': 'ChamranTeam@98',
+        'HOST': 'localhost',
+        'PORT': "3306",
+        'OPTIONS': {'charset': 'utf8mb4','use_unicode': True,
+                    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 
