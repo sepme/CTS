@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'captcha',
     'ckeditor',
     'ckeditor_uploader',
+    'bot_api'
 ]
 
 # Ckeditor Personalized

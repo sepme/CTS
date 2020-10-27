@@ -681,17 +681,33 @@ $(document).ready(function () {
     let taskList = $(".ct-checklist");
     if (taskList.length) {
 
-        let involved_users = {'expertUsers': [{'username': 'sepehr', 'fullname': 'سپهر متانت', 'photo': '/media/Expert%20Profile/expert%40gmail.com/photo_2019-02-15_13-45-24.jpg'}], 'researcherUsers': [{'username': 'reza', 'fullname': 'رضا باسره'}, {'username': 'ahmad', 'fullname': 'هادی کاظمی', 'photo': '/media/Researcher%20Profile/researcher1%40gmail.com/photo_2020-09-28_19-29-18.jpg'}], 'industryUser': {'username': 'None', 'fullname': 'چمران تیم', 'photo': '/media/Industry%20Profile/industry%40gmail.com/photo_2019-11-03_00-03-09.jpg'}};
+        let involved_users = {
+            'expertUsers': [{
+                'username': 'sepehr',
+                'fullname': 'سپهر متانت',
+                'photo': '/media/Expert%20Profile/expert%40gmail.com/photo_2019-02-15_13-45-24.jpg'
+            }],
+            'researcherUsers': [{'username': 'reza', 'fullname': 'رضا باسره'}, {
+                'username': 'ahmad',
+                'fullname': 'هادی کاظمی',
+                'photo': '/media/Researcher%20Profile/researcher1%40gmail.com/photo_2020-09-28_19-29-18.jpg'
+            }],
+            'industryUser': {
+                'username': 'None',
+                'fullname': 'چمران تیم',
+                'photo': '/media/Industry%20Profile/industry%40gmail.com/photo_2019-11-03_00-03-09.jpg'
+            }
+        };
 
         // Function to get task values => (pk, text, due, assigns)
-        function get_task_values (task) {                
+        function get_task_values(task) {
             let taskText = task.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text();
 
             let taskDue = null;
             if (task.find(".ct-checklist-item__detail").hasClass("has-due")) {
                 taskDue = task.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text();
             }
-            
+
             let taskAssigns = [];
             task.find(".ct-checklist-item__detail .ct-checklist__text .atMention").each(function () {
                 taskAssigns.push($(this).text());
@@ -704,16 +720,16 @@ $(document).ready(function () {
                 'assigns': taskAssigns,
             };
         }
-        
+
         // Function to get pending task values => (pk, text, due, assigns)
-        function get_pending_task_values (task) {                
+        function get_pending_task_values(task) {
             let taskText = task.find(".ct-checklist-item__detail .ct-checklist__pre pre").text();
 
             let taskDue = null;
             if (task.find(".ct-checklist-item__footer .ct-task-due span").text() !== "") {
                 taskDue = task.find(".ct-checklist-item__footer .ct-task-due span").text();
             }
-            
+
             let taskAssigns = [];
             task.find(".ct-checklist-item__footer .ct-task-assignee .dropdown div.dropdown-item.selected").each(function () {
                 taskAssigns.push($(this).attr("data-value"));
@@ -728,15 +744,15 @@ $(document).ready(function () {
         }
 
         // check task is change
-        function is_change (task) {
+        function is_change(task) {
             let taskValues = get_task_values(task);
             let pendingTaskValues = get_pending_task_values(task);
             if (taskValues.text !== pendingTaskValues.text || taskValues.due !== pendingTaskValues.due || taskValues.assigns.length !== pendingTaskValues.assigns.length) {
                 return true;
             }
-            $.each(taskValues.assigns, function( key, value ) {
-                let index = $.inArray( value, pendingTaskValues.assigns );
-                if ( index === -1 ) {
+            $.each(taskValues.assigns, function (key, value) {
+                let index = $.inArray(value, pendingTaskValues.assigns);
+                if (index === -1) {
                     return true;
                 }
             })
@@ -754,7 +770,7 @@ $(document).ready(function () {
             }
             facePile.html("");
             let moreMembers = ``;
-            for (let i=0; i<assigns.length; i++) {
+            for (let i = 0; i < assigns.length; i++) {
                 let item = {};
                 if (assigns[i].replace("@", "") === involved_users.industryUser.username) {
                     item = {
@@ -764,7 +780,7 @@ $(document).ready(function () {
                     }
                 } else {
                     let flag = true;
-                    for (let j=0; j<involved_users.expertUsers.length; j++) {
+                    for (let j = 0; j < involved_users.expertUsers.length; j++) {
                         if (assigns[i].replace("@", "") === involved_users.expertUsers[j].username) {
                             item = {
                                 'username': involved_users.expertUsers[j].username,
@@ -776,7 +792,7 @@ $(document).ready(function () {
                         }
                     }
                     if (flag) {
-                        for (let j=0; j<involved_users.researcherUsers.length; j++) {
+                        for (let j = 0; j < involved_users.researcherUsers.length; j++) {
                             if (assigns[i].replace("@", "") === involved_users.researcherUsers[j].username) {
                                 item = {
                                     'username': involved_users.researcherUsers[j].username,
@@ -788,9 +804,9 @@ $(document).ready(function () {
                         }
                     }
                 }
-                
+
                 if (item.photo === undefined) {
-                    item.photo  = '/static/industry/img/profile.jpg';
+                    item.photo = '/static/industry/img/profile.jpg';
                 }
 
                 if (i < maxItem) {
@@ -876,7 +892,7 @@ $(document).ready(function () {
 
         // Show task edititing front 
         function show_task_edit(task) {
-            
+
             // Save open task in pendingTasks and hidden that
             let openTask = taskList.find(".ct-checklist__item.onEdit");
             if (openTask.length) {
@@ -892,7 +908,7 @@ $(document).ready(function () {
                     .removeClass("d-none")
             }
 
-            
+
             // <If> exists is True use pendingTasks detail in edit <Else> use saved detail 
             let taskValues = {};
             if (task.hasClass("draft")) {
@@ -911,8 +927,8 @@ $(document).ready(function () {
             task.find(".ct-checklist-item__footer").removeClass("d-none");
             task.find(".ct-checklist-item__footer .ct-task-due span").text(taskDue);
             task.find(".ct-checklist-item__detail .ct-checklist__pre").removeClass("d-none")
-                        .find("pre").text(taskText);
-            
+                .find("pre").text(taskText);
+
             // Show assigns
             show_task_assignments(task, taskAssigns);
 
@@ -922,9 +938,9 @@ $(document).ready(function () {
         function init_task_options(taskItem) {
             taskItem.find(".ct-checklist-item__detail .ct-checklist-item__control .ct-checklist-item-edit").click(function () {
                 let checklistItem = $(this).closest(".ct-checklist__item");
-                
+
                 show_task_edit(checklistItem);
-                
+
                 // edit task mention users
                 checklistItem.find(".ct-checklist-item__footer .ct-task-assignee.ct-option-btn div.dropdown-item").click(function () {
                     if (!$(this).hasClass("selected")) {
@@ -946,11 +962,26 @@ $(document).ready(function () {
                 });
                 // init save edit btn
                 checklistItem.find(".ct-checklist-item__footer button.save-change").click(function () {
-                    // TODO: should add Ajax here
+                    // TODO: Send new task data to server
+                    let data = {
+                        "delete": true,
+                        "pk": checklistItem.attr("data-value")
+                    };
+                    $.ajax({
+                        method: "POST",
+                        url: "/addTask/",
+                        data: data,
+                        success: function (data) {
+
+                        },
+                        error: function (data) {
+
+                        }
+                    });
                     checklistItem.removeClass("onEdit draft");
                     let taskValues = get_pending_task_values(checklistItem);
-                    assigns = ``;
-                    for(let i=0; i<taskValues.assigns.length ; i++){
+                    let assigns = ``;
+                    for (let i = 0; i < taskValues.assigns.length; i++) {
                         assigns += ` <span class="atMention d-inline-block me">@${taskValues.assigns[i]}</span>`;
                     }
                     checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .atMention").remove();
@@ -967,6 +998,7 @@ $(document).ready(function () {
                     checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
                     checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
                     checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
+
                 });
             });
             // init edit task due
