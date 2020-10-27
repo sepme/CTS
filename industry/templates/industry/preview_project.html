@@ -4,7 +4,7 @@
 {% load date_tags %}
 {% load widget_tweaks %}
 {% load custom_tag %}
-{% block title %} جزییات پروژه {{ title }}{% endblock %}
+{% block title %}مدیریت پروژه{{ title }}{% endblock %}
 
 {% block modals %}
     {% include 'industry/layouts/expertResume.html' with project_pk=project_pk %}
@@ -254,12 +254,12 @@
 {% block content %}
     <div class="row">
         <div class="col-12 text-right">
-            <h3 class="h3 p-top-15">جزییات پروژه</h3>
+            <h3 class="h3 p-top-15">مدیریت پروژه</h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'industry:index' %}">پروژه ها</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'industry:index' %}">پروژه‌ها</a></li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <span>جزییات پروژه</span>
+                        <span>مدیریت پروژه</span>
                     </li>
                 </ol>
             </nav>
@@ -277,7 +277,7 @@
                     </div>
                     <div class="row" style="direction: ltr!important">
                         <div class="d-none d-lg-block col-lg-4 col-xs-3 mt-3">
-                            <span class="section-title">تایم لاین پروژه</span>
+                            <span class="section-title">تایم‌لاین پروژه</span>
                             <button type="button"
                                     class="border-button section-button"
                                     data-toggle="modal"
