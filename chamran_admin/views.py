@@ -401,39 +401,55 @@ class ResetPassword(generic.TemplateView):
             return redirect(reverse('chamran:login'))
 
 
+def find_user_by_unique_id(uniqe_id):
+    try:
+        user = ExpertUser.objects.get(unique__exact=uniqe_id)
+        return user, "expert"
+    except ExpertUser.DoesNotExist:
+        try:
+            user = IndustryUser.objects.get(unique__exact=uniqe_id)
+            return user, "industry"
+        except IndustryUser.DoesNotExist:
+            try:
+                user = ResearcherUser.objects.get(unique__exact=uniqe_id)
+                return user, "researcher"
+            except ResearcherUser.DoesNotExist:
+                raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
+
 class ResetPasswordConfirm(generic.FormView):
     template_name = 'registration/user_pass.html'
     form_class = forms.RegisterUserForm
+    success_url = "/login/"
 
     def get(self, request, *args, **kwargs):
         path = request.path
         uuid = path.split('/')[-2]
         try:
-            ExpertUser.objects.get(unique__exact=uuid)
+            self.user = ExpertUser.objects.get(unique__exact=uuid)
+            self.username = self.user.expertform.fullname
         except ExpertUser.DoesNotExist:
             try:
-                IndustryUser.objects.get(unique__exact=uuid)
+                self.user = IndustryUser.objects.get(unique__exact=uuid)
+                self.username = self.user.profile.name
             except IndustryUser.DoesNotExist:
                 try:
-                    ResearcherUser.objects.get(unique__exact=uuid)
+                    self.user = ResearcherUser.objects.get(unique__exact=uuid)
+                    self.username = self.user.researcherprofile.fullname
                 except ResearcherUser.DoesNotExist:
                     raise Http404('لینک مورد نظر اشتباه است (منسوخ شده است.)')
         return super().get(request, *args, **kwargs)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(ResetPasswordConfirm, self).get_context_data(**kwargs)
-    #     # context['form'] = forms.RegisterUserForm()
-    #     # print(self.user.user.username)
-    #     print('context recover', self.recover)
-    #     if self.recover:
-    #         context['username'] = self.user.user.username
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(ResetPasswordConfirm, self).get_context_data(**kwargs)
+        context['username'] = self.username
+        return context
 
     def post(self, request, *args, **kwargs):
         # print('recover: \nuser: ', self.recover, self.user)
         form = forms.RegisterUserForm(request.POST or None)
         unique_id = kwargs['unique_id']
-        user = find_user(request.user)
+        print(unique_id)
+        user, account_type = find_user_by_unique_id(uniqe_id=unique_id)
         # context = {'form': form,
         #            'username': self.user.user.username}
         if form.is_valid():
@@ -767,11 +783,11 @@ def addTask(request):
     for userId in involved_users_list:
         user, account_type = project.get_involved_user(userId[1:])
         if account_type == 'researcher':
-            involved_user_name .append(user.researcherprofile.fullname)
+            involved_user_name.append(user.researcherprofile.fullname)
         elif account_type == 'expert':
-            involved_user_name .append(user.expertform.fullname)
+            involved_user_name.append(user.expertform.fullname)
         elif account_type == "industry":
-            involved_user_name .append(user.profile.name)
+            involved_user_name.append(user.profile.name)
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user.user)
     task.save()
