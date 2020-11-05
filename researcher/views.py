@@ -18,6 +18,7 @@ from .tools.tools import *
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
 from chamran_admin.models import Message, Task, Card
+from chamran_admin.forms import CardForm
 
 ACCELERATOR = "384025"
 USER_ID_PATTERN = re.compile('[\w]+$')
@@ -307,6 +308,7 @@ class showActiveProject(LoginRequiredMixin, generic.TemplateView):
             taskInfo.append(data)
         context['task_list'] = taskInfo
 
+        context['form'] = CardForm()
         allCards = Card.objects.filter(project=project)
         cardInfo = []
         for card in allCards:
