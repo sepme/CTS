@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import permission_required
 from django.utils import timezone
 
 from . import models, forms
+from chamran_admin.forms import CardForm
 from .tools.tools import *
 from expert.models import ResearchQuestion, RequestResearcher
 from industry.models import Project, Comment
@@ -315,6 +316,7 @@ class showActiveProject(LoginRequiredMixin, generic.TemplateView):
                 "deadline": gregorian_to_numeric_jalali(card.deadline),
             })
         context['card_list'] = cardInfo
+        context['form'] = CardForm()
         return context
 
 

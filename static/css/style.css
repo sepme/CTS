@@ -5136,11 +5136,13 @@ img.center-head {
     -moz-border-radius: 15px;
     border-radius: 15px;
     width: 200px;
+    height: 200px;
 }
 
 @media (max-width: 576px) {
     .modal-resume .user-personal-info .profile img {
         width: 120px;
+        height: 120px;
     }
 }
 

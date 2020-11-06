@@ -559,22 +559,6 @@
                                                                         <pre contenteditable="true"></pre>
                                                                     </div>
 
-                                                                    <div class="ct-checklist-item-due ct-option-btn {% if not task.deadline %}d-none{% endif %}">
-                                                                        <button>
-                                                                            <span>{{ task.deadline }}</span>
-                                                                            <svg width="1em" height="1em"
-                                                                                 viewBox="0 0 16 16"
-                                                                                 class="bi bi-clock"
-                                                                                 fill="currentColor"
-                                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                                <path fill-rule="evenodd"
-                                                                                      d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
-                                                                                <path fill-rule="evenodd"
-                                                                                      d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
-                                                                            </svg>
-                                                                        </button>
-                                                                    </div>
-
                                                                     <div class="ct-checklist-item__control d-flex">
                                                                         <div class="ct-checklist-item-edit">
                                                                             <button>
@@ -602,6 +586,23 @@
                                                                             </button>
                                                                         </div>
                                                                     </div>
+
+                                                                    <div class="ct-checklist-item-due ct-option-btn {% if not task.deadline %}d-none{% endif %}">
+                                                                        <button>
+                                                                            <span>{{ task.deadline }}</span>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 class="bi bi-clock"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                    
                                                                     <div class="ct-checklist-item__footer d-none">
                                                                         <div class="float-left mt-1">
                                                                             <div class="ct-task-option d-flex">
@@ -895,7 +896,6 @@
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript" src={% static 'js/project.js' %}></script>
     <script type="text/javascript">
         $("#v-pills-roles-tab").click(function () {
             let policy = "{{ projectForm.policy|escapejs }}";
@@ -1117,4 +1117,5 @@
             });
         });
     </script>
+    <script type="text/javascript" src="{% static 'js/project.js' %}"></script>
 {% endblock %}
