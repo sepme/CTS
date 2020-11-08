@@ -1,0 +1,59 @@
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {  
+
+}
+
+/* Small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {  
+    .ct-checklist__item .ct-checklist-item__detail {
+        padding-left: 0;
+    }
+    
+    .ct-checklist__item .ct-checklist-item__detail.has-due {
+        padding-left: 0;
+    }
+
+    .ct-checklist__item .ct-checklist-item__detail .ct-checklist-item__control {
+        position: relative;
+        top: unset;
+        left: unset;
+        opacity: 1;
+        float: left;
+        transition: all 0.3s;
+        display: inline-flex !important;
+    }
+    
+    .ct-checklist__item .ct-checklist-item__detail .ct-checklist-item-due.ct-option-btn {
+        position: relative;
+        top: unset;
+        left: unset;
+        float: left;
+        transition: all 0.3s;
+    }
+
+    .ct-checklist__item:not(.onEdit):hover .ct-checklist-item__detail .ct-checklist-item-due.ct-option-btn {
+        left: unset;
+    }
+
+    .ct-checklist__item.onEdit .ct-checklist-item__detail .ct-checklist-item-due.ct-option-btn {
+        display: none !important;
+    }
+
+    .ct-checklist__item.onEdit .ct-checklist-item__detail .ct-checklist-item__control {
+        display: none !important;
+    }
+    
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {  
+
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) { 
+
+}
+
+/* Extra large devices (large desktops) */
+/* No media query since the extra-large breakpoint has no upper bound on its width */

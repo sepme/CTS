@@ -533,6 +533,139 @@ $(document).ready(function () {
             }
         });
     }
+
+    //****************************************//
+    //  PROJECT     
+    //****************************************//
+
+    // get researcher information
+    $("button[data-target='#researcherInfo']").click(function () {
+        let modal = $("#researcherInfo");
+        let id = $(this).attr("id");
+        let url = $(this).attr("data-url");
+        let project_id = $(this).attr("value");
+        $.ajax({
+            method: 'GET',
+            url: url,
+            dataType: 'json',
+            data: {id: id, project_id: project_id},
+            success: function (data) {
+                $("#researcherInfo").find(".add-comment").attr("id", project_id);
+                modal.find(".researcher_id").attr("value", id);
+                $(".project_id").attr("value", project_id);
+                if (data.photo)
+                    $('#researcher_photo').attr("src", data.photo);
+                else
+                    $('#researcher_photo').attr("src", "/static/expert/img/profile.jpg");
+                $('#researcher_name').html(data.name);
+                $('#researcher_major').html(data.major);
+                switch (data.grade) {
+                    case 1:
+                        $('#researcher_grade').html('کارشناسی');
+                        break;
+                    case 2:
+                        $('#researcher_grade').html('کارشناسی ارشد');
+                        break;
+                    case 3:
+                        $('#researcher_grade').html('دکتری');
+                        break;
+                    case 4:
+                        $('#researcher_grade').html('دکتری عمومی');
+                        break;
+                }
+            },
+            error: function (data) {
+
+            },
+        });
+    }); 
+
+    // get expert comments
+    function getComments(expert_id, project_id) {
+        $.ajax({
+            method: 'GET',
+            url: '/industry/get_comment/',
+            dataType: 'json',
+            data: {
+                expert_id: expert_id,
+                project_id: project_id
+            },
+            success: function (data) {
+                if (data.accepted) {
+                    $(".accept-request").hide();
+                    $(".accept-request").prop('disabled', true);
+                    $(".reject-request").hide();
+                    $(".reject-request").prop('disabled', true);
+                    if (data.enforcer) {
+                        $('.request').html("این پروژه به این استاد واگذار شده است.");
+                        $('.add-comment').attr('style', "display : block");
+                        $(".comment_submit").prop('disabled', false);
+                    } else {
+                        $('.request').html("درخواست این استاد برای پروژه رد شده است.");
+                        $('.add-comment').attr('style', "display : none");
+                        $(".comment_submit").prop('disabled', true);
+                    }
+                } else if (data.applied === false) {
+                    $('.request').html("برای مشاهده رزومه استاد بر روی دکمه روبه رو کلیک کنید.");
+                    $(".accept-request").hide();
+                    $(".accept-request").prop('disabled', true);
+                    $(".reject-request").hide();
+                    $(".reject-request").prop('disabled', true);
+                } else {
+                    $('.request').html("درخواستی برای انجام پروژه شما از طرف این استاد دریافت شده است.");
+                    $('.request').show();
+                    $(".accept-request").show();
+                    $(".accept-request").prop('disabled', false);
+                    $(".reject-request").show();
+                    $(".reject-request").prop('disabled', false);
+                }
+                setComment(data.comment);
+            },
+            error: function (data) {
+    
+            },
+        });
+    }
+    
+
+
+    // get expert information
+    $("[data-target='#expertResume']").click(function () {
+        let modal = $('#expertResume');
+        modal.modal('show');
+        $('#expertResume .close__redirect').click(function () {
+            modal.modal('hide');
+        });
+        if ($(this).hasClass("rounded-name-profile")) {
+            let tab = `<a class='nav-link active d-none' data-toggle='pill' role='tab' aria-controls='v-pills-home'
+                aria-selected='true' id="v-pills-expert-${$(this).attr("id")}" ></a>`;
+            modal.find(".comment-tabs div").html(tab);
+        }
+        let id = modal.find(".comment-tabs .nav-link.active").attr("id").replace("v-pills-expert-", "");
+        $.ajax({
+            method: 'GET',
+            url: '/expert/get_resume',
+            dataType: 'json',
+            data: {id: id},
+            success: function (data) {
+                if (data.photo){
+                    $("#expertResume #expert_photo").attr("src", data.photo);
+                } else{
+                    $("#expertResume #expert_photo").attr("src", "/static/expert/img/profile.jpg");
+                }  
+                $("#expert_name").html(data.name);
+                $("#expert_uni").html(data.university);
+                $("#expert_field").html(data.scientific_rank + " " + data.special_field);
+
+                getComments(id, modal.find("#project_id").val());
+            },
+        });
+    });
+
+    //****************************************//
+    //  END PROJECT     
+    //****************************************//
+
     //****************************************//
     //  User Info
     //****************************************//
