@@ -764,12 +764,12 @@ def addTask(request):
 
     if request.POST['description'] == "":
         return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
-    description = request.POST['description']
+    description = request.POST['description'].replace("<br>", "\n")
     project = Project.objects.get(id=request.POST['project_id'])
     user = request.user
     if request.POST.get("id", None):
         task = models.Task.objects.get(id=request.POST['id'])
-        task.description = request.POST['description']
+        task.description = description
     else:
         task = models.Task.objects.create(project=project
                                         , creator=user
@@ -783,11 +783,14 @@ def addTask(request):
     for userId in involved_users_list:
         user, account_type = project.get_involved_user(userId[1:])
         if account_type == 'researcher':
-            involved_user_name.append(user.researcherprofile.fullname)
+            if user.researcherprofile.fullname not in involved_user_name:
+                involved_user_name.append(user.researcherprofile.fullname)
         elif account_type == 'expert':
-            involved_user_name.append(user.expertform.fullname)
+            if user.expertform.fullname not in involved_user_name:
+                involved_user_name.append(user.expertform.fullname)
         elif account_type == "industry":
-            involved_user_name.append(user.profile.name)
+            if user.profile.name not in involved_user_name:
+                involved_user_name.append(user.profile.name)
         if user is not None and user not in task.involved_user.all():
             task.involved_user.add(user.user)
     task.save()
