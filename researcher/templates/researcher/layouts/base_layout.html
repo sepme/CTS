@@ -13,11 +13,14 @@
     <link rel="stylesheet" href="{% static 'fonts/fontawesome/5.15.1/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/Swiper/4.5.0/swiper.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/iziToast/1.4.0/iziToast.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/OwlCarousel2/2.3.4/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/OwlCarousel2/2.3.4/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/PersianDatepicker/1.2.0/persian-datepicker.min.css' %}">
     {% block header %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/comments.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'researcher/css/style.css' %}">
-    {#    <!-- <link rel="stylesheet" href="{% static 'researcher/css/style_xs.css' %}"> -->#}
+    <link rel="stylesheet" href="{% static 'css/resp.css' %}">
 </head>
 <body class="{% if request.user.researcheruser.status.status == 'signed_up' %}modal-open{% endif %}">
 {% getUnseenMessages request.user as UnseenMessages %}
