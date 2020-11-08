@@ -429,7 +429,7 @@ class RequestResearcherForm(forms.Form):
     
     def clean_least_hour(self):
         data = self.cleaned_data["least_hour"]
-        if data is None:
+        if data is "":
             raise ValidationError('حداقل ساعت نمی تواند خالی باشد.')
         if data < 1:
             raise ValidationError("مقدار حداقل ساعت وارد شده نامعتر می باشد.")
@@ -437,7 +437,7 @@ class RequestResearcherForm(forms.Form):
     
     def clean_researcher_count(self):
         data = self.cleaned_data["researcher_count"]
-        if data is None:
+        if data is "":
             raise ValidationError('تعداد دانشجو نمی تواند خالی باشد.')
         if data < 1:
             raise ValidationError("تعداد دانشجو وارد شده نامعتر می باشد.")

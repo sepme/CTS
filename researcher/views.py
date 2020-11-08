@@ -697,7 +697,7 @@ def ShowProject(request):
         tempTech.append(tech.technique_title)
     json_response["techniques"] = tempTech
     projects_comments = project.get_comments()
-    all_comments = projects_comments.exclude(researcher_user=None)
+    all_comments = projects_comments.filter(researcher_user=request.user.researcheruser)
     json_response['comments'] = []
     for com in all_comments:
         try:
@@ -934,8 +934,8 @@ def DeleteStudiousRecord(request):
 
 @permission_required([], login_url='/login/')
 def show_resume_preview(request):
-    researcherProfile = models.ResearcherProfile.objects.get(id=request.GET.get('id'))
-    researcher = researcherProfile.researcher_user
+    researcher = models.ResearcherUser.objects.get(id=request.GET.get('id'))
+    researcherProfile = researcher.researcherprofile
     researcher_information = {
         'name': researcherProfile.__str__(),
         'major': researcherProfile.major,

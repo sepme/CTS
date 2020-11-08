@@ -271,14 +271,28 @@ def allTaskHandler(chat_id):
 
 def startHandler(chat_id):
     bot_welcome = """
-به ربات تلگرامی چمران تیم خوش آمدید.
-       """
+سلام
+به ChamranTeam Bot خوش آمدید.
+لطفا من را به گروه‌تان اضافه کنید و آن‌جا من را تنظیم کنید تا وقایع پروژه‌تان را اطلاع‌رسانی کنم.
+اگر نمی‌دانید چطور این کار را انجام دهید، لطفا /help را بزنید.
+    """
     bot.sendMessage(chat_id=chat_id, text=bot_welcome)
     return HttpResponse('ok')
 
 def helpHandler(chat_id):
     # TODO : Hey;) write your text in the next line...
-    help_text = """{}"""
+    help_text = """
+برای این که بتوانم وقایع پروژه را در گروه تلگرامی مد نظرتان اطلاع‌رسانی کنم، ابتدا لازم است من را به آن گروه اضافه کنید. برای این کار، می‌توانید یکی از این دو کار را انجام دهید:
+1. در پروفایل من، روی تصویر سه نقطه بالا سمت راست کلیک کنید و Add to Group را بزنید؛
+2. در پروفایل گروه مورد نظر بروید و با استفاده از گزینه Add Member، من را اضافه کنید.
+
+خب، حالا در خدمت‌م! فقط کافی‌ست که کد پروژه‌تان را به من بگویید! کد پروژه در صفحه مدیریت پروژه شما در سامانه ChamranTeam قابل مشاهده است.
+برای این کار، لطفا در همان گروه، من را منشن کنید و پس از یک space، کد پروژه‌تان را برایم بنویسید. برای مثال، اگر کد پروژه شما 31886d75-e2ad-93a8-b608-5dec9921708a است، من را این‌طور صدا بزنید:
+@ChamranTeam_bot 31886d75-e2ad-93a8-b608-5dec9921708a
+اگر کد پروژه صحیح باشد، با وارد کردن این متن، پروژه شما در بالای متن تایپ شده، نمایش داده می‌شود. با کلیک روی آن پروژه، آن گروه تلگرامی برای پروژه‌تان ثبت می‌شود.
+دیگر از این به بعد، کارها را به من بسپارید!
+موفق باشید
+    """
     bot.sendMessage(chat_id=chat_id, text=help_text)
     return HttpResponse('ok')
 
@@ -345,10 +359,11 @@ def telegramHandler(request):
             startHandler(chat_id=chat_id)
 
         else:
-            try:
-                helpHandler(chat_id=chat_id)
-            except:
-                bot.sendMessage(chat_id=chat_id, text="با عرض پوزش درحال حاضر اطلاعاتی در دسترس نیست.")
+            pass
+            # try:
+            #     helpHandler(chat_id=chat_id)
+            # except:
+            #     bot.sendMessage(chat_id=chat_id, text="با عرض پوزش درحال حاضر اطلاعاتی در دسترس نیست.")
 
         return HttpResponse('ok')
     except:

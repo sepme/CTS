@@ -832,7 +832,7 @@ class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
         return context
 
 
-@permission_required('expert.be_industry', login_url='/login/')
+@permission_required('industry.be_industry', login_url='/login/')
 def industryRequestResearcher(request):
     project = models.Project.objects.get(id=request.POST['project_id'])
     form = RequestResearcherForm(request.POST)
