@@ -742,7 +742,6 @@ def cardList(request):
     return JsonResponse(data={"cardInfo": cardInfo})
 
 def checkTask(request):
-    print(request.POST)
     task = models.Task.objects.get(pk=request.POST['pk'])
     CHECK = {'true': True, 'false': False}
     task.done = CHECK[request.POST['check']]
@@ -757,7 +756,7 @@ def checkTask(request):
                     date=gregorian_to_numeric_jalali(datetime.date.today()),
                     red_triangle=RED_TRIANGLE_POINTED_DOWN)
     else:
-        text = """{tick} وظیفه (تسک) «{title}» توسط {fullname} در تاریخ {date} انجام شد.
+        text = """{tick} وظیفه (تسک) «{title}» توسط {fullname} در تاریخ {date} مجدد فعال شد.
 
     {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
                 format(tick=CHECK_BOX_WITH_CHECK,
