@@ -1092,7 +1092,7 @@ $(document).ready(function () {
                         // show success toast
                         iziToast.success({
                             rtl: true,
-                            message: "تسک با موفقیت حذف شد!",
+                            message: "تغییر وضعیت تسک با موفقیت ثبت شد.",
                             position: 'bottomLeft'
                         });
                     },

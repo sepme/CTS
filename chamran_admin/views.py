@@ -27,6 +27,7 @@ from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
 from bot_api.views import sendMessage
+from bot_api.emojis import *
 
 from industry.views import showActiveProject as industryShowActiveProject
 from expert.views import showActiveProject as expertShowActiveProject
@@ -35,13 +36,6 @@ from researcher.views import showActiveProject as researcherShowActiveProject
 LOCAL_URL = 'chamranteam.ir'
 USER_ID_PATTERN = re.compile('[\w]+$')
 
-SMALL_ORANGE_DIAMOND = "\U0001F538"
-SMALL_BLUE_DIAMOND ="\U0001F539"
-RED_TRIANGLE_POINTED_DOWN = "\U0001F53B"
-RED_EXCLAMTION_MARK = "\U00002757"
-PENCIL_SELECTOR = "\U0000270F\U0000FE0F"
-LABEL = '\U0001F3F7'
-HOURGLASS_NOT_DONE = "\U000023F3"
 
 def get_message_detail(request, message_id):
     message = Message.objects.filter(receiver=request.user).get(id=message_id)
@@ -747,15 +741,40 @@ def cardList(request):
         })
     return JsonResponse(data={"cardInfo": cardInfo})
 
+def checkTask(request):
+    task = models.Task.objects.get(pk=request.POST['pk'])
+    CHECK = {'true': True, 'false': False}
+    task.done = CHECK[request.POST['check']]
+    task.save()
+    if CHECK[request.POST['check']]:
+        text = """{tick} وظیفه (تسک) «{title}» توسط {fullname} در تاریخ {date} انجام شد.
+
+    {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+                format(tick=CHECK_BOX_WITH_CHECK,
+                    title=task.description,
+                    fullname=get_user_fullname(user=request.user),
+                    date=gregorian_to_numeric_jalali(datetime.date.today()),
+                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
+    else:
+        text = """{tick} وظیفه (تسک) «{title}» توسط {fullname} در تاریخ {date} انجام شد.
+
+    {red_triangle} برای اطلاعات بیشتر می توانید دکمه «مشاهده پروژه» در زیر این پیام را بزنید.""".\
+                format(tick=CHECK_BOX_WITH_CHECK,
+                    title=task.description,
+                    fullname=get_user_fullname(user=request.user),
+                    date=gregorian_to_numeric_jalali(datetime.date.today()),
+                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
+
+    return
 
 @permission_required(perm=[], login_url="/login")
 def addTask(request):
     if request.POST.get('check', None):
-        task = models.Task.objects.get(pk=request.POST['pk'])
-        CHECK = {'true': True, 'false': False}
-        task.done = CHECK[request.POST['check']]
-        task.save()
-        return JsonResponse(data={'success': 'success'})
+        try:
+            checkTask(request=request)
+            return JsonResponse(data={'success': 'success'})
+        except:
+            return JsonResponse(data={'error': 'Error'}, status=400)
 
     if request.POST.get('delete', None):
         task = models.Task.objects.get(pk=request.POST['pk'])
@@ -764,7 +783,7 @@ def addTask(request):
 
     if request.POST['description'] == "":
         return JsonResponse(data={"description": "توضیحات نمیتواند خالی باشد."}, status=400)
-    description = request.POST['description'].replace("<br>", "\n")
+    description = request.POST['description'].replace("<br>", "\r\n").replace("<div>", "\r\n").replace("</div>", "")
     project = Project.objects.get(id=request.POST['project_id'])
     user = request.user
     if request.POST.get("id", None):
@@ -781,18 +800,13 @@ def addTask(request):
     involved_users_list = request.POST.getlist('involved_users[]')
     involved_user_name  = []
     for userId in involved_users_list:
-        user, account_type = project.get_involved_user(userId[1:])
-        if account_type == 'researcher':
-            if user.researcherprofile.fullname not in involved_user_name:
-                involved_user_name.append(user.researcherprofile.fullname)
-        elif account_type == 'expert':
-            if user.expertform.fullname not in involved_user_name:
-                involved_user_name.append(user.expertform.fullname)
-        elif account_type == "industry":
-            if user.profile.name not in involved_user_name:
-                involved_user_name.append(user.profile.name)
-        if user is not None and user not in task.involved_user.all():
-            task.involved_user.add(user.user)
+        account, account_type = project.get_involved_user(userId[1:])
+        if account is not None:
+            name = get_user_fullname(user=account.user, account_type=account_type)
+            if name not in involved_user_name:
+                involved_user_name.append(name)
+            if account.user not in task.involved_user.all():
+                task.involved_user.add(account.user)
     task.save()
 
     url = "https://chamranteam.ir/project/"+ str(project.code)

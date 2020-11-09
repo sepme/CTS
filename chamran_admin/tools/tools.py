@@ -61,3 +61,12 @@ def get_user_by_unique_id(unique):
     else:
         return False
 
+def get_user_fullname(user, account_type=None):
+    if account_type == None:
+        account_type = find_account_type(user)
+    if account_type == 'researcher':
+        return user.researcheruser.researcherprofile.fullname
+    elif account_type == 'expert':
+        return user.expertuser.expertform.fullname
+    elif account_type == "industry":
+        return user.industryuser.profile.name

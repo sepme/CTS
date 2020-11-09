@@ -146,14 +146,13 @@ from ChamranTeamSite import settings
 from persiantools.jdatetime import JalaliDate
 
 from . import models
+from .emojis import *
 from industry.models import Project
 from chamran_admin.models import Task, Card
 from .config import bot_token, URL, SECURITY_CODE
 import telegram
 import re, uuid ,json
 
-WHITE_MEDIUM_SMALL_SQUARE = '\U000025FD'
-CHECK_BOX_WITH_CHECK = '\U00002611\U0000FE0F'
 
 global bot
 global TOKEN
