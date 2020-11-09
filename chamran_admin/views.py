@@ -742,6 +742,7 @@ def cardList(request):
     return JsonResponse(data={"cardInfo": cardInfo})
 
 def checkTask(request):
+    print(request.POST)
     task = models.Task.objects.get(pk=request.POST['pk'])
     CHECK = {'true': True, 'false': False}
     task.done = CHECK[request.POST['check']]
@@ -764,7 +765,8 @@ def checkTask(request):
                     fullname=get_user_fullname(user=request.user),
                     date=gregorian_to_numeric_jalali(datetime.date.today()),
                     red_triangle=RED_TRIANGLE_POINTED_DOWN)
-
+    url = "https://chamranteam.ir/project/"+ str(task.project.code)
+    sendMessage(project=task.project, text=text, url=url)
     return
 
 @permission_required(perm=[], login_url="/login")
