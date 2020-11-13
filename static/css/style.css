@@ -6940,7 +6940,7 @@ pre[contenteditable="true"] {
     left: 0;
     width: 46px;
     height: 46px;
-    color: #ff4545;
+    color: #ffffff;
     transform: rotateZ(80deg);
     transition: transform 0.3s;
 }
@@ -6950,6 +6950,7 @@ pre[contenteditable="true"] {
     display: block;
     visibility: visible;
     transform: rotateZ(0);
+    background-color: #ff4545;
 }
 
 .tagId-list .tagId-item:hover img:after {
