@@ -146,6 +146,7 @@ from ChamranTeamSite import settings
 from persiantools.jdatetime import JalaliDate
 
 from . import models
+from .tools.tools import *
 from .emojis import *
 from industry.models import Project
 from chamran_admin.models import Task, Card
@@ -236,20 +237,18 @@ def removeGroupHandler(removedMember, chat_id):
             except:
                 pass
 
-def stageGroupAndProject(message):
-    for keyboardList in message.reply_markup.inline_keyboard:
-        for keyboard in keyboardList:
-            text = keyboard.text
-            if text == "تایید":
-                try:
-                    gp = models.NewGroup.objects.get(group_id=message.chat_id)
-                    if gp.projectCode is None:
-                        gp.projectCode = keyboard.callback_data
-                        gp.save()
-                except:
-                    bot.send_message(chat_id=message.chat_id,
-                                     text="لطفا در ابتدا ربات چمران تیم را به گروه مرتبط به پروژه اضافه کنید.")
-            return 
+def stageGroupAndProject(keyboard, chat_id):
+    text = keyboard.text
+    if text == "تایید":
+        try:
+            gp = models.NewGroup.objects.get(group_id=chat_id)
+            if gp.projectCode is None:
+                gp.projectCode = keyboard.callback_data
+                gp.save()
+        except:
+            bot.send_message(chat_id=chat_id,
+                            text="لطفا در ابتدا ربات چمران تیم را به گروه مرتبط به پروژه اضافه کنید.")
+    return 
 
 def addGroupToProject(callBack):
     code = callBack['data']
@@ -265,7 +264,85 @@ def addGroupToProject(callBack):
     bot.send_message(chat_id=group.group_id,text=text)
     return HttpResponse("ok")
 
+
+def confirmChatId(keyboard, chat_id):
+    text = keyboard.text
+    if text == "جایگزین کن":
+        privateChat = models.PrivateChat.objects.get(chat_id=chat_id)
+        user, _ = get_user_by_unique_id(privateChat.unique_code)
+        user.chat_id = privateChat.chat_id
+        user.save()
+        bot.send_message(chat_id=chat_id, text="این گفتگو با موفقیت جایگزین شد.")
+    elif text == "تایید":
+        privateChat = models.PrivateChat.objects.get(chat_id=chat_id)
+        user, _ = get_user_by_unique_id(privateChat.unique_code)
+        user.chat_id = privateChat.chat_id
+        user.save()
+        bot.send_message(chat_id=chat_id, text="این گفتگو با موفقیت به حساب کاربری متصل شد.")
+    return
+
+
+def checkMarkup(message):
+    for keyboardList in message.reply_markup.inline_keyboard:
+        for keyboard in keyboardList:
+            text = keyboard.text
+            if text == "جایگزین کن":
+                confirmChatId(keyboard=keyboard, chat_id=message.chat_id)
+            elif text == "تایید":
+                if keyboard.callback_data == "private chat":
+                    confirmChatId(keyboard=keyboard, chat_id=message.chat_id)
+                else:
+                    stageGroupAndProject(keyboard=keyboard, chat_id=message.chat_id)
+
+            return
+
+
 def allTaskHandler(chat_id):
+    return
+
+def addPrivateChatHandler(chat_id):
+    models.PrivateChat.objects.get_or_create(chat_id=chat_id)
+    text = "لطفا شناسه یکتای خود را وارد کنید."
+    bot.send_message(chat_id=chat_id,text=text)
+    return
+
+
+def submitPrivateChat(chat_id, uniqueId):
+    try:
+        user_chat_id = models.PrivateChat.objects.get(chat_id=chat_id)
+        user_account, account_type = get_user_by_unique_id(uniqueId)
+
+        if user_account is None:
+            bot.send_message(chat_id=chat_id, text="شناسه کاربری وارد شده صحیح نمی باشد.")        
+            return
+
+        user_chat_id.unique_code = uniqueId
+        user_chat_id.save()
+        # user_account = find_user(user=user, account_type=account_type)
+        
+        TEXT = """نام و نام خانوادگی: {fullname}
+نوع حساب کاربری : {account_type} """.\
+            format(fullname=get_user_fullname(user_account.user, account_type=account_type),
+                    account_type=get_persian_account_type(account_type=account_type))
+
+        if user_account.chat_id is not None:
+            
+            if user_account.chat_id == chat_id:
+                bot.send_message(chat_id=chat_id, text="این گفتگو قبلا به حساب کاربری شما متصل شده است.")
+            else:
+                text = TEXT + "\n" + """برای این شناسه یکتا، قبلا گفتگو دیگری متصل شده است.
+آیا مایل به جایگزین کردن این گفتگو  هستید؟"""
+                keyboard = [[telegram.InlineKeyboardButton("جایگزین کن", callback_data="private chat")],]
+                reply_markup = telegram.InlineKeyboardMarkup(keyboard)
+                bot.send_message(chat_id=chat_id, text=text ,reply_markup=reply_markup)
+            return
+        
+        keyboard = [[telegram.InlineKeyboardButton("تایید", callback_data="private chat")],]
+        reply_markup = telegram.InlineKeyboardMarkup(keyboard)
+        text = TEXT + "\n" + "آیا مایل به اتصال این گفتگو به حساب کاربری خود هستید؟"
+        bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
+    except:
+        helpHandler(chat_id)
     return
 
 def startHandler(chat_id):
@@ -277,6 +354,7 @@ def startHandler(chat_id):
     """
     bot.sendMessage(chat_id=chat_id, text=bot_welcome)
     return HttpResponse('ok')
+
 
 def helpHandler(chat_id):
     # TODO : Hey;) write your text in the next line...
@@ -303,8 +381,8 @@ def telegramHandler(request):
     try:
         update = telegram.Update.de_json(json.loads(request.body), bot)
         message = update.effective_message
-        # print(update)
-        # print("+++++++++++++=")
+        print(update)
+        print("+++++++++++++=")
         if message is None:
             try:
                 inlineQuery(update)
@@ -314,7 +392,7 @@ def telegramHandler(request):
                 return HttpResponse("ok")
 
         if message.reply_markup is not None:
-            stageGroupAndProject(message)
+            checkMarkup(message)
             return HttpResponse("ok")
 
         if len(message.new_chat_members):        
@@ -353,12 +431,18 @@ def telegramHandler(request):
                         helpHandler(chat_id=chat_id)
                     except:
                         bot.sendMessage(chat_id=chat_id, text="با عرض پوزش درحال حاضر اطلاعاتی در دسترس نیست.")
-
-        elif text == "/start":
-            startHandler(chat_id=chat_id)
+                elif text == "/add":
+                    if message.chat.type == "private":
+                        addPrivateChatHandler(chat_id=chat_id)
+                    else:
+                        bot.sendMessage(chat_id=chat_id, text="این دستور برای گفتگو خصوصی است.")
 
         else:
-            pass
+            try:
+                uniqueId = uuid.UUID(text, version=4)
+                submitPrivateChat(chat_id, uniqueId)
+            except:
+                pass
             # try:
             #     helpHandler(chat_id=chat_id)
             # except:
@@ -438,3 +522,16 @@ def sendMessage(project, text, url=None):
 #             bot.sendMessage(chat_id=gp_id, text=text)
 #     except:
 #         pass
+
+
+{'update_id': 957667847,
+ 'message': {
+     'message_id': 201, 
+     'date': 1605179347, 
+     'chat': {
+         'id': 271373138, 
+         'type': 'private', 
+         'username': 'a_jafarzadeh1998', 
+         'first_name': 'Ali', 'last_name': 'Jafarzadeh'
+         }, 
+    'text': '/start', 'entities': [{'type': 'bot_command', 'offset': 0, 'length': 6}], 'caption_entities': [], 'photo': [], 'new_chat_members': [], 'new_chat_photo': [], 'delete_chat_photo': False, 'group_chat_created': False, 'supergroup_chat_created': False, 'channel_chat_created': False, 'from': {'id': 271373138, 'first_name': 'Ali', 'is_bot': False, 'last_name': 'Jafarzadeh', 'username': 'a_jafarzadeh1998', 'language_code': 'en'}}}

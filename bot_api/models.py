@@ -14,4 +14,15 @@ class Group(models.Model):
 
     def __str__(self):
         return self.group_id + " - " + str(self.project)
+
+class PrivateChat(models.Model):
+    chat_id = models.CharField(verbose_name=("ایدی چت  کاربر"),
+                                max_length=50,
+                                primary_key=True)
+    unique_code = models.UUIDField(verbose_name="شناسه یکتا",
+                                    null=True, blank=True)
+
+    def __str__(self):
+        return self.chat_id
+    
     
