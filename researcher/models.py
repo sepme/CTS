@@ -66,6 +66,7 @@ class ResearcherUser(models.Model):
     userId = models.CharField(verbose_name="ID کاربر", max_length=50, blank=True, null=True)
     points = models.FloatField(default=0.0, verbose_name='امتیاز')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
+    chat_id = models.CharField(verbose_name="آیدی چت", max_length=50, null=True, blank=True)
 
     class Meta:
         permissions = (

@@ -43,6 +43,7 @@ class IndustryUser(models.Model):
     )
     status = models.CharField(max_length=15, choices=STATUS, default='signed_up')
     unique = models.UUIDField(unique=True, default=uuid.uuid4)
+    chat_id = models.CharField(verbose_name="آیدی چت", max_length=50, null=True, blank=True)
 
     class Meta:
         permissions = (
