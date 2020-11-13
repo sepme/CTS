@@ -1,6 +1,6 @@
-from expert.models import ExpertUser
-from industry.models import IndustryUser
-from researcher.models import ResearcherUser
+import expert.models as expert_models
+import industry.models as industry_models
+import researcher.models as researcher_models
 
 
 
@@ -24,13 +24,13 @@ def jalali_date(jdate):
     return str(jdate.day) + ' ' + jalali_months[jdate.month - 1] + ' ' + str(jdate.year)
 
 def find_account_type(user):
-    expert = ExpertUser.objects.filter(user=user)
+    expert = expert_models.ExpertUser.objects.filter(user=user)
     if expert.exists():
         return 'expert'
-    industry = IndustryUser.objects.filter(user=user)
+    industry = industry_models.IndustryUser.objects.filter(user=user)
     if industry.exists():
         return 'industry'
-    researcher = ResearcherUser.objects.filter(user=user)
+    researcher = researcher_models.ResearcherUser.objects.filter(user=user)
     if researcher.exists():
         return 'researcher'
     else:
@@ -51,15 +51,15 @@ def find_user(user, account_type=None):
 
 
 def get_user_by_unique_id(unique):
-    expert = ExpertUser.objects.filter(unique__exact=unique)
+    expert = expert_models.ExpertUser.objects.filter(unique__exact=unique)
     if expert.exists():
         return expert.first(), "expert"
     
-    industry = IndustryUser.objects.filter(unique__exact=unique)
+    industry = industry_models.IndustryUser.objects.filter(unique__exact=unique)
     if industry.exists():
         return industry.first(), "industry"
     
-    researcher = ResearcherUser.objects.filter(unique__exact=unique)
+    researcher = researcher_models.ResearcherUser.objects.filter(unique__exact=unique)
     if researcher.exists():
         return researcher.first(), "researcher"
     return None

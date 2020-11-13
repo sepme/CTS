@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 import os
 from django.shortcuts import reverse, HttpResponseRedirect
 import uuid
-from industry.models import Keyword, Project
 from researcher.models import ResearchQuestionInstance
 
 # for Compress the photo
@@ -271,11 +270,10 @@ class ExpertProjectHistory(models.Model):
 
 
 class IndustryEvaluateExpert(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="پروژه", blank=True)
+    project = models.ForeignKey("industry.Project", on_delete=models.CASCADE, verbose_name="پروژه", blank=True)
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE, verbose_name="استاد")
     industry = models.ForeignKey('industry.IndustryUser', on_delete=models.CASCADE,
                                  verbose_name="صنعت ارزیابی کننده", blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name="پروژه", blank=True)
     INT_CHOICE = (
         (0, '0'),
         (1, '1'),
@@ -402,7 +400,7 @@ class ExpertRequestedProject(models.Model):
 
 
 class RequestResearcher(models.Model):
-    project = models.OneToOneField(Project, verbose_name="پروژه", on_delete=models.CASCADE)
+    project = models.OneToOneField("industry.Project", verbose_name="پروژه", on_delete=models.CASCADE)
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
     least_hour = models.IntegerField(verbose_name="حداقل ساعت")
     researcher_count = models.IntegerField(verbose_name="تعداد دانشجو")

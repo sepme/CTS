@@ -32,7 +32,7 @@ from researcher.models import Technique, RequestedProject, ResearcherUser
 from chamran_admin.models import Message, Task, Card
 
 from chamran_admin.forms import CardForm
-from bot_api.views import sendMessage
+from bot_api.sender import sendMessage, suggestProjectToResearcher
 
 USER_ID_PATTERN = re.compile('[\w]+$')
 
@@ -168,7 +168,6 @@ def ActiveProject(request, project, data):
 def show_project_ajax(request):
     project = models.Project.objects.filter(id=request.GET.get('id')).first()
     if project.status == 1 or project.status == 0:
-        print("SHOW  USUAl PROJECT")
         data = usualShow(request, project)
         return JsonResponse(data)
     else:
@@ -481,7 +480,6 @@ class NewProject(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             form = forms.ResearchProjectForm(request.POST)
             if form.is_valid():
                 print("form is validated")
-                print(form.cleaned_data.keys())
                 newProjectForm = form.save()
 
                 key_words = self.request.POST['key_words'].split(',')
@@ -664,12 +662,23 @@ def ProjectSetting(request):
             project.end_note = request.FILES['end_note']
         if 'proposal' in request.FILES.keys():
             project.proposal = request.FILES['proposal']
-        if len(technique_list) != 0:
-            projectform.techniques.clear()
-            for technique in technique_list:
-                projectform.techniques.add(Technique.objects.get_or_create( \
-                    technique_title=technique[:-2])[0])
-            projectform.save()
+        
+        # Set Techniques for Project
+        # if len(technique_list) != 0:
+        check = set([str(tech) for tech in projectform.techniques.all()])
+        hasNewTech = False
+        projectform.techniques.clear()
+        for technique in technique_list:
+            projectform.techniques.add(Technique.objects.get_or_create( \
+                technique_title=technique[:-2])[0])
+            try:
+                check.remove(technique[:-2])
+            except:
+                hasNewTech = True
+        if check:
+            hasNewTech = True
+        projectform.save()
+        
         data = {"experts": []}
         if len(expert_ids) != 0:
             for expert_id in expert_ids:
@@ -697,7 +706,7 @@ def ProjectSetting(request):
         چمران‌تیم""".format(industryName=project.industry_creator.profile.name,
                             projectName=project.project_form.persian_title)
                     text = "استاد {}، به پروژه پیوست.".format(expert.expertform.fullname)
-                    sendMessage(project=project, text=text)
+                    sendMessage(group_set=project.group_set.all(), text=text)
                 else:
                     expertResult['addExpert'] = False
                     project.expert_suggested.add(expert)
@@ -726,6 +735,13 @@ def ProjectSetting(request):
                 newMessage.save()
                 newMessage.receiver.add(expert.user)
                 data['experts'].append(expertResult)
+        
+        # send Project for researcher in Telegram Bot
+        if project.status == 2 and hasNewTech:
+            suggestProjectToResearcher(title=project.project_form.persian_title,
+                                        industry_name=project.industry_creator.profile.name,
+                                        project_code=str(project.code),
+                                        techniques_list=project.project_form.techniques.all())
         project.save()
         return JsonResponse(data={"message": "تنظیمات با موفقیت ثبت شد."})
 
@@ -870,7 +886,7 @@ def confirmResearcher(request):
         researcher.status.status = 'involved'
         project.save()
         text = "پژوهشگر {}, به پروژه پیوست.".format(researcher.researcherprofile.fullname)
-        sendMessage(project=project, text=text)
+        sendMessage(group_set=project.group_set.all(), text=text)
         researcher.status.save()
         application.save()
         return JsonResponse(data={})

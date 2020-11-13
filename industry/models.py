@@ -16,8 +16,8 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from researcher.models import ResearcherUser, RequestedProject, Technique
-from expert import models as expertModels
+import bot_api.sender as sender
+# from bot_api import views
 
 '''
 Each IndustryUser object has a one-to-one field to django's User model, an industryform contaning his information,
@@ -276,7 +276,7 @@ class ProjectForm(models.Model):
     required_budget = models.IntegerField(verbose_name="بودجه مورد نیاز")
     policy = models.TextField(verbose_name="نکات اخلاقی")
     # predict_profit = models.IntegerField(verbose_name='سود مالی')
-    techniques = models.ManyToManyField(Technique, verbose_name="تکنیک های مورد نیاز")
+    techniques = models.ManyToManyField("researcher.Technique", verbose_name="تکنیک های مورد نیاز")
 
     def __str__(self):
         return self.english_title
@@ -325,7 +325,7 @@ class ResearchProjectForm(models.Model):
     policy = models.TextField(verbose_name="ملاحظات اخلاقی", null=True, blank=True)
     executive_restrictions = models.TextField(verbose_name="محدودیت های اجرایی و روش کاهش آن ها", null=True, blank=True)
     
-    techniques = models.ManyToManyField(Technique, verbose_name="تکنیک های مورد نیاز")
+    techniques = models.ManyToManyField("researcher.Technique", verbose_name="تکنیک های مورد نیاز")
 
     def __str__(self):
         return self.english_title
@@ -391,6 +391,15 @@ class Project(models.Model):
             return self.form.english_title
         except:
             return self.research_project_form.english_title
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            perv = Project.objects.get(id=self.id)
+            if perv.status != 1 and self.status == 1:
+                sender.suggestProjectToExpert(title=self.project_form.persian_title,
+                                              industry_name=self.industry_creator.profile.name,
+                                              project_code=str(self.code))
+        super(Project, self).save(*args, **kwargs)
 
     def get_comments(self):
         project_comments = Comment.objects.all().filter(project=self).reverse()
@@ -513,7 +522,7 @@ class Comment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
     industry_user = models.ForeignKey(IndustryUser, on_delete=models.SET_NULL, null=True, blank=True)
     expert_user = models.ForeignKey('expert.ExpertUser', on_delete=models.SET_NULL, null=True, blank=True)
-    researcher_user = models.ForeignKey(ResearcherUser, on_delete=models.SET_NULL, null=True, blank=True)
+    researcher_user = models.ForeignKey("researcher.ResearcherUser", on_delete=models.SET_NULL, null=True, blank=True)
 
     attachment = models.FileField(upload_to=upload_comment, blank=True, null=True)
     date_submitted = models.DateField(auto_now_add=True, verbose_name="تاریخ ثبت")

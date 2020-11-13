@@ -8,7 +8,7 @@ from persiantools.jdatetime import JalaliDate ,digits
 
 from chamran_admin.views import Handler403
 from chamran_admin.models import Task, Card
-from .views import sendMessage
+from .sender import sendMessage
 
 RED_EXCLAMTION_MARK = "\U00002757"
 RED_TRIANGLE_POINTED_DOWN = "\U0001F53B"
@@ -56,7 +56,7 @@ def taskReminder():
                                hourglass=HOURGLASS_NOT_DONE,
                                deadline=gregorian_to_numeric_jalali(task.deadline),
                                red_triangle=RED_TRIANGLE_POINTED_DOWN)
-            sendMessage(project=task.project, text=text, url=url)
+            sendMessage(group_set=task.project.group_set.all(), text=text, url=url)
 
         elif today == dailyPeriod:
             url = "https://chamranteam.ir/project/"+str(task.project.code)
@@ -71,7 +71,7 @@ def taskReminder():
                                hourglass=HOURGLASS_NOT_DONE,
                                deadline=gregorian_to_numeric_jalali(task.deadline),
                                red_triangle=RED_TRIANGLE_POINTED_DOWN)
-            sendMessage(project=task.project, text=text, url=url)
+            sendMessage(group_set=task.project.group_set.all(), text=text, url=url)
     
     return
 
@@ -106,7 +106,7 @@ def cardReminder():
                                 deadline=gregorian_to_numeric_jalali(card.deadline),
                                 red_triangle=RED_TRIANGLE_POINTED_DOWN)
             url = "https://chamranteam.ir/project/"+str(card.project.code)
-            sendMessage(project=card.project, text=text, url=url)
+            sendMessage(group_set=card.project.group_set.all(), text=text, url=url)
 
         elif today == dailyPeriod:
             text = TEXT.format(red_exclamtion_1=RED_EXCLAMTION_MARK,
@@ -119,7 +119,7 @@ def cardReminder():
                                 deadline=gregorian_to_numeric_jalali(card.deadline),
                                 red_triangle=RED_TRIANGLE_POINTED_DOWN)
             url = "https://chamranteam.ir/project/"+str(card.project.code)
-            sendMessage(project=card.project, text=text, url=url)
+            sendMessage(group_set=card.project.group_set.all(), text=text, url=url)
     
     return
 

@@ -26,7 +26,7 @@ from .tools.tools import *
 from researcher.models import ResearcherUser, Status
 from expert.models import ExpertUser
 from industry.models import IndustryUser, Comment, Project
-from bot_api.views import sendMessage
+from bot_api.sender import sendMessage
 from bot_api.emojis import *
 
 from industry.views import showActiveProject as industryShowActiveProject
@@ -719,7 +719,7 @@ def addCard(request):
                       label=LABEL, title=newCard.title,
                       hourglass=HOURGLASS_NOT_DONE,deadline=form.cleaned_data['deadline'],
                       red_triangle=RED_TRIANGLE_POINTED_DOWN)
-        sendMessage(project=project, text=text)
+        sendMessage(group_set=project.group_set.all(), text=text)
         return JsonResponse(data={})
     else:
         print(form.errors)
@@ -765,7 +765,7 @@ def checkTask(request):
                     date=gregorian_to_numeric_jalali(datetime.date.today()),
                     red_triangle=RED_TRIANGLE_POINTED_DOWN)
     url = "https://chamranteam.ir/project/"+ str(task.project.code)
-    sendMessage(project=task.project, text=text, url=url)
+    sendMessage(group_set=task.project.group_set.all(), text=text, url=url)
     return
 
 @permission_required(perm=[], login_url="/login")
@@ -855,8 +855,8 @@ def addTask(request):
                    hourglass=HOURGLASS_NOT_DONE,
                    deadline=gregorian_to_numeric_jalali(task.deadline),
                    red_triangle=RED_TRIANGLE_POINTED_DOWN)
-            sendMessage(project=project, text=TEXT, url=url)
-    sendMessage(project=project, text=text, url=url)
+            sendMessage(group_set=project.group_set.all(), text=TEXT, url=url)
+    sendMessage(group_set=project.group_set.all(), text=text, url=url)
     return JsonResponse(data={"message": "task completely added."})
 
 
