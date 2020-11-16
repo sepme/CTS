@@ -57,6 +57,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                                                         .filter(researcher=researcher)\
                                                         .filter(status__in=["unseen", "pending", "accepted"])]
         technique_title = [str(item.technique) for item in researcher.techniqueinstance_set.all()]
+        context['researcher_techniques'] = technique_title
         technique = models.Technique.objects.filter(technique_title__in=technique_title)
         projects = []
         missedProjects = []
@@ -199,6 +200,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
         context['executiverecord_set'] = profile.executiverecord_set.all()
         context['studiousrecord_set'] = profile.studiousrecord_set.all()
         context['researcher_form'] = profile
+        context['unique_code'] = str(researcher.unique)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -277,6 +279,7 @@ class showActiveProject(LoginRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['account_type'] = "researcher"
         project = get_object_or_404(Project, code=kwargs["code"])
         context = ActiveProject(request=self.request, project=project, data=context)
         context['telegram_group'] = project.telegram_group
