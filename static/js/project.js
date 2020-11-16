@@ -1,17 +1,20 @@
 $(document).ready(function () {
 
     // init save clipboard
-    $(".js-copy-clipboard").click(function () {
-        if ($(this).hasClass("input-group-text")) {
-            let input = $(this).closest(".input-group").find("input")[0];
+    $(".dropdown.mega-dropdown .dropdown-menu").click(function (event) {
+        event.stopPropagation();
+        if ($(".js-copy-clipboard.input-group-text").is(event.target) || $(".js-copy-clipboard.input-group-text").has(event.target).length !== 0) {
+            let input = $(this).find("input")[0];
             input.select();
             input.setSelectionRange(0, 99999);
             document.execCommand("copy");
-            iziToast.success({
-                rtl: true,
-                message: "کد پروژه با موفقیت کپی شد!",
-                position: 'bottomLeft'
-            });
+            $(this).find(".js-copy-clipboard.input-group-text").html("<small>کپی شد!</small>");
+        }
+    });
+
+    $('.dropdown.mega-dropdown').on('hide.bs.dropdown', function () {
+        if ($(this).find(".js-copy-clipboard.input-group-text").length) {
+            $(this).find(".js-copy-clipboard.input-group-text").html('<i class="far fa-clipboard"></i>');
         }
     });
 
@@ -427,6 +430,9 @@ $(document).ready(function () {
                     data: data,
                     success: function (data) {
                         deleteItem.closest(".ct-checklist__item").remove();
+                        if (taskList.find(".ct-checklist__item").length === 0) {
+                            taskList.find(".empty-task").removeClass("d-none");
+                        }
                         // show success toast
                         iziToast.success({
                             rtl: true,
@@ -683,6 +689,7 @@ $(document).ready(function () {
                                         </div>
                                     </div>
                                 </div>`;
+                    taskList.find(".empty-task").addClass("d-none");
                     taskList.append(task);
 
                     // init new task options
