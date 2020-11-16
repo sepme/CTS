@@ -392,23 +392,24 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        industry_user = models.IndustryUser.objects.get(user=self.request.user)
-        profile = industry_user.profile
+        industry = self.request.user.industryuser
+        profile = industry.profile
         context['interface_form'] = forms.interfacePersonForm(instance=profile.interfacePerson, )
         if type(profile) == models.RandDProfile:
             context['type_form'] = "R&D"
             context['RandD_form'] = forms.RandDInfoForm(instance=profile,
                                                         initial={
-                                                            "userId": industry_user.userId,
+                                                            "userId": industry.userId,
                                                             'RandD_type': profile.RandD_type,
                                                             "RandDname": profile.name})
         else:
             context['type_form'] = "group"
             context['researchgroup_form'] = forms.ResearchGroupInfoForm(instance=profile,
                                                                         initial={
-                                                                            "userId": industry_user.userId,
+                                                                            "userId": industry.userId,
                                                                             'type_group': profile.type_group
                                                                         })
+        context['unique_code'] = str(industry.unique)
         return context
 
     def post(self, request):
@@ -779,6 +780,7 @@ class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['account_type'] = "industry"
         project = get_object_or_404(models.Project, code=kwargs["code"])
         context = ActiveProject(request=self.request, project=project, data=context)
         context['telegram_group'] = project.telegram_group
