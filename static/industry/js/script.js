@@ -1452,6 +1452,30 @@ $(document).ready(function () {
     //  End Deadline Progress
     //****************************************//
 
+    //****************************************//
+    //  User Info
+    //****************************************//
+
+    if (window.location.href.indexOf('/industry/userInfo/') > -1) {
+
+        $(".js-copy-clipboard.input-group-text").click(function () {
+            let input = $(this).closest(".input-group").find("input")[0];
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            $(this).html("<small>کپی شد!</small>");
+        });
+
+        $(".nav-item.nav-link").click(function () {
+            $(".js-copy-clipboard.input-group-text").html('<i class="far fa-clipboard"></i>');
+        });
+
+    }
+
+    //****************************************//
+    //  End User Info
+    //****************************************//
+
     function selecting_expert(element) {
         element.on("keyup", function () {
             const thisElement = $(this);
@@ -2040,7 +2064,7 @@ $(document).ready(function () {
             } else {
                 label.find(".file-upload-min-value").text("برای بارگذاری فایل کلیک کنید!");
             }
-        })
+        });
 
         // initial selected techniques tagInput
         $('#projectSetting #tags').tagsInput({

@@ -375,24 +375,24 @@ $(document).ready(function () {
                         thisFormGroup.find(".form-group__status").removeClass("check");
                         if (data.invalid_input) {
                             $("#userID").closest("div").append("<div class='error userId'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + data.message + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
+                                "<span class='error-body'>" +
+                                "<ul class='errorlist'>" +
+                                "<li>" + data.message + "</li>" +
+                                "</ul>" +
+                                "</span>" +
+                                "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         } else if (data.is_unique) {
                             thisFormGroup.find(".form-group__status").addClass("success");
                         } else {
                             $("#userID").closest("div").append("<div class='error userId'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + data.message + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
+                                "<span class='error-body'>" +
+                                "<ul class='errorlist'>" +
+                                "<li>" + data.message + "</li>" +
+                                "</ul>" +
+                                "</span>" +
+                                "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         }
@@ -558,6 +558,19 @@ $(document).ready(function () {
     //****************************************//
 
     if (window.location.href.indexOf('/expert/userInfo/') > -1) {
+
+        $(".js-copy-clipboard.input-group-text").click(function () {
+            let input = $(this).closest(".input-group").find("input")[0];
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            $(this).html("<small>کپی شد!</small>");
+        });
+
+        $(".nav-item.nav-link").click(function () {
+            $(".js-copy-clipboard.input-group-text").html('<i class="far fa-clipboard"></i>');
+        });
+
         function putAttachment(element) {
             element.on("change", function () {
                 let fileName = $(this).val().split("\\").pop();
@@ -1615,7 +1628,7 @@ function deleteComment(comment) {
 function setEthicalConsider(data) {
     let role = "";
     if (data.policy)
-        role +=`<div>
+        role += `<div>
                     <div class="question">
                         <span class="question-mark"><i class='far fa-question-circle'></i></span> 
                         <span>
@@ -1634,13 +1647,13 @@ function setEthicalConsider(data) {
                     </div>
                     <div class='answer'>${data.executive_restrictions}</div>
                 </div>`;
-    $(".project-info-content" ).html(role);
+    $(".project-info-content").html(role);
 }
 
 function setGoal(data) {
     let goal = "";
     if (data.main_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -1650,7 +1663,7 @@ function setGoal(data) {
                     <div class='answer'>${data.main_goal}</div>
                 </div>`;
     if (data.secondary_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -1660,7 +1673,7 @@ function setGoal(data) {
                     <div class='answer'>${data.secondary_goal}</div>
                 </div>`;
     if (data.practical_goal)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -1670,7 +1683,7 @@ function setGoal(data) {
                     <div class='answer'>${data.practical_goal}</div>
                 </div>`;
     if (data.research_question)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -1680,7 +1693,7 @@ function setGoal(data) {
                     <div class='answer'>${data.research_question}</div>
                 </div>`;
     if (data.reseach_assumptions)
-        goal +=`<div>
+        goal += `<div>
                     <div class='question'>
                         <span class='question-mark'>
                             <i class='far fa-question-circle'></i>
@@ -1689,7 +1702,7 @@ function setGoal(data) {
                     </div>
                     <div class='answer'>${data.reseach_assumptions}</div>
                 </div>`;
-    $(".project-info-content" ).html(goal);
+    $(".project-info-content").html(goal);
 }
 
 function setProcedure(data) {
@@ -1703,7 +1716,7 @@ function setProcedure(data) {
                         <div class='answer'>${data.summary_method}</div>
                      </div>`;
     if (data.required_equipment)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -1713,7 +1726,7 @@ function setProcedure(data) {
                         <div class='answer'>${data.required_equipment}</div>
                      </div>`;
     if (data.sample_count_method)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -1723,7 +1736,7 @@ function setProcedure(data) {
                         <div class='answer'>${data.sample_count_method}</div>
                      </div>`;
     if (data.analyse_method)
-        procedure +=`<div>
+        procedure += `<div>
                         <div class='question'>
                             <span class='question-mark'>
                                 <i class='far fa-question-circle'></i>
@@ -1894,7 +1907,7 @@ if (window.location.href.indexOf("expert/researcher/") > 0) {
             }
         });
     });
-    $("#researcher-remove-").click(function(event){
+    $("#researcher-remove-").click(function (event) {
         const thisBtn = $(this);
         let project_id = $(".project_id").val();
         console.log(project_id);

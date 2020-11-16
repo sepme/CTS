@@ -455,24 +455,24 @@ $(document).ready(function () {
                         thisFormGroup.find(".form-group__status").removeClass("check");
                         if (data.invalid_input) {
                             $("#userID").closest("div").append("<div class='error userId'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + data.message + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
+                                "<span class='error-body'>" +
+                                "<ul class='errorlist'>" +
+                                "<li>" + data.message + "</li>" +
+                                "</ul>" +
+                                "</span>" +
+                                "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         } else if (data.is_unique) {
                             thisFormGroup.find(".form-group__status").addClass("success");
                         } else {
                             $("#userID").closest("div").append("<div class='error userId'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + data.message + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
+                                "<span class='error-body'>" +
+                                "<ul class='errorlist'>" +
+                                "<li>" + data.message + "</li>" +
+                                "</ul>" +
+                                "</span>" +
+                                "</div>");
                             thisFormGroup.find(".form-group__status").addClass("fail");
                             thisFormGroup.find("input").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
                         }
@@ -578,7 +578,7 @@ $(document).ready(function () {
 
             },
         });
-    }); 
+    });
 
     // get expert comments
     function getComments(expert_id, project_id) {
@@ -622,11 +622,10 @@ $(document).ready(function () {
                 setComment(data.comment);
             },
             error: function (data) {
-    
+
             },
         });
     }
-    
 
 
     // get expert information
@@ -648,11 +647,11 @@ $(document).ready(function () {
             dataType: 'json',
             data: {id: id},
             success: function (data) {
-                if (data.photo){
+                if (data.photo) {
                     $("#expertResume #expert_photo").attr("src", data.photo);
-                } else{
+                } else {
                     $("#expertResume #expert_photo").attr("src", "/static/expert/img/profile.jpg");
-                }  
+                }
                 $("#expert_name").html(data.name);
                 $("#expert_uni").html(data.university);
                 $("#expert_field").html(data.scientific_rank + " " + data.special_field);
@@ -671,6 +670,19 @@ $(document).ready(function () {
     //****************************************//
 
     if (window.location.href.indexOf('/researcher/userInfo/') > -1) {
+
+        $(".js-copy-clipboard.input-group-text").click(function () {
+            let input = $(this).closest(".input-group").find("input")[0];
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            $(this).html("<small>کپی شد!</small>");
+        });
+
+        $(".nav-item.nav-link").click(function () {
+            $(".js-copy-clipboard.input-group-text").html('<i class="far fa-clipboard"></i>');
+        });
+
         function putAttachment(element) {
             element.on("change", function () {
                 let fileName = $(this).val().split("\\").pop();

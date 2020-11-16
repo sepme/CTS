@@ -1697,7 +1697,7 @@ hr {
 }
 
 .row {
-    direction: rtl !important;
+    direction: rtl;
 }
 
 .label {
