@@ -509,7 +509,12 @@ $(document).ready(function () {
                 },
             },
         });
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
         addTaskForm.find(".ct-task-assignee.ct-option-btn .dropdown-item").click(function () {
             if (!$(this).hasClass("selected")) {
                 let uuid = $(this).attr("data-value");
