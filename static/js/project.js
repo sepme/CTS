@@ -355,9 +355,16 @@ $(document).ready(function () {
                 });
                 // init save edit btn
                 checklistItem.find(".ct-checklist-item__footer button.save-change").click(function () {
-                    // TODO: Send new task data to server
+                    let taskValues = get_pending_task_values(checklistItem);
+                    let assigns = ``;
+                    for (let i = 0; i < taskValues.assigns.length; i++) {
+                        assigns += ` <span class="atMention d-inline-block me">@${taskValues.assigns[i]}</span>`;
+                    }
                     let data = {
-                        "delete": true,
+                        "project_id": addTaskForm.find("input[name='project_id']").val(),
+                        "description": taskValues.text,
+                        "involved_users": taskValues.assigns,
+                        "deadline": taskValues.due,
                         "pk": checklistItem.attr("data-value")
                     };
                     $.ajax({
@@ -365,33 +372,26 @@ $(document).ready(function () {
                         url: "/addTask/",
                         data: data,
                         success: function (data) {
-
+                            checklistItem.removeClass("onEdit draft");
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .atMention").remove();
+                            $(assigns).insertBefore(checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description"));
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text(taskValues.text);
+                            if (taskValues.due) {
+                                checklistItem.find(".ct-checklist-item__detail").addClass('has-due');
+                                checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").removeClass("d-none");
+                                checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text(taskValues.due);
+                            } else {
+                                checklistItem.find(".ct-checklist-item__detail").removeClass('has-due');
+                                checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").addClass("d-none");
+                            }
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
+                            checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
                         },
                         error: function (data) {
 
                         }
                     });
-                    checklistItem.removeClass("onEdit draft");
-                    let taskValues = get_pending_task_values(checklistItem);
-                    let assigns = ``;
-                    for (let i = 0; i < taskValues.assigns.length; i++) {
-                        assigns += ` <span class="atMention d-inline-block me">@${taskValues.assigns[i]}</span>`;
-                    }
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .atMention").remove();
-                    $(assigns).insertBefore(checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description"));
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text(taskValues.text);
-                    if (taskValues.due) {
-                        checklistItem.find(".ct-checklist-item__detail").addClass('has-due');
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").removeClass("d-none");
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text(taskValues.due);
-                    } else {
-                        checklistItem.find(".ct-checklist-item__detail").removeClass('has-due');
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").addClass("d-none");
-                    }
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
-                    checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
-
                 });
             });
             // init edit task due
