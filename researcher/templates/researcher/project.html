@@ -458,7 +458,8 @@
                                                         </div>
                                                     </div>
                                                     {% if telegram %}
-                                                        <a href="{{ telegram }}" class="p-telegram-link rounded-circle rounded-icon">
+                                                        <a href="{{ telegram }}"
+                                                           class="p-telegram-link rounded-circle rounded-icon">
                                                             <i class="fab fa-telegram-plane"
                                                                style="font-size: 20px"></i>
                                                         </a>
@@ -564,7 +565,7 @@
                                                     افزودن تسک
                                                 </button>
                                                 <div class="section">
-                                                    <div class="ct-checklist">
+                                                    <div class="ct-checklist {% if not task %}text-center{% endif %}">
                                                         {% for task in task_list %}
                                                             <div class="ct-checklist__item" data-value="{{ task.id }}">
                                                                 <div class="ct-checklist-item__checkbox">
@@ -774,6 +775,13 @@
                                                                 </div>
                                                             </div>
                                                         {% endfor %}
+                                                        <div class="empty-task {% if task %}d-none{% endif %}">
+                                                            <img src="{% static 'img/clipboard.svg' %}"
+                                                                 alt="no researcher" height="100px"
+                                                                 class="rounded-0 m-auto">
+                                                            <h5>تاکنون موردی تعریف نشده است!</h5>
+                                                            <p></p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

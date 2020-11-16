@@ -430,6 +430,9 @@ $(document).ready(function () {
                     data: data,
                     success: function (data) {
                         deleteItem.closest(".ct-checklist__item").remove();
+                        if (taskList.find(".ct-checklist__item").length === 0) {
+                            taskList.find(".empty-task").removeClass("d-none");
+                        }
                         // show success toast
                         iziToast.success({
                             rtl: true,
@@ -686,6 +689,7 @@ $(document).ready(function () {
                                         </div>
                                     </div>
                                 </div>`;
+                    taskList.find(".empty-task").addClass("d-none");
                     taskList.append(task);
 
                     // init new task options
