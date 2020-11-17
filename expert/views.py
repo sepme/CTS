@@ -171,6 +171,7 @@ class UserInfo(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['paper_form'] = forms.PaperRecordForm()
         context['email'] = self.request.user.get_username()
         context['autoAddProject'] = expertForm.expert_user.autoAddProject
+        context['unique_code'] = str(expert.unique)
         if expertForm.resume:
             context['resume'] = expertForm.resume
         return context
@@ -1211,6 +1212,7 @@ class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['account_type'] = "expert"
         project = get_object_or_404(Project, code=kwargs["code"])
         context = ActiveProject(request=self.request, project=project, data=context)
         context['requestResearcherForm'] = forms.RequestResearcherForm()

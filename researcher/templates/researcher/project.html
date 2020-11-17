@@ -309,7 +309,7 @@
                                     <span class="section-title">مشخصات پروژه</span>
                                     <div class="section">
                                         <div class="row mbottom-lg-25 flex-column-reverse flex-md-row">
-                                            <div class="col-md-7 col-lg-9">
+                                            <div class="col-md-7 col-lg-8">
                                                 <div class="row m-top-10">
                                                     <div class="col-md-12">
                                                         <div class="pre-header">
@@ -355,16 +355,16 @@
                                                     </div>
                                                 {% endif %}
                                             </div>
-                                            <div class="col-md-5 col-lg-3">
+                                            <div class="col-md-5 col-lg-4">
                                                 <div class="industry-logo-preview text-left mt-4">
                                                     {% if industry_logo %}
                                                         <img id="industry_logo"
                                                              src="{{ industry_logo }}"
-                                                             alt="industry-logo" width="150px" height="150px">
+                                                             alt="industry-logo" width="140px" height="140px">
                                                     {% else %}
                                                         <img id="industry_logo"
                                                              src="/static/industry/img/profile.jpg"
-                                                             alt="industry-logo" width="150px" height="150px">
+                                                             alt="industry-logo" width="140px" height="140px">
                                                     {% endif %}
                                                 </div>
                                                 <div class="text-center">
@@ -375,7 +375,7 @@
                                                 </div>
                                                 <div class="text-center mt-3">
 
-                                                    <div class="dropdown d-inline-block">
+                                                    <div class="dropdown mega-dropdown d-inline-block">
                                                         <a href="javascript: void(0);"
                                                            class="p-bot rounded-circle border-0 rounded-icon"
                                                            type="button"
@@ -450,26 +450,32 @@
                                                                        class="form-control m-0 bg-white dir-ltr"
                                                                        value="{{ project.code }}" readonly>
                                                                 <div class="input-group-append">
-                                                                    <span class="input-group-text css-hover js-copy-clipboard">
+                                                                    <span class="input-group-text css-hover js-copy-clipboard dir-rtl">
                                                                         <i class="far fa-clipboard"></i>
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <a href="#" class="p-telegram-link rounded-circle rounded-icon">
-                                                        <i class="fab fa-telegram-plane" style="font-size: 20px"></i>
-                                                    </a>
-
-                                                    <a href="{{ end_note }}"
-                                                       class="p-end_note-link rounded-circle rounded-icon">
-                                                        <i class="fas fa-quote-right" style="font-size: 16px"></i>
-                                                    </a>
-                                                    <a href="{{ proposal }}"
-                                                       class="p-proposal-link rounded-circle rounded-icon">
-                                                        <i class="fas fa-file-pdf" style="font-size: 18px"></i>
-                                                    </a>
+                                                    {% if telegram %}
+                                                        <a href="{{ telegram }}"
+                                                           class="p-telegram-link rounded-circle rounded-icon">
+                                                            <i class="fab fa-telegram-plane"
+                                                               style="font-size: 20px"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if end_not %}
+                                                        <a href="{{ end_note }}"
+                                                           class="p-end_note-link rounded-circle rounded-icon">
+                                                            <i class="fas fa-quote-right" style="font-size: 16px"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if proposal %}
+                                                        <a href="{{ proposal }}"
+                                                           class="p-proposal-link rounded-circle rounded-icon">
+                                                            <i class="fas fa-file-pdf" style="font-size: 18px"></i>
+                                                        </a>
+                                                    {% endif %}
                                                 </div>
                                                 {#                                                <div class="budget-section">#}
                                                 {#                                                    <div class="budget">#}
@@ -559,7 +565,7 @@
                                                     افزودن تسک
                                                 </button>
                                                 <div class="section">
-                                                    <div class="ct-checklist">
+                                                    <div class="ct-checklist {% if not task %}text-center{% endif %}">
                                                         {% for task in task_list %}
                                                             <div class="ct-checklist__item" data-value="{{ task.id }}">
                                                                 <div class="ct-checklist-item__checkbox">
@@ -769,6 +775,13 @@
                                                                 </div>
                                                             </div>
                                                         {% endfor %}
+                                                        <div class="empty-task {% if task %}d-none{% endif %}">
+                                                            <img src="{% static 'img/clipboard.svg' %}"
+                                                                 alt="no researcher" height="100px"
+                                                                 class="rounded-0 m-auto">
+                                                            <h5>تاکنون موردی تعریف نشده است!</h5>
+                                                            <p></p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

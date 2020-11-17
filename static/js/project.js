@@ -1,17 +1,20 @@
 $(document).ready(function () {
 
     // init save clipboard
-    $(".js-copy-clipboard").click(function () {
-        if ($(this).hasClass("input-group-text")) {
-            let input = $(this).closest(".input-group").find("input")[0];
+    $(".dropdown.mega-dropdown .dropdown-menu").click(function (event) {
+        event.stopPropagation();
+        if ($(".js-copy-clipboard.input-group-text").is(event.target) || $(".js-copy-clipboard.input-group-text").has(event.target).length !== 0) {
+            let input = $(this).find("input")[0];
             input.select();
             input.setSelectionRange(0, 99999);
             document.execCommand("copy");
-            iziToast.success({
-                rtl: true,
-                message: "کد پروژه با موفقیت کپی شد!",
-                position: 'bottomLeft'
-            });
+            $(this).find(".js-copy-clipboard.input-group-text").html("<small>کپی شد!</small>");
+        }
+    });
+
+    $('.dropdown.mega-dropdown').on('hide.bs.dropdown', function () {
+        if ($(this).find(".js-copy-clipboard.input-group-text").length) {
+            $(this).find(".js-copy-clipboard.input-group-text").html('<i class="far fa-clipboard"></i>');
         }
     });
 
@@ -352,9 +355,16 @@ $(document).ready(function () {
                 });
                 // init save edit btn
                 checklistItem.find(".ct-checklist-item__footer button.save-change").click(function () {
-                    // TODO: Send new task data to server
+                    let taskValues = get_pending_task_values(checklistItem);
+                    let assigns = ``;
+                    for (let i = 0; i < taskValues.assigns.length; i++) {
+                        assigns += ` <span class="atMention d-inline-block me">@${taskValues.assigns[i]}</span>`;
+                    }
                     let data = {
-                        "delete": true,
+                        "project_id": addTaskForm.find("input[name='project_id']").val(),
+                        "description": taskValues.text,
+                        "involved_users": taskValues.assigns,
+                        "deadline": taskValues.due,
                         "pk": checklistItem.attr("data-value")
                     };
                     $.ajax({
@@ -362,33 +372,26 @@ $(document).ready(function () {
                         url: "/addTask/",
                         data: data,
                         success: function (data) {
-
+                            checklistItem.removeClass("onEdit draft");
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .atMention").remove();
+                            $(assigns).insertBefore(checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description"));
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text(taskValues.text);
+                            if (taskValues.due) {
+                                checklistItem.find(".ct-checklist-item__detail").addClass('has-due');
+                                checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").removeClass("d-none");
+                                checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text(taskValues.due);
+                            } else {
+                                checklistItem.find(".ct-checklist-item__detail").removeClass('has-due');
+                                checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").addClass("d-none");
+                            }
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
+                            checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
+                            checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
                         },
                         error: function (data) {
 
                         }
                     });
-                    checklistItem.removeClass("onEdit draft");
-                    let taskValues = get_pending_task_values(checklistItem);
-                    let assigns = ``;
-                    for (let i = 0; i < taskValues.assigns.length; i++) {
-                        assigns += ` <span class="atMention d-inline-block me">@${taskValues.assigns[i]}</span>`;
-                    }
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .atMention").remove();
-                    $(assigns).insertBefore(checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description"));
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text .task-description").text(taskValues.text);
-                    if (taskValues.due) {
-                        checklistItem.find(".ct-checklist-item__detail").addClass('has-due');
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").removeClass("d-none");
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due button span").text(taskValues.due);
-                    } else {
-                        checklistItem.find(".ct-checklist-item__detail").removeClass('has-due');
-                        checklistItem.find(".ct-checklist-item__detail .ct-checklist-item-due").addClass("d-none");
-                    }
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__text").removeClass("d-none");
-                    checklistItem.find(".ct-checklist-item__detail .ct-checklist__pre").addClass("d-none");
-                    checklistItem.find(".ct-checklist-item__footer").addClass("d-none");
-
                 });
             });
             // init edit task due
@@ -427,6 +430,9 @@ $(document).ready(function () {
                     data: data,
                     success: function (data) {
                         deleteItem.closest(".ct-checklist__item").remove();
+                        if (taskList.find(".ct-checklist__item").length === 0) {
+                            taskList.find(".empty-task").removeClass("d-none");
+                        }
                         // show success toast
                         iziToast.success({
                             rtl: true,
@@ -683,6 +689,7 @@ $(document).ready(function () {
                                         </div>
                                     </div>
                                 </div>`;
+                    taskList.find(".empty-task").addClass("d-none");
                     taskList.append(task);
 
                     // init new task options

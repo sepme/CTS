@@ -104,13 +104,6 @@
                                     {{ project.project_title }}
                                 </h6>
                                 <div class="box-option-container">
-                                    <div class="project-techniques">
-                                        <ul class="mix-list hover">
-                                            {% for keyword in project.keyword %}
-                                                <li>{{ keyword.name }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
                                     <div class="data-modified">
                                     <span>{{ project.started }} {% if project.started != "امروز" %}
                                         قبل{% endif %} </span>
@@ -270,13 +263,6 @@
                                     {{ project.project_title }}
                                 </h6>
                                 <div class="box-option-container">
-                                    <div class="project-techniques">
-                                        <ul class="mix-list hover">
-                                            {% for keyword in project.keyword %}
-                                                <li>{{ keyword.name }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
                                     <div class="data-modified">
                                     <span>{{ project.started }} {% if project.started != "امروز" %}
                                         قبل{% endif %} </span>

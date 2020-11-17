@@ -1697,7 +1697,7 @@ hr {
 }
 
 .row {
-    direction: rtl !important;
+    direction: rtl;
 }
 
 .label {
@@ -5502,10 +5502,10 @@ nav[aria-label="breadcrumb"] ol {
 }
 
 .industry-logo-preview > img {
-    height: 150px;
-    width: 150px;
-    min-height: 150px;
-    min-width: 150px;
+    height: 140px;
+    width: 140px;
+    min-height: 140px;
+    min-width: 140px;
     border-radius: 5px;
     border: 1px solid #bdbdbd;
     margin: auto;
