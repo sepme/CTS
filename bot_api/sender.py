@@ -7,12 +7,12 @@ import telegram
 def sendMessage(group_set, text, url=None):
     if url is None:
         for gp in group_set:
-            bot.sendMessage(chat_id=gp.group_id, text=text)
+            views.bot.sendMessage(chat_id=gp.group_id, text=text)
     else:
         keyboard = [[telegram.InlineKeyboardButton("مشاهده پروژه", url=url)],]
         reply_markup = telegram.InlineKeyboardMarkup(keyboard)
         for gp in group_set:
-            bot.sendMessage(chat_id=gp.group_id, text=text.replace("<br>", "\n"), reply_markup=reply_markup)
+            views.bot.sendMessage(chat_id=gp.group_id, text=text.replace("<br>", "\n"), reply_markup=reply_markup)
 
 
 def suggestProjectToExpert(title, industry_name, project_code):

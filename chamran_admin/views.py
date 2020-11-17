@@ -719,7 +719,8 @@ def addCard(request):
                       label=LABEL, title=newCard.title,
                       hourglass=HOURGLASS_NOT_DONE,deadline=form.cleaned_data['deadline'],
                       red_triangle=RED_TRIANGLE_POINTED_DOWN)
-        sendMessage(group_set=project.group_set.all(), text=text)
+        url = "https://chamranteam.ir/project/"+ str(newCard.project.code)
+        sendMessage(group_set=project.group_set.all(), text=text, url=url)
         return JsonResponse(data={})
     else:
         print(form.errors)
