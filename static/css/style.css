@@ -2956,6 +2956,15 @@ div.no-project > a {
     padding: 4px 5px;
 }
 
+.link-with-icon.telegram {
+    border-radius: 30px;
+    background-color: #30A8DC;
+    color: #fff;
+    text-decoration: none;
+    margin: 0 5px;
+    padding: 4px 10px 4px 5px;
+}
+
 div.no-project > img.icon {
     position: absolute;
     top: 0;
