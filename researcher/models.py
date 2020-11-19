@@ -451,18 +451,18 @@ class TechniqueInstance(models.Model):
             return "امروز"
         total_passed = ""
         if days_passed > 364:
-            total_passed = digits(str(days_passed // 365)) + " سال "
+            total_passed = digits.en_to_fa(str(days_passed // 365)) + " سال "
         days_passed = days_passed % 365
         if days_passed > 30:
             if total_passed == "":
-                total_passed = digits(str(days_passed // 30)) + " ماه "
+                total_passed = digits.en_to_fa(str(days_passed // 30)) + " ماه "
             else:
-                total_passed += " و " + digits(str(days_passed // 30)) + " ماه "
+                total_passed += " و " + digits.en_to_fa(str(days_passed // 30)) + " ماه "
         days_passed = days_passed % 30
         if total_passed == "":
-            total_passed = digits(str(days_passed)) + " روز "
+            total_passed = digits.en_to_fa(str(days_passed)) + " روز "
         else:
-            total_passed += " و " + digits(str(days_passed)) + " روز "
+            total_passed += " و " + digits.en_to_fa(str(days_passed)) + " روز "
         total_passed += " پیش"
         return total_passed
 
