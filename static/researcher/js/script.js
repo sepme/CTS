@@ -559,6 +559,8 @@ $(document).ready(function () {
                     $('#researcher_photo').attr("src", "/static/expert/img/profile.jpg");
                 $('#researcher_name').html(data.name);
                 $('#researcher_major').html(data.major);
+                $('#researcher_university').html(data.university);
+                $('#researcher_entry_year').html(data.entry_year);
                 switch (data.grade) {
                     case 1:
                         $('#researcher_grade').html('کارشناسی');
