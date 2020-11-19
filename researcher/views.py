@@ -267,7 +267,7 @@ class UserInfo(PermissionRequiredMixin, LoginRequiredMixin, generic.TemplateView
 
 
 class showActiveProject(LoginRequiredMixin, generic.TemplateView):
-    template_name = "researcher/project.html"
+    template_name = "project/index.html"
     permission_required = ('researcher.be_researcher',)
     login_url = "/login/"
 

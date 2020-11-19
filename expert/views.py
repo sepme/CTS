@@ -989,7 +989,7 @@ def ExpertRequestResearcher(request):
         researcher_count = form.cleaned_data['researcher_count']
         try:
             researcher_request = RequestResearcher.objects.get(project=project)
-            researcher_request.researcher_count += researcher_count
+            researcher_request.researcher_count = researcher_count
             researcher_request.least_hour = least_hour
             researcher_request.save()
         except:
@@ -1199,7 +1199,7 @@ def ActiveProject(request, project, data):
 
 
 class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
-    template_name = "expert/project.html"
+    template_name = "project/index.html"
     permission_required = ('expert.be_expert',)
     login_url = "/login/"
 
