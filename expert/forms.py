@@ -1,6 +1,8 @@
 from django import forms
-from .models import *
 from django.core.exceptions import ValidationError
+
+from .models import *
+from .tools.tools import *
 
 import re
 
@@ -423,9 +425,14 @@ class CommentForm(forms.Form):
         data = self.cleaned_data["attachment"]
         return data
 
-class RequestResearcherForm(forms.Form):
-    least_hour       = forms.IntegerField(required=False)
-    researcher_count = forms.IntegerField(required=False)
+class RequestResearcherForm(forms.ModelForm):
+    # least_hour       = forms.IntegerField(required=False)
+    # researcher_count = forms.IntegerField(required=False)
+    expiration_date    = forms.CharField(max_length=50, required=False)
+
+    class Meta:
+        model = RequestResearcher
+        fields = ['least_hour', 'researcher_count',]
     
     def clean_least_hour(self):
         data = self.cleaned_data["least_hour"]
@@ -442,3 +449,13 @@ class RequestResearcherForm(forms.Form):
         if data < 1:
             raise ValidationError("تعداد دانشجو وارد شده نامعتر می باشد.")
         return data
+
+    def clean_expiration_date(self):
+        data = self.cleaned_data["expiration_date"]
+        if data is "":
+            raise ValidationError('تاریخ اعتبار درخواست نمی تواند خالی باشد.')
+        try:
+            return JalaliToGregorianDate(data)
+        except:
+            raise ValidationError('تاریخ اعتبار درخواست معتبر نمی باشد.')
+    

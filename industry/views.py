@@ -244,7 +244,7 @@ def accept_project(request):
     project.save()
     expert.status = 'involved'
     expert.save()
-    requestPorject = expert_models.ExpertRequestedProject.objects.get(expert=expert)
+    requestProject = expert_models.ExpertRequestedProject.objects.get(expert=expert)
     project_form = project.project_form
     for tech in requestProject.required_technique.all():
         if tech not in project_form.techniques.all():
@@ -819,10 +819,11 @@ class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
                 requestResearcher = RequestResearcher.objects.get(project=project)
                 context['researcherRequestFrom'] = RequestResearcherForm(initial={
                     "least_hour": requestResearcher.least_hour,
-                    "researcher_count": requestResearcher.researcher_count})
+                    "researcher_count": requestResearcher.researcher_count,
+                    "expiration_date": gregorian_to_numeric_jalali(requestResearcher.expiration_date)})
             except:
                 context['researcherRequestFrom'] = RequestResearcherForm()
-        context['form'] = CardForm()
+
         allTasks = Task.objects.filter(project=project)
         taskInfo = []
         for task in allTasks:
@@ -839,6 +840,7 @@ class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.Tem
             taskInfo.append(data)
         context['task_list'] = taskInfo
 
+        context['form'] = CardForm()
         allCards = Card.objects.filter(project=project)
         cardInfo = []
         for card in allCards:
@@ -858,18 +860,20 @@ def industryRequestResearcher(request):
         expert = project.expert_accepted.all().first()
         least_hour = form.cleaned_data['least_hour']
         researcher_count = form.cleaned_data['researcher_count']
+        expiration_date = form.cleaned_data['expiration_date']
         try:
             researcher_request = RequestResearcher.objects.get(project=project)
             researcher_request.researcher_count = researcher_count
             researcher_request.least_hour = least_hour
-            researcher_request.save()
+            researcher_request.expiration_date = expiration_date
         except:
             researcher_request = RequestResearcher(project=project
                                                    , expert=expert
                                                    , researcher_count=researcher_count
-                                                   , least_hour=least_hour)
+                                                   , least_hour=least_hour
+                                                   , expiration_date=expiration_date)
 
-            researcher_request.save()
+        researcher_request.save()
 
         return JsonResponse({"successfull": "successfull"})
     else:

@@ -340,7 +340,6 @@ class Project(models.Model):
     code = models.UUIDField(verbose_name="کد پروژه", default=uuid.uuid4, unique=True)
     date_submitted_by_industry = models.DateField(verbose_name="تاریخ ثبت پرژه توسط صنعت", auto_now_add=True)
     date_project_started = models.DateField(verbose_name="تاریخ شروع پروژه", null=True, blank=True)
-    researcherRequestDeadline = models.DateField(verbose_name="مهلت درخواست پژوهشگر", auto_now=False, auto_now_add=False, null=True, blank=True)
     finish_date_suggested = models.DateField(verbose_name="تاریخ پیشنهادی اتمام پروژه", auto_now=False, auto_now_add=False, null=True, blank=True)
     date_finished = models.DateField(verbose_name="تاریخ اتمام پروژه", null=True, blank=True)
     researcher_applied = models.ManyToManyField('researcher.ResearcherUser', through='researcher.RequestedProject',
