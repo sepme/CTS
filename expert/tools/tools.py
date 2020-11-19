@@ -6,6 +6,11 @@ def gregorian_to_numeric_jalali(date):
     j_date = JalaliDate(date)
     return str(j_date.year) + '/' + str(j_date.month) + '/' + str(j_date.day)
 
+def JalaliToGregorianDate(date):
+    datePart = date.split("/")
+    return JalaliDate(year=int(datePart[0]), month=int(datePart[1]), day=int(datePart[2]))\
+        .to_gregorian()
+
 
 def calculate_deadline(finished, started):
     if finished is None or started is None:

@@ -1,5 +1,6 @@
 {% load static %}
 {% load date_tags %}
+{% load widget_tweaks %}
 {% load message_tags %}
 <div class="modal fade" id="researcherRequest" tabindex="-1" role="dialog" aria-labelledby="researcherRequestLabel"
      aria-hidden="true">
@@ -55,8 +56,9 @@
                                 <div class="col-12">
                                     <div class="form-group num-input-control">
                                         <label for="requestDeadline"> مهلت درخواست:</label>
-                                        <input type="text"
-                                               id="requestDeadline" name="researcherRequestDeadline">
+                                        {{form.expiration_date |attr:"id:requestDeadline"}}
+                                        {% comment %} <input type="text"
+                                               id="requestDeadline" name="researcherRequestDeadline"> {% endcomment %}
                                     </div>
                                 </div>
                             </div>

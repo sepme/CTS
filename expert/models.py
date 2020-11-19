@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import os
 from django.shortcuts import reverse, HttpResponseRedirect
+from django.utils.timezone import now
 import uuid
 from researcher.models import ResearchQuestionInstance
 
@@ -404,6 +405,7 @@ class RequestResearcher(models.Model):
     expert = models.ForeignKey(ExpertUser, on_delete=models.CASCADE)
     least_hour = models.IntegerField(verbose_name="حداقل ساعت")
     researcher_count = models.IntegerField(verbose_name="تعداد دانشجو")
+    expiration_date = models.DateField(auto_now_add=False, verbose_name='تاریخ اعتبار درخواست', default=now)
 
     def __str__(self):
         return str(self.project) + " - " + str(self.researcher_count)
