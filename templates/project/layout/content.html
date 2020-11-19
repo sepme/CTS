@@ -1,0 +1,707 @@
+{% load static %}
+<div class="row">
+    <div class="col-12 text-right">
+        <h3 class="h3 p-top-15">مدیریت پروژه</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    {% if account_type == "industry" %}
+                        <a href="{% url 'industry:index' %}">پروژه‌ها</a>
+                    {% elif account_type == "expert" %}
+                        <a href="{% url 'expert:index' %}">پروژه‌ها</a>
+                    {% elif account_type == "researcher" %}
+                        <a href="{% url 'researcher:index' %}">پروژه‌ها</a>
+                    {% endif %}
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <span>مدیریت پروژه</span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 text-right">
+        <div class="card box flow-root-display w-100">
+            <div class="box-body">
+                <div class="row mbottom-lg-25 d-block d-lg-none">
+                    <div class="col-lg-12 text-right">
+                        <h6>پروژه <span>{{ title }}</span></h6>
+                        <h6>{{ eng_title }}</h6>
+                    </div>
+                </div>
+                <div class="row" style="direction: ltr!important">
+                    <div class="d-none d-lg-block col-lg-4 col-xs-3 mt-3">
+                        <span class="section-title">تایم‌لاین پروژه</span>
+                        <button type="button"
+                                class="border-button section-button"
+                                data-toggle="modal"
+                                data-target="#addDeadline">
+                            افزودن ددلاین
+                        </button>
+                        <div class="section overflow-auto" style="height:calc(100% - 30px);">
+                            {% if not project.is_date_valid %}
+                                <div class="project-progress-no-access">این قسمت در دسترس نیست!</div>
+                            {% endif %}
+                            <div class="project-progress mbottom-lg-25 {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
+                                <div class="step-container active">
+                                    <span class="step-date">
+                                        <div class="start">
+                                            {{ timeScheduling.start }}
+                                        </div>
+                                    </span>
+                                    <span class="step-name">
+                                        شروع پروژه
+                                    </span>
+                                </div>
+                                {% for card in card_list %}
+                                    <div class="step-container">
+                                        <span class="step-date">{{ card.deadline }}</span>
+                                        <span class="step-name">{{ card.title }}</span>
+                                    </div>
+                                {% endfor %}
+                                <div class="line-100">
+                                    <div class="arrow"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="vertical-line">
+                    </div>
+                    <div class="col-lg-8 col-xs-9">
+                        <div class="row mbottom-lg-25 d-none d-lg-block ">
+                            <div class="col-lg-12 text-right">
+                                <h6>پروژه <span>{{ title }}</span></h6>
+                                <h6>{{ eng_title }}</h6>
+                            </div>
+                        </div>
+                        <div class="row mbottom-lg-25">
+                            <div class="col-lg-12 text-right">
+                                <span class="section-title">مشخصات پروژه</span>
+                                <div class="section">
+                                    <div class="row mbottom-lg-25 flex-column-reverse flex-md-row">
+                                        <div class="col-md-7 col-lg-9">
+                                            <div class="row m-top-10">
+                                                <div class="col-md-12">
+                                                    <div class="pre-header">
+                                                        <span>مجری</span>
+                                                    </div>
+                                                    <div class="">
+                                                        {% for enforcer in enforcers %}
+                                                            <div class="rounded-name-profile clickable mt-2"
+                                                                 id="{{ enforcer.id }}"
+                                                                 data-toggle="modal" data-target="#expertResume">
+                                                                {% if enforcer.photo %}
+                                                                    <img src="{{ enforcer.photo }}"
+                                                                         alt="enforcer photo">
+                                                                {% else %}
+                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                         alt="Enforcer Photo">
+                                                                {% endif %}
+                                                                <span>{{ enforcer.name }}</span>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                {% if budget_amount %}
+                                                    <div class="col-12">
+                                                        <div class="pre-header">
+                                                            <span>بودجه</span>
+                                                        </div>
+                                                        <div id="budget-content">
+                                                            <span class="budget-amount">{{ budget_amount }}</span>
+                                                            <span>ریال</span>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            {% if executive_info %}
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="pre-header">
+                                                            <span>توضیحات اجرایی</span>
+                                                        </div>
+                                                        <pre id="executive-info">{{ executive_info }}</pre>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-5 col-lg-3">
+                                            <div class="industry-logo-preview text-left mt-4">
+                                                {% if industry_logo %}
+                                                    <img id="industry_logo"
+                                                         src="{{ industry_logo }}"
+                                                         alt="industry-logo" width="140px" height="140px">
+                                                {% else %}
+                                                    <img id="industry_logo"
+                                                         src="/static/industry/img/profile.jpg"
+                                                         alt="industry-logo" width="140px" height="140px">
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-center">
+                                                <div class="pre-header">
+                                                    <span>کارفرما</span>
+                                                </div>
+                                                <div>{{ industry_name }}</div>
+                                            </div>
+                                            <div class="text-center mt-3">
+
+                                                <div class="dropdown mega-dropdown d-inline-block">
+                                                    <a href="javascript: void(0);"
+                                                       class="p-bot rounded-circle border-0 rounded-icon"
+                                                       type="button"
+                                                       data-toggle="dropdown"
+                                                       aria-haspopup="true" aria-expanded="false">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="22"
+                                                             height="23" viewBox="0 0 206 153">
+                                                            <defs>
+                                                                <style>.a {
+                                                                    fill: none;
+                                                                    stroke: #707070;
+                                                                }
+
+                                                                .b {
+                                                                    clip-path: url(#a);
+                                                                }
+
+                                                                .c {
+                                                                    fill: #fff;
+                                                                }
+
+                                                                .d {
+                                                                    fill: #18a1d8;
+                                                                }
+
+                                                                .e {
+                                                                    clip-path: url(#b);
+                                                                }</style>
+                                                                <clipPath id="a">
+                                                                    <rect class="a" width="105" height="153"
+                                                                          transform="translate(855 461)"></rect>
+                                                                </clipPath>
+                                                                <clipPath id="b">
+                                                                    <rect class="a" width="105" height="153"></rect>
+                                                                </clipPath>
+                                                            </defs>
+                                                            <g transform="translate(-855 -461)">
+                                                                <g class="b">
+                                                                    <path class="c"
+                                                                          d="M2845.55,569.55c8.1,54.7,193.9,64.5,209.2,0v-93.2h-9v36c-32.45-52.2-148.85-80.2-190.4,0,0-15.4.1-28.275.1-33.125-.5-7.937-9.5-6.452-9.45,0S2846.05,521.45,2845.55,569.55Z"
+                                                                          transform="translate(-1990)"></path>
+                                                                    <rect class="d" height="56" rx="28"
+                                                                          transform="translate(877 523)"
+                                                                          width="167"></rect>
+                                                                    <circle class="c" cx="12" cy="12" r="12"
+                                                                            transform="translate(894 539)"></circle>
+                                                                    <circle class="c" cx="12" cy="12" r="12"
+                                                                            transform="translate(1003 539)"></circle>
+                                                                </g>
+                                                                <g class="e" transform="translate(956 461)">
+                                                                    <path class="c"
+                                                                          d="M3054.75,569.55c-8.1,54.7-193.9,64.5-209.2,0v-93.2h9v36c32.45-52.2,148.85-80.2,190.4,0,0-15.4-.1-28.275-.1-33.125.5-7.937,9.5-6.452,9.45,0S3054.25,521.45,3054.75,569.55Z"
+                                                                          transform="translate(-2950.3 -461)"></path>
+                                                                    <rect class="d" width="167" height="56" rx="28"
+                                                                          transform="translate(-84 62)"></rect>
+                                                                    <circle class="c" cx="12" cy="12" r="12"
+                                                                            transform="translate(42 78)"></circle>
+                                                                    <circle class="c" cx="12" cy="12" r="12"
+                                                                            transform="translate(-67 78)"></circle>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                    </a>
+                                                    <div class="dropdown-menu text-right px-3">
+                                                        <h6 class="text-right text-primary">کد پروژه</h6>
+                                                        <small>برای متصل کردن گروه تلگرامی به پروژه، کد زیر را کپی
+                                                            کنید و طبق راهنمای بات عمل کنید.</small>
+
+                                                        <div class="input-group my-3 dir-ltr"
+                                                             style="width: max-content">
+                                                            <input type="text"
+                                                                   class="form-control m-0 bg-white dir-ltr"
+                                                                   value="{{ project.code }}" readonly>
+                                                            <div class="input-group-append">
+                                                                    <span class="input-group-text css-hover js-copy-clipboard dir-rtl">
+                                                                        <i class="far fa-clipboard"></i>
+                                                                    </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% if telegram %}
+                                                    <a href="{{ telegram }}"
+                                                       class="p-telegram-link rounded-circle rounded-icon">
+                                                        <i class="fab fa-telegram-plane"
+                                                           style="font-size: 20px"></i>
+                                                    </a>
+                                                {% endif %}
+                                                {% if end_not %}
+                                                    <a href="{{ end_note }}"
+                                                       class="p-end_note-link rounded-circle rounded-icon">
+                                                        <i class="fas fa-quote-right" style="font-size: 16px"></i>
+                                                    </a>
+                                                {% endif %}
+                                                {% if proposal %}
+                                                    <a href="{{ proposal }}"
+                                                       class="p-proposal-link rounded-circle rounded-icon">
+                                                        <i class="fas fa-file-pdf" style="font-size: 18px"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                            {#                                                <div class="budget-section">#}
+                                            {#                                                    <div class="budget">#}
+                                            {#                                                        <div class="budget-header">بودجه</div>#}
+                                            {#                                                        <div class="budget-content">#}
+                                            {#                                                            <div class="budget-amount">{{ budget_amount }}</div>#}
+                                            {#                                                            <div>ریال</div>#}
+                                            {#                                                        </div>#}
+                                            {#                                                    </div>#}
+                                            {#                                                </div>#}
+                                        </div>
+                                    </div>
+                                    <div class="row mbottom-lg-25">
+                                        <div class="d-block d-lg-none col">
+                                            <span class="section-title">تایم لاین پروژه</span>
+                                            <button type="button"
+                                                    class="border-button section-button"
+                                                    data-toggle="modal"
+                                                    data-target="#addDeadline">
+                                                افزودن ددلاین
+                                            </button>
+                                            <div class="section w-100">
+                                                <div class="scroll-left d-none">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                         class="bi bi-chevron-left h-100" fill="currentColor"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+                                                    </svg>
+                                                </div>
+                                                <div class="overflow-auto">
+                                                    {% if not project.is_date_valid %}
+                                                        <div class="project-progress-no-access">این قسمت در دسترس
+                                                            نیست!
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="project-progress project-progress-sm {% if not project.is_date_valid %}project-progress-disabled{% endif %}">
+                                                        {#                                                        <div class="step-container active">#}
+                                                        {#                                    <span class="step-date">#}
+                                                        {#                                        <div class="start">#}
+                                                        {#                                            {{ timeScheduling.start }}#}
+                                                        {#                                        </div>#}
+                                                        {#                                    </span>#}
+                                                        {#                                                            <span class="step-name">#}
+                                                        {#                                        شروع پروژه#}
+                                                        {#                                    </span>#}
+                                                        {#                                                        </div>#}
+                                                        {#                                                        <div class="step-container {% is_active project_pk=project_pk phase=1 %}">#}
+                                                        {#                                    <span class="step-date">#}
+                                                        {#                                        <div class="first_phase">{{ timeScheduling.firstPhase }}</div>#}
+                                                        {#                                    </span>#}
+                                                        {#                                                            <span class="step-name">جمع آوری داده</span>#}
+                                                        {#                                                        </div>#}
+                                                        <div class="step-container active">
+                                                            <span class="step-date">{{ timeScheduling.start }}</span>
+                                                            <span class="step-name"> شروع پروژه </span>
+                                                        </div>
+                                                        {% for card in card_list %}
+                                                            <div class="step-container">
+                                                                <span class="step-date">{{ card.deadline }}</span>
+                                                                <span class="step-name">{{ card.title }}</span>
+                                                            </div>
+                                                        {% endfor %}
+                                                        <div class="line-100">
+                                                            <div class="arrow"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="scroll-right d-none">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                         class="bi bi-chevron-right h-100" fill="currentColor"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mbottom-lg-25">
+                                        <div class="col">
+                                            <span class="section-title">لیست وظایف</span>
+                                            <button type="button"
+                                                    class="border-button section-button"
+                                                    data-toggle="modal"
+                                                    data-target="#addTask">
+                                                افزودن تسک
+                                            </button>
+                                            <div class="section">
+                                                <div class="ct-checklist {% if not task %}text-center{% endif %}">
+                                                    {% for task in task_list %}
+                                                        <div class="ct-checklist__item" data-value="{{ task.id }}">
+                                                            <div class="ct-checklist-item__checkbox">
+                                                                <div class="form-group form-check">
+                                                                    <input type="checkbox"
+                                                                           class="form-check-input inp-cbx"
+                                                                           id="checkList#{{ task.id }}"
+                                                                           name="requestResearcher" value=1 hidden
+                                                                           {% if task.done %}checked{% endif %}>
+                                                                    <label class="form-check-label cbx mb-0"
+                                                                           for="checkList#{{ task.id }}">
+                                                                        <span>
+                                                                            <svg class="inline-svg bi bi-check2"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+                                                                            </svg>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ct-checklist-item__detail {% if task.deadline %}has-due{% endif %}">
+                                                                <div class="ct-checklist__text">
+                                                                    {% if task.done %}
+                                                                        <del>
+                                                                    {% endif %}
+                                                                    {% for tag in task.involved_user %}
+                                                                        <span class="atMention d-inline-block me">@{{ tag }}</span>
+                                                                    {% endfor %}
+                                                                    <span class="task-description">{{ task.description }}</span>
+                                                                    {% if task.done %}
+                                                                        </del>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="ct-checklist__pre d-none">
+                                                                    <pre contenteditable="true"></pre>
+                                                                </div>
+
+                                                                <div class="ct-checklist-item__control d-flex">
+                                                                    <div class="ct-checklist-item-edit">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 class="bi bi-pencil"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="ct-checklist-item-delete">
+                                                                        <button>
+                                                                            <svg width="1em" height="1em"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 class="bi bi-trash"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="ct-checklist-item-due ct-option-btn {% if not task.deadline %}d-none{% endif %}">
+                                                                    <button>
+                                                                        <span>{{ task.deadline }}</span>
+                                                                        <svg width="1em" height="1em"
+                                                                             viewBox="0 0 16 16"
+                                                                             class="bi bi-clock"
+                                                                             fill="currentColor"
+                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                            <path fill-rule="evenodd"
+                                                                                  d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                                            <path fill-rule="evenodd"
+                                                                                  d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="ct-checklist-item__footer d-none">
+                                                                    <div class="float-left mt-1">
+                                                                        <div class="ct-task-option d-flex">
+                                                                            <div class="ct-task-assignee ct-option-btn d-flex">
+                                                                                <ul class="facepile-list"></ul>
+                                                                                <div class="dropdown">
+                                                                                    <button class="btn btn-secondary dropdown-toggle ct-option-btn dropdownAssignment"
+                                                                                            type="button"
+                                                                                            data-toggle="dropdown"
+                                                                                            aria-haspopup="true"
+                                                                                            aria-expanded="false"
+                                                                                            style="padding: 4px 9px;">
+                                                                                        <svg width="1em"
+                                                                                             height="1em"
+                                                                                             viewBox="0 0 16 16"
+                                                                                             class="bi bi-person-plus"
+                                                                                             fill="currentColor"
+                                                                                             xmlns="http://www.w3.org/2000/svg">
+                                                                                            <path fill-rule="evenodd"
+                                                                                                  d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                    <div class="dropdown-menu text-right"
+                                                                                         aria-labelledby="dropdownAssignment">
+                                                                                        <h6 class="dropdown-header">
+                                                                                            رئیس پروژه
+                                                                                        </h6>
+                                                                                        <div class="dropdown-item d-flex {% if project.involved_user.industryUser.username in task.involved_user %}selected{% endif %}"
+                                                                                             type="button"
+                                                                                             data-value="{{ project.involved_user.industryUser.username }}">
+                                                                                            <img src="{{ project.involved_user.industryUser.photo }}"
+                                                                                                 width="32px"
+                                                                                                 class="ml-1"
+                                                                                                 alt="{{ project.involved_user.industryUser.fullname }}">
+                                                                                            <div class="mt-auto mb-auto">
+                                                                                                {{ project.involved_user.industryUser.fullname }}
+                                                                                                <span> ({{ project.involved_user.industryUser.username }}@) </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <h6 class="dropdown-header">
+                                                                                            استاد</h6>
+                                                                                        {% for user in project.involved_user.expertUsers %}
+                                                                                            <div class="dropdown-item d-flex {% if user.username in task.involved_user %}selected{% endif %}"
+                                                                                                 type="button"
+                                                                                                 data-value="{{ user.username }}">
+                                                                                                {% if user.photo %}
+                                                                                                    <img src="{{ user.photo }}"
+                                                                                                         alt="{{ user.fullname }}"
+                                                                                                         width="32px"
+                                                                                                         class="ml-1">
+                                                                                                {% else %}
+                                                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                                                         alt="{{ user.fullname }} "
+                                                                                                         width="32px"
+                                                                                                         class="ml-1">
+                                                                                                {% endif %}
+                                                                                                <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        {% endfor %}
+                                                                                        <h6 class="dropdown-header">
+                                                                                            پژوهشگر
+                                                                                        </h6>
+                                                                                        {% for user in project.involved_user.researcherUsers %}
+                                                                                            <div class="dropdown-item d-flex {% if user.username in task.involved_user %}selected{% endif %}"
+                                                                                                 type="button"
+                                                                                                 data-value="{{ user.username }}">
+                                                                                                {% if user.photo %}
+                                                                                                    <img src="{{ user.photo }}"
+                                                                                                         alt="{{ user.fullname }}"
+                                                                                                         width="32px"
+                                                                                                         class="ml-1">
+                                                                                                {% else %}
+                                                                                                    <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                                                         alt="{{ user.fullname }} "
+                                                                                                         width="32px"
+                                                                                                         class="ml-1">
+                                                                                                {% endif %}
+                                                                                                <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        {% endfor %}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="ct-task-due ct-option-btn">
+                                                                                <button id="id_task_due{{ task.id }}"
+                                                                                        type="button"
+                                                                                        style="padding: 6px 10px;"
+                                                                                        dir="ltr">
+                                                                                    <svg width="1em" height="1em"
+                                                                                         viewBox="0 0 16 16"
+                                                                                         class="bi bi-clock"
+                                                                                         fill="currentColor"
+                                                                                         xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path fill-rule="evenodd"
+                                                                                              d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                                                        <path fill-rule="evenodd"
+                                                                                              d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                                                                    </svg>
+                                                                                    <span>{% if task.deadline %}
+                                                                                        {{ task.deadline }}{% endif %}</span>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="">
+                                                                        <button class="save-change btn btn-primary btn-sm"
+                                                                                data-id="{{ task.id }}">
+                                                                            ذخیره
+                                                                        </button>
+                                                                        <button class="cancel-change btn btn-link text-dark btn-sm">
+                                                                            <svg width="2em" height="2em"
+                                                                                 viewBox="0 0 16 16" class="bi bi-x"
+                                                                                 fill="currentColor"
+                                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                                <path fill-rule="evenodd"
+                                                                                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z">
+                                                                                </path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                    <div class="empty-task {% if task %}d-none{% endif %}">
+                                                        <img src="{% static 'img/clipboard.svg' %}"
+                                                             alt="no researcher" height="100px"
+                                                             class="rounded-0 m-auto">
+                                                        <h5>تاکنون موردی تعریف نشده است!</h5>
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mbottom-lg-25">
+                                        <div class="col-lg-12 text-right">
+                                            <span class="section-title">اطلاعات پروژه</span>
+                                            <div class="project-info-tabs">
+                                                <div class="nav flex-column nav-pills" id="v-pills-tab"
+                                                     role="tablist"
+                                                     aria-orientation="vertical">
+                                                    <a class="nav-link active" id="v-pills-majors-tab"
+                                                       data-toggle="pill"
+                                                       role="tab" aria-controls="v-pills-majors"
+                                                       aria-selected="true">
+                                                        بیان مساله
+                                                    </a>
+                                                    <a class="nav-link" id="v-pills-approaches-tab"
+                                                       data-toggle="pill"
+                                                       role="tab" aria-controls="v-pills-approaches"
+                                                       aria-selected="false">
+                                                        روش اجرا
+                                                    </a>
+                                                    <a class="nav-link" id="v-pills-resources-tab"
+                                                       data-toggle="pill"
+                                                       role="tab" aria-controls="v-pills-resources"
+                                                       aria-selected="false">
+                                                        اهداف
+                                                    </a>
+                                                    <a class="nav-link" id="v-pills-roles-tab"
+                                                       data-toggle="pill"
+                                                       role="tab" aria-controls="v-pills-roles"
+                                                       aria-selected="false">
+                                                        ملاحظات اخلاقی
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="section">
+                                                <div class="project-info-innerDiv">
+                                                    <div class="project-info-content">
+                                                        <div>
+                                                            <div class="question">
+                                                                    <span class="question-mark">
+                                                                        <i class="far fa-question-circle"></i>
+                                                                    </span>
+                                                                خلاصه ضرورت اجرا
+                                                            </div>
+                                                            <div class="answer">{{ projectForm.summary_of_necessity }}</div>
+                                                        </div>
+                                                        <div>
+                                                            {% if projectForm.necessity_expression %}
+                                                                <div class="question">
+                                                                        <span class="question-mark">
+                                                                            <i class="far fa-question-circle"></i>
+                                                                        </span>
+                                                                    مشروح بیان مساله و ضرورت اجرا
+                                                                </div>
+                                                                <div class="answer">{{ projectForm.necessity_expression }}</div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div>
+                                                            {% if projectForm.research_history %}
+                                                                <div class="question">
+                                                                        <span class="question-mark">
+                                                                            <i class="far fa-question-circle"></i>
+                                                                        </span>
+                                                                    سابقه طرح و بررسی متون
+                                                                </div>
+                                                                <div class="answer">{{ projectForm.research_history }}</div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mbottom-lg-25">
+                                        <div class="col-12">
+                                            <span class="section-title">پژوهشگران</span>
+                                            {% if reseacherRequestAbility %}
+                                                <button type="button"
+                                                        class="border-button section-button"
+                                                        data-toggle="modal"
+                                                        data-target="#researcherRequest">
+                                                    درخواست
+                                                </button>
+                                            {% endif %}
+                                            <div class="section">
+                                                <div class="row">
+                                                    <div class="col-12 text-center">
+
+                                                        {% if researcher_accepted or researchers_applied %}
+                                                            {% for researcher in researcher_accepted %}
+                                                                <div class="rounded-name-profile clickable mt-2"
+                                                                     value="{{ project_pk }}"
+                                                                     id="{{ researcher.id }}"
+                                                                     data-url="{% url 'researcher:show_resume_preview' %}"
+                                                                     data-toggle="modal"
+                                                                     data-target="#researcherInfo">
+                                                                    {% if researcher.photo %}
+                                                                        <img src="/media/{{ researcher.photo }}"
+                                                                             alt="enforcer photo">
+                                                                    {% else %}
+                                                                        <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                             alt="Enforcer Photo">
+                                                                    {% endif %}
+                                                                    <span>{{ researcher.fullname }}</span>
+                                                                </div>
+                                                            {% endfor %}
+                                                            {% for researcher in researchers_applied %}
+                                                                <div class="rounded-name-profile clickable mt-2"
+                                                                     value="{{ project_pk }}"
+                                                                     id="{{ researcher.id }}"
+                                                                     data-url="{% url 'researcher:show_resume_preview' %}"
+                                                                     data-toggle="modal"
+                                                                     data-target="#researcherInfo">
+                                                                    {% if researcher.photo %}
+                                                                        <img src="/media/{{ researcher.photo }}"
+                                                                             alt="enforcer photo">
+                                                                    {% else %}
+                                                                        <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                             alt="Enforcer Photo">
+                                                                    {% endif %}
+                                                                    <span>{{ researcher.fullname }}</span>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <img src="{% static 'img/empty-tray.svg' %}"
+                                                                 alt="no researcher" height="100px"
+                                                                 class="rounded-0">
+                                                            <h5>پژوهشگری برای این پروژه ثبت نشده است!</h5>
+                                                            <p></p>
+                                                        {% endif %}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {#                        <div class="col-12">#}
+                    {#                            {% include 'industry/layouts/comment.html' with comments=comments project_pk=project_pk expert_pk=expert_pk %}#}
+                    {#                        </div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

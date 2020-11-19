@@ -7,8 +7,8 @@
 {% block title %} جزییات پروژه {{ title }}{% endblock %}
 
 {% block modals %}
-    {% include 'project/expertResume.html' with project_pk=project_pk userType="researcher" %}
-    {% include 'project/researcher_info.html' with userType="researcher" %}
+    {% include 'project/layout/expertResume.html' with project_pk=project_pk userType="researcher" %}
+    {% include 'project/layout/researcher_info.html' with userType="researcher" %}
 
     <div class="modal fade" id="addTask" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel"
          aria-hidden="true">

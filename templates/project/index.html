@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 {% load static %}
+{% load widget_tweaks %}
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>{{ title }} | چمران تیم</title>
     <link rel="icon" sizes="16*16" href="{% static 'img/circle_logo.png' %}">
     <link rel="stylesheet" href="{% static 'libs/Bootstrap/4.5.0/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/fontawesome/5.15.1/css/all.min.css' %}">
@@ -16,8 +17,14 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'libs/Swiper/4.5.0/swiper.min.css' %}">
         <link rel="stylesheet" href="{% static 'libs/jQuery/tagsinput/1.3.6/jquery.tagsinput.min.css' %}">
+        <link rel="stylesheet" href="{% static 'libs/PersianDatepicker/1.2.0/persian-datepicker.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/comments.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet"
+              href="{% static 'libs/TempusDominusBootstrap4/5.0.0_alpha14/tempusdominus-bootstrap-4.min.css' %}"/>
+        {% if account_type == "industry" %}
+            <link rel="stylesheet" href="{% static 'industry/css/style.css' %}">
+        {% endif %}
     {% else %}
         <link rel="stylesheet" href="{% static 'theme-ct/css/style.css' %}">
         <link rel="stylesheet" href="{% static 'theme-ct/css/res.css' %}">
@@ -25,6 +32,7 @@
 </head>
 <body>
 {% if request.user.is_authenticated %}
+    {# import modals start #}
     <div class="modal fade" id="feedbackModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
          role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -52,6 +60,189 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="addTask" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title text-right" id="addTaskLabel">
+                        افزودن تسک
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="add-task-ajax" method="post" action="">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="container text-right">
+                            <div class="row">
+                                <label>
+                                    <input type="text" class="project"
+                                           name="project_id"
+                                           value="{{ project_pk }}"
+                                           hidden>
+                                </label>
+                                <div class="col-12">
+                                    <div class="form-group mb-1">
+                                        <label for="id_task_title">عنوان</label>
+                                        <pre contenteditable="true" id="id_task_title"></pre>
+                                    </div>
+                                    <ul class="tagId-list inline-list"></ul>
+                                    <div class="ct-task-option d-flex"
+                                         style="position: absolute;bottom: -50px;right: 0;">
+                                        <div class="ct-task-due ct-option-btn">
+                                            <button id="id_task_due" type="button" class=""
+                                                    data-toggle="datetimepicker" data-target="#id_card_deadline"
+                                                    style="padding: 7px 10px;" dir="ltr">
+                                                <svg width="1em" height="1em"
+                                                     viewBox="0 0 16 16" class="bi bi-clock"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd"
+                                                          d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm8-7A8 8 0 1 1 0 8a8 8 0 0 1 16 0z"></path>
+                                                    <path fill-rule="evenodd"
+                                                          d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"></path>
+                                                </svg>
+                                                <span></span>
+                                            </button>
+                                        </div>
+                                        <div class="ct-task-assignee ct-option-btn">
+                                            <div class="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle ct-option-btn"
+                                                        type="button" id="dropdownAssignment"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false" style="padding: 5px 9px;">
+                                                    <svg width="1em" height="1em"
+                                                         viewBox="0 0 16 16"
+                                                         class="bi bi-person-plus"
+                                                         fill="currentColor"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                                    </svg>
+                                                </button>
+                                                <div class="dropdown-menu text-right"
+                                                     aria-labelledby="dropdownAssignment">
+                                                    <h6 class="dropdown-header">رئیس پروژه</h6>
+                                                    <div class="dropdown-item d-flex" type="button"
+                                                         data-value="{{ project.involved_user.industryUser.username }}">
+                                                        <img src="{{ project.involved_user.industryUser.photo }}"
+                                                             width="50px" class="ml-1"
+                                                             alt="{{ project.involved_user.industryUser.fullname }}">
+                                                        <div class="mt-auto mb-auto">{{ project.involved_user.industryUser.fullname }}<span> ({{ project.involved_user.industryUser.username }}@) </span>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="dropdown-header">استاد</h6>
+                                                    {% for user in project.involved_user.expertUsers %}
+                                                        <div class="dropdown-item d-flex" type="button"
+                                                             data-value="{{ user.username }}">
+                                                            {% if user.photo %}
+                                                                <img src="{{ user.photo }}" alt="{{ user.fullname }}"
+                                                                     width="50px" class="ml-1">
+                                                            {% else %}
+                                                                <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                     alt="{{ user.fullname }} " width="50px"
+                                                                     class="ml-1">
+                                                            {% endif %}
+                                                            <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                    <h6 class="dropdown-header">پژوهشگر</h6>
+                                                    {% for user in project.involved_user.researcherUsers %}
+                                                        <div class="dropdown-item d-flex" type="button"
+                                                             data-value="{{ user.username }}">
+                                                            {% if user.photo %}
+                                                                <img src="{{ user.photo }}" alt="{{ user.fullname }}"
+                                                                     width="50px" class="ml-1">
+                                                            {% else %}
+                                                                <img src="{% static 'industry/img/profile.jpg' %}"
+                                                                     alt="{{ user.fullname }} " width="50px"
+                                                                     class="ml-1">
+                                                            {% endif %}
+                                                            <div class="mt-auto mb-auto">{{ user.fullname }}<span> ({{ user.username }}@) </span>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ct-task-delete ct-option-btn d-none">
+                                            <button>
+                                                <svg width="1em" height="1em"
+                                                     viewBox="0 0 16 16" class="bi bi-trash"
+                                                     fill="currentColor"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                                    <path fill-rule="evenodd"
+                                                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" style="z-index: 2">
+                            ثبت
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addDeadline" tabindex="-1" role="dialog" aria-labelledby="addDeadlineLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title text-right" id="addDeadlineLabel">
+                        افزودن ددلاین
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="add-card-ajax">
+                    <div class="modal-body">
+                        <div class="container text-right">
+                            <div class="row">
+                                <label>
+                                    <input type="text" class="project"
+                                           name="project_id"
+                                           value="{{ project_pk }}"
+                                           hidden>
+                                </label>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="id_card_title">عنوان</label>
+                                        {% render_field form.title class="form-control" id="id_card_title" %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_card_deadline">مهلت</label>
+                                        {% render_field form.deadline id="id_card_deadline" class="form-control datetimepicker-input" name="id_card_deadline" data-toggle="datetimepicker" data-target="#id_card_deadline" %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="accept-project">
+                            ثبت
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if reseacherRequestAbility and account_type == "industry" %}
+        {% include 'industry/layouts/researcher_request.html' with form=researcherRequestFrom %}
+    {% endif %}
+
+    {% include 'project/layout/expertResume.html' with project_pk=project_pk %}
+    {% include 'project/layout/researcher_info.html' %}
+    {# import modals end #}
+
     <div class="main">
         <div class="top-bar">
             <img src="{% static 'img/logo_text_beta.png' %}" alt="chamranTeam" id="maxLogo">
@@ -93,9 +284,16 @@
         <div class="content">
             <div class="container">
                 <div id="top"></div>
-
+                {% include 'project/layout/content.html' %}
             </div>
         </div>
+        {% if account_type == "industry" %}
+            {% include 'project/layout/industry_side_bar.html' %}
+        {% elif account_type == "expert" %}
+            {% include 'project/layout/expert_side_bar.html' %}
+        {% elif account_type == "researcher" %}
+            {% include 'project/layout/researcher_side_bar.html' %}
+        {% endif %}
     </div>
 {% else %} {# For Anonymous users with Link #}
     <header>
@@ -141,7 +339,6 @@
             </div>
         </div>
     </header>
-
     <div class="container-fluid">
         <div class="row">
             <div class="col">
@@ -163,8 +360,250 @@
     <script type="text/javascript" src="{% static 'js/persianumber.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/script-functions.js' %}"></script>
+    {% if account_type == "industry" %}
+        <script type="text/javascript" src="{% static 'industry/js/script-functions.js' %}"></script>
+        <script type="text/javascript" src="{% static 'industry/js/script.js' %}"></script>
+    {% elif account_type == "expert" %}
+        <script type="text/javascript" src="{% static 'expert/js/script-functions.js' %}"></script>
+        <script type="text/javascript" src="{% static 'expert/js/script.js' %}"></script>
+    {% elif account_type == "researcher" %}
+        <script type="text/javascript" src="{% static 'researcher/js/script-functions.js' %}"></script>
+        <script type="text/javascript" src="{% static 'researcher/js/script.js' %}"></script>
+    {% endif %}
+    <script type="text/javascript">
+        $("#v-pills-roles-tab").click(function () {
+            let policy = "{{ projectForm.policy|escapejs }}";
+            let executive_restrictions = "{{executive_restrictions |escapejs}}"
+            let role = "";
+            if (policy)
+                role += `<div>
+                            <div class="question">
+                                <span class="question-mark"><i class='far fa-question-circle'></i></span>
+                                <span>
+                                    ملاحظات اخلاقی
+                                </span>
+                            </div>
+                            <div class='answer'>${policy}</div>
+                        </div>`;
+            if (executive_restrictions)
+                role += `<div>
+                            <div class="question">
+                                <span class="question-mark"><i class='far fa-question-circle'></i></span>
+                                <span>
+                                    محدودیت های اجرایی طرح و روش کاهش آن ها
+                                </span>
+                            </div>
+                            <div class='answer'>${executive_restrictions}</div>
+                        </div>`;
+            $(".project-info-content").html(role);
+            $('*').persiaNumber();
+        });
+        $("#v-pills-resources-tab").click(function () {
+            let main_goal = "{{ projectForm.main_goal|escapejs }}";
+            let secondary_goal = "{{ projectForm.secondary_goal|escapejs }}";
+            let practical_goal = "{{ projectForm.practical_goal|escapejs }}";
+            let research_question = "{{ projectForm.research_question|escapejs }}";
+            let reseach_assumptions = "{{ reseach_assumptions|escapejs}}"
+            let goal = "";
+            if (main_goal)
+                goal += `<div>
+                            <div class='question'>
+                                <span class='question-mark'>
+                                    <i class='far fa-question-circle'></i>
+                                </span>
+        اهداف اصلی
+                            </div>
+                            <div class='answer'>${main_goal}</div>
+                        </div>`;
+            if (secondary_goal)
+                goal += `<div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+اهداف فرعی
+                    </div>
+                    <div class='answer'>${secondary_goal}</div>
+                </div>`;
+            if (practical_goal)
+                goal += `<div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+اهداف کاربردی
+                    </div>
+                    <div class='answer'>${practical_goal}</div>
+                </div>`;
+            if (research_question)
+                goal += `<div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+سوالات پژوهش
+                    </div>
+                    <div class='answer'>${research_question}</div>
+                </div>`;
+            if (reseach_assumptions)
+                goal += `<div>
+                    <div class='question'>
+                        <span class='question-mark'>
+                            <i class='far fa-question-circle'></i>
+                        </span>
+فرضیات پژوهش
+                    </div>
+                    <div class='answer'>${reseach_assumptions}</div>
+                </div>
+                `;
+            $(".project-info-content").html(goal);
+            $('*').persiaNumber();
+        });
+        $("#v-pills-approaches-tab").click(function () {
+            let summary_method = "{{ projectForm.summary_method|escapejs }}";
+            console.log(summary_method);
+            let required_equipment = "{{ projectForm.required_equipment|escapejs }}";
+            let sample_count_method = "{{ projectForm.sample_count_method|escapejs }}";
+            let analyse_method = "{{ projectForm.analyse_method|escapejs }}";
+            let procedure = `<div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>
+خلاصه روش اجرا
+                        </div>
+                        <div class='answer'>${summary_method}</div>
+                     </div>`;
+            if (required_equipment)
+                procedure += `<div>
+                            <div class='question'>
+                                <span class='question-mark'>
+                                    <i class='far fa-question-circle'></i>
+                                </span>
+    مشخصات ابزار جمع آوری اطلاعات و نحوه جمع آوری آن
+                            </div>
+                            <div class='answer'>${required_equipment}</div>
+                        </div>`;
+            if (sample_count_method)
+                procedure += `<div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>
+روش محاسبه حجم نمونه و تعداد آن
+                        </div>
+                        <div class='answer'>${sample_count_method}</div>
+                     </div>`;
+            if (analyse_method)
+                procedure += `<div>
+                        <div class='question'>
+                            <span class='question-mark'>
+                                <i class='far fa-question-circle'></i>
+                            </span>
+روش تجزیه و تحلیل داده ها
+                        </div>
+                        <div class='answer'>${analyse_method}</div>
+                     </div>
+                        `;
+            $(".project-info-content").html(procedure);
+            $('*').persiaNumber();
+        });
+        $("#v-pills-majors-tab").click(function () {
+            let summary_of_necessity = "{{ projectForm.summary_of_necessity|escapejs }}";
+            let necessity_expression = "{{ projectForm.necessity_expression|escapejs }}";
+            let research_history = "{{ projectForm.research_history|escapejs }}";
+            let problemStatement = `<div>
+                                <div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>
+خلاصه ضرورت اجرا
+                                </div>
+                                <div class='answer'>${summary_of_necessity}</div>
+                            </div>`;
+            if (necessity_expression)
+                problemStatement += `<div>
+                                        <div class='question'>
+                                            <span class='question-mark'>
+                                                <i class='far fa-question-circle'></i>
+                                            </span>
+        مشروح بیان مسئله و ضرورت اجرا
+                                        </div>
+                                        <div class='answer'>${necessity_expression}</div>
+                                    </div>
+                            <div>`;
+            if (research_history)
+                problemStatement += `<div class='question'>
+                                    <span class='question-mark'>
+                                        <i class='far fa-question-circle'></i>
+                                    </span>
+سابقه طرح و بررسی متون
+                                </div>
+                                <div class='answer'>${research_history}</div>
+                            </div>`;
+            $(".project-info-content").html(problemStatement);
+            $('*').persiaNumber();
+        });
+        //"<div>" +
+        //        "<div class='question'>" +
+        //        "<span class='question-mark'>" +
+        //        "<i class='far fa-question-circle'></i>" +
+        //        "</span>" +
+        //        "برآورد شما از سود مالی این پروژه چگونه است؟" +
+        //        "</div>" +
+        //        "<div class='answer'>" +
+        //        numbersComma("{{ projectForm.predict_profit }}") + " ریال" +
+        //        "</div></div>";
+    </script>
+    <script type="text/javascript"
+            src="{% static 'libs/OwlCarousel2/2.3.4/owl.carousel.min.js' %}"></script>
+    <script type="text/javascript">
+        $(".comments .fa-trash-alt").closest(".dropdown-item").click(function () {
+            deleteComment($(this).closest('.my-comment'));
+        });
+        dialog_comment_init();
+        $('.owl-carousel').owlCarousel({
+            stagePadding: 50,
+            loop: false,
+            margin: 20,
+            nav: false,
+            dots: true,
+            rtl: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1000: {
+                    items: 3
+                }
+            }
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'libs/PersianDate/1.1.0/persian-date.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'libs/PersianDatepicker/1.2.0/persian-datepicker.min.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#id_card_deadline, #requestDeadline').pDatepicker({
+                format: 'YYYY/MM/DD',
+                onShow: function (unix) {
+                    let datePicker = $(".datepicker-container");
+                    if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
+                        if (datePicker.offset().top > 310) {
+                            datePicker.css("top", datePicker.offset().top - 310);
+                        } else {
+                            datePicker.css("top", 0);
+                        }
+                    }
+                },
+            });
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'js/project.js' %}"></script>
 {% else %}
-    No
+
 {% endif %}
 </body>
 </html>
