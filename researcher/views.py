@@ -50,8 +50,9 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         context['status'] = researcher.status.status
         if researcher.status.status == 'deactivated':
             return context
-        all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gt=0)]
-        all_projects = Project.objects.filter(id__in=all_projects).filter(researcherRequestDeadline__gte=timezone.now())
+        all_projects = [re.project.pk for re in RequestResearcher.objects.filter(researcher_count__gt=0)\
+                                                                         .filter(expiration_date__gte=timezone.now())]
+        all_projects = Project.objects.filter(id__in=all_projects)
         new_projects = all_projects.exclude(researcher_applied__in=[researcher])
         applied_projects = [re.project for re in models.RequestedProject.objects\
                                                         .filter(researcher=researcher)\
@@ -86,7 +87,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'keyword': project.project_form.key_words.all(),
                 'started': date_last(datetime.date.today(), project.date_project_started),
                 'need_hour': project.requestresearcher.least_hour,
-                "expiration" : date_last(project.researcherRequestDeadline, datetime.date.today()),
+                "expiration" : date_last(project.requestresearcher.expiration_date, datetime.date.today()),
             }
             new_project_list.append(temp)
         for project in missedProjects:
@@ -96,7 +97,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                 'started': date_last(datetime.date.today(), project["project"].date_project_started),
                 'finished': date_last(datetime.date.today(), project["project"].date_finished),
                 'need_hour': project["project"].requestresearcher.least_hour,
-                "expiration" : date_last(project['project'].researcherRequestDeadline, datetime.date.today()),
+                "expiration" : date_last(project['project'].requestresearcher.expiration_date, datetime.date.today()),
                 'missedTechinque': project["missedTechnique"],
                 "satisfiedTechniques": project['satisfiedTechniques'],
             }
@@ -142,7 +143,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     'started': date_last(datetime.date.today(), project.date_project_started),
 
                     'need_hour': project.requestresearcher.least_hour,
-                    "expiration": date_last(project.researcherRequestDeadline, datetime.date.today()),
+                    "expiration": date_last(project.requestresearcher.expiration_date, datetime.date.today()),
                     'status': status,
                 }
                 my_project_list.append(temp)
@@ -687,10 +688,10 @@ def ShowProject(request):
     project = Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
     json_response['deadline'] = 'نا مشخص'
-    if project.status == 1 and project.date_project_started and project.researcherRequestDeadline:
-        json_response['deadline'] = date_last(datetime.date.today(), project.researcherRequestDeadline)
+    if project.status == 1 and project.date_project_started and project.requestresearcher.expiration_date:
+        json_response['deadline'] = date_last(datetime.date.today(), project.requestresearcher.expiration_date)
     else:
-        json_response['deadline'] = date_last(project.date_project_started, project.researcherRequestDeadline)
+        json_response['deadline'] = date_last(project.date_project_started, project.requestresearcher.expiration_date)
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
@@ -783,10 +784,10 @@ def MyProject(request):
     project = Project.objects.filter(id=request.GET.get('id')).first()
     json_response = model_to_dict(project.project_form)
     json_response['deadline'] = 'نا مشخص'
-    if project.status == 1 and project.date_project_started and project.researcherRequestDeadline:
-        json_response['deadline'] = date_last(datetime.date.today(), project.researcherRequestDeadline)
+    if project.status == 1 and project.date_project_started and project.requestresearcher.expiration_date:
+        json_response['deadline'] = date_last(datetime.date.today(), project.requestresearcher.expiration_date)
     else:
-        json_response['deadline'] = date_last(project.date_project_started, project.researcherRequestDeadline)
+        json_response['deadline'] = date_last(project.date_project_started, project.requestresearcher.expiration_date)
     json_response['submission_date'] = gregorian_to_numeric_jalali(project.date_submitted_by_industry)
     for ind, value in enumerate(json_response['key_words']):
         json_response['key_words'][ind] = value.__str__()
