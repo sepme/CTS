@@ -403,7 +403,7 @@
             let secondary_goal = "{{ projectForm.secondary_goal|escapejs }}";
             let practical_goal = "{{ projectForm.practical_goal|escapejs }}";
             let research_question = "{{ projectForm.research_question|escapejs }}";
-            let reseach_assumptions = "{{ reseach_assumptions|escapejs}}"
+            let reseach_assumptions = "{{ reseach_assumptions|escapejs}}";
             let goal = "";
             if (main_goal)
                 goal += `<div>
@@ -461,7 +461,6 @@
         });
         $("#v-pills-approaches-tab").click(function () {
             let summary_method = "{{ projectForm.summary_method|escapejs }}";
-            console.log(summary_method);
             let required_equipment = "{{ projectForm.required_equipment|escapejs }}";
             let sample_count_method = "{{ projectForm.sample_count_method|escapejs }}";
             let analyse_method = "{{ projectForm.analyse_method|escapejs }}";
