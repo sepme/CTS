@@ -1,0 +1,108 @@
+{% load static %}
+{% load custom_tags %}
+<div class="side-bar">
+    <div class="topMargin"></div>
+    <div class="researcher-icon"></div>
+    {% if request.user.researcheruser.researcherprofile.photo %}
+        <img src="{{ request.user.researcheruser.researcherprofile.photo.url }}" alt="profile" class="profile"
+             width="150px" height="150px" id="profile">
+    {% else %}
+        <img src="{% static 'researcher/img/profile.jpg' %}" alt="Ehsan" class="profile" width="150px"
+             height="150px">
+    {% endif %}
+
+    <h5>{% block name %}{{ request.user.researcheruser.researcherprofile }}{% endblock %}</h5>
+    <h6>پژوهشگر</h6>
+    <div class="hr"></div>
+    <ul class="list-group">
+        {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+            <a href="javascript:void(0)" class="forbidden__access">
+        {% else %}
+            {% url "researcher:index" as index_url %}
+            <a href="{{ index_url }}">
+        {% endif %}
+        <li class="list-group-item text-right {% if request.get_full_path ==  index_url %}active{% endif %}">
+            <div>
+                <span>پروژه ها</span>
+                <span class="fas fa-list-ul"></span>
+            </div>
+        </li>
+        </a>
+        {% url 'researcher:messages' as messages_url %}
+        <a href="{{ messages_url }}">
+            <li class="list-group-item text-right {% if messages_url == request.get_full_path %}active{% endif %}">
+                <div>
+                    {% if UnseenMessages %}
+                        <span class="new-message">{{ UnseenMessages }}</span>
+                    {% endif %}
+                    <span>پیام ها</span>
+                    <span class="fas fa-envelope"></span>
+                </div>
+            </li>
+        </a>
+        {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+            <a href="javascript:void(0)" class="forbidden__access">
+        {% else %}
+            {% url 'researcher:technique' as technique_url %}
+            <a href="{{ technique_url }}">
+        {% endif %}
+        <li class="list-group-item text-right {% if request.get_full_path ==  technique_url %}active{% endif %}">
+            <div>
+                <span>مهارت های پژوهشی</span>
+                <span class="fas fa-file-medical"></span>
+            </div>
+        </li>
+        </a>
+        <!-- {% url 'researcher:question-alert' as question_url %} -->
+        {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+            {% getQuestionUrl request.user.researcheruser as questionId %}
+            {% if questionId %}
+                {% url 'researcher:question-show' question_id=questionId as question_url %}
+            {% else %}
+                {% url 'researcher:question-alert' as question_url %}
+            {% endif %}
+            <a href="{{ question_url }}">
+        {% else %}
+            <a href="javascript:void(0)" class="forbidden__access question_-_uploaded">
+        {% endif %}
+        <li class="list-group-item text-right {% if request.get_full_path ==  question_url %}active{% endif %}">
+            <div>
+                <span>سوالات پژوهشی</span>
+                <span class="fas fa-question"></span>
+            </div>
+        </li>
+        </a>
+        {% if request.user.researcheruser.status.status == "not_answered" or request.user.researcheruser.status.status == "wait_for_result" %}
+            <a href="javascript:void(0)" class="forbidden__access">
+        {% else %}
+            {% url 'researcher:userInfo' as userInfo_url %}
+            <a href="{{ userInfo_url }}">
+        {% endif %}
+        <li class="list-group-item text-right {% if request.get_full_path == userInfo_url %}active{% endif %}">
+            <div>
+                <span>اطلاعات کاربری</span>
+                <span class="fas fa-cog"></span>
+            </div>
+        </li>
+        </a>
+    </ul>
+    <div class="hr display-sm"></div>
+    <ul class="list-group display-sm">
+        <a href="{% url 'chamran:send_reset_email' %}">
+            <li class="list-group-item text-right">
+                <div>
+                    <span>تغییر رمز عبور</span>
+                    <i class="fas fa-lock"></i>
+                </div>
+            </li>
+        </a>
+        <a href="{% url 'chamran:logout' %}">
+            <li class="list-group-item text-right">
+                <div>
+                    <span>خروج</span>
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </li>
+        </a>
+    </ul>
+</div>

@@ -539,7 +539,7 @@ $(document).ready(function () {
     //****************************************//
 
     // get researcher information
-    $("button[data-target='#researcherInfo']").click(function () {
+    $("[data-target='#researcherInfo']").click(function () {
         let modal = $("#researcherInfo");
         let id = $(this).attr("id");
         let url = $(this).attr("data-url");

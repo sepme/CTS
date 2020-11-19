@@ -768,7 +768,7 @@ def searchUserId(request):
 
 
 class showActiveProject(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
-    template_name = "industry/preview_project.html"
+    template_name = "project/index.html"
     permission_required = ('industry.be_industry',)
     login_url = "/login/"
 
