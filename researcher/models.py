@@ -299,7 +299,12 @@ class StudiousRecord(models.Model):
 
     title = models.CharField(max_length=300, verbose_name="عنوان طرح پژوهشی")
     presenter = models.CharField(max_length=256, verbose_name="نام مجری")
-    responsible = models.CharField(max_length=256, verbose_name="مسئول اجرا / همکار")
+    RESPONSIBLE_CHOICE = (
+        ("colleague", "colleague"),
+        ("presenter", "presenter")
+    )
+    responsible = models.CharField(max_length=256, verbose_name="مسئول اجرا / همکار",
+                                    choices=RESPONSIBLE_CHOICE)
     STATUS_CHOICE = (
         (1, 'در دست اجرا'),
         (2, 'خاتمه یافته'),
