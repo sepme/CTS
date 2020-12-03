@@ -31,8 +31,11 @@
                                 <div class="col">
                                     <div class="project-techniques mine">
                                         <div>
-                                            <span>مهارت موجود من</span>
-                                            <span class="primary-technique">مهارت پژوهشی به درد نخور من</span>
+                                            {#                                            <span>مهارت موجود من</span>#}
+                                            {#                                            <span class="primary-technique">مهارت پژوهشی به درد نخور من</span>#}
+                                            {% for researcher in researcher_techniques %}
+                                                <span>{{ researcher }}</span>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
@@ -217,8 +220,8 @@
                                     <div class="col-5">
                                         <div class="project-techniques">
                                             <div>
-                                                {% for keyword in project.keyword %}
-                                                    <span>{{ keyword.name }}</span>
+                                                {% for technique in project.satisfiedTechniques %}
+                                                    <span>{{ technique.name }}</span>
                                                 {% endfor %}
                                                 <span class="show-all" data-toggle="modal"
                                                       data-target="#previewKeywords">همه</span>
