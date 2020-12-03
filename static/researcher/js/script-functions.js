@@ -393,11 +393,18 @@ function show_research_record(pk) {
             status = "متوقف";
             break;
     }
+    let responsible = "";
+
+    if ($("#exampleRadios1").checked)
+        responsible = "مسئول اجرا";
+    else
+        responsible = "همکار";
+
     let newRow = `
         <tr class="row-stu-${pk}">
             <td>${$("#subject").val()}</td>
             <td>${$("#admin").val()}</td>
-            <td>${$("#liable").val()}</td>
+            <td>${responsible}</td>
             <td>${status}</td>
             <td>
                 <i class='fas fa-trash-alt delete_stu'

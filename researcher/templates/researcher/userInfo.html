@@ -236,7 +236,11 @@
                                                                 <td>{{ record.major }}</td>
                                                                 <td>{{ record.university }}</td>
                                                                 <td>{{ record.place }}</td>
-                                                                <td>{{ record.graduated_year }}</td>
+                                                                {% if record.graduated_year == "0000" %}
+                                                                    <td>در حال تحصیل</td>
+                                                                {% else %}
+                                                                    <td>{{ record.graduated_year }}</td>
+                                                                {% endif %}
                                                                 <td>
                                                                     {#                                                                    <i class='fas fa-pen' id='edit_edu'></i>#}
                                                                     <i class='fas fa-trash-alt delete_edu'
@@ -339,7 +343,13 @@
                                                             <tr class="row-stu-{{ record.pk }}">
                                                                 <td>{{ record.title }}</td>
                                                                 <td>{{ record.presenter }}</td>
+                                                                {% if record.responsible == "presenter" %}
+                                                                    <td>مسئول اجرا</td>
+                                                                {% elif record.responsible == "colleague" %}
+                                                                    <td>همکار</td>
+                                                                {% else %}
                                                                 <td>{{ record.responsible }}</td>
+                                                                {% endif %}                                                                
                                                                 <td> {% if record.status == 1 %}
                                                                     در دست اجرا
                                                                 {% elif record.status == 2 %}

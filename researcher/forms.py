@@ -346,7 +346,8 @@ class ScientificRecordForm(forms.ModelForm):
                 raise ValidationError(_("سال را اشتباه وارد کرده اید."))
             
             if (int(data)/1000) < 1:
-                raise ValidationError(_("عدد چهار رقمی وارد کنید."))
+                if int(data) != 0:
+                    raise ValidationError(_("عدد چهار رقمی وارد کنید."))
         return data
     
 class ExecutiveRecordForm(forms.ModelForm):
