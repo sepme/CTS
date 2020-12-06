@@ -1344,16 +1344,11 @@ $(document).ready(function () {
                 dataType: 'json',
                 data: {'id': pk},
                 success: function (data) {
-                    console.log(data);
-                    console.log(data.requestResearcher);
                     if (data.requestResearcher) {
                         $("#researcherAccess").attr("value", 1);
-                        projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
-                        $("#ApplicationDeadline").attr('value', data.researcherRequestDeadline);
                     } else {
                         // $("#researcherAccess").click();
                         $("#researcherAccess").attr("value", "").prop("checked", false);
-                        projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
                     }
                     if (data.end_note_fileName)
                         $(".end-note-file-name").text(data.end_note_fileName);
@@ -1522,17 +1517,6 @@ $(document).ready(function () {
 
         });
 
-        //## show date picker on check
-        projectSettingForm.find("#researcherAccess").on("change", function () {
-            if ($(this).is(":checked")) {
-                projectSettingForm.find("#ApplicationDeadline").closest(".form-group").removeClass("d-none");
-                $("#researcherAccess").attr("value", 1);
-            } else {
-                projectSettingForm.find("#ApplicationDeadline").closest(".form-group").addClass("d-none");
-                $("#researcherAccess").attr("value", 0);
-            }
-        });
-
         //## ignore submit form on press Enter key
         projectSettingForm.on('keyup keypress', function (e) {
             let keyCode = e.keyCode || e.which;
@@ -1549,7 +1533,6 @@ $(document).ready(function () {
             // let techs = [];
             let id = $(this).attr("id");
             // let expertIds = [];
-            let applicationDeadline = $("#ApplicationDeadline").val();
             $.each(projectSettingForm.find(".selected-expert"), function () {
                 data.append("expert_ids", $(this).attr("id"));
             });
@@ -1561,11 +1544,8 @@ $(document).ready(function () {
             let telegram_group = projectSettingForm.find("#telegramGroupLink").val();
             data.set('id', id);
             data.set('telegram_group', telegram_group);
-            data.set('researcherRequestDeadline', applicationDeadline);
-            if ($("#researcherAccess").val() == 1)
+            if ($("#researcherAccess").val() === 1)
                 data.set('requestResearcher', true);
-            $("#ApplicationDeadline").removeClass("error").css("color", "").prev().css("color", "");
-            $("#ApplicationDeadline").closest("div").find(".error").remove();
             $.ajax({
                 traditional: true,
                 method: 'POST',
@@ -1594,16 +1574,6 @@ $(document).ready(function () {
                         message: message,
                         position: 'bottomLeft'
                     });
-                    if (obj.researcherRequestDeadline) {
-                        $("#ApplicationDeadline").closest("div").append("<div class='error'>" +
-                            "<span class='error-body'>" +
-                            "<ul class='errorlist'>" +
-                            "<li>" + obj.researcherRequestDeadline + "</li>" +
-                            "</ul>" +
-                            "</span>" +
-                            "</div>");
-                        $("#ApplicationDeadline").addClass("error").css("color", "rgb(255, 69, 69)").prev().css("color", "rgb(255, 69, 69)");
-                    }
                 }
             });
         });

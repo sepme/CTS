@@ -383,17 +383,4 @@
     {#    </script>#}
     <script type="text/javascript" src="{% static 'libs/PersianDate/1.1.0/persian-date.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'libs/PersianDatepicker/1.2.0/persian-datepicker.min.js' %}"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('#ApplicationDeadline').pDatepicker({
-                format: 'YYYY/MM/DD',
-                onShow: function (unix) {
-                    let datePicker = $(".datepicker-container");
-                    if (datePicker.find(".datepicker-plot-area").height() + datePicker.offset().top > $(window).height()) {
-                        datePicker.css("top", datePicker.offset().top - 310);
-                    }
-                },
-            });
-        });
-    </script>
 {% endblock %}
