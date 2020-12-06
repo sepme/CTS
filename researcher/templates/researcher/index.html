@@ -31,10 +31,10 @@
                                 <div class="col">
                                     <div class="project-techniques mine">
                                         <div>
-                                            {#                                            <span>مهارت موجود من</span>#}
-                                            {#                                            <span class="primary-technique">مهارت پژوهشی به درد نخور من</span>#}
+                                            {#<span>مهارت موجود من</span>#}
+                                            {#<span class="primary-technique">مهارت پژوهشی به درد نخور من</span>#}
                                             {% for researcher in researcher_techniques %}
-                                                <span>{{ researcher }}</span>
+                                                <span class="primary-technique">{{ researcher }}</span>
                                             {% endfor %}
                                         </div>
                                     </div>
@@ -50,8 +50,8 @@
                                 <div class="col">
                                     <div class="project-techniques">
                                         <div>
-                                            <span class="missed-technique">مهارت پژوهشی ناموجود</span>
-                                            <span>مهارت پژوهشی موجود ما</span>
+                                            {#<span class="missed-technique">مهارت پژوهشی ناموجود</span>#}
+                                            {#<span>مهارت پژوهشی موجود ما</span>#}
                                         </div>
                                     </div>
                                 </div>
@@ -220,8 +220,8 @@
                                     <div class="col-5">
                                         <div class="project-techniques">
                                             <div>
-                                                {% for technique in project.satisfiedTechniques %}
-                                                    <span>{{ technique.name }}</span>
+                                                {% for technique in project.techniques %}
+                                                    <span>{{ technique.technique_title }}</span>
                                                 {% endfor %}
                                                 <span class="show-all" data-toggle="modal"
                                                       data-target="#previewKeywords">همه</span>
@@ -341,8 +341,8 @@
                             <span><i
                                     class='fas fa-hourglass-end'></i>درأمد : <span> {{ project.income }} </span> کسب کرده اید.</span>
                             <span><i class='fas fa-hourglass-end'></i>مهارت های پژوهشی مورد استفاده :
-                                {% for technique in project.technique %}
-                                    <span> {{ technique }} , </span>
+                                {% for technique in project.techniques %}
+                                    <span> {{ technique.technique_title }} , </span>
                                 {% endfor %}
             </span>
                         </div>

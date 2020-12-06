@@ -350,20 +350,40 @@ $(document).ready(function () {
         indexTechniques[cardID] = techList;
     });
 
+    // $("span.show-all[data-target='#previewKeywords']").click(function () {
+    //     let cardID = $(this).closest(".card.box").attr("id");
+    //     let modal = $("#previewKeywords");
+    //     modal.find(".project-techniques:not('.mine') div").html("");
+    //     for (let i = 0; i < indexTechniques[cardID]["all"].length; i++) {
+    //         let missed = false;
+    //         if (missed) {
+    //             modal.find(".project-techniques:not('.mine') div").append(`<span class="missed-technique">${indexTechniques[cardID]["all"][i]}</span>`)
+    //         } else {
+    //             modal.find(".project-techniques:not('.mine') div").append(`<span>${indexTechniques[cardID]["all"][i]}</span>`)
+    //         }
+    //     }
+    //     console.log(indexTechniques);
+    //     console.log(indexTechniques[cardID]);
+    // });
+
+    // Show techniques and status of them
     $("span.show-all[data-target='#previewKeywords']").click(function () {
-        let cardID = $(this).closest(".card.box").attr("id");
-        let modal = $("#previewKeywords");
-        modal.find(".project-techniques:not('.mine') div").html("");
-        for (let i = 0; i < indexTechniques[cardID]["all"].length; i++) {
-            let missed = false;
-            if (missed) {
-                modal.find(".project-techniques:not('.mine') div").append(`<span class="missed-technique">${indexTechniques[cardID]["all"][i]}</span>`)
+        const modal = $(".modal#previewKeywords");
+        $(this).closest(".project-techniques").find("span:not('.show-all')").each(function () {
+            let tech_name = $(this).text();
+            let my_tech_list = modal.find(".project-techniques.mine");
+            if (my_tech_list.find(`span.primary-technique:contains('${tech_name}')`).length) {
+                my_tech_list.find(`span.primary-technique:contains('${tech_name}')`).removeAttr('class');
+                modal.find(".project-techniques:not('.mine') div").append(`<span>${tech_name}</span>`);
             } else {
-                modal.find(".project-techniques:not('.mine') div").append(`<span>${indexTechniques[cardID]["all"][i]}</span>`)
+                modal.find(".project-techniques:not('.mine') div").append(`<span class="missed-technique">${tech_name}</span>`);
             }
-        }
-        console.log(indexTechniques);
-        console.log(indexTechniques[cardID]);
+        });
+    });
+
+    $(".modal#previewKeywords").on('hide.bs.modal', function () {
+        $(this).find(".project-techniques.mine div span").addClass("primary-technique");
+        $(this).find(".project-techniques:not('.mine') div").html('');
     });
 
 // Auto scroll to active project tab when exists

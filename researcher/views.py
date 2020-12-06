@@ -84,7 +84,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
             temp = {
                 'PK': project.pk,
                 'project_title': project.project_form.persian_title,
-                'keyword': project.project_form.key_words.all(),
+                'techniques': project.project_form.techniques.all(),
                 'started': date_last(datetime.date.today(), project.date_project_started),
                 'need_hour': project.requestresearcher.least_hour,
                 "expiration" : date_last(project.requestresearcher.expiration_date, datetime.date.today()),
@@ -93,7 +93,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
         for project in missedProjects:
             temp = {
                 'project_title': project["project"].project_form.persian_title,
-                'keyword': project["project"].project_form.key_words.all(),
+                'techniques': project["project"].project_form.techniques.all(),
                 'started': date_last(datetime.date.today(), project["project"].date_project_started),
                 'finished': date_last(datetime.date.today(), project["project"].date_finished),
                 'need_hour': project["project"].requestresearcher.least_hour,
@@ -139,7 +139,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     'PK': project.pk,
                     'code': project.code,
                     'project_title': project.project_form.persian_title,
-                    'keyword': project.project_form.key_words.all(),
+                    'techniques': project.project_form.techniques.all(),
                     'started': date_last(datetime.date.today(), project.date_project_started),
 
                     'need_hour': project.requestresearcher.least_hour,
@@ -147,6 +147,7 @@ class Index(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
                     'status': status,
                 }
                 my_project_list.append(temp)
+                print(project.project_form.techniques.all())
         context["my_project_list"] = my_project_list
         return context
 

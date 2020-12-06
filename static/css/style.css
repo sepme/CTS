@@ -3656,10 +3656,6 @@ div.no-project > span.disable-border-button {
     padding: 10px 5px;
 }
 
-.box.has-image.no-border .box-body .box-score {
-
-}
-
 .box.has-image.no-border .box-body .box-score .score-amount {
     font-weight: 700;
     font-size: 18px;
@@ -3752,10 +3748,6 @@ div.no-project > span.disable-border-button {
     width: calc(100% - 6px);
 }
 
-.box .box-body .confirm-researcher {
-
-}
-
 .box .box-body .project-techniques, .custom-techniques {
     /*margin-bottom: 10px;*/
     /*margin-right: 10px;*/
@@ -3780,13 +3772,17 @@ div.no-project > span.disable-border-button {
 .project-techniques span, .custom-techniques span {
     display: inline-block;
     background-color: #3ccd1c;
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: 600;
     padding: 3px 5px;
     margin-bottom: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+.project-techniques span:not(:first-child) {
+    margin-right: 0.25rem;
 }
 
 .box .box-body .project-techniques span.show-all, .custom-techniques span.show-all {
